@@ -1,0 +1,6 @@
+-cp src
+-D analyzer-optimize
+--library aidan-ecs
+--library discord.js
+-main Main
+--js bin/main.js

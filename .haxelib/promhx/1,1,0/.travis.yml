@@ -1,0 +1,46 @@
+# The first thing is to tell which VM environment we want the test to be run on.
+# It dosen't quite matter for Haxe, just choose one of the targets our project support (e.g. PHP),
+# and than apt-get install the others (e.g. Neko, C++).
+# For more info, see http://about.travis-ci.org/docs/user/ci-environment/
+language: php 
+
+env:
+    matrix:
+    - TARGET=cpp
+    - TARGET=cs
+    - TARGET=java
+    - TARGET=neko
+    - TARGET=node
+    - TARGET=php
+    - TARGET=error
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: TARGET=cs
+    - env: TARGET=php
+
+ 
+# Install Haxe and dependencies before running the test.
+before_script:
+  - git submodule update --init --recursive            # update utest
+  - sudo add-apt-repository ppa:eyecreate/haxe -y      # add the ubuntu ppa that contains haxe
+  - sudo apt-get update                                # pull info from ppa
+  - sudo apt-get install haxe -y                       # install haxe (and neko)
+  - mkdir ~/haxelib                                    # create a folder for installing haxelib
+  - haxelib setup ~/haxelib
+  - haxelib install monax                              # dependency
+  - haxelib install utest                              # dependency
+  - sh -c "if [ '$TARGET' = 'cpp' ]; then sudo apt-get install gcc-multilib g++-multilib -y; fi"
+  - sh -c "if [ '$TARGET' = 'cpp' ]; then haxelib install hxcpp; fi"
+  - sh -c "if [ '$TARGET' = 'cs' ]; then haxelib install hxcs; fi"
+  - sh -c "if [ '$TARGET' = 'java' ]; then haxelib install hxjava; fi"
+  - sh -c "if [ '$TARGET' = 'node' ]; then haxelib install nodejs; fi"
+ 
+# Run the test!
+script:
+  - haxe hxml/test.${TARGET}.hxml
+
+branches:
+      only:
+          - master 

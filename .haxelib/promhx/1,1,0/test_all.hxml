@@ -1,0 +1,33 @@
+# generate js for browser testing
+# no auto-execution
+-cp src/main
+-cp src/test
+-lib monax
+-lib utest
+-main TestAll
+-js bin/test.js
+
+--next
+hxml/test.node.hxml
+
+--next
+
+hxml/test.neko.hxml
+
+--next
+
+hxml/test.cpp.hxml
+
+--next
+
+hxml/test.java.hxml
+
+--next
+# TODO - figure out what is happening with php
+# hxml/test.php.hxml
+
+--next
+hxml/test.cs.hxml
+
+--next
+hxml/test.swf9.hxml

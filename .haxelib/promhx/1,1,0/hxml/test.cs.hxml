@@ -1,0 +1,7 @@
+
+hxml/test.defaults.hxml
+-main TestAllQueue
+-cmd echo "---------------------------------------C#---------------------------------------"
+-cs bin/testcs
+-cmd mono ./bin/testcs/bin/TestAllQueue.exe
+

@@ -1,0 +1,10 @@
+{
+    "name": "asynctools",
+    "url": "https://github.com/ciscoheat/asynctools",
+    "description": "Haxe implementation of the npm async package.",
+    "license": "MIT",
+    "releasenote": "Initial version.",
+    "contributors": ["ciscoheat"],
+    "version": "0.1.0",
+    "tags": []
+}

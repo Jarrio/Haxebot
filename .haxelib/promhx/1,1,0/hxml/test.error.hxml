@@ -1,0 +1,5 @@
+hxml/test.defaults.hxml
+-D PromhxExposeErrors
+-main TestExposedError
+-cmd echo "--------------------------------------NEKO--------------------------------------"
+-x bin/test

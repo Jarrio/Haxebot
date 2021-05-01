@@ -1,0 +1,4 @@
+hxml/test.defaults.hxml
+-main TestAllQueue
+-cmd echo "--------------------------------------NEKO--------------------------------------"
+-x bin/test

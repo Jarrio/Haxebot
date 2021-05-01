@@ -1,0 +1,5 @@
+hxml/test.defaults.hxml
+-main TestAllQueue
+-cmd echo "--------------------------------------PHP---------------------------------------"
+-php bin/testphp
+-cmd php bin/testphp/index.php
