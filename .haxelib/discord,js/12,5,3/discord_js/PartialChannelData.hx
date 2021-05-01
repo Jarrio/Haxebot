@@ -7,7 +7,7 @@ typedef PartialChannelData = {
 	@:optional
 	var topic : String;
 	@:optional
-	var type : global.ChannelType;
+	var type : String;
 	@:optional
 	var parentID : Float;
 	@:optional

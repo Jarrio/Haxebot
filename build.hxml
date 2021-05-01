@@ -2,5 +2,9 @@
 -D analyzer-optimize
 --library aidan-ecs
 --library discord.js
--main Main
+--library hxnodejs
+
 --js bin/main.js
+-main Main
+
+

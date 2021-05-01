@@ -63,11 +63,33 @@ Main.__name__ = "Main";
 Main.start = function() {
 	Main.universe = new ecs_Universe(1000);
 	Main.universe.systems.add(new systems_Messages(Main.universe));
+	var client = new discord_$js_Client();
+	client.on("ready",function(_) {
+		console.log("src/Main.hx:21:","HaxeBot Ready!");
+	});
+	client.on("message",function(message) {
+		console.log("src/Main.hx:25:",message.author.tag);
+	});
+	client.login(Main.config.discord_api_key).then(function(reply) {
+		console.log("src/Main.hx:29:","HaxeBot logged in!");
+	},function(error) {
+		console.log("src/Main.hx:31:","HaxeBot Error!");
+		console.log("src/Main.hx:32:",error);
+	});
 	new haxe_Timer(100).run = function() {
 		Main.universe.update(1);
 	};
 };
 Main.main = function() {
+	try {
+		Main.config = JSON.parse(js_node_Fs.readFileSync("./bin/config.json",{ encoding : "utf8"}));
+	} catch( _g ) {
+		console.log("src/Main.hx:44:",haxe_Exception.caught(_g).get_message());
+	}
+	if(Main.config == null || Main.config.discord_api_key == null) {
+		console.log("src/Main.hx:48:","Enter your discord auth token");
+		return;
+	}
 	Main.start();
 };
 Math.__name__ = "Math";
@@ -413,6 +435,7 @@ bits_BitsData.set = function(this1,index,value) {
 bits_BitsData.get_length = function(this1) {
 	return this1.length;
 };
+var discord_$js_Client = require("discord.js").Client;
 var ecs_Components = function(_size) {
 	this.components = new Array(_size);
 };
@@ -734,6 +757,10 @@ var ecs_ds_Unit = {};
 ecs_ds_Unit._new = function() {
 	return null;
 };
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 function ecs_macros_ComponentCache_getComponentCount() {
 	return ecs_macros_ComponentCache_componentIncrementer;
 }
@@ -1029,13 +1056,38 @@ var haxe_Exception = function(message,previous,native) {
 	this.__nativeException = native != null ? native : this;
 };
 haxe_Exception.__name__ = "haxe.Exception";
+haxe_Exception.caught = function(value) {
+	if(((value) instanceof haxe_Exception)) {
+		return value;
+	} else if(((value) instanceof Error)) {
+		return new haxe_Exception(value.message,null,value);
+	} else {
+		return new haxe_ValueException(value,null,value);
+	}
+};
+haxe_Exception.thrown = function(value) {
+	if(((value) instanceof haxe_Exception)) {
+		return value.get_native();
+	} else if(((value) instanceof Error)) {
+		return value;
+	} else {
+		var e = new haxe_ValueException(value);
+		return e;
+	}
+};
 haxe_Exception.__super__ = Error;
 haxe_Exception.prototype = $extend(Error.prototype,{
-	toString: function() {
+	unwrap: function() {
+		return this.__nativeException;
+	}
+	,toString: function() {
 		return this.get_message();
 	}
 	,get_message: function() {
 		return this.message;
+	}
+	,get_native: function() {
+		return this.__nativeException;
 	}
 });
 var haxe_Timer = function(time_ms) {
@@ -1049,15 +1101,49 @@ haxe_Timer.prototype = {
 	run: function() {
 	}
 };
+var haxe_ValueException = function(value,previous,native) {
+	haxe_Exception.call(this,String(value),previous,native);
+	this.value = value;
+};
+haxe_ValueException.__name__ = "haxe.ValueException";
+haxe_ValueException.__super__ = haxe_Exception;
+haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
+	unwrap: function() {
+		return this.value;
+	}
+});
 var haxe_ds_Option = $hxEnums["haxe.ds.Option"] = { __ename__:true,__constructs__:null
 	,Some: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.ds.Option",toString:$estr}; },$_._hx_name="Some",$_.__params__ = ["v"],$_)
 	,None: {_hx_name:"None",_hx_index:1,__enum__:"haxe.ds.Option",toString:$estr}
 };
 haxe_ds_Option.__constructs__ = [haxe_ds_Option.Some,haxe_ds_Option.None];
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
 };
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_io_Bytes.__name__ = "haxe.io.Bytes";
+var haxe_io_Eof = function() {
+};
+haxe_io_Eof.__name__ = "haxe.io.Eof";
+haxe_io_Eof.prototype = {
+	toString: function() {
+		return "Eof";
+	}
+};
+var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__:true,__constructs__:null
+	,Blocked: {_hx_name:"Blocked",_hx_index:0,__enum__:"haxe.io.Error",toString:$estr}
+	,Overflow: {_hx_name:"Overflow",_hx_index:1,__enum__:"haxe.io.Error",toString:$estr}
+	,OutsideBounds: {_hx_name:"OutsideBounds",_hx_index:2,__enum__:"haxe.io.Error",toString:$estr}
+	,Custom: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"haxe.io.Error",toString:$estr}; },$_._hx_name="Custom",$_.__params__ = ["e"],$_)
+};
+haxe_io_Error.__constructs__ = [haxe_io_Error.Blocked,haxe_io_Error.Overflow,haxe_io_Error.OutsideBounds,haxe_io_Error.Custom];
+var haxe_io_Input = function() { };
+haxe_io_Input.__name__ = "haxe.io.Input";
+var haxe_io_Output = function() { };
+haxe_io_Output.__name__ = "haxe.io.Output";
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
 	this.array = array;
@@ -1328,6 +1414,24 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+var js_node_Fs = require("fs");
+var js_node_KeyValue = {};
+js_node_KeyValue.get_key = function(this1) {
+	return this1[0];
+};
+js_node_KeyValue.get_value = function(this1) {
+	return this1[1];
+};
+var js_node_buffer_Buffer = require("buffer").Buffer;
+var js_node_stream_WritableNewOptionsAdapter = {};
+js_node_stream_WritableNewOptionsAdapter.from = function(options) {
+	if(!Object.prototype.hasOwnProperty.call(options,"final")) {
+		Object.defineProperty(options,"final",{ get : function() {
+			return options.final_;
+		}});
+	}
+	return options;
+};
 var safety_SafetyException = function(message,previous,native) {
 	haxe_Exception.call(this,message,previous,native);
 };
@@ -1342,6 +1446,121 @@ safety_NullPointerException.__name__ = "safety.NullPointerException";
 safety_NullPointerException.__super__ = safety_SafetyException;
 safety_NullPointerException.prototype = $extend(safety_SafetyException.prototype,{
 });
+var sys_io_FileInput = function(fd) {
+	this.fd = fd;
+	this.pos = 0;
+};
+sys_io_FileInput.__name__ = "sys.io.FileInput";
+sys_io_FileInput.__super__ = haxe_io_Input;
+sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
+	readByte: function() {
+		var buf = js_node_buffer_Buffer.alloc(1);
+		var bytesRead;
+		try {
+			bytesRead = js_node_Fs.readSync(this.fd,buf,0,1,this.pos);
+		} catch( _g ) {
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(_g1.code == "EOF") {
+				throw haxe_Exception.thrown(new haxe_io_Eof());
+			} else {
+				throw haxe_Exception.thrown(haxe_io_Error.Custom(_g1));
+			}
+		}
+		if(bytesRead == 0) {
+			throw haxe_Exception.thrown(new haxe_io_Eof());
+		}
+		this.pos++;
+		return buf[0];
+	}
+	,readBytes: function(s,pos,len) {
+		var data = s.b;
+		var buf = js_node_buffer_Buffer.from(data.buffer,data.byteOffset,s.length);
+		var bytesRead;
+		try {
+			bytesRead = js_node_Fs.readSync(this.fd,buf,pos,len,this.pos);
+		} catch( _g ) {
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(_g1.code == "EOF") {
+				throw haxe_Exception.thrown(new haxe_io_Eof());
+			} else {
+				throw haxe_Exception.thrown(haxe_io_Error.Custom(_g1));
+			}
+		}
+		if(bytesRead == 0) {
+			throw haxe_Exception.thrown(new haxe_io_Eof());
+		}
+		this.pos += bytesRead;
+		return bytesRead;
+	}
+	,close: function() {
+		js_node_Fs.closeSync(this.fd);
+	}
+	,seek: function(p,pos) {
+		switch(pos._hx_index) {
+		case 0:
+			this.pos = p;
+			break;
+		case 1:
+			this.pos += p;
+			break;
+		case 2:
+			this.pos = js_node_Fs.fstatSync(this.fd).size + p;
+			break;
+		}
+	}
+	,tell: function() {
+		return this.pos;
+	}
+	,eof: function() {
+		return this.pos >= js_node_Fs.fstatSync(this.fd).size;
+	}
+});
+var sys_io_FileOutput = function(fd) {
+	this.fd = fd;
+	this.pos = 0;
+};
+sys_io_FileOutput.__name__ = "sys.io.FileOutput";
+sys_io_FileOutput.__super__ = haxe_io_Output;
+sys_io_FileOutput.prototype = $extend(haxe_io_Output.prototype,{
+	writeByte: function(b) {
+		var buf = js_node_buffer_Buffer.alloc(1);
+		buf[0] = b;
+		js_node_Fs.writeSync(this.fd,buf,0,1,this.pos);
+		this.pos++;
+	}
+	,writeBytes: function(s,pos,len) {
+		var data = s.b;
+		var buf = js_node_buffer_Buffer.from(data.buffer,data.byteOffset,s.length);
+		var wrote = js_node_Fs.writeSync(this.fd,buf,pos,len,this.pos);
+		this.pos += wrote;
+		return wrote;
+	}
+	,close: function() {
+		js_node_Fs.closeSync(this.fd);
+	}
+	,seek: function(p,pos) {
+		switch(pos._hx_index) {
+		case 0:
+			this.pos = p;
+			break;
+		case 1:
+			this.pos += p;
+			break;
+		case 2:
+			this.pos = js_node_Fs.fstatSync(this.fd).size + p;
+			break;
+		}
+	}
+	,tell: function() {
+		return this.pos;
+	}
+});
+var sys_io_FileSeek = $hxEnums["sys.io.FileSeek"] = { __ename__:true,__constructs__:null
+	,SeekBegin: {_hx_name:"SeekBegin",_hx_index:0,__enum__:"sys.io.FileSeek",toString:$estr}
+	,SeekCur: {_hx_name:"SeekCur",_hx_index:1,__enum__:"sys.io.FileSeek",toString:$estr}
+	,SeekEnd: {_hx_name:"SeekEnd",_hx_index:2,__enum__:"sys.io.FileSeek",toString:$estr}
+};
+sys_io_FileSeek.__constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.SeekCur,sys_io_FileSeek.SeekEnd];
 var systems_Messages = function(_universe) {
 	ecs_System.call(this,_universe);
 };
