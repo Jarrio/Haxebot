@@ -44,11 +44,9 @@ class Main {
 			trace(e.message);
 		}
 
-		if (config == null || config.discord_api_key == null) {
-			trace('Enter your discord auth token');
-			return;
+		if (config == null || config.discord_api_key == 'TOKEN_HERE') {
+			throw ('Enter your discord auth token.');
 		}
-
 
 		start();
 	}

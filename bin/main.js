@@ -86,9 +86,8 @@ Main.main = function() {
 	} catch( _g ) {
 		console.log("src/Main.hx:44:",haxe_Exception.caught(_g).get_message());
 	}
-	if(Main.config == null || Main.config.discord_api_key == null) {
-		console.log("src/Main.hx:48:","Enter your discord auth token");
-		return;
+	if(Main.config == null || Main.config.discord_api_key == "TOKEN_HERE") {
+		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.start();
 };
