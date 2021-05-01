@@ -1,2 +1,2 @@
-/bin/node_modules/*
-/bin/config.json
+bin/node_modules/*
+bin/config.json
