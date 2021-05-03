@@ -73,6 +73,7 @@ class Main {
 }
 
 typedef TConfig = {
+	var macros:Bool;
 	var prefixes:Array<String>;
 	var discord_api_key:String;
 }
