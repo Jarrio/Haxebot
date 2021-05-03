@@ -3,7 +3,9 @@
 --library aidan-ecs
 --library discord.js
 --library hxnodejs
-
+--debug
+-D source-map
+-D source-map-content
 --js bin/main.js
 -main Main
 

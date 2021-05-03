@@ -5,7 +5,8 @@ import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
 import systems.Messages;
-
+import components.Command;
+import systems.commands.Hi;
 class Main {
 	public static var config:TConfig;
 	public static var universe:Universe;
@@ -13,6 +14,7 @@ class Main {
 		universe = new Universe(1000);
 
 		universe.setSystems(
+			Hi,
 			Messages
 		);
 
@@ -21,8 +23,25 @@ class Main {
 			trace("HaxeBot Ready!");
 		});
 
-		client.on('message', function(message) {
-			trace((message:Message).author.tag);
+		client.on('message', function(message:Message) {
+			
+			var split = message.content.split(' ');
+			var first_word = split[0];
+			var content = null;
+			if (split.length > 1) {
+				content = message.content.substring(first_word.length);
+			}
+			trace(first_word);
+			for (prefix in config.prefixes) {
+				if (prefix == first_word.charAt(0)) {
+					var command = ({
+						name: first_word, 
+						content: content
+					}:Command);
+					universe.setComponents(universe.createEntity(), command, message);
+					break;
+				}
+			}
 		});
 
 		client.login(config.discord_api_key).then(function(reply) {
@@ -53,5 +72,6 @@ class Main {
 }
 
 typedef TConfig = {
+	var prefixes:Array<String>;
 	var discord_api_key:String;
 }

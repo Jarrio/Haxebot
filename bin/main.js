@@ -36,15 +36,21 @@ var Lambda = function() { };
 Lambda.__name__ = "Lambda";
 Lambda.has = function(it,elt) {
 	var x = $getIterator(it);
-	while(x.hasNext()) if(x.next() == elt) {
-		return true;
+	while(x.hasNext()) {
+		var x1 = x.next();
+		if(x1 == elt) {
+			return true;
+		}
 	}
 	return false;
 };
 Lambda.exists = function(it,f) {
 	var x = $getIterator(it);
-	while(x.hasNext()) if(f(x.next())) {
-		return true;
+	while(x.hasNext()) {
+		var x1 = x.next();
+		if(f(x1)) {
+			return true;
+		}
 	}
 	return false;
 };
@@ -62,19 +68,49 @@ var Main = function() { };
 Main.__name__ = "Main";
 Main.start = function() {
 	Main.universe = new ecs_Universe(1000);
+	Main.universe.systems.add(new systems_commands_Hi(Main.universe));
 	Main.universe.systems.add(new systems_Messages(Main.universe));
 	var client = new discord_$js_Client();
 	client.on("ready",function(_) {
-		console.log("src/Main.hx:21:","HaxeBot Ready!");
+		console.log("src/Main.hx:23:","HaxeBot Ready!");
 	});
 	client.on("message",function(message) {
-		console.log("src/Main.hx:25:",message.author.tag);
+		var split = message.content.split(" ");
+		var first_word = split[0];
+		var content = null;
+		if(split.length > 1) {
+			content = message.content.substring(first_word.length);
+		}
+		console.log("src/Main.hx:34:",first_word);
+		var _g = 0;
+		var _g1 = Main.config.prefixes;
+		while(_g < _g1.length) {
+			var prefix = _g1[_g];
+			++_g;
+			if(prefix == first_word.charAt(0)) {
+				var command = { name : first_word, content : content};
+				var _ecsTmpEntity = Main.universe.entities.create();
+				Main.universe.components.set(_ecsTmpEntity,1,command);
+				Main.universe.components.set(_ecsTmpEntity,0,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var _g2 = 0;
+				var _g3 = Main.universe.families.number;
+				while(_g2 < _g3) {
+					var i = _g2++;
+					var ecsTmpFamily = Main.universe.families.get(i);
+					if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+						ecsTmpFamily.add(_ecsTmpEntity);
+					}
+				}
+				break;
+			}
+		}
 	});
 	client.login(Main.config.discord_api_key).then(function(reply) {
-		console.log("src/Main.hx:29:","HaxeBot logged in!");
+		console.log("src/Main.hx:48:","HaxeBot logged in!");
 	},function(error) {
-		console.log("src/Main.hx:31:","HaxeBot Error!");
-		console.log("src/Main.hx:32:",error);
+		console.log("src/Main.hx:50:","HaxeBot Error!");
+		console.log("src/Main.hx:51:",error);
 	});
 	new haxe_Timer(100).run = function() {
 		Main.universe.update(1);
@@ -84,7 +120,7 @@ Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./bin/config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
-		console.log("src/Main.hx:44:",haxe_Exception.caught(_g).get_message());
+		console.log("src/Main.hx:63:",haxe_Exception.caught(_g).get_message());
 	}
 	if(Main.config == null || Main.config.discord_api_key == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -150,7 +186,9 @@ Std.string = function(s) {
 };
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
-	var bits = [0];
+	var this1 = [0];
+	var this2 = this1;
+	var bits = this2;
 	var _g = 0;
 	while(_g < positions.length) {
 		var pos = positions[_g];
@@ -162,9 +200,13 @@ bits_Bits.fromPositions = function(positions) {
 			if(bits.length <= cell) {
 				var _g1 = bits.length;
 				var _g2 = cell + 1;
-				while(_g1 < _g2) bits[_g1++] = 0;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					bits[i] = 0;
+				}
 			}
-			bits[cell] |= 1 << pos - cell * 32;
+			var bit = pos - cell * 32;
+			bits[cell] |= 1 << bit;
 		}
 	}
 	return bits;
@@ -174,12 +216,16 @@ bits_Bits._new = function(capacity) {
 		capacity = 0;
 	}
 	var this1 = [0];
+	var this2 = this1;
 	if(capacity > 0) {
 		var newLength = Math.ceil(capacity / 32);
-		var _g = this1.length;
-		while(_g < newLength) this1[_g++] = 0;
+		var _g = this2.length;
+		while(_g < newLength) {
+			var i = _g++;
+			this2[i] = 0;
+		}
 	}
-	return this1;
+	return this2;
 };
 bits_Bits.set = function(this1,pos) {
 	if(pos < 32) {
@@ -189,9 +235,13 @@ bits_Bits.set = function(this1,pos) {
 		if(this1.length <= cell) {
 			var _g = this1.length;
 			var _g1 = cell + 1;
-			while(_g < _g1) this1[_g++] = 0;
+			while(_g < _g1) {
+				var i = _g++;
+				this1[i] = 0;
+			}
 		}
-		this1[cell] |= 1 << pos - cell * 32;
+		var bit = pos - cell * 32;
+		this1[cell] |= 1 << bit;
 	}
 };
 bits_Bits.unset = function(this1,pos) {
@@ -202,9 +252,13 @@ bits_Bits.unset = function(this1,pos) {
 		if(this1.length <= cell) {
 			var _g = this1.length;
 			var _g1 = cell + 1;
-			while(_g < _g1) this1[_g++] = 0;
+			while(_g < _g1) {
+				var i = _g++;
+				this1[i] = 0;
+			}
 		}
-		this1[cell] &= ~(1 << pos - cell * 32);
+		var bit = pos - cell * 32;
+		this1[cell] &= ~(1 << bit);
 	}
 };
 bits_Bits.add = function(this1,bits) {
@@ -212,7 +266,10 @@ bits_Bits.add = function(this1,bits) {
 	if(this1.length < data.length) {
 		var newLength = data.length;
 		var _g = this1.length;
-		while(_g < newLength) this1[_g++] = 0;
+		while(_g < newLength) {
+			var i = _g++;
+			this1[i] = 0;
+		}
 	}
 	var _g = 0;
 	var _g1 = data.length;
@@ -238,8 +295,9 @@ bits_Bits.isSet = function(this1,pos) {
 		return 0 != (this1[0] & 1 << pos);
 	} else {
 		var cell = pos / 32 | 0;
+		var bit = pos - cell * 32;
 		if(cell < this1.length) {
-			return 0 != (this1[cell] & 1 << pos - cell * 32);
+			return 0 != (this1[cell] & 1 << bit);
 		} else {
 			return false;
 		}
@@ -288,18 +346,26 @@ bits_Bits.toString = function(this1) {
 	var _g = 0;
 	var _g1 = this1.length;
 	while(_g < _g1) {
-		var cellValue = this1[_g++];
+		var cell = _g++;
+		var cellValue = this1[cell];
 		var _g2 = 0;
-		while(_g2 < 32) result = (0 != (cellValue & 1 << _g2++) ? "1" : "0") + result;
+		while(_g2 < 32) {
+			var i = _g2++;
+			result = (0 != (cellValue & 1 << i) ? "1" : "0") + result;
+		}
 	}
 	return HxOverrides.substr(result,result.indexOf("1"),null);
 };
 bits_Bits.isEmpty = function(this1) {
 	var empty = true;
 	var _g = 0;
-	while(_g < this1.length) if(this1[_g++] != 0) {
-		empty = false;
-		break;
+	while(_g < this1.length) {
+		var cellValue = this1[_g];
+		++_g;
+		if(cellValue != 0) {
+			empty = false;
+			break;
+		}
 	}
 	return empty;
 };
@@ -320,7 +386,10 @@ bits_Bits.count = function(this1) {
 bits_Bits.clear = function(this1) {
 	var _g = 0;
 	var _g1 = this1.length;
-	while(_g < _g1) this1[_g++] = 0;
+	while(_g < _g1) {
+		var cell = _g++;
+		this1[cell] = 0;
+	}
 };
 bits_Bits.merge = function(this1,bits) {
 	if(this1.length < bits.length) {
@@ -402,11 +471,15 @@ bits_BitsIterator.prototype = {
 };
 var bits_BitsData = {};
 bits_BitsData._new = function() {
-	return [0];
+	var this1 = [0];
+	return this1;
 };
 bits_BitsData.resize = function(this1,newLength) {
 	var _g = this1.length;
-	while(_g < newLength) this1[_g++] = 0;
+	while(_g < newLength) {
+		var i = _g++;
+		this1[i] = 0;
+	}
 };
 bits_BitsData.copy = function(this1) {
 	return this1.slice();
@@ -436,7 +509,8 @@ bits_BitsData.get_length = function(this1) {
 };
 var discord_$js_Client = require("discord.js").Client;
 var ecs_Components = function(_size) {
-	this.components = new Array(_size);
+	var this1 = new Array(_size);
+	this.components = this1;
 };
 ecs_Components.__name__ = "ecs.Components";
 ecs_Components.prototype = {
@@ -489,14 +563,20 @@ ecs_Family.prototype = {
 			this.active = true;
 			var _g = 0;
 			var _g1 = this.entities.size();
-			while(_g < _g1) this.onEntityAdded.notify(this.entities.getDense(_g++));
+			while(_g < _g1) {
+				var i = _g++;
+				this.onEntityAdded.notify(this.entities.getDense(i));
+			}
 		}
 	}
 	,deactivate: function() {
 		if(this.active) {
 			var _g = 0;
 			var _g1 = this.entities.size();
-			while(_g < _g1) this.onEntityRemoved.notify(this.entities.getDense(_g++));
+			while(_g < _g1) {
+				var i = _g++;
+				this.onEntityRemoved.notify(this.entities.getDense(i));
+			}
 			this.active = false;
 		}
 	}
@@ -552,16 +632,36 @@ ecs_Universe.prototype = {
 };
 var ecs_core_ComponentManager = function(_entities) {
 	this.entities = _entities;
-	this.flags = new Array(_entities.capacity());
-	this.components = new Array(0);
+	var this1 = new Array(_entities.capacity());
+	this.flags = this1;
+	var meta = haxe_rtti_Meta.getType(ecs_core_ComponentManager);
+	var componentCount = meta.componentCount[0];
+	var componentIDs = meta.components;
+	var this1 = new Array(componentCount);
+	this.components = this1;
+	var _g = 0;
+	while(_g < componentIDs.length) {
+		var id = componentIDs[_g];
+		++_g;
+		this.components[id] = new ecs_Components(_entities.capacity());
+	}
 	var _g = 0;
 	var _g1 = this.flags.length;
-	while(_g < _g1) this.flags[_g++] = [0];
+	while(_g < _g1) {
+		var i = _g++;
+		var this1 = [0];
+		var this2 = this1;
+		this.flags[i] = this2;
+	}
 };
 ecs_core_ComponentManager.__name__ = "ecs.core.ComponentManager";
 ecs_core_ComponentManager.prototype = {
 	getTable: function(_compID) {
 		return this.components[_compID];
+	}
+	,set: function(_entity,_id,_component) {
+		this.components[_id].set(_entity,_component);
+		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
 	}
 	,remove: function(_entity,_id) {
 		bits_Bits.unset(this.flags[ecs_Entity.id(_entity)],_id);
@@ -571,7 +671,8 @@ ecs_core_ComponentManager.prototype = {
 	}
 };
 var ecs_core_EntityManager = function(_max) {
-	this.storage = new Array(_max);
+	var this1 = new Array(_max);
+	this.storage = this1;
 	this.nextID = 0;
 };
 ecs_core_EntityManager.__name__ = "ecs.core.EntityManager";
@@ -590,9 +691,39 @@ ecs_core_EntityManager.prototype = {
 	}
 };
 var ecs_core_FamilyManager = function(_components,_resources,_size) {
+	var meta = haxe_rtti_Meta.getType(ecs_core_FamilyManager);
+	var allFamilies = meta.families;
+	var this1 = new Array(allFamilies.length);
+	this.families = this1;
+	var _g_current = 0;
+	while(_g_current < allFamilies.length) {
+		var _g1_value = allFamilies[_g_current];
+		var _g1_key = _g_current++;
+		var this1 = [0];
+		var this2 = this1;
+		var cmpBits = this2;
+		var _g = 0;
+		var _g1 = _g1_value.components;
+		while(_g < _g1.length) {
+			var id = _g1[_g];
+			++_g;
+			bits_Bits.set(cmpBits,id);
+		}
+		var this11 = [0];
+		var this21 = this11;
+		var resBits = this21;
+		var _g2 = 0;
+		var _g3 = _g1_value.resources;
+		while(_g2 < _g3.length) {
+			var id1 = _g3[_g2];
+			++_g2;
+			bits_Bits.set(resBits,id1);
+		}
+		this.families[_g1_key] = new ecs_Family(_g1_key,cmpBits,resBits,_size);
+	}
 	this.components = _components;
 	this.resources = _resources;
-	this.families = new Array(0);
+	this.number = this.families.length;
 };
 ecs_core_FamilyManager.__name__ = "ecs.core.FamilyManager";
 ecs_core_FamilyManager.prototype = {
@@ -602,6 +733,17 @@ ecs_core_FamilyManager.prototype = {
 	,tryActivate: function(_id) {
 		if(!this.families[_id].isActive() && bits_Bits.areSet(this.resources.flags,this.families[_id].resourcesMask)) {
 			this.families[_id].activate();
+		}
+	}
+	,tryDeactivate: function(_id,resourceID) {
+		if(!bits_Bits.isSet(this.resources.flags,resourceID)) {
+			return;
+		}
+		if(!this.families[_id].isActive()) {
+			return;
+		}
+		if(bits_Bits.isSet(this.families[_id].resourcesMask,resourceID)) {
+			this.families[_id].deactivate();
 		}
 	}
 	,whenEntityDestroyed: function(_entity) {
@@ -618,8 +760,24 @@ ecs_core_FamilyManager.prototype = {
 	}
 };
 var ecs_core_ResourceManager = function() {
-	this.flags = [0];
-	this.resources = new Array(0);
+	var resourceCount = haxe_rtti_Meta.getType(ecs_core_ResourceManager).resourceCount[0];
+	var capacity = resourceCount;
+	if(resourceCount == null) {
+		capacity = 0;
+	}
+	var this1 = [0];
+	var this2 = this1;
+	if(capacity > 0) {
+		var newLength = Math.ceil(capacity / 32);
+		var _g = this2.length;
+		while(_g < newLength) {
+			var i = _g++;
+			this2[i] = 0;
+		}
+	}
+	this.flags = this2;
+	var this1 = new Array(resourceCount);
+	this.resources = this1;
 };
 ecs_core_ResourceManager.__name__ = "ecs.core.ResourceManager";
 ecs_core_ResourceManager.prototype = {
@@ -651,7 +809,11 @@ ecs_core_SystemManager.prototype = {
 	,update: function(_dt) {
 		var _g = 0;
 		var _g1 = this.active;
-		while(_g < _g1.length) _g1[_g++].update(_dt);
+		while(_g < _g1.length) {
+			var system = _g1[_g];
+			++_g;
+			system.update(_dt);
+		}
 	}
 };
 var ecs_ds_Result = $hxEnums["ecs.ds.Result"] = { __ename__:true,__constructs__:null
@@ -689,7 +851,11 @@ ecs_ds_Signal.prototype = {
 	,notify: function(_data) {
 		var _g = 0;
 		var _g1 = this.subscribers;
-		while(_g < _g1.length) _g1[_g++](_data);
+		while(_g < _g1.length) {
+			var func = _g1[_g];
+			++_g;
+			func(_data);
+		}
 	}
 };
 var ecs_ds_Signal_$ecs_$Entity = function() {
@@ -708,19 +874,31 @@ ecs_ds_Signal_$ecs_$Entity.prototype = {
 	,notify: function(_data) {
 		var _g = 0;
 		var _g1 = this.subscribers;
-		while(_g < _g1.length) _g1[_g++](_data);
+		while(_g < _g1.length) {
+			var func = _g1[_g];
+			++_g;
+			func(_data);
+		}
 	}
 };
 var ecs_ds_SparseSet = function(_size) {
-	this.sparse = new Array(_size);
-	this.dense = new Array(_size);
+	var this1 = new Array(_size);
+	this.sparse = this1;
+	var this1 = new Array(_size);
+	this.dense = this1;
 	this.number = 0;
 	var _g = 0;
 	var _g1 = this.sparse.length;
-	while(_g < _g1) this.sparse[_g++] = 0;
+	while(_g < _g1) {
+		var i = _g++;
+		this.sparse[i] = 0;
+	}
 	var _g = 0;
 	var _g1 = this.dense.length;
-	while(_g < _g1) this.dense[_g++] = ecs_Entity.none;
+	while(_g < _g1) {
+		var i = _g++;
+		this.dense[i] = ecs_Entity.none;
+	}
 };
 ecs_ds_SparseSet.__name__ = "ecs.ds.SparseSet";
 ecs_ds_SparseSet.prototype = {
@@ -752,14 +930,6 @@ ecs_ds_SparseSet.prototype = {
 		return this.number;
 	}
 };
-var ecs_ds_Unit = {};
-ecs_ds_Unit._new = function() {
-	return null;
-};
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
-};
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 function ecs_macros_ComponentCache_getComponentCount() {
 	return ecs_macros_ComponentCache_componentIncrementer;
 }
@@ -792,10 +962,14 @@ function ecs_macros_FamilyCache_getFamilyIDsWithResource(_id) {
 	var filtered = [];
 	var _g_current = 0;
 	var _g_array = ecs_macros_FamilyCache_familyDefinitions;
-	while(_g_current < _g_array.length) if(Lambda.exists(_g_array[_g_current++].resources,function(f) {
-		return f.uID == _id;
-	})) {
-		filtered.push(_g_current - 1);
+	while(_g_current < _g_array.length) {
+		var _g1_value = _g_array[_g_current];
+		var _g1_key = _g_current++;
+		if(Lambda.exists(_g1_value.resources,function(f) {
+			return f.uID == _id;
+		})) {
+			filtered.push(_g1_key);
+		}
 	}
 	return filtered;
 }
@@ -803,10 +977,14 @@ function ecs_macros_FamilyCache_getFamilyIDsWithComponent(_id) {
 	var filtered = [];
 	var _g_current = 0;
 	var _g_array = ecs_macros_FamilyCache_familyDefinitions;
-	while(_g_current < _g_array.length) if(Lambda.exists(_g_array[_g_current++].components,function(f) {
-		return f.uID == _id;
-	})) {
-		filtered.push(_g_current - 1);
+	while(_g_current < _g_array.length) {
+		var _g1_value = _g_array[_g_current];
+		var _g1_key = _g_current++;
+		if(Lambda.exists(_g1_value.components,function(f) {
+			return f.uID == _id;
+		})) {
+			filtered.push(_g1_key);
+		}
 	}
 	return filtered;
 }
@@ -834,13 +1012,25 @@ function ecs_macros_FamilyCache_hash(_family) {
 	buffer_b = "c:";
 	var _g = 0;
 	var _g1 = _family.components;
-	while(_g < _g1.length) buffer_b += Std.string(_g1[_g++].type);
+	while(_g < _g1.length) {
+		var comp = _g1[_g];
+		++_g;
+		buffer_b += Std.string(comp.type);
+	}
 	buffer_b += "r:";
 	var _g = 0;
 	var _g1 = _family.resources;
-	while(_g < _g1.length) buffer_b += Std.string(_g1[_g++].type);
+	while(_g < _g1.length) {
+		var res = _g1[_g];
+		++_g;
+		buffer_b += Std.string(res.type);
+	}
 	return buffer_b;
 }
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 function ecs_macros_ResourceCache_getResourceCount() {
 	return ecs_macros_ResourceCache_resourceIncrementer;
 }
@@ -890,8 +1080,12 @@ function ecs_macros_SystemMacros_hasMeta(_field,_meta) {
 	}
 	var _g = 0;
 	var _g1 = _field.meta;
-	while(_g < _g1.length) if(_g1[_g++].name == _meta) {
-		return true;
+	while(_g < _g1.length) {
+		var meta = _g1[_g];
+		++_g;
+		if(meta.name == _meta) {
+			return true;
+		}
 	}
 	return false;
 }
@@ -933,22 +1127,24 @@ function ecs_macros_SystemMacros_extractFullFamily(_field) {
 					value1 = ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
 				}
 			}
+			var requires = value1 == null ? ecs_ds_Result.Ok([]) : value1;
 			var value = Lambda.find(_g2,function(f) {
 				return f.name == "resources";
 			});
-			var value2;
+			var value1;
 			if(value == null) {
-				value2 = null;
+				value1 = null;
 			} else {
 				var _g1 = value.kind;
 				if(_g1._hx_index == 0) {
 					var _g2 = _g1.t;
-					value2 = _g2 == null ? ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos}) : _g2._hx_index == 2 ? ecs_macros_SystemMacros_extractFamilyComponentsFromObject(_g2.fields) : ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
+					value1 = _g2 == null ? ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos}) : _g2._hx_index == 2 ? ecs_macros_SystemMacros_extractFamilyComponentsFromObject(_g2.fields) : ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
 				} else {
-					value2 = ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
+					value1 = ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
 				}
 			}
-			return ecs_ds_Result.Ok({ name : _field.name, components : value1 == null ? ecs_ds_Result.Ok([]) : value1, resources : value2 == null ? ecs_ds_Result.Ok([]) : value2});
+			var resources = value1 == null ? ecs_ds_Result.Ok([]) : value1;
+			return ecs_ds_Result.Ok({ name : _field.name, components : requires, resources : resources});
 		} else {
 			return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
 		}
@@ -978,8 +1174,10 @@ function ecs_macros_SystemMacros_getUniqueComponents(_families) {
 	var _g = 0;
 	var _g1 = _families;
 	while(_g < _g1.length) {
+		var family = _g1[_g];
+		++_g;
 		var _g2 = 0;
-		var _g3 = _g1[_g++].components;
+		var _g3 = family.components;
 		while(_g2 < _g3.length) {
 			var component = [_g3[_g2]];
 			++_g2;
@@ -1319,6 +1517,19 @@ haxe_macro_TypeTools.findField = function(c,name,isStatic) {
 		}
 	}
 };
+var haxe_rtti_Meta = function() { };
+haxe_rtti_Meta.__name__ = "haxe.rtti.Meta";
+haxe_rtti_Meta.getType = function(t) {
+	var meta = haxe_rtti_Meta.getMeta(t);
+	if(meta == null || meta.obj == null) {
+		return { };
+	} else {
+		return meta.obj;
+	}
+};
+haxe_rtti_Meta.getMeta = function(t) {
+	return t.__meta__;
+};
 var js_Boot = function() { };
 js_Boot.__name__ = "js.Boot";
 js_Boot.__string_rec = function(o,s) {
@@ -1560,6 +1771,32 @@ var sys_io_FileSeek = $hxEnums["sys.io.FileSeek"] = { __ename__:true,__construct
 	,SeekEnd: {_hx_name:"SeekEnd",_hx_index:2,__enum__:"sys.io.FileSeek",toString:$estr}
 };
 sys_io_FileSeek.__constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.SeekCur,sys_io_FileSeek.SeekEnd];
+var systems_CommandBase = function(_universe) {
+	ecs_System.call(this,_universe);
+};
+systems_CommandBase.__name__ = "systems.CommandBase";
+systems_CommandBase.__super__ = ecs_System;
+systems_CommandBase.prototype = $extend(ecs_System.prototype,{
+	update: function(_dt) {
+		var _g = this.commands.iterator();
+		while(_g.active && _g.idx < _g.set.size()) {
+			var entity = _g.set.getDense(_g.idx++);
+			var message = this.table6c16270644d94dba4055a067a073b12c.get(entity);
+			var command = this.tableff7698320b2346222a0ba18495307447.get(entity);
+			if(command.name == this.get_name()) {
+				this.run(command,message);
+				this.commands.remove(entity);
+			}
+		}
+	}
+	,onAdded: function() {
+		this.commands = this.universe.families.get(0);
+		this.table6c16270644d94dba4055a067a073b12c = this.universe.components.getTable(0);
+		this.tableff7698320b2346222a0ba18495307447 = this.universe.components.getTable(1);
+	}
+	,onRemoved: function() {
+	}
+});
 var systems_Messages = function(_universe) {
 	ecs_System.call(this,_universe);
 };
@@ -1567,6 +1804,23 @@ systems_Messages.__name__ = "systems.Messages";
 systems_Messages.__super__ = ecs_System;
 systems_Messages.prototype = $extend(ecs_System.prototype,{
 	onAdded: function() {
+	}
+	,onRemoved: function() {
+	}
+});
+var systems_commands_Hi = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+systems_commands_Hi.__name__ = "systems.commands.Hi";
+systems_commands_Hi.__super__ = systems_CommandBase;
+systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,message) {
+		message.reply("Hey there");
+	}
+	,get_name: function() {
+		return "!hi";
+	}
+	,onAdded: function() {
 	}
 	,onRemoved: function() {
 	}
@@ -1580,7 +1834,9 @@ Array.__name__ = "Array";
 js_Boot.__toStr = ({ }).toString;
 bits_BitsData.CELL_SIZE = 32;
 ecs_Entity.none = ecs_Entity._new(-1);
-ecs_ds_Unit.unit = ecs_ds_Unit._new();
+ecs_core_ComponentManager.__meta__ = { obj : { components : [1,0], componentCount : [2]}};
+ecs_core_FamilyManager.__meta__ = { obj : { families : [{ components : [0,1], resources : []}], resourceCount : [0], componentCount : [2]}};
+ecs_core_ResourceManager.__meta__ = { obj : { resourceCount : [0]}};
 var ecs_macros_ComponentCache_components = new haxe_ds_StringMap();
 var ecs_macros_ComponentCache_componentIncrementer = 0;
 var ecs_macros_FamilyCache_familyIDs = new haxe_ds_StringMap();
@@ -1591,3 +1847,5 @@ var ecs_macros_ResourceCache_resources = new haxe_ds_StringMap();
 var ecs_macros_ResourceCache_resourceIncrementer = 0;
 Main.main();
 })({});
+
+//# sourceMappingURL=main.js.map

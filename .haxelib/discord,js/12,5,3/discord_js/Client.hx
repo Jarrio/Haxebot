@@ -28,7 +28,9 @@ package discord_js;
 	public function sweepMessages(?lifetime:Float):Float;
 	public function toJSON():Dynamic;
 	@:overload(function<S>(event:{ /** Returns a string representation of a string.Returns a string representation of an object. **/ dynamic function toString():String; /** Returns the primitive value of the specified object.Returns the primitive value of the specified object. **/ dynamic function valueOf():ts.AnyOf2<String, js.lib.Symbol>; }, listener:(args:haxe.extern.Rest<Dynamic>) -> Void):Client { })
-	public function on<K>(event:K, listener:(args:Any) -> Void):Client;
+	@:overload(function<S>(event:{ /** Returns a string representation of a string.Returns a string representation of an object. **/ dynamic function toString():String; /** Returns the primitive value of the specified object.Returns the primitive value of the specified object. **/ dynamic function valueOf():ts.AnyOf2<String, js.lib.Symbol>; }, listener:(args:haxe.extern.Rest<Dynamic>) -> Void):Client { })
+	@:overload(function<K>(event:K, listener:(args:Dynamic) -> Void):Client{})
+	public function on<K>(event:K, listener:(args:Dynamic) -> Void):Client;
 
 	@:overload(function<S>(event:{ /** Returns a string representation of a string.Returns a string representation of an object. **/ dynamic function toString():String; /** Returns the primitive value of the specified object.Returns the primitive value of the specified object. **/ dynamic function valueOf():ts.AnyOf2<String, js.lib.Symbol>; }, listener:(args:haxe.extern.Rest<Dynamic>) -> Void):Client { })
 	public function once<K>(event:K, listener:(args:haxe.extern.Rest<Any>) -> Void):Client;
