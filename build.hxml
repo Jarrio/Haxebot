@@ -3,10 +3,12 @@
 --library aidan-ecs
 --library discord.js
 --library hxnodejs
+--library safety
 --debug
 -D source-map
 -D source-map-content
 --js bin/main.js
+--macro Safety.safeNavigation('', true)
 -main Main
 
 

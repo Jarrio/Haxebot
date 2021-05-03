@@ -7,6 +7,7 @@ import haxe.Timer;
 import systems.Messages;
 import components.Command;
 import systems.commands.Hi;
+
 class Main {
 	public static var config:TConfig;
 	public static var universe:Universe;
