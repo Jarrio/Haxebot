@@ -7,20 +7,23 @@ import haxe.Timer;
 import systems.Messages;
 import components.Command;
 import systems.commands.Hi;
+import systems.commands.Haxelib;
+import systems.CommandBase;
 
 class Main {
+	public static var connected:Bool = false;
 	public static var config:TConfig;
 	public static var universe:Universe;
 	public static function start() {
 		universe = new Universe(1000);
 
 		universe.setSystems(
-			Hi,
-			Messages
+			Haxelib
 		);
 
 		var client = new Client();
 		client.on('ready', function(_) {
+			connected = true;
 			trace("HaxeBot Ready!");
 		});
 
@@ -36,8 +39,8 @@ class Main {
 			for (prefix in config.prefixes) {
 				if (prefix == first_word.charAt(0)) {
 					var command = ({
-						name: first_word, 
-						content: content
+						name: first_word.trim(), 
+						content: content.trim()
 					}:Command);
 					universe.setComponents(universe.createEntity(), command, message);
 					break;
