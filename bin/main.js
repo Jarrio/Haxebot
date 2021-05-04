@@ -72,7 +72,7 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_Messages(Main.universe));
 	var client = new discord_$js_Client();
 	client.on("ready",function(_) {
-		console.log("src/Main.hx:23:","HaxeBot Ready!");
+		haxe_Log.trace("HaxeBot Ready!",{ fileName : "src/Main.hx", lineNumber : 24, className : "Main", methodName : "start"});
 	});
 	client.on("message",function(message) {
 		var split = message.content.split(" ");
@@ -81,7 +81,7 @@ Main.start = function() {
 		if(split.length > 1) {
 			content = message.content.substring(first_word.length);
 		}
-		console.log("src/Main.hx:34:",first_word);
+		haxe_Log.trace(first_word,{ fileName : "src/Main.hx", lineNumber : 35, className : "Main", methodName : "start"});
 		var _g = 0;
 		var _g1 = Main.config.prefixes;
 		while(_g < _g1.length) {
@@ -90,27 +90,22 @@ Main.start = function() {
 			if(prefix == first_word.charAt(0)) {
 				var command = { name : first_word, content : content};
 				var _ecsTmpEntity = Main.universe.entities.create();
-				Main.universe.components.set(_ecsTmpEntity,1,command);
-				Main.universe.components.set(_ecsTmpEntity,0,message);
+				Main.universe.components.set_components_Command(_ecsTmpEntity,1,command);
+				Main.universe.components.set_discord_js_Message(_ecsTmpEntity,0,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var _g2 = 0;
-				var _g3 = Main.universe.families.number;
-				while(_g2 < _g3) {
-					var i = _g2++;
-					var ecsTmpFamily = Main.universe.families.get(i);
-					if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-						ecsTmpFamily.add(_ecsTmpEntity);
-					}
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 				break;
 			}
 		}
 	});
 	client.login(Main.config.discord_api_key).then(function(reply) {
-		console.log("src/Main.hx:48:","HaxeBot logged in!");
+		haxe_Log.trace("HaxeBot logged in!",{ fileName : "src/Main.hx", lineNumber : 49, className : "Main", methodName : "start"});
 	},function(error) {
-		console.log("src/Main.hx:50:","HaxeBot Error!");
-		console.log("src/Main.hx:51:",error);
+		haxe_Log.trace("HaxeBot Error!",{ fileName : "src/Main.hx", lineNumber : 51, className : "Main", methodName : "start"});
+		haxe_Log.trace(error,{ fileName : "src/Main.hx", lineNumber : 52, className : "Main", methodName : "start"});
 	});
 	new haxe_Timer(100).run = function() {
 		Main.universe.update(1);
@@ -120,7 +115,7 @@ Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./bin/config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
-		console.log("src/Main.hx:63:",haxe_Exception.caught(_g).get_message());
+		haxe_Log.trace(haxe_Exception.caught(_g).get_message(),{ fileName : "src/Main.hx", lineNumber : 64, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_api_key == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -183,6 +178,18 @@ var Std = function() { };
 Std.__name__ = "Std";
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
+};
+var Util = function() { };
+Util.__name__ = "Util";
+Util.loadFile = function(filename,pos) {
+	var data = null;
+	try {
+		data = JSON.parse(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"}));
+	} catch( _g ) {
+		haxe_Log.trace(haxe_Exception.caught(_g),{ fileName : "src/Util.hx", lineNumber : 11, className : "Util", methodName : "loadFile"});
+		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 12, className : "Util", methodName : "loadFile", customParams : [pos]});
+	}
+	return data;
 };
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
@@ -521,6 +528,32 @@ ecs_Components.prototype = {
 		return this.components[ecs_Entity.id(_entity)];
 	}
 };
+var ecs_Components_$components_$Command = function(_size) {
+	var this1 = new Array(_size);
+	this.components = this1;
+};
+ecs_Components_$components_$Command.__name__ = "ecs.Components_components_Command";
+ecs_Components_$components_$Command.prototype = {
+	set: function(_entity,_component) {
+		this.components[ecs_Entity.id(_entity)] = _component;
+	}
+	,get: function(_entity) {
+		return this.components[ecs_Entity.id(_entity)];
+	}
+};
+var ecs_Components_$discord_$js_$Message = function(_size) {
+	var this1 = new Array(_size);
+	this.components = this1;
+};
+ecs_Components_$discord_$js_$Message.__name__ = "ecs.Components_discord_js_Message";
+ecs_Components_$discord_$js_$Message.prototype = {
+	set: function(_entity,_component) {
+		this.components[ecs_Entity.id(_entity)] = _component;
+	}
+	,get: function(_entity) {
+		return this.components[ecs_Entity.id(_entity)];
+	}
+};
 var ecs_Entity = {};
 ecs_Entity._new = function(_id) {
 	return _id;
@@ -634,17 +667,10 @@ var ecs_core_ComponentManager = function(_entities) {
 	this.entities = _entities;
 	var this1 = new Array(_entities.capacity());
 	this.flags = this1;
-	var meta = haxe_rtti_Meta.getType(ecs_core_ComponentManager);
-	var componentCount = meta.componentCount[0];
-	var componentIDs = meta.components;
-	var this1 = new Array(componentCount);
+	var this1 = new Array(2);
 	this.components = this1;
-	var _g = 0;
-	while(_g < componentIDs.length) {
-		var id = componentIDs[_g];
-		++_g;
-		this.components[id] = new ecs_Components(_entities.capacity());
-	}
+	this.components[1] = new ecs_Components_$components_$Command(_entities.capacity());
+	this.components[0] = new ecs_Components_$discord_$js_$Message(_entities.capacity());
 	var _g = 0;
 	var _g1 = this.flags.length;
 	while(_g < _g1) {
@@ -656,12 +682,16 @@ var ecs_core_ComponentManager = function(_entities) {
 };
 ecs_core_ComponentManager.__name__ = "ecs.core.ComponentManager";
 ecs_core_ComponentManager.prototype = {
-	getTable: function(_compID) {
-		return this.components[_compID];
-	}
-	,set: function(_entity,_id,_component) {
+	set_discord_js_Message: function(_entity,_id,_component) {
 		this.components[_id].set(_entity,_component);
 		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
+	}
+	,set_components_Command: function(_entity,_id,_component) {
+		this.components[_id].set(_entity,_component);
+		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
+	}
+	,getTable: function(_compID) {
+		return this.components[_compID];
 	}
 	,remove: function(_entity,_id) {
 		bits_Bits.unset(this.flags[ecs_Entity.id(_entity)],_id);
@@ -691,36 +721,22 @@ ecs_core_EntityManager.prototype = {
 	}
 };
 var ecs_core_FamilyManager = function(_components,_resources,_size) {
-	var meta = haxe_rtti_Meta.getType(ecs_core_FamilyManager);
-	var allFamilies = meta.families;
-	var this1 = new Array(allFamilies.length);
+	var this1 = new Array(1);
 	this.families = this1;
-	var _g_current = 0;
-	while(_g_current < allFamilies.length) {
-		var _g1_value = allFamilies[_g_current];
-		var _g1_key = _g_current++;
-		var this1 = [0];
-		var this2 = this1;
-		var cmpBits = this2;
-		var _g = 0;
-		var _g1 = _g1_value.components;
-		while(_g < _g1.length) {
-			var id = _g1[_g];
-			++_g;
-			bits_Bits.set(cmpBits,id);
-		}
-		var this11 = [0];
-		var this21 = this11;
-		var resBits = this21;
-		var _g2 = 0;
-		var _g3 = _g1_value.resources;
-		while(_g2 < _g3.length) {
-			var id1 = _g3[_g2];
-			++_g2;
-			bits_Bits.set(resBits,id1);
-		}
-		this.families[_g1_key] = new ecs_Family(_g1_key,cmpBits,resBits,_size);
+	var this1 = [0];
+	var this2 = this1;
+	var _g = this2.length;
+	while(_g < 1) {
+		var i = _g++;
+		this2[i] = 0;
 	}
+	var cmpBits = this2;
+	bits_Bits.set(cmpBits,0);
+	bits_Bits.set(cmpBits,1);
+	var this1 = [0];
+	var this2 = this1;
+	var resBits = this2;
+	this.families[0] = new ecs_Family(0,cmpBits,resBits,_size);
 	this.components = _components;
 	this.resources = _resources;
 	this.number = this.families.length;
@@ -760,23 +776,10 @@ ecs_core_FamilyManager.prototype = {
 	}
 };
 var ecs_core_ResourceManager = function() {
-	var resourceCount = haxe_rtti_Meta.getType(ecs_core_ResourceManager).resourceCount[0];
-	var capacity = resourceCount;
-	if(resourceCount == null) {
-		capacity = 0;
-	}
 	var this1 = [0];
 	var this2 = this1;
-	if(capacity > 0) {
-		var newLength = Math.ceil(capacity / 32);
-		var _g = this2.length;
-		while(_g < newLength) {
-			var i = _g++;
-			this2[i] = 0;
-		}
-	}
 	this.flags = this2;
-	var this1 = new Array(resourceCount);
+	var this1 = new Array(0);
 	this.resources = this1;
 };
 ecs_core_ResourceManager.__name__ = "ecs.core.ResourceManager";
@@ -1027,10 +1030,6 @@ function ecs_macros_FamilyCache_hash(_family) {
 	}
 	return buffer_b;
 }
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
-};
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 function ecs_macros_ResourceCache_getResourceCount() {
 	return ecs_macros_ResourceCache_resourceIncrementer;
 }
@@ -1287,6 +1286,31 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 		return this.__nativeException;
 	}
 });
+var haxe_Log = function() { };
+haxe_Log.__name__ = "haxe.Log";
+haxe_Log.formatOutput = function(v,infos) {
+	var str = Std.string(v);
+	if(infos == null) {
+		return str;
+	}
+	var pstr = infos.fileName + ":" + infos.lineNumber;
+	if(infos.customParams != null) {
+		var _g = 0;
+		var _g1 = infos.customParams;
+		while(_g < _g1.length) {
+			var v = _g1[_g];
+			++_g;
+			str += ", " + Std.string(v);
+		}
+	}
+	return pstr + ": " + str;
+};
+haxe_Log.trace = function(v,infos) {
+	var str = haxe_Log.formatOutput(v,infos);
+	if(typeof(console) != "undefined" && console.log != null) {
+		console.log(str);
+	}
+};
 var haxe_Timer = function(time_ms) {
 	var me = this;
 	this.id = setInterval(function() {
@@ -1314,6 +1338,10 @@ var haxe_ds_Option = $hxEnums["haxe.ds.Option"] = { __ename__:true,__constructs_
 	,None: {_hx_name:"None",_hx_index:1,__enum__:"haxe.ds.Option",toString:$estr}
 };
 haxe_ds_Option.__constructs__ = [haxe_ds_Option.Some,haxe_ds_Option.None];
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 var haxe_io_Bytes = function(data) {
 	this.length = data.byteLength;
 	this.b = new Uint8Array(data);
@@ -1516,19 +1544,6 @@ haxe_macro_TypeTools.findField = function(c,name,isStatic) {
 			return null;
 		}
 	}
-};
-var haxe_rtti_Meta = function() { };
-haxe_rtti_Meta.__name__ = "haxe.rtti.Meta";
-haxe_rtti_Meta.getType = function(t) {
-	var meta = haxe_rtti_Meta.getMeta(t);
-	if(meta == null || meta.obj == null) {
-		return { };
-	} else {
-		return meta.obj;
-	}
-};
-haxe_rtti_Meta.getMeta = function(t) {
-	return t.__meta__;
 };
 var js_Boot = function() { };
 js_Boot.__name__ = "js.Boot";
@@ -1834,9 +1849,6 @@ Array.__name__ = "Array";
 js_Boot.__toStr = ({ }).toString;
 bits_BitsData.CELL_SIZE = 32;
 ecs_Entity.none = ecs_Entity._new(-1);
-ecs_core_ComponentManager.__meta__ = { obj : { components : [1,0], componentCount : [2]}};
-ecs_core_FamilyManager.__meta__ = { obj : { families : [{ components : [0,1], resources : []}], resourceCount : [0], componentCount : [2]}};
-ecs_core_ResourceManager.__meta__ = { obj : { resourceCount : [0]}};
 var ecs_macros_ComponentCache_components = new haxe_ds_StringMap();
 var ecs_macros_ComponentCache_componentIncrementer = 0;
 var ecs_macros_FamilyCache_familyIDs = new haxe_ds_StringMap();

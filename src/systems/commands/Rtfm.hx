@@ -1,20 +1,13 @@
 package systems.commands;
 
 import discord_js.TextChannel;
-import sys.io.File;
-import haxe.Json;
 import discord_js.Message;
 import components.Command;
 
 class Rtfm extends CommandBase {
 	var data:Array<TRtfmFormat>;
 	override function onAdded() {
-		try {
-			this.data = Json.parse(File.getContent('./commands/rtfm.json'));
-		} catch (e) {
-			trace(e);
-			trace('Failed to load file or parse json');
-		}
+		this.data = loadFile('rtfm');
 	}
 	
 	function run(command:Command, message:Message) {
@@ -28,7 +21,7 @@ class Rtfm extends CommandBase {
 			compare = (message.channel:TextChannel).id;
 		}
 
-		for (item in data) {	
+		for (item in data) {
 			if(item.keys.exists((key) -> key == compare)) {
 				(message.channel:TextChannel).send(item.content);
 				return;

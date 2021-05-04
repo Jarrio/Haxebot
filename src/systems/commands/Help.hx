@@ -1,21 +1,13 @@
 package systems.commands;
 
 import discord_js.TextChannel;
-import haxe.Json;
-import sys.io.File;
-import ecs.Universe;
 import discord_js.Message;
 import components.Command;
 
 class Help extends CommandBase {
 	var data:Array<THelpFormat>;
 	override function onAdded() {
-		try {
-			this.data = Json.parse(File.getContent('./commands/help.json'));
-		} catch (e) {
-			trace(e);
-			trace('Failed to load file or parse json');
-		}
+		this.data = loadFile('help');
 	}
 
 	function run(command:Command, message:Message) {

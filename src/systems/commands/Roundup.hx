@@ -54,8 +54,7 @@ class Roundup extends CommandBase {
 	}
 	
 	function run(command:Command, message:Message) {
-		var guild = message.guild.roles.cache.get(this.super_mod_id);
-		if ((message.guild.available && !guild!.members!.has(message.author.id))) {
+		if (!hasRole(this.super_mod_id, message)) {
 			message.react('❎').then(null, null);
 			return;
 		}

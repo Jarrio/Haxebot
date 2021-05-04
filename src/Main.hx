@@ -32,7 +32,7 @@ class Main {
 			if (split.length > 1) {
 				content = message.content.substring(first_word.length);
 			}
-			trace(first_word);
+			
 			for (prefix in config.prefixes) {
 				if (prefix == first_word.charAt(0)) {
 					var command = ({
