@@ -81,7 +81,6 @@ Main.start = function() {
 		if(split.length > 1) {
 			content = message.content.substring(first_word.length);
 		}
-		haxe_Log.trace(first_word,{ fileName : "src/Main.hx", lineNumber : 35, className : "Main", methodName : "start"});
 		var _g = 0;
 		var _g1 = Main.config.prefixes;
 		while(_g < _g1.length) {
@@ -179,18 +178,25 @@ Std.__name__ = "Std";
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
-var Util = function() { };
-Util.__name__ = "Util";
-Util.loadFile = function(filename,pos) {
+function Util_loadFile(filename,pos) {
 	var data = null;
 	try {
 		data = JSON.parse(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"}));
 	} catch( _g ) {
-		haxe_Log.trace(haxe_Exception.caught(_g),{ fileName : "src/Util.hx", lineNumber : 11, className : "Util", methodName : "loadFile"});
-		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 12, className : "Util", methodName : "loadFile", customParams : [pos]});
+		haxe_Log.trace(haxe_Exception.caught(_g),{ fileName : "src/Util.hx", lineNumber : 11, className : "_Util.Util_Fields_", methodName : "loadFile"});
+		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 12, className : "_Util.Util_Fields_", methodName : "loadFile", customParams : [pos]});
 	}
 	return data;
-};
+}
+function Util_hasRole(role,message) {
+	var guild = message.guild.roles.cache.get(role);
+	if(message.guild.available) {
+		var _v_ = guild == null ? null : guild.members;
+		return !(_v_ == null ? null : _v_.has(message.author.id));
+	} else {
+		return false;
+	}
+}
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
 	var this1 = [0];
@@ -933,6 +939,10 @@ ecs_ds_SparseSet.prototype = {
 		return this.number;
 	}
 };
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 function ecs_macros_ComponentCache_getComponentCount() {
 	return ecs_macros_ComponentCache_componentIncrementer;
 }
@@ -1338,10 +1348,6 @@ var haxe_ds_Option = $hxEnums["haxe.ds.Option"] = { __ename__:true,__constructs_
 	,None: {_hx_name:"None",_hx_index:1,__enum__:"haxe.ds.Option",toString:$estr}
 };
 haxe_ds_Option.__constructs__ = [haxe_ds_Option.Some,haxe_ds_Option.None];
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
-};
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
 var haxe_io_Bytes = function(data) {
 	this.length = data.byteLength;
 	this.b = new Uint8Array(data);
