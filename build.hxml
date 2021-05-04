@@ -7,7 +7,6 @@
 --debug
 -D ecs.static_loading
 -D source-map
--D source-map-content
 --js bin/main.js
 --macro Safety.safeNavigation('', true)
 -main Main

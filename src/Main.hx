@@ -4,11 +4,9 @@ import haxe.Json;
 import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
-import systems.Messages;
 import components.Command;
-import systems.commands.Hi;
+import systems.commands.Run;
 import systems.commands.Haxelib;
-import systems.CommandBase;
 
 class Main {
 	public static var connected:Bool = false;
@@ -18,7 +16,8 @@ class Main {
 		universe = new Universe(1000);
 
 		universe.setSystems(
-			Haxelib
+			Haxelib,
+			Run
 		);
 
 		var client = new Client();
