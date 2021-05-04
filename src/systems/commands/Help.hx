@@ -9,8 +9,7 @@ import components.Command;
 
 class Help extends CommandBase {
 	var data:Array<THelpFormat>;
-	public function new(universe:Universe) {
-		super(universe);
+	override function onAdded() {
 		try {
 			this.data = Json.parse(File.getContent('./commands/help.json'));
 		} catch (e) {
@@ -24,7 +23,6 @@ class Help extends CommandBase {
 			trace('no help content configured');
 			return;
 		}
-		
 		var msg = '';
 		
 		for (key => item in data) {
@@ -40,7 +38,7 @@ class Help extends CommandBase {
 				}
 			}
 		}
-
+		
 		(message.channel:TextChannel).send(msg);
 	}
 
