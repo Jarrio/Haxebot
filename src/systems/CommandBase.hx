@@ -4,9 +4,9 @@ import haxe.exceptions.NotImplementedException;
 import discord_js.Message;
 import components.Command;
 import ecs.System;
-class CommandBase extends System {
+abstract class CommandBase extends System {
 	@:fastFamily var commands:{command:Command, message:Message};
-	override function update(_dt:Float) {
+	override function update(_) {
 		if (!Main.connected) {
 			return;
 		}
@@ -18,12 +18,8 @@ class CommandBase extends System {
 		});
 	}
 
-	function run(command:Command, message:Message):Void {
-		throw NotImplementedException;
-	}
-	var block:Bool;
+	abstract function run(command:Command, message:Message):Void;
+
 	var name(get, never):String;
-	function get_name():String {
-		throw NotImplementedException;
-	}
+	abstract function get_name():String;
 }

@@ -1,34 +1,18 @@
 package systems.commands;
 
-import js.node.ChildProcess;
 import js.node.Fs;
 import haxe.Http;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
-import ecs.System;
 import discord_js.Message;
 import components.Command;
 import js.node.ChildProcess.spawn;
 
-class Run extends System {
-	@:fastFamily var commands:{command:Command, message:Message};
+class Run extends CommandBase {
 	var message_id:String;
 	var haxe_version:String = null;
 	var code_requests:Map<String, Array<Float>> = [];
-
-	override function update(_dt:Float) {
-		if (!Main.connected) {
-			return;
-		}
-
-		iterate(commands, entity -> {
-			if (command.name == this.get_name()) {
-				this.run(command, message);
-				this.commands.remove(entity);
-			}
-		});
-	}
 
 	function run(command:Command, message:Message) {
 		if (this.haxe_version == null) {
@@ -130,7 +114,7 @@ class Run extends System {
 	function cleanOutput(data:String, filename:String, class_entry) {
 		data = data.toString();
 		var remove_vm = ~/(\[(.*|vm)\].*)$/igmu;
-		remove_vm.replace(data, '').trim();
+		
 		data = data.replace(filename, class_entry).replace('', '');
 		data = data.replace(this.base_path, "");
 		data = data.replace("/hx/", "");
@@ -262,7 +246,7 @@ class Run extends System {
 					process = 'haxe';
 				}
 
-				var ls = spawn(process, libs.concat(commands));
+				var ls = spawn(process, libs.concat(commands), {timeout: 10000});
 				
 				//to debug code output
 				// ls.stdout.on('data', (data:String) -> {
@@ -273,13 +257,19 @@ class Run extends System {
 					trace('error: ' + data);
 					var compile_output = this.cleanOutput(data, filename, class_entry);
 					message.reply({content: mention + '```\n${compile_output}```'});
+					ls.kill('SIGTERM');
 					return;
 				});
-
+				
 				ls.once('close', (data) -> {
 					var response = "";
-					
-					var process = spawn('node', ['${this.base_path}/bin/$filename.js']);
+					var js_file = '${this.base_path}/bin/$filename.js';
+					if (!FileSystem.exists(js_file)) {
+						trace('Code likely errored and didnt compile ($filename.js)');
+						ls.kill('SIGTERM');
+						return;
+					}
+					var process = spawn('node', [js_file], {timeout: 10000});
 					process.stdout.once('data', (data:String) -> {
 						data = this.cleanOutput(data, filename, class_entry);
 						response += data;

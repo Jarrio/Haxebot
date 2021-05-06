@@ -1,13 +1,16 @@
 [
 	{
+		"prefix": "!",
 		"type": "run",
 		"content": "Run haxe code in discord! See pin in <#663246792426782730> for a description on how to use this"
 	},
 	{
+		"prefix": "!",
 		"type": "rtfm",
 		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `!rtfm heaps`"
 	},
 	{
+		"prefix": "!",
 		"type": "notify",
 		"content": "Type a channel to recieve notifications from key people within those communities when big things change"
 	}

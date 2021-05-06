@@ -15,17 +15,17 @@ class Help extends CommandBase {
 			trace('no help content configured');
 			return;
 		}
-		var msg = '';
 		
+		var msg = '';
 		for (key => item in data) {
 			if (command.content == null) {
-				msg += '`${item.type}: ${item.content}';
+				msg += '- `${item.prefix}${item.type}`: ${item.content}';
 				if (key != data.length - 1) {
 					msg += '\n';
 				}
 			} else {
 				if (item.type == command.content) {
-					msg = '`${item.type}: ${item.content}';
+					msg = '`${item.type}`: ${item.content}';
 					break;
 				}
 			}
@@ -41,6 +41,7 @@ class Help extends CommandBase {
 
 typedef THelpFormat = {
 	var type:HelpType;
+	var prefix:String;
 	var content:String;
 }
 

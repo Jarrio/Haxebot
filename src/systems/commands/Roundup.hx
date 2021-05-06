@@ -11,18 +11,8 @@ class Roundup extends CommandBase {
 	var roundup:Int = -1;
 	var channel:TextChannel;
 	final super_mod_id:String = '198916468312637440';
-	final announcement_channel:String = '286485321925918721';
-	override function update(_dt:Float) {
-		super.update(_dt);
-		if (!this.active || this.roundup == -1 || Date.now().getTime() - last_checked <= 86400000) {
-			return;
-		}
-
-		if (this.channel != null) {
-			this.last_checked = Date.now().getTime();
-			getHaxeIoPage();
-		}
-	}
+	// final announcement_channel:String = '286485321925918721';
+	final announcement_channel:String = '661958918636830720';
 
 	function getHaxeIoPage() {
 		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/${this.roundup}.md');
@@ -51,6 +41,18 @@ class Roundup extends CommandBase {
 			}
 		}
 		data.request();
+	}
+
+	override function update(_) {
+		super.update(_);
+		if (!this.active || this.roundup == -1 || Date.now().getTime() - last_checked <= 86400000) {
+			return;
+		}
+
+		if (this.channel != null) {
+			this.last_checked = Date.now().getTime();
+			getHaxeIoPage();
+		}
 	}
 	
 	function run(command:Command, message:Message) {

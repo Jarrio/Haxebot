@@ -16,5 +16,5 @@ function loadFile(filename:String, ?pos:PosInfos):Dynamic {
 
 function hasRole(role:String, message:Message) {
 	var guild = message.guild.roles.cache.get(role);
-	return (message.guild.available && !guild!.members!.has(message.author.id));
+	return (message.guild.available && guild!.members!.has(message.author.id));
 }

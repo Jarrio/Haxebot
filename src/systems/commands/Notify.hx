@@ -22,9 +22,6 @@ class Notify extends CommandBase {
 
 	function run(command:Command, message:Message) {
 		for (index => channel in command.content.split(' ')) {
-			if (index == 0) {
-				continue;
-			}
 			var role = this.getRole(channel);
 			if (role == 'err') {
 				message.react('❎');

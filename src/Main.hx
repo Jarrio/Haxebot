@@ -5,8 +5,14 @@ import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
 import components.Command;
-import systems.commands.Run;
 import systems.commands.Haxelib;
+import systems.commands.Run;
+import systems.commands.Notify;
+import systems.commands.Roundup;
+import systems.commands.Rtfm;
+import systems.commands.Help;
+import systems.commands.ToggleMacros;
+import systems.commands.Hi;
 
 class Main {
 	public static var connected:Bool = false;
@@ -17,13 +23,19 @@ class Main {
 
 		universe.setSystems(
 			Haxelib,
-			Run
+			Run,
+			Notify,
+			Roundup,
+			Rtfm,
+			ToggleMacros,
+			Help,
+			Hi
 		);
 
 		var client = new Client();
 		client.on('ready', function(_) {
 			connected = true;
-			trace("HaxeBot Ready!");
+			trace('$name Ready!');
 		});
 
 		client.on('message', function(message:Message) {
@@ -39,7 +51,7 @@ class Main {
 				if (prefix == first_word.charAt(0)) {
 					var command = ({
 						name: first_word.trim(), 
-						content: content.trim()
+						content: content == null ? null : content.trim()
 					}:Command);
 					universe.setComponents(universe.createEntity(), command, message);
 					break;
@@ -47,10 +59,10 @@ class Main {
 			}
 		});
 
-		client.login(config.discord_api_key).then(function(reply) {
-			trace("HaxeBot logged in!");
+		client.login(config.discord_api_key).then(function(_) {
+			trace('$name logged in!');
 		}, function(error) {
-			trace("HaxeBot Error!");
+			trace('$name Error!');
 			trace(error);
 		});
 
@@ -61,7 +73,7 @@ class Main {
 
 	static function main() {
 		try {
-			config = Json.parse(File.getContent('./bin/config.json'));
+			config = Json.parse(File.getContent('./config.json'));
 		} catch (e) {
 			trace(e.message);
 		}
@@ -72,10 +84,19 @@ class Main {
 
 		start();
 	}
+
+	public static var name(get, never):String;
+	private static function get_name() {
+		if (config == null || config.project_name == null) {
+			return 'bot';
+		}
+		return config.project_name;
+	}	
 }
 
 typedef TConfig = {
 	var macros:Bool;
+	var project_name:String;
 	var prefixes:Array<String>;
 	var discord_api_key:String;
 }

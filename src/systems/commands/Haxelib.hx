@@ -8,26 +8,14 @@ import discord_js.Message;
 import components.Command;
 import js.node.ChildProcess.spawn;
 
-class Haxelib extends System {
-	@:fastFamily var commands:{command:Command, message:Message};
+class Haxelib extends CommandBase {
 	var message_id:String;
 	final super_mod_id:String = '198916468312637440';
 	
-	override function update(_dt:Float) {
-		if (!Main.connected) {
-			return;
-		}
-
-		iterate(commands, entity -> {
-			if (command.name == this.get_name()) {
-				this.run(command, message);
-				this.commands.remove(entity);
-			}
-		});
-	}	
-
 	function run(command:Command, message:Message) {
-		if (command.content != "list" || !hasRole(this.super_mod_id, message)) {
+		var role_status = hasRole(this.super_mod_id, message);
+
+		if (command.content != "list" && !role_status) {
 			message.react('❎').then(null, null);
 			return;
 		}
