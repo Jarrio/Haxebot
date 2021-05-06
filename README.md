@@ -1,4 +1,5 @@
-#Haxebot
+# Haxebot
+
 The discord bot running on the haxe discord server!
 It can run haxe code and does a few other basic commands. Not an advanced bot or anything but works well :)
 
