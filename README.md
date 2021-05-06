@@ -1,9 +1,3 @@
-# Haxe project
+The discord bot running on the haxe discord server!
 
-This is an example Haxe project scaffolded by Visual Studio Code.
-
-Without further changes the structure is following:
-
- * `src/Main.hx`: Entry point Haxe source file
- * `build.hxml`: Haxe command line file used to build the project
- * `README.md`: This file
+To figure out how to get this bot running head over to [`Base Template Repo`](https://github.com/Jarrio/DiscordBotTemplate) and follow the setup instructions
