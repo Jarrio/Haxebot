@@ -9,6 +9,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jarrio",
-  "license": "ISC",
+  "license": "MIT",
   "description": ""
 }
