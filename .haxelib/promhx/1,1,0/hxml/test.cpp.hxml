@@ -1,5 +1,0 @@
-hxml/test.defaults.hxml
--main TestAllQueue
--cmd echo "--------------------------------------CPP---------------------------------------"
--cpp bin/testcpp
--cmd ./bin/testcpp/TestAllQueue

@@ -1,4 +1,0 @@
-hxml/test.defaults.hxml
--main TestAll
--cmd echo "--------------------------------------FLASH--------------------------------------"
--swf bin/test.swf

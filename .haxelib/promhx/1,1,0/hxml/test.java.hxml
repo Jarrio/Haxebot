@@ -1,5 +1,0 @@
-hxml/test.defaults.hxml
--main TestAllQueue
--cmd echo "--------------------------------------JAVA--------------------------------------"
--java bin/testjava
--cmd java -jar bin/testjava/TestAllQueue.jar

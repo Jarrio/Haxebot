@@ -1,4 +1,0 @@
--cp src/main
--cp src/test
--lib monax
--lib utest
