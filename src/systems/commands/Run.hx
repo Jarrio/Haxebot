@@ -1,5 +1,6 @@
 package systems.commands;
 
+import discord_js.Role;
 import js.node.Fs;
 import haxe.Http;
 import discord_js.TextChannel;
@@ -270,12 +271,16 @@ class Run extends CommandBase {
 						return;
 					}
 					var process = spawn('node', [js_file], {timeout: 10000});
-					process.stdout.once('data', (data:String) -> {
+
+					process.stdout.on('data', (data) -> {
 						data = this.cleanOutput(data, filename, class_entry);
-						response += data;
+						trace(data);
+						response = data;
+						
+						
 					});
 
-					process.stderr.once('data', (data) -> {
+					process.stderr.on('data', (data) -> {
 						trace('error: ' + data);
 					});
 
@@ -300,16 +305,20 @@ class Run extends CommandBase {
 
 						while (regex.match(response)) {
 							output_numbers.push(regex.matched(2));
-							output_lines.push(regex.matched(3));
-
+							output_lines.push(regex.matched(3).replace('\n', ' '));
+							
 							response = regex.matchedRight();
 						}
+						
+						// output_lines = response.split('\n');
+
+						
 
 						regex.replace(response, "");
 
-						for (i in 0...output_numbers.length) {
+						for (key => value in output_lines) {
 							var desc = (embed.description == null) ? "" : embed.description;
-							embed.setDescription(desc += '\n${output_numbers[i].replace(':', '')}. ' + output_lines[i]);
+							embed.setDescription(desc += '\n${key}. ' + value);
 						}
 
 						embed.description = '```markdown\n' + embed.description + '\n```';

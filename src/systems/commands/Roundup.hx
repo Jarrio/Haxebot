@@ -11,8 +11,8 @@ class Roundup extends CommandBase {
 	var roundup:Int = -1;
 	var channel:TextChannel;
 	final super_mod_id:String = '198916468312637440';
-	// final announcement_channel:String = '286485321925918721';
-	final announcement_channel:String = '661958918636830720';
+	final announcement_channel:String = '286485321925918721';
+	// final announcement_channel:String = '661958918636830720';
 
 	function getHaxeIoPage() {
 		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/${this.roundup}.md');
