@@ -68,15 +68,15 @@ class Api extends CommandBase {
 							reply_body += '**Description**\n```$desc```';
 						}
 
-
-						embed.setDescription(reply_body);
+						embed.setDescription(reply_body.htmlUnescape());
 						message.reply(embed);
 						return;
 					}
 				}
 			}
 			if (reply_body.length > 0) {
-				embed.setDescription(reply_body);
+				
+				embed.setDescription(reply_body.htmlUnescape());
 				message.reply(embed);
 			}
 		}

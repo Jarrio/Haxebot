@@ -1190,14 +1190,14 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 						if(StringTools.trim(desc).length > 0) {
 							reply_body += "**Description**\n```" + desc + "```";
 						}
-						embed.setDescription(reply_body);
+						embed.setDescription(StringTools.htmlUnescape(reply_body));
 						message.reply(embed);
 						return;
 					}
 				}
 			}
 			if(reply_body.length > 0) {
-				embed.setDescription(reply_body);
+				embed.setDescription(StringTools.htmlUnescape(reply_body));
 				message.reply(embed);
 			}
 		};
