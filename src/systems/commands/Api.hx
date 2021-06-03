@@ -1,15 +1,17 @@
 package systems.commands;
 
 import discord_js.TextChannel;
-import js.Browser;
+import js.Browser.console;
 import discord_js.MessageEmbed;
 import haxe.Http;
 import discord_js.Message;
 import components.Command;
 import NodeHtmlParser;
+
 class Api extends CommandBase {
 	public static final haxe:String = 'https://api.haxe.org/';
 	public static final flixel:String = 'https://api.haxeflixel.com/';
+	public static final heaps:String = 'https://heaps.io/api/';
 	function run(command:Command, message:Message) {
 		if (command.content == null) {
 			return;
@@ -17,11 +19,25 @@ class Api extends CommandBase {
 
 		var docs = switch ((message.channel:TextChannel).id) {
 			case '165234904815239168': flixel;
+			case '501408700142059520': heaps;
 			default: haxe;
 		}
 
-		if (command.content.contains('Flx') || command.content.contains('flixel')) {
+		if (command.content.contains('Flx') || command.content.contains('flixel.')) {
 			docs = flixel;
+		}
+
+		if (command.content.contains('haxe.')) {
+			docs = haxe;
+		}
+
+		var check = ['h2d', 'h3d', 'hxd', 'hxsl'];
+		for (item in check) {
+			if (!command.content.contains(item)) {
+				continue;
+			}
+			docs = heaps;
+			break;
 		}
 
 		extractDoxData(new ApiParams(docs, command), message);
@@ -82,7 +98,8 @@ class Api extends CommandBase {
 		}
 
 		http.onError = function(msg) {
-			Browser.console.log('Api.hx: 71 - $msg');
+			console.log('Api.hx: 102 - $msg | ${http.url}');
+
 			message.react('❎');
 		}
 		http.request();
@@ -102,6 +119,7 @@ abstract ApiParams(TApiParams) {
 			base = switch(split[2].toLowerCase()) {
 				case 'flixel': Api.flixel;
 				case 'haxe': Api.haxe;
+				case 'heaps': Api.heaps;
 				default: Api.haxe;
 			}
 		}

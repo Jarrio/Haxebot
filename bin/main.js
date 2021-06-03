@@ -1128,9 +1128,31 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 		if(command.content == null) {
 			return;
 		}
-		var docs = message.channel.id == "165234904815239168" ? systems_commands_Api.flixel : systems_commands_Api.haxe;
-		if(command.content.indexOf("Flx") != -1 || command.content.indexOf("flixel") != -1) {
+		var docs;
+		switch(message.channel.id) {
+		case "165234904815239168":
 			docs = systems_commands_Api.flixel;
+			break;
+		case "501408700142059520":
+			docs = systems_commands_Api.heaps;
+			break;
+		default:
+			docs = systems_commands_Api.haxe;
+		}
+		if(command.content.indexOf("Flx") != -1 || command.content.indexOf("flixel.") != -1) {
+			docs = systems_commands_Api.flixel;
+		}
+		if(command.content.indexOf("haxe.") != -1) {
+			docs = systems_commands_Api.haxe;
+		}
+		var check = ["h2d","h3d","hxd","hxsl"];
+		var _g = 0;
+		while(_g < check.length) {
+			if(command.content.indexOf(check[_g++]) == -1) {
+				continue;
+			}
+			docs = systems_commands_Api.heaps;
+			break;
 		}
 		var base = docs;
 		var split = command.content.split(" ");
@@ -1141,6 +1163,9 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				break;
 			case "haxe":
 				base = systems_commands_Api.haxe;
+				break;
+			case "heaps":
+				base = systems_commands_Api.heaps;
 				break;
 			default:
 				base = systems_commands_Api.haxe;
@@ -1202,7 +1227,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			}
 		};
 		http.onError = function(msg) {
-			$global.console.log("Api.hx: 71 - " + msg);
+			$global.console.log("Api.hx: 102 - " + msg + " | " + http.url);
 			message.react("❎");
 		};
 		http.request();
@@ -1879,5 +1904,6 @@ Main.connected = false;
 ecs_Entity.none = ecs_Entity._new(-1);
 systems_commands_Api.haxe = "https://api.haxe.org/";
 systems_commands_Api.flixel = "https://api.haxeflixel.com/";
+systems_commands_Api.heaps = "https://heaps.io/api/";
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
