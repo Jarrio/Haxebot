@@ -1184,9 +1184,6 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			embed.setTitle(info.class_name + ("" + (info.identifier != null ? "#" + info.identifier : "")));
 			embed.setURL(http.url);
 			var reply_body = "";
-			if(StringTools.trim(cls_desc).length > 0) {
-				reply_body += "```\n" + cls_desc + "\n```";
-			}
 			var _g_current = 0;
 			var _g_array = body.querySelectorAll(".fields");
 			while(_g_current < _g_array.length) {
@@ -1220,6 +1217,9 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 						return;
 					}
 				}
+			}
+			if(StringTools.trim(cls_desc).length > 0) {
+				reply_body += "```\n" + cls_desc + "\n```";
 			}
 			if(reply_body.length > 0) {
 				embed.setDescription(StringTools.htmlUnescape(reply_body));

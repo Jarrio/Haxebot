@@ -56,9 +56,6 @@ class Api extends CommandBase {
 			embed.setURL(http.url);
 
 			var reply_body = '';
-			if (cls_desc.trim().length > 0) {
-				reply_body += '```\n$cls_desc\n```';
-			}
 			
 			for (key => item in body.querySelectorAll('.fields')) {
 				var id_check = ~/<span class="identifier">(.*?)<\/span/gm;
@@ -90,8 +87,12 @@ class Api extends CommandBase {
 					}
 				}
 			}
+			
+			if (cls_desc.trim().length > 0) {
+				reply_body += '```\n$cls_desc\n```';
+			}
+
 			if (reply_body.length > 0) {
-				
 				embed.setDescription(reply_body.htmlUnescape());
 				message.reply(embed);
 			}
