@@ -13,6 +13,7 @@ import systems.commands.Rtfm;
 import systems.commands.Help;
 import systems.commands.ToggleMacros;
 import systems.commands.Hi;
+import systems.commands.Api;
 
 class Main {
 	public static var connected:Bool = false;
@@ -29,7 +30,8 @@ class Main {
 			Rtfm,
 			ToggleMacros,
 			Help,
-			Hi
+			Hi,
+			Api
 		);
 
 		var client = new Client();

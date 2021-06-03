@@ -1,6 +1,5 @@
 package systems;
 
-import haxe.exceptions.NotImplementedException;
 import discord_js.Message;
 import components.Command;
 import ecs.System;

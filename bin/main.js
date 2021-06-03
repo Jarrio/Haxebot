@@ -8,7 +8,7 @@ function $extend(from, fields) {
 	return proto;
 }
 var DateTools = function() { };
-DateTools.__name__ = "DateTools";
+DateTools.__name__ = true;
 DateTools.__format_get = function(d,e) {
 	switch(e) {
 	case "%":
@@ -104,7 +104,7 @@ DateTools.format = function(d,f) {
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
 };
-EReg.__name__ = "EReg";
+EReg.__name__ = true;
 EReg.prototype = {
 	match: function(s) {
 		if(this.r.global) {
@@ -130,7 +130,7 @@ EReg.prototype = {
 	}
 };
 var HxOverrides = function() { };
-HxOverrides.__name__ = "HxOverrides";
+HxOverrides.__name__ = true;
 HxOverrides.cca = function(s,index) {
 	var x = s.charCodeAt(index);
 	if(x != x) {
@@ -150,51 +150,20 @@ HxOverrides.substr = function(s,pos,len) {
 	}
 	return s.substr(pos,len);
 };
-HxOverrides.remove = function(a,obj) {
-	var i = a.indexOf(obj);
-	if(i == -1) {
-		return false;
-	}
-	a.splice(i,1);
-	return true;
-};
 HxOverrides.now = function() {
 	return Date.now();
 };
 var Lambda = function() { };
-Lambda.__name__ = "Lambda";
-Lambda.has = function(it,elt) {
-	var x = $getIterator(it);
-	while(x.hasNext()) {
-		var x1 = x.next();
-		if(x1 == elt) {
-			return true;
-		}
-	}
-	return false;
-};
+Lambda.__name__ = true;
 Lambda.exists = function(it,f) {
 	var x = $getIterator(it);
-	while(x.hasNext()) {
-		var x1 = x.next();
-		if(f(x1)) {
-			return true;
-		}
+	while(x.hasNext()) if(f(x.next())) {
+		return true;
 	}
 	return false;
 };
-Lambda.find = function(it,f) {
-	var v = $getIterator(it);
-	while(v.hasNext()) {
-		var v1 = v.next();
-		if(f(v1)) {
-			return v1;
-		}
-	}
-	return null;
-};
 var Main = function() { };
-Main.__name__ = "Main";
+Main.__name__ = true;
 Main.start = function() {
 	Main.universe = new ecs_Universe(1000);
 	Main.universe.systems.add(new systems_commands_Haxelib(Main.universe));
@@ -205,10 +174,11 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_ToggleMacros(Main.universe));
 	Main.universe.systems.add(new systems_commands_Help(Main.universe));
 	Main.universe.systems.add(new systems_commands_Hi(Main.universe));
+	Main.universe.systems.add(new systems_commands_Api(Main.universe));
 	var client = new discord_$js_Client();
 	client.on("ready",function(_) {
 		Main.connected = true;
-		haxe_Log.trace("" + Main.get_name() + " Ready!",{ fileName : "src/Main.hx", lineNumber : 38, className : "Main", methodName : "start"});
+		haxe_Log.trace("" + Main.get_name() + " Ready!",{ fileName : "src/Main.hx", lineNumber : 40, className : "Main", methodName : "start"});
 	});
 	client.on("message",function(message) {
 		var split = message.content.split(" ");
@@ -219,28 +189,24 @@ Main.start = function() {
 		}
 		var _g = 0;
 		var _g1 = Main.config.prefixes;
-		while(_g < _g1.length) {
-			var prefix = _g1[_g];
-			++_g;
-			if(prefix == first_word.charAt(0)) {
-				var command = { name : StringTools.trim(first_word), content : content == null ? null : StringTools.trim(content)};
-				var _ecsTmpEntity = Main.universe.entities.create();
-				Main.universe.components.set_components_Command(_ecsTmpEntity,1,command);
-				Main.universe.components.set_discord_js_Message(_ecsTmpEntity,0,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				break;
+		while(_g < _g1.length) if(_g1[_g++] == first_word.charAt(0)) {
+			var command = { name : StringTools.trim(first_word), content : content == null ? null : StringTools.trim(content)};
+			var _ecsTmpEntity = Main.universe.entities.create();
+			Main.universe.components.set_components_Command(_ecsTmpEntity,1,command);
+			Main.universe.components.set_discord_js_Message(_ecsTmpEntity,0,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(0);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
 			}
+			break;
 		}
 	});
 	client.login(Main.config.discord_api_key).then(function(_) {
-		haxe_Log.trace("" + Main.get_name() + " logged in!",{ fileName : "src/Main.hx", lineNumber : 63, className : "Main", methodName : "start"});
+		haxe_Log.trace("" + Main.get_name() + " logged in!",{ fileName : "src/Main.hx", lineNumber : 65, className : "Main", methodName : "start"});
 	},function(error) {
-		haxe_Log.trace("" + Main.get_name() + " Error!",{ fileName : "src/Main.hx", lineNumber : 65, className : "Main", methodName : "start"});
-		haxe_Log.trace(error,{ fileName : "src/Main.hx", lineNumber : 66, className : "Main", methodName : "start"});
+		haxe_Log.trace("" + Main.get_name() + " Error!",{ fileName : "src/Main.hx", lineNumber : 67, className : "Main", methodName : "start"});
+		haxe_Log.trace(error,{ fileName : "src/Main.hx", lineNumber : 68, className : "Main", methodName : "start"});
 	});
 	new haxe_Timer(100).run = function() {
 		Main.universe.update(1);
@@ -250,7 +216,7 @@ Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
-		haxe_Log.trace(haxe_Exception.caught(_g).get_message(),{ fileName : "src/Main.hx", lineNumber : 78, className : "Main", methodName : "main"});
+		haxe_Log.trace(haxe_Exception.caught(_g).get_message(),{ fileName : "src/Main.hx", lineNumber : 80, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_api_key == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -263,9 +229,10 @@ Main.get_name = function() {
 	}
 	return Main.config.project_name;
 };
-Math.__name__ = "Math";
+Math.__name__ = true;
+var NodeHtmlParser = require("node-html-parser");
 var Reflect = function() { };
-Reflect.__name__ = "Reflect";
+Reflect.__name__ = true;
 Reflect.field = function(o,field) {
 	try {
 		return o[field];
@@ -293,59 +260,8 @@ Reflect.compareMethods = function(f1,f2) {
 		return false;
 	}
 };
-var Safety = function() { };
-Safety.__name__ = "Safety";
-Safety.or = function(value,defaultValue) {
-	if(value == null) {
-		return defaultValue;
-	} else {
-		return value;
-	}
-};
-Safety.orGet = function(value,getter) {
-	if(value == null) {
-		return getter();
-	} else {
-		return value;
-	}
-};
-Safety.sure = function(value) {
-	if(value == null) {
-		throw new safety_NullPointerException("Null pointer in .sure() call");
-	} else {
-		return value;
-	}
-};
-Safety.unsafe = function(value) {
-	return value;
-};
-Safety.check = function(value,callback) {
-	if(value != null) {
-		return callback(value);
-	} else {
-		return false;
-	}
-};
-Safety.let = function(value,callback) {
-	if(value == null) {
-		return null;
-	} else {
-		return callback(value);
-	}
-};
-Safety.run = function(value,callback) {
-	if(value != null) {
-		callback(value);
-	}
-};
-Safety.apply = function(value,callback) {
-	if(value != null) {
-		callback(value);
-	}
-	return value;
-};
 var Std = function() { };
-Std.__name__ = "Std";
+Std.__name__ = true;
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
@@ -370,7 +286,7 @@ Std.parseInt = function(x) {
 	return null;
 };
 var StringTools = function() { };
-StringTools.__name__ = "StringTools";
+StringTools.__name__ = true;
 StringTools.htmlUnescape = function(s) {
 	return s.split("&gt;").join(">").split("&lt;").join("<").split("&quot;").join("\"").split("&#039;").join("'").split("&amp;").join("&");
 };
@@ -442,48 +358,6 @@ function Util_hasRole(role,message) {
 	}
 }
 var bits_Bits = {};
-bits_Bits.fromPositions = function(positions) {
-	var this1 = [0];
-	var this2 = this1;
-	var bits = this2;
-	var _g = 0;
-	while(_g < positions.length) {
-		var pos = positions[_g];
-		++_g;
-		if(pos < 32) {
-			bits[0] |= 1 << pos;
-		} else {
-			var cell = pos / 32 | 0;
-			if(bits.length <= cell) {
-				var _g1 = bits.length;
-				var _g2 = cell + 1;
-				while(_g1 < _g2) {
-					var i = _g1++;
-					bits[i] = 0;
-				}
-			}
-			var bit = pos - cell * 32;
-			bits[cell] |= 1 << bit;
-		}
-	}
-	return bits;
-};
-bits_Bits._new = function(capacity) {
-	if(capacity == null) {
-		capacity = 0;
-	}
-	var this1 = [0];
-	var this2 = this1;
-	if(capacity > 0) {
-		var newLength = Math.ceil(capacity / 32);
-		var _g = this2.length;
-		while(_g < newLength) {
-			var i = _g++;
-			this2[i] = 0;
-		}
-	}
-	return this2;
-};
 bits_Bits.set = function(this1,pos) {
 	if(pos < 32) {
 		this1[0] |= 1 << pos;
@@ -492,72 +366,9 @@ bits_Bits.set = function(this1,pos) {
 		if(this1.length <= cell) {
 			var _g = this1.length;
 			var _g1 = cell + 1;
-			while(_g < _g1) {
-				var i = _g++;
-				this1[i] = 0;
-			}
+			while(_g < _g1) this1[_g++] = 0;
 		}
-		var bit = pos - cell * 32;
-		this1[cell] |= 1 << bit;
-	}
-};
-bits_Bits.unset = function(this1,pos) {
-	if(pos < 32) {
-		this1[0] &= ~(1 << pos);
-	} else {
-		var cell = pos / 32 | 0;
-		if(this1.length <= cell) {
-			var _g = this1.length;
-			var _g1 = cell + 1;
-			while(_g < _g1) {
-				var i = _g++;
-				this1[i] = 0;
-			}
-		}
-		var bit = pos - cell * 32;
-		this1[cell] &= ~(1 << bit);
-	}
-};
-bits_Bits.add = function(this1,bits) {
-	var data = bits;
-	if(this1.length < data.length) {
-		var newLength = data.length;
-		var _g = this1.length;
-		while(_g < newLength) {
-			var i = _g++;
-			this1[i] = 0;
-		}
-	}
-	var _g = 0;
-	var _g1 = data.length;
-	while(_g < _g1) {
-		var cell = _g++;
-		this1[cell] |= data[cell];
-	}
-};
-bits_Bits.remove = function(this1,bits) {
-	var data = bits;
-	var _g = 0;
-	var _g1 = data.length;
-	while(_g < _g1) {
-		var cell = _g++;
-		if(cell >= this1.length) {
-			break;
-		}
-		this1[cell] &= ~data[cell];
-	}
-};
-bits_Bits.isSet = function(this1,pos) {
-	if(pos < 32) {
-		return 0 != (this1[0] & 1 << pos);
-	} else {
-		var cell = pos / 32 | 0;
-		var bit = pos - cell * 32;
-		if(cell < this1.length) {
-			return 0 != (this1[cell] & 1 << bit);
-		} else {
-			return false;
-		}
+		this1[cell] |= 1 << pos - cell * 32;
 	}
 };
 bits_Bits.areSet = function(this1,bits) {
@@ -578,212 +389,21 @@ bits_Bits.areSet = function(this1,bits) {
 	}
 	return has;
 };
-bits_Bits.forEach = function(this1,callback) {
-	var _g = 0;
-	var _g1 = this1.length;
-	while(_g < _g1) {
-		var cell = _g++;
-		var cellValue = this1[cell];
-		if(cellValue != 0) {
-			var _g2 = 0;
-			while(_g2 < 32) {
-				var i = _g2++;
-				if(0 != (cellValue & 1 << i)) {
-					callback(cell * 32 + i);
-				}
-			}
-		}
-	}
-};
-bits_Bits.copy = function(this1) {
-	return this1.slice();
-};
-bits_Bits.toString = function(this1) {
-	var result = "";
-	var _g = 0;
-	var _g1 = this1.length;
-	while(_g < _g1) {
-		var cell = _g++;
-		var cellValue = this1[cell];
-		var _g2 = 0;
-		while(_g2 < 32) {
-			var i = _g2++;
-			result = (0 != (cellValue & 1 << i) ? "1" : "0") + result;
-		}
-	}
-	return HxOverrides.substr(result,result.indexOf("1"),null);
-};
 bits_Bits.isEmpty = function(this1) {
 	var empty = true;
 	var _g = 0;
-	while(_g < this1.length) {
-		var cellValue = this1[_g];
-		++_g;
-		if(cellValue != 0) {
-			empty = false;
-			break;
-		}
+	while(_g < this1.length) if(this1[_g++] != 0) {
+		empty = false;
+		break;
 	}
 	return empty;
 };
-bits_Bits.count = function(this1) {
-	var result = 0;
-	var _g = 0;
-	while(_g < this1.length) {
-		var v = this1[_g];
-		++_g;
-		if(v != 0) {
-			v -= v >>> 1 & 1431655765;
-			v = (v & 858993459) + (v >>> 2 & 858993459);
-			result += (v + (v >>> 4) & 252645135) * 16843009 >>> 24;
-		}
-	}
-	return result;
-};
-bits_Bits.clear = function(this1) {
-	var _g = 0;
-	var _g1 = this1.length;
-	while(_g < _g1) {
-		var cell = _g++;
-		this1[cell] = 0;
-	}
-};
-bits_Bits.merge = function(this1,bits) {
-	if(this1.length < bits.length) {
-		var result = bits.slice();
-		var _g = 0;
-		var _g1 = this1.length;
-		while(_g < _g1) {
-			var cell = _g++;
-			result[cell] |= this1[cell];
-		}
-		return result;
-	} else {
-		var result = this1.slice();
-		var _g = 0;
-		var _g1 = bits.length;
-		while(_g < _g1) {
-			var cell = _g++;
-			result[cell] |= bits[cell];
-		}
-		return result;
-	}
-};
-bits_Bits.intersect = function(this1,bits) {
-	if(this1.length < bits.length) {
-		var result = this1.slice();
-		var _g = 0;
-		var _g1 = this1.length;
-		while(_g < _g1) {
-			var cell = _g++;
-			result[cell] &= bits[cell];
-		}
-		return result;
-	} else {
-		var result = bits.slice();
-		var _g = 0;
-		var _g1 = bits.length;
-		while(_g < _g1) {
-			var cell = _g++;
-			result[cell] &= this1[cell];
-		}
-		return result;
-	}
-};
-bits_Bits.iterator = function(this1) {
-	return new bits_BitsIterator(this1);
-};
-var bits_BitsIterator = function(data) {
-	this.i = 0;
-	this.cell = 0;
-	this.data = data;
-};
-bits_BitsIterator.__name__ = "bits.BitsIterator";
-bits_BitsIterator.prototype = {
-	hasNext: function() {
-		var has = false;
-		while(this.cell < this.data.length) {
-			var cellValue = this.data[this.cell];
-			if(cellValue != 0) {
-				while(this.i < 32) {
-					if((cellValue & 1 << this.i) != 0) {
-						has = true;
-						break;
-					}
-					++this.i;
-				}
-				if(has) {
-					break;
-				}
-			}
-			this.i = 0;
-			++this.cell;
-		}
-		return has;
-	}
-	,next: function() {
-		++this.i;
-		return this.cell * 32 + this.i - 1;
-	}
-};
-var bits_BitsData = {};
-bits_BitsData._new = function() {
-	var this1 = [0];
-	return this1;
-};
-bits_BitsData.resize = function(this1,newLength) {
-	var _g = this1.length;
-	while(_g < newLength) {
-		var i = _g++;
-		this1[i] = 0;
-	}
-};
-bits_BitsData.copy = function(this1) {
-	return this1.slice();
-};
-bits_BitsData.countOnes = function(this1) {
-	var result = 0;
-	var _g = 0;
-	while(_g < this1.length) {
-		var v = this1[_g];
-		++_g;
-		if(v != 0) {
-			v -= v >>> 1 & 1431655765;
-			v = (v & 858993459) + (v >>> 2 & 858993459);
-			result += (v + (v >>> 4) & 252645135) * 16843009 >>> 24;
-		}
-	}
-	return result;
-};
-bits_BitsData.get = function(this1,index) {
-	return this1[index];
-};
-bits_BitsData.set = function(this1,index,value) {
-	return this1[index] = value;
-};
-bits_BitsData.get_length = function(this1) {
-	return this1.length;
-};
 var discord_$js_Client = require("discord.js").Client;
 var discord_$js_MessageEmbed = require("discord.js").MessageEmbed;
-var ecs_Components = function(_size) {
-	var this1 = new Array(_size);
-	this.components = this1;
-};
-ecs_Components.__name__ = "ecs.Components";
-ecs_Components.prototype = {
-	set: function(_entity,_component) {
-		this.components[ecs_Entity.id(_entity)] = _component;
-	}
-	,get: function(_entity) {
-		return this.components[ecs_Entity.id(_entity)];
-	}
-};
 var ecs_Components_$components_$Command = function(_size) {
-	var this1 = new Array(_size);
-	this.components = this1;
+	this.components = new Array(_size);
 };
-ecs_Components_$components_$Command.__name__ = "ecs.Components_components_Command";
+ecs_Components_$components_$Command.__name__ = true;
 ecs_Components_$components_$Command.prototype = {
 	set: function(_entity,_component) {
 		this.components[ecs_Entity.id(_entity)] = _component;
@@ -793,10 +413,9 @@ ecs_Components_$components_$Command.prototype = {
 	}
 };
 var ecs_Components_$discord_$js_$Message = function(_size) {
-	var this1 = new Array(_size);
-	this.components = this1;
+	this.components = new Array(_size);
 };
-ecs_Components_$discord_$js_$Message.__name__ = "ecs.Components_discord_js_Message";
+ecs_Components_$discord_$js_$Message.__name__ = true;
 ecs_Components_$discord_$js_$Message.prototype = {
 	set: function(_entity,_component) {
 		this.components[ecs_Entity.id(_entity)] = _component;
@@ -821,7 +440,7 @@ var ecs_Family = function(_id,_cmpMask,_resMask,_size) {
 	this.entities = new ecs_ds_SparseSet(_size);
 	this.active = bits_Bits.isEmpty(this.resourcesMask);
 };
-ecs_Family.__name__ = "ecs.Family";
+ecs_Family.__name__ = true;
 ecs_Family.prototype = {
 	add: function(_entity) {
 		if(!this.entities.has(_entity)) {
@@ -839,31 +458,6 @@ ecs_Family.prototype = {
 			}
 		}
 	}
-	,has: function(_entity) {
-		return this.entities.has(_entity);
-	}
-	,activate: function() {
-		if(!this.active) {
-			this.active = true;
-			var _g = 0;
-			var _g1 = this.entities.size();
-			while(_g < _g1) {
-				var i = _g++;
-				this.onEntityAdded.notify(this.entities.getDense(i));
-			}
-		}
-	}
-	,deactivate: function() {
-		if(this.active) {
-			var _g = 0;
-			var _g1 = this.entities.size();
-			while(_g < _g1) {
-				var i = _g++;
-				this.onEntityRemoved.notify(this.entities.getDense(i));
-			}
-			this.active = false;
-		}
-	}
 	,isActive: function() {
 		return this.active;
 	}
@@ -876,7 +470,7 @@ var ecs__$Family_FamilyIterator = function(_set,_active) {
 	this.active = _active;
 	this.idx = 0;
 };
-ecs__$Family_FamilyIterator.__name__ = "ecs._Family.FamilyIterator";
+ecs__$Family_FamilyIterator.__name__ = true;
 ecs__$Family_FamilyIterator.prototype = {
 	hasNext: function() {
 		if(this.active) {
@@ -892,13 +486,11 @@ ecs__$Family_FamilyIterator.prototype = {
 var ecs_System = function(_universe) {
 	this.universe = _universe;
 };
-ecs_System.__name__ = "ecs.System";
+ecs_System.__name__ = true;
 ecs_System.prototype = {
 	onAdded: function() {
 	}
 	,update: function(_dt) {
-	}
-	,onRemoved: function() {
 	}
 };
 var ecs_Universe = function(_maxEntities) {
@@ -908,7 +500,7 @@ var ecs_Universe = function(_maxEntities) {
 	this.families = new ecs_core_FamilyManager(this.components,this.resources,_maxEntities);
 	this.systems = new ecs_core_SystemManager();
 };
-ecs_Universe.__name__ = "ecs.Universe";
+ecs_Universe.__name__ = true;
 ecs_Universe.prototype = {
 	update: function(_dt) {
 		this.systems.update(_dt);
@@ -916,22 +508,15 @@ ecs_Universe.prototype = {
 };
 var ecs_core_ComponentManager = function(_entities) {
 	this.entities = _entities;
-	var this1 = new Array(_entities.capacity());
-	this.flags = this1;
-	var this1 = new Array(2);
-	this.components = this1;
+	this.flags = new Array(_entities.capacity());
+	this.components = new Array(2);
 	this.components[1] = new ecs_Components_$components_$Command(_entities.capacity());
 	this.components[0] = new ecs_Components_$discord_$js_$Message(_entities.capacity());
 	var _g = 0;
 	var _g1 = this.flags.length;
-	while(_g < _g1) {
-		var i = _g++;
-		var this1 = [0];
-		var this2 = this1;
-		this.flags[i] = this2;
-	}
+	while(_g < _g1) this.flags[_g++] = [0];
 };
-ecs_core_ComponentManager.__name__ = "ecs.core.ComponentManager";
+ecs_core_ComponentManager.__name__ = true;
 ecs_core_ComponentManager.prototype = {
 	set_discord_js_Message: function(_entity,_id,_component) {
 		this.components[_id].set(_entity,_component);
@@ -944,19 +529,12 @@ ecs_core_ComponentManager.prototype = {
 	,getTable: function(_compID) {
 		return this.components[_compID];
 	}
-	,remove: function(_entity,_id) {
-		bits_Bits.unset(this.flags[ecs_Entity.id(_entity)],_id);
-	}
-	,clear: function(_entity) {
-		bits_Bits.clear(this.flags[ecs_Entity.id(_entity)]);
-	}
 };
 var ecs_core_EntityManager = function(_max) {
-	var this1 = new Array(_max);
-	this.storage = this1;
+	this.storage = new Array(_max);
 	this.nextID = 0;
 };
-ecs_core_EntityManager.__name__ = "ecs.core.EntityManager";
+ecs_core_EntityManager.__name__ = true;
 ecs_core_EntityManager.prototype = {
 	create: function() {
 		var idx = this.nextID++;
@@ -964,197 +542,72 @@ ecs_core_EntityManager.prototype = {
 		this.storage[idx] = e;
 		return e;
 	}
-	,get: function(_id) {
-		return this.storage[_id];
-	}
 	,capacity: function() {
 		return this.storage.length;
 	}
 };
 var ecs_core_FamilyManager = function(_components,_resources,_size) {
-	var this1 = new Array(1);
-	this.families = this1;
+	this.families = new Array(1);
 	var this1 = [0];
-	var this2 = this1;
-	var _g = this2.length;
-	while(_g < 1) {
-		var i = _g++;
-		this2[i] = 0;
-	}
-	var cmpBits = this2;
+	var _g = this1.length;
+	while(_g < 1) this1[_g++] = 0;
+	var cmpBits = this1;
 	bits_Bits.set(cmpBits,0);
 	bits_Bits.set(cmpBits,1);
-	var this1 = [0];
-	var this2 = this1;
-	var resBits = this2;
-	this.families[0] = new ecs_Family(0,cmpBits,resBits,_size);
+	this.families[0] = new ecs_Family(0,cmpBits,[0],_size);
 	this.components = _components;
 	this.resources = _resources;
 	this.number = this.families.length;
 };
-ecs_core_FamilyManager.__name__ = "ecs.core.FamilyManager";
+ecs_core_FamilyManager.__name__ = true;
 ecs_core_FamilyManager.prototype = {
 	get: function(_index) {
 		return this.families[_index];
 	}
-	,tryActivate: function(_id) {
-		if(!this.families[_id].isActive() && bits_Bits.areSet(this.resources.flags,this.families[_id].resourcesMask)) {
-			this.families[_id].activate();
-		}
-	}
-	,tryDeactivate: function(_id,resourceID) {
-		if(!bits_Bits.isSet(this.resources.flags,resourceID)) {
-			return;
-		}
-		if(!this.families[_id].isActive()) {
-			return;
-		}
-		if(bits_Bits.isSet(this.families[_id].resourcesMask,resourceID)) {
-			this.families[_id].deactivate();
-		}
-	}
-	,whenEntityDestroyed: function(_entity) {
-		var compFlags = this.components.flags[ecs_Entity.id(_entity)];
-		var _g = 0;
-		var _g1 = this.families;
-		while(_g < _g1.length) {
-			var family = _g1[_g];
-			++_g;
-			if(!bits_Bits.areSet(compFlags,family.componentsMask)) {
-				family.remove(_entity);
-			}
-		}
-	}
 };
 var ecs_core_ResourceManager = function() {
-	var this1 = [0];
-	var this2 = this1;
-	this.flags = this2;
-	var this1 = new Array(0);
-	this.resources = this1;
+	this.flags = [0];
+	this.resources = new Array(0);
 };
-ecs_core_ResourceManager.__name__ = "ecs.core.ResourceManager";
-ecs_core_ResourceManager.prototype = {
-	get: function(_id) {
-		return this.resources[_id];
-	}
-	,insert: function(_id,_resource) {
-		this.resources[_id] = _resource;
-		bits_Bits.set(this.flags,_id);
-	}
-	,remove: function(_id) {
-		bits_Bits.unset(this.flags,_id);
-		this.resources[_id] = null;
-	}
-};
+ecs_core_ResourceManager.__name__ = true;
 var ecs_core_SystemManager = function() {
 	this.active = [];
 };
-ecs_core_SystemManager.__name__ = "ecs.core.SystemManager";
+ecs_core_SystemManager.__name__ = true;
 ecs_core_SystemManager.prototype = {
 	add: function(_system) {
 		this.active.push(_system);
 		_system.onAdded();
 	}
-	,remove: function(_system) {
-		_system.onRemoved();
-		HxOverrides.remove(this.active,_system);
-	}
 	,update: function(_dt) {
 		var _g = 0;
 		var _g1 = this.active;
-		while(_g < _g1.length) {
-			var system = _g1[_g];
-			++_g;
-			system.update(_dt);
-		}
-	}
-};
-var ecs_ds_Result = $hxEnums["ecs.ds.Result"] = { __ename__:true,__constructs__:null
-	,Ok: ($_=function(data) { return {_hx_index:0,data:data,__enum__:"ecs.ds.Result",toString:$estr}; },$_._hx_name="Ok",$_.__params__ = ["data"],$_)
-	,Error: ($_=function(error) { return {_hx_index:1,error:error,__enum__:"ecs.ds.Result",toString:$estr}; },$_._hx_name="Error",$_.__params__ = ["error"],$_)
-};
-ecs_ds_Result.__constructs__ = [ecs_ds_Result.Ok,ecs_ds_Result.Error];
-var ecs_ds_Set = function() {
-	this.data = [];
-};
-ecs_ds_Set.__name__ = "ecs.ds.Set";
-ecs_ds_Set.prototype = {
-	add: function(_value) {
-		if(!Lambda.has(this.data,_value)) {
-			this.data.push(_value);
-		}
-	}
-	,iterator: function() {
-		return new haxe_iterators_ArrayIterator(this.data);
-	}
-};
-var ecs_ds_Signal = function() {
-	this.subscribers = [];
-};
-ecs_ds_Signal.__name__ = "ecs.ds.Signal";
-ecs_ds_Signal.prototype = {
-	subscribe: function(_func) {
-		if(this.subscribers.indexOf(_func) == -1) {
-			this.subscribers.push(_func);
-		}
-	}
-	,unsubscribe: function(_func) {
-		HxOverrides.remove(this.subscribers,_func);
-	}
-	,notify: function(_data) {
-		var _g = 0;
-		var _g1 = this.subscribers;
-		while(_g < _g1.length) {
-			var func = _g1[_g];
-			++_g;
-			func(_data);
-		}
+		while(_g < _g1.length) _g1[_g++].update(_dt);
 	}
 };
 var ecs_ds_Signal_$ecs_$Entity = function() {
 	this.subscribers = [];
 };
-ecs_ds_Signal_$ecs_$Entity.__name__ = "ecs.ds.Signal_ecs_Entity";
+ecs_ds_Signal_$ecs_$Entity.__name__ = true;
 ecs_ds_Signal_$ecs_$Entity.prototype = {
-	subscribe: function(_func) {
-		if(this.subscribers.indexOf(_func) == -1) {
-			this.subscribers.push(_func);
-		}
-	}
-	,unsubscribe: function(_func) {
-		HxOverrides.remove(this.subscribers,_func);
-	}
-	,notify: function(_data) {
+	notify: function(_data) {
 		var _g = 0;
 		var _g1 = this.subscribers;
-		while(_g < _g1.length) {
-			var func = _g1[_g];
-			++_g;
-			func(_data);
-		}
+		while(_g < _g1.length) _g1[_g++](_data);
 	}
 };
 var ecs_ds_SparseSet = function(_size) {
-	var this1 = new Array(_size);
-	this.sparse = this1;
-	var this1 = new Array(_size);
-	this.dense = this1;
+	this.sparse = new Array(_size);
+	this.dense = new Array(_size);
 	this.number = 0;
 	var _g = 0;
 	var _g1 = this.sparse.length;
-	while(_g < _g1) {
-		var i = _g++;
-		this.sparse[i] = 0;
-	}
+	while(_g < _g1) this.sparse[_g++] = 0;
 	var _g = 0;
 	var _g1 = this.dense.length;
-	while(_g < _g1) {
-		var i = _g++;
-		this.dense[i] = ecs_Entity.none;
-	}
+	while(_g < _g1) this.dense[_g++] = ecs_Entity.none;
 };
-ecs_ds_SparseSet.__name__ = "ecs.ds.SparseSet";
+ecs_ds_SparseSet.__name__ = true;
 ecs_ds_SparseSet.prototype = {
 	has: function(_entity) {
 		if(this.sparse[ecs_Entity.id(_entity)] < this.number) {
@@ -1177,9 +630,6 @@ ecs_ds_SparseSet.prototype = {
 	,getDense: function(_idx) {
 		return this.dense[_idx];
 	}
-	,getSparse: function(_entity) {
-		return this.sparse[ecs_Entity.id(_entity)];
-	}
 	,size: function() {
 		return this.number;
 	}
@@ -1187,326 +637,14 @@ ecs_ds_SparseSet.prototype = {
 var haxe_ds_StringMap = function() {
 	this.h = Object.create(null);
 };
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-function ecs_macros_ComponentCache_getComponentCount() {
-	return ecs_macros_ComponentCache_componentIncrementer;
-}
-function ecs_macros_ComponentCache_getComponentMap() {
-	return ecs_macros_ComponentCache_components;
-}
-function ecs_macros_ComponentCache_registerComponent(_hash,_type) {
-	if(Object.prototype.hasOwnProperty.call(ecs_macros_ComponentCache_components.h,_hash)) {
-		return ecs_macros_ComponentCache_components.h[_hash].id;
-	} else {
-		var id = ecs_macros_ComponentCache_componentIncrementer++;
-		ecs_macros_ComponentCache_components.h[_hash] = { id : id, type : _type};
-		return id;
-	}
-}
-function ecs_macros_ComponentCache_getComponentID(_type) {
-	if(Object.prototype.hasOwnProperty.call(ecs_macros_ComponentCache_components.h,_type)) {
-		return haxe_ds_Option.Some(ecs_macros_ComponentCache_components.h[_type].id);
-	} else {
-		return haxe_ds_Option.None;
-	}
-}
-function ecs_macros_FamilyCache_getFamilyCount() {
-	return ecs_macros_FamilyCache_familyIncrementer;
-}
-function ecs_macros_FamilyCache_getFamilies() {
-	return ecs_macros_FamilyCache_familyDefinitions;
-}
-function ecs_macros_FamilyCache_getFamilyIDsWithResource(_id) {
-	var filtered = [];
-	var _g_current = 0;
-	var _g_array = ecs_macros_FamilyCache_familyDefinitions;
-	while(_g_current < _g_array.length) {
-		var _g1_value = _g_array[_g_current];
-		var _g1_key = _g_current++;
-		if(Lambda.exists(_g1_value.resources,function(f) {
-			return f.uID == _id;
-		})) {
-			filtered.push(_g1_key);
-		}
-	}
-	return filtered;
-}
-function ecs_macros_FamilyCache_getFamilyIDsWithComponent(_id) {
-	var filtered = [];
-	var _g_current = 0;
-	var _g_array = ecs_macros_FamilyCache_familyDefinitions;
-	while(_g_current < _g_array.length) {
-		var _g1_value = _g_array[_g_current];
-		var _g1_key = _g_current++;
-		if(Lambda.exists(_g1_value.components,function(f) {
-			return f.uID == _id;
-		})) {
-			filtered.push(_g1_key);
-		}
-	}
-	return filtered;
-}
-function ecs_macros_FamilyCache_getFamilyByKey(_key) {
-	if(Object.prototype.hasOwnProperty.call(ecs_macros_FamilyCache_keyedFamilies.h,_key)) {
-		return haxe_ds_Option.Some(ecs_macros_FamilyCache_keyedFamilies.h[_key]);
-	} else {
-		return haxe_ds_Option.None;
-	}
-}
-function ecs_macros_FamilyCache_registerFamily(_key,_family) {
-	var familyHash = ecs_macros_FamilyCache_hash(_family);
-	ecs_macros_FamilyCache_keyedFamilies.h[_key] = _family;
-	if(Object.prototype.hasOwnProperty.call(ecs_macros_FamilyCache_familyIDs.h,familyHash)) {
-		return ecs_macros_FamilyCache_familyIDs.h[familyHash];
-	} else {
-		var id = ecs_macros_FamilyCache_familyIncrementer++;
-		ecs_macros_FamilyCache_familyIDs.h[familyHash] = id;
-		ecs_macros_FamilyCache_familyDefinitions.push(_family);
-		return id;
-	}
-}
-function ecs_macros_FamilyCache_hash(_family) {
-	var buffer_b = "";
-	buffer_b = "c:";
-	var _g = 0;
-	var _g1 = _family.components;
-	while(_g < _g1.length) {
-		var comp = _g1[_g];
-		++_g;
-		buffer_b += Std.string(comp.type);
-	}
-	buffer_b += "r:";
-	var _g = 0;
-	var _g1 = _family.resources;
-	while(_g < _g1.length) {
-		var res = _g1[_g];
-		++_g;
-		buffer_b += Std.string(res.type);
-	}
-	return buffer_b;
-}
-function ecs_macros_ResourceCache_getResourceCount() {
-	return ecs_macros_ResourceCache_resourceIncrementer;
-}
-function ecs_macros_ResourceCache_getResourceMap() {
-	return ecs_macros_ResourceCache_resources;
-}
-function ecs_macros_ResourceCache_getResourceID(_hash) {
-	if(Object.prototype.hasOwnProperty.call(ecs_macros_ResourceCache_resources.h,_hash)) {
-		return haxe_ds_Option.Some(ecs_macros_ResourceCache_resources.h[_hash]);
-	} else {
-		return haxe_ds_Option.None;
-	}
-}
-function ecs_macros_ResourceCache_registerResource(_hash) {
-	if(!Object.prototype.hasOwnProperty.call(ecs_macros_ResourceCache_resources.h,_hash)) {
-		var id = ecs_macros_ResourceCache_resourceIncrementer++;
-		ecs_macros_ResourceCache_resources.h[_hash] = id;
-		return id;
-	} else {
-		return ecs_macros_ResourceCache_resources.h[_hash];
-	}
-}
-function ecs_macros_SystemMacros_getOrCreateOverrideFunction(_name,_fields,_pos) {
-	var _g = 0;
-	while(_g < _fields.length) {
-		var field = _fields[_g];
-		++_g;
-		if(field.name == _name) {
-			return field;
-		}
-	}
-	_fields.push({ name : _name, access : [haxe_macro_Access.APublic,haxe_macro_Access.AOverride], pos : _pos, kind : haxe_macro_FieldType.FFun({ args : [], expr : { expr : haxe_macro_ExprDef.EBlock([]), pos : { file : "c:\\Users\\Jazz9\\Documents\\Projects\\haxe\\node\\Haxebot\\.haxelib\\aidan-ecs/git/src/ecs/macros/SystemMacros.hx", min : 7200, max : 7202}}})});
-	return _fields[_fields.length - 1];
-}
-function ecs_macros_SystemMacros_insertExprIntoFunction(_pos,_field,_expr) {
-	var _g = _field.kind;
-	if(_g._hx_index == 1) {
-		var _g1 = _g.f.expr.expr;
-		if(_g1._hx_index == 12) {
-			_g1.exprs.splice(_pos,0,_expr);
-		}
-	}
-}
-function ecs_macros_SystemMacros_hasMeta(_field,_meta) {
-	if(_field.meta == null || _field.meta.length == 0) {
-		return false;
-	}
-	var _g = 0;
-	var _g1 = _field.meta;
-	while(_g < _g1.length) {
-		var meta = _g1[_g];
-		++_g;
-		if(meta.name == _meta) {
-			return true;
-		}
-	}
-	return false;
-}
-function ecs_macros_SystemMacros_extractFastFamily(_field) {
-	var _g = _field.kind;
-	if(_g._hx_index == 0) {
-		var _g1 = _g.t;
-		if(_g1 == null) {
-			return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
-		} else if(_g1._hx_index == 2) {
-			return ecs_macros_SystemMacros_extractFamilyComponentsFromObject(_g1.fields);
-		} else {
-			return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
-		}
-	} else {
-		return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
-	}
-}
-function ecs_macros_SystemMacros_extractFullFamily(_field) {
-	var _g = _field.kind;
-	if(_g._hx_index == 0) {
-		var _g1 = _g.t;
-		if(_g1 == null) {
-			return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
-		} else if(_g1._hx_index == 2) {
-			var _g2 = _g1.fields;
-			var value = Lambda.find(_g2,function(f) {
-				return f.name == "requires";
-			});
-			var value1;
-			if(value == null) {
-				value1 = null;
-			} else {
-				var _g1 = value.kind;
-				if(_g1._hx_index == 0) {
-					var _g3 = _g1.t;
-					value1 = _g3 == null ? ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos}) : _g3._hx_index == 2 ? ecs_macros_SystemMacros_extractFamilyComponentsFromObject(_g3.fields) : ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
-				} else {
-					value1 = ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
-				}
-			}
-			var requires = value1 == null ? ecs_ds_Result.Ok([]) : value1;
-			var value = Lambda.find(_g2,function(f) {
-				return f.name == "resources";
-			});
-			var value1;
-			if(value == null) {
-				value1 = null;
-			} else {
-				var _g1 = value.kind;
-				if(_g1._hx_index == 0) {
-					var _g2 = _g1.t;
-					value1 = _g2 == null ? ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos}) : _g2._hx_index == 2 ? ecs_macros_SystemMacros_extractFamilyComponentsFromObject(_g2.fields) : ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
-				} else {
-					value1 = ecs_ds_Result.Error({ message : "Unexpected object field expression " + Std.string(_g1), pos : value.pos});
-				}
-			}
-			var resources = value1 == null ? ecs_ds_Result.Ok([]) : value1;
-			return ecs_ds_Result.Ok({ name : _field.name, components : requires, resources : resources});
-		} else {
-			return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
-		}
-	} else {
-		return ecs_ds_Result.Error({ message : "Unexpected field kind " + Std.string(_g) + ", expected FVar", pos : _field.pos});
-	}
-}
-function ecs_macros_SystemMacros_extractFamilyComponentsFromObject(_fields) {
-	var extracted = [];
-	var _g = 0;
-	var _g1 = _fields;
-	while(_g < _g1.length) {
-		var field = _g1[_g];
-		++_g;
-		var _g2 = field.kind;
-		if(_g2._hx_index == 0) {
-			extracted.push({ name : field.name, type : _g2.t});
-		} else {
-			return ecs_ds_Result.Error({ message : "Unexpected expression " + Std.string(_g2) + ", expected FVar(_, EConst(CIdent(_)))", pos : field.pos});
-		}
-	}
-	extracted.sort(ecs_macros_SystemMacros_sort);
-	return ecs_ds_Result.Ok(extracted);
-}
-function ecs_macros_SystemMacros_getUniqueComponents(_families) {
-	var components = [];
-	var _g = 0;
-	var _g1 = _families;
-	while(_g < _g1.length) {
-		var family = _g1[_g];
-		++_g;
-		var _g2 = 0;
-		var _g3 = family.components;
-		while(_g2 < _g3.length) {
-			var component = [_g3[_g2]];
-			++_g2;
-			if(!Lambda.exists(components,(function(component) {
-				return function(f) {
-					return f.uID == component[0].uID;
-				};
-			})(component))) {
-				components.push(component[0]);
-			}
-		}
-	}
-	return components;
-}
-function ecs_macros_SystemMacros_sort(o1,o2) {
-	var name1 = o1.type;
-	var name2 = o2.type;
-	if(name1 < name2) {
-		return -1;
-	}
-	if(name1 > name2) {
-		return 1;
-	}
-	return 0;
-}
-var ecs_macros_TableType = {};
-ecs_macros_TableType._new = function(value) {
-	return value;
-};
-ecs_macros_TableType.fromClass = function(input) {
-	return ecs_macros_TableType._new(input.__name__);
-};
-function ecs_macros_UniverseMacros_extractFunctionBlock(_expr) {
-	var _g = _expr.expr;
-	if(_g._hx_index == 28) {
-		var _g1 = _g.e.expr;
-		if(_g1._hx_index == 18) {
-			var _g = _g1.e;
-			if(_g == null) {
-				return haxe_ds_Option.None;
-			} else {
-				var _g1 = _g.expr;
-				if(_g1._hx_index == 12) {
-					return haxe_ds_Option.Some(_g1.exprs);
-				} else {
-					return haxe_ds_Option.None;
-				}
-			}
-		} else {
-			return haxe_ds_Option.None;
-		}
-	} else {
-		return haxe_ds_Option.None;
-	}
-}
-function ecs_macros_UniverseMacros_isLocalIdent(_target,_classType,_vars) {
-	var value = haxe_macro_TypeTools.findField(_classType,_target);
-	var defaultValue = haxe_macro_TypeTools.findField(_classType,_target,true);
-	var found = value == null ? defaultValue : value;
-	if(found != null) {
-		return haxe_ds_Option.Some(found.type);
-	}
-	if(Object.prototype.hasOwnProperty.call(_vars.h,_target)) {
-		return haxe_ds_Option.Some(_vars.h[_target].t);
-	} else {
-		return haxe_ds_Option.None;
-	}
-}
+haxe_ds_StringMap.__name__ = true;
 var haxe_Exception = function(message,previous,native) {
 	Error.call(this,message);
 	this.message = message;
 	this.__previousException = previous;
 	this.__nativeException = native != null ? native : this;
 };
-haxe_Exception.__name__ = "haxe.Exception";
+haxe_Exception.__name__ = true;
 haxe_Exception.caught = function(value) {
 	if(((value) instanceof haxe_Exception)) {
 		return value;
@@ -1542,7 +680,7 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 	}
 });
 var haxe_Log = function() { };
-haxe_Log.__name__ = "haxe.Log";
+haxe_Log.__name__ = true;
 haxe_Log.formatOutput = function(v,infos) {
 	var str = Std.string(v);
 	if(infos == null) {
@@ -1552,11 +690,7 @@ haxe_Log.formatOutput = function(v,infos) {
 	if(infos.customParams != null) {
 		var _g = 0;
 		var _g1 = infos.customParams;
-		while(_g < _g1.length) {
-			var v = _g1[_g];
-			++_g;
-			str += ", " + Std.string(v);
-		}
+		while(_g < _g1.length) str += ", " + Std.string(_g1[_g++]);
 	}
 	return pstr + ": " + str;
 };
@@ -1572,7 +706,7 @@ var haxe_Timer = function(time_ms) {
 		me.run();
 	},time_ms);
 };
-haxe_Timer.__name__ = "haxe.Timer";
+haxe_Timer.__name__ = true;
 haxe_Timer.prototype = {
 	run: function() {
 	}
@@ -1581,18 +715,13 @@ var haxe_ValueException = function(value,previous,native) {
 	haxe_Exception.call(this,String(value),previous,native);
 	this.value = value;
 };
-haxe_ValueException.__name__ = "haxe.ValueException";
+haxe_ValueException.__name__ = true;
 haxe_ValueException.__super__ = haxe_Exception;
 haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
 	unwrap: function() {
 		return this.value;
 	}
 });
-var haxe_ds_Option = $hxEnums["haxe.ds.Option"] = { __ename__:true,__constructs__:null
-	,Some: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.ds.Option",toString:$estr}; },$_._hx_name="Some",$_.__params__ = ["v"],$_)
-	,None: {_hx_name:"None",_hx_index:1,__enum__:"haxe.ds.Option",toString:$estr}
-};
-haxe_ds_Option.__constructs__ = [haxe_ds_Option.Some,haxe_ds_Option.None];
 var haxe_exceptions_PosException = function(message,previous,pos) {
 	haxe_Exception.call(this,message,previous);
 	if(pos == null) {
@@ -1601,7 +730,7 @@ var haxe_exceptions_PosException = function(message,previous,pos) {
 		this.posInfos = pos;
 	}
 };
-haxe_exceptions_PosException.__name__ = "haxe.exceptions.PosException";
+haxe_exceptions_PosException.__name__ = true;
 haxe_exceptions_PosException.__super__ = haxe_Exception;
 haxe_exceptions_PosException.prototype = $extend(haxe_Exception.prototype,{
 	toString: function() {
@@ -1614,7 +743,7 @@ var haxe_exceptions_NotImplementedException = function(message,previous,pos) {
 	}
 	haxe_exceptions_PosException.call(this,message,previous,pos);
 };
-haxe_exceptions_NotImplementedException.__name__ = "haxe.exceptions.NotImplementedException";
+haxe_exceptions_NotImplementedException.__name__ = true;
 haxe_exceptions_NotImplementedException.__super__ = haxe_exceptions_PosException;
 haxe_exceptions_NotImplementedException.prototype = $extend(haxe_exceptions_PosException.prototype,{
 });
@@ -1624,7 +753,7 @@ var haxe_http_HttpBase = function(url) {
 	this.params = [];
 	this.emptyOnData = $bind(this,this.onData);
 };
-haxe_http_HttpBase.__name__ = "haxe.http.HttpBase";
+haxe_http_HttpBase.__name__ = true;
 haxe_http_HttpBase.prototype = {
 	onData: function(data) {
 	}
@@ -1655,7 +784,7 @@ haxe_http_HttpBase.prototype = {
 var haxe_http_HttpNodeJs = function(url) {
 	haxe_http_HttpBase.call(this,url);
 };
-haxe_http_HttpNodeJs.__name__ = "haxe.http.HttpNodeJs";
+haxe_http_HttpNodeJs.__name__ = true;
 haxe_http_HttpNodeJs.__super__ = haxe_http_HttpBase;
 haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 	request: function(post) {
@@ -1745,7 +874,7 @@ var haxe_io_Bytes = function(data) {
 	data.hxBytes = this;
 	data.bytes = this.b;
 };
-haxe_io_Bytes.__name__ = "haxe.io.Bytes";
+haxe_io_Bytes.__name__ = true;
 haxe_io_Bytes.ofData = function(b) {
 	var hb = b.hxBytes;
 	if(hb != null) {
@@ -1778,13 +907,10 @@ haxe_io_Bytes.prototype = {
 					var code = (c & 63) << 6 | b[i++] & 127;
 					s += String.fromCodePoint(code);
 				} else if(c < 240) {
-					var c2 = b[i++];
-					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
+					var code1 = (c & 31) << 12 | (b[i++] & 127) << 6 | b[i++] & 127;
 					s += String.fromCodePoint(code1);
 				} else {
-					var c21 = b[i++];
-					var c3 = b[i++];
-					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+					var u = (c & 15) << 18 | (b[i++] & 127) << 12 | (b[i++] & 127) << 6 | b[i++] & 127;
 					s += String.fromCodePoint(u);
 				}
 			}
@@ -1804,14 +930,6 @@ var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:true,__constru
 	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
 };
 haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
-var haxe_io_Eof = function() {
-};
-haxe_io_Eof.__name__ = "haxe.io.Eof";
-haxe_io_Eof.prototype = {
-	toString: function() {
-		return "Eof";
-	}
-};
 var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__:true,__constructs__:null
 	,Blocked: {_hx_name:"Blocked",_hx_index:0,__enum__:"haxe.io.Error",toString:$estr}
 	,Overflow: {_hx_name:"Overflow",_hx_index:1,__enum__:"haxe.io.Error",toString:$estr}
@@ -1819,15 +937,11 @@ var haxe_io_Error = $hxEnums["haxe.io.Error"] = { __ename__:true,__constructs__:
 	,Custom: ($_=function(e) { return {_hx_index:3,e:e,__enum__:"haxe.io.Error",toString:$estr}; },$_._hx_name="Custom",$_.__params__ = ["e"],$_)
 };
 haxe_io_Error.__constructs__ = [haxe_io_Error.Blocked,haxe_io_Error.Overflow,haxe_io_Error.OutsideBounds,haxe_io_Error.Custom];
-var haxe_io_Input = function() { };
-haxe_io_Input.__name__ = "haxe.io.Input";
-var haxe_io_Output = function() { };
-haxe_io_Output.__name__ = "haxe.io.Output";
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
 	this.array = array;
 };
-haxe_iterators_ArrayIterator.__name__ = "haxe.iterators.ArrayIterator";
+haxe_iterators_ArrayIterator.__name__ = true;
 haxe_iterators_ArrayIterator.prototype = {
 	hasNext: function() {
 		return this.current < this.array.length;
@@ -1836,171 +950,8 @@ haxe_iterators_ArrayIterator.prototype = {
 		return this.array[this.current++];
 	}
 };
-var haxe_macro_StringLiteralKind = $hxEnums["haxe.macro.StringLiteralKind"] = { __ename__:true,__constructs__:null
-	,DoubleQuotes: {_hx_name:"DoubleQuotes",_hx_index:0,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
-	,SingleQuotes: {_hx_name:"SingleQuotes",_hx_index:1,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
-};
-haxe_macro_StringLiteralKind.__constructs__ = [haxe_macro_StringLiteralKind.DoubleQuotes,haxe_macro_StringLiteralKind.SingleQuotes];
-var haxe_macro_Constant = $hxEnums["haxe.macro.Constant"] = { __ename__:true,__constructs__:null
-	,CInt: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CInt",$_.__params__ = ["v"],$_)
-	,CFloat: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CFloat",$_.__params__ = ["f"],$_)
-	,CString: ($_=function(s,kind) { return {_hx_index:2,s:s,kind:kind,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CString",$_.__params__ = ["s","kind"],$_)
-	,CIdent: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CIdent",$_.__params__ = ["s"],$_)
-	,CRegexp: ($_=function(r,opt) { return {_hx_index:4,r:r,opt:opt,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CRegexp",$_.__params__ = ["r","opt"],$_)
-};
-haxe_macro_Constant.__constructs__ = [haxe_macro_Constant.CInt,haxe_macro_Constant.CFloat,haxe_macro_Constant.CString,haxe_macro_Constant.CIdent,haxe_macro_Constant.CRegexp];
-var haxe_macro_Binop = $hxEnums["haxe.macro.Binop"] = { __ename__:true,__constructs__:null
-	,OpAdd: {_hx_name:"OpAdd",_hx_index:0,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpMult: {_hx_name:"OpMult",_hx_index:1,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpDiv: {_hx_name:"OpDiv",_hx_index:2,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpSub: {_hx_name:"OpSub",_hx_index:3,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpAssign: {_hx_name:"OpAssign",_hx_index:4,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpEq: {_hx_name:"OpEq",_hx_index:5,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpNotEq: {_hx_name:"OpNotEq",_hx_index:6,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpGt: {_hx_name:"OpGt",_hx_index:7,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpGte: {_hx_name:"OpGte",_hx_index:8,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpLt: {_hx_name:"OpLt",_hx_index:9,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpLte: {_hx_name:"OpLte",_hx_index:10,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpAnd: {_hx_name:"OpAnd",_hx_index:11,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpOr: {_hx_name:"OpOr",_hx_index:12,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpXor: {_hx_name:"OpXor",_hx_index:13,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpBoolAnd: {_hx_name:"OpBoolAnd",_hx_index:14,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpBoolOr: {_hx_name:"OpBoolOr",_hx_index:15,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpShl: {_hx_name:"OpShl",_hx_index:16,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpShr: {_hx_name:"OpShr",_hx_index:17,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpUShr: {_hx_name:"OpUShr",_hx_index:18,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpMod: {_hx_name:"OpMod",_hx_index:19,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpAssignOp: ($_=function(op) { return {_hx_index:20,op:op,__enum__:"haxe.macro.Binop",toString:$estr}; },$_._hx_name="OpAssignOp",$_.__params__ = ["op"],$_)
-	,OpInterval: {_hx_name:"OpInterval",_hx_index:21,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpArrow: {_hx_name:"OpArrow",_hx_index:22,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpIn: {_hx_name:"OpIn",_hx_index:23,__enum__:"haxe.macro.Binop",toString:$estr}
-};
-haxe_macro_Binop.__constructs__ = [haxe_macro_Binop.OpAdd,haxe_macro_Binop.OpMult,haxe_macro_Binop.OpDiv,haxe_macro_Binop.OpSub,haxe_macro_Binop.OpAssign,haxe_macro_Binop.OpEq,haxe_macro_Binop.OpNotEq,haxe_macro_Binop.OpGt,haxe_macro_Binop.OpGte,haxe_macro_Binop.OpLt,haxe_macro_Binop.OpLte,haxe_macro_Binop.OpAnd,haxe_macro_Binop.OpOr,haxe_macro_Binop.OpXor,haxe_macro_Binop.OpBoolAnd,haxe_macro_Binop.OpBoolOr,haxe_macro_Binop.OpShl,haxe_macro_Binop.OpShr,haxe_macro_Binop.OpUShr,haxe_macro_Binop.OpMod,haxe_macro_Binop.OpAssignOp,haxe_macro_Binop.OpInterval,haxe_macro_Binop.OpArrow,haxe_macro_Binop.OpIn];
-var haxe_macro_Unop = $hxEnums["haxe.macro.Unop"] = { __ename__:true,__constructs__:null
-	,OpIncrement: {_hx_name:"OpIncrement",_hx_index:0,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpDecrement: {_hx_name:"OpDecrement",_hx_index:1,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpNot: {_hx_name:"OpNot",_hx_index:2,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpNeg: {_hx_name:"OpNeg",_hx_index:3,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpNegBits: {_hx_name:"OpNegBits",_hx_index:4,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpSpread: {_hx_name:"OpSpread",_hx_index:5,__enum__:"haxe.macro.Unop",toString:$estr}
-};
-haxe_macro_Unop.__constructs__ = [haxe_macro_Unop.OpIncrement,haxe_macro_Unop.OpDecrement,haxe_macro_Unop.OpNot,haxe_macro_Unop.OpNeg,haxe_macro_Unop.OpNegBits,haxe_macro_Unop.OpSpread];
-var haxe_macro_FunctionKind = $hxEnums["haxe.macro.FunctionKind"] = { __ename__:true,__constructs__:null
-	,FAnonymous: {_hx_name:"FAnonymous",_hx_index:0,__enum__:"haxe.macro.FunctionKind",toString:$estr}
-	,FNamed: ($_=function(name,inlined) { return {_hx_index:1,name:name,inlined:inlined,__enum__:"haxe.macro.FunctionKind",toString:$estr}; },$_._hx_name="FNamed",$_.__params__ = ["name","inlined"],$_)
-	,FArrow: {_hx_name:"FArrow",_hx_index:2,__enum__:"haxe.macro.FunctionKind",toString:$estr}
-};
-haxe_macro_FunctionKind.__constructs__ = [haxe_macro_FunctionKind.FAnonymous,haxe_macro_FunctionKind.FNamed,haxe_macro_FunctionKind.FArrow];
-var haxe_macro_ExprDef = $hxEnums["haxe.macro.ExprDef"] = { __ename__:true,__constructs__:null
-	,EConst: ($_=function(c) { return {_hx_index:0,c:c,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EConst",$_.__params__ = ["c"],$_)
-	,EArray: ($_=function(e1,e2) { return {_hx_index:1,e1:e1,e2:e2,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EArray",$_.__params__ = ["e1","e2"],$_)
-	,EBinop: ($_=function(op,e1,e2) { return {_hx_index:2,op:op,e1:e1,e2:e2,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EBinop",$_.__params__ = ["op","e1","e2"],$_)
-	,EField: ($_=function(e,field) { return {_hx_index:3,e:e,field:field,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EField",$_.__params__ = ["e","field"],$_)
-	,EParenthesis: ($_=function(e) { return {_hx_index:4,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EParenthesis",$_.__params__ = ["e"],$_)
-	,EObjectDecl: ($_=function(fields) { return {_hx_index:5,fields:fields,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EObjectDecl",$_.__params__ = ["fields"],$_)
-	,EArrayDecl: ($_=function(values) { return {_hx_index:6,values:values,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EArrayDecl",$_.__params__ = ["values"],$_)
-	,ECall: ($_=function(e,params) { return {_hx_index:7,e:e,params:params,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECall",$_.__params__ = ["e","params"],$_)
-	,ENew: ($_=function(t,params) { return {_hx_index:8,t:t,params:params,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ENew",$_.__params__ = ["t","params"],$_)
-	,EUnop: ($_=function(op,postFix,e) { return {_hx_index:9,op:op,postFix:postFix,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EUnop",$_.__params__ = ["op","postFix","e"],$_)
-	,EVars: ($_=function(vars) { return {_hx_index:10,vars:vars,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EVars",$_.__params__ = ["vars"],$_)
-	,EFunction: ($_=function(kind,f) { return {_hx_index:11,kind:kind,f:f,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EFunction",$_.__params__ = ["kind","f"],$_)
-	,EBlock: ($_=function(exprs) { return {_hx_index:12,exprs:exprs,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EBlock",$_.__params__ = ["exprs"],$_)
-	,EFor: ($_=function(it,expr) { return {_hx_index:13,it:it,expr:expr,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EFor",$_.__params__ = ["it","expr"],$_)
-	,EIf: ($_=function(econd,eif,eelse) { return {_hx_index:14,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EIf",$_.__params__ = ["econd","eif","eelse"],$_)
-	,EWhile: ($_=function(econd,e,normalWhile) { return {_hx_index:15,econd:econd,e:e,normalWhile:normalWhile,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EWhile",$_.__params__ = ["econd","e","normalWhile"],$_)
-	,ESwitch: ($_=function(e,cases,edef) { return {_hx_index:16,e:e,cases:cases,edef:edef,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ESwitch",$_.__params__ = ["e","cases","edef"],$_)
-	,ETry: ($_=function(e,catches) { return {_hx_index:17,e:e,catches:catches,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ETry",$_.__params__ = ["e","catches"],$_)
-	,EReturn: ($_=function(e) { return {_hx_index:18,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EReturn",$_.__params__ = ["e"],$_)
-	,EBreak: {_hx_name:"EBreak",_hx_index:19,__enum__:"haxe.macro.ExprDef",toString:$estr}
-	,EContinue: {_hx_name:"EContinue",_hx_index:20,__enum__:"haxe.macro.ExprDef",toString:$estr}
-	,EUntyped: ($_=function(e) { return {_hx_index:21,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EUntyped",$_.__params__ = ["e"],$_)
-	,EThrow: ($_=function(e) { return {_hx_index:22,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EThrow",$_.__params__ = ["e"],$_)
-	,ECast: ($_=function(e,t) { return {_hx_index:23,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECast",$_.__params__ = ["e","t"],$_)
-	,EDisplay: ($_=function(e,displayKind) { return {_hx_index:24,e:e,displayKind:displayKind,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EDisplay",$_.__params__ = ["e","displayKind"],$_)
-	,EDisplayNew: ($_=function(t) { return {_hx_index:25,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EDisplayNew",$_.__params__ = ["t"],$_)
-	,ETernary: ($_=function(econd,eif,eelse) { return {_hx_index:26,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ETernary",$_.__params__ = ["econd","eif","eelse"],$_)
-	,ECheckType: ($_=function(e,t) { return {_hx_index:27,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECheckType",$_.__params__ = ["e","t"],$_)
-	,EMeta: ($_=function(s,e) { return {_hx_index:28,s:s,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EMeta",$_.__params__ = ["s","e"],$_)
-	,EIs: ($_=function(e,t) { return {_hx_index:29,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EIs",$_.__params__ = ["e","t"],$_)
-};
-haxe_macro_ExprDef.__constructs__ = [haxe_macro_ExprDef.EConst,haxe_macro_ExprDef.EArray,haxe_macro_ExprDef.EBinop,haxe_macro_ExprDef.EField,haxe_macro_ExprDef.EParenthesis,haxe_macro_ExprDef.EObjectDecl,haxe_macro_ExprDef.EArrayDecl,haxe_macro_ExprDef.ECall,haxe_macro_ExprDef.ENew,haxe_macro_ExprDef.EUnop,haxe_macro_ExprDef.EVars,haxe_macro_ExprDef.EFunction,haxe_macro_ExprDef.EBlock,haxe_macro_ExprDef.EFor,haxe_macro_ExprDef.EIf,haxe_macro_ExprDef.EWhile,haxe_macro_ExprDef.ESwitch,haxe_macro_ExprDef.ETry,haxe_macro_ExprDef.EReturn,haxe_macro_ExprDef.EBreak,haxe_macro_ExprDef.EContinue,haxe_macro_ExprDef.EUntyped,haxe_macro_ExprDef.EThrow,haxe_macro_ExprDef.ECast,haxe_macro_ExprDef.EDisplay,haxe_macro_ExprDef.EDisplayNew,haxe_macro_ExprDef.ETernary,haxe_macro_ExprDef.ECheckType,haxe_macro_ExprDef.EMeta,haxe_macro_ExprDef.EIs];
-var haxe_macro_DisplayKind = $hxEnums["haxe.macro.DisplayKind"] = { __ename__:true,__constructs__:null
-	,DKCall: {_hx_name:"DKCall",_hx_index:0,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKDot: {_hx_name:"DKDot",_hx_index:1,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKStructure: {_hx_name:"DKStructure",_hx_index:2,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKMarked: {_hx_name:"DKMarked",_hx_index:3,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKPattern: ($_=function(outermost) { return {_hx_index:4,outermost:outermost,__enum__:"haxe.macro.DisplayKind",toString:$estr}; },$_._hx_name="DKPattern",$_.__params__ = ["outermost"],$_)
-};
-haxe_macro_DisplayKind.__constructs__ = [haxe_macro_DisplayKind.DKCall,haxe_macro_DisplayKind.DKDot,haxe_macro_DisplayKind.DKStructure,haxe_macro_DisplayKind.DKMarked,haxe_macro_DisplayKind.DKPattern];
-var haxe_macro_ComplexType = $hxEnums["haxe.macro.ComplexType"] = { __ename__:true,__constructs__:null
-	,TPath: ($_=function(p) { return {_hx_index:0,p:p,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TPath",$_.__params__ = ["p"],$_)
-	,TFunction: ($_=function(args,ret) { return {_hx_index:1,args:args,ret:ret,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TFunction",$_.__params__ = ["args","ret"],$_)
-	,TAnonymous: ($_=function(fields) { return {_hx_index:2,fields:fields,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TAnonymous",$_.__params__ = ["fields"],$_)
-	,TParent: ($_=function(t) { return {_hx_index:3,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TParent",$_.__params__ = ["t"],$_)
-	,TExtend: ($_=function(p,fields) { return {_hx_index:4,p:p,fields:fields,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TExtend",$_.__params__ = ["p","fields"],$_)
-	,TOptional: ($_=function(t) { return {_hx_index:5,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TOptional",$_.__params__ = ["t"],$_)
-	,TNamed: ($_=function(n,t) { return {_hx_index:6,n:n,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TNamed",$_.__params__ = ["n","t"],$_)
-	,TIntersection: ($_=function(tl) { return {_hx_index:7,tl:tl,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TIntersection",$_.__params__ = ["tl"],$_)
-};
-haxe_macro_ComplexType.__constructs__ = [haxe_macro_ComplexType.TPath,haxe_macro_ComplexType.TFunction,haxe_macro_ComplexType.TAnonymous,haxe_macro_ComplexType.TParent,haxe_macro_ComplexType.TExtend,haxe_macro_ComplexType.TOptional,haxe_macro_ComplexType.TNamed,haxe_macro_ComplexType.TIntersection];
-var haxe_macro_Access = $hxEnums["haxe.macro.Access"] = { __ename__:true,__constructs__:null
-	,APublic: {_hx_name:"APublic",_hx_index:0,__enum__:"haxe.macro.Access",toString:$estr}
-	,APrivate: {_hx_name:"APrivate",_hx_index:1,__enum__:"haxe.macro.Access",toString:$estr}
-	,AStatic: {_hx_name:"AStatic",_hx_index:2,__enum__:"haxe.macro.Access",toString:$estr}
-	,AOverride: {_hx_name:"AOverride",_hx_index:3,__enum__:"haxe.macro.Access",toString:$estr}
-	,ADynamic: {_hx_name:"ADynamic",_hx_index:4,__enum__:"haxe.macro.Access",toString:$estr}
-	,AInline: {_hx_name:"AInline",_hx_index:5,__enum__:"haxe.macro.Access",toString:$estr}
-	,AMacro: {_hx_name:"AMacro",_hx_index:6,__enum__:"haxe.macro.Access",toString:$estr}
-	,AFinal: {_hx_name:"AFinal",_hx_index:7,__enum__:"haxe.macro.Access",toString:$estr}
-	,AExtern: {_hx_name:"AExtern",_hx_index:8,__enum__:"haxe.macro.Access",toString:$estr}
-	,AAbstract: {_hx_name:"AAbstract",_hx_index:9,__enum__:"haxe.macro.Access",toString:$estr}
-	,AOverload: {_hx_name:"AOverload",_hx_index:10,__enum__:"haxe.macro.Access",toString:$estr}
-};
-haxe_macro_Access.__constructs__ = [haxe_macro_Access.APublic,haxe_macro_Access.APrivate,haxe_macro_Access.AStatic,haxe_macro_Access.AOverride,haxe_macro_Access.ADynamic,haxe_macro_Access.AInline,haxe_macro_Access.AMacro,haxe_macro_Access.AFinal,haxe_macro_Access.AExtern,haxe_macro_Access.AAbstract,haxe_macro_Access.AOverload];
-var haxe_macro_FieldType = $hxEnums["haxe.macro.FieldType"] = { __ename__:true,__constructs__:null
-	,FVar: ($_=function(t,e) { return {_hx_index:0,t:t,e:e,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FVar",$_.__params__ = ["t","e"],$_)
-	,FFun: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FFun",$_.__params__ = ["f"],$_)
-	,FProp: ($_=function(get,set,t,e) { return {_hx_index:2,get:get,set:set,t:t,e:e,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FProp",$_.__params__ = ["get","set","t","e"],$_)
-};
-haxe_macro_FieldType.__constructs__ = [haxe_macro_FieldType.FVar,haxe_macro_FieldType.FFun,haxe_macro_FieldType.FProp];
-var haxe_macro_Type = $hxEnums["haxe.macro.Type"] = { __ename__:true,__constructs__:null
-	,TMono: ($_=function(t) { return {_hx_index:0,t:t,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TMono",$_.__params__ = ["t"],$_)
-	,TEnum: ($_=function(t,params) { return {_hx_index:1,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TEnum",$_.__params__ = ["t","params"],$_)
-	,TInst: ($_=function(t,params) { return {_hx_index:2,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TInst",$_.__params__ = ["t","params"],$_)
-	,TType: ($_=function(t,params) { return {_hx_index:3,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TType",$_.__params__ = ["t","params"],$_)
-	,TFun: ($_=function(args,ret) { return {_hx_index:4,args:args,ret:ret,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TFun",$_.__params__ = ["args","ret"],$_)
-	,TAnonymous: ($_=function(a) { return {_hx_index:5,a:a,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TAnonymous",$_.__params__ = ["a"],$_)
-	,TDynamic: ($_=function(t) { return {_hx_index:6,t:t,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TDynamic",$_.__params__ = ["t"],$_)
-	,TLazy: ($_=function(f) { return {_hx_index:7,f:f,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TLazy",$_.__params__ = ["f"],$_)
-	,TAbstract: ($_=function(t,params) { return {_hx_index:8,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TAbstract",$_.__params__ = ["t","params"],$_)
-};
-haxe_macro_Type.__constructs__ = [haxe_macro_Type.TMono,haxe_macro_Type.TEnum,haxe_macro_Type.TInst,haxe_macro_Type.TType,haxe_macro_Type.TFun,haxe_macro_Type.TAnonymous,haxe_macro_Type.TDynamic,haxe_macro_Type.TLazy,haxe_macro_Type.TAbstract];
-var haxe_macro_TypeTools = function() { };
-haxe_macro_TypeTools.__name__ = "haxe.macro.TypeTools";
-haxe_macro_TypeTools.findField = function(c,name,isStatic) {
-	if(isStatic == null) {
-		isStatic = false;
-	}
-	while(true) {
-		var _gname = [name];
-		var field = Lambda.find((isStatic ? c.statics : c.fields).get(),(function(_gname) {
-			return function(field) {
-				return field.name == _gname[0];
-			};
-		})(_gname));
-		if(field != null) {
-			return field;
-		} else if(c.superClass != null) {
-			c = c.superClass.t.get();
-			name = _gname[0];
-			continue;
-		} else {
-			return null;
-		}
-	}
-};
 var js_Boot = function() { };
-js_Boot.__name__ = "js.Boot";
+js_Boot.__name__ = true;
 js_Boot.__string_rec = function(o,s) {
 	if(o == null) {
 		return "null";
@@ -2094,7 +1045,7 @@ js_Boot.__string_rec = function(o,s) {
 	}
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
-js_lib__$ArrayBuffer_ArrayBufferCompat.__name__ = "js.lib._ArrayBuffer.ArrayBufferCompat";
+js_lib__$ArrayBuffer_ArrayBufferCompat.__name__ = true;
 js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl = function(begin,end) {
 	var u = new Uint8Array(this,begin,end == null ? null : end - begin);
 	var resultArray = new Uint8Array(u.byteLength);
@@ -2105,52 +1056,11 @@ var js_node_ChildProcess = require("child_process");
 var js_node_Fs = require("fs");
 var js_node_Http = require("http");
 var js_node_Https = require("https");
-var js_node_KeyValue = {};
-js_node_KeyValue.get_key = function(this1) {
-	return this1[0];
-};
-js_node_KeyValue.get_value = function(this1) {
-	return this1[1];
-};
 var js_node_Path = require("path");
 var js_node_buffer_Buffer = require("buffer").Buffer;
-var js_node_stream_WritableNewOptionsAdapter = {};
-js_node_stream_WritableNewOptionsAdapter.from = function(options) {
-	if(!Object.prototype.hasOwnProperty.call(options,"final")) {
-		Object.defineProperty(options,"final",{ get : function() {
-			return options.final_;
-		}});
-	}
-	return options;
-};
 var js_node_url_URL = require("url").URL;
-var js_node_url_URLSearchParamsEntry = {};
-js_node_url_URLSearchParamsEntry._new = function(name,value) {
-	var this1 = [name,value];
-	return this1;
-};
-js_node_url_URLSearchParamsEntry.get_name = function(this1) {
-	return this1[0];
-};
-js_node_url_URLSearchParamsEntry.get_value = function(this1) {
-	return this1[1];
-};
-var safety_SafetyException = function(message,previous,native) {
-	haxe_Exception.call(this,message,previous,native);
-};
-safety_SafetyException.__name__ = "safety.SafetyException";
-safety_SafetyException.__super__ = haxe_Exception;
-safety_SafetyException.prototype = $extend(haxe_Exception.prototype,{
-});
-var safety_NullPointerException = function(message,previous,native) {
-	safety_SafetyException.call(this,message,previous,native);
-};
-safety_NullPointerException.__name__ = "safety.NullPointerException";
-safety_NullPointerException.__super__ = safety_SafetyException;
-safety_NullPointerException.prototype = $extend(safety_SafetyException.prototype,{
-});
 var sys_FileSystem = function() { };
-sys_FileSystem.__name__ = "sys.FileSystem";
+sys_FileSystem.__name__ = true;
 sys_FileSystem.exists = function(path) {
 	try {
 		js_node_Fs.accessSync(path);
@@ -2180,125 +1090,10 @@ sys_FileSystem.createDirectory = function(path) {
 		}
 	}
 };
-var sys_io_FileInput = function(fd) {
-	this.fd = fd;
-	this.pos = 0;
-};
-sys_io_FileInput.__name__ = "sys.io.FileInput";
-sys_io_FileInput.__super__ = haxe_io_Input;
-sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
-	readByte: function() {
-		var buf = js_node_buffer_Buffer.alloc(1);
-		var bytesRead;
-		try {
-			bytesRead = js_node_Fs.readSync(this.fd,buf,0,1,this.pos);
-		} catch( _g ) {
-			var _g1 = haxe_Exception.caught(_g).unwrap();
-			if(_g1.code == "EOF") {
-				throw haxe_Exception.thrown(new haxe_io_Eof());
-			} else {
-				throw haxe_Exception.thrown(haxe_io_Error.Custom(_g1));
-			}
-		}
-		if(bytesRead == 0) {
-			throw haxe_Exception.thrown(new haxe_io_Eof());
-		}
-		this.pos++;
-		return buf[0];
-	}
-	,readBytes: function(s,pos,len) {
-		var data = s.b;
-		var buf = js_node_buffer_Buffer.from(data.buffer,data.byteOffset,s.length);
-		var bytesRead;
-		try {
-			bytesRead = js_node_Fs.readSync(this.fd,buf,pos,len,this.pos);
-		} catch( _g ) {
-			var _g1 = haxe_Exception.caught(_g).unwrap();
-			if(_g1.code == "EOF") {
-				throw haxe_Exception.thrown(new haxe_io_Eof());
-			} else {
-				throw haxe_Exception.thrown(haxe_io_Error.Custom(_g1));
-			}
-		}
-		if(bytesRead == 0) {
-			throw haxe_Exception.thrown(new haxe_io_Eof());
-		}
-		this.pos += bytesRead;
-		return bytesRead;
-	}
-	,close: function() {
-		js_node_Fs.closeSync(this.fd);
-	}
-	,seek: function(p,pos) {
-		switch(pos._hx_index) {
-		case 0:
-			this.pos = p;
-			break;
-		case 1:
-			this.pos += p;
-			break;
-		case 2:
-			this.pos = js_node_Fs.fstatSync(this.fd).size + p;
-			break;
-		}
-	}
-	,tell: function() {
-		return this.pos;
-	}
-	,eof: function() {
-		return this.pos >= js_node_Fs.fstatSync(this.fd).size;
-	}
-});
-var sys_io_FileOutput = function(fd) {
-	this.fd = fd;
-	this.pos = 0;
-};
-sys_io_FileOutput.__name__ = "sys.io.FileOutput";
-sys_io_FileOutput.__super__ = haxe_io_Output;
-sys_io_FileOutput.prototype = $extend(haxe_io_Output.prototype,{
-	writeByte: function(b) {
-		var buf = js_node_buffer_Buffer.alloc(1);
-		buf[0] = b;
-		js_node_Fs.writeSync(this.fd,buf,0,1,this.pos);
-		this.pos++;
-	}
-	,writeBytes: function(s,pos,len) {
-		var data = s.b;
-		var buf = js_node_buffer_Buffer.from(data.buffer,data.byteOffset,s.length);
-		var wrote = js_node_Fs.writeSync(this.fd,buf,pos,len,this.pos);
-		this.pos += wrote;
-		return wrote;
-	}
-	,close: function() {
-		js_node_Fs.closeSync(this.fd);
-	}
-	,seek: function(p,pos) {
-		switch(pos._hx_index) {
-		case 0:
-			this.pos = p;
-			break;
-		case 1:
-			this.pos += p;
-			break;
-		case 2:
-			this.pos = js_node_Fs.fstatSync(this.fd).size + p;
-			break;
-		}
-	}
-	,tell: function() {
-		return this.pos;
-	}
-});
-var sys_io_FileSeek = $hxEnums["sys.io.FileSeek"] = { __ename__:true,__constructs__:null
-	,SeekBegin: {_hx_name:"SeekBegin",_hx_index:0,__enum__:"sys.io.FileSeek",toString:$estr}
-	,SeekCur: {_hx_name:"SeekCur",_hx_index:1,__enum__:"sys.io.FileSeek",toString:$estr}
-	,SeekEnd: {_hx_name:"SeekEnd",_hx_index:2,__enum__:"sys.io.FileSeek",toString:$estr}
-};
-sys_io_FileSeek.__constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.SeekCur,sys_io_FileSeek.SeekEnd];
 var systems_CommandBase = function(_universe) {
 	ecs_System.call(this,_universe);
 };
-systems_CommandBase.__name__ = "systems.CommandBase";
+systems_CommandBase.__name__ = true;
 systems_CommandBase.__super__ = ecs_System;
 systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 	update: function(_) {
@@ -2322,15 +1117,108 @@ systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 		this.table6c16270644d94dba4055a067a073b12c = this.universe.components.getTable(0);
 		this.tableff7698320b2346222a0ba18495307447 = this.universe.components.getTable(1);
 	}
-	,onRemoved: function() {
-		ecs_System.prototype.onRemoved.call(this);
+});
+var systems_commands_Api = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+systems_commands_Api.__name__ = true;
+systems_commands_Api.__super__ = systems_CommandBase;
+systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,message) {
+		if(command.content == null) {
+			return;
+		}
+		var docs = message.channel.id == "165234904815239168" ? systems_commands_Api.flixel : systems_commands_Api.haxe;
+		if(command.content.indexOf("Flx") != -1 || command.content.indexOf("flixel") != -1) {
+			docs = systems_commands_Api.flixel;
+		}
+		var base = docs;
+		var split = command.content.split(" ");
+		if(split[2] != null) {
+			switch(split[2].toLowerCase()) {
+			case "flixel":
+				base = systems_commands_Api.flixel;
+				break;
+			case "haxe":
+				base = systems_commands_Api.haxe;
+				break;
+			default:
+				base = systems_commands_Api.haxe;
+			}
+		}
+		var url = base + StringTools.replace(split[0],".","/") + ".html";
+		this.extractDoxData({ class_name : split[0].substring(split[0].lastIndexOf(".") + 1), path : split[0], identifier : split[1], page : split[1] != null ? url + ("#" + split[1]) : url},message);
+	}
+	,extractDoxData: function(info,message) {
+		var http = new haxe_http_HttpNodeJs(info.page);
+		http.onData = function(resp) {
+			var body = NodeHtmlParser.parse(resp).querySelector(".body");
+			var sections = body.querySelectorAll(".section");
+			var cls_desc = body.querySelector(".doc-main").innerText;
+			var embed = new discord_$js_MessageEmbed();
+			embed.setTitle(info.class_name + ("" + (info.identifier != null ? "#" + info.identifier : "")));
+			embed.setURL(http.url);
+			var reply_body = "";
+			if(StringTools.trim(cls_desc).length > 0) {
+				reply_body += "```\n" + cls_desc + "\n```";
+			}
+			var _g_current = 0;
+			var _g_array = body.querySelectorAll(".fields");
+			while(_g_current < _g_array.length) {
+				var _g1_value = _g_array[_g_current++];
+				var key = _g_current - 1;
+				var id_check = new EReg("<span class=\"identifier\">(.*?)</span","gm");
+				var _g = 0;
+				var _g1 = _g1_value.querySelectorAll(".field");
+				while(_g < _g1.length) {
+					var field = _g1[_g];
+					++_g;
+					if(info.identifier == null) {
+						break;
+					}
+					if(id_check.match(field.innerHTML) && id_check.matched(1) == info.identifier) {
+						var del_value_meta_regx = new EReg("(@:value\\(.*?\\)+)","gmi");
+						var type = StringTools.htmlUnescape(field.querySelector(".anchor").innerText);
+						if(del_value_meta_regx.match(type)) {
+							type = StringTools.replace(type,del_value_meta_regx.matched(1),"");
+						}
+						type = StringTools.replace(type,"static","");
+						type = StringTools.replace(type,"read only","(read only) ");
+						var desc = field.querySelector(".doc").innerText;
+						var section = sections[key].innerText;
+						reply_body += "**" + HxOverrides.substr(section,0,section.length - 1) + "** \n```hx\n" + type + "\n```";
+						if(StringTools.trim(desc).length > 0) {
+							reply_body += "**Description**\n```" + desc + "```";
+						}
+						embed.setDescription(reply_body);
+						message.reply(embed);
+						return;
+					}
+				}
+			}
+			if(reply_body.length > 0) {
+				embed.setDescription(reply_body);
+				message.reply(embed);
+			}
+		};
+		http.onError = function(msg) {
+			$global.console.log("Api.hx: 71 - " + msg);
+			message.react("❎");
+		};
+		http.request();
+	}
+	,get_name: function() {
+		return "!api";
+	}
+	,onAdded: function() {
+		systems_CommandBase.prototype.onAdded.call(this);
 	}
 });
 var systems_commands_Haxelib = function(_universe) {
 	this.super_mod_id = "198916468312637440";
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Haxelib.__name__ = "systems.commands.Haxelib";
+systems_commands_Haxelib.__name__ = true;
 systems_commands_Haxelib.__super__ = systems_CommandBase;
 systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,message) {
@@ -2344,11 +1232,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		var commands = [];
 		var _g = 0;
 		var _g1 = command.content.split(" ");
-		while(_g < _g1.length) {
-			var c = _g1[_g];
-			++_g;
-			commands.push(c);
-		}
+		while(_g < _g1.length) commands.push(_g1[_g++]);
 		var $process = "./haxe/haxelib";
 		if(!sys_FileSystem.exists("./haxe/haxelib")) {
 			$process = "haxelib";
@@ -2388,14 +1272,11 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 var systems_commands_Help = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Help.__name__ = "systems.commands.Help";
+systems_commands_Help.__name__ = true;
 systems_commands_Help.__super__ = systems_CommandBase;
 systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 	onAdded: function() {
@@ -2428,27 +1309,11 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 	,get_name: function() {
 		return "!help";
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
-var systems_commands_HelpType = {};
-systems_commands_HelpType.fromString = function(value) {
-	switch(value.toLowerCase()) {
-	case "notify":
-		return "notify";
-	case "rtfm":
-		return "rtfm";
-	case "run":
-		return "run";
-	default:
-		return "Invalid help option.";
-	}
-};
 var systems_commands_Hi = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Hi.__name__ = "systems.commands.Hi";
+systems_commands_Hi.__name__ = true;
 systems_commands_Hi.__super__ = systems_CommandBase;
 systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,message) {
@@ -2460,14 +1325,11 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 var systems_commands_Notify = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Notify.__name__ = "systems.commands.Notify";
+systems_commands_Notify.__name__ = true;
 systems_commands_Notify.__super__ = systems_CommandBase;
 systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	getRole: function(channel) {
@@ -2490,9 +1352,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		var _this = command.content.split(" ");
 		var _g_current = 0;
 		while(_g_current < _this.length) {
-			var _g1_value = _this[_g_current];
-			++_g_current;
-			var channel = [_g1_value];
+			var channel = [_this[_g_current++]];
 			var role = this.getRole(channel[0]);
 			if(role == "err") {
 				message.react("❎");
@@ -2504,8 +1364,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			while(!_g2_lastStep.done) {
 				var v = _g2_lastStep.value;
 				_g2_lastStep = jsIterator.next();
-				var key = v[0];
-				if(key == role) {
+				if(v[0] == role) {
 					found = true;
 					break;
 				}
@@ -2531,9 +1390,6 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 var systems_commands_Roundup = function(_universe) {
 	this.announcement_channel = "286485321925918721";
@@ -2543,7 +1399,7 @@ var systems_commands_Roundup = function(_universe) {
 	this.last_checked = -1;
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Roundup.__name__ = "systems.commands.Roundup";
+systems_commands_Roundup.__name__ = true;
 systems_commands_Roundup.__super__ = systems_CommandBase;
 systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	getHaxeIoPage: function() {
@@ -2625,14 +1481,11 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 var systems_commands_Rtfm = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Rtfm.__name__ = "systems.commands.Rtfm";
+systems_commands_Rtfm.__name__ = true;
 systems_commands_Rtfm.__super__ = systems_CommandBase;
 systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 	onAdded: function() {
@@ -2664,16 +1517,13 @@ systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 	,get_name: function() {
 		return "!rtfm";
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 var systems_commands_Run = function(_universe) {
 	this.code_requests = new haxe_ds_StringMap();
 	this.haxe_version = null;
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_Run.__name__ = "systems.commands.Run";
+systems_commands_Run.__name__ = true;
 systems_commands_Run.__super__ = systems_CommandBase;
 systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,message) {
@@ -2724,13 +1574,6 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		this.parse(message,null);
-	}
-	,deleteFile: function(filename) {
-		try {
-			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
-		} catch( _g ) {
-			haxe_Log.trace(haxe_Exception.caught(_g).unwrap(),{ fileName : "src/systems/commands/Run.hx", lineNumber : 75, className : "systems.commands.Run", methodName : "deleteFile"});
-		}
 	}
 	,extractLibs: function(code) {
 		var check_code = new EReg("(/?/?-l\\W.*)","gmiu");
@@ -2794,8 +1637,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 	,parse: function(message,code) {
 		var user = message.author.tag;
 		if(this.code_requests.h[user] == null) {
-			var v = [];
-			this.code_requests.h[user] = v;
+			this.code_requests.h[user] = [];
 		}
 		this.code_requests.h[user].push(message.createdTimestamp);
 		if(!this.canRequest(this.code_requests.h[user])) {
@@ -2806,10 +1648,8 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 			message.reply({ content : "Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>."});
 			return;
 		}
-		var class_exists = new EReg("(class.*({|\n{))","mgu");
-		if(class_exists.match(code)) {
-			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mgu");
-			if(!check_class.match(code)) {
+		if(new EReg("(class.*({|\n{))","mgu").match(code)) {
+			if(!new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mgu").match(code)) {
 				message.reply({ content : "You must have a class called `Test` or `Main`"});
 				return;
 			}
@@ -2821,8 +1661,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 		this.runCodeOnThread(code,message);
 	}
 	,isSafe: function(code,message) {
-		var check_http = new EReg("haxe.http|haxe.Http","gmu");
-		if(check_http.match(code)) {
+		if(new EReg("haxe.http|haxe.Http","gmu").match(code)) {
 			return false;
 		}
 		if(!Main.config.macros) {
@@ -2851,11 +1690,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 		var format = "";
 		var _g = 0;
 		var _g1 = get_paths.paths;
-		while(_g < _g1.length) {
-			var data = _g1[_g];
-			++_g;
-			format += data;
-		}
+		while(_g < _g1.length) format += _g1[_g++];
 		try {
 			var filename = "H" + message.author.id + "_" + new Date().getTime();
 			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mg");
@@ -2917,11 +1752,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 							response = "";
 							var _g = 0;
 							var _g1 = x.slice(x.length - 25);
-							while(_g < _g1.length) {
-								var line = _g1[_g];
-								++_g;
-								response += line + "\n";
-							}
+							while(_g < _g1.length) response += _g1[_g++] + "\n";
 						}
 						var output_numbers = [];
 						var output_lines = [];
@@ -2936,23 +1767,20 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 						response.replace(regex.r,"");
 						var _g2_current = 0;
 						while(_g2_current < output_lines.length) {
-							var _g3_value = output_lines[_g2_current];
-							var _g3_key = _g2_current++;
+							var _g3_value = output_lines[_g2_current++];
 							var desc = embed.description == null ? "" : embed.description;
-							embed.setDescription(desc += "\n" + _g3_key + ". " + _g3_value);
+							embed.setDescription(desc += "\n" + (_g2_current - 1) + ". " + _g3_value);
 						}
 						embed.description = "```markdown\n" + embed.description + "\n```";
 						if(truncated) {
 							embed.description += "\n //Output has been truncated | ";
 						}
-						var desc = "**Code:**\n```hx\n" + get_paths.code + "```**Output:**\n" + embed.description;
-						embed.description = desc;
+						embed.description = "**Code:**\n```hx\n" + get_paths.code + "```**Output:**\n" + embed.description;
 						var url = _gthis.codeSource(message);
 						if(url == "") {
 							embed.setAuthor("@" + message.author.tag,message.author.displayAvatarURL());
 						} else {
-							var tag = url.split("#")[1];
-							embed.setTitle("TryHaxe #" + tag);
+							embed.setTitle("TryHaxe #" + url.split("#")[1]);
 							embed.setURL(url);
 							embed.setAuthor("@" + message.author.tag,message.author.displayAvatarURL());
 						}
@@ -2982,8 +1810,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 			sys_FileSystem.createDirectory(path + "/haxebot");
 		}
 		path += "/haxebot";
-		var date = DateTools.format(new Date(),"%F");
-		path += "/" + date;
+		path += "/" + DateTools.format(new Date(),"%F");
 		if(!sys_FileSystem.exists(path)) {
 			sys_FileSystem.createDirectory(path);
 		}
@@ -3001,15 +1828,12 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 var systems_commands_ToggleMacros = function(_universe) {
 	this.super_mod_id = "198916468312637440";
 	systems_CommandBase.call(this,_universe);
 };
-systems_commands_ToggleMacros.__name__ = "systems.commands.ToggleMacros";
+systems_commands_ToggleMacros.__name__ = true;
 systems_commands_ToggleMacros.__super__ = systems_CommandBase;
 systems_commands_ToggleMacros.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,message) {
@@ -3032,9 +1856,6 @@ systems_commands_ToggleMacros.prototype = $extend(systems_CommandBase.prototype,
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
-	,onRemoved: function() {
-		systems_CommandBase.prototype.onRemoved.call(this);
-	}
 });
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
@@ -3043,8 +1864,8 @@ if(typeof(performance) != "undefined" ? typeof(performance.now) == "function" : 
 	HxOverrides.now = performance.now.bind(performance);
 }
 if( String.fromCodePoint == null ) String.fromCodePoint = function(c) { return c < 0x10000 ? String.fromCharCode(c) : String.fromCharCode((c>>10)+0xD7C0)+String.fromCharCode((c&0x3FF)+0xDC00); }
-String.__name__ = "String";
-Array.__name__ = "Array";
+String.__name__ = true;
+Array.__name__ = true;
 Date.__name__ = "Date";
 js_Boot.__toStr = ({ }).toString;
 if(ArrayBuffer.prototype.slice == null) {
@@ -3055,20 +1876,8 @@ DateTools.DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Frida
 DateTools.MONTH_SHORT_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 DateTools.MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 Main.connected = false;
-bits_BitsData.CELL_SIZE = 32;
 ecs_Entity.none = ecs_Entity._new(-1);
-var ecs_macros_ComponentCache_components = new haxe_ds_StringMap();
-var ecs_macros_ComponentCache_componentIncrementer = 0;
-var ecs_macros_FamilyCache_familyIDs = new haxe_ds_StringMap();
-var ecs_macros_FamilyCache_familyDefinitions = [];
-var ecs_macros_FamilyCache_keyedFamilies = new haxe_ds_StringMap();
-var ecs_macros_FamilyCache_familyIncrementer = 0;
-var ecs_macros_ResourceCache_resources = new haxe_ds_StringMap();
-var ecs_macros_ResourceCache_resourceIncrementer = 0;
-systems_commands_HelpType.run = "run";
-systems_commands_HelpType.rtfm = "rtfm";
-systems_commands_HelpType.notify = "notify";
+systems_commands_Api.haxe = "https://api.haxe.org/";
+systems_commands_Api.flixel = "https://api.haxeflixel.com/";
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
-
-//# sourceMappingURL=main.js.map

@@ -1,0 +1,4 @@
+common.hxml
+--debug
+--dce no
+-D source-map

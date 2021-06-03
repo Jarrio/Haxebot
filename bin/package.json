@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "main.js",
   "dependencies": {
-    "discord.js": "^12.5.3"
+    "discord.js": "^12.5.3",
+    "dts2hx": "^0.15.3",
+    "node-html-parser": "^3.3.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

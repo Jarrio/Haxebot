@@ -13,5 +13,10 @@
 		"prefix": "!",
 		"type": "notify",
 		"content": "Type a channel to recieve notifications from key people within those communities when big things change"
+	},
+	{
+		"prefix": "!",
+		"type": "api",
+		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `!api haxe.Json` \n\t2)`!api haxe.Json parse`\n\t3) `!api flixel.FlxBasic active`"
 	}
 ]

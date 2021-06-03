@@ -4,9 +4,8 @@
 --library discord.js
 --library hxnodejs
 --library safety
---debug
+--library node-html-parser
 -D ecs.static_loading
--D source-map
 --js bin/main.js
 --macro Safety.safeNavigation('', true)
 -main Main
