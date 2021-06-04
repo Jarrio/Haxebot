@@ -9,9 +9,11 @@ import components.Command;
 import NodeHtmlParser;
 
 class Api extends CommandBase {
-	public static final haxe:String = 'https://api.haxe.org/';
+	public static final _haxe:String = 'https://api.haxe.org/';
+	public static final openfl:String = 'https://api.openfl.org/';
 	public static final flixel:String = 'https://api.haxeflixel.com/';
 	public static final heaps:String = 'https://heaps.io/api/';
+	public static final lime:String = 'https://api.lime.software/';
 	function run(command:Command, message:Message) {
 		if (command.content == null) {
 			return;
@@ -20,7 +22,9 @@ class Api extends CommandBase {
 		var docs = switch ((message.channel:TextChannel).id) {
 			case '165234904815239168': flixel;
 			case '501408700142059520': heaps;
-			default: haxe;
+			case '769686258049351722': lime;
+			//case '769686284318146561': openfl; //openfl channel
+			default: _haxe;
 		}
 
 		if (command.content.contains('Flx') || command.content.contains('flixel.')) {
@@ -28,7 +32,17 @@ class Api extends CommandBase {
 		}
 
 		if (command.content.contains('haxe.')) {
-			docs = haxe;
+			docs = _haxe;
+		}
+
+		//temporarily pull docs from flixel's doc because i think the parser is having issues with
+		//openfl docs
+		// if (command.content.contains('openfl.')) {
+		// 	docs = openfl;
+		// }
+
+		if (command.content.contains('lime.')) {
+			docs = lime;
 		}
 
 		var check = ['h2d', 'h3d', 'hxd', 'hxsl'];
@@ -48,6 +62,12 @@ class Api extends CommandBase {
 
 		http.onData = (resp) -> {
 			var body = NodeHtmlParser.parse(resp).querySelector('.body');
+			
+			
+			if (body == null) {
+				return;
+			}
+			
 			var sections = body.querySelectorAll('.section');
 			var cls_desc = body.querySelector('.doc-main').innerText;
 			var embed = new MessageEmbed();
@@ -63,10 +83,10 @@ class Api extends CommandBase {
 					if (info.identifier == null) {
 						break;
 					}
-					
-					if (id_check.match(field.innerHTML) && id_check.matched(1) == info.identifier) {
+
+					if (id_check.match(field.innerHTML) && id_check.matched(1).toLowerCase() == info.identifier.toLowerCase()) {
 						var del_value_meta_regx = ~/(@:value\(.*?\)+)/gmi;
-						var type = field.querySelector('.anchor').innerText.htmlUnescape();
+						var type = field.querySelector('>h3').innerText.htmlUnescape();
 						if (del_value_meta_regx.match(type)) {
 							type = type.replace(del_value_meta_regx.matched(1), '');
 						}
@@ -115,13 +135,15 @@ class Api extends CommandBase {
 abstract ApiParams(TApiParams) {
 	public inline function new(base:String, command:Command) {
 		var split = command.content.split(' ');
-
+		
 		if (split[2] != null) {
 			base = switch(split[2].toLowerCase()) {
 				case 'flixel': Api.flixel;
-				case 'haxe': Api.haxe;
+				case 'haxe': Api._haxe;
 				case 'heaps': Api.heaps;
-				default: Api.haxe;
+				case 'lime': Api.lime;
+				//case 'openfl': Api.openfl;
+				default: Api._haxe;
 			}
 		}
 
