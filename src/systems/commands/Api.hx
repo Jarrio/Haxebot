@@ -23,7 +23,7 @@ class Api extends CommandBase {
 			case '165234904815239168': flixel;
 			case '501408700142059520': heaps;
 			case '769686258049351722': lime;
-			//case '769686284318146561': openfl; //openfl channel
+			case '769686284318146561': openfl; //openfl channel
 			default: _haxe;
 		}
 
@@ -37,9 +37,9 @@ class Api extends CommandBase {
 
 		//temporarily pull docs from flixel's doc because i think the parser is having issues with
 		//openfl docs
-		// if (command.content.contains('openfl.')) {
-		// 	docs = openfl;
-		// }
+		if (command.content.contains('openfl.')) {
+			docs = openfl;
+		}
 
 		if (command.content.contains('lime.')) {
 			docs = lime;
@@ -62,8 +62,7 @@ class Api extends CommandBase {
 
 		http.onData = (resp) -> {
 			var body = NodeHtmlParser.parse(resp).querySelector('.body');
-			
-			
+
 			if (body == null) {
 				return;
 			}
@@ -119,8 +118,7 @@ class Api extends CommandBase {
 		}
 
 		http.onError = function(msg) {
-			console.log('Api.hx: 102 - $msg | ${http.url}');
-
+			trace('$msg | ${http.url}');
 			message.react('❎');
 		}
 		http.request();
@@ -142,7 +140,7 @@ abstract ApiParams(TApiParams) {
 				case 'haxe': Api._haxe;
 				case 'heaps': Api.heaps;
 				case 'lime': Api.lime;
-				//case 'openfl': Api.openfl;
+				case 'openfl': Api.openfl;
 				default: Api._haxe;
 			}
 		}

@@ -275,9 +275,8 @@ class Run extends CommandBase {
 					process.stdout.on('data', (data) -> {
 						data = this.cleanOutput(data, filename, class_entry);
 						trace(data);
-						response = data;
-						
-						
+						response += data;
+						trace(response);
 					});
 
 					process.stderr.on('data', (data) -> {
@@ -289,10 +288,10 @@ class Run extends CommandBase {
 
 						var x = response.split('\n');
 						var truncated = false;
-						if (x.length > 24) {
+						if (x.length > 21) {
 							truncated = true;
 							response = "";
-							for (line in x.slice(x.length - 25)) {
+							for (line in x.slice(x.length - 20)) {
 								response += line + "\n";
 							}
 						}
@@ -310,24 +309,18 @@ class Run extends CommandBase {
 							response = regex.matchedRight();
 						}
 						
-						// output_lines = response.split('\n');
-
-						
-
 						regex.replace(response, "");
-
+						var code_output = '';
 						for (key => value in output_lines) {
-							var desc = (embed.description == null) ? "" : embed.description;
-							embed.setDescription(desc += '\n${key}. ' + value);
+							code_output += '\n${key}. ' + value;
 						}
-
-						embed.description = '```markdown\n' + embed.description + '\n```';
 
 						if (truncated) {
-							embed.description += '\n //Output has been truncated | ';
+							code_output += '\n//Output has been trimmed.';
 						}
-						var desc = '**Code:**\n```hx\n${get_paths.code}```**Output:**\n${embed.description}';
-						embed.description = desc;
+
+						var desc = '**Code:**\n```hx\n${get_paths.code}```**Output:**\n```markdown\n' + code_output + '\n```';
+						embed.setDescription(desc);
 
 						var url = this.codeSource(message);
 						if (url == "") {
@@ -342,13 +335,12 @@ class Run extends CommandBase {
 						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
 
 						if (response.length > 0 && data == 0) {
+
+							message.delete().then(null, (err) -> trace(err));
+							(message.channel : TextChannel).send(embed);
 							ls.kill();
 							process.kill();
-
-							message.delete().then(function(_) {
-								((message.channel : TextChannel) : TextChannel).send(embed);
-							}, (err) -> trace(err));
-
+							
 							return;
 						}
 					});
