@@ -18,5 +18,10 @@
 		"prefix": "!",
 		"type": "api",
 		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `!api haxe.Json` \n\t2)`!api haxe.Json parse`\n\t3) `!api flixel.FlxBasic active`"
+	},
+	{
+		"prefix": "!",
+		"type": "fnf",
+		"content": "Hey, did you read the rules? We can't help with project/game specific issues. Please check out the appropriate discord server - https://discord.gg/YVMMkvjqhF"
 	}
 ]
