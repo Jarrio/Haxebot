@@ -1757,7 +1757,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 			code_content = format + "\n" + code_content;
 			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + message.author.username + " | time: " + Std.string(new Date())),function(error) {
 				if(error != null) {
-					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 233, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 238, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 				}
 				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
 				var $process = "./haxe/haxe";
@@ -1766,7 +1766,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var ls = js_node_ChildProcess.spawn($process,libs.concat(commands),{ timeout : 10000});
 				ls.stderr.once("data",function(data) {
-					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 258, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 263, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					var compile_output = _gthis.cleanOutput(data,filename,class_entry);
 					message.reply({ content : mention + ("```\n" + compile_output + "```")});
 					ls.kill("SIGTERM");
@@ -1775,22 +1775,19 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 					var response = "";
 					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
 					if(!sys_FileSystem.exists(js_file)) {
-						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 269, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 274, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						ls.kill("SIGTERM");
 						return;
 					}
-					var $process = js_node_ChildProcess.spawn("node",[js_file],{ timeout : 10000});
-					$process.stdout.on("data",function(data) {
-						data = _gthis.cleanOutput(data,filename,class_entry);
-						haxe_Log.trace(data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 277, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-						response += data;
-						haxe_Log.trace(response,{ fileName : "src/systems/commands/Run.hx", lineNumber : 279, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					var vm = new vm2_NodeVM({ sandbox : null, console : "redirect"});
+					vm.on("console.log",function(data,info) {
+						haxe_Log.trace(data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 285, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(info,{ fileName : "src/systems/commands/Run.hx", lineNumber : 286, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						response += "" + info + "\n";
+						return response;
 					});
-					$process.stderr.on("data",function(data) {
-						haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 283, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-					});
-					$process.once("close",function(data) {
-						haxe_Log.trace("close: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 287, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					try {
+						vm.runFile(js_file);
 						var x = response.split("\n");
 						var truncated = false;
 						if(x.length > 21) {
@@ -1800,27 +1797,21 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 							var _g1 = x.slice(x.length - 20);
 							while(_g < _g1.length) response += _g1[_g++] + "\n";
 						}
-						var output_numbers = [];
-						var output_lines = [];
-						var regex = new EReg("^(.*\\.hx:)(\\d*:)(.*)","gmiu");
 						var embed = new discord_$js_MessageEmbed();
 						embed.type = "article";
-						while(regex.match(response)) {
-							output_numbers.push(regex.matched(2));
-							output_lines.push(StringTools.replace(regex.matched(3),"\n"," "));
-							response = regex.matchedRight();
-						}
-						response.replace(regex.r,"");
 						var code_output = "";
+						var _this = response.split("\n");
 						var _g2_current = 0;
-						while(_g2_current < output_lines.length) {
-							var _g3_value = output_lines[_g2_current++];
-							code_output += "\n" + (_g2_current - 1) + ". " + _g3_value;
+						while(_g2_current < _this.length) {
+							var _g3_value = _this[_g2_current++];
+							code_output += "" + (_g2_current - 1) + ". " + _g3_value + " \n";
 						}
 						if(truncated) {
 							code_output += "\n//Output has been trimmed.";
 						}
-						embed.setDescription("**Code:**\n```hx\n" + get_paths.code + "```**Output:**\n```markdown\n" + code_output + "\n```");
+						var desc = "**Code:**\n```hx \n" + get_paths.code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
+						haxe_Log.trace(desc,{ fileName : "src/systems/commands/Run.hx", lineNumber : 315, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						embed.setDescription(desc);
 						var url = _gthis.codeSource(message);
 						if(url == "") {
 							embed.setAuthor("@" + message.author.tag,message.author.displayAvatarURL());
@@ -1830,21 +1821,23 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setAuthor("@" + message.author.tag,message.author.displayAvatarURL());
 						}
 						embed.setFooter("Haxe " + _gthis.haxe_version,"https://cdn.discordapp.com/emojis/567741748172816404.png?v=1");
+						haxe_Log.trace(response,{ fileName : "src/systems/commands/Run.hx", lineNumber : 330, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						if(response.length > 0 && data == 0) {
 							message.delete().then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/systems/commands/Run.hx", lineNumber : 339, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+								haxe_Log.trace(err,{ fileName : "src/systems/commands/Run.hx", lineNumber : 332, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 							});
 							message.channel.send(embed);
 							ls.kill();
-							$process.kill();
 							return;
 						}
-					});
+					} catch( _g ) {
+						haxe_Log.trace(haxe_Exception.caught(_g),{ fileName : "src/systems/commands/Run.hx", lineNumber : 339, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					}
 				});
 			});
 			return;
 		} catch( _g ) {
-			haxe_Log.trace(haxe_Exception.caught(_g).unwrap(),{ fileName : "src/systems/commands/Run.hx", lineNumber : 351, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(haxe_Exception.caught(_g).unwrap(),{ fileName : "src/systems/commands/Run.hx", lineNumber : 419, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			message.reply({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -1901,6 +1894,7 @@ systems_commands_ToggleMacros.prototype = $extend(systems_CommandBase.prototype,
 		systems_CommandBase.prototype.onAdded.call(this);
 	}
 });
+var vm2_NodeVM = require("vm2").NodeVM;
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;

@@ -1,5 +1,10 @@
 package systems.commands;
 
+import js.lib.Object;
+import vm2.NodeVM;
+import js.Browser;
+import js.node.Process;
+import vm2.VM;
 import discord_js.Role;
 import js.node.Fs;
 import haxe.Http;
@@ -270,7 +275,72 @@ class Run extends CommandBase {
 						ls.kill('SIGTERM');
 						return;
 					}
-					var process = spawn('node', [js_file], {timeout: 10000});
+					var obj = null;
+					var vm = new NodeVM({
+						sandbox: obj,
+						console: 'redirect',
+					});
+					
+					vm.on('console.log', (data, info) -> {
+						trace(data);
+						trace(info);
+						response += '$info\n';
+					});
+
+					try {
+						vm.runFile(js_file);
+
+						var x = response.split('\n');
+						var truncated = false;
+						if (x.length > 21) {
+							truncated = true;
+							response = "";
+							for (line in x.slice(x.length - 20)) {
+								response += line + "\n";
+							}
+						}
+
+						var embed = new MessageEmbed();
+						embed.type = 'article';
+						var code_output = '';
+						for (key => item in response.split('\n')) {
+							code_output += '$key. $item \n';
+						}
+
+						if (truncated) {
+							code_output += '\n//Output has been trimmed.';
+						}
+
+						var desc = '**Code:**\n```hx \n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
+						trace(desc);
+						
+						embed.setDescription(desc);
+
+						var url = this.codeSource(message);
+						if (url == "") {
+							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+						} else {
+							var tag = url.split('#')[1];
+							embed.setTitle('TryHaxe #$tag');
+							embed.setURL(url);
+							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+						}
+
+						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
+						trace(response);
+						if (response.length > 0 && data == 0) {
+							message.delete().then(null, (err) -> trace(err));
+							(message.channel : TextChannel).send(embed);
+							ls.kill();
+							return;
+						}
+
+					} catch (e) {
+						trace(e);
+					}
+
+					return; 
+					var process = spawn('vm2', [js_file], {timeout: 10000});
 
 					process.stdout.on('data', (data) -> {
 						data = this.cleanOutput(data, filename, class_entry);
@@ -319,7 +389,7 @@ class Run extends CommandBase {
 							code_output += '\n//Output has been trimmed.';
 						}
 
-						var desc = '**Code:**\n```hx\n${get_paths.code}```**Output:**\n```markdown\n' + code_output + '\n```';
+						var desc = '**Code:**\n```hx \n${get_paths.code}``` **Output:**\n ```markdown \n' + code_output + '\n```';
 						embed.setDescription(desc);
 
 						var url = this.codeSource(message);
@@ -335,12 +405,10 @@ class Run extends CommandBase {
 						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
 
 						if (response.length > 0 && data == 0) {
-
 							message.delete().then(null, (err) -> trace(err));
 							(message.channel : TextChannel).send(embed);
 							ls.kill();
 							process.kill();
-							
 							return;
 						}
 					});

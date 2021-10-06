@@ -4,6 +4,7 @@
 --library discord.js
 --library hxnodejs
 --library safety
+--library vm2
 --library node-html-parser
 -D ecs.static_loading
 --js bin/main.js
