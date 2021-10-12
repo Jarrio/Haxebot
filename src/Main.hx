@@ -1,3 +1,6 @@
+import discord_api_types.Routes;
+import discordjs.rest.REST;
+import discord_js.ClientOptions.IntentFlags;
 import discord_js.Message;
 import discord_js.Client;
 import haxe.Json;
@@ -14,6 +17,11 @@ import systems.commands.Help;
 import systems.commands.ToggleMacros;
 import systems.commands.Hi;
 import systems.commands.Api;
+
+typedef CommandTest = {
+	var name:String;
+	var description:String;
+} 
 
 class Main {
 	public static var connected:Bool = false;
@@ -34,14 +42,19 @@ class Main {
 			Api
 		);
 
-		var client = new Client();
+		var client = new Client({intents: [IntentFlags.GUILDS]});
 		client.on('ready', function(_) {
 			connected = true;
 			trace('$name Ready!');
 		});
 
+		var rest = new REST({'version': '9'});
+		rest.setToken(Main.config.discord_api_key);
+		rest.put(Routes.applicationGuildCommands('', ''), 
+			{body: [{name: 'test', description: 'description test'}]}).then((test) -> trace(test), (err) -> trace(err));
+		
+	
 		client.on('message', function(message:Message) {
-			
 			var split = message.content.split(' ');
 			var first_word = split[0];
 			var content = null;

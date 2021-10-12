@@ -1,7 +1,11 @@
 -cp src
 -D analyzer-optimize
+--library node
 --library aidan-ecs
 --library discord.js
+--library discord-api-types
+--library discordjs-collection
+--library discordjs-rest
 --library hxnodejs
 --library safety
 --library vm2
@@ -10,5 +14,4 @@
 --js bin/main.js
 --macro Safety.safeNavigation('', true)
 -main Main
-
-
+--macro includeFile('jscode.js')
