@@ -7,6 +7,141 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var DateTools = function() { };
+$hxClasses["DateTools"] = DateTools;
+DateTools.__name__ = "DateTools";
+DateTools.__format_get = function(d,e) {
+	switch(e) {
+	case "%":
+		return "%";
+	case "A":
+		return DateTools.DAY_NAMES[d.getDay()];
+	case "B":
+		return DateTools.MONTH_NAMES[d.getMonth()];
+	case "C":
+		return StringTools.lpad(Std.string(d.getFullYear() / 100 | 0),"0",2);
+	case "D":
+		return DateTools.__format(d,"%m/%d/%y");
+	case "F":
+		return DateTools.__format(d,"%Y-%m-%d");
+	case "I":case "l":
+		var hour = d.getHours() % 12;
+		return StringTools.lpad(Std.string(hour == 0 ? 12 : hour),e == "I" ? "0" : " ",2);
+	case "M":
+		return StringTools.lpad(Std.string(d.getMinutes()),"0",2);
+	case "R":
+		return DateTools.__format(d,"%H:%M");
+	case "S":
+		return StringTools.lpad(Std.string(d.getSeconds()),"0",2);
+	case "T":
+		return DateTools.__format(d,"%H:%M:%S");
+	case "Y":
+		return Std.string(d.getFullYear());
+	case "a":
+		return DateTools.DAY_SHORT_NAMES[d.getDay()];
+	case "b":case "h":
+		return DateTools.MONTH_SHORT_NAMES[d.getMonth()];
+	case "d":
+		return StringTools.lpad(Std.string(d.getDate()),"0",2);
+	case "e":
+		return Std.string(d.getDate());
+	case "H":case "k":
+		return StringTools.lpad(Std.string(d.getHours()),e == "H" ? "0" : " ",2);
+	case "m":
+		return StringTools.lpad(Std.string(d.getMonth() + 1),"0",2);
+	case "n":
+		return "\n";
+	case "p":
+		if(d.getHours() > 11) {
+			return "PM";
+		} else {
+			return "AM";
+		}
+		break;
+	case "r":
+		return DateTools.__format(d,"%I:%M:%S %p");
+	case "s":
+		return Std.string(d.getTime() / 1000 | 0);
+	case "t":
+		return "\t";
+	case "u":
+		var t = d.getDay();
+		if(t == 0) {
+			return "7";
+		} else if(t == null) {
+			return "null";
+		} else {
+			return "" + t;
+		}
+		break;
+	case "w":
+		return Std.string(d.getDay());
+	case "y":
+		return StringTools.lpad(Std.string(d.getFullYear() % 100),"0",2);
+	default:
+		throw new haxe_exceptions_NotImplementedException("Date.format %" + e + "- not implemented yet.",null,{ fileName : "DateTools.hx", lineNumber : 101, className : "DateTools", methodName : "__format_get"});
+	}
+};
+DateTools.__format = function(d,f) {
+	var r_b = "";
+	var p = 0;
+	while(true) {
+		var np = f.indexOf("%",p);
+		if(np < 0) {
+			break;
+		}
+		var len = np - p;
+		r_b += len == null ? HxOverrides.substr(f,p,null) : HxOverrides.substr(f,p,len);
+		r_b += Std.string(DateTools.__format_get(d,HxOverrides.substr(f,np + 1,1)));
+		p = np + 2;
+	}
+	var len = f.length - p;
+	r_b += len == null ? HxOverrides.substr(f,p,null) : HxOverrides.substr(f,p,len);
+	return r_b;
+};
+DateTools.format = function(d,f) {
+	return DateTools.__format(d,f);
+};
+DateTools.delta = function(d,t) {
+	return new Date(d.getTime() + t);
+};
+DateTools.getMonthDays = function(d) {
+	var month = d.getMonth();
+	var year = d.getFullYear();
+	if(month != 1) {
+		return DateTools.DAYS_OF_MONTH[month];
+	}
+	var isB = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+	if(isB) {
+		return 29;
+	} else {
+		return 28;
+	}
+};
+DateTools.seconds = function(n) {
+	return n * 1000.0;
+};
+DateTools.minutes = function(n) {
+	return n * 60.0 * 1000.0;
+};
+DateTools.hours = function(n) {
+	return n * 60.0 * 60.0 * 1000.0;
+};
+DateTools.days = function(n) {
+	return n * 24.0 * 60.0 * 60.0 * 1000.0;
+};
+DateTools.parse = function(t) {
+	var s = t / 1000;
+	var m = s / 60;
+	var h = m / 60;
+	return { ms : t % 1000, seconds : s % 60 | 0, minutes : m % 60 | 0, hours : h % 24 | 0, days : h / 24 | 0};
+};
+DateTools.make = function(o) {
+	return o.ms + 1000.0 * (o.seconds + 60.0 * (o.minutes + 60.0 * (o.hours + 24.0 * o.days)));
+};
+DateTools.makeUtc = function(year,month,day,hour,min,sec) {
+	return Date.UTC(year,month,day,hour,min,sec);
+};
 var EReg = function(r,opt) {
 	this.r = new RegExp(r,opt.split("u").join(""));
 };
@@ -453,12 +588,13 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_Help(Main.universe));
 	Main.universe.systems.add(new systems_commands_Haxelib(Main.universe));
 	Main.universe.systems.add(new systems_commands_Notify(Main.universe));
+	Main.universe.systems.add(new systems_commands_Run(Main.universe));
 	var client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES"]});
 	client.once("ready",function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 34, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 35, className : "Main", methodName : "start"});
 		Main.connected = true;
 	});
 	client.on("interactionCreate",function(interaction) {
@@ -477,6 +613,12 @@ Main.start = function() {
 			command.content = components_CommandOptions.Hi;
 			break;
 		case "notify":
+			command.content = components_CommandOptions.Notify(interaction.options.getString("channel"));
+			break;
+		case "run":
+			command.content = components_CommandOptions.Code(interaction.options.getString("code"));
+			break;
+		case "togglemacros":
 			command.content = components_CommandOptions.Notify(interaction.options.getString("channel"));
 			break;
 		default:
@@ -500,7 +642,7 @@ Main.main = function() {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 71, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 76, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -510,15 +652,17 @@ Main.main = function() {
 	var help = new discord_$builder_SlashCommandBuilder().setName("help").setDescription("Haxebot commands list").addStringOption(new discord_$builder_SlashCommandStringOption().setName("category").setDescription("help section"));
 	var haxelib = new discord_$builder_SlashCommandBuilder().setName("haxelib").setDescription("Haxelib").addStringOption(new discord_$builder_SlashCommandStringOption().setName("command").setDescription("Haxe library manager"));
 	var notify = new discord_$builder_SlashCommandBuilder().setName("notify").setDescription("Subscribe to channel specific updates").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("Channels to subscribe to separated by a space"));
+	var run = new discord_$builder_SlashCommandBuilder().setName("run").setDescription("Run haxe code").addStringOption(new discord_$builder_SlashCommandStringOption().setName("code").setDescription("the haxe code"));
 	commands.push(discord_$builder_AnySlashCommand.fromBase(hi));
 	commands.push(discord_$builder_AnySlashCommand.fromString(help));
 	commands.push(discord_$builder_AnySlashCommand.fromString(haxelib));
 	commands.push(discord_$builder_AnySlashCommand.fromString(notify));
+	commands.push(discord_$builder_AnySlashCommand.fromString(run));
 	var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
 	rest.put(Routes.applicationGuildCommands(Main.config.client_id,Main.config.server_id),{ body : commands}).then(function(_) {
-		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 98, className : "Main", methodName : "main"});
+		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 107, className : "Main", methodName : "main"});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 98, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 107, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -1679,10 +1823,11 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,None: {_hx_name:"None",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Hi: {_hx_name:"Hi",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
 	,Notify: ($_=function(channel) { return {_hx_index:2,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
-	,Help: ($_=function(category) { return {_hx_index:3,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
-	,Haxelib: ($_=function(command) { return {_hx_index:4,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
+	,Code: ($_=function(code) { return {_hx_index:3,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
+	,Help: ($_=function(category) { return {_hx_index:4,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
+	,Haxelib: ($_=function(command) { return {_hx_index:5,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.None,components_CommandOptions.Hi,components_CommandOptions.Notify,components_CommandOptions.Help,components_CommandOptions.Haxelib];
+components_CommandOptions.__constructs__ = [components_CommandOptions.None,components_CommandOptions.Hi,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.None,components_CommandOptions.Hi];
 var discord_$builder_SharedNameAndDescription = require("@discordjs/builders").SharedNameAndDescription;
 var discord_$builder_SharedSlashCommandOptions = require("@discordjs/builders").SharedSlashCommandOptions;
@@ -1727,6 +1872,7 @@ var discord_$js_APIMessage = require("discord.js").APIMessage;
 var discord_$js_Activity = require("discord.js").Activity;
 var discord_$js_Application = require("discord.js").Application;
 var discord_$js_Base = require("discord.js").Base;
+var discord_$js_ApplicationCommandManager = require("discord.js").ApplicationCommandManager;
 var discord_$js_BaseClient = require("discord.js").BaseClient;
 var discord_$js_Emoji = require("discord.js").Emoji;
 var discord_$js_BaseGuildEmoji = require("discord.js").BaseGuildEmoji;
@@ -5124,6 +5270,188 @@ haxe_exceptions_NotImplementedException.__name__ = "haxe.exceptions.NotImplement
 haxe_exceptions_NotImplementedException.__super__ = haxe_exceptions_PosException;
 haxe_exceptions_NotImplementedException.prototype = $extend(haxe_exceptions_PosException.prototype,{
 	__class__: haxe_exceptions_NotImplementedException
+});
+var haxe_http_HttpBase = function(url) {
+	this.url = url;
+	this.headers = [];
+	this.params = [];
+	this.emptyOnData = $bind(this,this.onData);
+};
+$hxClasses["haxe.http.HttpBase"] = haxe_http_HttpBase;
+haxe_http_HttpBase.__name__ = "haxe.http.HttpBase";
+haxe_http_HttpBase.prototype = {
+	url: null
+	,responseBytes: null
+	,responseAsString: null
+	,postData: null
+	,postBytes: null
+	,headers: null
+	,params: null
+	,emptyOnData: null
+	,setHeader: function(name,value) {
+		var _g = 0;
+		var _g1 = this.headers.length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(this.headers[i].name == name) {
+				this.headers[i] = { name : name, value : value};
+				return;
+			}
+		}
+		this.headers.push({ name : name, value : value});
+	}
+	,addHeader: function(header,value) {
+		this.headers.push({ name : header, value : value});
+	}
+	,setParameter: function(name,value) {
+		var _g = 0;
+		var _g1 = this.params.length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(this.params[i].name == name) {
+				this.params[i] = { name : name, value : value};
+				return;
+			}
+		}
+		this.params.push({ name : name, value : value});
+	}
+	,addParameter: function(name,value) {
+		this.params.push({ name : name, value : value});
+	}
+	,setPostData: function(data) {
+		this.postData = data;
+		this.postBytes = null;
+	}
+	,setPostBytes: function(data) {
+		this.postBytes = data;
+		this.postData = null;
+	}
+	,request: function(post) {
+		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "haxe/http/HttpBase.hx", lineNumber : 186, className : "haxe.http.HttpBase", methodName : "request"});
+	}
+	,onData: function(data) {
+	}
+	,onBytes: function(data) {
+	}
+	,onError: function(msg) {
+	}
+	,onStatus: function(status) {
+	}
+	,hasOnData: function() {
+		return !Reflect.compareMethods($bind(this,this.onData),this.emptyOnData);
+	}
+	,success: function(data) {
+		this.responseBytes = data;
+		this.responseAsString = null;
+		if(this.hasOnData()) {
+			this.onData(this.get_responseData());
+		}
+		this.onBytes(this.responseBytes);
+	}
+	,get_responseData: function() {
+		if(this.responseAsString == null && this.responseBytes != null) {
+			this.responseAsString = this.responseBytes.getString(0,this.responseBytes.length,haxe_io_Encoding.UTF8);
+		}
+		return this.responseAsString;
+	}
+	,__class__: haxe_http_HttpBase
+	,__properties__: {get_responseData:"get_responseData"}
+};
+var haxe_http_HttpNodeJs = function(url) {
+	haxe_http_HttpBase.call(this,url);
+};
+$hxClasses["haxe.http.HttpNodeJs"] = haxe_http_HttpNodeJs;
+haxe_http_HttpNodeJs.__name__ = "haxe.http.HttpNodeJs";
+haxe_http_HttpNodeJs.__super__ = haxe_http_HttpBase;
+haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
+	req: null
+	,cancel: function() {
+		if(this.req == null) {
+			return;
+		}
+		this.req.abort();
+		this.req = null;
+	}
+	,request: function(post) {
+		var _gthis = this;
+		this.responseAsString = null;
+		this.responseBytes = null;
+		var parsedUrl = new js_node_url_URL(this.url);
+		var secure = parsedUrl.protocol == "https:";
+		var host = parsedUrl.hostname;
+		var path = parsedUrl.pathname;
+		var port = parsedUrl.port != null ? Std.parseInt(parsedUrl.port) : secure ? 443 : 80;
+		var h = { };
+		var _g = 0;
+		var _g1 = this.headers;
+		while(_g < _g1.length) {
+			var i = _g1[_g];
+			++_g;
+			var arr = Reflect.field(h,i.name);
+			if(arr == null) {
+				arr = [];
+				h[i.name] = arr;
+			}
+			arr.push(i.value);
+		}
+		if(this.postData != null || this.postBytes != null) {
+			post = true;
+		}
+		var uri = null;
+		var _g = 0;
+		var _g1 = this.params;
+		while(_g < _g1.length) {
+			var p = _g1[_g];
+			++_g;
+			if(uri == null) {
+				uri = "";
+			} else {
+				uri += "&";
+			}
+			var s = p.name;
+			var uri1 = encodeURIComponent(s) + "=";
+			var s1 = p.value;
+			uri += uri1 + encodeURIComponent(s1);
+		}
+		var question = path.split("?").length <= 1;
+		if(uri != null) {
+			path += (question ? "?" : "&") + uri;
+		}
+		var opts = { protocol : parsedUrl.protocol, hostname : host, port : port, method : post ? "POST" : "GET", path : path, headers : h};
+		var httpResponse = function(res) {
+			res.setEncoding("binary");
+			var s = res.statusCode;
+			if(s != null) {
+				_gthis.onStatus(s);
+			}
+			var data = [];
+			res.on("data",function(chunk) {
+				data.push(js_node_buffer_Buffer.from(chunk,"binary"));
+			});
+			res.on("end",function(_) {
+				var buf = data.length == 1 ? data[0] : js_node_buffer_Buffer.concat(data);
+				var httpResponse = buf.buffer.slice(buf.byteOffset,buf.byteOffset + buf.byteLength);
+				_gthis.responseBytes = haxe_io_Bytes.ofData(httpResponse);
+				_gthis.req = null;
+				if(s != null && s >= 200 && s < 400) {
+					_gthis.success(_gthis.responseBytes);
+				} else {
+					_gthis.onError("Http Error #" + s);
+				}
+			});
+		};
+		this.req = secure ? js_node_Https.request(opts,httpResponse) : js_node_Http.request(opts,httpResponse);
+		if(post) {
+			if(this.postData != null) {
+				this.req.write(this.postData);
+			} else if(this.postBytes != null) {
+				this.req.setHeader("Content-Length","" + this.postBytes.length);
+				this.req.write(js_node_buffer_Buffer.from(this.postBytes.b.bufferValue));
+			}
+		}
+		this.req.end();
+	}
+	,__class__: haxe_http_HttpNodeJs
 });
 var haxe_io_ArrayBufferView = {};
 haxe_io_ArrayBufferView.__properties__ = {get_byteLength:"get_byteLength",get_byteOffset:"get_byteOffset",get_buffer:"get_buffer"};
@@ -9212,6 +9540,60 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
+var js_Browser = function() { };
+$hxClasses["js.Browser"] = js_Browser;
+js_Browser.__name__ = "js.Browser";
+js_Browser.__properties__ = {get_supported:"get_supported",get_self:"get_self"};
+js_Browser.get_self = function() {
+	return $global;
+};
+js_Browser.get_supported = function() {
+	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
+		return typeof(window.location.protocol) == "string";
+	} else {
+		return false;
+	}
+};
+js_Browser.getLocalStorage = function() {
+	try {
+		var s = window.localStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		return null;
+	}
+};
+js_Browser.getSessionStorage = function() {
+	try {
+		var s = window.sessionStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		return null;
+	}
+};
+js_Browser.createXMLHttpRequest = function() {
+	if(typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	if(typeof ActiveXObject != "undefined") {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
+};
+js_Browser.alert = function(v) {
+	window.alert(Std.string(v));
+};
 var js_Lib = function() { };
 $hxClasses["js.Lib"] = js_Lib;
 js_Lib.__name__ = "js.Lib";
@@ -9235,6 +9617,20 @@ js_Lib.getOriginalException = function() {
 };
 js_Lib.getNextHaxeUID = function() {
 	return $global.$haxeUID++;
+};
+var js_html__$CanvasElement_CanvasUtil = function() { };
+$hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
+js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
+js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
+	var ctx = canvas.getContext("webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	var ctx = canvas.getContext("experimental-webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	return null;
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
 $hxClasses["js.lib._ArrayBuffer.ArrayBufferCompat"] = js_lib__$ArrayBuffer_ArrayBufferCompat;
@@ -9307,7 +9703,11 @@ js_lib_SetKeyValueIterator.prototype = {
 	,__class__: js_lib_SetKeyValueIterator
 };
 var js_node_ChildProcess = require("child_process");
+var js_node_DnsErrorCode = require("dns");
+var js_node_Dns = require("dns");
 var js_node_Fs = require("fs");
+var js_node_Http = require("http");
+var js_node_Https = require("https");
 var js_node_KeyValue = {};
 js_node_KeyValue.__properties__ = {get_value:"get_value",get_key:"get_key"};
 js_node_KeyValue.get_key = function(this1) {
@@ -9316,9 +9716,11 @@ js_node_KeyValue.get_key = function(this1) {
 js_node_KeyValue.get_value = function(this1) {
 	return this1[1];
 };
+var js_node_Module = require("module");
 var js_node_Path = require("path");
 var js_node_events_EventEmitter = require("events").EventEmitter;
 var js_node_Stream = require("stream");
+var js_node_Tls = require("tls");
 var js_node_buffer_Buffer = require("buffer").Buffer;
 var js_node_buffer__$Buffer_Helper = function() { };
 $hxClasses["js.node.buffer._Buffer.Helper"] = js_node_buffer__$Buffer_Helper;
@@ -9335,6 +9737,17 @@ js_node_buffer__$Buffer_Helper.bytesOfBuffer = function(b) {
 var js_node_buffer__$Buffer_BufferModule = require("buffer");
 var js_node_stream_Readable = require("stream").Readable;
 var js_node_stream_Writable = require("stream").Writable;
+var js_node_http_Agent = require("http").Agent;
+var js_node_http_ClientRequest = require("http").ClientRequest;
+var js_node_http_IncomingMessage = require("http").IncomingMessage;
+var js_node_net_Server = require("net").Server;
+var js_node_http_Server = require("http").Server;
+var js_node_http_ServerResponse = require("http").ServerResponse;
+var js_node_https_Agent = require("https").Agent;
+var js_node_tls_Server = require("tls").Server;
+var js_node_https_Server = require("https").Server;
+var js_node_stream_Duplex = require("stream").Duplex;
+var js_node_net_Socket = require("net").Socket;
 var js_node_stream_WritableNewOptionsAdapter = {};
 js_node_stream_WritableNewOptionsAdapter.from = function(options) {
 	if(!Object.prototype.hasOwnProperty.call(options,"final")) {
@@ -9343,6 +9756,21 @@ js_node_stream_WritableNewOptionsAdapter.from = function(options) {
 		}});
 	}
 	return options;
+};
+var js_node_tls_TLSSocket = require("tls").TLSSocket;
+var js_node_url_URL = require("url").URL;
+var js_node_url_URLSearchParams = require("url").URLSearchParams;
+var js_node_url_URLSearchParamsEntry = {};
+js_node_url_URLSearchParamsEntry.__properties__ = {get_value:"get_value",get_name:"get_name"};
+js_node_url_URLSearchParamsEntry._new = function(name,value) {
+	var this1 = [name,value];
+	return this1;
+};
+js_node_url_URLSearchParamsEntry.get_name = function(this1) {
+	return this1[0];
+};
+js_node_url_URLSearchParamsEntry.get_value = function(this1) {
+	return this1[1];
 };
 var safety_SafetyException = function(message,previous,native) {
 	haxe_Exception.call(this,message,previous,native);
@@ -9687,7 +10115,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
-		if(_g._hx_index == 4) {
+		if(_g._hx_index == 5) {
 			var command = _g.command;
 			if(command != "list" && !role_status) {
 				interaction.reply("Invalid Permissions.").then(null,null);
@@ -9768,7 +10196,7 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 3) {
+		if(_g._hx_index == 4) {
 			var _g1 = _g.category;
 			var msg = "";
 			var _this = this.data;
@@ -9911,6 +10339,325 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,__class__: systems_commands_Notify
 });
+var systems_commands_Run = function(_universe) {
+	this.code_requests = new haxe_ds_StringMap();
+	this.haxe_version = null;
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Run"] = systems_commands_Run;
+systems_commands_Run.__name__ = "systems.commands.Run";
+systems_commands_Run.__super__ = systems_CommandBase;
+systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
+	message_id: null
+	,haxe_version: null
+	,code_requests: null
+	,run: function(command,interaction) {
+		var _gthis = this;
+		var _g = command.content;
+		if(_g._hx_index == 3) {
+			if(this.haxe_version == null) {
+				var $process = "./haxe/haxe";
+				if(!sys_FileSystem.exists("./haxe/haxe")) {
+					$process = "haxe";
+				}
+				var ls = js_node_ChildProcess.spawn($process,["--version"]);
+				ls.stdout.once("data",function(data) {
+					_gthis.haxe_version = data.toString().substring(0,5);
+					ls.kill();
+				});
+			}
+			this.extractCode(_g.code,interaction);
+		}
+	}
+	,codeSource: function(code) {
+		var remote = new EReg("^(!run #([a-zA-Z0-9]{5,8}))","gi");
+		var source = "";
+		if(remote.match(code)) {
+			source = "https://try.haxe.org/#" + remote.matched(2);
+		}
+		return source;
+	}
+	,extractCode: function(code,interaction) {
+		if(code.length > 0) {
+			this.parse(interaction,code);
+		}
+	}
+	,deleteFile: function(filename) {
+		try {
+			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
+		} catch( _g ) {
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 63, className : "systems.commands.Run", methodName : "deleteFile"});
+		}
+	}
+	,extractLibs: function(code) {
+		var check_code = new EReg("(/?/?-l\\W.*)","gmiu");
+		if(!check_code.match(code)) {
+			return [];
+		}
+		var libs = [];
+		while(check_code.match(code)) {
+			var split = check_code.matched(1).split(" ");
+			libs.push("-L");
+			libs.push(split[1]);
+			code = check_code.matchedRight();
+		}
+		return libs;
+	}
+	,canRequest: function(data) {
+		var timings = 0.0;
+		var last = 0.0;
+		var count = 1;
+		var _g = 0;
+		var _g1 = data.length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(data.length % 2 == 1 && data.length - i == 1) {
+				break;
+			}
+			if(i % 2 == 0) {
+				last = data[i];
+				continue;
+			}
+			timings += data[i] - last;
+			++count;
+		}
+		if(data.length >= 6) {
+			return timings / count > 2000;
+		} else {
+			return true;
+		}
+	}
+	,cleanOutput: function(data,filename,class_entry) {
+		data = data.toString();
+		new RegExp("(\\[(.*|vm)\\].*)$","igmu".split("u").join(""));
+		data = StringTools.replace(StringTools.replace(data,filename,class_entry),"\x1B","");
+		data = StringTools.replace(data,this.get_base_path(),"");
+		data = StringTools.replace(data,"/hx/","");
+		data = StringTools.replace(data,"/bin/","");
+		return data;
+	}
+	,getImportAndUsings: function(input,index) {
+		if(index == null) {
+			index = 0;
+		}
+		var regex = new EReg("^(import|using)(.*);$","igmu");
+		var matches = [];
+		while(regex.match(input)) {
+			matches.push(regex.matched(index));
+			input = regex.matchedRight();
+		}
+		return { code : input, paths : matches};
+	}
+	,parse: function(message,code) {
+		var user = "<@" + message.user.id + ">";
+		if(this.code_requests.h[user] == null) {
+			var v = [];
+			this.code_requests.h[user] = v;
+		}
+		this.code_requests.h[user].push(message.createdTimestamp);
+		if(!this.canRequest(this.code_requests.h[user])) {
+			message.reply({ content : "" + user + " - Wait 3 seconds before submitting code requests."});
+			return;
+		}
+		if(code == null) {
+			message.reply({ content : "Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>."});
+			return;
+		}
+		var class_exists = new EReg("(class.*({|\n{))","mgu");
+		if(class_exists.match(code)) {
+			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mgu");
+			if(!check_class.match(code)) {
+				message.reply({ content : "You must have a class called `Test` or `Main`"});
+				return;
+			}
+		}
+		if(!this.isSafe(code,message)) {
+			message.reply({ content : "Your code contains bad things."});
+			return;
+		}
+		this.runCodeOnThread(code,message);
+	}
+	,isSafe: function(code,interaction) {
+		var check_http = new EReg("haxe.http|haxe.Http","gmu");
+		if(check_http.match(code)) {
+			return false;
+		}
+		if(!Main.config.macros) {
+			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
+				interaction.reply({ content : "Currently no build macros allowed"});
+				return false;
+			}
+		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
+			return false;
+		}
+		return !new EReg("(\\}\\})|(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
+	}
+	,runCodeOnThread: function(code,interaction) {
+		var _gthis = this;
+		if(!this.isSafe(code,interaction)) {
+			interaction.reply({ content : "Your code contains bad things."});
+			return;
+		}
+		var mention = "";
+		var libs = this.extractLibs(code);
+		var lib_regex = new EReg("(/?/?-l\\W.*)","gmiu");
+		if(lib_regex.match(code)) {
+			code = code.replace(lib_regex.r,"");
+		}
+		var get_paths = this.getImportAndUsings(code);
+		var format = "";
+		var _g = 0;
+		var _g1 = get_paths.paths;
+		while(_g < _g1.length) {
+			var data = _g1[_g];
+			++_g;
+			format += data;
+		}
+		try {
+			var filename = "H" + interaction.user.id + "_" + new Date().getTime();
+			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mg");
+			var code_content = "";
+			var class_entry = "Main";
+			if(check_class.match(get_paths.code)) {
+				var parsed = check_class.matched(0);
+				var replaced = "";
+				if(parsed.indexOf("Test") != -1) {
+					class_entry = "Test";
+				}
+				var by = StringTools.replace(parsed,class_entry,filename);
+				replaced = parsed.replace(check_class.r,by);
+				code_content = StringTools.replace(get_paths.code,parsed,replaced);
+			} else {
+				code_content = "class " + filename + " {static function main() {" + get_paths.code + "}}";
+			}
+			code_content = format + "\n" + code_content;
+			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + interaction.user.username + " | time: " + Std.string(new Date())),function(error) {
+				if(error != null) {
+					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 221, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+				}
+				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
+				var $process = "./haxe/haxe";
+				if(!sys_FileSystem.exists("./haxe/haxe")) {
+					$process = "haxe";
+				}
+				var ls = js_node_ChildProcess.spawn($process,libs.concat(commands),{ timeout : 10000});
+				ls.stderr.once("data",function(data) {
+					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 246, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					var compile_output = _gthis.cleanOutput(data,filename,class_entry);
+					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
+					ls.kill("SIGTERM");
+				});
+				ls.once("close",function(data) {
+					var response = "";
+					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
+					if(!sys_FileSystem.exists(js_file)) {
+						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 257, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						ls.kill("SIGTERM");
+						return;
+					}
+					var obj = null;
+					var vm = new vm2_NodeVM({ sandbox : obj, console : "redirect"});
+					vm.on("console.log",function(data,info) {
+						haxe_Log.trace(data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 268, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(info,{ fileName : "src/systems/commands/Run.hx", lineNumber : 269, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						response += "" + info + "\n";
+						return response;
+					});
+					try {
+						vm.runFile(js_file);
+						var x = response.split("\n");
+						var truncated = false;
+						if(x.length > 21) {
+							truncated = true;
+							response = "";
+							var _g = 0;
+							var _g1 = x.slice(x.length - 20);
+							while(_g < _g1.length) {
+								var line = _g1[_g];
+								++_g;
+								response += line + "\n";
+							}
+						}
+						var embed = new discord_$js_MessageEmbed();
+						embed.type = "article";
+						var code_output = "";
+						var _this = response.split("\n");
+						var _g2_current = 0;
+						while(_g2_current < _this.length) {
+							var _g3_value = _this[_g2_current];
+							var _g3_key = _g2_current++;
+							code_output += "" + _g3_key + ". " + _g3_value + " \n";
+						}
+						if(truncated) {
+							code_output += "\n//Output has been trimmed.";
+						}
+						var desc = "**Code:**\n```hx \n" + get_paths.code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
+						haxe_Log.trace(desc,{ fileName : "src/systems/commands/Run.hx", lineNumber : 298, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						embed.setDescription(desc);
+						var url = _gthis.codeSource(code);
+						if(url == "") {
+							embed.setAuthor("@" + interaction.user.tag,interaction.user.displayAvatarURL());
+						} else {
+							var tag = url.split("#")[1];
+							embed.setTitle("TryHaxe #" + tag);
+							embed.setURL(url);
+							embed.setAuthor("@" + interaction.user.tag,interaction.user.displayAvatarURL());
+						}
+						embed.setFooter("Haxe " + _gthis.haxe_version,"https://cdn.discordapp.com/emojis/567741748172816404.png?v=1");
+						if(response.length > 0 && data == 0) {
+							interaction.channel.send(embed);
+							interaction.reply({ embeds : [embed]});
+							ls.kill();
+							return;
+						}
+					} catch( _g ) {
+						var _g1 = haxe_Exception.caught(_g);
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 322, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					}
+				});
+			});
+			return;
+		} catch( _g ) {
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 402, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			interaction.reply({ content : mention + "Code failed to execute."});
+		}
+	}
+	,get_base_path: function() {
+		var path = js_node_Path.resolve(".");
+		if(!sys_FileSystem.exists(path + "/haxebot")) {
+			sys_FileSystem.createDirectory(path + "/haxebot");
+		}
+		path += "/haxebot";
+		var date = DateTools.format(new Date(),"%F");
+		path += "/" + date;
+		if(!sys_FileSystem.exists(path)) {
+			sys_FileSystem.createDirectory(path);
+		}
+		if(!sys_FileSystem.exists(path + "/hx")) {
+			sys_FileSystem.createDirectory(path + "/hx");
+		}
+		if(!sys_FileSystem.exists(path + "/bin")) {
+			sys_FileSystem.createDirectory(path + "/bin");
+		}
+		return path;
+	}
+	,get_name: function() {
+		return "run";
+	}
+	,onAdded: function() {
+		systems_CommandBase.prototype.onAdded.call(this);
+	}
+	,onRemoved: function() {
+		systems_CommandBase.prototype.onRemoved.call(this);
+	}
+	,__class__: systems_commands_Run
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_base_path:"get_base_path"})
+});
+var vm2_NodeVM = require("vm2").NodeVM;
+var vm2_VM = require("vm2").VM;
+var vm2_VMScript = require("vm2").VMScript;
 function $getIterator(o) { if( o instanceof Array ) return new haxe_iterators_ArrayIterator(o); else return o.iterator(); }
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
@@ -9936,6 +10683,11 @@ js_Boot.__toStr = ({ }).toString;
 if(ArrayBuffer.prototype.slice == null) {
 	ArrayBuffer.prototype.slice = js_lib__$ArrayBuffer_ArrayBufferCompat.sliceImpl;
 }
+DateTools.DAY_SHORT_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+DateTools.DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+DateTools.MONTH_SHORT_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+DateTools.MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+DateTools.DAYS_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
 EReg.escapeRe = new RegExp("[.*+?^${}()|[\\]\\\\]","g");
 Main.connected = false;
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];

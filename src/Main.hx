@@ -1,6 +1,5 @@
 import discord_builder.SlashCommandStringOption;
 import discord_builder.SharedSlashCommandOptions;
-import discord_builder.SlashCommandUserOption;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 import discord_builder.SlashCommandBuilder;
@@ -16,6 +15,7 @@ import systems.commands.Hi;
 import systems.commands.Help;
 import systems.commands.Haxelib;
 import systems.commands.Notify;
+import systems.commands.Run;
 
 class Main {
 	public static var connected:Bool = false;
@@ -27,6 +27,7 @@ class Main {
 		universe.setSystems(Help);
 		universe.setSystems(Haxelib);
 		universe.setSystems(Notify);
+		universe.setSystems(Run);
 
 		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 		
@@ -54,6 +55,8 @@ class Main {
 					command.content = Notify(interaction.options.getString('channel'));
 				case 'togglemacros':
 					command.content = Notify(interaction.options.getString('channel'));
+				case 'run':
+					command.content = Code(interaction.options.getString('code'));
 				default:
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
@@ -88,13 +91,15 @@ class Main {
 		var notify = new SlashCommandBuilder().setName('notify').setDescription('Subscribe to channel specific updates').addStringOption(
 			new SlashCommandStringOption().setName('channel').setDescription('Channels to subscribe to separated by a space')
 		);
-		var toggle_macros = new SlashCommandBuilder().setName('toggleMacros').setDescription('Toggle Macros on run scripts');
+		var run = new SlashCommandBuilder().setName('run').setDescription('Run haxe code').addStringOption(
+			new SlashCommandStringOption().setName('code').setDescription('the haxe code')
+		);
 		
 		commands.push(hi);
 		commands.push(help);
 		commands.push(haxelib);
 		commands.push(notify);
-		commands.push(toggle_macros);
+		commands.push(run);
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		
