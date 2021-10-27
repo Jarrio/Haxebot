@@ -15,6 +15,7 @@ import haxe.Timer;
 import systems.commands.Hi;
 import systems.commands.Help;
 import systems.commands.Haxelib;
+import systems.commands.Notify;
 
 class Main {
 	public static var connected:Bool = false;
@@ -25,6 +26,7 @@ class Main {
 		universe.setSystems(Hi);
 		universe.setSystems(Help);
 		universe.setSystems(Haxelib);
+		universe.setSystems(Notify);
 
 		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 
@@ -48,6 +50,8 @@ class Main {
 					command.content = Help(interaction.options.getString('category'));
 				case 'haxelib':
 					command.content = Haxelib(interaction.options.getString('command'));
+				case 'notify':
+					command.content = Notify(interaction.options.getString('channel'));
 				default:
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
@@ -79,10 +83,14 @@ class Main {
 		var haxelib = new SlashCommandBuilder().setName('haxelib').setDescription('Haxelib').addStringOption(
 			new SlashCommandStringOption().setName('command').setDescription('Haxe library manager')
 		);
+		var notify = new SlashCommandBuilder().setName('notify').setDescription('Subscribe to channel specific updates').addStringOption(
+			new SlashCommandStringOption().setName('channel').setDescription('Channels to subscribe to separated by a space')
+		);
 		
 		commands.push(hi);
 		commands.push(help);
 		commands.push(haxelib);
+		commands.push(notify);
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		

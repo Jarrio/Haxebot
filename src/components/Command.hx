@@ -10,6 +10,7 @@ typedef Command = {
 enum CommandOptions {
 	None;
 	Hi;
+	Notify(channel:String);
 	Help(category:String);
 	Haxelib(command:String);
 }
