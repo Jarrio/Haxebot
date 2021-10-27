@@ -29,7 +29,7 @@ class Main {
 		universe.setSystems(Notify);
 
 		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
-
+		
 		client.once('ready', (_) -> {
 			trace('Ready!');
 			connected = true;
@@ -51,6 +51,8 @@ class Main {
 				case 'haxelib':
 					command.content = Haxelib(interaction.options.getString('command'));
 				case 'notify':
+					command.content = Notify(interaction.options.getString('channel'));
+				case 'togglemacros':
 					command.content = Notify(interaction.options.getString('channel'));
 				default:
 			}
@@ -86,11 +88,13 @@ class Main {
 		var notify = new SlashCommandBuilder().setName('notify').setDescription('Subscribe to channel specific updates').addStringOption(
 			new SlashCommandStringOption().setName('channel').setDescription('Channels to subscribe to separated by a space')
 		);
+		var toggle_macros = new SlashCommandBuilder().setName('toggleMacros').setDescription('Toggle Macros on run scripts');
 		
 		commands.push(hi);
 		commands.push(help);
 		commands.push(haxelib);
 		commands.push(notify);
+		commands.push(toggle_macros);
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		
