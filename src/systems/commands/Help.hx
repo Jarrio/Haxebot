@@ -1,7 +1,6 @@
 package systems.commands;
 
-import discord_js.TextChannel;
-import discord_js.Message;
+import discord_builder.BaseCommandInteraction;
 import components.Command;
 
 class Help extends CommandBase {
@@ -10,38 +9,46 @@ class Help extends CommandBase {
 		this.data = loadFile('help');
 	}
 
-	function run(command:Command, message:Message) {
+	function run(command:Command, interaction:BaseCommandInteraction) {
 		if (data == null || data.length == 0) {
 			trace('no help content configured');
 			return;
 		}
 		
-		var msg = '';
-		for (key => item in data) {
-			if (command.content == null) {
-				msg += '- `${item.prefix}${item.type}`: ${item.content}';
-				if (key != data.length - 1) {
-					msg += '\n';
+		switch (command.content) {
+			case Help(category):
+				var msg = '';
+				for (key => item in data) {
+					if (category == null) {
+						if (!item.show_help) {
+							continue;
+						}
+						msg += '- `/${item.type}`: ${item.content}';
+						if (key != data.length - 1) {
+							msg += '\n';
+						}
+					} else {
+						if (item.type == category) {
+							msg = '/`${item.type}`: ${item.content}';
+							break;
+						}
+					}
 				}
-			} else {
-				if (item.type == command.content) {
-					msg = '`${item.type}`: ${item.content}';
-					break;
-				}
-			}
+				interaction.reply(msg);
+			default:
 		}
 		
-		(message.channel:TextChannel).send(msg);
+		//(message.channel:TextChannel).send(msg);
 	}
 
 	function get_name():String {
-		return '!help';
+		return 'help';
 	}
 }
 
 typedef THelpFormat = {
+	var show_help:Bool;
 	var type:HelpType;
-	var prefix:String;
 	var content:String;
 }
 

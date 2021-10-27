@@ -1,69 +1,87 @@
 package systems.commands;
 
-import discord_js.TextChannel;
+import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
-import ecs.System;
-import discord_js.Message;
 import components.Command;
 import js.node.ChildProcess.spawn;
 
+typedef CommandHistory = {
+	var timestamp:Float;
+	var interaction:BaseCommandInteraction;
+}
+
 class Haxelib extends CommandBase {
-	var message_id:String;
+	var last_interaction:BaseCommandInteraction;
 	final super_mod_id:String = '198916468312637440';
-	
-	function run(command:Command, message:Message) {
-		var role_status = hasRole(this.super_mod_id, message);
-
-		if (command.content != "list" && !role_status) {
-			message.react('❎').then(null, null);
-			return;
-		}
-		var channel = (message.channel:TextChannel);
-		var commands = [];
-		for (c in command.content.split(' ')) {
-			commands.push(c);
-		}
-
-		var process = './haxe/haxelib';
-		if (!FileSystem.exists(process)) {
-			process = 'haxelib';
-		}
-
-		var ls = spawn(process, commands);
-		ls.stdout.on('data', function(data:String) {
-			if (!data.contains("KB") && !data.contains("%")) {
-				if (this.message_id == null) {
-					var embed = new MessageEmbed();
-					embed.setTitle('Status');
-					embed.setDescription(data);
-					channel.send(embed).then((data) -> {
-						this.message_id = data.id;
-					}, null);
-				} else {
-					channel.messages.fetch(this.message_id).then((response) -> {
-						var embed = response.embeds[0];
-						embed.description += '\n$data';
-						response.edit(embed);
-					}, null);
-				}
+	var command_history:Map<String, CommandHistory> = [];
+	function run(command:Command, interaction:BaseCommandInteraction) {
+		for (key => data in command_history) {
+			var time = Date.now().getTime();
+			if (time - data.timestamp > 5000) {
+				command_history.remove(key);
 			}
-		});
+		}
 
-		ls.stderr.on('data', (data) -> {
-			var embed = new MessageEmbed();
-			embed.type = 'article';
-			embed.addField('Haxelib Error', data);
+		var role_status = hasRole(this.super_mod_id, interaction);
+		switch (command.content) {
+			case Haxelib(command):
+				if (command != "list" && !role_status) {
+					interaction.reply('Invalid Permissions.').then(null, null);
+					return;
+				}
 
-			channel.send(embed);
-		});
+				var channel = (interaction.channel);
+				var commands = [];
+				for (c in command.split(' ')) {
+					commands.push(c);
+				}
+		
+				var process = './haxe/haxelib';
+				if (!FileSystem.exists(process)) {
+					process = 'haxelib';
+				}
+		
+				var ls = spawn(process, commands);
+				ls.stdout.on('data', function(data:String) {
+					if (!data.contains("KB") && !data.contains("%")) {
+						if (!this.command_history.exists(command)) {
+							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
+							interaction.reply({embeds: [embed]}).then((data) -> {
+								this.addHistory(command, interaction);
+							}, null);
+						} else {
+							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
+							this.command_history.get(command).interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
+						}
+					}
+				});
+		
+				ls.stderr.on('data', (data) -> {
+					var embed = new MessageEmbed();
+					embed.type = 'article';
+					embed.addField('Haxelib Error', data);
+		
+					channel.send(embed);
+				});
+			default:
+	}	
 
-		ls.on('close', (data) -> {
-			this.message_id = null;
-		});
 	}
 
+	function addHistory(command:String, interaction:BaseCommandInteraction) {
+		if (this.command_history.exists(command)) {
+			return false;
+		}
+
+		this.command_history.set(command, {
+			timestamp: Date.now().getTime(),
+			interaction: interaction
+		});
+
+		return true;
+	}
 	function get_name():String {
-		return '+haxelib';
+		return 'haxelib';
 	}
 }

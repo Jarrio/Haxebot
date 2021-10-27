@@ -1,3 +1,4 @@
+import discord_builder.BaseCommandInteraction;
 import discord_js.Message;
 import sys.io.File;
 import haxe.Json;
@@ -14,7 +15,7 @@ function loadFile(filename:String, ?pos:PosInfos):Dynamic {
 	return data;
 }
 
-function hasRole(role:String, message:Message) {
-	var guild = message.guild.roles.cache.get(role);
-	return (message.guild.available && guild!.members!.has(message.author.id));
+function hasRole(role:String, interaction:BaseCommandInteraction) {
+	var guild = interaction.member.roles.cache.get(role);
+	return (interaction.guild.available && guild!.members!.has(interaction.user.id));
 }

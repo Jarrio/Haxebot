@@ -1,16 +1,18 @@
 -cp src
 -D analyzer-optimize
---library node
---library aidan-ecs
---library discord.js
---library discord-api-types
---library discordjs-collection
---library discordjs-rest
---library hxnodejs
 --library safety
 --library vm2
 --library node-html-parser
 --library discord-builder
+--library aidan-ecs
+--library discord.js
+--library hxnodejs
+--library discord.js
+--library discord-api-types
+--library discordjs-collection
+--library discordjs-rest
+--library discord-builder
+--library node
 -D ecs.static_loading
 --js bin/main.js
 --macro Safety.safeNavigation('', true)

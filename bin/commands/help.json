@@ -1,26 +1,26 @@
 [
 	{
-		"prefix": "!",
+		"show_help": true,
 		"type": "run",
 		"content": "Run haxe code in discord! See pin in <#663246792426782730> for a description on how to use this"
 	},
 	{
-		"prefix": "!",
+		"show_help": true,
 		"type": "rtfm",
 		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `!rtfm heaps`"
 	},
 	{
-		"prefix": "!",
+		"show_help": true,
 		"type": "notify",
 		"content": "Type a channel to recieve notifications from key people within those communities when big things change"
 	},
 	{
-		"prefix": "!",
+		"show_help": true,
 		"type": "api",
 		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `!api haxe.Json` \n\t2)`!api haxe.Json parse`\n\t3) `!api flixel.FlxBasic active`"
 	},
 	{
-		"prefix": "!",
+		"show_help": false,
 		"type": "fnf",
 		"content": "Hey, did you read the rules? We can't help with project/game specific issues. Please check out the appropriate discord server - https://discord.gg/YVMMkvjqhF"
 	}
