@@ -10,6 +10,7 @@
 --library safety
 --library vm2
 --library node-html-parser
+--library discord-builder
 -D ecs.static_loading
 --js bin/main.js
 --macro Safety.safeNavigation('', true)

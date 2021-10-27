@@ -1,3 +1,6 @@
+import discord_builder.SlashCommandStringOption;
+import discord_builder.SlashCommandUserOption;
+import discord_builder.SlashCommandBuilder;
 import discord_api_types.Routes;
 import discordjs.rest.REST;
 import discord_js.ClientOptions.IntentFlags;
@@ -42,26 +45,49 @@ class Main {
 			Api
 		);
 
-		var client = new Client({intents: [IntentFlags.GUILDS]});
+		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MEMBERS, IntentFlags.GUILD_MESSAGES]});
 		client.on('ready', function(_) {
 			connected = true;
 			trace('$name Ready!');
 		});
 
+		
+		var commands = [];
+		
+		var boop = new SlashCommandBuilder().setName('boop').setDescription('test boop description');
+		var test = new SlashCommandBuilder().setName('test').setDescription('testing test command');
+		var user = new SlashCommandUserOption();
+		user.setName('user').setDescription('user to test').setRequired(true);
+		test.addUserOption(user);
+
+		var code = new SlashCommandBuilder().setName('code').setDescription('run code');
+		var input = new SlashCommandStringOption();
+		input.setName('code').setDescription('code goes here').setRequired(true);
+		code.addStringOption(input);
+		commands.push(boop);
+		commands.push(test);
+		commands.push(code);
+
 		var rest = new REST({'version': '9'});
 		rest.setToken(Main.config.discord_api_key);
-		rest.put(Routes.applicationGuildCommands('', ''), 
-			{body: [{name: 'test', description: 'description test'}]}).then((test) -> trace(test), (err) -> trace(err));
-		
-	
-		client.on('message', function(message:Message) {
+		rest.put(Routes.applicationGuildCommands('661960123035418629', '416069724158427137'), 
+			{body: commands}).then((test) -> trace(test), (err) -> trace(err));
+
+		client.on('interactionCreate', (args) -> {
+			trace(args);
+			if (args.commandName == 'code') {
+				args.reply('code!!!');
+			}
+		});
+
+		client.on('messageCreate', function(message:Message) {
 			var split = message.content.split(' ');
 			var first_word = split[0];
 			var content = null;
 			if (split.length > 1) {
 				content = message.content.substring(first_word.length);
 			}
-			
+
 			for (prefix in config.prefixes) {
 				if (prefix == first_word.charAt(0)) {
 					var command = ({
