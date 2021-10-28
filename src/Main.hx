@@ -96,9 +96,9 @@ class Main {
 			new SlashCommandStringOption().setName('channel').setDescription('Channels to subscribe to separated by a space')
 		);
 		var run = new SlashCommandBuilder().setName('run').setDescription('Run haxe code').addStringOption(
-			new SlashCommandStringOption().setName('code').setDescription('the haxe code')
+			new SlashCommandStringOption().setName('code').setDescription('the haxe code').setRequired(true)
 		);
-		var run = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
+		var rtfm = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
 			new SlashCommandStringOption().setName('rtfm').setDescription('optional channel name')
 		);
 		
@@ -107,6 +107,7 @@ class Main {
 		commands.push(haxelib);
 		commands.push(notify);
 		commands.push(run);
+		commands.push(rtfm);
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		

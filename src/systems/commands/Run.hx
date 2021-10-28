@@ -293,8 +293,9 @@ class Run extends CommandBase {
 						if (truncated) {
 							code_output += '\n//Output has been trimmed.';
 						}
-
-						var desc = '**Code:**\n```hx \n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
+						trace(get_paths.code.charAt(0));
+						trace(get_paths.code.charAt(1));
+						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
 						trace(desc);
 
 						embed.setDescription(desc);
@@ -312,7 +313,6 @@ class Run extends CommandBase {
 						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
 						
 						if (response.length > 0 && data == 0) {
-							interaction.channel.send(embed);
 							interaction.reply({embeds: [embed]});
 							ls.kill();
 							return;
@@ -371,8 +371,10 @@ class Run extends CommandBase {
 						if (truncated) {
 							code_output += '\n//Output has been trimmed.';
 						}
+						trace(get_paths.code.charAt(0));
+						trace(get_paths.code.charAt(1));
 
-						var desc = '**Code:**\n```hx \n${get_paths.code}``` **Output:**\n ```markdown \n' + code_output + '\n```';
+						var desc = '**Code:**\n ```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
 						embed.setDescription(desc);
 
 						var url = this.codeSource(code);
@@ -388,8 +390,7 @@ class Run extends CommandBase {
 						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
 
 						if (response.length > 0 && data == 0) {
-							interaction.deleteReply().then(null, (err) -> trace(err));
-							interaction.channel.send(embed);
+							interaction.reply({embeds: [embed]});
 							ls.kill();
 							process.kill();
 							return;
