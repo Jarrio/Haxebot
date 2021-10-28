@@ -60,7 +60,7 @@ class Main {
 				case 'run':
 					command.content = Code(interaction.options.getString('code'));
 				case 'rtfm':
-					command.content = Rtfm(interaction.options.getString('rtfm'));
+					command.content = Rtfm(interaction.options.getString('channel'));
 				default:
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
@@ -99,7 +99,7 @@ class Main {
 			new SlashCommandStringOption().setName('code').setDescription('the haxe code').setRequired(true)
 		);
 		var rtfm = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
-			new SlashCommandStringOption().setName('rtfm').setDescription('optional channel name')
+			new SlashCommandStringOption().setName('channel').setDescription('optional channel name')
 		);
 		
 		commands.push(hi);

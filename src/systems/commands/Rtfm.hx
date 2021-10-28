@@ -1,8 +1,6 @@
 package systems.commands;
 
 import discord_builder.BaseCommandInteraction;
-import discord_js.TextChannel;
-import discord_js.Message;
 import components.Command;
 
 class Rtfm extends CommandBase {
@@ -16,28 +14,24 @@ class Rtfm extends CommandBase {
 			trace("failed to read rtfm data");
 			return;
 		}
-		trace('here');
 		switch (command.content) {
 			case Rtfm(channel):
-				var compare = '';
+				var compare = channel;
 				if (channel == null) {
 					compare = interaction.channel.name;
 				}
-				trace(compare);
-
+				
 				for (item in data) {
-					trace(item.content);
-					
-					if(item.keys.exists((key) -> key == compare)) {
-						interaction.reply(item.content);
-						return;
+					for (val in item.keys) {
+						if (val == compare) {
+							interaction.reply(item.content);
+							return;
+						}
 					}
 				}
+				interaction.reply('No information available.');
 			default:
-
 		}
-
-
 	}
 
 	function get_name():String {

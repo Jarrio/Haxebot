@@ -618,7 +618,7 @@ Main.start = function() {
 			command.content = components_CommandOptions.Notify(interaction.options.getString("channel"));
 			break;
 		case "rtfm":
-			command.content = components_CommandOptions.Rtfm(interaction.options.getString("rtfm"));
+			command.content = components_CommandOptions.Rtfm(interaction.options.getString("channel"));
 			break;
 		case "run":
 			command.content = components_CommandOptions.Code(interaction.options.getString("code"));
@@ -658,7 +658,7 @@ Main.main = function() {
 	var haxelib = new discord_$builder_SlashCommandBuilder().setName("haxelib").setDescription("Haxelib").addStringOption(new discord_$builder_SlashCommandStringOption().setName("command").setDescription("Haxe library manager"));
 	var notify = new discord_$builder_SlashCommandBuilder().setName("notify").setDescription("Subscribe to channel specific updates").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("Channels to subscribe to separated by a space"));
 	var run = new discord_$builder_SlashCommandBuilder().setName("run").setDescription("Run haxe code").addStringOption(new discord_$builder_SlashCommandStringOption().setName("code").setDescription("the haxe code").setRequired(true));
-	var rtfm = new discord_$builder_SlashCommandBuilder().setName("rtfm").setDescription("Short paragraphs introducing frameworks").addStringOption(new discord_$builder_SlashCommandStringOption().setName("rtfm").setDescription("optional channel name"));
+	var rtfm = new discord_$builder_SlashCommandBuilder().setName("rtfm").setDescription("Short paragraphs introducing frameworks").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("optional channel name"));
 	commands.push(discord_$builder_AnySlashCommand.fromBase(hi));
 	commands.push(discord_$builder_AnySlashCommand.fromString(help));
 	commands.push(discord_$builder_AnySlashCommand.fromString(haxelib));
@@ -10601,34 +10601,37 @@ systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 	data: null
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
-		this.data = Util_loadFile("rtfm",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 11, className : "systems.commands.Rtfm", methodName : "onAdded"});
+		this.data = Util_loadFile("rtfm",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 9, className : "systems.commands.Rtfm", methodName : "onAdded"});
 	}
 	,run: function(command,interaction) {
 		if(this.data == null) {
-			haxe_Log.trace("failed to read rtfm data",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 16, className : "systems.commands.Rtfm", methodName : "run"});
+			haxe_Log.trace("failed to read rtfm data",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 14, className : "systems.commands.Rtfm", methodName : "run"});
 			return;
 		}
-		haxe_Log.trace("here",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 19, className : "systems.commands.Rtfm", methodName : "run"});
 		var _g = command.content;
 		if(_g._hx_index == 2) {
-			var compare = "";
-			if(_g.channel == null) {
+			var _g1 = _g.channel;
+			var compare = _g1;
+			if(_g1 == null) {
 				compare = interaction.channel.name;
 			}
-			haxe_Log.trace(compare,{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 26, className : "systems.commands.Rtfm", methodName : "run"});
 			var _g = 0;
 			var _g1 = this.data;
 			while(_g < _g1.length) {
 				var item = _g1[_g];
 				++_g;
-				haxe_Log.trace(item.content,{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 29, className : "systems.commands.Rtfm", methodName : "run"});
-				if(Lambda.exists(item.keys,function(key) {
-					return key == compare;
-				})) {
-					interaction.reply(item.content);
-					return;
+				var _g2 = 0;
+				var _g3 = item.keys;
+				while(_g2 < _g3.length) {
+					var val = _g3[_g2];
+					++_g2;
+					if(val == compare) {
+						interaction.reply(item.content);
+						return;
+					}
 				}
 			}
+			interaction.reply("No information available.");
 		}
 	}
 	,get_name: function() {
