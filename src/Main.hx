@@ -16,6 +16,7 @@ import systems.commands.Help;
 import systems.commands.Haxelib;
 import systems.commands.Notify;
 import systems.commands.Run;
+import systems.commands.Rtfm;
 
 class Main {
 	public static var connected:Bool = false;
@@ -28,6 +29,7 @@ class Main {
 		universe.setSystems(Haxelib);
 		universe.setSystems(Notify);
 		universe.setSystems(Run);
+		universe.setSystems(Rtfm);
 
 		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 		
@@ -57,6 +59,8 @@ class Main {
 					command.content = Notify(interaction.options.getString('channel'));
 				case 'run':
 					command.content = Code(interaction.options.getString('code'));
+				case 'rtfm':
+					command.content = Rtfm(interaction.options.getString('rtfm'));
 				default:
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
@@ -93,6 +97,9 @@ class Main {
 		);
 		var run = new SlashCommandBuilder().setName('run').setDescription('Run haxe code').addStringOption(
 			new SlashCommandStringOption().setName('code').setDescription('the haxe code')
+		);
+		var run = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
+			new SlashCommandStringOption().setName('rtfm').setDescription('optional channel name')
 		);
 		
 		commands.push(hi);

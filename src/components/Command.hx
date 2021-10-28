@@ -10,6 +10,7 @@ typedef Command = {
 enum CommandOptions {
 	None;
 	Hi;
+	Rtfm(channel:String);
 	Notify(channel:String);
 	Code(code:String);
 	Help(category:String);
