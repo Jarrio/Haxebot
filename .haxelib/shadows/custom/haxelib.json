@@ -1,0 +1,10 @@
+{
+    "name": "shadows",
+    "description": "Custom shadows for haxebot to work",
+    "license": "MIT",
+    "version": "0.0.1",
+    "classPath": "src",
+    "contributors": ["Jarrio"],
+		"releasenote": "Shadowed node Childprocess",
+    "tags": ["js", "nodejs", "async", "net", "web", "extern"]
+}
