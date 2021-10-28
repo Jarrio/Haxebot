@@ -1,3 +1,5 @@
+import discord_js.TextChannel;
+import discord_js.Message;
 import systems.commands.Run;
 import discord_builder.SlashCommandNumberOption;
 import discord_builder.SlashCommandStringOption;
@@ -45,11 +47,10 @@ class Main {
 			connected = true;
 		});
 
-		client.on('messageCreate', (message:String) -> {
+		client.on('messageCreate', (message:Message) -> {
 			if (message.toString().startsWith("!run")) {
-				trace('here');
 				var code:RunMessage = message.toString();
-				universe.setComponents(universe.createEntity(), code);
+				universe.setComponents(universe.createEntity(), code, message);
 			}
 		});
 

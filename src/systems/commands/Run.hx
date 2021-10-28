@@ -20,7 +20,7 @@ import js.node.ChildProcess.spawn;
 enum abstract RunMessage(String) from String to String {}
 
 class Run extends System {
-	@:fastFamily var code_messages:{message:RunMessage};
+	@:fastFamily var code_messages:{message:RunMessage, response:Message};
 	var message_id:String;
 	var haxe_version:String = null;
 	var code_requests:Map<String, Array<Float>> = [];
@@ -45,14 +45,14 @@ class Run extends System {
 
 		iterate(code_messages, entity -> {
 			if (message.startsWith('!run ')) {
-				this.run(message);
+				this.run(message, response);
 				trace('here');
 				this.code_messages.remove(entity);
 			}
 		});
 	}
 
-	function run(message:String) {
+	function run(message:String, response:Message) {
 		if (this.haxe_version == null) {
 			var process = './haxe/haxe';
 			if (!FileSystem.exists(process)) {
@@ -65,7 +65,7 @@ class Run extends System {
 			});
 		}
 		
-		this.extractCode(message);
+		this.extractCode(message, response);
 	}
 
 	function codeSource(message:String) {
@@ -77,10 +77,10 @@ class Run extends System {
 		return source;
 	}
 
-	function extractCode(message:String) {
+	function extractCode(message:String, response:Message) {
 		var check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx)(.*)```)/gmisu;
 		if (check_code.match(message)) {
-			this.parse(check_code.matched(4));
+			this.parse(check_code.matched(4), response);
 			return;
 		}
 
@@ -90,7 +90,7 @@ class Run extends System {
 			var get_code = new Http('https://try.haxe.org/embed/${check_code.matched(2)}');
 			get_code.onData = (data) -> {
 				if (regex.match(data)) {
-					this.parse(regex.matched(2).htmlUnescape());
+					this.parse(regex.matched(2).htmlUnescape(), response);
 				}
 			}
 			get_code.request();
@@ -99,10 +99,10 @@ class Run extends System {
 
 		check_code = ~/!run (.*)/gmis;
 		if (check_code.match(message)) {
-			this.parse(check_code.matched(1));
+			this.parse(check_code.matched(1), response);
 			return;
 		}
-		this.parse(null);
+		this.parse(null, response);
 	}
 
 	function deleteFile(filename:String) {
@@ -175,9 +175,9 @@ class Run extends System {
 		};
 	}
 
-	function parse(code:String) {
+	function parse(code:String, response:Message) {
 		if (code == null || code.length == 0) {
-			this.channel.send({content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'});
+			response.reply({content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'});
 			return;
 		}
 
@@ -186,18 +186,18 @@ class Run extends System {
 		if (class_exists.match(code)) {
 			var check_class = ~/(^class\s(Test|Main)(\n|\s|\S))/mgu;
 			if (!check_class.match(code)) {
-				this.channel.send({content: 'You must have a class called `Test` or `Main`'});
+				response.reply({content: 'You must have a class called `Test` or `Main`'});
 				return;
 			}
 		}
-		if (!this.isSafe(code)) {
-			this.channel.send({content: 'Your code contains bad things.'});
+		if (!this.isSafe(code, response)) {
+			response.reply({content: 'Your code contains bad things.'});
 			return;
 		}
-		this.runCodeOnThread(code);
+		this.runCodeOnThread(code, response);
 	}
 
-	function isSafe(code:String) {
+	function isSafe(code:String, response:Message) {
 		var check_http = new EReg('haxe.http|haxe.Http', 'gmu');
 		if (check_http.match(code)) {
 			return false;
@@ -205,7 +205,7 @@ class Run extends System {
 
 		if (!Main.config.macros) {
 			if (~/@:.*[bB]uild/igmu.match(code)) {
-				this.channel.send({content: "Currently no build macros allowed"});
+				response.reply({content: "Currently no build macros allowed"});
 				return false;
 			}
 		} else {
@@ -216,9 +216,9 @@ class Run extends System {
 		return !~/(\}\})|(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
-	function runCodeOnThread(code:String) {
-		if (!this.isSafe(code)) {
-			this.channel.send({content: 'Your code contains bad things.'});
+	function runCodeOnThread(code:String, message:Message) {
+		if (!this.isSafe(code, message)) {
+			message.reply({content: 'Your code contains bad things.'});
 			return;
 		}
 
@@ -259,7 +259,7 @@ class Run extends System {
 			}
 
 			code_content = format + '\n' + code_content;
-			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:Blank | time: ${Date.now()}', (error) -> {
+			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${message.author.tag} | time: ${Date.now()}', (error) -> {
 				if (error != null) {
 					trace(error);
 				}
@@ -288,7 +288,7 @@ class Run extends System {
 				ls.stderr.once('data', (data) -> {
 					trace('error: ' + data);
 					var compile_output = this.cleanOutput(data, filename, class_entry);
-					this.channel.send({content: mention + '```\n${compile_output}```'});
+					message.reply({content: mention + '```\n${compile_output}```'});
 					ls.kill('SIGTERM');
 					return;
 				});
@@ -346,14 +346,20 @@ class Run extends System {
 						embed.setDescription(desc);
 
 						var url = this.codeSource(code);
-						var tag = url.split('#')[1];
-						embed.setTitle('TryHaxe #$tag');
-						embed.setURL(url);
-						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
+						if (url == "") {
+							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+						} else {
+							var tag = url.split('#')[1];
+							embed.setTitle('TryHaxe #$tag');
+							embed.setURL(url);
+							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+						}
 
-						trace(response);
+						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');						
 						if (response.length > 0 && data == 0) {
-							this.channel.send({embeds: [embed]});
+							message.reply({embeds: [embed]}).then((succ) -> {
+								message.delete().then(null, null);
+							}, null);
 							ls.kill();
 							return;
 						}
