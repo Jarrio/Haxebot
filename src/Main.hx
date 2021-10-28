@@ -1,3 +1,4 @@
+import discord_builder.SlashCommandNumberOption;
 import discord_builder.SlashCommandStringOption;
 import discord_builder.SharedSlashCommandOptions;
 import components.Command;
@@ -17,6 +18,7 @@ import systems.commands.Haxelib;
 import systems.commands.Notify;
 import systems.commands.Run;
 import systems.commands.Rtfm;
+import systems.commands.Roundup;
 
 class Main {
 	public static var connected:Bool = false;
@@ -30,6 +32,7 @@ class Main {
 		universe.setSystems(Notify);
 		universe.setSystems(Run);
 		universe.setSystems(Rtfm);
+		universe.setSystems(Roundup);
 
 		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 		
@@ -61,6 +64,8 @@ class Main {
 					command.content = Code(interaction.options.getString('code'));
 				case 'rtfm':
 					command.content = Rtfm(interaction.options.getString('channel'));
+				case 'roundup':
+					command.content = Roundup(interaction.options.getNumber('issue'));
 				default:
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
@@ -101,6 +106,10 @@ class Main {
 		var rtfm = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
 			new SlashCommandStringOption().setName('channel').setDescription('optional channel name')
 		);
+
+		var roundup = new SlashCommandBuilder().setName('roundup').setDescription('Configure auto-roundup posting').addNumberOption(
+			new SlashCommandNumberOption().setName('issue').setDescription('What issue of roundup to start tracking from').setRequired(true)
+		);
 		
 		commands.push(hi);
 		commands.push(help);
@@ -108,6 +117,7 @@ class Main {
 		commands.push(notify);
 		commands.push(run);
 		commands.push(rtfm);
+		commands.push(roundup);
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		

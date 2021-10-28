@@ -591,12 +591,13 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_Notify(Main.universe));
 	Main.universe.systems.add(new systems_commands_Run(Main.universe));
 	Main.universe.systems.add(new systems_commands_Rtfm(Main.universe));
+	Main.universe.systems.add(new systems_commands_Roundup(Main.universe));
 	var client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES"]});
 	client.once("ready",function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 37, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 40, className : "Main", methodName : "start"});
 		Main.connected = true;
 	});
 	client.on("interactionCreate",function(interaction) {
@@ -616,6 +617,9 @@ Main.start = function() {
 			break;
 		case "notify":
 			command.content = components_CommandOptions.Notify(interaction.options.getString("channel"));
+			break;
+		case "roundup":
+			command.content = components_CommandOptions.Roundup(interaction.options.getNumber("issue"));
 			break;
 		case "rtfm":
 			command.content = components_CommandOptions.Rtfm(interaction.options.getString("channel"));
@@ -647,7 +651,7 @@ Main.main = function() {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 80, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 85, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -659,17 +663,19 @@ Main.main = function() {
 	var notify = new discord_$builder_SlashCommandBuilder().setName("notify").setDescription("Subscribe to channel specific updates").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("Channels to subscribe to separated by a space"));
 	var run = new discord_$builder_SlashCommandBuilder().setName("run").setDescription("Run haxe code").addStringOption(new discord_$builder_SlashCommandStringOption().setName("code").setDescription("the haxe code").setRequired(true));
 	var rtfm = new discord_$builder_SlashCommandBuilder().setName("rtfm").setDescription("Short paragraphs introducing frameworks").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("optional channel name"));
+	var roundup = new discord_$builder_SlashCommandBuilder().setName("roundup").setDescription("Configure auto-roundup posting").addNumberOption(new discord_$builder_SlashCommandNumberOption().setName("issue").setDescription("What issue of roundup to start tracking from").setRequired(true));
 	commands.push(discord_$builder_AnySlashCommand.fromBase(hi));
 	commands.push(discord_$builder_AnySlashCommand.fromString(help));
 	commands.push(discord_$builder_AnySlashCommand.fromString(haxelib));
 	commands.push(discord_$builder_AnySlashCommand.fromString(notify));
 	commands.push(discord_$builder_AnySlashCommand.fromString(run));
 	commands.push(discord_$builder_AnySlashCommand.fromString(rtfm));
+	commands.push(discord_$builder_AnySlashCommand.fromNumber(roundup));
 	var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
 	rest.put(Routes.applicationGuildCommands(Main.config.client_id,Main.config.server_id),{ body : commands}).then(function(_) {
-		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "main"});
+		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 125, className : "Main", methodName : "main"});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 125, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -1829,13 +1835,14 @@ bits_BitsData.get_length = function(this1) {
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,None: {_hx_name:"None",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Hi: {_hx_name:"Hi",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
-	,Rtfm: ($_=function(channel) { return {_hx_index:2,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
-	,Notify: ($_=function(channel) { return {_hx_index:3,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
-	,Code: ($_=function(code) { return {_hx_index:4,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
-	,Help: ($_=function(category) { return {_hx_index:5,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
-	,Haxelib: ($_=function(command) { return {_hx_index:6,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
+	,Roundup: ($_=function(number) { return {_hx_index:2,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
+	,Rtfm: ($_=function(channel) { return {_hx_index:3,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
+	,Notify: ($_=function(channel) { return {_hx_index:4,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
+	,Code: ($_=function(code) { return {_hx_index:5,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
+	,Help: ($_=function(category) { return {_hx_index:6,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
+	,Haxelib: ($_=function(command) { return {_hx_index:7,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.None,components_CommandOptions.Hi,components_CommandOptions.Rtfm,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
+components_CommandOptions.__constructs__ = [components_CommandOptions.None,components_CommandOptions.Hi,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.None,components_CommandOptions.Hi];
 var discord_$builder_SharedNameAndDescription = require("@discordjs/builders").SharedNameAndDescription;
 var discord_$builder_SharedSlashCommandOptions = require("@discordjs/builders").SharedSlashCommandOptions;
@@ -10367,7 +10374,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
-		if(_g._hx_index == 6) {
+		if(_g._hx_index == 7) {
 			var command = _g.command;
 			if(command != "list" && !role_status) {
 				interaction.reply("Invalid Permissions.").then(null,null);
@@ -10448,7 +10455,7 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 5) {
+		if(_g._hx_index == 6) {
 			var _g1 = _g.category;
 			var msg = "";
 			var _this = this.data;
@@ -10541,7 +10548,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 3) {
+		if(_g._hx_index == 4) {
 			var _this = _g.channel.split(" ");
 			var _g_current = 0;
 			while(_g_current < _this.length) {
@@ -10591,6 +10598,107 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,__class__: systems_commands_Notify
 });
+var systems_commands_Roundup = function(_universe) {
+	this.announcement_channel = "286485321925918721";
+	this.super_mod_id = "198916468312637440";
+	this.roundup = -1;
+	this.active = false;
+	this.last_checked = -1;
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Roundup"] = systems_commands_Roundup;
+systems_commands_Roundup.__name__ = "systems.commands.Roundup";
+systems_commands_Roundup.__super__ = systems_CommandBase;
+systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
+	last_checked: null
+	,active: null
+	,roundup: null
+	,channel: null
+	,super_mod_id: null
+	,announcement_channel: null
+	,getHaxeIoPage: function() {
+		var _gthis = this;
+		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + this.roundup + ".md");
+		var embed = new discord_$js_MessageEmbed();
+		data.onError = function(error) {
+			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 21, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
+		};
+		data.onData = function(body) {
+			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
+			if(regex.match(body)) {
+				embed.setTitle("Haxe Roundup #" + _gthis.roundup);
+				embed.setURL("https://haxe.io/roundups/" + _gthis.roundup + "/");
+				var desc_split = StringTools.trim(regex.matched(1)).split("\n");
+				var desc = "\n**News And Articles**";
+				var _g = 0;
+				while(_g < desc_split.length) {
+					var item = desc_split[_g];
+					++_g;
+					if(desc.length + StringTools.trim(item).length + 3 >= 2048) {
+						continue;
+					}
+					desc += "\n" + StringTools.trim(item);
+				}
+				desc += "\n...";
+				embed.setDescription(desc);
+				_gthis.channel.send({ embeds : [embed]}).then(function(_) {
+					return _gthis.roundup++;
+				});
+			}
+		};
+		data.request();
+	}
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		if(!this.active || this.roundup == -1 || new Date().getTime() - this.last_checked <= 86400000) {
+			return;
+		}
+		if(this.channel != null) {
+			this.last_checked = new Date().getTime();
+			this.getHaxeIoPage();
+		}
+	}
+	,run: function(command,interaction) {
+		var _gthis = this;
+		if(!Util_hasRole(this.super_mod_id,interaction)) {
+			interaction.reply("Invalid permissions").then(null,null);
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 2) {
+			var _g1 = _g.number;
+			if(this.active) {
+				this.active = false;
+				this.last_checked = -1;
+				interaction.reply("Disabled haxe roundup monitoring");
+				return;
+			}
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 72, className : "systems.commands.Roundup", methodName : "run"});
+			if(_g1 <= 600) {
+				interaction.reply("Please enter a more recent roundup issue.");
+				return;
+			}
+			this.active = true;
+			this.roundup = _g1 | 0;
+			interaction.reply("Will start watching haxe roundups from **#" + _g1 + "**.");
+			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 85, className : "systems.commands.Roundup", methodName : "run"});
+			});
+		}
+	}
+	,get_name: function() {
+		return "roundup";
+	}
+	,onAdded: function() {
+		systems_CommandBase.prototype.onAdded.call(this);
+	}
+	,onRemoved: function() {
+		systems_CommandBase.prototype.onRemoved.call(this);
+	}
+	,__class__: systems_commands_Roundup
+});
 var systems_commands_Rtfm = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
@@ -10609,7 +10717,7 @@ systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 2) {
+		if(_g._hx_index == 3) {
 			var _g1 = _g.channel;
 			var compare = _g1;
 			if(_g1 == null) {
@@ -10657,7 +10765,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 4) {
+		if(_g._hx_index == 5) {
 			if(this.haxe_version == null) {
 				var $process = "./haxe/haxe";
 				if(!sys_FileSystem.exists("./haxe/haxe")) {
