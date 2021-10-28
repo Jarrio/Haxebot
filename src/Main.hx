@@ -1,3 +1,4 @@
+import systems.commands.Run;
 import discord_builder.SlashCommandNumberOption;
 import discord_builder.SlashCommandStringOption;
 import discord_builder.SharedSlashCommandOptions;
@@ -16,12 +17,12 @@ import systems.commands.Hi;
 import systems.commands.Help;
 import systems.commands.Haxelib;
 import systems.commands.Notify;
-import systems.commands.Run;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
 
 class Main {
+	public static var client:Client;
 	public static var connected:Bool = false;
 	public static var config:TConfig;
 	public static var universe:Universe;
@@ -32,20 +33,24 @@ class Main {
 		universe.setSystems(Help);
 		universe.setSystems(Haxelib);
 		universe.setSystems(Notify);
-		universe.setSystems(Run);
 		universe.setSystems(Rtfm);
 		universe.setSystems(Roundup);
 		universe.setSystems(Api);
+		universe.setSystems(Run);
 
-		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
+		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 		
 		client.once('ready', (_) -> {
 			trace('Ready!');
 			connected = true;
 		});
 
-		client.on('messageCreate', (message) -> {
-			trace(message);
+		client.on('messageCreate', (message:String) -> {
+			if (message.toString().startsWith("!run")) {
+				trace('here');
+				var code:RunMessage = message.toString();
+				universe.setComponents(universe.createEntity(), code);
+			}
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
@@ -67,8 +72,6 @@ class Main {
 					command.content = Notify(interaction.options.getString('channel'));
 				case 'togglemacros':
 					command.content = Notify(interaction.options.getString('channel'));
-				case 'run':
-					command.content = Code(interaction.options.getString('code'));
 				case 'rtfm':
 					command.content = Rtfm(interaction.options.getString('channel'));
 				case 'roundup':
@@ -109,14 +112,11 @@ class Main {
 		var notify = new SlashCommandBuilder().setName('notify').setDescription('Subscribe to channel specific updates').addStringOption(
 			new SlashCommandStringOption().setName('channel').setDescription('Channels to subscribe to separated by a space')
 		);
-		var run = new SlashCommandBuilder().setName('run').setDescription('Run haxe code').addStringOption(
-			new SlashCommandStringOption().setName('code').setDescription('the haxe code').setRequired(true)
-		);
 		var rtfm = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
 			new SlashCommandStringOption().setName('channel').setDescription('optional channel name')
 		);
 
-		var roundup = new SlashCommandBuilder().setName('roundup').setDescription('Configure auto-roundup posting').addNumberOption(
+		var roundup = new SlashCommandBuilder().setName('roundup').setDescription('[Mod] Configure auto-roundup posting').addNumberOption(
 			new SlashCommandNumberOption().setName('issue').setDescription('What issue of roundup to start tracking from').setRequired(true)
 		);
 
@@ -128,7 +128,6 @@ class Main {
 		commands.push(help);
 		commands.push(haxelib);
 		commands.push(notify);
-		commands.push(run);
 		commands.push(rtfm);
 		commands.push(roundup);
 		commands.push(api);

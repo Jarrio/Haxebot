@@ -1,5 +1,6 @@
 package systems.commands;
 
+import ecs.System;
 import discord_builder.BaseCommandInteraction;
 import js.lib.Object;
 import vm2.NodeVM;
@@ -16,44 +17,92 @@ import discord_js.Message;
 import components.Command;
 import js.node.ChildProcess.spawn;
 
-class Run extends CommandBase {
+enum abstract RunMessage(String) from String to String {}
+
+class Run extends System {
+	@:fastFamily var code_messages:{message:RunMessage};
 	var message_id:String;
 	var haxe_version:String = null;
 	var code_requests:Map<String, Array<Float>> = [];
-
-	function run(command:Command, interaction:BaseCommandInteraction) {
-		switch (command.content) {
-			case Code(code):
-				if (this.haxe_version == null) {
-					var process = './haxe/haxe';
-					if (!FileSystem.exists(process)) {
-						process = 'haxe';
-					}
-					var ls = spawn(process, ['--version']);
-					ls.stdout.once('data', (data) -> {
-						this.haxe_version = data.toString().substring(0, 5);
-						ls.kill();
-					});
-				}
-				this.extractCode(code, interaction);
-			default:
-		}
+	var channel:TextChannel;
+	var checked:Bool = false;
+	override function onAdded() {
 
 	}
 
-	function codeSource(code:String) {
+	override function update(_) {
+		if (!Main.connected) {
+			return;
+		}
+
+		if (this.channel == null && !checked) {
+			checked = true;
+			Main.client.channels.fetch('597067735771381771').then(channel -> {
+				this.channel = cast channel;
+			});
+			return;
+		}
+
+		iterate(code_messages, entity -> {
+			if (message.startsWith('!run ')) {
+				this.run(message);
+				trace('here');
+				this.code_messages.remove(entity);
+			}
+		});
+	}
+
+	function run(message:String) {
+		if (this.haxe_version == null) {
+			var process = './haxe/haxe';
+			if (!FileSystem.exists(process)) {
+				process = 'haxe';
+			}
+			var ls = spawn(process, ['--version']);
+			ls.stdout.once('data', (data) -> {
+				this.haxe_version = data.toString().substring(0, 5);
+				ls.kill();
+			});
+		}
+		
+		this.extractCode(message);
+	}
+
+	function codeSource(message:String) {
 		var remote = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
 		var source = "";
-		if (remote.match(code)) {
+		if (remote.match(message)) {
 			source = 'https://try.haxe.org/#${remote.matched(2)}';
 		}
 		return source;
 	}
 
-	function extractCode(code:String, interaction:BaseCommandInteraction) {
-		if (code.length > 0) {
-			this.parse(interaction, code);
+	function extractCode(message:String) {
+		var check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx)(.*)```)/gmisu;
+		if (check_code.match(message)) {
+			this.parse(check_code.matched(4));
+			return;
 		}
+
+		check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
+		if (check_code.match(message)) {
+			var regex = ~/(<code class="prettyprint haxe">)(.*?)(<\/code>)/gmius;
+			var get_code = new Http('https://try.haxe.org/embed/${check_code.matched(2)}');
+			get_code.onData = (data) -> {
+				if (regex.match(data)) {
+					this.parse(regex.matched(2).htmlUnescape());
+				}
+			}
+			get_code.request();
+			return;
+		}
+
+		check_code = ~/!run (.*)/gmis;
+		if (check_code.match(message)) {
+			this.parse(check_code.matched(1));
+			return;
+		}
+		this.parse(null);
 	}
 
 	function deleteFile(filename:String) {
@@ -103,7 +152,7 @@ class Run extends CommandBase {
 	function cleanOutput(data:String, filename:String, class_entry) {
 		data = data.toString();
 		var remove_vm = ~/(\[(.*|vm)\].*)$/igmu;
-
+		
 		data = data.replace(filename, class_entry).replace('', '');
 		data = data.replace(this.base_path, "");
 		data = data.replace("/hx/", "");
@@ -126,19 +175,9 @@ class Run extends CommandBase {
 		};
 	}
 
-	function parse(message:BaseCommandInteraction, code:String) {
-		var user = '<@${message.user.id}>';
-		if (this.code_requests[user] == null) {
-			this.code_requests[user] = [];
-		}
-		this.code_requests[user].push(message.createdTimestamp);
-		if (!this.canRequest(this.code_requests[user])) {
-			message.reply({content: '$user - Wait 3 seconds before submitting code requests.'});
-			return;
-		}
-
-		if (code == null) {
-			message.reply({content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'});
+	function parse(code:String) {
+		if (code == null || code.length == 0) {
+			this.channel.send({content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'});
 			return;
 		}
 
@@ -147,18 +186,18 @@ class Run extends CommandBase {
 		if (class_exists.match(code)) {
 			var check_class = ~/(^class\s(Test|Main)(\n|\s|\S))/mgu;
 			if (!check_class.match(code)) {
-				message.reply({content: 'You must have a class called `Test` or `Main`'});
+				this.channel.send({content: 'You must have a class called `Test` or `Main`'});
 				return;
 			}
 		}
-		if (!this.isSafe(code, message)) {
-			message.reply({content: 'Your code contains bad things.'});
+		if (!this.isSafe(code)) {
+			this.channel.send({content: 'Your code contains bad things.'});
 			return;
 		}
-		this.runCodeOnThread(code, message);
+		this.runCodeOnThread(code);
 	}
 
-	function isSafe(code:String, interaction:BaseCommandInteraction) {
+	function isSafe(code:String) {
 		var check_http = new EReg('haxe.http|haxe.Http', 'gmu');
 		if (check_http.match(code)) {
 			return false;
@@ -166,7 +205,7 @@ class Run extends CommandBase {
 
 		if (!Main.config.macros) {
 			if (~/@:.*[bB]uild/igmu.match(code)) {
-				interaction.reply({content: "Currently no build macros allowed"});
+				this.channel.send({content: "Currently no build macros allowed"});
 				return false;
 			}
 		} else {
@@ -177,9 +216,9 @@ class Run extends CommandBase {
 		return !~/(\}\})|(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
-	function runCodeOnThread(code:String, interaction:BaseCommandInteraction) {
-		if (!this.isSafe(code, interaction)) {
-			interaction.reply({content: 'Your code contains bad things.'});
+	function runCodeOnThread(code:String) {
+		if (!this.isSafe(code)) {
+			this.channel.send({content: 'Your code contains bad things.'});
 			return;
 		}
 
@@ -198,7 +237,7 @@ class Run extends CommandBase {
 			format += data;
 		}
 		try {
-			var filename = 'H${interaction.user.id}_' + Date.now().getTime();
+			var filename = 'H' + Date.now().getTime() + Math.floor(Math.random() * 100000);
 			var check_class = ~/(^class\s(Test|Main)(\n|\s|\S))/mg;
 			var code_content = "";
 			var class_entry = "Main";
@@ -211,12 +250,16 @@ class Run extends CommandBase {
 
 				replaced = check_class.replace(parsed, StringTools.replace(parsed, class_entry, filename));
 				code_content = get_paths.code.replace(parsed, replaced);
+				var other_instances = new EReg(class_entry, 'gm');
+				if (other_instances.match(code_content)) {
+					code_content = other_instances.replace(code_content, filename);
+				}
 			} else {
 				code_content = 'class $filename {static function main() {${get_paths.code}}}';
 			}
-			code_content = format + '\n' + code_content;
 
-			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${interaction.user.username} | time: ${Date.now()}', (error) -> {
+			code_content = format + '\n' + code_content;
+			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:Blank | time: ${Date.now()}', (error) -> {
 				if (error != null) {
 					trace(error);
 				}
@@ -229,14 +272,14 @@ class Run extends CommandBase {
 					'-js',
 					'${this.base_path}/bin/$filename.js'
 				];
-
+				
 				var process = './haxe/haxe';
 				if (!FileSystem.exists(process)) {
 					process = 'haxe';
 				}
 
 				var ls = spawn(process, libs.concat(commands), {timeout: 10000});
-
+				
 				//to debug code output
 				// ls.stdout.on('data', (data:String) -> {
 				// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
@@ -245,11 +288,11 @@ class Run extends CommandBase {
 				ls.stderr.once('data', (data) -> {
 					trace('error: ' + data);
 					var compile_output = this.cleanOutput(data, filename, class_entry);
-					interaction.reply({content: mention + '```\n${compile_output}```'});
+					this.channel.send({content: mention + '```\n${compile_output}```'});
 					ls.kill('SIGTERM');
 					return;
 				});
-
+				
 				ls.once('close', (data) -> {
 					var response = "";
 					var js_file = '${this.base_path}/bin/$filename.js';
@@ -263,7 +306,7 @@ class Run extends CommandBase {
 						sandbox: obj,
 						console: 'redirect',
 					});
-
+					
 					vm.on('console.log', (data, info) -> {
 						trace(data);
 						trace(info);
@@ -272,13 +315,12 @@ class Run extends CommandBase {
 
 					try {
 						vm.runFile(js_file);
-
 						var x = response.split('\n');
 						var truncated = false;
-						if (x.length > 21) {
+						if (x.length > 24) {
 							truncated = true;
 							response = "";
-							for (line in x.slice(x.length - 20)) {
+							for (line in x.slice(x.length - 23)) {
 								response += line + "\n";
 							}
 						}
@@ -286,46 +328,45 @@ class Run extends CommandBase {
 						var embed = new MessageEmbed();
 						embed.type = 'article';
 						var code_output = '';
-						for (key => item in response.split('\n')) {
+						var split = response.split('\n');
+						for (key => item in split) {
+							if (key >= split.length -1) {
+								break;
+							}
 							code_output += '$key. $item \n';
 						}
 
 						if (truncated) {
 							code_output += '\n//Output has been trimmed.';
 						}
-						trace(get_paths.code.charAt(0));
-						trace(get_paths.code.charAt(1));
+
 						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
 						trace(desc);
-
+						
 						embed.setDescription(desc);
 
 						var url = this.codeSource(code);
-						if (url == "") {
-							embed.setAuthor('@${interaction.user.tag}', interaction.user.displayAvatarURL());
-						} else {
-							var tag = url.split('#')[1];
-							embed.setTitle('TryHaxe #$tag');
-							embed.setURL(url);
-							embed.setAuthor('@${interaction.user.tag}', interaction.user.displayAvatarURL());
-						}
-
+						var tag = url.split('#')[1];
+						embed.setTitle('TryHaxe #$tag');
+						embed.setURL(url);
 						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
-						
+
+						trace(response);
 						if (response.length > 0 && data == 0) {
-							interaction.reply({embeds: [embed]});
+							this.channel.send({embeds: [embed]});
 							ls.kill();
 							return;
 						}
-
 					} catch (e) {
 						trace(e);
 					}
+					return; 
 				});
 			});
+			return;
 		} catch (e:Dynamic) {
 			trace(e);
-			interaction.reply({content: mention + "Code failed to execute."});
+			this.channel.send({content: mention + "Code failed to execute."});
 		}
 	}
 
@@ -354,6 +395,6 @@ class Run extends CommandBase {
 	}
 
 	function get_name():String {
-		return 'run';
+		return '!run';
 	}
 }

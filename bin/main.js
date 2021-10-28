@@ -162,22 +162,32 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_Help(Main.universe));
 	Main.universe.systems.add(new systems_commands_Haxelib(Main.universe));
 	Main.universe.systems.add(new systems_commands_Notify(Main.universe));
-	Main.universe.systems.add(new systems_commands_Run(Main.universe));
 	Main.universe.systems.add(new systems_commands_Rtfm(Main.universe));
 	Main.universe.systems.add(new systems_commands_Roundup(Main.universe));
 	Main.universe.systems.add(new systems_commands_Api(Main.universe));
-	var client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES"]});
-	client.once("ready",function() {
+	Main.universe.systems.add(new systems_commands_Run(Main.universe));
+	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES"]});
+	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 43, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 44, className : "Main", methodName : "start"});
 		Main.connected = true;
 	});
-	client.on("messageCreate",function(message) {
-		haxe_Log.trace(message,{ fileName : "src/Main.hx", lineNumber : 48, className : "Main", methodName : "start"});
+	Main.client.on("messageCreate",function(message) {
+		if(StringTools.startsWith(message.toString(),"!run")) {
+			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 50, className : "Main", methodName : "start"});
+			var code = message.toString();
+			var _ecsTmpEntity = Main.universe.entities.create();
+			Main.universe.components.set_systems_commands_RunMessage(_ecsTmpEntity,2,code);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+		}
 	});
-	client.on("interactionCreate",function(interaction) {
+	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
 			return;
 		}
@@ -204,9 +214,6 @@ Main.start = function() {
 		case "rtfm":
 			command.content = components_CommandOptions.Rtfm(interaction.options.getString("channel"));
 			break;
-		case "run":
-			command.content = components_CommandOptions.Code(interaction.options.getString("code"));
-			break;
 		case "togglemacros":
 			command.content = components_CommandOptions.Notify(interaction.options.getString("channel"));
 			break;
@@ -221,7 +228,7 @@ Main.start = function() {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
-	client.login(Main.config.discord_token);
+	Main.client.login(Main.config.discord_token);
 	new haxe_Timer(100).run = function() {
 		Main.universe.update(1);
 	};
@@ -230,7 +237,7 @@ Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
-		haxe_Log.trace(haxe_Exception.caught(_g).get_message(),{ fileName : "src/Main.hx", lineNumber : 94, className : "Main", methodName : "main"});
+		haxe_Log.trace(haxe_Exception.caught(_g).get_message(),{ fileName : "src/Main.hx", lineNumber : 97, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -240,22 +247,20 @@ Main.main = function() {
 	var help = new discord_$builder_SlashCommandBuilder().setName("help").setDescription("Haxebot commands list").addStringOption(new discord_$builder_SlashCommandStringOption().setName("category").setDescription("help section"));
 	var haxelib = new discord_$builder_SlashCommandBuilder().setName("haxelib").setDescription("Haxelib").addStringOption(new discord_$builder_SlashCommandStringOption().setName("command").setDescription("Haxe library manager"));
 	var notify = new discord_$builder_SlashCommandBuilder().setName("notify").setDescription("Subscribe to channel specific updates").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("Channels to subscribe to separated by a space"));
-	var run = new discord_$builder_SlashCommandBuilder().setName("run").setDescription("Run haxe code").addStringOption(new discord_$builder_SlashCommandStringOption().setName("code").setDescription("the haxe code").setRequired(true));
 	var rtfm = new discord_$builder_SlashCommandBuilder().setName("rtfm").setDescription("Short paragraphs introducing frameworks").addStringOption(new discord_$builder_SlashCommandStringOption().setName("channel").setDescription("optional channel name"));
-	var roundup = new discord_$builder_SlashCommandBuilder().setName("roundup").setDescription("Configure auto-roundup posting").addNumberOption(new discord_$builder_SlashCommandNumberOption().setName("issue").setDescription("What issue of roundup to start tracking from").setRequired(true));
+	var roundup = new discord_$builder_SlashCommandBuilder().setName("roundup").setDescription("[Mod] Configure auto-roundup posting").addNumberOption(new discord_$builder_SlashCommandNumberOption().setName("issue").setDescription("What issue of roundup to start tracking from").setRequired(true));
 	var api = new discord_$builder_SlashCommandBuilder().setName("api").setDescription("Grab documentation from supported API's").addStringOption(new discord_$builder_SlashCommandStringOption().setName("package").setDescription("path to the class/method/var").setRequired(true));
 	commands.push(discord_$builder_AnySlashCommand.fromBase(hi));
 	commands.push(discord_$builder_AnySlashCommand.fromString(help));
 	commands.push(discord_$builder_AnySlashCommand.fromString(haxelib));
 	commands.push(discord_$builder_AnySlashCommand.fromString(notify));
-	commands.push(discord_$builder_AnySlashCommand.fromString(run));
 	commands.push(discord_$builder_AnySlashCommand.fromString(rtfm));
 	commands.push(discord_$builder_AnySlashCommand.fromNumber(roundup));
 	commands.push(discord_$builder_AnySlashCommand.fromString(api));
 	new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token).put(Routes.applicationGuildCommands(Main.config.client_id,Main.config.server_id),{ body : commands}).then(function(_) {
-		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 139, className : "Main", methodName : "main"});
+		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 138, className : "Main", methodName : "main"});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 139, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 138, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -490,6 +495,18 @@ ecs_Components_$discord_$builder_$BaseCommandInteraction.prototype = {
 		return this.components[ecs_Entity.id(_entity)];
 	}
 };
+var ecs_Components_$systems_$commands_$RunMessage = function(_size) {
+	this.components = new Array(_size);
+};
+ecs_Components_$systems_$commands_$RunMessage.__name__ = true;
+ecs_Components_$systems_$commands_$RunMessage.prototype = {
+	set: function(_entity,_component) {
+		this.components[ecs_Entity.id(_entity)] = _component;
+	}
+	,get: function(_entity) {
+		return this.components[ecs_Entity.id(_entity)];
+	}
+};
 var ecs_Entity = {};
 ecs_Entity._new = function(_id) {
 	return _id;
@@ -575,9 +592,10 @@ ecs_Universe.prototype = {
 var ecs_core_ComponentManager = function(_entities) {
 	this.entities = _entities;
 	this.flags = new Array(_entities.capacity());
-	this.components = new Array(2);
+	this.components = new Array(3);
 	this.components[1] = new ecs_Components_$components_$Command(_entities.capacity());
 	this.components[0] = new ecs_Components_$discord_$builder_$BaseCommandInteraction(_entities.capacity());
+	this.components[2] = new ecs_Components_$systems_$commands_$RunMessage(_entities.capacity());
 	var _g = 0;
 	var _g1 = this.flags.length;
 	while(_g < _g1) this.flags[_g++] = [0];
@@ -589,6 +607,10 @@ ecs_core_ComponentManager.prototype = {
 		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
 	}
 	,set_components_Command: function(_entity,_id,_component) {
+		this.components[_id].set(_entity,_component);
+		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
+	}
+	,set_systems_commands_RunMessage: function(_entity,_id,_component) {
 		this.components[_id].set(_entity,_component);
 		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
 	}
@@ -613,7 +635,7 @@ ecs_core_EntityManager.prototype = {
 	}
 };
 var ecs_core_FamilyManager = function(_components,_resources,_size) {
-	this.families = new Array(1);
+	this.families = new Array(2);
 	var this1 = [0];
 	var _g = this1.length;
 	while(_g < 1) this1[_g++] = 0;
@@ -621,6 +643,12 @@ var ecs_core_FamilyManager = function(_components,_resources,_size) {
 	bits_Bits.set(cmpBits,0);
 	bits_Bits.set(cmpBits,1);
 	this.families[0] = new ecs_Family(0,cmpBits,[0],_size);
+	var this1 = [0];
+	var _g = this1.length;
+	while(_g < 1) this1[_g++] = 0;
+	var cmpBits = this1;
+	bits_Bits.set(cmpBits,2);
+	this.families[1] = new ecs_Family(1,cmpBits,[0],_size);
 	this.components = _components;
 	this.resources = _resources;
 	this.number = this.families.length;
@@ -1689,43 +1717,89 @@ systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 	}
 });
 var systems_commands_Run = function(_universe) {
-	this.code_requests = new haxe_ds_StringMap();
+	this.checked = false;
 	this.haxe_version = null;
-	systems_CommandBase.call(this,_universe);
+	ecs_System.call(this,_universe);
 };
 systems_commands_Run.__name__ = true;
-systems_commands_Run.__super__ = systems_CommandBase;
-systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
-	run: function(command,interaction) {
+systems_commands_Run.__super__ = ecs_System;
+systems_commands_Run.prototype = $extend(ecs_System.prototype,{
+	onAdded: function() {
+		ecs_System.prototype.onAdded.call(this);
+		this.code_messages = this.universe.families.get(1);
+		this.table25aaa7d3f4989532034d5f61746d0948 = this.universe.components.getTable(2);
+	}
+	,update: function(_) {
 		var _gthis = this;
-		var _g = command.content;
-		if(_g._hx_index == 6) {
-			if(this.haxe_version == null) {
-				var $process = "./haxe/haxe";
-				if(!sys_FileSystem.exists("./haxe/haxe")) {
-					$process = "haxe";
-				}
-				var ls = js_node_ChildProcess.spawn($process,["--version"]);
-				ls.stdout.once("data",function(data) {
-					_gthis.haxe_version = data.toString().substring(0,5);
-					ls.kill();
-				});
+		if(!Main.connected) {
+			return;
+		}
+		if(this.channel == null && !this.checked) {
+			this.checked = true;
+			Main.client.channels.fetch("597067735771381771").then(function(channel) {
+				return _gthis.channel = channel;
+			});
+			return;
+		}
+		var _g = this.code_messages.iterator();
+		while(_g.active && _g.idx < _g.set.size()) {
+			var entity = _g.set.getDense(_g.idx++);
+			var message = this.table25aaa7d3f4989532034d5f61746d0948.get(entity);
+			if(StringTools.startsWith(message,"!run ")) {
+				this.run(message);
+				haxe_Log.trace("here",{ fileName : "src/systems/commands/Run.hx", lineNumber : 49, className : "systems.commands.Run", methodName : "update"});
+				this.code_messages.remove(entity);
 			}
-			this.extractCode(_g.code,interaction);
 		}
 	}
-	,codeSource: function(code) {
+	,run: function(message) {
+		var _gthis = this;
+		if(this.haxe_version == null) {
+			var $process = "./haxe/haxe";
+			if(!sys_FileSystem.exists("./haxe/haxe")) {
+				$process = "haxe";
+			}
+			var ls = js_node_ChildProcess.spawn($process,["--version"]);
+			ls.stdout.once("data",function(data) {
+				_gthis.haxe_version = data.toString().substring(0,5);
+				ls.kill();
+			});
+		}
+		this.extractCode(message);
+	}
+	,codeSource: function(message) {
 		var remote = new EReg("^(!run #([a-zA-Z0-9]{5,8}))","gi");
 		var source = "";
-		if(remote.match(code)) {
+		if(remote.match(message)) {
 			source = "https://try.haxe.org/#" + remote.matched(2);
 		}
 		return source;
 	}
-	,extractCode: function(code,interaction) {
-		if(code.length > 0) {
-			this.parse(interaction,code);
+	,extractCode: function(message) {
+		var _gthis = this;
+		var check_code = new EReg("^(!run(\\s|\n| \n|)```(haxe|hx)(.*)```)","gmisu");
+		if(check_code.match(message)) {
+			this.parse(check_code.matched(4));
+			return;
 		}
+		check_code = new EReg("^(!run #([a-zA-Z0-9]{5,8}))","gi");
+		if(check_code.match(message)) {
+			var regex = new EReg("(<code class=\"prettyprint haxe\">)(.*?)(</code>)","gmius");
+			var get_code = new haxe_http_HttpNodeJs("https://try.haxe.org/embed/" + check_code.matched(2));
+			get_code.onData = function(data) {
+				if(regex.match(data)) {
+					_gthis.parse(StringTools.htmlUnescape(regex.matched(2)));
+				}
+			};
+			get_code.request();
+			return;
+		}
+		check_code = new EReg("!run (.*)","gmis");
+		if(check_code.match(message)) {
+			this.parse(check_code.matched(1));
+			return;
+		}
+		this.parse(null);
 	}
 	,extractLibs: function(code) {
 		var check_code = new EReg("(/?/?-l\\W.*)","gmiu");
@@ -1740,30 +1814,6 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 			code = check_code.matchedRight();
 		}
 		return libs;
-	}
-	,canRequest: function(data) {
-		var timings = 0.0;
-		var last = 0.0;
-		var count = 1;
-		var _g = 0;
-		var _g1 = data.length;
-		while(_g < _g1) {
-			var i = _g++;
-			if(data.length % 2 == 1 && data.length - i == 1) {
-				break;
-			}
-			if(i % 2 == 0) {
-				last = data[i];
-				continue;
-			}
-			timings += data[i] - last;
-			++count;
-		}
-		if(data.length >= 6) {
-			return timings / count > 2000;
-		} else {
-			return true;
-		}
 	}
 	,cleanOutput: function(data,filename,class_entry) {
 		data = data.toString();
@@ -1786,39 +1836,30 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		return { code : input, paths : matches};
 	}
-	,parse: function(message,code) {
-		var user = "<@" + message.user.id + ">";
-		if(this.code_requests.h[user] == null) {
-			this.code_requests.h[user] = [];
-		}
-		this.code_requests.h[user].push(message.createdTimestamp);
-		if(!this.canRequest(this.code_requests.h[user])) {
-			message.reply({ content : "" + user + " - Wait 3 seconds before submitting code requests."});
-			return;
-		}
-		if(code == null) {
-			message.reply({ content : "Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>."});
+	,parse: function(code) {
+		if(code == null || code.length == 0) {
+			this.channel.send({ content : "Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>."});
 			return;
 		}
 		if(new EReg("(class.*({|\n{))","mgu").match(code)) {
 			if(!new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mgu").match(code)) {
-				message.reply({ content : "You must have a class called `Test` or `Main`"});
+				this.channel.send({ content : "You must have a class called `Test` or `Main`"});
 				return;
 			}
 		}
-		if(!this.isSafe(code,message)) {
-			message.reply({ content : "Your code contains bad things."});
+		if(!this.isSafe(code)) {
+			this.channel.send({ content : "Your code contains bad things."});
 			return;
 		}
-		this.runCodeOnThread(code,message);
+		this.runCodeOnThread(code);
 	}
-	,isSafe: function(code,interaction) {
+	,isSafe: function(code) {
 		if(new EReg("haxe.http|haxe.Http","gmu").match(code)) {
 			return false;
 		}
 		if(!Main.config.macros) {
 			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
-				interaction.reply({ content : "Currently no build macros allowed"});
+				this.channel.send({ content : "Currently no build macros allowed"});
 				return false;
 			}
 		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
@@ -1826,10 +1867,10 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		return !new EReg("(\\}\\})|(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
 	}
-	,runCodeOnThread: function(code,interaction) {
+	,runCodeOnThread: function(code) {
 		var _gthis = this;
-		if(!this.isSafe(code,interaction)) {
-			interaction.reply({ content : "Your code contains bad things."});
+		if(!this.isSafe(code)) {
+			this.channel.send({ content : "Your code contains bad things."});
 			return;
 		}
 		var mention = "";
@@ -1844,7 +1885,7 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 		var _g1 = get_paths.paths;
 		while(_g < _g1.length) format += _g1[_g++];
 		try {
-			var filename = "H" + interaction.user.id + "_" + new Date().getTime();
+			var filename = "H" + new Date().getTime() + Math.floor(Math.random() * 100000);
 			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mg");
 			var code_content = "";
 			var class_entry = "Main";
@@ -1857,13 +1898,17 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 				var by = StringTools.replace(parsed,class_entry,filename);
 				replaced = parsed.replace(check_class.r,by);
 				code_content = StringTools.replace(get_paths.code,parsed,replaced);
+				var other_instances = new EReg(class_entry,"gm");
+				if(other_instances.match(code_content)) {
+					code_content = code_content.replace(other_instances.r,filename);
+				}
 			} else {
 				code_content = "class " + filename + " {static function main() {" + get_paths.code + "}}";
 			}
 			code_content = format + "\n" + code_content;
-			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + interaction.user.username + " | time: " + Std.string(new Date())),function(error) {
+			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:Blank | time: " + Std.string(new Date())),function(error) {
 				if(error != null) {
-					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 221, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 264, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 				}
 				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
 				var $process = "./haxe/haxe";
@@ -1872,23 +1917,23 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var ls = js_node_ChildProcess.spawn($process,libs.concat(commands),{ timeout : 10000});
 				ls.stderr.once("data",function(data) {
-					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 246, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 289, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					var compile_output = _gthis.cleanOutput(data,filename,class_entry);
-					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
+					_gthis.channel.send({ content : mention + ("```\n" + compile_output + "```")});
 					ls.kill("SIGTERM");
 				});
 				ls.once("close",function(data) {
 					var response = "";
 					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
 					if(!sys_FileSystem.exists(js_file)) {
-						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 257, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 300, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						ls.kill("SIGTERM");
 						return;
 					}
 					var vm = new vm2_NodeVM({ sandbox : null, console : "redirect"});
 					vm.on("console.log",function(data,info) {
-						haxe_Log.trace(data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 268, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-						haxe_Log.trace(info,{ fileName : "src/systems/commands/Run.hx", lineNumber : 269, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 311, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(info,{ fileName : "src/systems/commands/Run.hx", lineNumber : 312, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						response += "" + info + "\n";
 						return response;
 					});
@@ -1896,52 +1941,51 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 						vm.runFile(js_file);
 						var x = response.split("\n");
 						var truncated = false;
-						if(x.length > 21) {
+						if(x.length > 24) {
 							truncated = true;
 							response = "";
 							var _g = 0;
-							var _g1 = x.slice(x.length - 20);
+							var _g1 = x.slice(x.length - 23);
 							while(_g < _g1.length) response += _g1[_g++] + "\n";
 						}
 						var embed = new discord_$js_MessageEmbed();
 						embed.type = "article";
 						var code_output = "";
-						var _this = response.split("\n");
+						var split = response.split("\n");
 						var _g2_current = 0;
-						while(_g2_current < _this.length) {
-							var _g3_value = _this[_g2_current++];
-							code_output += "" + (_g2_current - 1) + ". " + _g3_value + " \n";
+						while(_g2_current < split.length) {
+							var _g3_value = split[_g2_current++];
+							var _g3_key = _g2_current - 1;
+							if(_g3_key >= split.length - 1) {
+								break;
+							}
+							code_output += "" + _g3_key + ". " + _g3_value + " \n";
 						}
 						if(truncated) {
 							code_output += "\n//Output has been trimmed.";
 						}
-						haxe_Log.trace(get_paths.code.charAt(0),{ fileName : "src/systems/commands/Run.hx", lineNumber : 296, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-						haxe_Log.trace(get_paths.code.charAt(1),{ fileName : "src/systems/commands/Run.hx", lineNumber : 297, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						var desc = "**Code:**\n```hx\n" + get_paths.code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
-						haxe_Log.trace(desc,{ fileName : "src/systems/commands/Run.hx", lineNumber : 299, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(desc,{ fileName : "src/systems/commands/Run.hx", lineNumber : 344, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						embed.setDescription(desc);
 						var url = _gthis.codeSource(code);
-						if(url == "") {
-							embed.setAuthor("@" + interaction.user.tag,interaction.user.displayAvatarURL());
-						} else {
-							embed.setTitle("TryHaxe #" + url.split("#")[1]);
-							embed.setURL(url);
-							embed.setAuthor("@" + interaction.user.tag,interaction.user.displayAvatarURL());
-						}
+						embed.setTitle("TryHaxe #" + url.split("#")[1]);
+						embed.setURL(url);
 						embed.setFooter("Haxe " + _gthis.haxe_version,"https://cdn.discordapp.com/emojis/567741748172816404.png?v=1");
+						haxe_Log.trace(response,{ fileName : "src/systems/commands/Run.hx", lineNumber : 354, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						if(response.length > 0 && data == 0) {
-							interaction.reply({ embeds : [embed]});
+							_gthis.channel.send({ embeds : [embed]});
 							ls.kill();
 							return;
 						}
 					} catch( _g ) {
-						haxe_Log.trace(haxe_Exception.caught(_g),{ fileName : "src/systems/commands/Run.hx", lineNumber : 322, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(haxe_Exception.caught(_g),{ fileName : "src/systems/commands/Run.hx", lineNumber : 361, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
+			return;
 		} catch( _g ) {
-			haxe_Log.trace(haxe_Exception.caught(_g).unwrap(),{ fileName : "src/systems/commands/Run.hx", lineNumber : 327, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-			interaction.reply({ content : mention + "Code failed to execute."});
+			haxe_Log.trace(haxe_Exception.caught(_g).unwrap(),{ fileName : "src/systems/commands/Run.hx", lineNumber : 368, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
 	,get_base_path: function() {
@@ -1961,12 +2005,6 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 			sys_FileSystem.createDirectory(path + "/bin");
 		}
 		return path;
-	}
-	,get_name: function() {
-		return "run";
-	}
-	,onAdded: function() {
-		systems_CommandBase.prototype.onAdded.call(this);
 	}
 });
 var vm2_NodeVM = require("vm2").NodeVM;
