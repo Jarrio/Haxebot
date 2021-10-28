@@ -27,6 +27,7 @@ class Main {
 	public static var universe:Universe;
 	public static function start() {
 		universe = new Universe(1000);
+		
 		universe.setSystems(Hi);
 		universe.setSystems(Help);
 		universe.setSystems(Haxelib);
@@ -41,6 +42,10 @@ class Main {
 		client.once('ready', (_) -> {
 			trace('Ready!');
 			connected = true;
+		});
+
+		client.on('messageCreate', (message) -> {
+			trace(message);
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {

@@ -321,89 +321,12 @@ class Run extends CommandBase {
 					} catch (e) {
 						trace(e);
 					}
-
-					return;
-					var process = spawn('vm2', [js_file], {timeout: 10000});
-
-					process.stdout.on('data', (data) -> {
-						data = this.cleanOutput(data, filename, class_entry);
-						trace(data);
-						response += data;
-						trace(response);
-					});
-
-					process.stderr.on('data', (data) -> {
-						trace('error: ' + data);
-					});
-
-					process.once('close', (data:Int) -> {
-						trace('close: ' + data);
-
-						var x = response.split('\n');
-						var truncated = false;
-						if (x.length > 21) {
-							truncated = true;
-							response = "";
-							for (line in x.slice(x.length - 20)) {
-								response += line + "\n";
-							}
-						}
-
-						var output_numbers = [];
-						var output_lines = [];
-						var regex = ~/^(.*\.hx:)(\d*:)(.*)/gmiu;
-						var embed = new MessageEmbed();
-						embed.type = 'article';
-
-						while (regex.match(response)) {
-							output_numbers.push(regex.matched(2));
-							output_lines.push(regex.matched(3).replace('\n', ' '));
-
-							response = regex.matchedRight();
-						}
-
-						regex.replace(response, "");
-						var code_output = '';
-						for (key => value in output_lines) {
-							code_output += '\n${key}. ' + value;
-						}
-
-						if (truncated) {
-							code_output += '\n//Output has been trimmed.';
-						}
-						trace(get_paths.code.charAt(0));
-						trace(get_paths.code.charAt(1));
-
-						var desc = '**Code:**\n ```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
-						embed.setDescription(desc);
-
-						var url = this.codeSource(code);
-						if (url == "") {
-							embed.setAuthor('@${interaction.user.tag}', interaction.user.displayAvatarURL());
-						} else {
-							var tag = url.split('#')[1];
-							embed.setTitle('TryHaxe #$tag');
-							embed.setURL(url);
-							embed.setAuthor('@${interaction.user.tag}', interaction.user.displayAvatarURL());
-						}
-
-						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');
-
-						if (response.length > 0 && data == 0) {
-							interaction.reply({embeds: [embed]});
-							ls.kill();
-							process.kill();
-							return;
-						}
-					});
 				});
 			});
-			return;
 		} catch (e:Dynamic) {
 			trace(e);
 			interaction.reply({content: mention + "Code failed to execute."});
 		}
-
 	}
 
 	var base_path(get, never):String;

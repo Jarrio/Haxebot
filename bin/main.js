@@ -598,8 +598,11 @@ Main.start = function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 42, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 43, className : "Main", methodName : "start"});
 		Main.connected = true;
+	});
+	client.on("messageCreate",function(message) {
+		haxe_Log.trace(message,{ fileName : "src/Main.hx", lineNumber : 48, className : "Main", methodName : "start"});
 	});
 	client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -655,7 +658,7 @@ Main.main = function() {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 89, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 94, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -679,9 +682,9 @@ Main.main = function() {
 	commands.push(discord_$builder_AnySlashCommand.fromString(api));
 	var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
 	rest.put(Routes.applicationGuildCommands(Main.config.client_id,Main.config.server_id),{ body : commands}).then(function(_) {
-		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 134, className : "Main", methodName : "main"});
+		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 139, className : "Main", methodName : "main"});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 134, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 139, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -11231,11 +11234,10 @@ systems_commands_Run.prototype = $extend(systems_CommandBase.prototype,{
 					}
 				});
 			});
-			return;
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 403, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 327, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			interaction.reply({ content : mention + "Code failed to execute."});
 		}
 	}
