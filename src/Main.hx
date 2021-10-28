@@ -19,6 +19,7 @@ import systems.commands.Notify;
 import systems.commands.Run;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
+import systems.commands.Api;
 
 class Main {
 	public static var connected:Bool = false;
@@ -33,6 +34,7 @@ class Main {
 		universe.setSystems(Run);
 		universe.setSystems(Rtfm);
 		universe.setSystems(Roundup);
+		universe.setSystems(Api);
 
 		var client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 		
@@ -66,6 +68,8 @@ class Main {
 					command.content = Rtfm(interaction.options.getString('channel'));
 				case 'roundup':
 					command.content = Roundup(interaction.options.getNumber('issue'));
+				case 'api':
+					command.content = API(interaction.options.getString('package'));
 				default:
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
@@ -110,6 +114,10 @@ class Main {
 		var roundup = new SlashCommandBuilder().setName('roundup').setDescription('Configure auto-roundup posting').addNumberOption(
 			new SlashCommandNumberOption().setName('issue').setDescription('What issue of roundup to start tracking from').setRequired(true)
 		);
+
+		var api = new SlashCommandBuilder().setName('api').setDescription('Grab documentation from supported API\'s').addStringOption(
+			new SlashCommandStringOption().setName('package').setDescription('path to the class/method/var').setRequired(true)
+		);
 		
 		commands.push(hi);
 		commands.push(help);
@@ -118,6 +126,7 @@ class Main {
 		commands.push(run);
 		commands.push(rtfm);
 		commands.push(roundup);
+		commands.push(api);
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		

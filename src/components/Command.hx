@@ -12,6 +12,7 @@ enum CommandOptions {
 	Hi;
 	Roundup(number:Float);
 	Rtfm(channel:String);
+	API(channel:String);
 	Notify(channel:String);
 	Code(code:String);
 	Help(category:String);
