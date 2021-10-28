@@ -1736,7 +1736,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		}
 		if(this.channel == null && !this.checked) {
 			this.checked = true;
-			Main.client.channels.fetch("597067735771381771").then(function(channel) {
+			Main.client.channels.fetch("663246792426782730").then(function(channel) {
 				return _gthis.channel = channel;
 			});
 			return;

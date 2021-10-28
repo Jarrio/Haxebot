@@ -37,7 +37,7 @@ class Run extends System {
 
 		if (this.channel == null && !checked) {
 			checked = true;
-			Main.client.channels.fetch('597067735771381771').then(channel -> {
+			Main.client.channels.fetch('663246792426782730').then(channel -> {
 				this.channel = cast channel;
 			});
 			return;
