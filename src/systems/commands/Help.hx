@@ -23,7 +23,11 @@ class Help extends CommandBase {
 						if (!item.show_help) {
 							continue;
 						}
-						msg += '- `/${item.type}`: ${item.content}';
+						if (item.type == HelpType.run) {
+							msg += '- `!${item.type}`: ${item.content}';
+ 						} else {
+							msg += '- `/${item.type}`: ${item.content}';
+						}
 						if (key != data.length - 1) {
 							msg += '\n';
 						}
@@ -37,8 +41,6 @@ class Help extends CommandBase {
 				interaction.reply(msg);
 			default:
 		}
-		
-		//(message.channel:TextChannel).send(msg);
 	}
 
 	function get_name():String {

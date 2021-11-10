@@ -48,6 +48,9 @@ class Main {
 		});
 
 		client.on('messageCreate', (message:Message) -> {
+			if ((message.channel:TextChannel).type == 'dm') {
+				return;
+			}
 			if (message.toString().startsWith("!run")) {
 				var code:RunMessage = message.toString();
 				universe.setComponents(universe.createEntity(), code, message);

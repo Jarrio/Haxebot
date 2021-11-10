@@ -46,7 +46,6 @@ class Run extends System {
 		iterate(code_messages, entity -> {
 			if (message.startsWith('!run ')) {
 				this.run(message, response);
-				trace('here');
 				this.code_messages.remove(entity);
 			}
 		});
@@ -78,7 +77,7 @@ class Run extends System {
 	}
 
 	function extractCode(message:String, response:Message) {
-		var check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx)(.*)```)/gmisu;
+		var check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
 		if (check_code.match(message)) {
 			this.parse(check_code.matched(4), response);
 			return;
@@ -279,7 +278,7 @@ class Run extends System {
 				}
 
 				var ls = spawn(process, libs.concat(commands), {timeout: 10000});
-				
+
 				//to debug code output
 				// ls.stdout.on('data', (data:String) -> {
 				// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
@@ -308,8 +307,6 @@ class Run extends System {
 					});
 					
 					vm.on('console.log', (data, info) -> {
-						trace(data);
-						trace(info);
 						response += '$info\n';
 					});
 
@@ -341,8 +338,6 @@ class Run extends System {
 						}
 
 						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
-						trace(desc);
-						
 						embed.setDescription(desc);
 
 						var url = this.codeSource(code);
@@ -354,10 +349,14 @@ class Run extends System {
 							embed.setURL(url);
 							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
 						}
+						
+						var date = Date.fromTime(message.createdTimestamp);
+						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
 						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');						
 						if (response.length > 0 && data == 0) {
 							message.reply({embeds: [embed]}).then((succ) -> {
+								trace('${message.author.tag} at $format_date with file id: ${filename}');
 								message.delete().then(null, null);
 							}, null);
 							ls.kill();

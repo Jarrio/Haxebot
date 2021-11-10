@@ -7,7 +7,7 @@
 	{
 		"show_help": true,
 		"type": "rtfm",
-		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `!rtfm heaps`"
+		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `/rtfm heaps`"
 	},
 	{
 		"show_help": true,
@@ -17,7 +17,7 @@
 	{
 		"show_help": true,
 		"type": "api",
-		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `!api haxe.Json` \n\t2)`!api haxe.Json parse`\n\t3) `!api flixel.FlxBasic active`"
+		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `/api haxe.Json` \n\t2)`/api haxe.Json parse`\n\t3) `/api flixel.FlxBasic active`"
 	},
 	{
 		"show_help": false,
