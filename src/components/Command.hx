@@ -7,12 +7,12 @@ typedef Command = {
 	var content:CommandOptions;
 }
 
+@:keep
 enum CommandOptions {
-	None;
 	Hi;
 	Roundup(number:Float);
 	Rtfm(channel:String);
-	API(channel:String);
+	Api(channel:String);
 	Notify(channel:String);
 	Code(code:String);
 	Help(category:String);

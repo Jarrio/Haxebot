@@ -1,3 +1,8 @@
+import discord_builder.SlashCommandMentionableOption;
+import discord_builder.SlashCommandRoleOption;
+import discord_builder.SlashCommandChannelOption;
+import discord_builder.SlashCommandBooleanOption;
+import discord_builder.SlashCommandUserOption;
 import discord_js.TextChannel;
 import discord_js.Message;
 import systems.commands.Run;
@@ -62,27 +67,48 @@ class Main {
 			
 			var command:Command = {
 				name: interaction.commandName,
-				content: None
+				content: null
 			}
-			
-			switch(interaction.commandName) {
-				case 'hi':
-					command.content = Hi;
-				case 'help':
-					command.content = Help(interaction.options.getString('category'));
-				case 'haxelib':
-					command.content = Haxelib(interaction.options.getString('command'));
-				case 'notify':
-					command.content = Notify(interaction.options.getString('channel'));
-				case 'togglemacros':
-					command.content = Notify(interaction.options.getString('channel'));
-				case 'rtfm':
-					command.content = Rtfm(interaction.options.getString('channel'));
-				case 'roundup':
-					command.content = Roundup(interaction.options.getNumber('issue'));
-				case 'api':
-					command.content = API(interaction.options.getString('package'));
-				default:
+
+			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
+			for (value in config.commands) {
+				if (value.name != command.name) {
+					continue;
+				}
+				if (value.params == null) {
+					command.content = Type.createEnum(CommandOptions, enum_id);
+					break;
+				} else {
+					var params = new Array<Dynamic>();
+					for (param in value.params) {
+						switch (param.type) {
+							case user: 
+								params.push(interaction.options.getUser(param.name));
+							case bool: 
+								params.push(interaction.options.getBoolean(param.name));
+							case mention: 
+								params.push(interaction.options.getMentionable(param.name));
+							case channel: 
+								params.push(interaction.options.getChannel(param.name));
+							case role: 
+								params.push(interaction.options.getRole(param.name));
+							case string: 
+								params.push(interaction.options.getString(param.name));
+							case number: 
+								params.push(interaction.options.getNumber(param.name));
+							default:
+								throw 'Something went wrong.';
+						}
+					}
+					command.content = Type.createEnum(CommandOptions, enum_id, params);
+					break;
+				}
+			}
+
+			if (command.content == null) {
+				trace(interaction);
+				trace(enum_id);
+				throw 'Unmatched command.';
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
@@ -105,36 +131,7 @@ class Main {
 			throw ('Enter your discord auth token.');
 		}
 
-		var commands = new Array<AnySlashCommand>();
-		var hi = new SlashCommandBuilder().setName('hi').setDescription('Replies with hi!');
-		var help = new SlashCommandBuilder().setName('help').setDescription('Haxebot commands list').addStringOption(
-			new SlashCommandStringOption().setName('category').setDescription('help section')
-		);
-		var haxelib = new SlashCommandBuilder().setName('haxelib').setDescription('Haxelib').addStringOption(
-			new SlashCommandStringOption().setName('command').setDescription('Haxe library manager')
-		);
-		var notify = new SlashCommandBuilder().setName('notify').setDescription('Subscribe to channel specific updates').addStringOption(
-			new SlashCommandStringOption().setName('channel').setDescription('Channels to subscribe to separated by a space')
-		);
-		var rtfm = new SlashCommandBuilder().setName('rtfm').setDescription('Short paragraphs introducing frameworks').addStringOption(
-			new SlashCommandStringOption().setName('channel').setDescription('optional channel name')
-		);
-
-		var roundup = new SlashCommandBuilder().setName('roundup').setDescription('[Mod] Configure auto-roundup posting').addNumberOption(
-			new SlashCommandNumberOption().setName('issue').setDescription('What issue of roundup to start tracking from').setRequired(true)
-		);
-
-		var api = new SlashCommandBuilder().setName('api').setDescription('Grab documentation from supported API\'s').addStringOption(
-			new SlashCommandStringOption().setName('package').setDescription('path to the class/method/var').setRequired(true)
-		);
-		
-		commands.push(hi);
-		commands.push(help);
-		commands.push(haxelib);
-		commands.push(notify);
-		commands.push(rtfm);
-		commands.push(roundup);
-		commands.push(api);
+		var commands = parseCommands();
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
 		
@@ -142,6 +139,56 @@ class Main {
 			.then((_) -> trace('Successfully registered application commands.'), (err) -> trace(err));
 
 		start();
+	}
+
+	static function parseCommands() {
+		var command_defs = config.commands;
+		if (command_defs == null || command_defs.length == 0) {
+			throw 'No commands configured in the config.json file.';
+		}
+
+		var commands = new Array<AnySlashCommand>();
+		for (command in command_defs) {
+			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description);
+			if (command.params != null) {
+				
+				for (param in command.params) {
+					switch (param.type) {
+						case user:
+							main_command.addUserOption(
+								new SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						case string:
+							main_command.addStringOption(
+								new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						case bool:
+							main_command.addBooleanOption(
+								new SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						case channel:
+							main_command.addChannelOption(
+								new SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						case role:
+							main_command.addRoleOption(
+								new SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						case mention:
+							main_command.addMentionableOption(
+								new SlashCommandMentionableOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						case number:
+							main_command.addNumberOption(
+								new SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required)
+							);
+						default:
+					}
+				}
+			}
+			commands.push(main_command);
+		}
+		return commands;
 	}
 
 	public static var name(get, never):String;
@@ -159,4 +206,23 @@ typedef TConfig = {
 	var client_id:String;
 	var server_id:String;
 	var discord_token:String;
+	var commands:Array<TCommands>;
+}
+
+typedef TCommands = {
+	var type:CommandType;
+	var name:String;
+	var description:String;
+	@:optional var params:Array<TCommands>;
+	@:optional var required:Bool;
+}
+
+enum abstract CommandType(String) {
+	var string;
+	var number;
+	var user;
+	var channel;
+	var role;
+	var bool;
+	var mention;
 }

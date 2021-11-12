@@ -19,7 +19,7 @@ class Api extends CommandBase {
 		}
 
 		switch (command.content) {
-			case API(content):
+			case Api(content):
 				var docs = switch (interaction.channel.id) {
 					case '165234904815239168': flixel;
 					case '501408700142059520': heaps;
@@ -138,7 +138,7 @@ abstract ApiParams(TApiParams) {
 	public inline function new(base:String, command:Command) {
 		var split = null;
 		switch (command.content) {
-			case API(path): 
+			case CommandOptions.Api(path): 
 				split = path.split(' ');
 			default:
 		}
@@ -147,12 +147,12 @@ abstract ApiParams(TApiParams) {
 		if (split[2] != null) {
 			
 			base = switch(split[2].toLowerCase()) {
-				case 'flixel': Api.flixel;
-				case 'haxe': Api.haxe;
-				case 'heaps': Api.heaps;
-				case 'lime': Api.lime;
-				case 'openfl': Api.openfl;
-				default: Api.haxe;
+				case 'flixel': systems.commands.Api.flixel;
+				case 'haxe': systems.commands.Api.haxe;
+				case 'heaps': systems.commands.Api.heaps;
+				case 'lime': systems.commands.Api.lime;
+				case 'openfl': systems.commands.Api.openfl;
+				default: systems.commands.Api.haxe;
 			}
 		}
 
