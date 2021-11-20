@@ -10726,22 +10726,21 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			ls.stdout.on("data",function(data) {
 				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 47, className : "systems.commands.Haxelib", methodName : "run"});
 				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
-				if(data.indexOf("KB") == -1 && data.indexOf("%") == -1) {
-					if(!Object.prototype.hasOwnProperty.call(_gthis.message_history.h,id)) {
-						embed = embed.setDescription(data.toString());
-						interaction.reply({ embeds : [embed]}).then(function(data) {
-							_gthis.addHistory(id,embed);
-						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
-						});
-					} else {
-						haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 57, className : "systems.commands.Haxelib", methodName : "run"});
-						embed = _gthis.message_history.h[id];
-						embed = embed.setDescription(embed.description + data.toString());
-						interaction.editReply({ embeds : [embed]}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 60, className : "systems.commands.Haxelib", methodName : "run"});
-						});
-					}
+				if(!Object.prototype.hasOwnProperty.call(_gthis.message_history.h,id)) {
+					haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 51, className : "systems.commands.Haxelib", methodName : "run"});
+					embed = embed.setDescription(data.toString());
+					interaction.reply({ embeds : [embed]}).then(function(data) {
+						_gthis.addHistory(id,embed);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
+					});
+				} else {
+					haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 57, className : "systems.commands.Haxelib", methodName : "run"});
+					embed = _gthis.message_history.h[id];
+					embed = embed.setDescription(embed.description + data.toString());
+					interaction.editReply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 60, className : "systems.commands.Haxelib", methodName : "run"});
+					});
 				}
 			});
 			ls.stderr.on("data",function(data) {
@@ -11184,6 +11183,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11415,6 +11415,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 373, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
