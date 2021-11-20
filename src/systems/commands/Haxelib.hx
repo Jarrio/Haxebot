@@ -14,14 +14,14 @@ typedef CommandHistory = {
 class Haxelib extends CommandBase {
 	var last_interaction:BaseCommandInteraction;
 	final super_mod_id:String = '198916468312637440';
-	var message_history:Map<String, String> = [];
+	var message_history:Map<String, MessageEmbed> = [];
 	function run(command:Command, interaction:BaseCommandInteraction) {
-		// for (key => data in message_history) {
-		// 	var time = Date.now().getTime();
-		// 	if (time - data.timestamp > 5000) {
-		// 		message_history.remove(key);
-		// 	}
-		// }
+		for (key => data in message_history) {
+			var time = Date.now().getTime();
+			if (time - data.timestamp > 5000) {
+				message_history.remove(key);
+			}
+		}
 
 		var role_status = hasRole(this.super_mod_id, interaction);
 		switch (command.content) {
@@ -49,15 +49,16 @@ class Haxelib extends CommandBase {
 
 					if (!this.message_history.exists(id)) {
 						trace('here');
-						this.addHistory(id, data.toString());
+						this.addHistory(id, embed);
 						embed = embed.setDescription(data.toString());
 						interaction.reply({embeds: [embed]}).then(function(data) {
 							
 						}, (err) -> trace(err));
 					} else {
 						trace('here');
-						embed = embed.setDescription(this.message_history.get(id) + data.toString());
-						interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
+						embed = this.message_history.get(id);
+						embed = embed.setDescription(embed.description + data.toString());
+						interaction.editReply(embed.description).then(null, (err) -> trace(err));
 					}
 					
 				});
@@ -74,7 +75,7 @@ class Haxelib extends CommandBase {
 
 	}
 
-	function addHistory(command:String, embed:String) {
+	function addHistory(command:String, embed:MessageEmbed) {
 		if (this.message_history.exists(command)) {
 			return false;
 		}
