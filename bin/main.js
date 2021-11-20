@@ -10703,17 +10703,17 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
 		if(_g._hx_index == 7) {
-			var command = _g.command;
-			if(command != "list" && !role_status) {
+			var _g1 = _g.command;
+			if(_g1 != "list" && !role_status) {
 				interaction.reply("Invalid Permissions.").then(null,null);
 				return;
 			}
 			var channel = interaction.channel;
 			var commands = [];
 			var _g = 0;
-			var _g1 = command.split(" ");
-			while(_g < _g1.length) {
-				var c = _g1[_g];
+			var _g2 = _g1.split(" ");
+			while(_g < _g2.length) {
+				var c = _g2[_g];
 				++_g;
 				commands.push(c);
 			}
@@ -10730,15 +10730,16 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 					if(!Object.prototype.hasOwnProperty.call(_gthis.message_history.h,id)) {
 						embed = embed.setDescription(data.toString());
 						interaction.reply({ embeds : [embed]}).then(function(data) {
-							_gthis.addHistory(command,embed);
+							_gthis.addHistory(id,embed);
 						},function(err) {
 							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
 						});
 					} else {
+						haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 57, className : "systems.commands.Haxelib", methodName : "run"});
 						embed = _gthis.message_history.h[id];
 						embed = embed.setDescription(embed.description + data.toString());
 						interaction.editReply({ embeds : [embed]}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 59, className : "systems.commands.Haxelib", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 60, className : "systems.commands.Haxelib", methodName : "run"});
 						});
 					}
 				}
@@ -11183,7 +11184,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11415,7 +11415,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 373, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
