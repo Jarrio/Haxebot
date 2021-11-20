@@ -10684,7 +10684,6 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 	,super_mod_id: null
 	,message_history: null
 	,run: function(command,interaction) {
-		var _gthis = this;
 		var h = this.message_history.h;
 		var _g_keys = Object.keys(h);
 		var _g_length = _g_keys.length;
@@ -10703,17 +10702,17 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
 		if(_g._hx_index == 7) {
-			var command = _g.command;
-			if(command != "list" && !role_status) {
+			var _g1 = _g.command;
+			if(_g1 != "list" && !role_status) {
 				interaction.reply("Invalid Permissions.").then(null,null);
 				return;
 			}
 			var channel = interaction.channel;
 			var commands = [];
 			var _g = 0;
-			var _g1 = command.split(" ");
-			while(_g < _g1.length) {
-				var c = _g1[_g];
+			var _g2 = _g1.split(" ");
+			while(_g < _g2.length) {
+				var c = _g2[_g];
 				++_g;
 				commands.push(c);
 			}
@@ -10721,27 +10720,16 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			if(!sys_FileSystem.exists("./haxe/haxelib")) {
 				$process = "haxelib";
 			}
-			var id = interaction.id;
 			var ls = js_node_ChildProcess.spawn($process,commands);
+			var output = "";
 			ls.stdout.on("data",function(data) {
-				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 47, className : "systems.commands.Haxelib", methodName : "run"});
-				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
-				if(data.indexOf("KB") == -1 && data.indexOf("%") == -1) {
-					if(!Object.prototype.hasOwnProperty.call(_gthis.message_history.h,id)) {
-						embed = embed.setDescription(data.toString());
-						interaction.reply({ embeds : [embed]}).then(function(data) {
-							_gthis.addHistory(command,embed);
-						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
-						});
-					} else {
-						embed = _gthis.message_history.h[id];
-						embed = embed.setDescription(embed.description + data.toString());
-						interaction.editReply({ embeds : [embed]}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 59, className : "systems.commands.Haxelib", methodName : "run"});
-						});
-					}
-				}
+				output += data;
+			});
+			ls.stdout.once("close",function(data) {
+				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib").setDescription(output);
+				return interaction.reply({ embeds : [embed]}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 53, className : "systems.commands.Haxelib", methodName : "run"});
+				});
 			});
 			ls.stderr.on("data",function(data) {
 				var embed = new discord_$js_MessageEmbed();

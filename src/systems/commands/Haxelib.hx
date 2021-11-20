@@ -41,26 +41,18 @@ class Haxelib extends CommandBase {
 				if (!FileSystem.exists(process)) {
 					process = 'haxelib';
 				}
-				var id = interaction.id;
+
 				var ls = spawn(process, commands);
+				var output = '';
 				ls.stdout.on('data', function(data:String) {
-					trace(data);
-					var embed = new MessageEmbed().setTitle('Haxelib');
-					
-					if (!data.contains("KB") && !data.contains("%")) {
-						if (!this.message_history.exists(id)) {
-							embed = embed.setDescription(data.toString());
-							interaction.reply({embeds: [embed]}).then(function(data) {
-								this.addHistory(command, embed);
-							}, (err) -> trace(err));
-						} else {
-							embed = this.message_history.get(id);
-							embed = embed.setDescription(embed.description + data.toString());
-							interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
-						}
-					}
+					output += data;
 				});
-		
+
+				ls.stdout.once('close', (data) -> {
+					var embed = new MessageEmbed().setTitle('Haxelib').setDescription(output);
+					interaction.reply({embeds: [embed]}).then(null, (err) -> trace(err));
+				});
+
 				ls.stderr.on('data', (data) -> {
 					var embed = new MessageEmbed();
 					embed.type = 'article';
