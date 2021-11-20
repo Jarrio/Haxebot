@@ -10723,6 +10723,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			var ls = js_node_ChildProcess.spawn($process,commands);
 			ls.stdout.on("data",function(data) {
+				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 47, className : "systems.commands.Haxelib", methodName : "run"});
 				if(data.indexOf("KB") == -1 && data.indexOf("%") == -1) {
 					if(!Object.prototype.hasOwnProperty.call(_gthis.command_history.h,command)) {
 						var embed = new discord_$js_MessageEmbed().setTitle("Status").setDescription(data.toString());
@@ -10732,7 +10733,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 					} else {
 						var embed = new discord_$js_MessageEmbed().setTitle("Status").setDescription(data.toString());
 						_gthis.command_history.h[command].interaction.editReply({ embeds : [embed]}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 56, className : "systems.commands.Haxelib", methodName : "run"});
 						});
 					}
 				}
@@ -11179,6 +11180,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11410,6 +11412,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 373, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});

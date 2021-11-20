@@ -44,12 +44,13 @@ class Haxelib extends CommandBase {
 		
 				var ls = spawn(process, commands);
 				ls.stdout.on('data', function(data:String) {
+					trace(data);
 					if (!data.contains("KB") && !data.contains("%")) {
 						if (!this.command_history.exists(command)) {
 							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
 							interaction.reply({embeds: [embed]}).then((data) -> {
 								this.addHistory(command, interaction);
-							}, null);
+							}, (err) -> trace(err));
 						} else {
 							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
 							this.command_history.get(command).interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
