@@ -49,9 +49,10 @@ class Haxelib extends CommandBase {
 
 					if (!this.message_history.exists(id)) {
 						trace('here');
+						this.addHistory(id, embed);
 						embed = embed.setDescription(data.toString());
 						interaction.reply({embeds: [embed]}).then(function(data) {
-							this.addHistory(id, embed);
+							
 						}, (err) -> trace(err));
 					} else {
 						trace('here');

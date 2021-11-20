@@ -10728,18 +10728,18 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
 				if(!Object.prototype.hasOwnProperty.call(_gthis.message_history.h,id)) {
 					haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 51, className : "systems.commands.Haxelib", methodName : "run"});
+					_gthis.addHistory(id,embed);
 					embed = embed.setDescription(data.toString());
 					interaction.reply({ embeds : [embed]}).then(function(data) {
-						_gthis.addHistory(id,embed);
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 56, className : "systems.commands.Haxelib", methodName : "run"});
 					});
 				} else {
-					haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 57, className : "systems.commands.Haxelib", methodName : "run"});
+					haxe_Log.trace("here",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 58, className : "systems.commands.Haxelib", methodName : "run"});
 					embed = _gthis.message_history.h[id];
 					embed = embed.setDescription(embed.description + data.toString());
 					interaction.editReply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 60, className : "systems.commands.Haxelib", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 61, className : "systems.commands.Haxelib", methodName : "run"});
 					});
 				}
 			});
