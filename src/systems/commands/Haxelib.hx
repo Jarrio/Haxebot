@@ -57,8 +57,8 @@ class Haxelib extends CommandBase {
 					} else {
 						trace('here');
 						embed = this.message_history.get(id);
-						embed = embed.setDescription(embed.description + data.toString());
-						interaction.editReply(embed.description).then(null, (err) -> trace(err));
+						var embed = new MessageEmbed().setTitle('Haxelib').setDescription(embed.description + data.toString());
+						interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
 					}
 					
 				});
