@@ -10723,6 +10723,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			var ls = js_node_ChildProcess.spawn($process,commands);
 			var output = "";
 			ls.stdout.on("data",function(data) {
+<<<<<<< HEAD
 				output += data;
 			});
 			ls.stdout.once("close",function(data) {
@@ -10730,6 +10731,24 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 				return interaction.reply({ embeds : [embed]}).then(null,function(err) {
 					haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 53, className : "systems.commands.Haxelib", methodName : "run"});
 				});
+=======
+				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 48, className : "systems.commands.Haxelib", methodName : "run"});
+				output += data;
+			});
+			ls.stdout.once("end",function(data) {
+				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 69, className : "systems.commands.Haxelib", methodName : "run"});
+				haxe_Log.trace(output,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 70, className : "systems.commands.Haxelib", methodName : "run"});
+			});
+			ls.stdout.once("close",function(data) {
+				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib").setDescription(output);
+				interaction.reply({ embeds : [embed]}).then(function(_) {
+					haxe_Log.trace("succ",{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 75, className : "systems.commands.Haxelib", methodName : "run"});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 75, className : "systems.commands.Haxelib", methodName : "run"});
+				});
+				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 76, className : "systems.commands.Haxelib", methodName : "run"});
+				haxe_Log.trace(output,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 77, className : "systems.commands.Haxelib", methodName : "run"});
+>>>>>>> 341595b8b2d25ac95697a758b703674a38c070e4
 			});
 			ls.stderr.on("data",function(data) {
 				var embed = new discord_$js_MessageEmbed();
@@ -11171,7 +11190,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11403,7 +11421,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 373, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
