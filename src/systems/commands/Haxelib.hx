@@ -48,7 +48,7 @@ class Haxelib extends CommandBase {
 					if (!data.contains("KB") && !data.contains("%")) {
 						if (!this.command_history.exists(command)) {
 							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
-							interaction.reply({embeds: [embed]}).then((data) -> {
+							interaction.reply({embeds: [embed]}).then(function(data) {
 								this.addHistory(command, interaction);
 							}, (err) -> trace(err));
 						} else {

@@ -10728,8 +10728,10 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 					if(!Object.prototype.hasOwnProperty.call(_gthis.command_history.h,command)) {
 						var embed = new discord_$js_MessageEmbed().setTitle("Status").setDescription(data.toString());
 						interaction.reply({ embeds : [embed]}).then(function(data) {
-							return _gthis.addHistory(command,interaction);
-						},null);
+							_gthis.addHistory(command,interaction);
+						},function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 53, className : "systems.commands.Haxelib", methodName : "run"});
+						});
 					} else {
 						var embed = new discord_$js_MessageEmbed().setTitle("Status").setDescription(data.toString());
 						_gthis.command_history.h[command].interaction.editReply({ embeds : [embed]}).then(null,function(err) {
