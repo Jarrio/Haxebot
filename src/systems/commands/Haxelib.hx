@@ -46,22 +46,22 @@ class Haxelib extends CommandBase {
 				var output = '';
 				ls.stdout.on('data', function(data:String) {
 					trace(data);
-					output += data + '\n';
-					var embed = new MessageEmbed().setTitle('Haxelib');
+					output += data;
+					// var embed = new MessageEmbed().setTitle('Haxelib');
 
-					if (!this.message_history.exists(id)) {
-						trace('here');
-						this.addHistory(id, embed);
-						embed = embed.setDescription(data.toString());
-						interaction.reply({embeds: [embed]}).then(function(data) {
+					// if (!this.message_history.exists(id)) {
+					// 	trace('here');
+					// 	this.addHistory(id, embed);
+					// 	embed = embed.setDescription(data.toString());
+					// 	interaction.reply({embeds: [embed]}).then(function(data) {
 							
-						}, (err) -> trace(err));
-					} else {
-						trace('here');
-						embed = this.message_history.get(id);
-						var embed = new MessageEmbed().setTitle('Haxelib').setDescription(embed.description + data.toString());
-						interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
-					}
+					// 	}, (err) -> trace(err));
+					// } else {
+					// 	trace('here');
+					// 	embed = this.message_history.get(id);
+					// 	var embed = new MessageEmbed().setTitle('Haxelib').setDescription(embed.description + data.toString());
+					// 	interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
+					// }
 					
 				});
 				
@@ -71,6 +71,8 @@ class Haxelib extends CommandBase {
 				});
 
 				ls.stdout.once('close', (data) -> {
+					var embed = new MessageEmbed().setTitle('Haxelib').setDescription(output);
+					interaction.reply({embeds: [embed]}).then((_) -> trace('succ'), (err) -> trace(err));
 					trace(data);
 					trace(output);
 				});
