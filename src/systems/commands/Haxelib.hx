@@ -43,8 +43,10 @@ class Haxelib extends CommandBase {
 				}
 				var id = interaction.id;
 				var ls = spawn(process, commands);
+				var output = '';
 				ls.stdout.on('data', function(data:String) {
 					trace(data);
+					output += data + '\n';
 					var embed = new MessageEmbed().setTitle('Haxelib');
 
 					if (!this.message_history.exists(id)) {
@@ -62,7 +64,17 @@ class Haxelib extends CommandBase {
 					}
 					
 				});
-		
+				
+				ls.stdout.once('end', (data) -> {
+					trace(data);
+					trace(output);
+				});
+
+				ls.stdout.once('close', (data) -> {
+					trace(data);
+					trace(output);
+				});
+
 				ls.stderr.on('data', (data) -> {
 					var embed = new MessageEmbed();
 					embed.type = 'article';
