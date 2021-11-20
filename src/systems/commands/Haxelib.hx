@@ -45,6 +45,11 @@ class Haxelib extends CommandBase {
 				var ls = spawn(process, commands);
 				var output = '';
 				ls.stdout.on('data', function(data:String) {
+					//Filter out download progress to output message
+					if (data.contains('KB') || data.contains('%')) {
+						return;
+					}
+					
 					output += data;
 				});
 

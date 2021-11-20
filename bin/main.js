@@ -10723,12 +10723,15 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			var ls = js_node_ChildProcess.spawn($process,commands);
 			var output = "";
 			ls.stdout.on("data",function(data) {
+				if(data.indexOf("KB") != -1 || data.indexOf("%") != -1) {
+					return;
+				}
 				output += data;
 			});
 			ls.stdout.once("close",function(data) {
 				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib").setDescription(output);
 				return interaction.reply({ embeds : [embed]}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 53, className : "systems.commands.Haxelib", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 58, className : "systems.commands.Haxelib", methodName : "run"});
 				});
 			});
 			ls.stderr.on("data",function(data) {
