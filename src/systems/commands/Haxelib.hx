@@ -14,12 +14,12 @@ typedef CommandHistory = {
 class Haxelib extends CommandBase {
 	var last_interaction:BaseCommandInteraction;
 	final super_mod_id:String = '198916468312637440';
-	var command_history:Map<String, CommandHistory> = [];
+	var message_history:Map<String, MessageEmbed> = [];
 	function run(command:Command, interaction:BaseCommandInteraction) {
-		for (key => data in command_history) {
+		for (key => data in message_history) {
 			var time = Date.now().getTime();
 			if (time - data.timestamp > 5000) {
-				command_history.remove(key);
+				message_history.remove(key);
 			}
 		}
 
@@ -41,19 +41,22 @@ class Haxelib extends CommandBase {
 				if (!FileSystem.exists(process)) {
 					process = 'haxelib';
 				}
-		
+				var id = interaction.id;
 				var ls = spawn(process, commands);
 				ls.stdout.on('data', function(data:String) {
 					trace(data);
+					var embed = new MessageEmbed().setTitle('Haxelib');
+					
 					if (!data.contains("KB") && !data.contains("%")) {
-						if (!this.command_history.exists(command)) {
-							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
+						if (!this.message_history.exists(id)) {
+							embed = embed.setDescription(data.toString());
 							interaction.reply({embeds: [embed]}).then(function(data) {
-								this.addHistory(command, interaction);
+								this.addHistory(command, embed);
 							}, (err) -> trace(err));
 						} else {
-							var embed = new MessageEmbed().setTitle('Status').setDescription(data.toString());
-							this.command_history.get(command).interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
+							embed = this.message_history.get(id);
+							embed = embed.setDescription(embed.description + data.toString());
+							interaction.editReply({embeds: [embed]}).then(null, (err) -> trace(err));
 						}
 					}
 				});
@@ -70,16 +73,12 @@ class Haxelib extends CommandBase {
 
 	}
 
-	function addHistory(command:String, interaction:BaseCommandInteraction) {
-		if (this.command_history.exists(command)) {
+	function addHistory(command:String, embed:MessageEmbed) {
+		if (this.message_history.exists(command)) {
 			return false;
 		}
 
-		this.command_history.set(command, {
-			timestamp: Date.now().getTime(),
-			interaction: interaction
-		});
-
+		this.message_history.set(command, embed);
 		return true;
 	}
 	function get_name():String {

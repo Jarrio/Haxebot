@@ -10672,7 +10672,7 @@ systems_commands_ApiParams._new = function(base,command) {
 	return this1;
 };
 var systems_commands_Haxelib = function(_universe) {
-	this.command_history = new haxe_ds_StringMap();
+	this.message_history = new haxe_ds_StringMap();
 	this.super_mod_id = "198916468312637440";
 	systems_CommandBase.call(this,_universe);
 };
@@ -10682,10 +10682,10 @@ systems_commands_Haxelib.__super__ = systems_CommandBase;
 systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 	last_interaction: null
 	,super_mod_id: null
-	,command_history: null
+	,message_history: null
 	,run: function(command,interaction) {
 		var _gthis = this;
-		var h = this.command_history.h;
+		var h = this.message_history.h;
 		var _g_keys = Object.keys(h);
 		var _g_length = _g_keys.length;
 		var _g_current = 0;
@@ -10694,7 +10694,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			var _g1_value = h[key];
 			var time = new Date().getTime();
 			if(time - _g1_value.timestamp > 5000) {
-				var _this = this.command_history;
+				var _this = this.message_history;
 				if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
 					delete(_this.h[key]);
 				}
@@ -10721,21 +10721,24 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			if(!sys_FileSystem.exists("./haxe/haxelib")) {
 				$process = "haxelib";
 			}
+			var id = interaction.id;
 			var ls = js_node_ChildProcess.spawn($process,commands);
 			ls.stdout.on("data",function(data) {
 				haxe_Log.trace(data,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 47, className : "systems.commands.Haxelib", methodName : "run"});
+				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
 				if(data.indexOf("KB") == -1 && data.indexOf("%") == -1) {
-					if(!Object.prototype.hasOwnProperty.call(_gthis.command_history.h,command)) {
-						var embed = new discord_$js_MessageEmbed().setTitle("Status").setDescription(data.toString());
+					if(!Object.prototype.hasOwnProperty.call(_gthis.message_history.h,id)) {
+						embed = embed.setDescription(data.toString());
 						interaction.reply({ embeds : [embed]}).then(function(data) {
-							_gthis.addHistory(command,interaction);
+							_gthis.addHistory(command,embed);
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 53, className : "systems.commands.Haxelib", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 55, className : "systems.commands.Haxelib", methodName : "run"});
 						});
 					} else {
-						var embed = new discord_$js_MessageEmbed().setTitle("Status").setDescription(data.toString());
-						_gthis.command_history.h[command].interaction.editReply({ embeds : [embed]}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 56, className : "systems.commands.Haxelib", methodName : "run"});
+						embed = _gthis.message_history.h[id];
+						embed = embed.setDescription(embed.description + data.toString());
+						interaction.editReply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 59, className : "systems.commands.Haxelib", methodName : "run"});
 						});
 					}
 				}
@@ -10748,13 +10751,11 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			});
 		}
 	}
-	,addHistory: function(command,interaction) {
-		if(Object.prototype.hasOwnProperty.call(this.command_history.h,command)) {
+	,addHistory: function(command,embed) {
+		if(Object.prototype.hasOwnProperty.call(this.message_history.h,command)) {
 			return false;
 		}
-		var this1 = this.command_history;
-		var value = { timestamp : new Date().getTime(), interaction : interaction};
-		this1.h[command] = value;
+		this.message_history.h[command] = embed;
 		return true;
 	}
 	,get_name: function() {
