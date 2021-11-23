@@ -11174,7 +11174,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11342,7 +11341,11 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 					var obj = null;
 					var vm = new vm2_NodeVM({ sandbox : obj, console : "redirect"});
 					vm.on("console.log",function(data,info) {
-						response += "" + info + "\n";
+						var regex = new EReg("H[0-9]*..hx:[0-9]*.: (.*)","gm");
+						if(regex.match(data)) {
+							data = regex.matched(1);
+						}
+						response += "" + data + "\n";
 						return response;
 					});
 					try {
@@ -11392,7 +11395,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						embed.setFooter("Haxe " + _gthis.haxe_version,"https://cdn.discordapp.com/emojis/567741748172816404.png?v=1");
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
-								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 359, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 364, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 								return message.delete().then(null,null);
 							},null);
 							ls.kill();
@@ -11400,15 +11403,14 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						}
 					} catch( _g ) {
 						var _g1 = haxe_Exception.caught(_g);
-						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 366, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 371, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
 			return;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 373, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 378, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}

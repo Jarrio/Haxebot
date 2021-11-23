@@ -307,7 +307,12 @@ class Run extends System {
 					});
 					
 					vm.on('console.log', (data, info) -> {
-						response += '$info\n';
+						var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
+						if (regex.match(data)) {
+							data = regex.matched(1);
+						}
+
+						response += '$data\n';
 					});
 
 					try {
