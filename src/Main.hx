@@ -27,6 +27,7 @@ import systems.commands.Notify;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
+import systems.commands.Session;
 
 class Main {
 	public static var client:Client;
@@ -44,6 +45,7 @@ class Main {
 		universe.setSystems(Roundup);
 		universe.setSystems(Api);
 		universe.setSystems(Run);
+		universe.setSystems(Session);
 
 		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
 		

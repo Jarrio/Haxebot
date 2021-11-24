@@ -11,6 +11,7 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Roundup(number:Float);
+	Session(type:String, id:String, name:String, description:String);
 	Rtfm(channel:String);
 	Api(channel:String);
 	Notify(channel:String);
