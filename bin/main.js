@@ -11001,7 +11001,6 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				interaction.reply("Disabled haxe roundup monitoring");
 				return;
 			}
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 74, className : "systems.commands.Roundup", methodName : "run"});
 			if(_g1 <= 600) {
 				interaction.reply("Please enter a more recent roundup issue.");
 				return;
@@ -11175,6 +11174,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11410,6 +11410,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 378, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});

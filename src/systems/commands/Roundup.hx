@@ -71,7 +71,7 @@ class Roundup extends CommandBase {
 					interaction.reply("Disabled haxe roundup monitoring");
 					return;
 				}
-				trace(number);
+				
 				if (number <= 600) {
 					interaction.reply("Please enter a more recent roundup issue.");
 					return;
