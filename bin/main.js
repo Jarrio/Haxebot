@@ -675,7 +675,7 @@ Main.start = function() {
 		if(command.content == null) {
 			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 109, className : "Main", methodName : "start"});
 			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 110, className : "Main", methodName : "start"});
-			throw haxe_Exception.thrown("Unmatched command.");
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 111, className : "Main", methodName : "start"});
 		}
 		var _ecsTmpEntity = Main.universe.entities.create();
 		Main.universe.components.set_components_Command(_ecsTmpEntity,1,command);
@@ -10865,6 +10865,8 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			return "761714809179209818";
 		case "<#565569107701923852>":case "haxeui":
 			return "761714853403820052";
+		case "<#853414608747364352>":case "ceramic":
+			return "914171888748609546";
 		case "<#561254298449739776>":case "dvorak":
 			return "903006951896666153";
 		case "<#501408700142059520>":case "heaps":
@@ -10876,22 +10878,21 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 4) {
-			var _this = _g.channel.split(" ");
-			var _g_current = 0;
-			while(_g_current < _this.length) {
-				var _g1_value = _this[_g_current];
-				++_g_current;
-				var channel = [_g1_value];
+			var _g1 = 0;
+			var _g2 = _g.channel.split(" ");
+			while(_g1 < _g2.length) {
+				var channel = [_g2[_g1]];
+				++_g1;
 				var role = this.getRole(channel[0]);
 				if(role == "err") {
 					continue;
 				}
 				var found = false;
 				var jsIterator = interaction.member.roles.cache.entries();
-				var _g2_lastStep = jsIterator.next();
-				while(!_g2_lastStep.done) {
-					var v = _g2_lastStep.value;
-					_g2_lastStep = jsIterator.next();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
 					var key = v[0];
 					if(key == role) {
 						found = true;
@@ -10961,14 +10962,14 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				while(_g < desc_split.length) {
 					var item = desc_split[_g];
 					++_g;
-					if(desc.length + StringTools.trim(item).length + 3 >= 2048) {
+					if(desc.length + StringTools.trim(item).length + 3 + 22 >= 2048) {
 						continue;
 					}
 					desc += "\n" + StringTools.trim(item);
 				}
 				desc += "\n...";
 				embed.setDescription(desc);
-				_gthis.channel.send({ embeds : [embed]}).then(function(_) {
+				_gthis.channel.send({ content : "<@&761714325227700225>", embeds : [embed]}).then(function(_) {
 					return _gthis.roundup++;
 				});
 			}
@@ -11000,7 +11001,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				interaction.reply("Disabled haxe roundup monitoring");
 				return;
 			}
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 72, className : "systems.commands.Roundup", methodName : "run"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 74, className : "systems.commands.Roundup", methodName : "run"});
 			if(_g1 <= 600) {
 				interaction.reply("Please enter a more recent roundup issue.");
 				return;
@@ -11011,7 +11012,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 85, className : "systems.commands.Roundup", methodName : "run"});
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 87, className : "systems.commands.Roundup", methodName : "run"});
 			});
 		}
 	}

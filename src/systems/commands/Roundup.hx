@@ -23,19 +23,21 @@ class Roundup extends CommandBase {
 		data.onData = (body) -> {
 			var regex = ~/### News and Articles(.*?)##### _In case you missed it_/gmis;
 			if (regex.match(body)) {
+				
 				embed.setTitle('Haxe Roundup #$roundup');
 				embed.setURL('https://haxe.io/roundups/$roundup/');
+				
 				var desc_split = regex.matched(1).trim().split('\n');
 				var desc = '\n**News And Articles**';
 				for (item in desc_split) {
-					if (desc.length + item.trim().length + 3 >= 2048) {
+					if (desc.length + item.trim().length + 3 + 22 >= 2048) {
 						continue;
 					}
 					desc += '\n' + item.trim();
 				}
 				desc += '\n...';
 				embed.setDescription(desc);
-				this.channel.send({embeds: [embed]}).then((_) -> {
+				this.channel.send({content: '<@&761714325227700225>', embeds: [embed]}).then((_) -> {
 					this.roundup++;
 				});
 			}

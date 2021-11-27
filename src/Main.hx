@@ -108,7 +108,7 @@ class Main {
 			if (command.content == null) {
 				trace(interaction);
 				trace(enum_id);
-				throw 'Unmatched command.';
+				trace('Unmatched command. (${command.name})');
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
