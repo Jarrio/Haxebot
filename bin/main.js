@@ -10928,6 +10928,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 });
 var systems_commands_Roundup = function(_universe) {
 	this.announcement_channel = "286485321925918721";
+	this.news_role = "761714325227700225";
 	this.super_mod_id = "198916468312637440";
 	this.roundup = -1;
 	this.active = false;
@@ -10943,13 +10944,14 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,roundup: null
 	,channel: null
 	,super_mod_id: null
+	,news_role: null
 	,announcement_channel: null
 	,getHaxeIoPage: function() {
 		var _gthis = this;
 		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + this.roundup + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 21, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 22, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
@@ -10969,7 +10971,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				desc += "\n...";
 				embed.setDescription(desc);
-				_gthis.channel.send({ content : "<@&761714325227700225>", embeds : [embed]}).then(function(_) {
+				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
 					return _gthis.roundup++;
 				});
 			}
@@ -11011,7 +11013,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 87, className : "systems.commands.Roundup", methodName : "run"});
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 88, className : "systems.commands.Roundup", methodName : "run"});
 			});
 		}
 	}
@@ -11174,7 +11176,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11410,7 +11411,6 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 378, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});

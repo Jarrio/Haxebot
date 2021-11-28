@@ -12,6 +12,7 @@ class Roundup extends CommandBase {
 	var roundup:Int = -1;
 	var channel:TextChannel;
 	final super_mod_id:String = '198916468312637440';
+	final news_role:String = '761714325227700225';
 	final announcement_channel:String = '286485321925918721';
 
 	function getHaxeIoPage() {
@@ -37,7 +38,7 @@ class Roundup extends CommandBase {
 				}
 				desc += '\n...';
 				embed.setDescription(desc);
-				this.channel.send({content: '<@&761714325227700225>', embeds: [embed]}).then((_) -> {
+				this.channel.send({content: '<@&$news_role>', allowedMentions: {roles: [news_role]}, embeds: [embed]}).then((_) -> {
 					this.roundup++;
 				});
 			}
