@@ -8,7 +8,7 @@
 		"content": "HaxeFlixel has its roots in the original ActionScript 3 version of Flixel, created by Adam “Atomic” Saltsman. It was started by Alexander Hohlov in 2011, initially as a straightforward Haxe port of the AS3 codebase and Richard Davey's Flixel Power Tools.\n\nThanks to the efforts of the core team as well as over 100 contributors, today's version of HaxeFlixel far surpasses the capabilities of the original. Not only has the core engine seen many substantial improvements and new features, there is also a far richer ecosystem with additional libaries and over 80 demo projects to learn from."
 	},
 	{
-		"keys": ["683303810579431447", "dvorak", "597067735771381771"],
-		"content": "Test channel!!"
+		"keys": ["565569107701923852", "haxe-ui", "haxeui", "haxeui"],
+		"content": "HaxeUI allows the creation of multi-platform, multi-framework user interfaces (including native ones) that can be built using normal haxe code as well as using a markup language like XML. \nFor more info a getting started guides see: http://haxeui.org/getting-started/"
 	}
 ]

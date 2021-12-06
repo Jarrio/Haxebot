@@ -312,7 +312,11 @@ class Run extends System {
 							data = regex.matched(1);
 						}
 
-						response += '$data\n';
+						if (info != null) {
+							response += '$info\n';
+						} else {
+							response += '$data\n';
+						}
 					});
 
 					try {

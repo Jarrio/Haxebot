@@ -16,6 +16,8 @@ class Notify extends CommandBase {
 			case '<#501447516852715525>' | 'kha': '761714809179209818';
 			// #haxe-ui
 			case '<#565569107701923852>' | 'haxeui': '761714853403820052';
+			// #ceramic
+			case '<#853414608747364352>' | 'ceramic': '914171888748609546';
 			// #devserver notes test
 			case '<#561254298449739776>' | 'dvorak': '903006951896666153';
 			default: 'err';
@@ -25,7 +27,7 @@ class Notify extends CommandBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Notify(channel):
-				for (index => channel in channel.split(' ')) {
+				for (channel in channel.split(' ')) {
 					var role = this.getRole(channel);
 					if (role == 'err') {
 						continue;

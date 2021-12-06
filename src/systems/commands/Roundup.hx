@@ -12,6 +12,7 @@ class Roundup extends CommandBase {
 	var roundup:Int = -1;
 	var channel:TextChannel;
 	final super_mod_id:String = '198916468312637440';
+	final news_role:String = '761714325227700225';
 	final announcement_channel:String = '286485321925918721';
 
 	function getHaxeIoPage() {
@@ -23,19 +24,21 @@ class Roundup extends CommandBase {
 		data.onData = (body) -> {
 			var regex = ~/### News and Articles(.*?)##### _In case you missed it_/gmis;
 			if (regex.match(body)) {
+				
 				embed.setTitle('Haxe Roundup #$roundup');
 				embed.setURL('https://haxe.io/roundups/$roundup/');
+				
 				var desc_split = regex.matched(1).trim().split('\n');
 				var desc = '\n**News And Articles**';
 				for (item in desc_split) {
-					if (desc.length + item.trim().length + 3 >= 2048) {
+					if (desc.length + item.trim().length + 3 + 22 >= 2048) {
 						continue;
 					}
 					desc += '\n' + item.trim();
 				}
 				desc += '\n...';
 				embed.setDescription(desc);
-				this.channel.send({embeds: [embed]}).then((_) -> {
+				this.channel.send({content: '<@&$news_role>', allowedMentions: {roles: [news_role]}, embeds: [embed]}).then((_) -> {
 					this.roundup++;
 				});
 			}
@@ -69,7 +72,7 @@ class Roundup extends CommandBase {
 					interaction.reply("Disabled haxe roundup monitoring");
 					return;
 				}
-				trace(number);
+				
 				if (number <= 600) {
 					interaction.reply("Please enter a more recent roundup issue.");
 					return;

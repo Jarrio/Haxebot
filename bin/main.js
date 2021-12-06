@@ -10867,6 +10867,8 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			return "761714809179209818";
 		case "<#565569107701923852>":case "haxeui":
 			return "761714853403820052";
+		case "<#853414608747364352>":case "ceramic":
+			return "914171888748609546";
 		case "<#561254298449739776>":case "dvorak":
 			return "903006951896666153";
 		case "<#501408700142059520>":case "heaps":
@@ -10890,10 +10892,10 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var found = false;
 				var jsIterator = interaction.member.roles.cache.entries();
-				var _g2_lastStep = jsIterator.next();
-				while(!_g2_lastStep.done) {
-					var v = _g2_lastStep.value;
-					_g2_lastStep = jsIterator.next();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
 					var key = v[0];
 					if(key == role) {
 						found = true;
@@ -10929,6 +10931,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 });
 var systems_commands_Roundup = function(_universe) {
 	this.announcement_channel = "286485321925918721";
+	this.news_role = "761714325227700225";
 	this.super_mod_id = "198916468312637440";
 	this.roundup = -1;
 	this.active = false;
@@ -10944,13 +10947,14 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,roundup: null
 	,channel: null
 	,super_mod_id: null
+	,news_role: null
 	,announcement_channel: null
 	,getHaxeIoPage: function() {
 		var _gthis = this;
 		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + this.roundup + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 21, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 22, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
@@ -10963,14 +10967,14 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				while(_g < desc_split.length) {
 					var item = desc_split[_g];
 					++_g;
-					if(desc.length + StringTools.trim(item).length + 3 >= 2048) {
+					if(desc.length + StringTools.trim(item).length + 3 + 22 >= 2048) {
 						continue;
 					}
 					desc += "\n" + StringTools.trim(item);
 				}
 				desc += "\n...";
 				embed.setDescription(desc);
-				_gthis.channel.send({ embeds : [embed]}).then(function(_) {
+				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
 					return _gthis.roundup++;
 				});
 			}
@@ -11002,7 +11006,6 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				interaction.reply("Disabled haxe roundup monitoring");
 				return;
 			}
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 72, className : "systems.commands.Roundup", methodName : "run"});
 			if(_g1 <= 600) {
 				interaction.reply("Please enter a more recent roundup issue.");
 				return;
@@ -11013,7 +11016,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 85, className : "systems.commands.Roundup", methodName : "run"});
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 88, className : "systems.commands.Roundup", methodName : "run"});
 			});
 		}
 	}
@@ -11348,8 +11351,13 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						if(regex.match(data)) {
 							data = regex.matched(1);
 						}
-						response += "" + data + "\n";
-						return response;
+						if(info != null) {
+							response += "" + info + "\n";
+							return response;
+						} else {
+							response += "" + data + "\n";
+							return response;
+						}
 					});
 					try {
 						vm.runFile(js_file);
@@ -11398,7 +11406,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						embed.setFooter("Haxe " + _gthis.haxe_version,"https://cdn.discordapp.com/emojis/567741748172816404.png?v=1");
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
-								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 364, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 368, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 								return message.delete().then(null,null);
 							},null);
 							ls.kill();
@@ -11406,7 +11414,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						}
 					} catch( _g ) {
 						var _g1 = haxe_Exception.caught(_g);
-						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 371, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 375, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
@@ -11414,7 +11422,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 378, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 382, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
