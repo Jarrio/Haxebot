@@ -1,20 +1,13 @@
 package systems.commands;
 
 import ecs.System;
-import discord_builder.BaseCommandInteraction;
-import js.lib.Object;
 import vm2.NodeVM;
-import js.Browser;
-import js.node.Process;
-import vm2.VM;
-import discord_js.Role;
 import js.node.Fs;
 import haxe.Http;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
 import discord_js.Message;
-import components.Command;
 import js.node.ChildProcess.spawn;
 
 enum abstract RunMessage(String) from String to String {}

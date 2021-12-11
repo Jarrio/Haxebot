@@ -1,3 +1,5 @@
+import buddy.internal.sys.Js;
+import discord_js.User;
 import discord_builder.SlashCommandMentionableOption;
 import discord_builder.SlashCommandRoleOption;
 import discord_builder.SlashCommandChannelOption;
@@ -22,6 +24,7 @@ import ecs.Universe;
 import haxe.Timer;
 import systems.commands.Hi;
 import systems.commands.Help;
+import systems.commands.Helppls;
 import systems.commands.Haxelib;
 import systems.commands.Notify;
 import systems.commands.Rtfm;
@@ -38,6 +41,7 @@ class Main {
 		
 		universe.setSystems(Hi);
 		universe.setSystems(Help);
+		universe.setSystems(Helppls);
 		universe.setSystems(Haxelib);
 		universe.setSystems(Notify);
 		universe.setSystems(Rtfm);
@@ -45,7 +49,7 @@ class Main {
 		universe.setSystems(Api);
 		universe.setSystems(Run);
 
-		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
+		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
 		
 		client.once('ready', (_) -> {
 			trace('Ready!');
@@ -53,9 +57,12 @@ class Main {
 		});
 
 		client.on('messageCreate', (message:Message) -> {
-			if ((message.channel:TextChannel).type == 'dm') {
+			trace((message.channel:Dynamic).type);
+			if ((message.channel:TextChannel).type == 'DM') {
+				universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
 				return;
 			}
+
 			if (message.toString().startsWith("!run")) {
 				var code:RunMessage = message.toString();
 				universe.setComponents(universe.createEntity(), code, message);
@@ -200,6 +207,12 @@ class Main {
 	}
 }
 
+typedef THelpPls = {
+	var user:User;
+	var content:String;
+	var message:Message;
+}
+
 typedef TConfig = {
 	var project_name:String;
 	var macros:Bool;
@@ -225,4 +238,8 @@ enum abstract CommandType(String) {
 	var role;
 	var bool;
 	var mention;
+}
+
+enum abstract CommandForward(String) {
+	var helppls;
 }

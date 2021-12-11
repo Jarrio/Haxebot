@@ -10,6 +10,7 @@ typedef Command = {
 @:keep
 enum CommandOptions {
 	Hi;
+	Helppls;
 	Roundup(number:Float);
 	Rtfm(channel:String);
 	Api(channel:String);
