@@ -58,7 +58,8 @@ class Main {
 
 		client.on('messageCreate', (message:Message) -> {
 			trace((message.channel:Dynamic).type);
-			if ((message.channel:TextChannel).type == 'DM') {
+			var channel = (message.channel:TextChannel);
+			if (channel.type == 'DM' && !message.author.bot) {
 				universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
 				return;
 			}
