@@ -24,14 +24,12 @@ class Helppls extends CommandBase {
 			}
 			var author = message.author.id;
 			var state = this.state.get(author);
-			var reply = message.content;
 
 			if (state != none) {
 				var reply = message.content;
 				if (state == channel) {
-					reply = this.getChannel(reply);
+					reply = '<#${this.getChannelId(this.getChannel(reply))}>';
 				}
-
 				this.updateSessionAnswer(author, state, reply);
 			}
 			
@@ -66,7 +64,7 @@ class Helppls extends CommandBase {
 						if (key == is_there_an_error) {
 							continue;
 						}
-						
+
 						embed.addField(value.question, answer);
 					}
 
@@ -96,8 +94,7 @@ class Helppls extends CommandBase {
 
 	function updateSessionChannel(user:String, state:QuestionState, channel:String) {
 		var active_session = this.session[user];
-		active_session.get(state).channel = channel;
-
+		active_session.get(state).channel = this.getChannelId(channel);
 		this.session.set(user, active_session);
 	}
 
@@ -167,6 +164,20 @@ class Helppls extends CommandBase {
 		}
 	}
 
+	function getChannelId(channel:String) {
+		return switch (channel) {
+			case 'flixel': '165234904815239168';
+			case 'heaps': '501408700142059520';
+			case 'ceramic': '853414608747364352';
+			case 'openfl': '769686284318146561';
+			case 'lime': '769686258049351722';
+			case 'nme': '162656395110514688';
+			case 'haxe': '162395145352904705';
+			case 'other': '596744553030090880';
+			default: channel;
+		}
+	}
+	
 	function getChannel(channel:String) {
 		return switch(channel) {
 			case '1': 'flixel';

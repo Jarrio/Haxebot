@@ -10939,12 +10939,12 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 			if(state != 0) {
 				var reply = message.content;
 				if(state == 1) {
-					reply = this.getChannel(reply);
+					reply = "<#" + this.getChannelId(this.getChannel(reply)) + ">";
 				}
 				this.updateSessionAnswer(author,state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 75, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 74, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
@@ -10968,7 +10968,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 					this.questionExpectedBehaviour(message);
 					break;
 				case 5:
-					haxe_Log.trace("finished?",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 57, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("finished?",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 56, className : "systems.commands.Helppls", methodName : "update"});
 					var embed = new discord_$js_MessageEmbed();
 					var _g1 = new haxe_iterators_MapKeyValueIterator(this.session.h[author]);
 					while(_g1.hasNext()) {
@@ -10990,7 +10990,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 75, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 74, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
 			this.dm_messages.remove(entity);
@@ -11007,7 +11007,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,updateSessionChannel: function(user,state,channel) {
 		var active_session = this.session.h[user];
-		active_session.h[state].channel = channel;
+		active_session.h[state].channel = this.getChannelId(channel);
 		this.session.h[user] = active_session;
 	}
 	,updateSessionAnswer: function(user,state,answer) {
@@ -11073,6 +11073,28 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 			this.state.h[interaction.user.id] = 0;
 			interaction.user.send("sup");
 			interaction.reply(":white_check_mark:");
+		}
+	}
+	,getChannelId: function(channel) {
+		switch(channel) {
+		case "ceramic":
+			return "853414608747364352";
+		case "flixel":
+			return "165234904815239168";
+		case "haxe":
+			return "162395145352904705";
+		case "heaps":
+			return "501408700142059520";
+		case "lime":
+			return "769686258049351722";
+		case "nme":
+			return "162656395110514688";
+		case "openfl":
+			return "769686284318146561";
+		case "other":
+			return "596744553030090880";
+		default:
+			return channel;
 		}
 	}
 	,getChannel: function(channel) {
