@@ -36,6 +36,7 @@ class Main {
 	public static var connected:Bool = false;
 	public static var config:TConfig;
 	public static var universe:Universe;
+	public static var dm_help_tracking:Map<String, Float> = [];
 	public static function start() {
 		universe = new Universe(1000);
 		
@@ -57,11 +58,11 @@ class Main {
 		});
 
 		client.on('messageCreate', (message:Message) -> {
-			trace((message.channel:Dynamic).type);
 			var channel = (message.channel:TextChannel);
 			if (channel.type == 'DM' && !message.author.bot) {
-				universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
-				return;
+				if (dm_help_tracking.exists(message.author.id)) {
+					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
+				}
 			}
 
 			if (message.toString().startsWith("!run")) {
@@ -78,6 +79,12 @@ class Main {
 				content: null
 			}
 
+			switch (command.name) {
+				case 'helppls':
+					var time = Date.now().getTime();
+					dm_help_tracking.set(interaction.user.id, time);
+				default:
+			}
 			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 			for (value in config.commands) {
 				if (value.name != command.name) {

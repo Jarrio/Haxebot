@@ -577,6 +577,62 @@ Lambda.concat = function(a,b) {
 	}
 	return l;
 };
+var haxe_ds_Map = {};
+haxe_ds_Map.set = function(this1,key,value) {
+	this1.set(key,value);
+};
+haxe_ds_Map.get = function(this1,key) {
+	return this1.get(key);
+};
+haxe_ds_Map.exists = function(this1,key) {
+	return this1.exists(key);
+};
+haxe_ds_Map.remove = function(this1,key) {
+	return this1.remove(key);
+};
+haxe_ds_Map.keys = function(this1) {
+	return this1.keys();
+};
+haxe_ds_Map.iterator = function(this1) {
+	return this1.iterator();
+};
+haxe_ds_Map.keyValueIterator = function(this1) {
+	return this1.keyValueIterator();
+};
+haxe_ds_Map.copy = function(this1) {
+	return this1.copy();
+};
+haxe_ds_Map.toString = function(this1) {
+	return this1.toString();
+};
+haxe_ds_Map.clear = function(this1) {
+	this1.clear();
+};
+haxe_ds_Map.arrayWrite = function(this1,k,v) {
+	this1.set(k,v);
+	return v;
+};
+haxe_ds_Map.toStringMap = function(t) {
+	return new haxe_ds_StringMap();
+};
+haxe_ds_Map.toIntMap = function(t) {
+	return new haxe_ds_IntMap();
+};
+haxe_ds_Map.toEnumValueMapMap = function(t) {
+	return new haxe_ds_EnumValueMap();
+};
+haxe_ds_Map.toObjectMap = function(t) {
+	return new haxe_ds_ObjectMap();
+};
+haxe_ds_Map.fromStringMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromIntMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromObjectMap = function(map) {
+	return map;
+};
 var Main = function() { };
 $hxClasses["Main"] = Main;
 Main.__name__ = "Main";
@@ -600,26 +656,26 @@ Main.start = function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 55, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 56, className : "Main", methodName : "start"});
 		Main.connected = true;
 	});
 	Main.client.on("messageCreate",function(message) {
-		haxe_Log.trace(message.channel.type,{ fileName : "src/Main.hx", lineNumber : 60, className : "Main", methodName : "start"});
 		var channel = message.channel;
 		if(channel.type == "DM" && !message.author.bot) {
-			var _ecsTmpEntity = Main.universe.entities.create();
-			Main.universe.components.set_CommandForward(_ecsTmpEntity,3,"helppls");
-			Main.universe.components.set_discord_js_Message(_ecsTmpEntity,2,message);
-			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-			var ecsTmpFamily = Main.universe.families.get(1);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
+			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
+				var _ecsTmpEntity = Main.universe.entities.create();
+				Main.universe.components.set_CommandForward(_ecsTmpEntity,3,"helppls");
+				Main.universe.components.set_discord_js_Message(_ecsTmpEntity,2,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 			}
-			var ecsTmpFamily = Main.universe.families.get(2);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
-			}
-			return;
 		}
 		if(StringTools.startsWith(message.toString(),"!run")) {
 			var code = message.toString();
@@ -642,6 +698,10 @@ Main.start = function() {
 			return;
 		}
 		var command = { name : interaction.commandName, content : null};
+		if(command.name == "helppls") {
+			var time = new Date().getTime();
+			Main.dm_help_tracking.h[interaction.user.id] = time;
+		}
 		var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 		var _g = 0;
 		var _g1 = Main.config.commands;
@@ -692,9 +752,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 117, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 118, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 124, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 125, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 126, className : "Main", methodName : "start"});
 		}
 		var _ecsTmpEntity = Main.universe.entities.create();
 		Main.universe.components.set_components_Command(_ecsTmpEntity,1,command);
@@ -715,7 +775,7 @@ Main.main = function() {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 135, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 142, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -723,9 +783,9 @@ Main.main = function() {
 	var commands = Main.parseCommands();
 	var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
 	rest.put(Routes.applicationGuildCommands(Main.config.client_id,Main.config.server_id),{ body : commands}).then(function(_) {
-		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 147, className : "Main", methodName : "main"});
+		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 154, className : "Main", methodName : "main"});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 147, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 154, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -5116,62 +5176,6 @@ haxe_ds__$List_ListKeyValueIterator.prototype = {
 		return { value : val, key : this.idx++};
 	}
 	,__class__: haxe_ds__$List_ListKeyValueIterator
-};
-var haxe_ds_Map = {};
-haxe_ds_Map.set = function(this1,key,value) {
-	this1.set(key,value);
-};
-haxe_ds_Map.get = function(this1,key) {
-	return this1.get(key);
-};
-haxe_ds_Map.exists = function(this1,key) {
-	return this1.exists(key);
-};
-haxe_ds_Map.remove = function(this1,key) {
-	return this1.remove(key);
-};
-haxe_ds_Map.keys = function(this1) {
-	return this1.keys();
-};
-haxe_ds_Map.iterator = function(this1) {
-	return this1.iterator();
-};
-haxe_ds_Map.keyValueIterator = function(this1) {
-	return this1.keyValueIterator();
-};
-haxe_ds_Map.copy = function(this1) {
-	return this1.copy();
-};
-haxe_ds_Map.toString = function(this1) {
-	return this1.toString();
-};
-haxe_ds_Map.clear = function(this1) {
-	this1.clear();
-};
-haxe_ds_Map.arrayWrite = function(this1,k,v) {
-	this1.set(k,v);
-	return v;
-};
-haxe_ds_Map.toStringMap = function(t) {
-	return new haxe_ds_StringMap();
-};
-haxe_ds_Map.toIntMap = function(t) {
-	return new haxe_ds_IntMap();
-};
-haxe_ds_Map.toEnumValueMapMap = function(t) {
-	return new haxe_ds_EnumValueMap();
-};
-haxe_ds_Map.toObjectMap = function(t) {
-	return new haxe_ds_ObjectMap();
-};
-haxe_ds_Map.fromStringMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromIntMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromObjectMap = function(map) {
-	return map;
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { __keys__ : { }};
@@ -10926,6 +10930,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 		this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
 	}
 	,update: function(_) {
+		var _gthis = this;
 		var _g = this.dm_messages.iterator();
 		while(_g.active && _g.idx < _g.set.size()) {
 			var entity = _g.set.getDense(_g.idx++);
@@ -10934,24 +10939,39 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 			if(type != "helppls") {
 				continue;
 			}
-			var author = message.author.id;
-			var state = this.state.h[author];
+			var author = [message.author.id];
+			var state = this.state.h[author[0]];
 			if(state != 0) {
 				var reply = message.content;
-				if(state == 1) {
-					reply = "<#" + this.getChannelId(this.getChannel(reply)) + ">";
+				if(state != null) {
+					switch(state) {
+					case 1:
+						reply = "<#" + this.getChannelId(this.getChannel(reply)) + ">";
+						break;
+					case 3:
+						var data = this.parseVSCodeJson(reply);
+						if(data != null) {
+							reply = "```\n" + data.resource + ":" + data.startLineNumber + " - " + data.message + "\n```";
+						}
+						break;
+					default:
+					}
 				}
-				this.updateSessionAnswer(author,state,reply);
+				this.updateSessionAnswer(author[0],state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 74, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 86, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
-					this.questionChannel(message);
+					var question = this.questionChannel(message.author.id);
+					var message1 = message.author;
+					var embed = new discord_$js_MessageEmbed();
+					embed.setDescription(question);
+					message1.send({ embeds : [embed]});
 					break;
 				case 1:
-					this.updateSessionChannel(author,state,this.getChannel(message.content));
+					this.updateSessionChannel(author[0],state,this.getChannel(message.content));
 					this.questionIsThereAnError(message);
 					break;
 				case 2:
@@ -10968,9 +10988,9 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 					this.questionExpectedBehaviour(message);
 					break;
 				case 5:
-					haxe_Log.trace("finished?",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 56, className : "systems.commands.Helppls", methodName : "update"});
-					var embed = new discord_$js_MessageEmbed();
-					var _g1 = new haxe_iterators_MapKeyValueIterator(this.session.h[author]);
+					haxe_Log.trace("finished?",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 64, className : "systems.commands.Helppls", methodName : "update"});
+					var embed1 = new discord_$js_MessageEmbed();
+					var _g1 = new haxe_iterators_MapKeyValueIterator(this.session.h[author[0]]);
 					while(_g1.hasNext()) {
 						var _g2 = _g1.next();
 						var key = _g2.key;
@@ -10982,15 +11002,33 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 						if(key == 2) {
 							continue;
 						}
-						embed.addField(value.question,answer);
+						embed1.addField(value.question,answer);
 					}
-					message.author.send({ embeds : [embed]});
+					message.author.send({ embeds : [embed1]}).then((function(author) {
+						return function(_) {
+							var _this = Main.dm_help_tracking;
+							if(Object.prototype.hasOwnProperty.call(_this.h,author[0])) {
+								delete(_this.h[author[0]]);
+							}
+							var _this = _gthis.session;
+							if(Object.prototype.hasOwnProperty.call(_this.h,author[0])) {
+								delete(_this.h[author[0]]);
+							}
+							var _this = _gthis.state;
+							if(Object.prototype.hasOwnProperty.call(_this.h,author[0])) {
+								delete(_this.h[author[0]]);
+								return true;
+							} else {
+								return false;
+							}
+						};
+					})(author),null);
 					break;
 				case 6:
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 74, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 86, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
 			this.dm_messages.remove(entity);
@@ -11015,15 +11053,12 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 		active_session.h[state].answer = answer;
 		this.session.h[user] = active_session;
 	}
-	,questionChannel: function(message) {
-		this.state.h[message.author.id] = 1;
+	,questionChannel: function(user) {
+		this.state.h[user] = 1;
 		var question = "Which category best summarises your project?";
-		this.updateSessionQuestion(message.author.id,1,"Which category best summarises your project?");
+		this.updateSessionQuestion(user,1,"Which category best summarises your project?");
 		question = "Which category best summarises your project?" + "\n1 - flixel\n2 - heaps\n3 - ceramic\n4 - openfl\n5 - lime\n6 - nme\n7 - haxe\n8 - other";
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription(question);
-		message1.send({ embeds : [embed]});
+		return question;
 	}
 	,questionIsThereAnError: function(message) {
 		this.state.h[message.author.id] = 2;
@@ -11037,18 +11072,29 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,questionWhatError: function(message) {
 		this.state.h[message.author.id] = 3;
-		this.updateSessionQuestion(message.author.id,3,"Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy Message)");
+		this.updateSessionQuestion(message.author.id,3,"Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)");
 		var message1 = message.author;
 		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy Message)");
+		embed.setDescription("Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)");
 		message1.send({ embeds : [embed]});
 	}
 	,questionPasteSomeCode: function(message) {
+		var json = this.parseErrorMessage(this.session.h[message.author.id].h[3].answer);
+		var from = 0;
+		var to = 0;
+		var question = "";
+		if(json != null) {
+			from = json.line - 5;
+			to = json.line + 5;
+			question = "Paste lines **__" + from + "__**-**__" + to + "__** from file **" + json.file + "**";
+		} else {
+			question = "Paste code lines from relevant file";
+		}
 		this.state.h[message.author.id] = 4;
-		this.updateSessionQuestion(message.author.id,4,"Paste code lines (x-x)");
+		this.updateSessionQuestion(message.author.id,4,question);
 		var message1 = message.author;
 		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("Paste code lines (x-x)");
+		embed.setDescription(question);
 		message1.send({ embeds : [embed]});
 	}
 	,questionExpectedBehaviour: function(message) {
@@ -11061,17 +11107,40 @@ systems_commands_Helppls.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,questionWhatsHappening: function(message) {
 		this.state.h[message.author.id] = 5;
-		this.updateSessionQuestion(message.author.id,5,"Describe what is *actually* happening");
+		this.updateSessionQuestion(message.author.id,5,"Briefly describe what is happening");
 		var message1 = message.author;
 		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("Describe what is *actually* happening");
+		embed.setDescription("Briefly describe what is happening");
 		message1.send({ embeds : [embed]});
+	}
+	,parseErrorMessage: function(input) {
+		var regex = new EReg("```\n(.*):([0-9]+) - (.*)\n```","gmi");
+		if(regex.match(input)) {
+			return { file : regex.matched(1), line : Std.parseInt(regex.matched(2)), message : regex.matched(3)};
+		}
+		return null;
+	}
+	,parseVSCodeJson: function(input) {
+		try {
+			var obj = JSON.parse(input);
+			var split = obj[0].resource.split("/");
+			if(split.length >= 2) {
+				obj[0].resource = split[split.length - 2] + "/" + split[split.length - 1];
+			}
+			return obj[0];
+		} catch( _g ) {
+			return null;
+		}
 	}
 	,run: function(command,interaction) {
 		if(command.content._hx_index == 1) {
 			this.session.h[interaction.user.id] = new haxe_ds_IntMap();
 			this.state.h[interaction.user.id] = 0;
-			interaction.user.send("sup");
+			var interaction1 = interaction.user;
+			var content = this.questionChannel(interaction.user.id);
+			var embed = new discord_$js_MessageEmbed();
+			embed.setDescription(content);
+			interaction1.send({ embeds : [embed]});
 			interaction.reply(":white_check_mark:");
 		}
 	}
@@ -11796,6 +11865,7 @@ DateTools.MONTH_NAMES = ["January","February","March","April","May","June","July
 DateTools.DAYS_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
 EReg.escapeRe = new RegExp("[.*+?^${}()|[\\]\\\\]","g");
 Main.connected = false;
+Main.dm_help_tracking = new haxe_ds_StringMap();
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;

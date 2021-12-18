@@ -1,5 +1,6 @@
 package systems.commands;
 
+import haxe.Json;
 import discord_js.MessageEmbed;
 import Main.CommandForward;
 import discord_js.Message;
@@ -27,15 +28,23 @@ class Helppls extends CommandBase {
 
 			if (state != none) {
 				var reply = message.content;
-				if (state == channel) {
-					reply = '<#${this.getChannelId(this.getChannel(reply))}>';
+				switch (state) {
+					case channel:
+						reply = '<#${this.getChannelId(this.getChannel(reply))}>';
+					case what_error_message:
+						var data = this.parseVSCodeJson(reply);
+						if (data != null) {
+							reply = '```\n${data.resource}:${data.startLineNumber} - ${data.message}\n```';
+						}
+					default:
 				}
 				this.updateSessionAnswer(author, state, reply);
 			}
 			
 			switch (state) {
 				case none: 
-					this.questionChannel(message);
+					var question = this.questionChannel(message.author.id);
+					message.author.send({embeds: [this.createEmbed(question)]});
 				case channel:
 					this.updateSessionChannel(author, state, this.getChannel(message.content));
 					this.questionIsThereAnError(message);
@@ -68,7 +77,11 @@ class Helppls extends CommandBase {
 						embed.addField(value.question, answer);
 					}
 
-					message.author.send({embeds: [embed]});
+					message.author.send({embeds: [embed]}).then((_) -> {
+						Main.dm_help_tracking.remove(author);
+						this.session.remove(author);
+						this.state.remove(author);
+					}, null);
 				default:
 					trace('something else $state');
 			}
@@ -105,13 +118,13 @@ class Helppls extends CommandBase {
 		this.session.set(user, active_session);
 	}
 
-	function questionChannel(message:Message) {
-		this.state.set(message.author.id, channel);
+	function questionChannel(user:String) {
+		this.state.set(user, channel);
 		var question = 'Which category best summarises your project?';
-		this.updateSessionQuestion(message.author.id, channel, question);
+		this.updateSessionQuestion(user, channel, question);
 
 		question += '\n1 - flixel\n2 - heaps\n3 - ceramic\n4 - openfl\n5 - lime\n6 - nme\n7 - haxe\n8 - other';
-		message.author.send({embeds: [this.createEmbed(question)]});
+		return question;
 	}
 
 	function questionIsThereAnError(message:Message) {
@@ -125,14 +138,26 @@ class Helppls extends CommandBase {
 
 	function questionWhatError(message:Message) {
 		this.state.set(message.author.id, what_error_message);
-		var question = 'Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy Message)';
+		var question = 'Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)';
 		this.updateSessionQuestion(message.author.id, what_error_message, question);
 		message.author.send({embeds: [this.createEmbed(question)]});
 	}
 
 	function questionPasteSomeCode(message:Message) {
+		var json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+		var from = 0;
+		var to = 0;
+		var question = '';
+		if (json != null) {
+			from = json.line - 5;
+			to = json.line + 5;
+			question = 'Paste lines **__${from}__**-**__${to}__** from file **${json.file}**';
+		} else {
+			question = 'Paste code lines from relevant file';
+		}
+
 		this.state.set(message.author.id, paste_some_code);
-		var question = 'Paste code lines (x-x)';
+		
 		this.updateSessionQuestion(message.author.id, paste_some_code, question);
 		message.author.send({embeds: [this.createEmbed(question)]});
 	}
@@ -146,10 +171,36 @@ class Helppls extends CommandBase {
 
 	function questionWhatsHappening(message:Message) {
 		this.state.set(message.author.id, whats_happening);
-		var question = 'Describe what is *actually* happening';
+		var question = 'Briefly describe what is happening';
 		this.updateSessionQuestion(message.author.id, whats_happening, question);
 
 		message.author.send({embeds: [this.createEmbed(question)]});
+	}
+
+	function parseErrorMessage(input:String) {
+		var regex = ~/```\n(.*):([0-9]+) - (.*)\n```/gmi;
+		if (regex.match(input)) {
+			return {
+				file: regex.matched(1),
+				line: regex.matched(2).parseInt(),
+				message: regex.matched(3)
+			}
+		}
+
+		return null;
+	}
+
+	function parseVSCodeJson(input:String) {
+		try {
+			var obj = (Json.parse(input):Array<VSCodeErrorMessage>);
+			var split = obj[0].resource.split('/');
+			if (split.length >= 2) {
+				obj[0].resource = split[split.length - 2] + '/' + split[split.length - 1];
+			}
+			return obj[0];
+		} catch (e) {
+			return null;
+		}
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -157,7 +208,7 @@ class Helppls extends CommandBase {
 			case Helppls:
 				this.session.set(interaction.user.id, []);
 				this.state.set(interaction.user.id, none);
-				interaction.user.send('sup');
+				interaction.user.send({embeds: [this.createEmbed(this.questionChannel(interaction.user.id))]});
 				
 				interaction.reply(':white_check_mark:');
 			default:
@@ -202,6 +253,19 @@ class Helppls extends CommandBase {
 	function get_name():String {
 		return 'helppls';
 	}
+}
+
+typedef VSCodeErrorMessage = {
+	var resource:String;
+	var owner:String;
+	var code:String;
+	var severity:Int;
+	var message:String;
+	var source:String;
+	var startLineNumber:Int;
+	var startColumn:Int;
+	var endLineNumber:Int;
+	var endColumn:Int;
 }
 
 typedef FileQuestions = {
