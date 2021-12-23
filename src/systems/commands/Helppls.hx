@@ -66,8 +66,24 @@ class Helppls extends CommandBase {
 
 					for (key => value in this.session.get(author)) {
 						var answer = value.answer;
-						if (key == paste_some_code) {
-							answer = '```hx\n' + answer + '\n```';
+
+						switch (key) {
+							case paste_some_code:
+								var json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+								if (json != null) {
+									var from = json.line - 5;
+									var to = json.line + 5;
+									var split = answer.split('\n');
+									var code = '';
+									for (key => line in split) {
+										code += '${key + from}   ${line.trim()} \n';
+									}
+
+									answer = '```hx\n' + code + '\n```';
+								}
+							case is_there_an_error:
+								continue;
+							default:
 						}
 
 						if (key == is_there_an_error) {
@@ -76,12 +92,23 @@ class Helppls extends CommandBase {
 
 						embed.addField(value.question, answer);
 					}
+					
+					message.client.channels.fetch(this.getChannelId('other')).then(function(channel){
+						channel.send({embeds: [embed]}).then(function(channel_message) {
+							channel_message.startThread({name: 'topic'}).then(function(thread) {
+								message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
+								channel.send("**Please reply to the above issue within the thread.**");
+							});
+						});
+					}, (err) -> trace(err));
 
-					message.author.send({embeds: [embed]}).then((_) -> {
-						Main.dm_help_tracking.remove(author);
-						this.session.remove(author);
-						this.state.remove(author);
-					}, null);
+					// message.author.send({embeds: [embed]}).then((message) -> {
+					// 	Main.dm_help_tracking.remove(author);
+					// 	this.session.remove(author);
+					// 	this.state.remove(author);
+					// }, null);
+
+				
 				default:
 					trace('something else $state');
 			}
@@ -224,7 +251,8 @@ class Helppls extends CommandBase {
 			case 'lime': '769686258049351722';
 			case 'nme': '162656395110514688';
 			case 'haxe': '162395145352904705';
-			case 'other': '596744553030090880';
+			//case 'other': '596744553030090880';
+			case 'other': '597067735771381771';
 			default: channel;
 		}
 	}

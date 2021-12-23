@@ -1,12 +1,12 @@
 package discord_js;
 
-@:jsRequire("discord.js", "TextChannel") extern class TextChannel {
+@:jsRequire("discord.js", "TextChannel") extern class TextChannel extends Channel {
 	function new(guild:Guild, ?data:Dynamic);
 	public var messages : MessageManager;
 	public var nsfw : Bool;
-	public var type : String;
 	public var rateLimitPerUser : Float;
 	public var topic : Null<String>;
+	public var threads : ThreadManager;
 	public function createWebhook(name:String, ?options:{ @:optional var avatar : Dynamic; @:optional var reason : String; }):js.lib.Promise<Webhook>;
 	public function setNSFW(nsfw:Bool, ?reason:String):js.lib.Promise<TextChannel>;
 	public function setRateLimitPerUser(rateLimitPerUser:Float, ?reason:String):js.lib.Promise<TextChannel>;
@@ -3275,17 +3275,11 @@ package discord_js;
 	public function setTopic(topic:Null<String>, ?reason:String):js.lib.Promise<TextChannel>;
 	public function updateOverwrite(userOrRole:ts.AnyOf5<String, User, GuildMember, Message, Role>, options:PermissionOverwriteOption, ?reason:String):js.lib.Promise<TextChannel>;
 	public function isText():Bool;
-	public final createdAt : js.lib.Date;
-	public final createdTimestamp : Float;
-	public var deleted : Bool;
-	public var id : String;
-	public function delete(?reason:String):js.lib.Promise<Channel>;
 	public function fetch(?force:Bool):js.lib.Promise<Channel>;
 	/**
 		Returns a string representation of an object.
 	**/
 	dynamic function toString():String;
-	public final client : Client;
 	public function toJSON(props:haxe.extern.Rest<{ }>):Dynamic;
 	/**
 		Returns the primitive value of the specified object.
