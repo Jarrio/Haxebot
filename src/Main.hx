@@ -37,9 +37,10 @@ class Main {
 	public static var config:TConfig;
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
+
 	public static function start() {
 		universe = new Universe(1000);
-		
+
 		universe.setSystems(Hi);
 		universe.setSystems(Help);
 		universe.setSystems(Helppls);
@@ -51,14 +52,14 @@ class Main {
 		universe.setSystems(Run);
 
 		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
-		
+
 		client.once('ready', (_) -> {
 			trace('Ready!');
 			connected = true;
 		});
 
 		client.on('messageCreate', (message:Message) -> {
-			var channel = (message.channel:TextChannel);
+			var channel = (message.channel : TextChannel);
 			if (channel.type == 'DM' && !message.author.bot) {
 				if (dm_help_tracking.exists(message.author.id)) {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
@@ -72,8 +73,9 @@ class Main {
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
-			if (!interaction.isCommand()) return;
-			
+			if (!interaction.isCommand())
+				return;
+
 			var command:Command = {
 				name: interaction.commandName,
 				content: null
@@ -97,19 +99,19 @@ class Main {
 					var params = new Array<Dynamic>();
 					for (param in value.params) {
 						switch (param.type) {
-							case user: 
+							case user:
 								params.push(interaction.options.getUser(param.name));
-							case bool: 
+							case bool:
 								params.push(interaction.options.getBoolean(param.name));
-							case mention: 
+							case mention:
 								params.push(interaction.options.getMentionable(param.name));
-							case channel: 
+							case channel:
 								params.push(interaction.options.getChannel(param.name));
-							case role: 
+							case role:
 								params.push(interaction.options.getRole(param.name));
-							case string: 
+							case string:
 								params.push(interaction.options.getString(param.name));
-							case number: 
+							case number:
 								params.push(interaction.options.getNumber(param.name));
 							default:
 								throw 'Something went wrong.';
@@ -143,14 +145,14 @@ class Main {
 		}
 
 		if (config == null || config.discord_token == 'TOKEN_HERE') {
-			throw ('Enter your discord auth token.');
+			throw('Enter your discord auth token.');
 		}
 
 		var commands = parseCommands();
-		
-		var rest = new REST({ version: '9' }).setToken(config.discord_token);
-		
-		rest.put(Routes.applicationGuildCommands(config.client_id, config.server_id), { body: commands })
+
+		var rest = new REST({version: '9'}).setToken(config.discord_token);
+
+		rest.put(Routes.applicationGuildCommands(config.client_id, config.server_id), {body: commands})
 			.then((_) -> trace('Successfully registered application commands.'), (err) -> trace(err));
 
 		start();
@@ -166,37 +168,36 @@ class Main {
 		for (command in command_defs) {
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description);
 			if (command.params != null) {
-				
 				for (param in command.params) {
 					switch (param.type) {
 						case user:
-							main_command.addUserOption(
-								new SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case string:
-							main_command.addStringOption(
-								new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addStringOption(new SlashCommandStringOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case bool:
-							main_command.addBooleanOption(
-								new SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case channel:
-							main_command.addChannelOption(
-								new SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case role:
-							main_command.addRoleOption(
-								new SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case mention:
-							main_command.addMentionableOption(
-								new SlashCommandMentionableOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case number:
-							main_command.addNumberOption(
-								new SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						default:
 					}
 				}
@@ -207,6 +208,7 @@ class Main {
 	}
 
 	public static var name(get, never):String;
+
 	private static function get_name() {
 		if (config == null || config.project_name == null) {
 			return 'bot';

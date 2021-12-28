@@ -15,5 +15,8 @@
   },
   "author": "jarrio",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "dts2hx": "^0.18.1"
+  }
 }
