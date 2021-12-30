@@ -40,7 +40,7 @@
     "typeParamClosePolicy": "none",
 		"functionTypeHaxe4Policy": "around",
 		"arrowFunctionsPolicy": "around",
-		"colonPolicy": "",
+		"colonPolicy": "none",
 		"caseColonPolicy": "onlyAfter"
 	},
   "wrapping": {

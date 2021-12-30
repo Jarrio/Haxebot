@@ -1,11 +1,15 @@
 package systems.commands;
 
+import firebase.firestore.Query;
+import firebase.firestore.Firestore;
+import firebase.app.FirebaseApp;
 import haxe.Json;
 import discord_js.MessageEmbed;
 import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
+import firebase.firestore.Firestore.*;
 
 class Helppls extends CommandBase {
 	var state:Map<String, QuestionState> = [];
@@ -16,7 +20,19 @@ class Helppls extends CommandBase {
 		super(universe);
 	}
 
-	override function onAdded() {}
+	override function onAdded() {
+		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), (err) -> trace(err));
+		var db = Firestore.getFirestore(FirebaseApp.getApp());
+		
+		var q:Query<{name:String}> = query(collection(db, 'test'), orderBy('name', DESCENDING));
+		updateDoc(doc(db, 'test', 'mcXuD85vFTBOG0vAZi3I'), {name: 'test doc'}).then((_) -> trace('added'), (err) -> trace(err));
+
+		Firestore.getDocs(q).then((docs) -> {
+			docs.forEach((doc) -> {
+				trace(doc.data().name);
+			});
+		}, (err) -> trace(err));
+	}
 
 	override function update(_) {
 		iterate(dm_messages, entity -> {
@@ -40,9 +56,9 @@ class Helppls extends CommandBase {
 				}
 				this.updateSessionAnswer(author, state, reply);
 			}
-			
+
 			switch (state) {
-				case none: 
+				case none:
 					var question = this.questionChannel(message.author.id);
 					message.author.send({embeds: [this.createEmbed(question)]});
 				case channel:
@@ -92,8 +108,8 @@ class Helppls extends CommandBase {
 
 						embed.addField(value.question, answer);
 					}
-					
-					message.client.channels.fetch(this.getChannelId('other')).then(function(channel){
+
+					message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
 						channel.send({embeds: [embed]}).then(function(channel_message) {
 							channel_message.startThread({name: 'topic'}).then(function(thread) {
 								message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
@@ -102,13 +118,12 @@ class Helppls extends CommandBase {
 						});
 					}, (err) -> trace(err));
 
-					// message.author.send({embeds: [embed]}).then((message) -> {
-					// 	Main.dm_help_tracking.remove(author);
-					// 	this.session.remove(author);
-					// 	this.state.remove(author);
-					// }, null);
+				// message.author.send({embeds: [embed]}).then((message) -> {
+				// 	Main.dm_help_tracking.remove(author);
+				// 	this.session.remove(author);
+				// 	this.state.remove(author);
+				// }, null);
 
-				
 				default:
 					trace('something else $state');
 			}
@@ -184,7 +199,7 @@ class Helppls extends CommandBase {
 		}
 
 		this.state.set(message.author.id, paste_some_code);
-		
+
 		this.updateSessionQuestion(message.author.id, paste_some_code, question);
 		message.author.send({embeds: [this.createEmbed(question)]});
 	}
@@ -219,7 +234,7 @@ class Helppls extends CommandBase {
 
 	function parseVSCodeJson(input:String) {
 		try {
-			var obj = (Json.parse(input):Array<VSCodeErrorMessage>);
+			var obj = (Json.parse(input) : Array<VSCodeErrorMessage>);
 			var split = obj[0].resource.split('/');
 			if (split.length >= 2) {
 				obj[0].resource = split[split.length - 2] + '/' + split[split.length - 1];
@@ -236,7 +251,7 @@ class Helppls extends CommandBase {
 				this.session.set(interaction.user.id, []);
 				this.state.set(interaction.user.id, none);
 				interaction.user.send({embeds: [this.createEmbed(this.questionChannel(interaction.user.id))]});
-				
+
 				interaction.reply(':white_check_mark:');
 			default:
 		}
@@ -251,14 +266,14 @@ class Helppls extends CommandBase {
 			case 'lime': '769686258049351722';
 			case 'nme': '162656395110514688';
 			case 'haxe': '162395145352904705';
-			//case 'other': '596744553030090880';
+			// case 'other': '596744553030090880';
 			case 'other': '597067735771381771';
 			default: channel;
 		}
 	}
-	
+
 	function getChannel(channel:String) {
-		return switch(channel) {
+		return switch (channel) {
 			case '1': 'flixel';
 			case '2': 'heaps';
 			case '3': 'ceramic';
@@ -273,7 +288,7 @@ class Helppls extends CommandBase {
 
 	inline function createEmbed(content:String) {
 		var embed = new MessageEmbed();
-	
+
 		embed.setDescription(content);
 		return embed;
 	}

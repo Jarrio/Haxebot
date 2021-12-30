@@ -30,8 +30,10 @@ import systems.commands.Notify;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
+import firebase.app.FirebaseApp;
 
 class Main {
+	public static var app:FirebaseApp;
 	public static var client:Client;
 	public static var connected:Bool = false;
 	public static var config:TConfig;
@@ -39,6 +41,12 @@ class Main {
 	public static var dm_help_tracking:Map<String, Float> = [];
 
 	public static function start() {
+		// var app = getApp();
+
+		// trace(app);
+		// trace(app.name);
+		// trace(app.options);
+
 		universe = new Universe(1000);
 
 		universe.setSystems(Hi);
@@ -138,6 +146,17 @@ class Main {
 	}
 
 	static function main() {
+		Main.app = FirebaseApp.initializeApp({
+			apiKey: "AIzaSyBKGASqr3dgNygiv3WnHzQKYv_iYTwK4Kk",
+			databaseURL: 'https://console.firebase.google.com/u/0/project/haxe-forum/firestore/data/~2F',
+			authDomain: "haxe-forum.firebaseapp.com",
+			projectId: "haxe-forum",
+			storageBucket: "haxe-forum.appspot.com",
+			messagingSenderId: "72566195073",
+			appId: "1:72566195073:web:8d39d1f8d29227d2a79e80",
+			measurementId: "G-VB7FNBVMZF"
+		});
+
 		try {
 			config = Json.parse(File.getContent('./config.json'));
 		} catch (e) {
