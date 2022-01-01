@@ -11,6 +11,7 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Helppls;
+	Index(topic:String, source_url:String, title:String, description:String);
 	Roundup(number:Float);
 	Rtfm(channel:String);
 	Api(channel:String);
