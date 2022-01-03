@@ -1,3 +1,4 @@
+import haxe.extern.EitherType;
 import buddy.internal.sys.Js;
 import discord_js.User;
 import discord_builder.SlashCommandMentionableOption;
@@ -30,6 +31,7 @@ import systems.commands.Notify;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
+import systems.commands.Index;
 import firebase.app.FirebaseApp;
 
 class Main {
@@ -58,6 +60,7 @@ class Main {
 		universe.setSystems(Roundup);
 		universe.setSystems(Api);
 		universe.setSystems(Run);
+		universe.setSystems(Index);
 
 		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
 
@@ -78,6 +81,10 @@ class Main {
 				var code:RunMessage = message.toString();
 				universe.setComponents(universe.createEntity(), code, message);
 			}
+		});
+		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
+			trace('disconnected');
+			trace(incoming);
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
@@ -146,8 +153,6 @@ class Main {
 	}
 
 	static function main() {
-		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
-
 		try {
 			config = Json.parse(File.getContent('./config.json'));
 		} catch (e) {
@@ -158,6 +163,7 @@ class Main {
 			throw('Enter your discord auth token.');
 		}
 
+		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
 		var commands = parseCommands();
 
 		var rest = new REST({version: '9'}).setToken(config.discord_token);
@@ -185,9 +191,13 @@ class Main {
 								.setDescription(param.description)
 								.setRequired(param.required));
 						case string:
-							main_command.addStringOption(new SlashCommandStringOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
+							var cmd = new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required);
+							if (param.choices != null) {
+								for (option in param.choices) {
+									cmd.addChoice(option.name, option.value);
+								}
+							}
+							main_command.addStringOption(cmd);
 						case bool:
 							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
 								.setDescription(param.description)
@@ -249,6 +259,7 @@ typedef TCommands = {
 	var description:String;
 	@:optional var params:Array<TCommands>;
 	@:optional var required:Bool;
+	@:optional var choices:Array<{name:String, value:EitherType<Int, String>}>;
 }
 
 enum abstract CommandType(String) {

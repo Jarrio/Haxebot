@@ -22,7 +22,7 @@ extern class BaseCommandInteraction extends Interaction {
 	var replied:Bool;
 	var type:InteractionType;
 	var options:CommandInteractions;
-	
+	function isAutocomplete():Bool;
 	function deferReply(options:InteractionDeferReplyOptions):Promise<Message>;
 	function deleteReply():Promise<Void>;
 	@:overload(function(options:String):Promise<Message> {})

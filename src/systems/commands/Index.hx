@@ -35,8 +35,11 @@ class Index extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Helppls:
-				
+			case Index(topic, source_url, title, description):
+				trace('topic: $topic');
+				trace('source_url: $source_url');
+				trace('title: $title');
+				trace('description: $description');
 			default:
 		}
 	}
