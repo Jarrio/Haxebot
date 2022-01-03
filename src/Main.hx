@@ -141,6 +141,7 @@ class Main {
 				trace(interaction);
 				trace(enum_id);
 				trace('Unmatched command. (${command.name})');
+				return;
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
