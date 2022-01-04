@@ -1,9 +1,8 @@
 package systems.commands;
 
-import firebase.firestore.Query;
+import firebase.firestore.DocumentReference;
+import firebase.firestore.CollectionReference;
 import firebase.firestore.Firestore;
-import firebase.app.FirebaseApp;
-import haxe.Json;
 import discord_js.MessageEmbed;
 import Main.CommandForward;
 import discord_js.Message;
@@ -11,26 +10,24 @@ import components.Command;
 import discord_builder.BaseCommandInteraction;
 import firebase.firestore.Firestore.*;
 
-class Index extends CommandBase {
+typedef TProjectIndex = {
+	var topic:String;
+	var source_url:String;
+	var title:String;
+	var description:String;
+	var created_at:Date;
+	var validated:Bool;	
+	var validated_by:String;
+}
 
+class Index extends CommandDbBase {
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
 
 	public function new(universe) {
 		super(universe);
-	}
+		Firestore.onSnapshot(collection(this.db, 'index'), function(snapshot:DocumentReference<TProjectIndex>) {
 
-	override function onAdded() {
-		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), (err) -> trace(err));
-		var db = Firestore.getFirestore(FirebaseApp.getApp());
-		
-		var q:Query<{name:String}> = query(collection(db, 'test'), orderBy('name', DESCENDING));
-		updateDoc(doc(db, 'test', 'mcXuD85vFTBOG0vAZi3I'), {name: 'test doc'}).then((_) -> trace('added'), (err) -> trace(err));
-
-		Firestore.getDocs(q).then((docs) -> {
-			docs.forEach((doc) -> {
-				trace(doc.data().name);
-			});
-		}, (err) -> trace(err));
+		}, (error) -> trace(error));
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -40,6 +37,16 @@ class Index extends CommandBase {
 				trace('source_url: $source_url');
 				trace('title: $title');
 				trace('description: $description');
+				Firestore.addDoc(collection(db, 'index'), {
+					topic: topic,
+					source_url: source_url,
+					title: title,
+					description: description,
+					created_at: Date.now(),
+					added_by: interaction.user.id,
+					validated: false,
+					validated_by: ""
+				}).then((_) -> trace('added'), (err) -> trace(err));
 			default:
 		}
 	}
