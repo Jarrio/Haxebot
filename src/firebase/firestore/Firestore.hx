@@ -208,11 +208,11 @@ extern class Firestore {
 	 * Attaches a listener for QuerySnapshot events. You may either pass individual onNext and onError callbacks or pass a single observer object with next and error callbacks. The listener can be cancelled by calling the function that is returned when onSnapshot is called.
 	 * NOTE: Although an onCompletion callback can be provided, it will never be called because the snapshot stream is never-ending.
 	 */
-	@:overload(function<T>(reference:DocumentReference<T>, options:SnapshotListenOptions, callback:TObserver<T>):Unsubscribe {})
+	@:overload(function<T>(reference:DocumentReference<T>, options:SnapshotListenOptions, callback:TObserver<DocumentSnapshot<T>>):Unsubscribe {})
 	@:overload(function<T>(reference:DocumentReference<T>, on_next:(snapshot:DocumentSnapshot<T>)->Void, ?on_error:(error:FirestoreError)->Void, ?on_complete:()->Void):Unsubscribe {})
-	@:overload(function<T>(query:Query<T>, on_next:(snapshot:DocumentSnapshot<T>)->Void, ?on_error:(error:FirestoreError)->Void, ?on_complete:()->Void):Unsubscribe {})
-	@:overload(function<T>(query:Query<T>, callback:TObserver<T>):Unsubscribe {})
-	public static function onSnapshot<T>(reference:DocumentReference<T>, callback:TObserver<T>):Unsubscribe;
+	@:overload(function<T>(query:Query<T>, on_next:(snapshot:QuerySnapshot<T>)->Void, ?on_error:(error:FirestoreError)->Void, ?on_complete:()->Void):Unsubscribe {})
+	@:overload(function<T>(query:Query<T>, callback:TObserver<QuerySnapshot<T>>):Unsubscribe {})
+	public static function onSnapshot<T>(reference:DocumentReference<T>, callback:TObserver<DocumentSnapshot<T>>):Unsubscribe;
 	/**
 	 * Attaches a listener for a snapshots-in-sync event. The snapshots-in-sync event indicates that all listeners affected by a given change have fired, even if a single server-generated change affects multiple listeners.
 	 * NOTE: The snapshots-in-sync event only indicates that listeners are in sync with each other, but does not relate to whether those snapshots are in sync with the server. Use SnapshotMetadata in the individual listeners to determine if a snapshot is from the cache or the server.
@@ -386,7 +386,7 @@ typedef FirestoreSettings = {
 }
 
 typedef TObserver<T> = {
-	@:optional var next:(snapshot:DocumentSnapshot<T>)->Void;
+	@:optional var next:(snapshot:T)->Void;
 	@:optional var error:(error:FirestoreError)->Void;
 	@:optional var complete:()->Void;
 }

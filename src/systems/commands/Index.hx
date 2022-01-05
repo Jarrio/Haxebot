@@ -25,7 +25,13 @@ class Index extends CommandDbBase {
 
 	public function new(universe) {
 		super(universe);
-		Firestore.onSnapshot(collection(this.db, 'index'), function(snapshot:DocumentReference<TProjectIndex>) {
+		var query = Firestore.query(collection(db, 'index'));
+
+		Firestore.onSnapshot(query, function(snapshot) {
+			snapshot.forEach((result) -> {
+				trace(result.data());
+			});
+			
 
 		}, (error) -> trace(error));
 	}
@@ -37,6 +43,7 @@ class Index extends CommandDbBase {
 				trace('source_url: $source_url');
 				trace('title: $title');
 				trace('description: $description');
+				
 				Firestore.addDoc(collection(db, 'index'), {
 					topic: topic,
 					source_url: source_url,

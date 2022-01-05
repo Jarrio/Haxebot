@@ -578,81 +578,61 @@ Lambda.concat = function(a,b) {
 	}
 	return l;
 };
-var haxe_IMap = function() { };
-$hxClasses["haxe.IMap"] = haxe_IMap;
-haxe_IMap.__name__ = "haxe.IMap";
-haxe_IMap.__isInterface__ = true;
-haxe_IMap.prototype = {
-	get: null
-	,set: null
-	,exists: null
-	,remove: null
-	,keys: null
-	,iterator: null
-	,keyValueIterator: null
-	,copy: null
-	,toString: null
-	,clear: null
-	,__class__: haxe_IMap
+var haxe_ds_Map = {};
+haxe_ds_Map.set = function(this1,key,value) {
+	this1.set(key,value);
 };
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
+haxe_ds_Map.get = function(this1,key) {
+	return this1.get(key);
 };
-$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
-haxe_ds_StringMap.createCopy = function(h) {
-	var copy = new haxe_ds_StringMap();
-	for (var key in h) copy.h[key] = h[key];
-	return copy;
+haxe_ds_Map.exists = function(this1,key) {
+	return this1.exists(key);
 };
-haxe_ds_StringMap.stringify = function(h) {
-	var s = "{";
-	var first = true;
-	for (var key in h) {
-		if (first) first = false; else s += ',';
-		s += key + ' => ' + Std.string(h[key]);
-	}
-	return s + "}";
+haxe_ds_Map.remove = function(this1,key) {
+	return this1.remove(key);
 };
-haxe_ds_StringMap.prototype = {
-	h: null
-	,exists: function(key) {
-		return Object.prototype.hasOwnProperty.call(this.h,key);
-	}
-	,get: function(key) {
-		return this.h[key];
-	}
-	,set: function(key,value) {
-		this.h[key] = value;
-	}
-	,remove: function(key) {
-		if(Object.prototype.hasOwnProperty.call(this.h,key)) {
-			delete(this.h[key]);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	,keys: function() {
-		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
-	}
-	,iterator: function() {
-		return new haxe_ds__$StringMap_StringMapValueIterator(this.h);
-	}
-	,keyValueIterator: function() {
-		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
-	}
-	,copy: function() {
-		return haxe_ds_StringMap.createCopy(this.h);
-	}
-	,clear: function() {
-		this.h = Object.create(null);
-	}
-	,toString: function() {
-		return haxe_ds_StringMap.stringify(this.h);
-	}
-	,__class__: haxe_ds_StringMap
+haxe_ds_Map.keys = function(this1) {
+	return this1.keys();
+};
+haxe_ds_Map.iterator = function(this1) {
+	return this1.iterator();
+};
+haxe_ds_Map.keyValueIterator = function(this1) {
+	return this1.keyValueIterator();
+};
+haxe_ds_Map.copy = function(this1) {
+	return this1.copy();
+};
+haxe_ds_Map.toString = function(this1) {
+	return this1.toString();
+};
+haxe_ds_Map.clear = function(this1) {
+	this1.clear();
+};
+haxe_ds_Map.arrayWrite = function(this1,k,v) {
+	this1.set(k,v);
+	return v;
+};
+haxe_ds_Map.toStringMap = function(t) {
+	return new haxe_ds_StringMap();
+};
+haxe_ds_Map.toIntMap = function(t) {
+	return new haxe_ds_IntMap();
+};
+haxe_ds_Map.toEnumValueMapMap = function(t) {
+	return new haxe_ds_EnumValueMap();
+};
+haxe_ds_Map.toObjectMap = function(t) {
+	return new haxe_ds_ObjectMap();
+};
+haxe_ds_Map.fromStringMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromIntMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromObjectMap = function(map) {
+	return map;
 };
 var Main = function() { };
 $hxClasses["Main"] = Main;
@@ -2775,6 +2755,82 @@ ecs_ds_SparseSet.prototype = {
 		return this.number;
 	}
 	,__class__: ecs_ds_SparseSet
+};
+var haxe_IMap = function() { };
+$hxClasses["haxe.IMap"] = haxe_IMap;
+haxe_IMap.__name__ = "haxe.IMap";
+haxe_IMap.__isInterface__ = true;
+haxe_IMap.prototype = {
+	get: null
+	,set: null
+	,exists: null
+	,remove: null
+	,keys: null
+	,iterator: null
+	,keyValueIterator: null
+	,copy: null
+	,toString: null
+	,clear: null
+	,__class__: haxe_IMap
+};
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.createCopy = function(h) {
+	var copy = new haxe_ds_StringMap();
+	for (var key in h) copy.h[key] = h[key];
+	return copy;
+};
+haxe_ds_StringMap.stringify = function(h) {
+	var s = "{";
+	var first = true;
+	for (var key in h) {
+		if (first) first = false; else s += ',';
+		s += key + ' => ' + Std.string(h[key]);
+	}
+	return s + "}";
+};
+haxe_ds_StringMap.prototype = {
+	h: null
+	,exists: function(key) {
+		return Object.prototype.hasOwnProperty.call(this.h,key);
+	}
+	,get: function(key) {
+		return this.h[key];
+	}
+	,set: function(key,value) {
+		this.h[key] = value;
+	}
+	,remove: function(key) {
+		if(Object.prototype.hasOwnProperty.call(this.h,key)) {
+			delete(this.h[key]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	,keys: function() {
+		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
+	}
+	,iterator: function() {
+		return new haxe_ds__$StringMap_StringMapValueIterator(this.h);
+	}
+	,keyValueIterator: function() {
+		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
+	}
+	,copy: function() {
+		return haxe_ds_StringMap.createCopy(this.h);
+	}
+	,clear: function() {
+		this.h = Object.create(null);
+	}
+	,toString: function() {
+		return haxe_ds_StringMap.stringify(this.h);
+	}
+	,__class__: haxe_ds_StringMap
 };
 function ecs_macros_ComponentCache_getComponentCount() {
 	return ecs_macros_ComponentCache_componentIncrementer;
@@ -5147,62 +5203,6 @@ haxe_ds__$List_ListKeyValueIterator.prototype = {
 		return { value : val, key : this.idx++};
 	}
 	,__class__: haxe_ds__$List_ListKeyValueIterator
-};
-var haxe_ds_Map = {};
-haxe_ds_Map.set = function(this1,key,value) {
-	this1.set(key,value);
-};
-haxe_ds_Map.get = function(this1,key) {
-	return this1.get(key);
-};
-haxe_ds_Map.exists = function(this1,key) {
-	return this1.exists(key);
-};
-haxe_ds_Map.remove = function(this1,key) {
-	return this1.remove(key);
-};
-haxe_ds_Map.keys = function(this1) {
-	return this1.keys();
-};
-haxe_ds_Map.iterator = function(this1) {
-	return this1.iterator();
-};
-haxe_ds_Map.keyValueIterator = function(this1) {
-	return this1.keyValueIterator();
-};
-haxe_ds_Map.copy = function(this1) {
-	return this1.copy();
-};
-haxe_ds_Map.toString = function(this1) {
-	return this1.toString();
-};
-haxe_ds_Map.clear = function(this1) {
-	this1.clear();
-};
-haxe_ds_Map.arrayWrite = function(this1,k,v) {
-	this1.set(k,v);
-	return v;
-};
-haxe_ds_Map.toStringMap = function(t) {
-	return new haxe_ds_StringMap();
-};
-haxe_ds_Map.toIntMap = function(t) {
-	return new haxe_ds_IntMap();
-};
-haxe_ds_Map.toEnumValueMapMap = function(t) {
-	return new haxe_ds_EnumValueMap();
-};
-haxe_ds_Map.toObjectMap = function(t) {
-	return new haxe_ds_ObjectMap();
-};
-haxe_ds_Map.fromStringMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromIntMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromObjectMap = function(map) {
-	return map;
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { __keys__ : { }};
@@ -12167,45 +12167,34 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 });
 var systems_commands_Index = function(universe) {
 	systems_CommandDbBase.call(this,universe);
+	var query = firebase_firestore_Firestore.query(firebase_firestore_Firestore.collection(firebase_firestore_Firestore.getFirestore(firebase_app_FirebaseApp.getApp()),"index"));
+	firebase_firestore_Firestore.onSnapshot(query,function(snapshot) {
+		snapshot.forEach(function(result) {
+			haxe_Log.trace(result.data(),{ fileName : "src/systems/commands/Index.hx", lineNumber : 32, className : "systems.commands.Index", methodName : "new"});
+		});
+	},function(error) {
+		haxe_Log.trace(error,{ fileName : "src/systems/commands/Index.hx", lineNumber : 36, className : "systems.commands.Index", methodName : "new"});
+	});
 };
 $hxClasses["systems.commands.Index"] = systems_commands_Index;
 systems_commands_Index.__name__ = "systems.commands.Index";
 systems_commands_Index.__super__ = systems_CommandDbBase;
 systems_commands_Index.prototype = $extend(systems_CommandDbBase.prototype,{
-	onAdded: function() {
-		systems_CommandDbBase.prototype.onAdded.call(this);
-		this.dm_messages = this.universe.families.get(1);
-		this.table6c16270644d94dba4055a067a073b12c = this.universe.components.getTable(2);
-		this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-		var q = firebase_firestore_Firestore.query(firebase_firestore_Firestore.collection(firebase_firestore_Firestore.getFirestore(firebase_app_FirebaseApp.getApp()),"test"),firebase_firestore_Firestore.orderBy("name","desc"));
-		firebase_firestore_Firestore.updateDoc(firebase_firestore_Firestore.doc(firebase_firestore_Firestore.getFirestore(firebase_app_FirebaseApp.getApp()),"test","mcXuD85vFTBOG0vAZi3I"),{ name : "test doc"}).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Index.hx", lineNumber : 24, className : "systems.commands.Index", methodName : "onAdded"});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Index.hx", lineNumber : 24, className : "systems.commands.Index", methodName : "onAdded"});
-		});
-		firebase_firestore_Firestore.getDocs(q).then(function(docs) {
-			docs.forEach(function(doc) {
-				haxe_Log.trace(doc.data().name,{ fileName : "src/systems/commands/Index.hx", lineNumber : 28, className : "systems.commands.Index", methodName : "onAdded"});
-			});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Index.hx", lineNumber : 30, className : "systems.commands.Index", methodName : "onAdded"});
-		});
-	}
-	,run: function(command,interaction) {
+	run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 2) {
 			var _g1 = _g.topic;
 			var _g2 = _g.source_url;
 			var _g3 = _g.title;
 			var _g4 = _g.description;
-			haxe_Log.trace("topic: " + _g1,{ fileName : "src/systems/commands/Index.hx", lineNumber : 36, className : "systems.commands.Index", methodName : "run"});
-			haxe_Log.trace("source_url: " + _g2,{ fileName : "src/systems/commands/Index.hx", lineNumber : 37, className : "systems.commands.Index", methodName : "run"});
-			haxe_Log.trace("title: " + _g3,{ fileName : "src/systems/commands/Index.hx", lineNumber : 38, className : "systems.commands.Index", methodName : "run"});
-			haxe_Log.trace("description: " + _g4,{ fileName : "src/systems/commands/Index.hx", lineNumber : 39, className : "systems.commands.Index", methodName : "run"});
-			firebase_firestore_Firestore.addDoc(firebase_firestore_Firestore.collection(firebase_firestore_Firestore.getFirestore(firebase_app_FirebaseApp.getApp()),"index"),{ topic : _g1, source_url : _g2, title : _g3, description : _g4, created_at : firebase_firestore_Firestore.serverTimestamp(), added_by : interaction.user.id, validated : false, validated_by : ""}).then(function(_) {
-				haxe_Log.trace("added",{ fileName : "src/systems/commands/Index.hx", lineNumber : 49, className : "systems.commands.Index", methodName : "run"});
+			haxe_Log.trace("topic: " + _g1,{ fileName : "src/systems/commands/Index.hx", lineNumber : 42, className : "systems.commands.Index", methodName : "run"});
+			haxe_Log.trace("source_url: " + _g2,{ fileName : "src/systems/commands/Index.hx", lineNumber : 43, className : "systems.commands.Index", methodName : "run"});
+			haxe_Log.trace("title: " + _g3,{ fileName : "src/systems/commands/Index.hx", lineNumber : 44, className : "systems.commands.Index", methodName : "run"});
+			haxe_Log.trace("description: " + _g4,{ fileName : "src/systems/commands/Index.hx", lineNumber : 45, className : "systems.commands.Index", methodName : "run"});
+			firebase_firestore_Firestore.addDoc(firebase_firestore_Firestore.collection(firebase_firestore_Firestore.getFirestore(firebase_app_FirebaseApp.getApp()),"index"),{ topic : _g1, source_url : _g2, title : _g3, description : _g4, created_at : new Date(), added_by : interaction.user.id, validated : false, validated_by : ""}).then(function(_) {
+				haxe_Log.trace("added",{ fileName : "src/systems/commands/Index.hx", lineNumber : 55, className : "systems.commands.Index", methodName : "run"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Index.hx", lineNumber : 49, className : "systems.commands.Index", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Index.hx", lineNumber : 55, className : "systems.commands.Index", methodName : "run"});
 			});
 		}
 	}
@@ -12260,6 +12249,12 @@ systems_commands_Index.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,get_name: function() {
 		return "index";
+	}
+	,onAdded: function() {
+		systems_CommandDbBase.prototype.onAdded.call(this);
+		this.dm_messages = this.universe.families.get(1);
+		this.table6c16270644d94dba4055a067a073b12c = this.universe.components.getTable(2);
+		this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
 	}
 	,onRemoved: function() {
 		systems_CommandDbBase.prototype.onRemoved.call(this);
@@ -12597,6 +12592,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 104, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -12837,6 +12833,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 375, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
