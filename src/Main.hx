@@ -1,3 +1,6 @@
+import haxe.extern.EitherType;
+import buddy.internal.sys.Js;
+import discord_js.User;
 import discord_builder.SlashCommandMentionableOption;
 import discord_builder.SlashCommandRoleOption;
 import discord_builder.SlashCommandChannelOption;
@@ -35,9 +38,17 @@ class Main {
 	public static var connected:Bool = false;
 	public static var config:TConfig;
 	public static var universe:Universe;
+	public static var dm_help_tracking:Map<String, Float> = [];
+
 	public static function start() {
+		// var app = getApp();
+
+		// trace(app);
+		// trace(app.name);
+		// trace(app.options);
+
 		universe = new Universe(1000);
-		
+
 		universe.setSystems(Hi);
 		universe.setSystems(Help);
 		universe.setSystems(Haxelib);
@@ -47,31 +58,40 @@ class Main {
 		universe.setSystems(Api);
 		universe.setSystems(Run);
 
-		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES]});
-		
+		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
+
 		client.once('ready', (_) -> {
 			trace('Ready!');
 			connected = true;
 		});
 
 		client.on('messageCreate', (message:Message) -> {
-			if ((message.channel:TextChannel).type == 'dm') {
-				return;
-			}
+			var channel = (message.channel : TextChannel);
 			if (message.toString().startsWith("!run")) {
 				var code:RunMessage = message.toString();
 				universe.setComponents(universe.createEntity(), code, message);
 			}
 		});
+		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
+			trace('disconnected');
+			trace(incoming);
+		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
-			if (!interaction.isCommand()) return;
-			
+			if (!interaction.isCommand())
+				return;
+
 			var command:Command = {
 				name: interaction.commandName,
 				content: null
 			}
 
+			switch (command.name) {
+				case 'helppls':
+					var time = Date.now().getTime();
+					dm_help_tracking.set(interaction.user.id, time);
+				default:
+			}
 			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 			for (value in config.commands) {
 				if (value.name != command.name) {
@@ -84,19 +104,19 @@ class Main {
 					var params = new Array<Dynamic>();
 					for (param in value.params) {
 						switch (param.type) {
-							case user: 
+							case user:
 								params.push(interaction.options.getUser(param.name));
-							case bool: 
+							case bool:
 								params.push(interaction.options.getBoolean(param.name));
-							case mention: 
+							case mention:
 								params.push(interaction.options.getMentionable(param.name));
-							case channel: 
+							case channel:
 								params.push(interaction.options.getChannel(param.name));
-							case role: 
+							case role:
 								params.push(interaction.options.getRole(param.name));
-							case string: 
+							case string:
 								params.push(interaction.options.getString(param.name));
-							case number: 
+							case number:
 								params.push(interaction.options.getNumber(param.name));
 							default:
 								throw 'Something went wrong.';
@@ -131,14 +151,15 @@ class Main {
 		}
 
 		if (config == null || config.discord_token == 'TOKEN_HERE') {
-			throw ('Enter your discord auth token.');
+			throw('Enter your discord auth token.');
 		}
+
 		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
 		var commands = parseCommands();
-		
-		var rest = new REST({ version: '9' }).setToken(config.discord_token);
-		
-		rest.put(Routes.applicationGuildCommands(config.client_id, config.server_id), { body: commands })
+
+		var rest = new REST({version: '9'}).setToken(config.discord_token);
+
+		rest.put(Routes.applicationGuildCommands(config.client_id, config.server_id), {body: commands})
 			.then((_) -> trace('Successfully registered application commands.'), (err) -> trace(err));
 
 		start();
@@ -154,37 +175,40 @@ class Main {
 		for (command in command_defs) {
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description);
 			if (command.params != null) {
-				
 				for (param in command.params) {
 					switch (param.type) {
 						case user:
-							main_command.addUserOption(
-								new SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case string:
-							main_command.addStringOption(
-								new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							var cmd = new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required);
+							if (param.choices != null) {
+								for (option in param.choices) {
+									cmd.addChoice(option.name, option.value);
+								}
+							}
+							main_command.addStringOption(cmd);
 						case bool:
-							main_command.addBooleanOption(
-								new SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case channel:
-							main_command.addChannelOption(
-								new SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case role:
-							main_command.addRoleOption(
-								new SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case mention:
-							main_command.addMentionableOption(
-								new SlashCommandMentionableOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						case number:
-							main_command.addNumberOption(
-								new SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required)
-							);
+							main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
 						default:
 					}
 				}
@@ -195,12 +219,19 @@ class Main {
 	}
 
 	public static var name(get, never):String;
+
 	private static function get_name() {
 		if (config == null || config.project_name == null) {
 			return 'bot';
 		}
 		return config.project_name;
 	}
+}
+
+typedef THelpPls = {
+	var user:User;
+	var content:String;
+	var message:Message;
 }
 
 typedef TConfig = {
@@ -213,13 +244,13 @@ typedef TConfig = {
 	var commands:Array<TCommands>;
 }
 
-
 typedef TCommands = {
 	var type:CommandType;
 	var name:String;
 	var description:String;
 	@:optional var params:Array<TCommands>;
 	@:optional var required:Bool;
+	@:optional var choices:Array<{name:String, value:EitherType<Int, String>}>;
 }
 
 enum abstract CommandType(String) {
@@ -230,4 +261,8 @@ enum abstract CommandType(String) {
 	var role;
 	var bool;
 	var mention;
+}
+
+enum abstract CommandForward(String) {
+	var helppls;
 }
