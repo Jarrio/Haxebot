@@ -205,12 +205,14 @@ class Main {
 
 typedef TConfig = {
 	var project_name:String;
+	var firebase:FirebaseOptions;
 	var macros:Bool;
 	var client_id:String;
 	var server_id:String;
 	var discord_token:String;
 	var commands:Array<TCommands>;
 }
+
 
 typedef TCommands = {
 	var type:CommandType;
