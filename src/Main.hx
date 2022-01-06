@@ -27,8 +27,10 @@ import systems.commands.Notify;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
+import firebase.web.app.FirebaseApp;
 
 class Main {
+	public static var app:FirebaseApp;
 	public static var client:Client;
 	public static var connected:Bool = false;
 	public static var config:TConfig;
@@ -131,7 +133,7 @@ class Main {
 		if (config == null || config.discord_token == 'TOKEN_HERE') {
 			throw ('Enter your discord auth token.');
 		}
-
+		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
 		var commands = parseCommands();
 		
 		var rest = new REST({ version: '9' }).setToken(config.discord_token);
