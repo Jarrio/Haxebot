@@ -13,6 +13,7 @@
 --library discordjs-rest
 --library discord-builder
 --library node
+--library firebase
 --library shadows
 -D ecs.static_loading
 --js bin/main.js
