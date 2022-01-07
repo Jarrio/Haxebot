@@ -577,81 +577,61 @@ Lambda.concat = function(a,b) {
 	}
 	return l;
 };
-var haxe_IMap = function() { };
-$hxClasses["haxe.IMap"] = haxe_IMap;
-haxe_IMap.__name__ = "haxe.IMap";
-haxe_IMap.__isInterface__ = true;
-haxe_IMap.prototype = {
-	get: null
-	,set: null
-	,exists: null
-	,remove: null
-	,keys: null
-	,iterator: null
-	,keyValueIterator: null
-	,copy: null
-	,toString: null
-	,clear: null
-	,__class__: haxe_IMap
+var haxe_ds_Map = {};
+haxe_ds_Map.set = function(this1,key,value) {
+	this1.set(key,value);
 };
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
+haxe_ds_Map.get = function(this1,key) {
+	return this1.get(key);
 };
-$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
-haxe_ds_StringMap.createCopy = function(h) {
-	var copy = new haxe_ds_StringMap();
-	for (var key in h) copy.h[key] = h[key];
-	return copy;
+haxe_ds_Map.exists = function(this1,key) {
+	return this1.exists(key);
 };
-haxe_ds_StringMap.stringify = function(h) {
-	var s = "{";
-	var first = true;
-	for (var key in h) {
-		if (first) first = false; else s += ',';
-		s += key + ' => ' + Std.string(h[key]);
-	}
-	return s + "}";
+haxe_ds_Map.remove = function(this1,key) {
+	return this1.remove(key);
 };
-haxe_ds_StringMap.prototype = {
-	h: null
-	,exists: function(key) {
-		return Object.prototype.hasOwnProperty.call(this.h,key);
-	}
-	,get: function(key) {
-		return this.h[key];
-	}
-	,set: function(key,value) {
-		this.h[key] = value;
-	}
-	,remove: function(key) {
-		if(Object.prototype.hasOwnProperty.call(this.h,key)) {
-			delete(this.h[key]);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	,keys: function() {
-		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
-	}
-	,iterator: function() {
-		return new haxe_ds__$StringMap_StringMapValueIterator(this.h);
-	}
-	,keyValueIterator: function() {
-		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
-	}
-	,copy: function() {
-		return haxe_ds_StringMap.createCopy(this.h);
-	}
-	,clear: function() {
-		this.h = Object.create(null);
-	}
-	,toString: function() {
-		return haxe_ds_StringMap.stringify(this.h);
-	}
-	,__class__: haxe_ds_StringMap
+haxe_ds_Map.keys = function(this1) {
+	return this1.keys();
+};
+haxe_ds_Map.iterator = function(this1) {
+	return this1.iterator();
+};
+haxe_ds_Map.keyValueIterator = function(this1) {
+	return this1.keyValueIterator();
+};
+haxe_ds_Map.copy = function(this1) {
+	return this1.copy();
+};
+haxe_ds_Map.toString = function(this1) {
+	return this1.toString();
+};
+haxe_ds_Map.clear = function(this1) {
+	this1.clear();
+};
+haxe_ds_Map.arrayWrite = function(this1,k,v) {
+	this1.set(k,v);
+	return v;
+};
+haxe_ds_Map.toStringMap = function(t) {
+	return new haxe_ds_StringMap();
+};
+haxe_ds_Map.toIntMap = function(t) {
+	return new haxe_ds_IntMap();
+};
+haxe_ds_Map.toEnumValueMapMap = function(t) {
+	return new haxe_ds_EnumValueMap();
+};
+haxe_ds_Map.toObjectMap = function(t) {
+	return new haxe_ds_ObjectMap();
+};
+haxe_ds_Map.fromStringMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromIntMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromObjectMap = function(map) {
+	return map;
 };
 var Main = function() { };
 $hxClasses["Main"] = Main;
@@ -2749,6 +2729,82 @@ ecs_ds_SparseSet.prototype = {
 		return this.number;
 	}
 	,__class__: ecs_ds_SparseSet
+};
+var haxe_IMap = function() { };
+$hxClasses["haxe.IMap"] = haxe_IMap;
+haxe_IMap.__name__ = "haxe.IMap";
+haxe_IMap.__isInterface__ = true;
+haxe_IMap.prototype = {
+	get: null
+	,set: null
+	,exists: null
+	,remove: null
+	,keys: null
+	,iterator: null
+	,keyValueIterator: null
+	,copy: null
+	,toString: null
+	,clear: null
+	,__class__: haxe_IMap
+};
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.createCopy = function(h) {
+	var copy = new haxe_ds_StringMap();
+	for (var key in h) copy.h[key] = h[key];
+	return copy;
+};
+haxe_ds_StringMap.stringify = function(h) {
+	var s = "{";
+	var first = true;
+	for (var key in h) {
+		if (first) first = false; else s += ',';
+		s += key + ' => ' + Std.string(h[key]);
+	}
+	return s + "}";
+};
+haxe_ds_StringMap.prototype = {
+	h: null
+	,exists: function(key) {
+		return Object.prototype.hasOwnProperty.call(this.h,key);
+	}
+	,get: function(key) {
+		return this.h[key];
+	}
+	,set: function(key,value) {
+		this.h[key] = value;
+	}
+	,remove: function(key) {
+		if(Object.prototype.hasOwnProperty.call(this.h,key)) {
+			delete(this.h[key]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	,keys: function() {
+		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
+	}
+	,iterator: function() {
+		return new haxe_ds__$StringMap_StringMapValueIterator(this.h);
+	}
+	,keyValueIterator: function() {
+		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
+	}
+	,copy: function() {
+		return haxe_ds_StringMap.createCopy(this.h);
+	}
+	,clear: function() {
+		this.h = Object.create(null);
+	}
+	,toString: function() {
+		return haxe_ds_StringMap.stringify(this.h);
+	}
+	,__class__: haxe_ds_StringMap
 };
 function ecs_macros_ComponentCache_getComponentCount() {
 	return ecs_macros_ComponentCache_componentIncrementer;
@@ -5121,62 +5177,6 @@ haxe_ds__$List_ListKeyValueIterator.prototype = {
 		return { value : val, key : this.idx++};
 	}
 	,__class__: haxe_ds__$List_ListKeyValueIterator
-};
-var haxe_ds_Map = {};
-haxe_ds_Map.set = function(this1,key,value) {
-	this1.set(key,value);
-};
-haxe_ds_Map.get = function(this1,key) {
-	return this1.get(key);
-};
-haxe_ds_Map.exists = function(this1,key) {
-	return this1.exists(key);
-};
-haxe_ds_Map.remove = function(this1,key) {
-	return this1.remove(key);
-};
-haxe_ds_Map.keys = function(this1) {
-	return this1.keys();
-};
-haxe_ds_Map.iterator = function(this1) {
-	return this1.iterator();
-};
-haxe_ds_Map.keyValueIterator = function(this1) {
-	return this1.keyValueIterator();
-};
-haxe_ds_Map.copy = function(this1) {
-	return this1.copy();
-};
-haxe_ds_Map.toString = function(this1) {
-	return this1.toString();
-};
-haxe_ds_Map.clear = function(this1) {
-	this1.clear();
-};
-haxe_ds_Map.arrayWrite = function(this1,k,v) {
-	this1.set(k,v);
-	return v;
-};
-haxe_ds_Map.toStringMap = function(t) {
-	return new haxe_ds_StringMap();
-};
-haxe_ds_Map.toIntMap = function(t) {
-	return new haxe_ds_IntMap();
-};
-haxe_ds_Map.toEnumValueMapMap = function(t) {
-	return new haxe_ds_EnumValueMap();
-};
-haxe_ds_Map.toObjectMap = function(t) {
-	return new haxe_ds_ObjectMap();
-};
-haxe_ds_Map.fromStringMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromIntMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromObjectMap = function(map) {
-	return map;
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { __keys__ : { }};
@@ -11036,34 +11036,13 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: systems_commands_Notify
 });
 var systems_commands_Poll = function(_universe) {
-	this.time = -1.;
-	this.messages = new haxe_ds_StringMap();
-	this.active_polls = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
 };
 $hxClasses["systems.commands.Poll"] = systems_commands_Poll;
 systems_commands_Poll.__name__ = "systems.commands.Poll";
 systems_commands_Poll.__super__ = systems_CommandBase;
 systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
-	active_polls: null
-	,messages: null
-	,time: null
-	,update: function(_) {
-		systems_CommandBase.prototype.update.call(this,_);
-		var h = this.messages.h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			if(Object.prototype.hasOwnProperty.call(this.active_polls.h,key)) {
-				continue;
-			}
-			var v = null;
-			this.active_polls.h[key] = v;
-		}
-	}
-	,run: function(command,interaction) {
+	run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 1) {
 			var question = _g.question;
@@ -11385,6 +11364,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 105, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11625,6 +11605,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 379, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});

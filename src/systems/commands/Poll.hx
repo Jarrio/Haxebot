@@ -14,22 +14,7 @@ import discord_builder.BaseCommandInteraction;
 import firebase.web.firestore.Firestore.*;
 
 class Poll extends CommandBase {
-	var active_polls:Map<String, TPoll> = [];
-	var messages:Map<String, Message> = [];
-
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
-	var time = -1.;
-
-	override function update(_:Float) {
-		super.update(_);
-		for (key => message in messages) {
-			if (active_polls.exists(key)) {
-				continue;
-			}
-
-			this.active_polls[key] = null;
-		}
-	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
