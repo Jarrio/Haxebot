@@ -10884,21 +10884,21 @@ systems_commands_Hi.__name__ = "systems.commands.Hi";
 systems_commands_Hi.__super__ = systems_CommandBase;
 systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
-		var message = "";
-		switch(interaction.user.id) {
-		case "415825875146375168":
-			message = "Hey semmi, got any cool music tonight?";
-			break;
-		case "726161533540761662":
-			message = "Hi muffin, don't make me go sleep :(";
-			break;
-		case "817154767733653524":
-			message = "Hello " + interaction.user.tag + ", always a pleasure :)";
-			break;
-		default:
-		}
-		if(Math.random() > 0.3) {
-			message = "Hey there";
+		var message = "Hey there";
+		if(Math.random() < 0.35) {
+			switch(interaction.user.id) {
+			case "415825875146375168":
+				message = "Hey semmi, got any cool music tonight?";
+				break;
+			case "726161533540761662":
+				message = "Hi muffin, don't make me go sleep :(";
+				break;
+			case "817154767733653524":
+				message = "Hello " + interaction.user.tag + ", always a pleasure :)";
+				break;
+			default:
+				message = "Hey you, what's up?";
+			}
 		}
 		interaction.reply(message);
 	}
