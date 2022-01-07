@@ -30,6 +30,7 @@ import systems.commands.Notify;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
+import systems.commands.Poll;
 import firebase.web.app.FirebaseApp;
 
 class Main {
@@ -57,6 +58,7 @@ class Main {
 		universe.setSystems(Roundup);
 		universe.setSystems(Api);
 		universe.setSystems(Run);
+		universe.setSystems(Poll);
 
 		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
 

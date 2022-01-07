@@ -38,6 +38,7 @@ class Help extends CommandBase {
 						}
 					}
 				}
+
 				interaction.reply(msg);
 			default:
 		}
