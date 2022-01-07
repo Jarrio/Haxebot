@@ -1,20 +1,14 @@
 package systems.commands;
 
 import ecs.System;
-import discord_builder.BaseCommandInteraction;
-import js.lib.Object;
 import vm2.NodeVM;
-import js.Browser;
-import js.node.Process;
-import vm2.VM;
-import discord_js.Role;
 import js.node.Fs;
+import js.node.Timers;
 import haxe.Http;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
 import discord_js.Message;
-import components.Command;
 import js.node.ChildProcess.spawn;
 
 enum abstract RunMessage(String) from String to String {}
@@ -301,9 +295,11 @@ class Run extends System {
 						return;
 					}
 					var obj = null;
+					
 					var vm = new NodeVM({
 						sandbox: obj,
 						console: 'redirect',
+						timeout: 10000,
 					});
 					
 					vm.on('console.log', (data, info) -> {
@@ -320,7 +316,8 @@ class Run extends System {
 					});
 
 					try {
-						vm.runFile(js_file);
+						vm.run(sys.io.File.getContent(js_file));
+						
 						var x = response.split('\n');
 						var truncated = false;
 						if (x.length > 24) {

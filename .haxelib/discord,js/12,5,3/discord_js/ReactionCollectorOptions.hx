@@ -1,6 +1,7 @@
 package discord_js;
 
 typedef ReactionCollectorOptions = {
+	@:optional var filter:(reaction:Dynamic, user:User)->Bool;
 	@:optional
 	var max : Float;
 	@:optional
