@@ -11073,7 +11073,9 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			var embed = new discord_$js_MessageEmbed();
-			embed.setDescription(question);
+			embed.setTitle("Poll");
+			embed.setDescription(question + "\n___");
+			embed.setFooter("Poll will run for " + time + " minutes.");
 			interaction.reply({ embeds : [embed]}).then(function(_) {
 				return interaction.fetchReply().then(function(message) {
 					var filter = function(reaction,user) {

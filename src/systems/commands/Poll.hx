@@ -38,7 +38,10 @@ class Poll extends CommandBase {
 					interaction.reply("A poll can't (currently) last longer than 3 days.");
 					return;
 				}
-				var embed = this.createEmbed(question);
+				var embed = new MessageEmbed();
+				embed.setTitle('Poll');
+				embed.setDescription(question + '\n___');
+				embed.setFooter('Poll will run for ${time} minutes.');
 
 				interaction.reply({embeds: [embed]}).then((_) -> {
 					interaction.fetchReply().then(function(message) {
