@@ -577,10 +577,67 @@ Lambda.concat = function(a,b) {
 	}
 	return l;
 };
+var haxe_ds_Map = {};
+haxe_ds_Map.set = function(this1,key,value) {
+	this1.set(key,value);
+};
+haxe_ds_Map.get = function(this1,key) {
+	return this1.get(key);
+};
+haxe_ds_Map.exists = function(this1,key) {
+	return this1.exists(key);
+};
+haxe_ds_Map.remove = function(this1,key) {
+	return this1.remove(key);
+};
+haxe_ds_Map.keys = function(this1) {
+	return this1.keys();
+};
+haxe_ds_Map.iterator = function(this1) {
+	return this1.iterator();
+};
+haxe_ds_Map.keyValueIterator = function(this1) {
+	return this1.keyValueIterator();
+};
+haxe_ds_Map.copy = function(this1) {
+	return this1.copy();
+};
+haxe_ds_Map.toString = function(this1) {
+	return this1.toString();
+};
+haxe_ds_Map.clear = function(this1) {
+	this1.clear();
+};
+haxe_ds_Map.arrayWrite = function(this1,k,v) {
+	this1.set(k,v);
+	return v;
+};
+haxe_ds_Map.toStringMap = function(t) {
+	return new haxe_ds_StringMap();
+};
+haxe_ds_Map.toIntMap = function(t) {
+	return new haxe_ds_IntMap();
+};
+haxe_ds_Map.toEnumValueMapMap = function(t) {
+	return new haxe_ds_EnumValueMap();
+};
+haxe_ds_Map.toObjectMap = function(t) {
+	return new haxe_ds_ObjectMap();
+};
+haxe_ds_Map.fromStringMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromIntMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromObjectMap = function(map) {
+	return map;
+};
 var Main = function() { };
 $hxClasses["Main"] = Main;
 Main.__name__ = "Main";
 Main.__properties__ = {get_name:"get_name"};
+Main.app = null;
 Main.client = null;
 Main.config = null;
 Main.universe = null;
@@ -594,18 +651,15 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_Roundup(Main.universe));
 	Main.universe.systems.add(new systems_commands_Api(Main.universe));
 	Main.universe.systems.add(new systems_commands_Run(Main.universe));
-	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES"]});
+	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES","DIRECT_MESSAGES"]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 51, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 64, className : "Main", methodName : "start"});
 		Main.connected = true;
 	});
 	Main.client.on("messageCreate",function(message) {
-		if(message.channel.type == "dm") {
-			return;
-		}
 		if(StringTools.startsWith(message.toString(),"!run")) {
 			var code = message.toString();
 			var _ecsTmpEntity = Main.universe.entities.create();
@@ -618,11 +672,19 @@ Main.start = function() {
 			}
 		}
 	});
+	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 76, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 77, className : "Main", methodName : "start"});
+	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
 			return;
 		}
 		var command = { name : interaction.commandName, content : null};
+		if(command.name == "helppls") {
+			var time = new Date().getTime();
+			Main.dm_help_tracking.h[interaction.user.id] = time;
+		}
 		var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 		var _g = 0;
 		var _g1 = Main.config.commands;
@@ -673,9 +735,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 109, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 110, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 111, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 131, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 132, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 133, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.entities.create();
@@ -697,17 +759,18 @@ Main.main = function() {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 128, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 150, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
+	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	var commands = Main.parseCommands();
 	var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
 	rest.put(Routes.applicationGuildCommands(Main.config.client_id,Main.config.server_id),{ body : commands}).then(function(_) {
-		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 140, className : "Main", methodName : "main"});
+		haxe_Log.trace("Successfully registered application commands.",{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "main"});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 140, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -745,7 +808,17 @@ Main.parseCommands = function() {
 					main_command.addRoleOption(new discord_$builder_SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required));
 					break;
 				case "string":
-					main_command.addStringOption(new discord_$builder_SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+					var cmd = new discord_$builder_SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required);
+					if(param.choices != null) {
+						var _g3 = 0;
+						var _g4 = param.choices;
+						while(_g3 < _g4.length) {
+							var option = _g4[_g3];
+							++_g3;
+							cmd.addChoice(option.name,option.value);
+						}
+					}
+					main_command.addStringOption(cmd);
 					break;
 				case "user":
 					main_command.addUserOption(new discord_$builder_SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required));
@@ -1912,6 +1985,33 @@ bits_BitsData.set = function(this1,index,value) {
 bits_BitsData.get_length = function(this1) {
 	return this1.length;
 };
+var buddy_internal_sys_Js = function() { };
+$hxClasses["buddy.internal.sys.Js"] = buddy_internal_sys_Js;
+buddy_internal_sys_Js.__name__ = "buddy.internal.sys.Js";
+buddy_internal_sys_Js.print = function(s) {
+};
+buddy_internal_sys_Js.println = function(s) {
+	var log = window.console;
+	if(buddy_internal_sys_Js.completed.match(s)) {
+		var _g = Std.parseInt(buddy_internal_sys_Js.completed.matched(1));
+		if(_g == null) {
+			log.error(s);
+		} else if(_g == 0) {
+			var _g = Std.parseInt(buddy_internal_sys_Js.completed.matched(2));
+			if(_g == null) {
+				log.warn("%c" + s,"color: green");
+			} else if(_g == 0) {
+				log.info("%c" + s,"color: green");
+			} else {
+				log.warn("%c" + s,"color: green");
+			}
+		} else {
+			log.error(s);
+		}
+	} else {
+		log.log(s);
+	}
+};
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Roundup: ($_=function(number) { return {_hx_index:1,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
@@ -2981,6 +3081,7 @@ function ecs_macros_UniverseMacros_isLocalIdent(_target,_classType,_vars) {
 		return haxe_ds_Option.None;
 	}
 }
+var firebase_web_app_FirebaseApp = require("firebase/app");
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__:"haxe.StackItem",__constructs__:null
 	,CFunction: {_hx_name:"CFunction",_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
 	,Module: ($_=function(m) { return {_hx_index:1,m:m,__enum__:"haxe.StackItem",toString:$estr}; },$_._hx_name="Module",$_.__params__ = ["m"],$_)
@@ -5035,62 +5136,6 @@ haxe_ds__$List_ListKeyValueIterator.prototype = {
 		return { value : val, key : this.idx++};
 	}
 	,__class__: haxe_ds__$List_ListKeyValueIterator
-};
-var haxe_ds_Map = {};
-haxe_ds_Map.set = function(this1,key,value) {
-	this1.set(key,value);
-};
-haxe_ds_Map.get = function(this1,key) {
-	return this1.get(key);
-};
-haxe_ds_Map.exists = function(this1,key) {
-	return this1.exists(key);
-};
-haxe_ds_Map.remove = function(this1,key) {
-	return this1.remove(key);
-};
-haxe_ds_Map.keys = function(this1) {
-	return this1.keys();
-};
-haxe_ds_Map.iterator = function(this1) {
-	return this1.iterator();
-};
-haxe_ds_Map.keyValueIterator = function(this1) {
-	return this1.keyValueIterator();
-};
-haxe_ds_Map.copy = function(this1) {
-	return this1.copy();
-};
-haxe_ds_Map.toString = function(this1) {
-	return this1.toString();
-};
-haxe_ds_Map.clear = function(this1) {
-	this1.clear();
-};
-haxe_ds_Map.arrayWrite = function(this1,k,v) {
-	this1.set(k,v);
-	return v;
-};
-haxe_ds_Map.toStringMap = function(t) {
-	return new haxe_ds_StringMap();
-};
-haxe_ds_Map.toIntMap = function(t) {
-	return new haxe_ds_IntMap();
-};
-haxe_ds_Map.toEnumValueMapMap = function(t) {
-	return new haxe_ds_EnumValueMap();
-};
-haxe_ds_Map.toObjectMap = function(t) {
-	return new haxe_ds_ObjectMap();
-};
-haxe_ds_Map.fromStringMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromIntMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromObjectMap = function(map) {
-	return map;
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { __keys__ : { }};
@@ -10771,11 +10816,11 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 	data: null
 	,onAdded: function() {
 		systems_CommandBase.prototype.onAdded.call(this);
-		this.data = Util_loadFile("help",{ fileName : "src/systems/commands/Help.hx", lineNumber : 9, className : "systems.commands.Help", methodName : "onAdded"});
+		this.data = Util_loadFile("help",{ fileName : "src/systems/commands/Help.hx", lineNumber : 10, className : "systems.commands.Help", methodName : "onAdded"});
 	}
 	,run: function(command,interaction) {
 		if(this.data == null || this.data.length == 0) {
-			haxe_Log.trace("no help content configured",{ fileName : "src/systems/commands/Help.hx", lineNumber : 14, className : "systems.commands.Help", methodName : "run"});
+			haxe_Log.trace("no help content configured",{ fileName : "src/systems/commands/Help.hx", lineNumber : 15, className : "systems.commands.Help", methodName : "run"});
 			return;
 		}
 		var _g = command.content;
@@ -10803,6 +10848,9 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 					msg = "/`" + _g1_value.type + "`: " + _g1_value.content;
 					break;
 				}
+			}
+			if(msg.length == 0 || msg == "" || msg == null) {
+				msg = "Nothing found, sorry :(";
 			}
 			interaction.reply(msg);
 		}
@@ -11490,10 +11538,12 @@ DateTools.MONTH_NAMES = ["January","February","March","April","May","June","July
 DateTools.DAYS_OF_MONTH = [31,28,31,30,31,30,31,31,30,31,30,31];
 EReg.escapeRe = new RegExp("[.*+?^${}()|[\\]\\\\]","g");
 Main.connected = false;
+Main.dm_help_tracking = new haxe_ds_StringMap();
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;
 bits_BitsData.CELL_SIZE = 32;
+buddy_internal_sys_Js.completed = new EReg("^\\d+ specs, (\\d+) failures, (\\d+) pending$","");
 ecs_Entity.none = ecs_Entity._new(-1);
 var ecs_macros_ComponentCache_components = new haxe_ds_StringMap();
 var ecs_macros_ComponentCache_componentIncrementer = 0;
