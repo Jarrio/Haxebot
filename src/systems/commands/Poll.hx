@@ -1,17 +1,13 @@
 package systems.commands;
 
-import discord_js.TextChannel;
 import discord_js.Collection;
-import js.Browser;
 import discord_js.User;
 import discord_js.MessageReaction;
-import discord_js.ReactionEmoji;
 import discord_js.MessageEmbed;
 import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
-import firebase.web.firestore.Firestore.*;
 
 class Poll extends CommandBase {
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
