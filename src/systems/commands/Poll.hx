@@ -49,7 +49,7 @@ class Poll extends CommandBase {
 									}
 
 									if (collected.has('❎')) {
-										check = collected.get('❎').count - 1;
+										cross = collected.get('❎').count - 1;
 									}
 
 									var embed = new MessageEmbed();
