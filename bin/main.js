@@ -672,7 +672,7 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_Api(Main.universe));
 	Main.universe.systems.add(new systems_commands_Run(Main.universe));
 	Main.universe.systems.add(new systems_commands_Poll(Main.universe));
-	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES","DIRECT_MESSAGES","GUILD_MEMBERS"]});
+	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES","DIRECT_MESSAGES","GUILD_MEMBERS","GUILD_MESSAGE_REACTIONS"]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
@@ -2039,7 +2039,7 @@ buddy_internal_sys_Js.println = function(s) {
 };
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
-	,Poll: ($_=function(question,type) { return {_hx_index:1,question:question,type:type,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","type"],$_)
+	,Poll: ($_=function(question,time) { return {_hx_index:1,question:question,time:time,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","time"],$_)
 	,Roundup: ($_=function(number) { return {_hx_index:2,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
 	,Rtfm: ($_=function(channel) { return {_hx_index:3,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
 	,Api: ($_=function(channel) { return {_hx_index:4,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["channel"],$_)
@@ -11014,6 +11014,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: systems_commands_Notify
 });
 var systems_commands_Poll = function(_universe) {
+	this.time = -1.;
 	this.messages = new haxe_ds_StringMap();
 	this.active_polls = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
@@ -11024,6 +11025,7 @@ systems_commands_Poll.__super__ = systems_CommandBase;
 systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	active_polls: null
 	,messages: null
+	,time: null
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
 		var h = this.messages.h;
@@ -11032,43 +11034,57 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 		var _g_current = 0;
 		while(_g_current < _g_length) {
 			var key = _g_keys[_g_current++];
-			var _g1_value = h[key];
 			if(Object.prototype.hasOwnProperty.call(this.active_polls.h,key)) {
 				continue;
 			}
-			var filter = function(reaction) {
-				haxe_Log.trace(reaction,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 24, className : "systems.commands.Poll", methodName : "update"});
-				if(reaction.emoji.name == "✅") {
-					return true;
-				}
-				if(reaction.emoji.name == "❎") {
-					return true;
-				}
-				return false;
-			};
 			var v = null;
 			this.active_polls.h[key] = v;
-			_g1_value.react("✅").then(null,null);
-			_g1_value.react("❎").then(null,null);
-			var foo = _g1_value.createReactionCollector(filter);
-			foo.on("collect",function() {
-				var $l=arguments.length;
-				var collected = new Array($l>0?$l-0:0);
-				for(var $i=0;$i<$l;++$i){collected[$i-0]=arguments[$i];}
-				haxe_Log.trace(collected == null ? "null" : "[" + collected.toString() + "]",{ fileName : "src/systems/commands/Poll.hx", lineNumber : 40, className : "systems.commands.Poll", methodName : "update"});
-			});
 		}
 	}
 	,run: function(command,interaction) {
-		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 1) {
+			var question = _g.question;
+			var time = _g.time;
+			if(time > 4320) {
+				interaction.reply("A poll can't (currently) last longer than 3 days.");
+				return;
+			}
 			var embed = new discord_$js_MessageEmbed();
-			embed.setDescription(_g.question);
+			embed.setDescription(question);
 			interaction.reply({ embeds : [embed]}).then(function(_) {
 				return interaction.fetchReply().then(function(message) {
-					haxe_Log.trace(message,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 53, className : "systems.commands.Poll", methodName : "run"});
-					_gthis.messages.h[message.id] = message;
+					var filter = function(reaction,user) {
+						if(reaction.emoji.name == "✅") {
+							return true;
+						}
+						if(reaction.emoji.name == "❎") {
+							return true;
+						}
+						reaction.remove();
+						return false;
+					};
+					message.react("✅").then(null,null).then(function(_) {
+						message.react("❎").then(null,null).then(function(_) {
+							var collector = message.createReactionCollector({ filter : filter, time : time * 60000});
+							collector.on("end",function(collected,reason) {
+								var check = 0.;
+								if(collected.has("✅")) {
+									check = collected.get("✅").count - 1;
+								}
+								if(collected.has("❎")) {
+									check = collected.get("❎").count - 1;
+								}
+								var embed = new discord_$js_MessageEmbed();
+								embed.setTitle(question);
+								embed.addField("✅ Yes:",check == null ? "null" : "" + check);
+								embed.addField("❎ No:","" + 0.);
+								var date = DateTools.format(new Date(message.createdTimestamp),"%d-%m-%Y %H:%M:%S");
+								embed.setFooter("Poll results | Started " + date);
+								message.reply({ embeds : [embed]});
+							});
+						},null);
+					},null);
 				},null);
 			},null);
 		}

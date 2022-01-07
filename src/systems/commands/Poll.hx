@@ -1,5 +1,10 @@
 package systems.commands;
 
+import discord_js.TextChannel;
+import discord_js.Collection;
+import js.Browser;
+import discord_js.User;
+import discord_js.MessageReaction;
 import discord_js.ReactionEmoji;
 import discord_js.MessageEmbed;
 import Main.CommandForward;
@@ -13,6 +18,7 @@ class Poll extends CommandBase {
 	var messages:Map<String, Message> = [];
 
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
+	var time = -1.;
 
 	override function update(_:Float) {
 		super.update(_);
@@ -20,39 +26,58 @@ class Poll extends CommandBase {
 			if (active_polls.exists(key)) {
 				continue;
 			}
-			var filter = (reaction:Dynamic, user) -> {
-				trace(reaction);
-				trace(user.tag);
-				if (reaction.emoji.name == "✅") {
-					return true;
-				}
-				if (reaction.emoji.name == "❎") {
-					return true;
-				}
-				return false;
-			}
+
 			this.active_polls[key] = null;
-			message.react("✅").then(null, null);
-			message.react("❎").then(null, null);
-
-			var foo = message.createReactionCollector({filter: filter});
-
-			foo.on('collect', (collected) -> {
-				trace(collected);
-			});
 		}
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Poll(question, type):
+			case Poll(question, time):
+				if (time > 4320) {
+					interaction.reply("A poll can't (currently) last longer than 3 days.");
+					return;
+				}
 				var embed = this.createEmbed(question);
-
 
 				interaction.reply({embeds: [embed]}).then((_) -> {
 					interaction.fetchReply().then(function(message) {
-						trace(message);
-						this.messages[message.id] = message;
+						var filter = (reaction:MessageReaction, user:User) -> {
+							if (reaction.emoji.name == "✅") {
+								return true;
+							}
+							if (reaction.emoji.name == "❎") {
+								return true;
+							}
+							reaction.remove();
+							return false;
+						}
+
+						message.react("✅").then(null, null).then(function(_) {
+							message.react("❎").then(null, null).then(function(_) {
+								var collector = message.createReactionCollector({filter: filter, time: time * 60000});
+								collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {
+									var check = 0.;
+									var cross = 0.;
+
+									if (collected.has('✅')) {
+										check = collected.get('✅').count - 1;
+									}
+
+									if (collected.has('❎')) {
+										check = collected.get('❎').count - 1;
+									}
+
+									var embed = new MessageEmbed();
+									embed.setTitle(question);
+									embed.addField('✅ Yes:', check.string());
+									embed.addField('❎ No:', cross.string());
+									var date = DateTools.format(Date.fromTime(message.createdTimestamp), '%d-%m-%Y %H:%M:%S');
+									embed.setFooter('Poll results | Started $date');
+									message.reply({embeds: [embed]});
+								});
+							}, null);
+						}, null);
 					}, null);
 				}, null);
 			default:
