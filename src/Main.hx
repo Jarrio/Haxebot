@@ -60,7 +60,7 @@ class Main {
 		universe.setSystems(Run);
 		universe.setSystems(Poll);
 
-		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
+		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES, IntentFlags.GUILD_MEMBERS]});
 
 		client.once('ready', (_) -> {
 			trace('Ready!');

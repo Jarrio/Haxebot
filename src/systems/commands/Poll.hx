@@ -20,8 +20,9 @@ class Poll extends CommandBase {
 			if (active_polls.exists(key)) {
 				continue;
 			}
-			var filter = (reaction:Dynamic) -> {
+			var filter = (reaction:Dynamic, user) -> {
 				trace(reaction);
+				trace(user.tag);
 				if (reaction.emoji.name == "✅") {
 					return true;
 				}
@@ -34,7 +35,7 @@ class Poll extends CommandBase {
 			message.react("✅").then(null, null);
 			message.react("❎").then(null, null);
 
-			var foo = message.createReactionCollector(filter);
+			var foo = message.createReactionCollector({filter: filter});
 
 			foo.on('collect', (collected) -> {
 				trace(collected);

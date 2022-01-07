@@ -506,7 +506,7 @@ package discord_js;
 	};
 	public var reference : Null<MessageReference>;
 	public function awaitReactions(filter:CollectorFilter, ?options:AwaitReactionsOptions):js.lib.Promise<Collection<String, MessageReaction>>;
-	public function createReactionCollector(filter:CollectorFilter, ?options:ReactionCollectorOptions):ReactionCollector;
+	public function createReactionCollector(?options:ReactionCollectorOptions):ReactionCollector;
 	public function delete(?options:{ @:optional var timeout : Float; @:optional var reason : String; }):js.lib.Promise<Message>;
 	@:overload(function(content:Dynamic, options:ts.AnyOf2<MessageEmbed, MessageEditOptions>):js.lib.Promise<Message> { })
 	public function edit(content:ts.AnyOf9<String, Float, { }, Bool, js.lib.Symbol, APIMessage, MessageEmbed, haxe.ds.ReadOnlyArray<Dynamic>, MessageEditOptions>):js.lib.Promise<Message>;
