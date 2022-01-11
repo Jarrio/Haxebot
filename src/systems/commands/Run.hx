@@ -38,7 +38,7 @@ class Run extends System {
 		}
 
 		iterate(code_messages, entity -> {
-			if (message.startsWith('!run ')) {
+			if (message.startsWith('!run')) {
 				this.run(message, response);
 				this.code_messages.remove(entity);
 			}
@@ -77,6 +77,13 @@ class Run extends System {
 			return;
 		}
 
+		check_code = ~/!run[\s|\n| \n](.*)/gmis;
+		if (check_code.match(message)) {
+			trace(check_code.matched(1));
+			this.parse(check_code.matched(1), response);
+			return;
+		}
+
 		check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
 		if (check_code.match(message)) {
 			var regex = ~/(<code class="prettyprint haxe">)(.*?)(<\/code>)/gmius;
@@ -90,11 +97,7 @@ class Run extends System {
 			return;
 		}
 
-		check_code = ~/!run (.*)/gmis;
-		if (check_code.match(message)) {
-			this.parse(check_code.matched(1), response);
-			return;
-		}
+
 		this.parse(null, response);
 	}
 
