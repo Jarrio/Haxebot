@@ -20,6 +20,12 @@ class ScamPrevention extends CommandBase {
 	var phishing_urls:Array<String> = [];
 	var phishing_update_time:Float;
 
+	var timestamp(get, never):Float;
+
+	private inline function get_timestamp() {
+		return Date.now().getTime();
+	}
+
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, _ -> {
@@ -33,11 +39,26 @@ class ScamPrevention extends CommandBase {
 
 			messages.remove(_);
 		});
+
 		this.getPhishingLinks();
 		this.checkHistory();
+
+		for (id => value in this.time_since) {
+			if (this.timestamp - value > 10000) {
+				trace('reset');
+				this.resetChecks(id);
+			}
+		}
 	}
 
-	function getPhishingLinks() {
+	inline function resetChecks(id:String) {
+		this.time_since.remove(id);
+		this.sequential_tags.remove(id);
+		this.user_list.remove(id);
+		this.last_message.remove(id);
+	}
+
+	inline function getPhishingLinks() {
 		if (Date.now().getTime() - this.phishing_update_time < 1000 * 60 * 60 * 6) {
 			return;
 		}
@@ -49,7 +70,7 @@ class ScamPrevention extends CommandBase {
 		links.request();
 	}
 
-	function checkHistory() {
+	inline function checkHistory() {
 		for (id => time in time_since) {
 			var tag_count = sequential_tags.get(id);
 			if (tag_count < 3) {
@@ -83,13 +104,9 @@ class ScamPrevention extends CommandBase {
 								}
 								message.reply('A <@&198916468312637440> will need to review this further');
 							}, (err) -> trace(err));
-							
 						}, (err) -> trace(err));
 
-					this.time_since.remove(id);
-					this.sequential_tags.remove(id);
-					this.user_list.remove(id);
-					this.last_message.remove(id);
+						this.resetChecks(id);
 				}, (err) -> trace(err));
 			}
 		}

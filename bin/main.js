@@ -11676,6 +11676,9 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 	,last_message: null
 	,phishing_urls: null
 	,phishing_update_time: null
+	,get_timestamp: function() {
+		return new Date().getTime();
+	}
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
 		var _g = this.messages.iterator();
@@ -11691,8 +11694,138 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			this.last_message.h[message.author.id] = message;
 			this.messages.remove(_);
 		}
-		this.getPhishingLinks();
-		this.checkHistory();
+		var _gthis = this;
+		if(!(new Date().getTime() - this.phishing_update_time < 21600000)) {
+			this.phishing_update_time = new Date().getTime();
+			var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
+			links.onData = function(data) {
+				_gthis.phishing_urls = JSON.parse(data);
+			};
+			links.request();
+		}
+		var _gthis1 = this;
+		var h = this.time_since.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var id = [key];
+			var tag_count = this.sequential_tags.h[id[0]];
+			if(tag_count < 3) {
+				continue;
+			}
+			if(new Date().getTime() - _g1_value < 10000) {
+				var message = [this.last_message.h[id[0]]];
+				if(message[0] == null) {
+					continue;
+				}
+				message[0].guild.members.fetch(id[0]).then((function(message,id) {
+					return function(guild_member) {
+						guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then((function(message,id) {
+							return function(_) {
+								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 90, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								var channel = message[0].channel;
+								channel.sendTyping().then((function(message,id) {
+									return function(_) {
+										var _g = 0;
+										var _g1 = _gthis1.phishing_urls;
+										while(_g < _g1.length) {
+											var link = _g1[_g];
+											++_g;
+											if(message[0].content.indexOf(link) != -1) {
+												channel.sendTyping().then((function(id) {
+													return function(_) {
+														guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
+														channel.send("User <@" + id[0] + "> has been auto banned for phishing links.");
+													};
+												})(id),null);
+												return;
+											}
+										}
+										message[0].reply("A <@&198916468312637440> will need to review this further");
+									};
+								})(message,id),(function() {
+									return function(err) {
+										haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 106, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+									};
+								})());
+							};
+						})(message,id),(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 107, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+							};
+						})());
+						var _this = _gthis1.time_since;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+						var _this = _gthis1.sequential_tags;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+						var _this = _gthis1.user_list;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+						var _this = _gthis1.last_message;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+					};
+				})(message,id),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+					};
+				})());
+			}
+		}
+		var h = this.time_since.h;
+		var _g1_keys = Object.keys(h);
+		var _g1_length = _g1_keys.length;
+		var _g1_current = 0;
+		while(_g1_current < _g1_length) {
+			var key = _g1_keys[_g1_current++];
+			var _g2_value = h[key];
+			if(new Date().getTime() - _g2_value > 10000) {
+				haxe_Log.trace("reset",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 48, className : "systems.commands.ScamPrevention", methodName : "update"});
+				var _this = this.time_since;
+				if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+					delete(_this.h[key]);
+				}
+				var _this1 = this.sequential_tags;
+				if(Object.prototype.hasOwnProperty.call(_this1.h,key)) {
+					delete(_this1.h[key]);
+				}
+				var _this2 = this.user_list;
+				if(Object.prototype.hasOwnProperty.call(_this2.h,key)) {
+					delete(_this2.h[key]);
+				}
+				var _this3 = this.last_message;
+				if(Object.prototype.hasOwnProperty.call(_this3.h,key)) {
+					delete(_this3.h[key]);
+				}
+			}
+		}
+	}
+	,resetChecks: function(id) {
+		var _this = this.time_since;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.sequential_tags;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.user_list;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.last_message;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
 	}
 	,getPhishingLinks: function() {
 		var _gthis = this;
@@ -11729,7 +11862,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					return function(guild_member) {
 						guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then((function(message,id) {
 							return function(_) {
-								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 69, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 90, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 								var channel = message[0].channel;
 								channel.sendTyping().then((function(message,id) {
 									return function(_) {
@@ -11752,13 +11885,13 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 									};
 								})(message,id),(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 85, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+										haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 106, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 									};
 								})());
 							};
 						})(message,id),(function() {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 87, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 107, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 							};
 						})());
 						var _this = _gthis.time_since;
@@ -11780,7 +11913,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					};
 				})(message,id),(function() {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 93, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 					};
 				})());
 			}
@@ -11816,6 +11949,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 	,table6c16270644d94dba4055a067a073b12c: null
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,__class__: systems_commands_ScamPrevention
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_timestamp:"get_timestamp"})
 });
 var vm2_NodeVM = require("vm2").NodeVM;
 var vm2_VMScript = require("vm2").VMScript;
