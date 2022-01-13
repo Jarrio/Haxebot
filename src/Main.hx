@@ -31,6 +31,7 @@ import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
 import systems.commands.Poll;
+import systems.commands.ScamPrevention;
 import firebase.web.app.FirebaseApp;
 
 class Main {
@@ -42,12 +43,6 @@ class Main {
 	public static var dm_help_tracking:Map<String, Float> = [];
 
 	public static function start() {
-		// var app = getApp();
-
-		// trace(app);
-		// trace(app.name);
-		// trace(app.options);
-
 		universe = new Universe(1000);
 
 		universe.setSystems(Hi);
@@ -59,6 +54,7 @@ class Main {
 		universe.setSystems(Api);
 		universe.setSystems(Run);
 		universe.setSystems(Poll);
+		universe.setSystems(ScamPrevention);
 
 		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES, IntentFlags.GUILD_MEMBERS, IntentFlags.GUILD_MESSAGE_REACTIONS]});
 
@@ -69,11 +65,15 @@ class Main {
 
 		client.on('messageCreate', (message:Message) -> {
 			var channel = (message.channel : TextChannel);
-			if (message.toString().startsWith("!run")) {
+			if (message.content.startsWith("!run")) {
 				var code:RunMessage = message.toString();
 				universe.setComponents(universe.createEntity(), code, message);
 			}
+			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+			}
 		});
+
 		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
 			trace('disconnected');
 			trace(incoming);
@@ -267,4 +267,5 @@ enum abstract CommandType(String) {
 
 enum abstract CommandForward(String) {
 	var helppls;
+	var scam_prevention;
 }

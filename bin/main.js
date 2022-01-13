@@ -576,81 +576,61 @@ Lambda.concat = function(a,b) {
 	}
 	return l;
 };
-var haxe_IMap = function() { };
-$hxClasses["haxe.IMap"] = haxe_IMap;
-haxe_IMap.__name__ = "haxe.IMap";
-haxe_IMap.__isInterface__ = true;
-haxe_IMap.prototype = {
-	get: null
-	,set: null
-	,exists: null
-	,remove: null
-	,keys: null
-	,iterator: null
-	,keyValueIterator: null
-	,copy: null
-	,toString: null
-	,clear: null
-	,__class__: haxe_IMap
+var haxe_ds_Map = {};
+haxe_ds_Map.set = function(this1,key,value) {
+	this1.set(key,value);
 };
-var haxe_ds_StringMap = function() {
-	this.h = Object.create(null);
+haxe_ds_Map.get = function(this1,key) {
+	return this1.get(key);
 };
-$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
-haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
-haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
-haxe_ds_StringMap.createCopy = function(h) {
-	var copy = new haxe_ds_StringMap();
-	for (var key in h) copy.h[key] = h[key];
-	return copy;
+haxe_ds_Map.exists = function(this1,key) {
+	return this1.exists(key);
 };
-haxe_ds_StringMap.stringify = function(h) {
-	var s = "{";
-	var first = true;
-	for (var key in h) {
-		if (first) first = false; else s += ',';
-		s += key + ' => ' + Std.string(h[key]);
-	}
-	return s + "}";
+haxe_ds_Map.remove = function(this1,key) {
+	return this1.remove(key);
 };
-haxe_ds_StringMap.prototype = {
-	h: null
-	,exists: function(key) {
-		return Object.prototype.hasOwnProperty.call(this.h,key);
-	}
-	,get: function(key) {
-		return this.h[key];
-	}
-	,set: function(key,value) {
-		this.h[key] = value;
-	}
-	,remove: function(key) {
-		if(Object.prototype.hasOwnProperty.call(this.h,key)) {
-			delete(this.h[key]);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	,keys: function() {
-		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
-	}
-	,iterator: function() {
-		return new haxe_ds__$StringMap_StringMapValueIterator(this.h);
-	}
-	,keyValueIterator: function() {
-		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
-	}
-	,copy: function() {
-		return haxe_ds_StringMap.createCopy(this.h);
-	}
-	,clear: function() {
-		this.h = Object.create(null);
-	}
-	,toString: function() {
-		return haxe_ds_StringMap.stringify(this.h);
-	}
-	,__class__: haxe_ds_StringMap
+haxe_ds_Map.keys = function(this1) {
+	return this1.keys();
+};
+haxe_ds_Map.iterator = function(this1) {
+	return this1.iterator();
+};
+haxe_ds_Map.keyValueIterator = function(this1) {
+	return this1.keyValueIterator();
+};
+haxe_ds_Map.copy = function(this1) {
+	return this1.copy();
+};
+haxe_ds_Map.toString = function(this1) {
+	return this1.toString();
+};
+haxe_ds_Map.clear = function(this1) {
+	this1.clear();
+};
+haxe_ds_Map.arrayWrite = function(this1,k,v) {
+	this1.set(k,v);
+	return v;
+};
+haxe_ds_Map.toStringMap = function(t) {
+	return new haxe_ds_StringMap();
+};
+haxe_ds_Map.toIntMap = function(t) {
+	return new haxe_ds_IntMap();
+};
+haxe_ds_Map.toEnumValueMapMap = function(t) {
+	return new haxe_ds_EnumValueMap();
+};
+haxe_ds_Map.toObjectMap = function(t) {
+	return new haxe_ds_ObjectMap();
+};
+haxe_ds_Map.fromStringMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromIntMap = function(map) {
+	return map;
+};
+haxe_ds_Map.fromObjectMap = function(map) {
+	return map;
 };
 var Main = function() { };
 $hxClasses["Main"] = Main;
@@ -671,16 +651,17 @@ Main.start = function() {
 	Main.universe.systems.add(new systems_commands_Api(Main.universe));
 	Main.universe.systems.add(new systems_commands_Run(Main.universe));
 	Main.universe.systems.add(new systems_commands_Poll(Main.universe));
+	Main.universe.systems.add(new systems_commands_ScamPrevention(Main.universe));
 	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES","DIRECT_MESSAGES","GUILD_MEMBERS","GUILD_MESSAGE_REACTIONS"]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var _ = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){_[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 66, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 62, className : "Main", methodName : "start"});
 		Main.connected = true;
 	});
 	Main.client.on("messageCreate",function(message) {
-		if(StringTools.startsWith(message.toString(),"!run")) {
+		if(StringTools.startsWith(message.content,"!run")) {
 			var code = message.toString();
 			var _ecsTmpEntity = Main.universe.entities.create();
 			Main.universe.components.set_systems_commands_RunMessage(_ecsTmpEntity,4,code);
@@ -691,6 +672,20 @@ Main.start = function() {
 				ecsTmpFamily.add(_ecsTmpEntity);
 			}
 			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+		}
+		if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+			var _ecsTmpEntity = Main.universe.entities.create();
+			Main.universe.components.set_CommandForward(_ecsTmpEntity,3,"scam_prevention");
+			Main.universe.components.set_discord_js_Message(_ecsTmpEntity,2,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(2);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(_ecsTmpEntity);
 			}
@@ -2434,6 +2429,10 @@ ecs_core_ComponentManager.prototype = {
 		this.components[_id].set(_entity,_component);
 		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
 	}
+	,set_CommandForward: function(_entity,_id,_component) {
+		this.components[_id].set(_entity,_component);
+		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
+	}
 	,set_discord_js_Message: function(_entity,_id,_component) {
 		this.components[_id].set(_entity,_component);
 		bits_Bits.set(this.flags[ecs_Entity.id(_entity)],_id);
@@ -2748,6 +2747,82 @@ ecs_ds_SparseSet.prototype = {
 		return this.number;
 	}
 	,__class__: ecs_ds_SparseSet
+};
+var haxe_IMap = function() { };
+$hxClasses["haxe.IMap"] = haxe_IMap;
+haxe_IMap.__name__ = "haxe.IMap";
+haxe_IMap.__isInterface__ = true;
+haxe_IMap.prototype = {
+	get: null
+	,set: null
+	,exists: null
+	,remove: null
+	,keys: null
+	,iterator: null
+	,keyValueIterator: null
+	,copy: null
+	,toString: null
+	,clear: null
+	,__class__: haxe_IMap
+};
+var haxe_ds_StringMap = function() {
+	this.h = Object.create(null);
+};
+$hxClasses["haxe.ds.StringMap"] = haxe_ds_StringMap;
+haxe_ds_StringMap.__name__ = "haxe.ds.StringMap";
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.createCopy = function(h) {
+	var copy = new haxe_ds_StringMap();
+	for (var key in h) copy.h[key] = h[key];
+	return copy;
+};
+haxe_ds_StringMap.stringify = function(h) {
+	var s = "{";
+	var first = true;
+	for (var key in h) {
+		if (first) first = false; else s += ',';
+		s += key + ' => ' + Std.string(h[key]);
+	}
+	return s + "}";
+};
+haxe_ds_StringMap.prototype = {
+	h: null
+	,exists: function(key) {
+		return Object.prototype.hasOwnProperty.call(this.h,key);
+	}
+	,get: function(key) {
+		return this.h[key];
+	}
+	,set: function(key,value) {
+		this.h[key] = value;
+	}
+	,remove: function(key) {
+		if(Object.prototype.hasOwnProperty.call(this.h,key)) {
+			delete(this.h[key]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	,keys: function() {
+		return new haxe_ds__$StringMap_StringMapKeyIterator(this.h);
+	}
+	,iterator: function() {
+		return new haxe_ds__$StringMap_StringMapValueIterator(this.h);
+	}
+	,keyValueIterator: function() {
+		return new haxe_ds__$StringMap_StringMapKeyValueIterator(this.h);
+	}
+	,copy: function() {
+		return haxe_ds_StringMap.createCopy(this.h);
+	}
+	,clear: function() {
+		this.h = Object.create(null);
+	}
+	,toString: function() {
+		return haxe_ds_StringMap.stringify(this.h);
+	}
+	,__class__: haxe_ds_StringMap
 };
 function ecs_macros_ComponentCache_getComponentCount() {
 	return ecs_macros_ComponentCache_componentIncrementer;
@@ -5116,62 +5191,6 @@ haxe_ds__$List_ListKeyValueIterator.prototype = {
 		return { value : val, key : this.idx++};
 	}
 	,__class__: haxe_ds__$List_ListKeyValueIterator
-};
-var haxe_ds_Map = {};
-haxe_ds_Map.set = function(this1,key,value) {
-	this1.set(key,value);
-};
-haxe_ds_Map.get = function(this1,key) {
-	return this1.get(key);
-};
-haxe_ds_Map.exists = function(this1,key) {
-	return this1.exists(key);
-};
-haxe_ds_Map.remove = function(this1,key) {
-	return this1.remove(key);
-};
-haxe_ds_Map.keys = function(this1) {
-	return this1.keys();
-};
-haxe_ds_Map.iterator = function(this1) {
-	return this1.iterator();
-};
-haxe_ds_Map.keyValueIterator = function(this1) {
-	return this1.keyValueIterator();
-};
-haxe_ds_Map.copy = function(this1) {
-	return this1.copy();
-};
-haxe_ds_Map.toString = function(this1) {
-	return this1.toString();
-};
-haxe_ds_Map.clear = function(this1) {
-	this1.clear();
-};
-haxe_ds_Map.arrayWrite = function(this1,k,v) {
-	this1.set(k,v);
-	return v;
-};
-haxe_ds_Map.toStringMap = function(t) {
-	return new haxe_ds_StringMap();
-};
-haxe_ds_Map.toIntMap = function(t) {
-	return new haxe_ds_IntMap();
-};
-haxe_ds_Map.toEnumValueMapMap = function(t) {
-	return new haxe_ds_EnumValueMap();
-};
-haxe_ds_Map.toObjectMap = function(t) {
-	return new haxe_ds_ObjectMap();
-};
-haxe_ds_Map.fromStringMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromIntMap = function(map) {
-	return map;
-};
-haxe_ds_Map.fromObjectMap = function(map) {
-	return map;
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { __keys__ : { }};
@@ -9162,6 +9181,8 @@ haxe_macro_TypeTools.nullable = function(complexType) {
 haxe_macro_TypeTools.toField = function(cf) {
 	var varAccessToString = function(va,getOrSet) {
 		switch(va._hx_index) {
+		case 0:case 7:
+			return "default";
 		case 1:
 			return "null";
 		case 2:
@@ -9173,8 +9194,6 @@ haxe_macro_TypeTools.toField = function(cf) {
 		case 5:
 			return "default";
 		case 6:
-			return "default";
-		case 0:case 7:
 			return "default";
 		}
 	};
@@ -11361,6 +11380,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		try {
 			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 108, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
@@ -11601,6 +11621,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			});
 			return;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 382, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
@@ -11636,6 +11657,165 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,table25aaa7d3f4989532034d5f61746d0948: null
 	,__class__: systems_commands_Run
 	,__properties__: {get_base_path:"get_base_path"}
+});
+var systems_commands_ScamPrevention = function(_universe) {
+	this.phishing_urls = [];
+	this.last_message = new haxe_ds_StringMap();
+	this.user_list = new haxe_ds_StringMap();
+	this.sequential_tags = new haxe_ds_StringMap();
+	this.time_since = new haxe_ds_StringMap();
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.ScamPrevention"] = systems_commands_ScamPrevention;
+systems_commands_ScamPrevention.__name__ = "systems.commands.ScamPrevention";
+systems_commands_ScamPrevention.__super__ = systems_CommandBase;
+systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
+	time_since: null
+	,sequential_tags: null
+	,user_list: null
+	,last_message: null
+	,phishing_urls: null
+	,phishing_update_time: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _g = this.messages.iterator();
+		while(_g.active && _g.idx < _g.set.size()) {
+			var _ = _g.set.getDense(_g.idx++);
+			var message = this.table6c16270644d94dba4055a067a073b12c.get(_);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(_);
+			if(forward != "scam_prevention") {
+				continue;
+			}
+			this.incrementSequential(message.author.id);
+			this.updateTime(message.author.id);
+			this.last_message.h[message.author.id] = message;
+			this.messages.remove(_);
+		}
+		this.getPhishingLinks();
+		this.checkHistory();
+	}
+	,getPhishingLinks: function() {
+		var _gthis = this;
+		if(new Date().getTime() - this.phishing_update_time < 21600000) {
+			return;
+		}
+		this.phishing_update_time = new Date().getTime();
+		var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
+		links.onData = function(data) {
+			_gthis.phishing_urls = JSON.parse(data);
+		};
+		links.request();
+	}
+	,checkHistory: function() {
+		var _gthis = this;
+		var h = this.time_since.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var id = [key];
+			var tag_count = this.sequential_tags.h[id[0]];
+			if(tag_count < 3) {
+				continue;
+			}
+			if(new Date().getTime() - _g1_value < 10000) {
+				var message = [this.last_message.h[id[0]]];
+				if(message[0] == null) {
+					continue;
+				}
+				message[0].guild.members.fetch(id[0]).then((function(message,id) {
+					return function(guild_member) {
+						guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then((function(message,id) {
+							return function(_) {
+								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 69, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								var channel = message[0].channel;
+								channel.sendTyping().then((function(message,id) {
+									return function(_) {
+										var _g = 0;
+										var _g1 = _gthis.phishing_urls;
+										while(_g < _g1.length) {
+											var link = _g1[_g];
+											++_g;
+											if(message[0].content.indexOf(link) != -1) {
+												channel.sendTyping().then((function(id) {
+													return function(_) {
+														guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
+														channel.send("User <@" + id[0] + "> has been auto banned for phishing links.");
+													};
+												})(id),null);
+												return;
+											}
+										}
+										message[0].reply("A <@&198916468312637440> will need to review this further");
+									};
+								})(message,id),(function() {
+									return function(err) {
+										haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 85, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+									};
+								})());
+							};
+						})(message,id),(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 87, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+							};
+						})());
+						var _this = _gthis.time_since;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+						var _this = _gthis.sequential_tags;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+						var _this = _gthis.user_list;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+						var _this = _gthis.last_message;
+						if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+							delete(_this.h[id[0]]);
+						}
+					};
+				})(message,id),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 93, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+					};
+				})());
+			}
+		}
+	}
+	,incrementSequential: function(user) {
+		var count = 0;
+		if(Object.prototype.hasOwnProperty.call(this.sequential_tags.h,user)) {
+			count = this.sequential_tags.h[user];
+		}
+		this.sequential_tags.h[user] = count + 1;
+	}
+	,updateTime: function(user) {
+		var this1 = this.time_since;
+		var value = new Date().getTime();
+		this1.h[user] = value;
+	}
+	,run: function(command,interaction) {
+	}
+	,get_name: function() {
+		return "scamprevention";
+	}
+	,onAdded: function() {
+		systems_CommandBase.prototype.onAdded.call(this);
+		this.messages = this.universe.families.get(1);
+		this.table6c16270644d94dba4055a067a073b12c = this.universe.components.getTable(2);
+		this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
+	}
+	,onRemoved: function() {
+		systems_CommandBase.prototype.onRemoved.call(this);
+	}
+	,messages: null
+	,table6c16270644d94dba4055a067a073b12c: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,__class__: systems_commands_ScamPrevention
 });
 var vm2_NodeVM = require("vm2").NodeVM;
 var vm2_VMScript = require("vm2").VMScript;
