@@ -15,16 +15,12 @@ class ScamPrevention extends CommandBase {
 	var time_since:Map<String, Float> = new Map();
 	var sequential_tags:Map<String, Int> = new Map();
 	var user_list:Map<String, User> = new Map();
-	var last_message:Map<String, Message> = new Map();
+	var trigger_messages:Map<String, Array<Message>> = new Map();
 
 	var phishing_urls:Array<String> = [];
 	var phishing_update_time:Float;
 
 	var timestamp(get, never):Float;
-
-	private inline function get_timestamp() {
-		return Date.now().getTime();
-	}
 
 	override function update(_:Float) {
 		super.update(_);
@@ -56,6 +52,19 @@ class ScamPrevention extends CommandBase {
 		this.sequential_tags.remove(id);
 		this.user_list.remove(id);
 		this.last_message.remove(id);
+	}
+	
+	inline function getLastMessage(id:String) {
+		var message = this.trigger_messages.get(id);
+		if (message == null) {
+			return null;
+		}
+		
+		if (message.length != 3) {
+			return null;
+		}
+
+		return message[2];
 	}
 
 	inline function getPhishingLinks() {
@@ -125,6 +134,12 @@ class ScamPrevention extends CommandBase {
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {}
+
+
+
+	private inline function get_timestamp() {
+		return Date.now().getTime();
+	}
 
 	function get_name():String {
 		return 'scamprevention';
