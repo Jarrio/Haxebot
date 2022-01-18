@@ -5,3 +5,4 @@
 /.haxelib/buddy
 /.haxelib/promhx
 /bin/haxebot
+.ecs_invalidation
