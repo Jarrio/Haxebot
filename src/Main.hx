@@ -139,7 +139,7 @@ class Main {
 
 		client.login(config.discord_token);
 
-		new Timer(100).run = function() {
+		new Timer(500).run = function() {
 			universe.update(1);
 		}
 	}

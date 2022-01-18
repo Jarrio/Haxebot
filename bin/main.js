@@ -870,7 +870,7 @@ Main.start = function() {
 		}
 	});
 	Main.client.login(Main.config.discord_token);
-	new haxe_Timer(100).run = function() {
+	new haxe_Timer(500).run = function() {
 		Main.universe.update(1);
 	};
 };
@@ -7996,8 +7996,9 @@ var systems_commands_Roundup = function(_universe) {
 	this.announcement_channel = "286485321925918721";
 	this.news_role = "761714325227700225";
 	this.super_mod_id = "198916468312637440";
-	this.roundup = -1;
-	this.active = false;
+	this.checking_channel = false;
+	this.channel = null;
+	this.active = true;
 	this.last_checked = -1;
 	systems_CommandBase.call(this,_universe);
 };
@@ -8007,23 +8008,23 @@ systems_commands_Roundup.__super__ = systems_CommandBase;
 systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	last_checked: null
 	,active: null
-	,roundup: null
 	,channel: null
+	,checking_channel: null
 	,super_mod_id: null
 	,news_role: null
 	,announcement_channel: null
 	,getHaxeIoPage: function() {
 		var _gthis = this;
-		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + this.roundup + ".md");
+		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.config.last_roundup_posted + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 22, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 25, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
 			if(regex.match(body)) {
-				embed.setTitle("Haxe Roundup #" + _gthis.roundup);
-				embed.setURL("https://haxe.io/roundups/" + _gthis.roundup + "/");
+				embed.setTitle("Haxe Roundup #" + Main.config.last_roundup_posted);
+				embed.setURL("https://haxe.io/roundups/" + Main.config.last_roundup_posted + "/");
 				var desc_split = StringTools.trim(regex.matched(1)).split("\n");
 				var desc = "\n**News And Articles**";
 				var _g = 0;
@@ -8038,21 +8039,34 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				desc += "\n...";
 				embed.setDescription(desc);
 				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
-					return _gthis.roundup++;
+					var fh = Main.config;
+					var postfix = fh.last_roundup_posted;
+					var value = fh.last_roundup_posted + 1;
+					Main.config.last_roundup_posted = value;
+					js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+					return postfix;
 				});
 			}
 		};
 		data.request();
 	}
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
-		if(!this.active || this.roundup == -1 || new Date().getTime() - this.last_checked <= 86400000) {
+		if(this.channel == null && this.checking_channel == false) {
+			this.checking_channel = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking_channel = false;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 60, className : "systems.commands.Roundup", methodName : "update"});
+			});
+		}
+		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
 			return;
 		}
-		if(this.channel != null) {
-			this.last_checked = new Date().getTime();
-			this.getHaxeIoPage();
-		}
+		this.last_checked = new Date().getTime();
+		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -8074,19 +8088,30 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			this.active = true;
-			this.roundup = _g1 | 0;
+			var value = _g1 | 0;
+			Main.config.last_roundup_posted = value;
+			js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
 			interaction.reply("Will start watching haxe roundups from **#" + _g1 + "**.");
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 88, className : "systems.commands.Roundup", methodName : "run"});
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 99, className : "systems.commands.Roundup", methodName : "run"});
 			});
 		}
+	}
+	,get_roundup: function() {
+		return Main.config.last_roundup_posted;
+	}
+	,set_roundup: function(value) {
+		Main.config.last_roundup_posted = value;
+		js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+		return value;
 	}
 	,get_name: function() {
 		return "roundup";
 	}
 	,__class__: systems_commands_Roundup
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{set_roundup:"set_roundup",get_roundup:"get_roundup"})
 });
 var systems_commands_Rtfm = function(_universe) {
 	systems_CommandBase.call(this,_universe);
