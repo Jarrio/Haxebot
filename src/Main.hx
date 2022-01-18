@@ -1,5 +1,4 @@
 import haxe.extern.EitherType;
-import buddy.internal.sys.Js;
 import discord_js.User;
 import discord_builder.SlashCommandMentionableOption;
 import discord_builder.SlashCommandRoleOption;
@@ -43,18 +42,15 @@ class Main {
 	public static var dm_help_tracking:Map<String, Float> = [];
 
 	public static function start() {
-		universe = new Universe(1000);
-
-		universe.setSystems(Hi);
-		universe.setSystems(Help);
-		universe.setSystems(Haxelib);
-		universe.setSystems(Notify);
-		universe.setSystems(Rtfm);
-		universe.setSystems(Roundup);
-		universe.setSystems(Api);
-		universe.setSystems(Run);
-		universe.setSystems(Poll);
-		universe.setSystems(ScamPrevention);
+		universe = Universe.create({
+			entities: 1000,
+			phases: [
+				{
+					name: 'main',
+					systems: [Hi, Help, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, ScamPrevention]
+				}
+			]
+		});
 
 		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES, IntentFlags.GUILD_MEMBERS, IntentFlags.GUILD_MESSAGE_REACTIONS]});
 
@@ -94,11 +90,14 @@ class Main {
 					dm_help_tracking.set(interaction.user.id, time);
 				default:
 			}
+
 			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
+
 			for (value in config.commands) {
 				if (value.name != command.name) {
 					continue;
 				}
+
 				if (value.params == null) {
 					command.content = Type.createEnum(CommandOptions, enum_id);
 					break;
@@ -140,7 +139,7 @@ class Main {
 
 		client.login(config.discord_token);
 
-		new Timer(100).run = function() {
+		new Timer(500).run = function() {
 			universe.update(1);
 		}
 	}
@@ -243,6 +242,7 @@ typedef TConfig = {
 	var client_id:String;
 	var server_id:String;
 	var discord_token:String;
+	var last_roundup_posted:Int;
 	var commands:Array<TCommands>;
 }
 

@@ -5,7 +5,7 @@ import components.Command;
 
 class Rtfm extends CommandBase {
 	var data:Array<TRtfmFormat>;
-	override function onAdded() {
+	override function onEnabled() {
 		this.data = loadFile('rtfm');
 	}
 	

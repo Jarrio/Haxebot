@@ -20,9 +20,7 @@ class Run extends System {
 	var code_requests:Map<String, Array<Float>> = [];
 	var channel:TextChannel;
 	var checked:Bool = false;
-	override function onAdded() {
 
-	}
 
 	override function update(_) {
 		if (!Main.connected) {

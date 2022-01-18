@@ -6,7 +6,7 @@ import components.Command;
 class Help extends CommandBase {
 	var data:Array<THelpFormat>;
 
-	override function onAdded() {
+	override function onEnabled() {
 		this.data = loadFile('help');
 	}
 

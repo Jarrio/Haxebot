@@ -41,7 +41,6 @@ class ScamPrevention extends CommandBase {
 
 		for (id => value in this.time_since) {
 			if (this.timestamp - value > 10000) {
-				trace('reset');
 				this.resetChecks(id);
 			}
 		}
@@ -121,7 +120,7 @@ class ScamPrevention extends CommandBase {
 		}
 	}
 
-	function incrementSequential(user:String) {
+	inline function incrementSequential(user:String) {
 		var count = 0;
 		if (this.sequential_tags.exists(user)) {
 			count = sequential_tags.get(user);
@@ -129,7 +128,7 @@ class ScamPrevention extends CommandBase {
 		this.sequential_tags.set(user, count + 1);
 	}
 
-	function updateTime(user:String) {
+	inline function updateTime(user:String) {
 		this.time_since.set(user, Date.now().getTime());
 	}
 
