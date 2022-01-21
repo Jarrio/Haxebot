@@ -31,7 +31,7 @@ class ScamPrevention extends CommandBase {
 
 			this.incrementSequential(message.author.id);
 			this.updateTime(message.author.id);
-			this.last_message.set(message.author.id, message);
+			this.addMessage(message.author.id, message);
 
 			messages.remove(_);
 		});
@@ -50,20 +50,20 @@ class ScamPrevention extends CommandBase {
 		this.time_since.remove(id);
 		this.sequential_tags.remove(id);
 		this.user_list.remove(id);
-		this.last_message.remove(id);
+		this.trigger_messages.remove(id);
 	}
-	
+
 	inline function getLastMessage(id:String) {
-		var message = this.trigger_messages.get(id);
-		if (message == null) {
-			return null;
-		}
-		
-		if (message.length != 3) {
+		var messages = this.trigger_messages.get(id);
+		if (messages == null) {
 			return null;
 		}
 
-		return message[2];
+		if (messages.length != 3) {
+			return null;
+		}
+
+		return messages[messages.length - 1];
 	}
 
 	inline function getPhishingLinks() {
@@ -78,7 +78,7 @@ class ScamPrevention extends CommandBase {
 		links.request();
 	}
 
-	inline function checkHistory() {
+	function checkHistory() {
 		for (id => time in time_since) {
 			var tag_count = sequential_tags.get(id);
 			if (tag_count < 3) {
@@ -86,15 +86,25 @@ class ScamPrevention extends CommandBase {
 			}
 
 			if (Date.now().getTime() - time < 10000) {
-				var message = this.last_message.get(id);
+				var message = this.getLastMessage(id);
 
 				if (message == null) {
 					continue;
 				}
 
 				message.guild.members.fetch(id).then(function(guild_member) {
+					this.time_since.set(id, time - 15000);
 					guild_member.timeout(1000 * 60 * 60 * 12, 'You are spamming something that doesn\t need to be spammed. Wait for review.')
 						.then(function(_) {
+							var messages = this.trigger_messages.get(id);
+							if (messages != null) {
+								for (item in messages) {
+									if (message.content != item.content || message.id == item.id) {
+										continue;
+									}
+									item.delete();
+								}
+							}
 							trace('user: ' + guild_member.user.tag + ' has been timed out');
 							var channel = (message.channel : TextChannel);
 							channel.sendTyping().then(function(_) {
@@ -110,11 +120,12 @@ class ScamPrevention extends CommandBase {
 										return;
 									}
 								}
-								message.reply('A <@&198916468312637440> will need to review this further');
+
+								message.reply('A <@&198916468312637440> will need to review this further').then(function(_) {
+									this.resetChecks(id);
+								});
 							}, (err) -> trace(err));
 						}, (err) -> trace(err));
-
-						this.resetChecks(id);
 				}, (err) -> trace(err));
 			}
 		}
@@ -134,13 +145,20 @@ class ScamPrevention extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {}
 
-
-
 	private inline function get_timestamp() {
 		return Date.now().getTime();
 	}
 
 	function get_name():String {
 		return 'scamprevention';
+	}
+
+	function addMessage(id:String, message:Message) {
+		var messages = this.trigger_messages.get(id);
+		if (messages == null) {
+			messages = [];
+		}
+		messages.push(message);
+		this.trigger_messages.set(id, messages);
 	}
 }
