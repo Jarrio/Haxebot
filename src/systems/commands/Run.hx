@@ -348,13 +348,18 @@ class Run extends System {
 						embed.setDescription(desc);
 
 						var url = this.codeSource(code);
+						var author = {
+							name: '@' + message.author.tag,
+							iconURL: message.author.displayAvatarURL()
+						}
+
 						if (url == "") {
-							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+							embed.setAuthor(author);
 						} else {
 							var tag = url.split('#')[1];
 							embed.setTitle('TryHaxe #$tag');
 							embed.setURL(url);
-							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+							embed.setAuthor(author);
 						}
 						
 						var date = Date.fromTime(message.createdTimestamp);

@@ -1,5 +1,6 @@
 package systems.commands;
 
+import discord_js.MessageEmbed;
 import discord_js.TextChannel;
 import sys.io.File;
 import haxe.Json;
@@ -102,7 +103,9 @@ class ScamPrevention extends CommandBase {
 									if (message.content != item.content || message.id == item.id) {
 										continue;
 									}
-									item.delete();
+									try {
+										item.delete();
+									} catch (e) {}
 								}
 							}
 							trace('user: ' + guild_member.user.tag + ' has been timed out');
@@ -120,8 +123,10 @@ class ScamPrevention extends CommandBase {
 										return;
 									}
 								}
-
-								message.reply('A <@&198916468312637440> will need to review this further').then(function(_) {
+								var embed = this.reformatMessage(message);
+								
+								message.reply({content: '<@&198916468312637440> Please review this message by: <@${message.author.id}>', embeds: [embed]}).then(function(_) {
+									message.delete();
 									this.resetChecks(id);
 								});
 							}, (err) -> trace(err));
@@ -129,6 +134,25 @@ class ScamPrevention extends CommandBase {
 				}, (err) -> trace(err));
 			}
 		}
+	}
+
+	function reformatMessage(message:Message) {
+		var embed = new MessageEmbed();
+		var content = message.content;
+		var link_regex = ~/(https?:\/\/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\d*)\/?([a-z_\/0-9\-#.]*)\??([a-z_\/0-9\-#=&]*)/ig; 
+		if (link_regex.match(content)) {
+			content = link_regex.replace(content, '[Link Removed]');
+			trace(content);
+		}
+		var url = 'https://cdn.discordapp.com/attachments/596744553030090880/934941714282577970/39487dc2-a3c0-40fe-b7aa-6c5ad58de4d4.png';
+		if (url == null) {
+			url = message.author.defaultAvatarURL;
+		}
+
+		embed.setAuthor({name: 'Caution!', iconURL: url});
+		embed.setDescription(content);
+
+		return embed;
 	}
 
 	inline function incrementSequential(user:String) {
