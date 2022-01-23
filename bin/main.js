@@ -8766,9 +8766,10 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		var link_regex = new EReg("(https?://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\\d*)/?([a-z_/0-9\\-#.]*)\\??([a-z_/0-9\\-#=&]*)","ig");
 		if(link_regex.match(content)) {
 			content = content.replace(link_regex.r,"[Link Removed]");
-			haxe_Log.trace(content,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 145, className : "systems.commands.ScamPrevention", methodName : "reformatMessage"});
 		}
-		embed.setAuthor({ name : "Caution!", iconURL : "https://cdn.discordapp.com/attachments/596744553030090880/934941714282577970/39487dc2-a3c0-40fe-b7aa-6c5ad58de4d4.png"});
+		var rand = Math.random();
+		var avatar = rand >= 0 || rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true" : rand >= 0.33 || rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";
+		embed.setAuthor({ name : "Caution!", iconURL : avatar});
 		embed.setDescription(content);
 		return embed;
 	}

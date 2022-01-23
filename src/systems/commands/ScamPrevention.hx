@@ -140,16 +140,21 @@ class ScamPrevention extends CommandBase {
 		var embed = new MessageEmbed();
 		var content = message.content;
 		var link_regex = ~/(https?:\/\/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\d*)\/?([a-z_\/0-9\-#.]*)\??([a-z_\/0-9\-#=&]*)/ig; 
+		
 		if (link_regex.match(content)) {
 			content = link_regex.replace(content, '[Link Removed]');
-			trace(content);
-		}
-		var url = 'https://cdn.discordapp.com/attachments/596744553030090880/934941714282577970/39487dc2-a3c0-40fe-b7aa-6c5ad58de4d4.png';
-		if (url == null) {
-			url = message.author.defaultAvatarURL;
 		}
 
-		embed.setAuthor({name: 'Caution!', iconURL: url});
+		var rand = Math.random(); 
+		var avatar = if (rand >= 0 || rand < 0.33) {
+			muffin;
+		} else if (rand >= 0.33 || rand < 0.66) {
+			bulby;
+		} else {
+			bsod;
+		}
+
+		embed.setAuthor({name: 'Caution!', iconURL: avatar});
 		embed.setDescription(content);
 
 		return embed;
@@ -185,4 +190,10 @@ class ScamPrevention extends CommandBase {
 		messages.push(message);
 		this.trigger_messages.set(id, messages);
 	}
+}
+
+enum abstract CopLogo(String) to String {
+	var muffin = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true';
+	var bulby = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true';
+	var bsod = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true';
 }
