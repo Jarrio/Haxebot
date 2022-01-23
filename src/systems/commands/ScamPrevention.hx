@@ -146,9 +146,9 @@ class ScamPrevention extends CommandBase {
 		}
 
 		var rand = Math.random(); 
-		var avatar = if (rand >= 0 || rand < 0.33) {
+		var avatar = if (rand >= 0 && rand < 0.33) {
 			muffin;
-		} else if (rand >= 0.33 || rand < 0.66) {
+		} else if (rand >= 0.33 && rand < 0.66) {
 			bulby;
 		} else {
 			bsod;

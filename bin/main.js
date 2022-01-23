@@ -8768,7 +8768,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			content = content.replace(link_regex.r,"[Link Removed]");
 		}
 		var rand = Math.random();
-		var avatar = rand >= 0 || rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true" : rand >= 0.33 || rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";
+		var avatar = rand >= 0 && rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true" : rand >= 0.33 && rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";
 		embed.setAuthor({ name : "Caution!", iconURL : avatar});
 		embed.setDescription(content);
 		return embed;
