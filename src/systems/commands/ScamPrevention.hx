@@ -147,7 +147,7 @@ class ScamPrevention extends CommandBase {
 
 		var rand = Math.random(); 
 
-		var avatar = CopInfo.logos[Math.floor(rand * CopInfo.logos.length)];
+		var avatar = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/${CopInfo.logos[Math.floor(rand * CopInfo.logos.length)]}_haxe_cop.png?raw=true';
 		
 		embed.setAuthor({name: 'Caution!', iconURL: avatar});
 		embed.setDescription(content);
@@ -188,6 +188,6 @@ class ScamPrevention extends CommandBase {
 }
 
 class CopInfo {
-	public static var logos = ['muffin', 'bulby', 'bsod'];
+	public static var logos = ['muffin', 'bulby', 'bsod','rtx'];
 
 }
