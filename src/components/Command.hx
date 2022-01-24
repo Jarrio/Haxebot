@@ -11,6 +11,7 @@ typedef Command = {
 @:keep
 enum CommandOptions {
 	Hi;
+	Boop(user:User);
 	Poll(question:String, time:Int);
 	Roundup(number:Float);
 	Rtfm(channel:String);

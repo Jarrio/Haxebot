@@ -7,7 +7,7 @@ class Boop extends CommandBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Boop(user): 
-				interaction.reply('BOOP <@${user.id}>');
+				interaction.reply('*boop* <@${user.id}>');
 			default:
 		}
 	}

@@ -30,6 +30,7 @@ import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
 import systems.commands.Poll;
+import systems.commands.Boop;
 import systems.commands.ScamPrevention;
 import firebase.web.app.FirebaseApp;
 
@@ -47,12 +48,18 @@ class Main {
 			phases: [
 				{
 					name: 'main',
-					systems: [Hi, Help, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, ScamPrevention]
+					systems: [Hi, Help, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention]
 				}
 			]
 		});
 
-		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES, IntentFlags.GUILD_MEMBERS, IntentFlags.GUILD_MESSAGE_REACTIONS]});
+		client = new Client({intents: [
+			IntentFlags.GUILDS,
+			IntentFlags.GUILD_MESSAGES,
+			IntentFlags.DIRECT_MESSAGES,
+			IntentFlags.GUILD_MEMBERS,
+			IntentFlags.GUILD_MESSAGE_REACTIONS
+		]});
 
 		client.once('ready', (_) -> {
 			trace('Ready!');
