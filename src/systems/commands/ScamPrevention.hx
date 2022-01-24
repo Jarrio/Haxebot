@@ -146,14 +146,9 @@ class ScamPrevention extends CommandBase {
 		}
 
 		var rand = Math.random(); 
-		var avatar = if (rand >= 0 && rand < 0.33) {
-			muffin;
-		} else if (rand >= 0.33 && rand < 0.66) {
-			bulby;
-		} else {
-			bsod;
-		}
 
+		var avatar = CopInfo.logos[Math.floor(rand * CopInfo.logos.length)];
+		
 		embed.setAuthor({name: 'Caution!', iconURL: avatar});
 		embed.setDescription(content);
 
@@ -192,8 +187,7 @@ class ScamPrevention extends CommandBase {
 	}
 }
 
-enum abstract CopLogo(String) to String {
-	var muffin = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true';
-	var bulby = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true';
-	var bsod = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true';
+class CopInfo {
+	public static var logos = ['muffin', 'bulby', 'bsod'];
+
 }
