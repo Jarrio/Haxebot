@@ -200,7 +200,7 @@ class ScamPrevention extends CommandBase {
 }
 
 enum abstract CopLogo(String) to String {
-	var muffin = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true';
+	var muffin = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true&rf=1';
 	var bulby = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true';
 	var bsod = 'https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true';
 }
