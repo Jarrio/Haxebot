@@ -74,7 +74,14 @@ class ScamPrevention extends CommandBase {
 		phishing_update_time = Date.now().getTime();
 		var links = new Http('https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json');
 		links.onData = function(data) {
-			phishing_urls = Json.parse(data);
+			try {
+				phishing_urls = Json.parse(data);
+			}	catch (e) {
+				trace(e);
+				trace('error parsing phishing links');
+				this.phishing_update_time = Date.now().getTime() - 1000 * 60 * 60 * 5;
+			}
+			
 		}
 		links.request();
 	}

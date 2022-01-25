@@ -8606,7 +8606,15 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			this.phishing_update_time = new Date().getTime();
 			var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
 			links.onData = function(data) {
-				_gthis.phishing_urls = JSON.parse(data);
+				try {
+					_gthis.phishing_urls = JSON.parse(data);
+				} catch( _g ) {
+					var _g1 = haxe_Exception.caught(_g);
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 80, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 81, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					var tmp = new Date().getTime();
+					_gthis.phishing_update_time = tmp - 18000000;
+				}
 			};
 			links.request();
 		}
@@ -8676,7 +8684,15 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		this.phishing_update_time = new Date().getTime();
 		var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
 		links.onData = function(data) {
-			_gthis.phishing_urls = JSON.parse(data);
+			try {
+				_gthis.phishing_urls = JSON.parse(data);
+			} catch( _g ) {
+				var _g1 = haxe_Exception.caught(_g);
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 80, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 81, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				var tmp = new Date().getTime();
+				_gthis.phishing_update_time = tmp - 18000000;
+			}
 		};
 		links.request();
 	}
@@ -8721,7 +8737,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 										}
 									}
 								}
-								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 118, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 								var channel = message[0].channel;
 								channel.sendTyping().then((function(message,id) {
 									return function(_) {
@@ -8765,19 +8781,19 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 									};
 								})(message,id),(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 132, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+										haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 139, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 									};
 								})());
 							};
 						})(message,id),(function() {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 133, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 140, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 							};
 						})());
 					};
 				})(message,time,id),(function() {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 134, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 141, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 					};
 				})());
 			}
