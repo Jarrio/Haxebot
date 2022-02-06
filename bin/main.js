@@ -7984,9 +7984,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 									cross = collected.get("❎").count - 1;
 								}
 								var embed = new discord_$js_MessageEmbed();
-								embed.setTitle(question);
-								embed.addField("✅ Yes:",check == null ? "null" : "" + check);
-								embed.addField("❎ No:",cross == null ? "null" : "" + cross);
+								embed.setDescription(question);
 								var date = DateTools.format(new Date(message.createdTimestamp),"%d-%m-%Y %H:%M:%S");
 								embed.setFooter("Poll results | Started " + date);
 								message.reply({ embeds : [embed]});
@@ -8503,7 +8501,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						}
 						var date = new Date(message.createdTimestamp);
 						var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
-						embed.setFooter("Haxe " + _gthis.haxe_version,"https://cdn.discordapp.com/emojis/567741748172816404.png?v=1");
+						embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
 								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 371, className : "systems.commands.Run", methodName : "runCodeOnThread"});

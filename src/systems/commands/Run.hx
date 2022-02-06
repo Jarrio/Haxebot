@@ -21,7 +21,6 @@ class Run extends System {
 	var channel:TextChannel;
 	var checked:Bool = false;
 
-
 	override function update(_) {
 		if (!Main.connected) {
 			return;
@@ -55,7 +54,7 @@ class Run extends System {
 				ls.kill();
 			});
 		}
-		
+
 		this.extractCode(message, response);
 	}
 
@@ -94,7 +93,6 @@ class Run extends System {
 			get_code.request();
 			return;
 		}
-
 
 		this.parse(null, response);
 	}
@@ -146,7 +144,7 @@ class Run extends System {
 	function cleanOutput(data:String, filename:String, class_entry) {
 		data = data.toString();
 		var remove_vm = ~/(\[(.*|vm)\].*)$/igmu;
-		
+
 		data = data.replace(filename, class_entry).replace('', '');
 		data = data.replace(this.base_path, "");
 		data = data.replace("/hx/", "");
@@ -266,7 +264,7 @@ class Run extends System {
 					'-js',
 					'${this.base_path}/bin/$filename.js'
 				];
-				
+
 				var process = './haxe/haxe';
 				if (!FileSystem.exists(process)) {
 					process = 'haxe';
@@ -274,7 +272,7 @@ class Run extends System {
 
 				var ls = spawn(process, libs.concat(commands), {timeout: 10000});
 
-				//to debug code output
+				// to debug code output
 				// ls.stdout.on('data', (data:String) -> {
 				// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
 				// });
@@ -286,7 +284,7 @@ class Run extends System {
 					ls.kill('SIGTERM');
 					return;
 				});
-				
+
 				ls.once('close', (data) -> {
 					var response = "";
 					var js_file = '${this.base_path}/bin/$filename.js';
@@ -296,13 +294,13 @@ class Run extends System {
 						return;
 					}
 					var obj = null;
-					
+
 					var vm = new NodeVM({
 						sandbox: obj,
 						console: 'redirect',
 						timeout: 10000,
 					});
-					
+
 					vm.on('console.log', (data, info) -> {
 						var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
 						if (regex.match(data)) {
@@ -318,7 +316,7 @@ class Run extends System {
 
 					try {
 						vm.run(sys.io.File.getContent(js_file));
-						
+
 						var x = response.split('\n');
 						var truncated = false;
 						if (x.length > 24) {
@@ -334,7 +332,7 @@ class Run extends System {
 						var code_output = '';
 						var split = response.split('\n');
 						for (key => item in split) {
-							if (key >= split.length -1) {
+							if (key >= split.length - 1) {
 								break;
 							}
 							code_output += '$key. $item \n';
@@ -361,11 +359,11 @@ class Run extends System {
 							embed.setURL(url);
 							embed.setAuthor(author);
 						}
-						
+
 						var date = Date.fromTime(message.createdTimestamp);
 						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
-						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');						
+						embed.setFooter({text: 'Haxe ${this.haxe_version}', iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'});
 						if (response.length > 0 && data == 0) {
 							message.reply({embeds: [embed]}).then((succ) -> {
 								trace('${message.author.tag} at $format_date with file id: ${filename}');
@@ -377,7 +375,7 @@ class Run extends System {
 					} catch (e) {
 						trace(e);
 					}
-					return; 
+					return;
 				});
 			});
 			return;

@@ -53,9 +53,12 @@ class Poll extends CommandBase {
 									}
 
 									var embed = new MessageEmbed();
-									embed.setTitle(question);
-									embed.addField('✅ Yes:', check.string());
-									embed.addField('❎ No:', cross.string());
+									var description = '$question\n\n';
+									description += '✅ Yes: ' + check.string();
+									description += '❎ No: ' + cross.string();
+									
+									embed.setDescription(question);
+									
 									var date = DateTools.format(Date.fromTime(message.createdTimestamp), '%d-%m-%Y %H:%M:%S');
 									embed.setFooter('Poll results | Started $date');
 									message.reply({embeds: [embed]});
