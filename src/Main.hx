@@ -76,12 +76,13 @@ class Main {
 			}
 
 			if (message.toString().startsWith("!run")) {
-			if (message.content.startsWith("!run")) {
-				var code:RunMessage = message.toString();
-				universe.setComponents(universe.createEntity(), code, message);
-			}
-			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
-				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+				if (message.content.startsWith("!run")) {
+					var code:RunMessage = message.toString();
+					universe.setComponents(universe.createEntity(), code, message);
+				}
+				if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+					universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+				}
 			}
 		});
 

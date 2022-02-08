@@ -20,7 +20,7 @@ class Helppls extends CommandBase {
 		super(universe);
 	}
 
-	override function onAdded() {
+	override function onEnabled() {
 		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), (err) -> trace(err));
 		var db = Firestore.getFirestore(FirebaseApp.getApp());
 		
