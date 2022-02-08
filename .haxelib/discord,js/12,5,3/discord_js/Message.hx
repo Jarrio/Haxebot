@@ -1,7 +1,7 @@
 package discord_js;
 
-import discord_js.ThreadManager.ThreadCreateOptions;
 import js.lib.Promise;
+import discord_js.ThreadManager;
 
 @:jsRequire("discord.js", "Message") extern class Message extends Base {
 	function new(client:Client, data:Dynamic, channel:ts.AnyOf3<TextChannel, NewsChannel, DMChannel>);
