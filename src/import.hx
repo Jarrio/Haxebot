@@ -1,6 +1,7 @@
 import Util;
-import ecs.macros.UniverseMacros;
-using ecs.macros.UniverseMacros;
+import ecs.Universe;
+using ecs.Universe;
+
 using StringTools;
 using Std;
 using Lambda;

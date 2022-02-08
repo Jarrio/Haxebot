@@ -6,6 +6,11 @@
 	},
 	{
 		"show_help": true,
+		"type": "poll",
+		"content": "Just a quick an easy way to create a basic poll for up to 3 days"
+	},
+	{
+		"show_help": true,
 		"type": "rtfm",
 		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `/rtfm heaps`"
 	},

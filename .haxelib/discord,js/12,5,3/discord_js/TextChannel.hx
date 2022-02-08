@@ -3294,8 +3294,7 @@ package discord_js;
 	dynamic function awaitMessages(filter:CollectorFilter, ?options:AwaitMessagesOptions):js.lib.Promise<Collection<String, Message>>;
 	dynamic function bulkDelete(messages:ts.AnyOf3<Float, Collection<String, Message>, haxe.ds.ReadOnlyArray<MessageResolvable>>, ?filterOld:Bool):js.lib.Promise<Collection<String, Message>>;
 	dynamic function createMessageCollector(filter:CollectorFilter, ?options:MessageCollectorOptions):MessageCollector;
-	dynamic function startTyping(?count:Float):js.lib.Promise<Void>;
-	dynamic function stopTyping(?force:Bool):Void;
+	dynamic function sendTyping():js.lib.Promise<Void>;
 	var lastMessageID : Null<String>;
 	var lastMessage : Null<Message>;
 	@:overload(function(options:Dynamic):js.lib.Promise<Array<Message>> { })

@@ -5,7 +5,8 @@ import components.Command;
 
 class Help extends CommandBase {
 	var data:Array<THelpFormat>;
-	override function onAdded() {
+
+	override function onEnabled() {
 		this.data = loadFile('help');
 	}
 
@@ -14,7 +15,7 @@ class Help extends CommandBase {
 			trace('no help content configured');
 			return;
 		}
-		
+
 		switch (command.content) {
 			case Help(category):
 				var msg = '';
@@ -25,7 +26,7 @@ class Help extends CommandBase {
 						}
 						if (item.type == HelpType.run) {
 							msg += '- `!${item.type}`: ${item.content}';
- 						} else {
+						} else {
 							msg += '- `/${item.type}`: ${item.content}';
 						}
 						if (key != data.length - 1) {
@@ -37,6 +38,9 @@ class Help extends CommandBase {
 							break;
 						}
 					}
+				}
+				if (msg.length == 0 || msg == '' || msg == null) {
+					msg = 'Nothing found, sorry :(';
 				}
 				interaction.reply(msg);
 			default:
@@ -58,12 +62,13 @@ enum abstract HelpType(String) from String {
 	var run;
 	var rtfm;
 	var notify;
+
 	static function fromString(value:String) {
-		return switch(value.toLowerCase()) {
+		return switch (value.toLowerCase()) {
 			case 'run': run;
 			case 'rtfm': rtfm;
 			case 'notify': notify;
-			default: 
+			default:
 				'Invalid help option.';
 		};
 	}

@@ -1,4 +1,4 @@
-import buddy.internal.sys.Js;
+import haxe.extern.EitherType;
 import discord_js.User;
 import discord_builder.SlashCommandMentionableOption;
 import discord_builder.SlashCommandRoleOption;
@@ -30,7 +30,10 @@ import systems.commands.Notify;
 import systems.commands.Rtfm;
 import systems.commands.Roundup;
 import systems.commands.Api;
-import firebase.app.FirebaseApp;
+import systems.commands.Poll;
+import systems.commands.Boop;
+import systems.commands.ScamPrevention;
+import firebase.web.app.FirebaseApp;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -41,25 +44,23 @@ class Main {
 	public static var dm_help_tracking:Map<String, Float> = [];
 
 	public static function start() {
-		// var app = getApp();
+		universe = Universe.create({
+			entities: 1000,
+			phases: [
+				{
+					name: 'main',
+					systems: [Hi, Help, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention]
+				}
+			]
+		});
 
-		// trace(app);
-		// trace(app.name);
-		// trace(app.options);
-
-		universe = new Universe(1000);
-
-		universe.setSystems(Hi);
-		universe.setSystems(Help);
-		universe.setSystems(Helppls);
-		universe.setSystems(Haxelib);
-		universe.setSystems(Notify);
-		universe.setSystems(Rtfm);
-		universe.setSystems(Roundup);
-		universe.setSystems(Api);
-		universe.setSystems(Run);
-
-		client = new Client({intents: [IntentFlags.GUILDS, IntentFlags.GUILD_MESSAGES, IntentFlags.DIRECT_MESSAGES]});
+		client = new Client({intents: [
+			IntentFlags.GUILDS,
+			IntentFlags.GUILD_MESSAGES,
+			IntentFlags.DIRECT_MESSAGES,
+			IntentFlags.GUILD_MEMBERS,
+			IntentFlags.GUILD_MESSAGE_REACTIONS
+		]});
 
 		client.once('ready', (_) -> {
 			trace('Ready!');
@@ -75,9 +76,18 @@ class Main {
 			}
 
 			if (message.toString().startsWith("!run")) {
+			if (message.content.startsWith("!run")) {
 				var code:RunMessage = message.toString();
 				universe.setComponents(universe.createEntity(), code, message);
 			}
+			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+			}
+		});
+
+		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
+			trace('disconnected');
+			trace(incoming);
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
@@ -96,10 +106,12 @@ class Main {
 				default:
 			}
 			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
+
 			for (value in config.commands) {
 				if (value.name != command.name) {
 					continue;
 				}
+
 				if (value.params == null) {
 					command.content = Type.createEnum(CommandOptions, enum_id);
 					break;
@@ -134,13 +146,14 @@ class Main {
 				trace(interaction);
 				trace(enum_id);
 				trace('Unmatched command. (${command.name})');
+				return;
 			}
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
 
 		client.login(config.discord_token);
 
-		new Timer(100).run = function() {
+		new Timer(500).run = function() {
 			universe.update(1);
 		}
 	}
@@ -167,6 +180,7 @@ class Main {
 			throw('Enter your discord auth token.');
 		}
 
+		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
 		var commands = parseCommands();
 
 		var rest = new REST({version: '9'}).setToken(config.discord_token);
@@ -194,9 +208,13 @@ class Main {
 								.setDescription(param.description)
 								.setRequired(param.required));
 						case string:
-							main_command.addStringOption(new SlashCommandStringOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
+							var cmd = new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required);
+							if (param.choices != null) {
+								for (option in param.choices) {
+									cmd.addChoice(option.name, option.value);
+								}
+							}
+							main_command.addStringOption(cmd);
 						case bool:
 							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
 								.setDescription(param.description)
@@ -244,10 +262,12 @@ typedef THelpPls = {
 
 typedef TConfig = {
 	var project_name:String;
+	var firebase:FirebaseOptions;
 	var macros:Bool;
 	var client_id:String;
 	var server_id:String;
 	var discord_token:String;
+	var last_roundup_posted:Int;
 	var commands:Array<TCommands>;
 }
 
@@ -257,6 +277,7 @@ typedef TCommands = {
 	var description:String;
 	@:optional var params:Array<TCommands>;
 	@:optional var required:Bool;
+	@:optional var choices:Array<{name:String, value:EitherType<Int, String>}>;
 }
 
 enum abstract CommandType(String) {
@@ -271,4 +292,5 @@ enum abstract CommandType(String) {
 
 enum abstract CommandForward(String) {
 	var helppls;
+	var scam_prevention;
 }

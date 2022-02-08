@@ -1,5 +1,6 @@
 package components;
 
+import systems.commands.Poll.PollTypes;
 import discord_js.User;
 
 typedef Command = {
@@ -11,6 +12,8 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Helppls;
+	Boop(user:User);
+	Poll(question:String, time:Int);
 	Roundup(number:Float);
 	Rtfm(channel:String);
 	Api(channel:String);
