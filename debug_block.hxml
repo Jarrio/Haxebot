@@ -1,0 +1,5 @@
+common.hxml
+--debug
+--dce no
+-D source-map
+-D block

@@ -22,7 +22,7 @@ class Poll extends CommandBase {
 				var embed = new MessageEmbed();
 				embed.setTitle('Poll');
 				embed.setDescription(question + '\n___');
-				embed.setFooter('Poll will run for ${time} minutes.');
+				embed.setFooter({text: 'Poll will run for ${time} minutes.'});
 
 				interaction.reply({embeds: [embed]}).then((_) -> {
 					interaction.fetchReply().then(function(message) {
@@ -54,21 +54,25 @@ class Poll extends CommandBase {
 
 									var embed = new MessageEmbed();
 									var description = '$question\n\n';
-									description += '✅ Yes: ' + check.string();
+									description += '✅ Yes: ' + check.string() + '\n';
 									description += '❎ No: ' + cross.string();
 									
-									embed.setDescription(question);
+									embed.setDescription(description);
 									
 									var date = DateTools.format(Date.fromTime(message.createdTimestamp), '%d-%m-%Y %H:%M:%S');
-									embed.setFooter('Poll results | Started $date');
-									message.reply({embeds: [embed]});
+									embed.setFooter({text: 'Poll results | Started $date'});
+									message.reply({content: '<@${interaction.member.id}>', embeds: [embed]});
 								});
-							}, null);
-						}, null);
-					}, null);
-				}, null);
+							}, err);
+						}, err);
+					}, err);
+				}, err);
 			default:
 		}
+	}
+
+	function err(err) {
+		trace(err);
 	}
 
 	inline function createEmbed(content:String) {

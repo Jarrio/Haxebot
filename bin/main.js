@@ -7948,6 +7948,7 @@ systems_commands_Poll.__name__ = "systems.commands.Poll";
 systems_commands_Poll.__super__ = systems_CommandBase;
 systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
+		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 2) {
 			var question = _g.question;
@@ -7959,7 +7960,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 			var embed = new discord_$js_MessageEmbed();
 			embed.setTitle("Poll");
 			embed.setDescription(question + "\n___");
-			embed.setFooter("Poll will run for " + time + " minutes.");
+			embed.setFooter({ text : "Poll will run for " + time + " minutes."});
 			interaction.reply({ embeds : [embed]}).then(function(_) {
 				return interaction.fetchReply().then(function(message) {
 					var filter = function(reaction,user) {
@@ -7985,16 +7986,22 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 									cross = collected.get("❎").count - 1;
 								}
 								var embed = new discord_$js_MessageEmbed();
-								embed.setDescription(question);
+								var description = "" + question + "\n\n";
+								description += "✅ Yes: " + (check == null ? "null" : "" + check) + "\n";
+								description += "❎ No: " + (cross == null ? "null" : "" + cross);
+								embed.setDescription(description);
 								var date = DateTools.format(new Date(message.createdTimestamp),"%d-%m-%Y %H:%M:%S");
-								embed.setFooter("Poll results | Started " + date);
-								message.reply({ embeds : [embed]});
+								embed.setFooter({ text : "Poll results | Started " + date});
+								message.reply({ content : "<@" + interaction.member.id + ">", embeds : [embed]});
 							});
-						},null);
-					},null);
-				},null);
-			},null);
+						},$bind(_gthis,_gthis.err));
+					},$bind(_gthis,_gthis.err));
+				},$bind(_gthis,_gthis.err));
+			},$bind(this,this.err));
 		}
+	}
+	,err: function(err) {
+		haxe_Log.trace(err,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 75, className : "systems.commands.Poll", methodName : "err"});
 	}
 	,createEmbed: function(content) {
 		var embed = new discord_$js_MessageEmbed();
@@ -8068,22 +8075,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		data.request();
 	}
 	,update: function(_) {
-		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
-		if(this.channel == null && this.checking_channel == false) {
-			this.checking_channel = true;
-			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
-				_gthis.channel = channel;
-				_gthis.checking_channel = false;
-			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 60, className : "systems.commands.Roundup", methodName : "update"});
-			});
-		}
-		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
-			return;
-		}
-		this.last_checked = new Date().getTime();
-		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -8112,7 +8104,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 99, className : "systems.commands.Roundup", methodName : "run"});
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 101, className : "systems.commands.Roundup", methodName : "run"});
 			});
 		}
 	}

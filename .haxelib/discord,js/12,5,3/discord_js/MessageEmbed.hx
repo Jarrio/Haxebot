@@ -38,7 +38,7 @@ typedef EmbedFooterData = {
 	public function setAuthor(options:EitherType<String, EmbedAuthorData>):MessageEmbed;
 	public function setColor(color:ColorResolvable):MessageEmbed;
 	public function setDescription(description:Dynamic):MessageEmbed;
-	public function setFooter(data:EitherType<String, EmbedFooterData>):MessageEmbed;
+	public function setFooter(data:EmbedFooterData):MessageEmbed;
 	public function setImage(url:String):MessageEmbed;
 	public function setThumbnail(url:String):MessageEmbed;
 	public function setTimestamp(?timestamp:ts.AnyOf2<Float, js.lib.Date>):MessageEmbed;
