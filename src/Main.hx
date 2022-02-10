@@ -54,6 +54,8 @@ class Main {
 			]
 		});
 
+		trace("Readd roundup system before publishing!");
+
 		client = new Client({intents: [
 			IntentFlags.GUILDS,
 			IntentFlags.GUILD_MESSAGES,

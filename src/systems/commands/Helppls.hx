@@ -75,66 +75,8 @@ class Helppls extends CommandDbBase {
 				case expected_behaviour:
 					this.questionWhatsHappening(message);
 				case whats_happening:
-					trace('finished?');
-					var embed = new MessageEmbed();
-
-					for (key => value in this.session.get(author)) {
-						var answer = value.answer;
-
-						switch (key) {
-							case paste_some_code:
-								var is_error_message = (this.session.get(message.author.id).exists(what_error_message));
-								var json = null;
-								if (is_error_message) {
-									json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
-								}
-
-								if (json != null) {
-									var from = json.line - 5;
-									var to = json.line + 5;
-									var split = answer.split('\n');
-									var code = '';
-									for (key => line in split) {
-										code += '${key + from}   ${line.trim()} \n';
-									}
-
-									answer = '```hx\n' + code + '\n```';
-								}
-							case is_there_an_error:
-								continue;
-							default:
-						}
-
-						if (key == is_there_an_error) {
-							continue;
-						}
-
-						embed.addField(value.question, answer);
-					}
-					
-					message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
-						channel.send({embeds: [embed]}).then(function(channel_message) {
-							channel_message.startThread({name: 'topic'}).then(function(thread) {
-								var data:TStoreContent = {
-									thread_id: thread.id,
-									validated_by: "",
-									solved: false,
-									title: this.getStateAnswer(author, whats_happening),
-									topic: this.getStateAnswer(author, QuestionState.channel),
-									source_url: "",
-									description: "",
-									added_by: message.author.id,
-									created: Date.fromTime(thread.createdTimestamp)
-								};
-								
-								this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
-								
-								message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
-								channel.send("**Please reply to the above issue within the thread.**");
-							});
-						});
-					}, (err) -> trace(err));
-
+					trace('finished last question');
+					this.handleFinished(message);
 				// message.author.send({embeds: [embed]}).then((message) -> {
 				// 	Main.dm_help_tracking.remove(author);
 				// 	this.session.remove(author);
@@ -147,6 +89,73 @@ class Helppls extends CommandDbBase {
 			this.dm_messages.remove(entity);
 		});
 		super.update(_);
+	}
+
+	inline function toggleState(author:String, state:QuestionState) {
+		this.state.set(author, state);
+	}
+
+	function handleFinished(message:Message) {
+		trace('handle finished');
+		var author = message.author.id;
+		var embed = new MessageEmbed();
+
+		for (key => value in this.session.get(author)) {
+			var answer = value.answer;
+
+			switch (key) {
+				case paste_some_code:
+					var is_error_message = (this.session.get(author).exists(what_error_message));
+					var json = null;
+					if (is_error_message) {
+						json = this.parseErrorMessage(this.session.get(author).get(what_error_message).answer);
+					}
+
+					if (json != null) {
+						var from = json.line - 5;
+						var to = json.line + 5;
+						var split = answer.split('\n');
+						var code = '';
+						for (key => line in split) {
+							code += '${key + from}   ${line.trim()} \n';
+						}
+
+						answer = '```hx\n' + code + '\n```';
+					}
+				case is_there_an_error:
+					continue;
+				default:
+			}
+
+			if (key == is_there_an_error) {
+				continue;
+			}
+
+			embed.addField(value.question, answer);
+		}
+
+		message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
+			channel.send({embeds: [embed]}).then(function(channel_message) {
+				channel_message.startThread({name: 'topic'}).then(function(thread) {
+					var data:TStoreContent = {
+						thread_id: thread.id,
+						validated_by: "",
+						solved: false,
+						title: this.getStateAnswer(author, whats_happening),
+						topic: this.getStateAnswer(author, QuestionState.channel),
+						source_url: "",
+						description: "",
+						added_by: message.author.id,
+						created: Date.fromTime(thread.createdTimestamp)
+					};
+
+					this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
+
+					message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
+					channel.send("**Please reply to the above issue within the thread.**");
+				});
+			});
+		}, (err) -> trace(err));
 	}
 
 	function getStateAnswer(author:String, state:QuestionState) {
@@ -191,7 +200,7 @@ class Helppls extends CommandDbBase {
 	}
 
 	function questionIsThereAnError(message:Message) {
-		this.state.set(message.author.id, is_there_an_error);
+		this.toggleState(message.author.id, is_there_an_error);
 		var question = 'Is there an Error Message?';
 		this.updateSessionQuestion(message.author.id, is_there_an_error, question);
 
@@ -200,7 +209,7 @@ class Helppls extends CommandDbBase {
 	}
 
 	function questionWhatError(message:Message) {
-		this.state.set(message.author.id, what_error_message);
+		this.toggleState(message.author.id, what_error_message);
 		var question = 'Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)';
 		this.updateSessionQuestion(message.author.id, what_error_message, question);
 		message.author.send({embeds: [this.createEmbed(question)]});
@@ -224,21 +233,21 @@ class Helppls extends CommandDbBase {
 			question = 'Paste code lines from relevant file';
 		}
 
-		this.state.set(message.author.id, paste_some_code);
+		this.toggleState(message.author.id, paste_some_code);
 
 		this.updateSessionQuestion(message.author.id, paste_some_code, question);
 		message.author.send({embeds: [this.createEmbed(question)]});
 	}
 
 	function questionExpectedBehaviour(message:Message) {
-		this.state.set(message.author.id, expected_behaviour);
+		this.toggleState(message.author.id, expected_behaviour);
 		var question = 'What do you expect to happen?';
 		this.updateSessionQuestion(message.author.id, expected_behaviour, question);
 		message.author.send({embeds: [this.createEmbed(question)]});
 	}
 
 	function questionWhatsHappening(message:Message) {
-		this.state.set(message.author.id, whats_happening);
+		this.toggleState(message.author.id, whats_happening);
 		var question = 'Briefly describe what is happening';
 		this.updateSessionQuestion(message.author.id, whats_happening, question);
 
@@ -246,7 +255,7 @@ class Helppls extends CommandDbBase {
 	}
 
 	function questionWhatTitle(message:Message) {
-		this.state.set(message.author.id, what_title);
+		this.toggleState(message.author.id, what_title);
 		var question = 'Please summarise a title for your issue';
 		this.updateSessionQuestion(message.author.id, what_title, question);
 
@@ -283,7 +292,7 @@ class Helppls extends CommandDbBase {
 		switch (command.content) {
 			case Helppls:
 				this.session.set(interaction.user.id, []);
-				this.state.set(interaction.user.id, none);
+				this.toggleState(interaction.user.id, none);
 				interaction.user.send({embeds: [this.createEmbed(this.questionChannel(interaction.user.id))]});
 
 				interaction.reply(':white_check_mark:');
@@ -384,4 +393,5 @@ enum abstract QuestionState(Int) {
 	var paste_some_code;
 	var whats_happening;
 	var expected_behaviour;
+	var finished;
 }
