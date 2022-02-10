@@ -1761,12 +1761,7 @@ function Util_loadFile(filename,pos) {
 function Util_hasRole(role,interaction) {
 	var guild = interaction.member.roles.cache.get(role);
 	if(interaction.guild.available) {
-		var _v_ = guild == null ? null : guild.members;
-		if(_v_ == null) {
-			return null;
-		} else {
-			return _v_.has(interaction.user.id);
-		}
+		return guild.members.has(interaction.user.id);
 	} else {
 		return false;
 	}
@@ -8075,7 +8070,22 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		data.request();
 	}
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
+		if(this.channel == null && this.checking_channel == false) {
+			this.checking_channel = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking_channel = false;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 62, className : "systems.commands.Roundup", methodName : "update"});
+			});
+		}
+		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
+			return;
+		}
+		this.last_checked = new Date().getTime();
+		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
