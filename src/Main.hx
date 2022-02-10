@@ -53,6 +53,10 @@ class Main {
 			]
 		});
 
+		#if block
+		trace('DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG');
+		#end
+
 		client = new Client({intents: [
 			IntentFlags.GUILDS,
 			IntentFlags.GUILD_MESSAGES,
