@@ -49,7 +49,7 @@ class Main {
 			phases: [
 				{
 					name: 'main',
-					systems: [Hi, Help, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention]
+					systems: [Hi, Help, Haxelib, Helppls, Notify, Rtfm, Run, Api, Poll, Boop, ScamPrevention]
 				}
 			]
 		});
@@ -160,17 +160,6 @@ class Main {
 	}
 
 	static function main() {
-		Main.app = FirebaseApp.initializeApp({
-			apiKey: "AIzaSyBKGASqr3dgNygiv3WnHzQKYv_iYTwK4Kk",
-			databaseURL: 'https://console.firebase.google.com/u/0/project/haxe-forum/firestore/data/~2F',
-			authDomain: "haxe-forum.firebaseapp.com",
-			projectId: "haxe-forum",
-			storageBucket: "haxe-forum.appspot.com",
-			messagingSenderId: "72566195073",
-			appId: "1:72566195073:web:8d39d1f8d29227d2a79e80",
-			measurementId: "G-VB7FNBVMZF"
-		});
-
 		try {
 			config = Json.parse(File.getContent('./config.json'));
 		} catch (e) {
@@ -182,10 +171,9 @@ class Main {
 		}
 
 		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
+
 		var commands = parseCommands();
-
 		var rest = new REST({version: '9'}).setToken(config.discord_token);
-
 		rest.put(Routes.applicationGuildCommands(config.client_id, config.server_id), {body: commands})
 			.then((_) -> trace('Successfully registered application commands.'), (err) -> trace(err));
 

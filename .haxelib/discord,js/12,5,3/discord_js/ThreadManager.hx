@@ -1,7 +1,6 @@
 package discord_js;
 
 import haxe.extern.EitherType;
-import promhx.Stream;
 import discord_js.Message;
 import js.lib.Promise;
 

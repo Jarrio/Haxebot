@@ -1,17 +1,16 @@
 package systems.commands;
 
-import firebase.firestore.Query;
-import firebase.firestore.Firestore;
-import firebase.app.FirebaseApp;
+import firebase.web.firestore.Firestore;
+import firebase.web.firestore.Query;
+import firebase.web.firestore.Firestore.*;
 import haxe.Json;
 import discord_js.MessageEmbed;
 import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
-import firebase.firestore.Firestore.*;
 
-class Helppls extends CommandBase {
+class Helppls extends CommandDbBase {
 	var state:Map<String, QuestionState> = [];
 	var session:Map<String, Map<QuestionState, TQuestion>> = [];
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
@@ -22,8 +21,7 @@ class Helppls extends CommandBase {
 
 	override function onEnabled() {
 		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), (err) -> trace(err));
-		var db = Firestore.getFirestore(FirebaseApp.getApp());
-		
+
 		var q:Query<{name:String}> = query(collection(db, 'test'), orderBy('name', DESCENDING));
 		updateDoc(doc(db, 'test', 'mcXuD85vFTBOG0vAZi3I'), {name: 'test doc'}).then((_) -> trace('added'), (err) -> trace(err));
 
@@ -85,7 +83,12 @@ class Helppls extends CommandBase {
 
 						switch (key) {
 							case paste_some_code:
-								var json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+								var is_error_message = (this.session.get(message.author.id).exists(what_error_message));
+								var json = null;
+								if (is_error_message) {
+									json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+								}
+
 								if (json != null) {
 									var from = json.line - 5;
 									var to = json.line + 5;
@@ -108,10 +111,24 @@ class Helppls extends CommandBase {
 
 						embed.addField(value.question, answer);
 					}
-
+					
 					message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
 						channel.send({embeds: [embed]}).then(function(channel_message) {
 							channel_message.startThread({name: 'topic'}).then(function(thread) {
+								var data:TStoreContent = {
+									thread_id: thread.id,
+									validated_by: "",
+									solved: false,
+									title: this.getStateAnswer(author, whats_happening),
+									topic: this.getStateAnswer(author, QuestionState.channel),
+									source_url: "",
+									description: "",
+									added_by: message.author.id,
+									created: Date.fromTime(thread.createdTimestamp)
+								};
+								
+								this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
+								
 								message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
 								channel.send("**Please reply to the above issue within the thread.**");
 							});
@@ -130,6 +147,10 @@ class Helppls extends CommandBase {
 			this.dm_messages.remove(entity);
 		});
 		super.update(_);
+	}
+
+	function getStateAnswer(author:String, state:QuestionState) {
+		return this.session.get(author).get(state).answer;
 	}
 
 	function updateSessionQuestion(user:String, state:QuestionState, question:String) {
@@ -186,7 +207,12 @@ class Helppls extends CommandBase {
 	}
 
 	function questionPasteSomeCode(message:Message) {
-		var json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+		var is_error_message = (this.session.get(message.author.id).exists(what_error_message));
+		var json = null;
+		if (is_error_message) {
+			json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+		}
+		
 		var from = 0;
 		var to = 0;
 		var question = '';
@@ -219,6 +245,14 @@ class Helppls extends CommandBase {
 		message.author.send({embeds: [this.createEmbed(question)]});
 	}
 
+	function questionWhatTitle(message:Message) {
+		this.state.set(message.author.id, what_title);
+		var question = 'Please summarise a title for your issue';
+		this.updateSessionQuestion(message.author.id, what_title, question);
+
+		message.author.send({embeds: [this.createEmbed(question)]});
+	}
+
 	function parseErrorMessage(input:String) {
 		var regex = ~/```\n(.*):([0-9]+) - (.*)\n```/gmi;
 		if (regex.match(input)) {
@@ -231,7 +265,7 @@ class Helppls extends CommandBase {
 
 		return null;
 	}
-
+	
 	function parseVSCodeJson(input:String) {
 		try {
 			var obj = (Json.parse(input) : Array<VSCodeErrorMessage>);
@@ -323,6 +357,18 @@ typedef TQuestion = {
 	var answer:String;
 }
 
+typedef TStoreContent = {
+	var thread_id:String;
+	var added_by:String;
+	var created:Date;
+	var description:String;
+	var source_url:String;
+	var title:String;
+	var topic:String;
+	var solved:Bool;
+	var validated_by:String;
+}
+
 enum abstract QuestionType(Int) {
 	var int;
 	var string;
@@ -332,6 +378,7 @@ enum abstract QuestionType(Int) {
 enum abstract QuestionState(Int) {
 	var none;
 	var channel;
+	var what_title;
 	var is_there_an_error;
 	var what_error_message;
 	var paste_some_code;
