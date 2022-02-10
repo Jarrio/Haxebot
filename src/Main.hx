@@ -49,12 +49,14 @@ class Main {
 			phases: [
 				{
 					name: 'main',
-					systems: [Hi, Help, Haxelib, Helppls, Notify, Rtfm, Run, Api, Poll, Boop, ScamPrevention]
+					systems: [Hi, Help, Haxelib, Roundup, Helppls, Notify, Rtfm, Run, Api, Poll, Boop, ScamPrevention]
 				}
 			]
 		});
 
-		trace("Readd roundup system before publishing!");
+		#if block
+		trace('DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG');
+		#end
 
 		client = new Client({intents: [
 			IntentFlags.GUILDS,
