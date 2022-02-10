@@ -2339,7 +2339,7 @@ ecs_Family.prototype = {
 var ecs__$Family_FamilyIterator = function(_set,_active) {
 	this.set = _set;
 	this.active = _active;
-	this.idx = 0;
+	this.idx = _set.size() - 1;
 };
 $hxClasses["ecs._Family.FamilyIterator"] = ecs__$Family_FamilyIterator;
 ecs__$Family_FamilyIterator.__name__ = "ecs._Family.FamilyIterator";
@@ -2349,13 +2349,13 @@ ecs__$Family_FamilyIterator.prototype = {
 	,idx: null
 	,hasNext: function() {
 		if(this.active) {
-			return this.idx < this.set.size();
+			return this.idx >= 0;
 		} else {
 			return false;
 		}
 	}
 	,next: function() {
-		return this.set.getDense(this.idx++);
+		return this.set.getDense(this.idx--);
 	}
 	,__class__: ecs__$Family_FamilyIterator
 };
@@ -2523,6 +2523,7 @@ var ecs_core_EntityManager = function(_max) {
 	var this1 = new Array(_max);
 	this.recycleBin = this1;
 	this.nextID = 0;
+	this.binSize = 0;
 };
 $hxClasses["ecs.core.EntityManager"] = ecs_core_EntityManager;
 ecs_core_EntityManager.__name__ = "ecs.core.EntityManager";
@@ -7453,9 +7454,9 @@ systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 		var _this = this.commands;
 		var _set = _this.entities;
 		var _active = _this.isActive();
-		var _g_idx = 0;
-		while(_active && _g_idx < _set.size()) {
-			var entity = _set.getDense(_g_idx++);
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
 			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
 			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
 			if(command.name == this.get_name()) {
@@ -8209,9 +8210,9 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		var _this = this.code_messages;
 		var _set = _this.entities;
 		var _active = _this.isActive();
-		var _g_idx = 0;
-		while(_active && _g_idx < _set.size()) {
-			var entity = _set.getDense(_g_idx++);
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
 			var message = this.table25aaa7d3f4989532034d5f61746d0948.get(entity);
 			var response = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
 			if(StringTools.startsWith(message,"!run")) {
@@ -8252,7 +8253,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		}
 		check_code = new EReg("!run[\\s|\n| \n](.*)","gmis");
 		if(check_code.match(message)) {
-			haxe_Log.trace(check_code.matched(1),{ fileName : "src/systems/commands/Run.hx", lineNumber : 80, className : "systems.commands.Run", methodName : "extractCode"});
+			haxe_Log.trace(check_code.matched(1),{ fileName : "src/systems/commands/Run.hx", lineNumber : 79, className : "systems.commands.Run", methodName : "extractCode"});
 			this.parse(check_code.matched(1),response);
 			return;
 		}
@@ -8276,7 +8277,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 106, className : "systems.commands.Run", methodName : "deleteFile"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 104, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
 	}
 	,extractLibs: function(code) {
@@ -8417,7 +8418,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			code_content = format + "\n" + code_content;
 			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + message.author.tag + " | time: " + Std.string(new Date())),function(error) {
 				if(error != null) {
-					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 258, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 256, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 				}
 				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
 				var $process = "./haxe/haxe";
@@ -8426,7 +8427,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 				}
 				var ls = js_node_ChildProcess.spawn($process,libs.concat(commands),{ timeout : 10000});
 				ls.stderr.once("data",function(data) {
-					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 283, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 281, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					var compile_output = _gthis.cleanOutput(data,filename,class_entry);
 					message.reply({ content : mention + ("```\n" + compile_output + "```")});
 					ls.kill("SIGTERM");
@@ -8435,7 +8436,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 					var response = "";
 					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
 					if(!sys_FileSystem.exists(js_file)) {
-						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 294, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 292, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						ls.kill("SIGTERM");
 						return;
 					}
@@ -8504,7 +8505,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
-								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 371, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 369, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 								return message.delete().then(null,null);
 							},null);
 							ls.kill();
@@ -8512,7 +8513,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						}
 					} catch( _g ) {
 						var _g1 = haxe_Exception.caught(_g);
-						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 378, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 376, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
@@ -8520,7 +8521,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 385, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 383, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -8578,9 +8579,9 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		var _this = this.messages;
 		var _set = _this.entities;
 		var _active = _this.isActive();
-		var _g_idx = 0;
-		while(_active && _g_idx < _set.size()) {
-			var _ = _set.getDense(_g_idx++);
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var _ = _set.getDense(_g_idx--);
 			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(_);
 			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(_);
 			if(forward != "scam_prevention") {
