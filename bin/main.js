@@ -8410,7 +8410,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 								embed.setDescription(description);
 								var date = DateTools.format(new Date(message.createdTimestamp),"%d-%m-%Y %H:%M:%S");
 								embed.setFooter({ text : "Poll results | Started " + date});
-								message.reply({ embeds : [embed]});
+								message.reply({ content : "<@" + interaction.member.id + ">", embeds : [embed]});
 							});
 						},$bind(_gthis,_gthis.err));
 					},$bind(_gthis,_gthis.err));
@@ -8493,22 +8493,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		data.request();
 	}
 	,update: function(_) {
-		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
-		if(this.channel == null && this.checking_channel == false) {
-			this.checking_channel = true;
-			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
-				_gthis.channel = channel;
-				_gthis.checking_channel = false;
-			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 60, className : "systems.commands.Roundup", methodName : "update"});
-			});
-		}
-		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
-			return;
-		}
-		this.last_checked = new Date().getTime();
-		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -8537,7 +8522,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 99, className : "systems.commands.Roundup", methodName : "run"});
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 101, className : "systems.commands.Roundup", methodName : "run"});
 			});
 		}
 	}
