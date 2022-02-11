@@ -42,7 +42,7 @@ class Help extends CommandBase {
 				if (msg.length == 0 || msg == '' || msg == null) {
 					msg = 'Nothing found, sorry :(';
 				}
-				interaction.reply(msg);
+				interaction.reply(msg).then(null, (err) -> trace(err));
 			default:
 		}
 	}
