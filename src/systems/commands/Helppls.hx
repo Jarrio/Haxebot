@@ -76,12 +76,6 @@ class Helppls extends CommandDbBase {
 					this.questionWhatsHappening(message);
 				case whats_happening:
 					this.questionWhatTitle(message);
-
-				// message.author.send({embeds: [embed]}).then((message) -> {
-				// 	Main.dm_help_tracking.remove(author);
-				// 	this.session.remove(author);
-				// 	this.state.remove(author);
-				// }, null);
 				case what_title:
 					this.handleFinished(message);
 				default:
