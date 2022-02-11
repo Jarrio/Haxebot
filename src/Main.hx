@@ -49,7 +49,8 @@ class Main {
 			phases: [
 				{
 					name: 'main',
-					systems: [Hi, Help, Haxelib, Roundup, Helppls, Notify, Rtfm, Run, Api, Poll, Boop, ScamPrevention]
+					systems: [
+						Hi, Help, Haxelib, Helppls, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention]
 				}
 			]
 		});
