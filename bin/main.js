@@ -998,6 +998,7 @@ Reflect.field = function(o,field) {
 	try {
 		return o[field];
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -1742,6 +1743,7 @@ Type.enumEq = function(a,b) {
 			}
 		}
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 	return true;
@@ -4305,6 +4307,7 @@ haxe_ds_BalancedTree.prototype = {
 			this.root = this.removeLoop(key,this.root);
 			return true;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(typeof(haxe_Exception.caught(_g).unwrap()) == "string") {
 				return false;
 			} else {
@@ -5955,6 +5958,7 @@ haxe_io_Input.prototype = {
 				--k;
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -5982,6 +5986,7 @@ haxe_io_Input.prototype = {
 				total.addBytes(buf,0,len);
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -6040,6 +6045,7 @@ haxe_io_Input.prototype = {
 				s = HxOverrides.substr(s,0,-1);
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(((_g1) instanceof haxe_io_Eof)) {
 				var e = _g1;
@@ -6274,6 +6280,7 @@ haxe_io_Output.prototype = {
 				}
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -6870,6 +6877,7 @@ js_Boot.__string_rec = function(o,s) {
 		try {
 			tostr = o.toString;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			return "???";
 		}
 		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
@@ -7205,6 +7213,7 @@ sys_FileSystem.exists = function(path) {
 		js_node_Fs.accessSync(path);
 		return true;
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -7218,6 +7227,7 @@ sys_FileSystem.fullPath = function(relPath) {
 	try {
 		return js_node_Fs.realpathSync(relPath);
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -7231,6 +7241,7 @@ sys_FileSystem.isDirectory = function(path) {
 	try {
 		return js_node_Fs.statSync(path).isDirectory();
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -7238,6 +7249,7 @@ sys_FileSystem.createDirectory = function(path) {
 	try {
 		js_node_Fs.mkdirSync(path);
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		var _g1 = haxe_Exception.caught(_g).unwrap();
 		if(_g1.code == "ENOENT") {
 			sys_FileSystem.createDirectory(js_node_Path.dirname(path));
@@ -7357,6 +7369,7 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,0,1,this.pos);
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -7378,6 +7391,7 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,pos,len,this.pos);
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -7882,7 +7896,9 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			if(msg.length == 0 || msg == "" || msg == null) {
 				msg = "Nothing found, sorry :(";
 			}
-			interaction.reply(msg);
+			interaction.reply(msg).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Help.hx", lineNumber : 45, className : "systems.commands.Help", methodName : "run"});
+			});
 		}
 	}
 	,get_name: function() {
@@ -8495,7 +8511,22 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		data.request();
 	}
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
+		if(this.channel == null && this.checking_channel == false) {
+			this.checking_channel = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking_channel = false;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 62, className : "systems.commands.Roundup", methodName : "update"});
+			});
+		}
+		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
+			return;
+		}
+		this.last_checked = new Date().getTime();
+		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
