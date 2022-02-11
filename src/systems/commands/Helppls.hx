@@ -44,7 +44,7 @@ class Helppls extends CommandDbBase {
 				var reply = message.content;
 				switch (state) {
 					case channel:
-						reply = '<#${this.getChannelId(this.getChannel(reply))}>';
+						reply = this.getChannelId(this.getChannel(reply));
 					case what_error_message:
 						var data = this.parseVSCodeJson(reply);
 						if (data != null) {
@@ -75,14 +75,15 @@ class Helppls extends CommandDbBase {
 				case expected_behaviour:
 					this.questionWhatsHappening(message);
 				case whats_happening:
-					trace('finished last question');
-					this.handleFinished(message);
+					this.questionWhatTitle(message);
+
 				// message.author.send({embeds: [embed]}).then((message) -> {
 				// 	Main.dm_help_tracking.remove(author);
 				// 	this.session.remove(author);
 				// 	this.state.remove(author);
 				// }, null);
-
+				case what_title:
+					this.handleFinished(message);
 				default:
 					trace('something else $state');
 			}
@@ -122,7 +123,11 @@ class Helppls extends CommandDbBase {
 
 						answer = '```hx\n' + code + '\n```';
 					}
+				case channel:
+					answer = '<#$answer>';
 				case is_there_an_error:
+					continue;
+				case what_title:
 					continue;
 				default:
 			}
@@ -134,31 +139,58 @@ class Helppls extends CommandDbBase {
 			embed.addField(value.question, answer);
 		}
 
+		var title = this.session.get(author).get(what_title).answer;
 		message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
 			channel.send({embeds: [embed]}).then(function(channel_message) {
-				channel_message.startThread({name: 'topic'}).then(function(thread) {
-					var data:TStoreContent = {
-						thread_id: thread.id,
-						validated_by: "",
-						solved: false,
-						title: this.getStateAnswer(author, whats_happening),
-						topic: this.getStateAnswer(author, QuestionState.channel),
-						source_url: "",
-						description: "",
-						added_by: message.author.id,
-						created: Date.fromTime(thread.createdTimestamp)
-					};
-
-					this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
-
+				channel_message.startThread({name: title}).then(function(thread) {
+					this.remoteSaveQuestion(message, thread.id);
 					message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
-					channel.send("**Please reply to the above issue within the thread.**");
+					channel.send("**__Please reply to the above issue within the thread.__**");
 				});
 			});
 		}, (err) -> trace(err));
 	}
 
+	function extractMessageHistory(thread_id:String) {
+		if (!Main.connected) {
+			return;
+		}
+		Main.client.channels.fetch('941720464466792458').then(function(channel) {
+			channel.messages.fetch({force: true}).then(function(succ) {
+				for (key => item in succ) {
+					trace(key);
+					trace(item.content);
+				}
+			}, (err) -> trace(err));
+		}, (err) -> trace(err));
+	}
+
+	function remoteSaveQuestion(message:Message, thread:String) {
+		var author = message.author.id;
+		var data:TStoreContent = {
+			thread_id: thread,
+			validated_by: null,
+			solved: false,
+			title: this.getStateAnswer(author, what_title),
+			topic: this.getStateAnswer(author, QuestionState.channel),
+			error_message: this.getStateAnswer(author, QuestionState.what_error_message),
+			code_lines: this.getStateAnswer(author, QuestionState.paste_some_code),
+			expected_behaviour: this.getStateAnswer(author, QuestionState.expected_behaviour),
+			whats_happening: this.getStateAnswer(author, QuestionState.whats_happening),
+			source_url: null,
+			description: null,
+			added_by: message.author.id,
+			created: Date.now()
+		};
+
+		this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
+	}
+
 	function getStateAnswer(author:String, state:QuestionState) {
+		var question = this.session.get(author).get(state);
+		if (question == null || question.answer == null) {
+			return null;
+		}
 		return this.session.get(author).get(state).answer;
 	}
 
@@ -184,6 +216,9 @@ class Helppls extends CommandDbBase {
 	}
 
 	function updateSessionAnswer(user:String, state:QuestionState, answer:String) {
+		if (answer == null || answer == '') {
+			return;
+		}
 		var active_session = this.session[user];
 		active_session.get(state).answer = answer;
 
@@ -221,7 +256,7 @@ class Helppls extends CommandDbBase {
 		if (is_error_message) {
 			json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
 		}
-		
+
 		var from = 0;
 		var to = 0;
 		var question = '';
@@ -274,7 +309,7 @@ class Helppls extends CommandDbBase {
 
 		return null;
 	}
-	
+
 	function parseVSCodeJson(input:String) {
 		try {
 			var obj = (Json.parse(input) : Array<VSCodeErrorMessage>);
@@ -376,6 +411,10 @@ typedef TStoreContent = {
 	var topic:String;
 	var solved:Bool;
 	var validated_by:String;
+	var error_message:String;
+	var code_lines:String;
+	var expected_behaviour:String;
+	var whats_happening:String;
 }
 
 enum abstract QuestionType(Int) {
