@@ -645,8 +645,8 @@ Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
 	var this1 = new Array(11);
-	var this2 = new Array(11);
-	vec[0] = new ecs_Phase(true,"main",this1,this2);
+	var this11 = new Array(11);
+	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
 	var vec1 = this1;
@@ -974,7 +974,6 @@ Reflect.field = function(o,field) {
 	try {
 		return o[field];
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -1719,7 +1718,6 @@ Type.enumEq = function(a,b) {
 			}
 		}
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 	return true;
@@ -4276,7 +4274,6 @@ haxe_ds_BalancedTree.prototype = {
 			this.root = this.removeLoop(key,this.root);
 			return true;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(typeof(haxe_Exception.caught(_g).unwrap()) == "string") {
 				return false;
 			} else {
@@ -5927,7 +5924,6 @@ haxe_io_Input.prototype = {
 				--k;
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -5955,7 +5951,6 @@ haxe_io_Input.prototype = {
 				total.addBytes(buf,0,len);
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -6014,7 +6009,6 @@ haxe_io_Input.prototype = {
 				s = HxOverrides.substr(s,0,-1);
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(((_g1) instanceof haxe_io_Eof)) {
 				var e = _g1;
@@ -6249,7 +6243,6 @@ haxe_io_Output.prototype = {
 				}
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -6846,7 +6839,6 @@ js_Boot.__string_rec = function(o,s) {
 		try {
 			tostr = o.toString;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			return "???";
 		}
 		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
@@ -7182,7 +7174,6 @@ sys_FileSystem.exists = function(path) {
 		js_node_Fs.accessSync(path);
 		return true;
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -7196,7 +7187,6 @@ sys_FileSystem.fullPath = function(relPath) {
 	try {
 		return js_node_Fs.realpathSync(relPath);
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -7210,7 +7200,6 @@ sys_FileSystem.isDirectory = function(path) {
 	try {
 		return js_node_Fs.statSync(path).isDirectory();
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -7218,7 +7207,6 @@ sys_FileSystem.createDirectory = function(path) {
 	try {
 		js_node_Fs.mkdirSync(path);
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		var _g1 = haxe_Exception.caught(_g).unwrap();
 		if(_g1.code == "ENOENT") {
 			sys_FileSystem.createDirectory(js_node_Path.dirname(path));
@@ -7338,7 +7326,6 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,0,1,this.pos);
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -7360,7 +7347,6 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,pos,len,this.pos);
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -7726,7 +7712,9 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		if(_g._hx_index == 9) {
 			var _g1 = _g.command;
 			if(_g1 != "list" && !role_status) {
-				interaction.reply("Invalid Permissions.").then(null,null);
+				interaction.reply("Invalid Permissions.").then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Haxelib.hx", lineNumber : 30, className : "systems.commands.Haxelib", methodName : "run"});
+				});
 				return;
 			}
 			var channel = interaction.channel;
