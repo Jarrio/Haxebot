@@ -1,5 +1,7 @@
 package systems.commands;
 
+import discord_js.User;
+import discord_js.MessageReaction;
 import discord_js.Collection;
 import firebase.web.firestore.Firestore;
 import firebase.web.firestore.Query;
@@ -10,6 +12,7 @@ import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
+import firebase.web.firestore.Timestamp;
 
 class Helppls extends CommandDbBase {
 	var state:Map<String, QuestionState> = [];
@@ -22,24 +25,84 @@ class Helppls extends CommandDbBase {
 	}
 
 	override function onEnabled() {
-		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), (err) -> trace(err));
+		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), err);
 
-		var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
-		Firestore.getDocs(q).then((docs) -> {
-			docs.forEach((doc) -> {
-				trace((doc.data().title));
-			});
-		}, (err) -> trace(err));
+
 	}
 
 	function checkExistingThreads(data:TStoreContent) {
-		var callback = function(messages:Collection<String, Message>) {
+		var timestamp = data.timestamp.toDate().getTime();
 
+		if (Date.now().getTime() - timestamp < 60000) {
+			trace('60 seconds has not passed');
+			return;
 		}
-		extractMessageHistory(data.thread_id, callback);
-	}
+		
+		trace('time has passed');
+		var callback = function(messages:Collection<String, Message>) {
+			var respondants = new Map<String, Int>();
+			for (key => message in messages) {
+				// if (data.added_by == message.author.id) {
+				// 	continue;
+				// }
+				var get = 0;
+				if (respondants.exists(message.author.id)) {
+					get = respondants.get(message.author.id);
+				}
+				respondants.set(message.author.id, get + 1);
+			}
 
+			var highest = -1;
+			var highest_id = null;
+			for (uid => messages in respondants) {
+				if (messages > highest) {
+					highest = messages;
+					highest_id = uid;
+				}
+			}
+
+			var filter = (reaction:MessageReaction, user:User) -> {
+				if (reaction.emoji.name == "✅") {
+					return true;
+				}
+				if (reaction.emoji.name == "❎") {
+					return true;
+				}
+				reaction.remove();
+				return false;
+			}
+
+			Main.client.channels.fetch(data.thread_id).then(function(channel) {
+				channel.send({content: 'Was this thread solved?'}).then(
+					function(message){
+						message.react("✅").then(null, null).then(function(_) {
+							message.react("❎").then(null, null).then(function(_) { 
+								var collector = message.createReactionCollector({filter: filter, time: 60000 * 60 * 48});
+								collector.on('collect', (collected:Collection<String, MessageReaction>, reason:String) -> {
+									trace('collected');
+								});
+							}, err);
+						}, err);
+					}, 
+					err
+				);
+			}, err);
+		}
+		this.extractMessageHistory(data.thread_id, callback);
+	}
+	
+	var toggle = false;
 	override function update(_) {
+		if (!this.toggle) {
+			var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
+			Firestore.getDocs(q).then((docs) -> {
+				docs.forEach((doc) -> {
+					this.checkExistingThreads(doc.data());
+				});
+			}, err);
+			toggle = true;
+		}
+
 		iterate(dm_messages, entity -> {
 			if (type != CommandForward.helppls) {
 				continue;
@@ -149,21 +212,27 @@ class Helppls extends CommandDbBase {
 					channel.send("**__Please reply to the above issue within the thread.__**");
 				});
 			});
-		}, (err) -> trace(err));
+		}, err);
 	}
 
 	function extractMessageHistory(thread_id:String, callback:(messages:Collection<String, Message>) -> Void) {
 		if (!Main.connected) {
 			return;
 		}
+		
+		Main.client.channels.fetch(thread_id).then(function(channel) {
+			channel.messages.fetch({force: true}).then(callback, err);
+		}, err);
+	}
 
-		Main.client.channels.fetch('941720464466792458').then(function(channel) {
-			channel.messages.fetch({force: true}).then(callback, (err) -> trace(err));
-		}, (err) -> trace(err));
+	function err(err:Dynamic) {
+		trace(err);
 	}
 
 	function remoteSaveQuestion(message:Message, thread:String) {
 		var author = message.author.id;
+		trace(Timestamp);
+		var now = Timestamp.fromDate(Date.now());
 		var data:TStoreContent = {
 			thread_id: thread,
 			validated_by: null,
@@ -177,11 +246,11 @@ class Helppls extends CommandDbBase {
 			source_url: null,
 			description: null,
 			added_by: message.author.id,
-			timestamp: Date.now(),
-			checked: Date.now()
+			timestamp: now,
+			checked: now
 		};
 
-		this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
+		this.addDoc('test', data, (_) -> trace('added'), err);
 	}
 
 	function getStateAnswer(author:String, state:QuestionState) {
@@ -402,8 +471,8 @@ typedef TQuestion = {
 typedef TStoreContent = {
 	var thread_id:String;
 	var added_by:String;
-	var timestamp:Date;
-	var checked:Date;
+	var timestamp:Timestamp;
+	var checked:Timestamp;
 	var description:String;
 	var source_url:String;
 	var title:String;

@@ -2788,6 +2788,7 @@ var firebase_web_app_FirebaseApp = require("firebase/app");
 var firebase_web_firestore_Query = require("firebase/firestore");
 var firebase_web_firestore_Firestore = require("firebase/firestore");
 var firebase_web_firestore_QueryConstraint = require("firebase/firestore");
+var firebase_web_firestore_Timestamp = require("firebase/firestore").Timestamp;
 var firebase_web_firestore_Unsubscribe = require("firebase/firestore");
 var haxe_StackItem = $hxEnums["haxe.StackItem"] = { __ename__:"haxe.StackItem",__constructs__:null
 	,CFunction: {_hx_name:"CFunction",_hx_index:0,__enum__:"haxe.StackItem",toString:$estr}
@@ -7906,6 +7907,7 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helppls = function(universe) {
+	this.toggle = false;
 	this.open_threads = new haxe_ds_StringMap();
 	this.session = new haxe_ds_StringMap();
 	this.state = new haxe_ds_StringMap();
@@ -7922,16 +7924,79 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,session: null
 	,open_threads: null
 	,onEnabled: function() {
-		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),firebase_web_firestore_Firestore.orderBy("timestamp","desc"));
-		firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
-			docs.forEach(function(doc) {
-				haxe_Log.trace(doc.data().title,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 29, className : "systems.commands.Helppls", methodName : "onEnabled"});
-			});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 31, className : "systems.commands.Helppls", methodName : "onEnabled"});
-		});
 	}
+	,checkExistingThreads: function(data) {
+		var _gthis = this;
+		var timestamp = data.timestamp.toDate().getTime();
+		if(new Date().getTime() - timestamp < 60000) {
+			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 37, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+			return;
+		}
+		haxe_Log.trace("time has passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 41, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+		var callback = function(messages) {
+			var respondants_h = Object.create(null);
+			var jsIterator = messages.entries();
+			var _g_lastStep = jsIterator.next();
+			while(!_g_lastStep.done) {
+				var v = _g_lastStep.value;
+				_g_lastStep = jsIterator.next();
+				var message = v[1];
+				var get = 0;
+				if(Object.prototype.hasOwnProperty.call(respondants_h,message.author.id)) {
+					get = respondants_h[message.author.id];
+				}
+				respondants_h[message.author.id] = get + 1;
+			}
+			var highest = -1;
+			var h = respondants_h;
+			var _g_keys = Object.keys(h);
+			var _g_length = _g_keys.length;
+			var _g_current = 0;
+			while(_g_current < _g_length) {
+				var key = _g_keys[_g_current++];
+				var _g1_value = h[key];
+				var messages = _g1_value;
+				if(messages > highest) {
+					highest = messages;
+				}
+			}
+			var filter = function(reaction,user) {
+				if(reaction.emoji.name == "✅") {
+					return true;
+				}
+				if(reaction.emoji.name == "❎") {
+					return true;
+				}
+				reaction.remove();
+				return false;
+			};
+			Main.client.channels.fetch(data.thread_id).then(function(channel) {
+				channel.send({ content : "Was this thread solved?"}).then(function(message) {
+					message.react("✅").then(null,null).then(function(_) {
+						message.react("❎").then(null,null).then(function(_) {
+							var collector = message.createReactionCollector({ filter : filter, time : 172800000});
+							collector.on("collect",function(collected,reason) {
+								haxe_Log.trace("collected",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 82, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+							});
+						},$bind(_gthis,_gthis.err));
+					},$bind(_gthis,_gthis.err));
+				},$bind(_gthis,_gthis.err));
+			},$bind(_gthis,_gthis.err));
+		};
+		this.extractMessageHistory(data.thread_id,callback);
+	}
+	,toggle: null
 	,update: function(_) {
+		var _gthis = this;
+		if(!this.toggle) {
+			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),firebase_web_firestore_Firestore.orderBy("timestamp","desc"));
+			firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
+				docs.forEach(function(doc) {
+					_gthis.checkExistingThreads(doc.data());
+				});
+			},$bind(this,this.err));
+			this.toggle = true;
+		}
 		var _this = this.dm_messages;
 		var _set = _this.entities;
 		var _active = _this.isActive();
@@ -7964,7 +8029,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				this.updateSessionAnswer(author,state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 81, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 152, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
@@ -8001,7 +8066,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 81, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 152, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
 			this.dm_messages.remove(entity);
@@ -8013,7 +8078,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,handleFinished: function(message) {
 		var _gthis = this;
-		haxe_Log.trace("handle finished",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 93, className : "systems.commands.Helppls", methodName : "handleFinished"});
+		haxe_Log.trace("handle finished",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 164, className : "systems.commands.Helppls", methodName : "handleFinished"});
 		var author = message.author.id;
 		var embed = new discord_$js_MessageEmbed();
 		var _g = new haxe_iterators_MapKeyValueIterator(this.session.h[author]);
@@ -8067,41 +8132,28 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					channel.send("**__Please reply to the above issue within the thread.__**");
 				});
 			});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 144, className : "systems.commands.Helppls", methodName : "handleFinished"});
-		});
+		},$bind(this,this.err));
 	}
-	,extractMessageHistory: function(thread_id) {
+	,extractMessageHistory: function(thread_id,callback) {
+		var _gthis = this;
 		if(!Main.connected) {
 			return;
 		}
-		Main.client.channels.fetch("941720464466792458").then(function(channel) {
-			channel.messages.fetch(null,{ force : true}).then(function(succ) {
-				var jsIterator = succ.entries();
-				var _g_lastStep = jsIterator.next();
-				while(!_g_lastStep.done) {
-					var v = _g_lastStep.value;
-					_g_lastStep = jsIterator.next();
-					var key = v[0];
-					var item = v[1];
-					haxe_Log.trace(key,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 154, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
-					haxe_Log.trace(item.content,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 155, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
-				}
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 157, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
-			});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 158, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
-		});
+		Main.client.channels.fetch(thread_id).then(function(channel) {
+			channel.messages.fetch(null,{ force : true}).then(callback,$bind(_gthis,_gthis.err));
+		},$bind(this,this.err));
+	}
+	,err: function(err) {
+		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 229, className : "systems.commands.Helppls", methodName : "err"});
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
-		var data = { thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : message.author.id, timestamp : new Date(), checked : new Date()};
+		haxe_Log.trace(firebase_web_firestore_Timestamp,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 234, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
+		var data = { thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : message.author.id, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 180, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 180, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
-		});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 253, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+		},$bind(this,this.err));
 	}
 	,getStateAnswer: function(author,state) {
 		var question = this.session.h[author].h[state];
