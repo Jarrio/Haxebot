@@ -1,5 +1,6 @@
 package systems.commands;
 
+import util.Random;
 import ecs.System;
 import vm2.NodeVM;
 import js.node.Fs;
@@ -20,7 +21,7 @@ class Run extends System {
 	var code_requests:Map<String, Array<Float>> = [];
 	var channel:TextChannel;
 	var checked:Bool = false;
-
+	var timeout = 5000;
 	override function update(_) {
 		if (!Main.connected) {
 			return;
@@ -208,6 +209,27 @@ class Run extends System {
 		return !~/(\}\})|(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
+	function insertLoopBreak(code:String) {
+		var varname = '';
+
+		var regex = ~/(while\s*\(.*\)\s*\{|while\s*\(.*?\))/gmui;
+		var copy = code;
+		var matched = [];
+
+		while (regex.match(code)) {
+			matched.push(regex.matched(1));
+			code = regex.matchedRight();
+		}
+
+		for (match in matched) {
+			varname = '___' + Random.string(6);
+			var start = 'final $varname = Date.now().getTime();';
+			var condition = 'if (Date.now().getTime() - $varname > ${this.timeout}) { break; }';
+			copy = copy.replace(match, start + '\n' + match + '\n' + condition);
+		}
+		return copy;
+	}
+
 	function runCodeOnThread(code:String, message:Message) {
 		if (!this.isSafe(code, message)) {
 			message.reply({content: 'Your code contains bad things.'});
@@ -251,6 +273,8 @@ class Run extends System {
 			}
 
 			code_content = format + '\n' + code_content;
+			code_content = this.insertLoopBreak(code_content);
+
 			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${message.author.tag} | time: ${Date.now()}', (error) -> {
 				if (error != null) {
 					trace(error);
@@ -270,7 +294,7 @@ class Run extends System {
 					process = 'haxe';
 				}
 
-				var ls = spawn(process, libs.concat(commands), {timeout: 10000});
+				var ls = spawn(process, libs.concat(commands), {timeout: this.timeout});
 
 				// to debug code output
 				// ls.stdout.on('data', (data:String) -> {
@@ -298,7 +322,7 @@ class Run extends System {
 					var vm = new NodeVM({
 						sandbox: obj,
 						console: 'redirect',
-						timeout: 10000,
+						timeout: this.timeout,
 					});
 
 					vm.on('console.log', (data, info) -> {
