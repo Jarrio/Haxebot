@@ -1,5 +1,6 @@
 package systems.commands;
 
+import discord_js.Collection;
 import firebase.web.firestore.Firestore;
 import firebase.web.firestore.Query;
 import firebase.web.firestore.Firestore.*;
@@ -14,7 +15,8 @@ class Helppls extends CommandDbBase {
 	var state:Map<String, QuestionState> = [];
 	var session:Map<String, Map<QuestionState, TQuestion>> = [];
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
-
+	//thread id & time since opening
+	var open_threads:Map<String, Float> = [];
 	public function new(universe) {
 		super(universe);
 	}
@@ -22,14 +24,19 @@ class Helppls extends CommandDbBase {
 	override function onEnabled() {
 		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), (err) -> trace(err));
 
-		var q:Query<{name:String}> = query(collection(db, 'test'), orderBy('name', DESCENDING));
-		updateDoc(doc(db, 'test', 'mcXuD85vFTBOG0vAZi3I'), {name: 'test doc'}).then((_) -> trace('added'), (err) -> trace(err));
-
+		var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
 		Firestore.getDocs(q).then((docs) -> {
 			docs.forEach((doc) -> {
-				trace(doc.data().name);
+				trace((doc.data().title));
 			});
 		}, (err) -> trace(err));
+	}
+
+	function checkExistingThreads(data:TStoreContent) {
+		var callback = function(messages:Collection<String, Message>) {
+
+		}
+		extractMessageHistory(data.thread_id, callback);
 	}
 
 	override function update(_) {
@@ -145,17 +152,13 @@ class Helppls extends CommandDbBase {
 		}, (err) -> trace(err));
 	}
 
-	function extractMessageHistory(thread_id:String) {
+	function extractMessageHistory(thread_id:String, callback:(messages:Collection<String, Message>) -> Void) {
 		if (!Main.connected) {
 			return;
 		}
+
 		Main.client.channels.fetch('941720464466792458').then(function(channel) {
-			channel.messages.fetch({force: true}).then(function(succ) {
-				for (key => item in succ) {
-					trace(key);
-					trace(item.content);
-				}
-			}, (err) -> trace(err));
+			channel.messages.fetch({force: true}).then(callback, (err) -> trace(err));
 		}, (err) -> trace(err));
 	}
 
@@ -174,7 +177,8 @@ class Helppls extends CommandDbBase {
 			source_url: null,
 			description: null,
 			added_by: message.author.id,
-			created: Date.now()
+			timestamp: Date.now(),
+			checked: Date.now()
 		};
 
 		this.addDoc('test', data, (_) -> trace('added'), (err) -> trace(err));
@@ -398,7 +402,8 @@ typedef TQuestion = {
 typedef TStoreContent = {
 	var thread_id:String;
 	var added_by:String;
-	var created:Date;
+	var timestamp:Date;
+	var checked:Date;
 	var description:String;
 	var source_url:String;
 	var title:String;
@@ -428,3 +433,4 @@ enum abstract QuestionState(Int) {
 	var expected_behaviour;
 	var finished;
 }
+ 

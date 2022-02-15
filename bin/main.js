@@ -7906,6 +7906,7 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helppls = function(universe) {
+	this.open_threads = new haxe_ds_StringMap();
 	this.session = new haxe_ds_StringMap();
 	this.state = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,universe);
@@ -7919,19 +7920,15 @@ systems_commands_Helppls.__super__ = systems_CommandDbBase;
 systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	state: null
 	,session: null
+	,open_threads: null
 	,onEnabled: function() {
-		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),firebase_web_firestore_Firestore.orderBy("name","desc"));
-		firebase_web_firestore_Firestore.updateDoc(firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test","mcXuD85vFTBOG0vAZi3I"),{ name : "test doc"}).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 26, className : "systems.commands.Helppls", methodName : "onEnabled"});
-		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 26, className : "systems.commands.Helppls", methodName : "onEnabled"});
-		});
+		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),firebase_web_firestore_Firestore.orderBy("timestamp","desc"));
 		firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
 			docs.forEach(function(doc) {
-				haxe_Log.trace(doc.data().name,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 30, className : "systems.commands.Helppls", methodName : "onEnabled"});
+				haxe_Log.trace(doc.data().title,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 29, className : "systems.commands.Helppls", methodName : "onEnabled"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 32, className : "systems.commands.Helppls", methodName : "onEnabled"});
+			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 31, className : "systems.commands.Helppls", methodName : "onEnabled"});
 		});
 	}
 	,update: function(_) {
@@ -7967,7 +7964,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				this.updateSessionAnswer(author,state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 88, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 81, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
@@ -8004,7 +8001,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 88, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 81, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
 			this.dm_messages.remove(entity);
@@ -8016,7 +8013,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,handleFinished: function(message) {
 		var _gthis = this;
-		haxe_Log.trace("handle finished",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 100, className : "systems.commands.Helppls", methodName : "handleFinished"});
+		haxe_Log.trace("handle finished",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 93, className : "systems.commands.Helppls", methodName : "handleFinished"});
 		var author = message.author.id;
 		var embed = new discord_$js_MessageEmbed();
 		var _g = new haxe_iterators_MapKeyValueIterator(this.session.h[author]);
@@ -8071,7 +8068,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 151, className : "systems.commands.Helppls", methodName : "handleFinished"});
+			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 144, className : "systems.commands.Helppls", methodName : "handleFinished"});
 		});
 	}
 	,extractMessageHistory: function(thread_id) {
@@ -8087,23 +8084,23 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					_g_lastStep = jsIterator.next();
 					var key = v[0];
 					var item = v[1];
-					haxe_Log.trace(key,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 161, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
-					haxe_Log.trace(item.content,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 162, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
+					haxe_Log.trace(key,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 154, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
+					haxe_Log.trace(item.content,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 155, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
 				}
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 164, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 157, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 165, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
+			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 158, className : "systems.commands.Helppls", methodName : "extractMessageHistory"});
 		});
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
-		var data = { thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : message.author.id, created : new Date()};
+		var data = { thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : message.author.id, timestamp : new Date(), checked : new Date()};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 186, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 180, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 186, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 180, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		});
 	}
 	,getStateAnswer: function(author,state) {
