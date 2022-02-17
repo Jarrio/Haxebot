@@ -3276,6 +3276,7 @@ package discord_js;
 	public function setTopic(topic:Null<String>, ?reason:String):js.lib.Promise<TextChannel>;
 	public function updateOverwrite(userOrRole:ts.AnyOf5<String, User, GuildMember, Message, Role>, options:PermissionOverwriteOption, ?reason:String):js.lib.Promise<TextChannel>;
 	public function isText():Bool;
+	public function isThread():Bool;
 	public final createdAt : js.lib.Date;
 	public final createdTimestamp : Float;
 	public var deleted : Bool;

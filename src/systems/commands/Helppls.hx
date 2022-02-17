@@ -18,15 +18,6 @@ class Helppls extends CommandDbBase {
 	var state:Map<String, QuestionState> = [];
 	var session:Map<String, Map<QuestionState, TQuestion>> = [];
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
-	//thread id & time since opening
-	var open_threads:Map<String, Float> = [];
-	public function new(universe) {
-		super(universe);
-	}
-
-	override function onEnabled() {
-		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), err);
-	}
 
 	function checkExistingThreads(data:TStoreContent) {
 		var timestamp = data.timestamp.toDate().getTime();
@@ -35,7 +26,7 @@ class Helppls extends CommandDbBase {
 			trace('60 seconds has not passed');
 			return;
 		}
-		
+
 		trace('time has passed');
 		var callback = function(messages:Collection<String, Message>) {
 			var respondants = new Map<String, Int>();
@@ -59,39 +50,47 @@ class Helppls extends CommandDbBase {
 				}
 			}
 
-			var filter = (reaction:MessageReaction, user:User) -> {
-				if (reaction.emoji.name == "✅") {
-					return true;
-				}
-				if (reaction.emoji.name == "❎") {
-					return true;
-				}
-				reaction.remove();
-				return false;
-			}
-
 			Main.client.channels.fetch(data.thread_id).then(function(channel) {
-				channel.send({content: 'Was this thread solved?'}).then(
-					function(message){
-						message.react("✅").then(null, err).then(function(_) {
-							message.react("❎").then(null, err).then(function(_) { 
-								var collector = message.createReactionCollector({filter: filter, time: 60000 * 60 * 48});
-								collector.on('collect', (collected:Collection<String, MessageReaction>, reason:String) -> {
-									trace('collected');
+				channel.send({content: 'Was this thread solved?'}).then(function(message) {
+					DiscordUtil.reactionTracker(message, (collected:MessageReaction, user:User) -> {
+						if (user.bot) {
+							return;
+						}
+						if (collected.emoji.name == "✅") {
+							channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
+								DiscordUtil.reactionTracker(message, (collected:MessageReaction, user:User) -> {
+									if (user.bot) {
+										return;
+									}
+									if (collected.emoji.name == "✅") {
+										var command = Main.getCommand('helpdescription');
+										if (command != null) {
+											command.setCommandPermission([
+												{
+													id: user.id,
+													type: USER,
+													permission: true
+												}
+											], () -> {
+												channel.send('<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?');
+											});
+										}
+									}
 								});
-							}, err);
-						}, err);
-					}, 
-					err
-				);
+							});
+						}
+						trace('collected');
+					});
+				}, err);
 			}, err);
 		}
 		this.extractMessageHistory(data.thread_id, callback);
 	}
-	
-	var toggle = true;
+
+	var toggle = false;
+
 	override function update(_) {
-		if (!this.toggle) {
+		if (!this.toggle && Main.commands_active) {
 			var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
 			Firestore.getDocs(q).then((docs) -> {
 				docs.forEach((doc) -> {
@@ -159,7 +158,6 @@ class Helppls extends CommandDbBase {
 	}
 
 	function handleFinished(message:Message) {
-		trace('handle finished');
 		var author = message.author.id;
 		var embed = new MessageEmbed();
 
@@ -217,7 +215,7 @@ class Helppls extends CommandDbBase {
 		if (!Main.connected) {
 			return;
 		}
-		
+
 		Main.client.channels.fetch(thread_id).then(function(channel) {
 			channel.messages.fetch({force: true}).then(callback, err);
 		}, err);
@@ -229,7 +227,6 @@ class Helppls extends CommandDbBase {
 
 	function remoteSaveQuestion(message:Message, thread:String) {
 		var author = message.author.id;
-		trace(Timestamp);
 		var now = Timestamp.fromDate(Date.now());
 		var data:TStoreContent = {
 			thread_id: thread,
@@ -500,4 +497,3 @@ enum abstract QuestionState(Int) {
 	var expected_behaviour;
 	var finished;
 }
- 

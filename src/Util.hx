@@ -19,3 +19,7 @@ function hasRole(role:String, interaction:BaseCommandInteraction) {
 	var guild = interaction.member.roles.cache.get(role);
 	return (interaction.guild.available && guild!.members!.has(interaction.user.id));
 }
+
+function err(err) {
+	trace(err);
+}
