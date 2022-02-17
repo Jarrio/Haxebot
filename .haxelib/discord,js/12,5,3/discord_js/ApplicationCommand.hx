@@ -1,5 +1,7 @@
 package discord_js;
 
+import discord_js.ApplicationCommandManager.ApplicationCommandData;
+import js.lib.Promise;
 import discord_api_types.ChannelType;
 import discord_api_types.ApplicationCommandOptionType;
 
@@ -16,6 +18,10 @@ extern class ApplicationCommand extends Base {
 	public var name:String;
 	public var options:Array<ApplicationCommandOption>;
 	public var permissions:ApplicationCommandPermissionsManager;
+
+	public function delete():Promise<ApplicationCommand>;
+	public function edit(data:ApplicationCommandData):Promise<ApplicationCommand>;
+	public function setDefaultPermmision(default_permission:Bool):Promise<ApplicationCommand>;
 }
 
 typedef ApplicationCommandOption = {

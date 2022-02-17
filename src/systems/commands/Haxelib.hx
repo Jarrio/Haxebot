@@ -27,7 +27,7 @@ class Haxelib extends CommandBase {
 		switch (command.content) {
 			case Haxelib(command):
 				if (command != "list" && !role_status) {
-					interaction.reply('Invalid Permissions.').then(null, null);
+					interaction.reply('Invalid Permissions.').then(null, (err) -> trace(err));
 					return;
 				}
 
