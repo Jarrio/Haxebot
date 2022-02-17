@@ -26,8 +26,6 @@ class Helppls extends CommandDbBase {
 
 	override function onEnabled() {
 		// Firestore.collection('hey').add({name: 'test'}).then((_) -> trace('added'), err);
-
-
 	}
 
 	function checkExistingThreads(data:TStoreContent) {
@@ -75,8 +73,8 @@ class Helppls extends CommandDbBase {
 			Main.client.channels.fetch(data.thread_id).then(function(channel) {
 				channel.send({content: 'Was this thread solved?'}).then(
 					function(message){
-						message.react("✅").then(null, null).then(function(_) {
-							message.react("❎").then(null, null).then(function(_) { 
+						message.react("✅").then(null, err).then(function(_) {
+							message.react("❎").then(null, err).then(function(_) { 
 								var collector = message.createReactionCollector({filter: filter, time: 60000 * 60 * 48});
 								collector.on('collect', (collected:Collection<String, MessageReaction>, reason:String) -> {
 									trace('collected');
@@ -91,7 +89,7 @@ class Helppls extends CommandDbBase {
 		this.extractMessageHistory(data.thread_id, callback);
 	}
 	
-	var toggle = false;
+	var toggle = true;
 	override function update(_) {
 		if (!this.toggle) {
 			var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
