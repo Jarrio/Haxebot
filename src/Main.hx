@@ -217,14 +217,6 @@ class Main {
 
 		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
 
-		var commands = parseCommands();
-		for (item in commands) {
-			if (item.name == "roundup") {
-				commands.remove(item);
-				break;
-			}
-		}
-
 		start();
 	}
 

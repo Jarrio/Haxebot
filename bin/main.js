@@ -950,16 +950,6 @@ Main.main = function() {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
-	var commands = Main.parseCommands();
-	var _g = 0;
-	while(_g < commands.length) {
-		var item = commands[_g];
-		++_g;
-		if(item.name == "roundup") {
-			HxOverrides.remove(commands,item);
-			break;
-		}
-	}
 	Main.start();
 };
 Main.parseCommands = function() {
