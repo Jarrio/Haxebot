@@ -1,3 +1,7 @@
+import js.node.Timers;
+import discord_js.ApplicationCommandManager.ApplicationCommandData;
+import discord_js.Snowflake;
+import discord_js.ApplicationCommand;
 import haxe.extern.EitherType;
 import discord_js.User;
 import discord_builder.SlashCommandMentionableOption;
@@ -15,8 +19,6 @@ import components.Command;
 import discord_builder.BaseCommandInteraction;
 import discord_builder.SlashCommandBuilder;
 import discord_js.ClientOptions.IntentFlags;
-import discordjs.rest.REST;
-import discord_api_types.Routes;
 import discord_js.Client;
 import haxe.Json;
 import sys.io.File;
@@ -37,6 +39,8 @@ import firebase.web.app.FirebaseApp;
 class Main {
 	public static var app:FirebaseApp;
 	public static var client:Client;
+	public static var commands:Map<String, ApplicationCommand> = [];
+	public static var commands_active:Bool = false;
 	public static var connected:Bool = false;
 	public static var config:TConfig;
 	public static var universe:Universe;
@@ -57,27 +61,56 @@ class Main {
 		trace('DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG');
 		#end
 
-		client = new Client({intents: [
-			IntentFlags.GUILDS,
-			IntentFlags.GUILD_MESSAGES,
-			IntentFlags.DIRECT_MESSAGES,
-			IntentFlags.GUILD_MEMBERS,
-			IntentFlags.GUILD_MESSAGE_REACTIONS
-		]});
+		client = new Client({
+			intents: [
+				IntentFlags.GUILDS,
+				IntentFlags.GUILD_MESSAGES,
+				IntentFlags.DIRECT_MESSAGES,
+				IntentFlags.GUILD_MEMBERS,
+				IntentFlags.GUILD_MESSAGE_REACTIONS
+			]
+		});
 
-		client.once('ready', (_) -> {
+		client.once('ready', (clients) -> {
 			trace('Ready!');
+			Main.client = cast clients[0];
 			connected = true;
+
+			var get_commands = parseCommands();
+			var count = 0;
+			function createCommand() {
+				Timers.setTimeout(function() {
+					Main.client.application.commands.create(cast get_commands[count]).then(function(command) {
+						saveCommand(command);
+						count++;
+						if (count + 1 != get_commands.length) {
+							createCommand();
+						} else {
+							trace('Commands activated!');
+							commands_active = true;
+						}
+					}, (err) -> trace(err));
+				}, 1250);
+			}
+			createCommand();
 		});
 
 		client.on('messageCreate', (message:Message) -> {
 			var channel = (message.channel : TextChannel);
-			if (message.content.startsWith("!run")) {
-				var code:RunMessage = message.toString();
-				universe.setComponents(universe.createEntity(), code, message);
+			if (channel.type == 'DM' && !message.author.bot) {
+				if (dm_help_tracking.exists(message.author.id)) {
+					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
+				}
 			}
-			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
-				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+
+			if (message.toString().startsWith("!run")) {
+				if (message.content.startsWith("!run")) {
+					var code:RunMessage = message.toString();
+					universe.setComponents(universe.createEntity(), code, message);
+				}
+				if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+					universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+				}
 			}
 		});
 
@@ -101,7 +134,6 @@ class Main {
 					dm_help_tracking.set(interaction.user.id, time);
 				default:
 			}
-
 			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 
 			for (value in config.commands) {
@@ -155,6 +187,23 @@ class Main {
 		}
 	}
 
+	public static function getCommand(name:String) {
+		if (Main.commands == null) {
+			return null;
+		}
+		for (command in Main.commands) {
+			if (name == command.name) {
+				return command;
+			}
+		}
+		return null;
+	}
+
+	static function saveCommand(command:ApplicationCommand) {
+		Main.commands.set(command.name, command);
+		trace('registered ${command.name}');
+	}
+
 	static function main() {
 		try {
 			config = Json.parse(File.getContent('./config.json'));
@@ -167,12 +216,14 @@ class Main {
 		}
 
 		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
+
 		var commands = parseCommands();
-
-		var rest = new REST({version: '9'}).setToken(config.discord_token);
-
-		rest.put(Routes.applicationGuildCommands(config.client_id, config.server_id), {body: commands})
-			.then((_) -> trace('Successfully registered application commands.'), (err) -> trace(err));
+		for (item in commands) {
+			if (item.name == "roundup") {
+				commands.remove(item);
+				break;
+			}
+		}
 
 		start();
 	}
@@ -185,7 +236,8 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
-			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description);
+			var permission = command.is_public == null ? true : command.is_public;
+			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultPermission(permission);
 			if (command.params != null) {
 				for (param in command.params) {
 					switch (param.type) {
@@ -257,13 +309,28 @@ typedef TConfig = {
 	var commands:Array<TCommands>;
 }
 
+typedef Foo = ApplicationCommandData;
+
 typedef TCommands = {
 	var type:CommandType;
 	var name:String;
 	var description:String;
+	@:optional var is_public:Bool;
 	@:optional var params:Array<TCommands>;
 	@:optional var required:Bool;
 	@:optional var choices:Array<{name:String, value:EitherType<Int, String>}>;
+}
+
+typedef RegisteredApplicationCommand = {
+	public var application_id:Snowflake;
+	public var default_permission:Bool;
+	public var default_member_permission:Dynamic;
+	public var description:String;
+	public var guild_id:Snowflake;
+	public var id:Snowflake;
+	public var name:String;
+	public var options:Array<ApplicationCommandOption>;
+	public var type:CommandType;
 }
 
 enum abstract CommandType(String) {

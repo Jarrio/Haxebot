@@ -1,5 +1,8 @@
 package discord_js;
 
+import js.lib.Promise;
+import discord_js.ThreadManager;
+
 @:jsRequire("discord.js", "Message") extern class Message extends Base {
 	function new(client:Client, data:Dynamic, channel:ts.AnyOf3<TextChannel, NewsChannel, DMChannel>);
 	private var _edits : Array<Message>;
@@ -34,6 +37,7 @@ package discord_js;
 	public var type : MessageType;
 	public final url : String;
 	public var webhookID : Null<String>;
+	public function startThread(?options:ThreadCreateOptions):Promise<ThreadChannel>;
 	public var flags : {
 		var bitfield : Float;
 		dynamic function add(bits:haxe.extern.Rest<BitFieldResolvable<MessageFlagsString>>):BitField<MessageFlagsString>;

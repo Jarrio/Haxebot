@@ -5,7 +5,6 @@ import sys.io.File;
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import discord_js.TextChannel;
-import discord_js.Message;
 import components.Command;
 
 class Roundup extends CommandBase {
@@ -48,8 +47,30 @@ class Roundup extends CommandBase {
 		data.request();
 	}
 
+	var set_permissions = false;
+
 	override function update(_) {
 		super.update(_);
+		if (!this.set_permissions && Main.commands_active && Main.commands.exists(this.name)) {
+			this.set_permissions = true;
+
+			var command = Main.getCommand(this.name);
+			if (command != null) {
+				command.permissions.set({
+					guild: '162395145352904705',
+					command: command.id,
+					permissions: [
+						{
+							id: '661960123035418629',
+							type: USER,
+							permission: true
+						}
+					]
+				}).then(function(command) {
+					trace('Updated permissions for ' + this.name);
+				});
+			}
+		}
 		#if block
 		return;
 		#end
@@ -66,7 +87,7 @@ class Roundup extends CommandBase {
 		if (this.roundup == -1 || this.channel == null || Date.now().getTime() - last_checked <= 86400000) {
 			return;
 		}
-		
+
 		this.last_checked = Date.now().getTime();
 		getHaxeIoPage();
 	}

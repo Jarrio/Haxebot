@@ -7,6 +7,7 @@ package discord_js;
 	public var type : String;
 	public var rateLimitPerUser : Float;
 	public var topic : Null<String>;
+	public var threads:ThreadManager;
 	public function createWebhook(name:String, ?options:{ @:optional var avatar : Dynamic; @:optional var reason : String; }):js.lib.Promise<Webhook>;
 	public function setNSFW(nsfw:Bool, ?reason:String):js.lib.Promise<TextChannel>;
 	public function setRateLimitPerUser(rateLimitPerUser:Float, ?reason:String):js.lib.Promise<TextChannel>;

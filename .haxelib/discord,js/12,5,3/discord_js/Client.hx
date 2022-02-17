@@ -3,7 +3,7 @@ package discord_js;
 @:jsRequire("discord.js", "Client") extern class Client extends BaseClient {
 	function new(?options:ClientOptions);
 	private var actions : Dynamic;
-	private var application : ClientApplication;
+	public var application : ClientApplication;
 	private function _eval(script:String):Dynamic;
 	private function _validateOptions(?options:ClientOptions):Void;
 	public var channels : ChannelManager;
