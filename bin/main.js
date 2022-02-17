@@ -7991,15 +7991,14 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	}
 	,__class__: systems_commands_Helpdescription
 });
-var systems_commands_Helppls = function(universe) {
+var systems_commands_Helppls = function(_universe) {
 	this.toggle = false;
-	this.open_threads = new haxe_ds_StringMap();
 	this.session = new haxe_ds_StringMap();
 	this.state = new haxe_ds_StringMap();
-	systems_CommandDbBase.call(this,universe);
-	this.dm_messages = universe.families.get(1);
-	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
+	systems_CommandDbBase.call(this,_universe);
+	this.dm_messages = this.universe.families.get(1);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8007,17 +8006,13 @@ systems_commands_Helppls.__super__ = systems_CommandDbBase;
 systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	state: null
 	,session: null
-	,open_threads: null
-	,onEnabled: function() {
-	}
 	,checkExistingThreads: function(data) {
 		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
 		if(new Date().getTime() - timestamp < 60000) {
-			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 36, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 26, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
 			return;
 		}
-		haxe_Log.trace("time has passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 40, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
 		var callback = function(messages) {
 			var respondants_h = Object.create(null);
 			var jsIterator = messages.entries();
@@ -8068,7 +8063,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 								});
 							});
 						}
-						haxe_Log.trace("collected",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 92, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+						haxe_Log.trace("collected",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 78, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
 					});
 				},$bind(_gthis,_gthis.err));
 			},$bind(_gthis,_gthis.err));
@@ -8119,7 +8114,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				this.updateSessionAnswer(author,state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 159, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 145, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
@@ -8156,7 +8151,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 159, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 145, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
 			this.dm_messages.remove(entity);
@@ -8233,14 +8228,14 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		},$bind(this,this.err));
 	}
 	,err: function(err) {
-		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 235, className : "systems.commands.Helppls", methodName : "err"});
+		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 221, className : "systems.commands.Helppls", methodName : "err"});
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
 		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
 		var data = { thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : message.author.id, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 258, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 244, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		},$bind(this,this.err));
 	}
 	,getStateAnswer: function(author,state) {

@@ -27,13 +27,9 @@ class Helppls extends CommandDbBase {
 			return;
 		}
 
-		trace('time has passed');
 		var callback = function(messages:Collection<String, Message>) {
 			var respondants = new Map<String, Int>();
 			for (key => message in messages) {
-				// if (data.added_by == message.author.id) {
-				// 	continue;
-				// }
 				var get = 0;
 				if (respondants.exists(message.author.id)) {
 					get = respondants.get(message.author.id);
