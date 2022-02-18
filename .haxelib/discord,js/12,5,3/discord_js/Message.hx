@@ -14,7 +14,7 @@ import discord_js.ThreadManager;
 	public var channel : ts.AnyOf3<TextChannel, NewsChannel, DMChannel>;
 	public final cleanContent : String;
 	public var content : String;
-	public final createdAt : js.lib.Date;
+	public final createdAt : Date;
 	public var createdTimestamp : Float;
 	public final deletable : Bool;
 	public var deleted : Bool;

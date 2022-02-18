@@ -78,6 +78,7 @@ class Haxelib extends CommandBase {
 		this.message_history.set(command, embed);
 		return true;
 	}
+	
 	function get_name():String {
 		return 'haxelib';
 	}

@@ -14,6 +14,16 @@ import components.Command;
 import discord_builder.BaseCommandInteraction;
 import firebase.web.firestore.Timestamp;
 
+typedef TMessage = {
+	var content:String;
+	var user:{
+		var id:String;
+		var username:String;
+		var avartarURL:String;
+	}
+	var posted:Timestamp;
+}
+
 class Helppls extends CommandDbBase {
 	var state:Map<String, QuestionState> = [];
 	var session:Map<String, Map<QuestionState, TQuestion>> = [];
@@ -28,14 +38,32 @@ class Helppls extends CommandDbBase {
 		}
 
 		var callback = function(messages:Collection<String, Message>) {
+			var discussion = new Array<TMessage>();
 			var respondants = new Map<String, Int>();
 			for (key => message in messages) {
+				if (message.author.bot) {
+					continue;
+				}
 				var get = 0;
 				if (respondants.exists(message.author.id)) {
 					get = respondants.get(message.author.id);
 				}
 				respondants.set(message.author.id, get + 1);
+
+				discussion.push({
+					content: message.content,
+					user: {
+						id: message.author.id,
+						username: message.author.username,
+						avartarURL: message.author.avatarURL()
+					},
+					posted: Timestamp.fromDate(message.createdAt)
+				});
 			}
+
+			discussion.sort(function(a, b) {
+				return Math.round(a.posted.toDate().getTime() - b.posted.toDate().getTime());
+			});
 
 			var highest = -1;
 			var highest_id = null;
@@ -69,18 +97,24 @@ class Helppls extends CommandDbBase {
 												}
 											], () -> {
 												channel.send('<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?');
+												var q = query(collection(db, 'test'), where('thread_id', '==', data.thread_id));
+												Firestore.getDocs(q).then((docs) -> {
+													if (docs.size != 1) {
+														return;
+													}
+													Firestore.updateDoc(docs.docs[0].ref, {discussion: discussion});
+												});
 											});
 										}
 									}
 								});
 							});
 						}
-						trace('collected');
 					});
 				}, err);
 			}, err);
 		}
-		this.extractMessageHistory(data.thread_id, callback);
+		this.extractMessageHistory(data.start_message_id, data.thread_id, callback);
 	}
 
 	var toggle = false;
@@ -207,13 +241,13 @@ class Helppls extends CommandDbBase {
 		}, err);
 	}
 
-	function extractMessageHistory(thread_id:String, callback:(messages:Collection<String, Message>) -> Void) {
+	function extractMessageHistory(start_id:String, thread_id:String, callback:(messages:Collection<String, Message>) -> Void) {
 		if (!Main.connected) {
 			return;
 		}
 
 		Main.client.channels.fetch(thread_id).then(function(channel) {
-			channel.messages.fetch({force: true}).then(callback, err);
+			channel.messages.fetch({after: '942949610924691518'}, {force: true}).then(callback, err);
 		}, err);
 	}
 
@@ -225,6 +259,8 @@ class Helppls extends CommandDbBase {
 		var author = message.author.id;
 		var now = Timestamp.fromDate(Date.now());
 		var data:TStoreContent = {
+			discussion: null,
+			start_message_id: message.id,
 			thread_id: thread,
 			validated_by: null,
 			solved: false,
@@ -236,7 +272,7 @@ class Helppls extends CommandDbBase {
 			whats_happening: this.getStateAnswer(author, QuestionState.whats_happening),
 			source_url: null,
 			description: null,
-			added_by: message.author.id,
+			added_by: author,
 			timestamp: now,
 			checked: now
 		};
@@ -460,6 +496,7 @@ typedef TQuestion = {
 }
 
 typedef TStoreContent = {
+	var start_message_id:String;
 	var thread_id:String;
 	var added_by:String;
 	var timestamp:Timestamp;
@@ -474,6 +511,7 @@ typedef TStoreContent = {
 	var code_lines:String;
 	var expected_behaviour:String;
 	var whats_happening:String;
+	var discussion:Array<TMessage>;
 }
 
 enum abstract QuestionType(Int) {
