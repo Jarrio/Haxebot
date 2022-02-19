@@ -24,16 +24,7 @@ import haxe.Json;
 import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
-import systems.commands.Hi;
-import systems.commands.Help;
-import systems.commands.Haxelib;
-import systems.commands.Notify;
-import systems.commands.Rtfm;
-import systems.commands.Roundup;
-import systems.commands.Api;
-import systems.commands.Poll;
-import systems.commands.Boop;
-import systems.commands.ScamPrevention;
+import systems.commands.*;
 import firebase.web.app.FirebaseApp;
 
 class Main {
@@ -52,7 +43,9 @@ class Main {
 			phases: [
 				{
 					name: 'main',
-					systems: [Hi, Help, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention]
+					systems: [
+						Hi, Help, React, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
+					]
 				}
 			]
 		});
@@ -101,16 +94,20 @@ class Main {
 				if (dm_help_tracking.exists(message.author.id)) {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
 				}
+				return;
 			}
 
-			if (message.toString().startsWith("!run")) {
-				if (message.content.startsWith("!run")) {
-					var code:RunMessage = message.toString();
-					universe.setComponents(universe.createEntity(), code, message);
-				}
-				if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
-					universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
-				}
+			if (message.content.startsWith("!run")) {
+				var code:RunMessage = message.toString();
+				universe.setComponents(universe.createEntity(), code, message);
+			}
+
+			if (message.content.startsWith("!react")) {
+				universe.setComponents(universe.createEntity(), CommandForward.react, message);
+			}
+
+			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 			}
 		});
 
@@ -183,6 +180,9 @@ class Main {
 		client.login(config.discord_token);
 
 		new Timer(500).run = function() {
+			if (!connected || !commands_active) {
+				return;
+			}
 			universe.update(1);
 		}
 	}
@@ -338,4 +338,5 @@ enum abstract CommandType(String) {
 enum abstract CommandForward(String) {
 	var helppls;
 	var scam_prevention;
+	var react;
 }

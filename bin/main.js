@@ -644,8 +644,8 @@ Main.universe = null;
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(11);
-	var this11 = new Array(11);
+	var this1 = new Array(12);
+	var this11 = new Array(12);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -715,41 +715,45 @@ Main.start = function() {
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new systems_commands_Haxelib(u);
+	var s = new systems_commands_React(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_Haxelib(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_Roundup(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Run(u);
+	var s = new systems_commands_Roundup(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_Run(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_ScamPrevention(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
+	s.onEnabled();
+	var s = new systems_commands_ScamPrevention(u);
+	phase.systems[11] = s;
+	phase.enabledSystems[11] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -763,7 +767,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 75, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 68, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var get_commands = Main.parseCommands();
@@ -777,11 +781,11 @@ Main.start = function() {
 					if(count + 1 != get_commands.length) {
 						createCommand();
 					} else {
-						haxe_Log.trace("Commands activated!",{ fileName : "src/Main.hx", lineNumber : 89, className : "Main", methodName : "start"});
+						haxe_Log.trace("Commands activated!",{ fileName : "src/Main.hx", lineNumber : 82, className : "Main", methodName : "start"});
 						Main.commands_active = true;
 					}
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 92, className : "Main", methodName : "start"});
+					haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 85, className : "Main", methodName : "start"});
 				});
 			},1250);
 		};
@@ -804,42 +808,55 @@ Main.start = function() {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
+			return;
 		}
-		if(StringTools.startsWith(message.toString(),"!run")) {
-			if(StringTools.startsWith(message.content,"!run")) {
-				var code = message.toString();
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,code);
-				Main.universe.components.set(_ecsTmpEntity,3,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
+		if(StringTools.startsWith(message.content,"!run")) {
+			var code = message.toString();
+			var _ecsTmpEntity = Main.universe.createEntity();
+			Main.universe.components.set(_ecsTmpEntity,4,code);
+			Main.universe.components.set(_ecsTmpEntity,3,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
 			}
-			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
-				Main.universe.components.set(_ecsTmpEntity,3,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+		}
+		if(StringTools.startsWith(message.content,"!react")) {
+			var _ecsTmpEntity = Main.universe.createEntity();
+			Main.universe.components.set(_ecsTmpEntity,2,"react");
+			Main.universe.components.set(_ecsTmpEntity,3,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+		}
+		if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+			var _ecsTmpEntity = Main.universe.createEntity();
+			Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
+			Main.universe.components.set(_ecsTmpEntity,3,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
 			}
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 118, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 116, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -900,9 +917,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 175, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 176, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 177, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 172, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 173, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 174, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -916,6 +933,9 @@ Main.start = function() {
 	});
 	Main.client.login(Main.config.discord_token);
 	new haxe_Timer(500).run = function() {
+		if(!Main.connected || !Main.commands_active) {
+			return;
+		}
 		Main.universe.update(1);
 	};
 };
@@ -1825,6 +1845,9 @@ function Util_hasRole(role,interaction) {
 		return false;
 	}
 }
+function Util_err(err) {
+	haxe_Log.trace(err,{ fileName : "src/Util.hx", lineNumber : 24, className : "_Util.Util_Fields_", methodName : "err"});
+}
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
 	var this1 = [0];
@@ -2156,17 +2179,18 @@ bits_BitsData.get_length = function(this1) {
 };
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
-	,Boop: ($_=function(user) { return {_hx_index:1,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
-	,Poll: ($_=function(question,time) { return {_hx_index:2,question:question,time:time,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","time"],$_)
-	,Roundup: ($_=function(number) { return {_hx_index:3,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
-	,Rtfm: ($_=function(channel) { return {_hx_index:4,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
-	,Api: ($_=function(channel) { return {_hx_index:5,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["channel"],$_)
-	,Notify: ($_=function(channel) { return {_hx_index:6,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
-	,Code: ($_=function(code) { return {_hx_index:7,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
-	,Help: ($_=function(category) { return {_hx_index:8,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
-	,Haxelib: ($_=function(command) { return {_hx_index:9,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
+	,React: ($_=function(emoji,message_id) { return {_hx_index:1,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
+	,Boop: ($_=function(user) { return {_hx_index:2,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
+	,Poll: ($_=function(question,time) { return {_hx_index:3,question:question,time:time,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","time"],$_)
+	,Roundup: ($_=function(number) { return {_hx_index:4,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
+	,Rtfm: ($_=function(channel) { return {_hx_index:5,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
+	,Api: ($_=function(channel) { return {_hx_index:6,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["channel"],$_)
+	,Notify: ($_=function(channel) { return {_hx_index:7,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
+	,Code: ($_=function(code) { return {_hx_index:8,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
+	,Help: ($_=function(category) { return {_hx_index:9,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
+	,Haxelib: ($_=function(command) { return {_hx_index:10,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.React,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi];
 var discord_$builder_SharedNameAndDescription = require("@discordjs/builders").SharedNameAndDescription;
 var discord_$builder_SharedSlashCommandOptions = require("@discordjs/builders").SharedSlashCommandOptions;
@@ -7538,7 +7562,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 5) {
+		if(_g._hx_index == 6) {
 			var _g1 = _g.channel;
 			var docs;
 			switch(interaction.channel.id) {
@@ -7583,7 +7607,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			var base = docs;
 			var split = null;
 			var _g = command.content;
-			if(_g._hx_index == 5) {
+			if(_g._hx_index == 6) {
 				split = _g.channel.split(" ");
 			}
 			if(split[2] != null) {
@@ -7684,7 +7708,7 @@ var systems_commands_ApiParams = {};
 systems_commands_ApiParams._new = function(base,command) {
 	var split = null;
 	var _g = command.content;
-	if(_g._hx_index == 5) {
+	if(_g._hx_index == 6) {
 		split = _g.channel.split(" ");
 	}
 	if(split[2] != null) {
@@ -7721,7 +7745,7 @@ systems_commands_Boop.__super__ = systems_CommandBase;
 systems_commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 1) {
+		if(_g._hx_index == 2) {
 			interaction.reply("*boop* <@" + _g.user.id + ">");
 		}
 	}
@@ -7762,7 +7786,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
-		if(_g._hx_index == 9) {
+		if(_g._hx_index == 10) {
 			var _g1 = _g.command;
 			if(_g1 != "list" && !role_status) {
 				interaction.reply("Invalid Permissions.").then(null,function(err) {
@@ -7834,7 +7858,7 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 8) {
+		if(_g._hx_index == 9) {
 			var _g1 = _g.category;
 			var msg = "";
 			var _this = this.data;
@@ -7951,7 +7975,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 6) {
+		if(_g._hx_index == 7) {
 			var _g1 = 0;
 			var _g2 = _g.channel.split(" ");
 			while(_g1 < _g2.length) {
@@ -8007,7 +8031,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 2) {
+		if(_g._hx_index == 3) {
 			var question = _g.question;
 			var time = _g.time;
 			if(time > 4320) {
@@ -8072,6 +8096,51 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
 	,__class__: systems_commands_Poll
+});
+var systems_commands_React = function(_universe) {
+	this.set_permission = false;
+	systems_CommandBase.call(this,_universe);
+	this.messages = this.universe.families.get(1);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
+};
+$hxClasses["systems.commands.React"] = systems_commands_React;
+systems_commands_React.__name__ = "systems.commands.React";
+systems_commands_React.__super__ = systems_CommandBase;
+systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
+	set_permission: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
+			if(forward != "react") {
+				continue;
+			}
+			var split = [message[0].content.split(" ")];
+			message[0].channel.messages.fetch(split[0][2]).then((function(split,message) {
+				return function(react_message) {
+					react_message.react(split[0][1]);
+					message[0].delete();
+				};
+			})(split,message),Util_err);
+			this.messages.remove(entity);
+		}
+	}
+	,get_name: function() {
+		return "react";
+	}
+	,run: function(command,interaction) {
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_React
 });
 var systems_commands_Roundup = function(_universe) {
 	this.set_permissions = false;
@@ -8175,7 +8244,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 3) {
+		if(_g._hx_index == 4) {
 			var _g1 = _g.number;
 			if(this.active) {
 				this.active = false;
@@ -8230,7 +8299,7 @@ systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 4) {
+		if(_g._hx_index == 5) {
 			var _g1 = _g.channel;
 			var compare = _g1;
 			if(_g1 == null) {
