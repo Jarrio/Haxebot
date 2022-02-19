@@ -1,0 +1,69 @@
+[
+	{
+		"qid": 1,
+		"question": [
+			"What kind of question do you need to ask?"
+		],
+		"valid_input": [
+			{
+				"rid": -1,
+				"name": "General"
+			},
+			{
+				"rid": 2,
+				"name": "Error message"
+			},
+			{
+				"rid": 3,
+				"name": "Unexpected behaviour"
+			},
+			{
+				"rid": -1,
+				"name": "Discussion"
+			},
+			{
+				"rid": -1,
+				"name": "Other"
+			}
+		],
+		"state": "question_type"
+	},
+	{
+		"qid": 2,
+		"pid": 1,
+		"rid": 2,
+		"question": [
+			"What is your error message?"
+		],
+		"state": "error_message"
+	},
+	{
+		"qid": 3,
+		"pid": 2,
+		"question": [
+			"Please provide a brief snippet of code related to the error."
+		],
+		"state": "provide_code"
+	},
+	{
+		"qid": 4,
+		"pid": 1,
+		"question": [
+			"What do you expect to happen?"
+		],
+		"state": "expected_behaviour"
+	},
+	{
+		"qid": 5,
+		"pid": 4,
+		"question": [
+			"What is happening?"
+		],
+		"state": "what_is_happening"
+	},
+	{
+		"qid": 6,
+		"question": "Please enter a title for your thread.",
+		"state": "title"
+	}
+]

@@ -2166,7 +2166,7 @@ bits_BitsData.get_length = function(this1) {
 };
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
-	,Helppls: {_hx_name:"Helppls",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
+	,Helppls: ($_=function(topic) { return {_hx_index:1,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
 	,Boop: ($_=function(user) { return {_hx_index:2,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
 	,Poll: ($_=function(question,time) { return {_hx_index:3,question:question,time:time,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","time"],$_)
 	,Roundup: ($_=function(number) { return {_hx_index:4,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
@@ -2179,7 +2179,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Haxelib: ($_=function(command) { return {_hx_index:11,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
 };
 components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Helppls,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
-components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Helppls];
+components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi];
 var discord_$builder_SharedNameAndDescription = require("@discordjs/builders").SharedNameAndDescription;
 var discord_$builder_SharedSlashCommandOptions = require("@discordjs/builders").SharedSlashCommandOptions;
 var discord_$builder_AnySlashCommand = {};
@@ -8082,7 +8082,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				},$bind(_gthis,_gthis.err));
 			},$bind(_gthis,_gthis.err));
 		};
-		this.extractMessageHistory(data.thread_id,callback);
+		this.extractMessageHistory(data.start_message_id,data.thread_id,callback);
 	}
 	,toggle: null
 	,update: function(_) {
@@ -8128,7 +8128,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				this.updateSessionAnswer(author,state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 179, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 178, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
@@ -8139,7 +8139,6 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					message1.send({ embeds : [embed]});
 					break;
 				case 1:
-					this.updateSessionChannel(author,state,this.getChannel(message.content));
 					this.questionIsThereAnError(message);
 					break;
 				case 2:
@@ -8165,12 +8164,20 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 179, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 178, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
 			this.dm_messages.remove(entity);
 		}
 		systems_CommandDbBase.prototype.update.call(this,_);
+	}
+	,question: function(message,question,state) {
+		this.state.h[message.author.id] = state;
+		this.updateSessionQuestion(message.author.id,state,question);
+		var message1 = message.author;
+		var embed = new discord_$js_MessageEmbed();
+		embed.setDescription(question);
+		message1.send({ embeds : [embed]});
 	}
 	,toggleState: function(author,state) {
 		this.state.h[author] = state;
@@ -8232,7 +8239,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			});
 		},$bind(this,this.err));
 	}
-	,extractMessageHistory: function(thread_id,callback) {
+	,extractMessageHistory: function(start_id,thread_id,callback) {
 		var _gthis = this;
 		if(!Main.connected) {
 			return;
@@ -8242,14 +8249,14 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		},$bind(this,this.err));
 	}
 	,err: function(err) {
-		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 255, className : "systems.commands.Helppls", methodName : "err"});
+		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 260, className : "systems.commands.Helppls", methodName : "err"});
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
 		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
 		var data = { discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : author, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 280, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 285, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		},$bind(this,this.err));
 	}
 	,getStateAnswer: function(author,state) {
@@ -8372,7 +8379,8 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 	}
 	,run: function(command,interaction) {
-		if(command.content._hx_index == 1) {
+		var _g = command.content;
+		if(_g._hx_index == 1) {
 			this.session.h[interaction.user.id] = new haxe_ds_IntMap();
 			this.state.h[interaction.user.id] = 0;
 			var interaction1 = interaction.user;
@@ -8380,6 +8388,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			var embed = new discord_$js_MessageEmbed();
 			embed.setDescription(content);
 			interaction1.send({ embeds : [embed]});
+			this.updateSessionChannel(interaction.user.id,1,this.getChannel(_g.topic));
 			interaction.reply(":white_check_mark:");
 		}
 	}

@@ -157,7 +157,6 @@ class Helppls extends CommandDbBase {
 					var question = this.questionChannel(message.author.id);
 					message.author.send({embeds: [this.createEmbed(question)]});
 				case channel:
-					this.updateSessionChannel(author, state, this.getChannel(message.content));
 					this.questionIsThereAnError(message);
 				case is_there_an_error:
 					if (message.content == '1') {
@@ -181,6 +180,12 @@ class Helppls extends CommandDbBase {
 			this.dm_messages.remove(entity);
 		});
 		super.update(_);
+	}
+
+	function question(message:Message, question:String, state:QuestionState) {
+		this.toggleState(message.author.id, state);
+		this.updateSessionQuestion(message.author.id, state, question);
+		message.author.send({embeds: [this.createEmbed(question)]});
 	}
 
 	inline function toggleState(author:String, state:QuestionState) {
@@ -419,11 +424,11 @@ class Helppls extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Helppls:
+			case Helppls(topic):
 				this.session.set(interaction.user.id, []);
 				this.toggleState(interaction.user.id, none);
 				interaction.user.send({embeds: [this.createEmbed(this.questionChannel(interaction.user.id))]});
-
+				this.updateSessionChannel(interaction.user.id, channel, this.getChannel(topic));
 				interaction.reply(':white_check_mark:');
 			default:
 		}
