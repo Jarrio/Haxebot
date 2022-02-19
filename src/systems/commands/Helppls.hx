@@ -24,10 +24,56 @@ typedef TMessage = {
 	var posted:Timestamp;
 }
 
+typedef THelpQuestions = {
+	var id:Int;
+	var question:Array<String>;
+	var valid_input:Null<Array<TValidInput>>;
+	var state:HelpState;
+}
+
+typedef TValidInput = {
+	var key:String;
+	var name:String;
+	var questions:Array<THelpQuestions>;
+}
+
+enum abstract HelpState(String) from String {
+	var question_type;
+	var error_message;
+	var provide_code;
+	var expected_behaviour;
+	var what_is_happening;
+	var title;
+}
+
+typedef TSession = {
+	var topic:String;
+	var timestamp:Float;
+	var author_id:String;
+	var questions:Array<{
+		qid:Int,
+		answer:String
+	}>;
+}
+
 class Helppls extends CommandDbBase {
+	var questions:Array<THelpQuestions>;
 	var state:Map<String, QuestionState> = [];
 	var session:Map<String, Map<QuestionState, TQuestion>> = [];
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
+
+	var new_state:Map<String, HelpState> = [];
+	var question_position:Map<String, Int> = [];
+	var new_session:Map<String, TSession> = [];
+
+	// TODO: cheat for figuring out purposes
+	var input_history:Map<String, Array<{qid:Int, answer:String}>> = [];
+	var last_input:{qid:Int, answer:String} = null;
+
+	public function new(universe) {
+		super(universe);
+		this.questions = loadFile(this.name);
+	}
 
 	function checkExistingThreads(data:TStoreContent) {
 		var timestamp = data.timestamp.toDate().getTime();
@@ -177,6 +223,27 @@ class Helppls extends CommandDbBase {
 				default:
 					trace('something else $state');
 			}
+
+			var question = this.getQuestion(this.question_position.get(author), this.new_state.get(author));
+			if (question.valid_input != null && question.valid_input.length > 0) {
+				this.last_input = {qid: question.id, answer: message.content};
+			}
+
+			var arr = this.input_history.get(author);
+			if (arr == null) {
+				arr = [];
+			}
+
+			arr.push({
+				qid: this.question_position.get(author),
+				answer: message.content
+			});
+
+			this.input_history.set(author, arr);
+
+			var question = this.nextQuestion(message.author.id, message.content);
+			message.author.send({embeds: [this.createEmbed(question.question.toString())]});
+
 			this.dm_messages.remove(entity);
 		});
 		super.update(_);
@@ -425,6 +492,11 @@ class Helppls extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Helppls(topic):
+				this.new_state.set(interaction.user.id, HelpState.question_type);
+				this.new_session.set(interaction.user.id, null);
+				this.question_position.set(interaction.user.id, 1);
+				interaction.user.send({embeds: [this.createEmbed(this.getQuestion(1, question_type).question.toString())]});
+
 				this.session.set(interaction.user.id, []);
 				this.toggleState(interaction.user.id, none);
 				interaction.user.send({embeds: [this.createEmbed(this.questionChannel(interaction.user.id))]});
@@ -432,6 +504,59 @@ class Helppls extends CommandDbBase {
 				interaction.reply(':white_check_mark:');
 			default:
 		}
+	}
+
+	// new question process!!!!
+	function nextQuestion(user:String, ?input:String) {
+		var qid = this.question_position.get(user);
+
+		for (value in this.questions) {
+			if (value.id == last_input.qid && value.valid_input != null) {
+				for (opts in value.valid_input) {
+					if (opts.key == "-1") {
+						continue;
+					}
+
+					if (last_input.answer == opts.key) {
+						for (next_phase in opts.questions) {
+							if (next_phase.id > qid && next_phase.id > last_input.qid) {
+								this.question_position.set(user, next_phase.id);
+								this.new_state.set(user, next_phase.state);
+								return next_phase;
+							}
+						}
+					}
+				}
+			}
+
+			if (value.id > qid) {
+				this.question_position.set(user, value.id);
+				this.new_state.set(user, value.state);
+				return value;
+			}
+		}
+		return null;
+	}
+
+	function getQuestion(qid:Int, state:HelpState) {
+		for (value in this.questions) {
+			if (value.id == qid && value.state == state) {
+				return value;
+			}
+
+			if (value.valid_input != null) {
+				for (input_options in value.valid_input) {
+					if (input_options.questions != null) {
+						for (value_2 in input_options.questions) {
+							if (value_2.id == qid && value_2.state == state) {
+								return value_2;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	function getChannelId(channel:String) {

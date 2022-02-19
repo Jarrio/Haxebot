@@ -7991,26 +7991,38 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	}
 	,__class__: systems_commands_Helpdescription
 });
-var systems_commands_Helppls = function(_universe) {
+var systems_commands_Helppls = function(universe) {
 	this.toggle = false;
+	this.last_input = null;
+	this.input_history = new haxe_ds_StringMap();
+	this.new_session = new haxe_ds_StringMap();
+	this.question_position = new haxe_ds_StringMap();
+	this.new_state = new haxe_ds_StringMap();
 	this.session = new haxe_ds_StringMap();
 	this.state = new haxe_ds_StringMap();
-	systems_CommandDbBase.call(this,_universe);
-	this.dm_messages = this.universe.families.get(1);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
+	systems_CommandDbBase.call(this,universe);
+	this.dm_messages = universe.families.get(1);
+	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
+	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 75, className : "systems.commands.Helppls", methodName : "new"});
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
 systems_commands_Helppls.__super__ = systems_CommandDbBase;
 systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
-	state: null
+	questions: null
+	,state: null
 	,session: null
+	,new_state: null
+	,question_position: null
+	,new_session: null
+	,input_history: null
+	,last_input: null
 	,checkExistingThreads: function(data) {
 		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
 		if(new Date().getTime() - timestamp < 60000) {
-			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 36, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 82, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
 			return;
 		}
 		var callback = function(messages) {
@@ -8128,7 +8140,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				this.updateSessionAnswer(author,state,reply);
 			}
 			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 178, className : "systems.commands.Helppls", methodName : "update"});
+				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 224, className : "systems.commands.Helppls", methodName : "update"});
 			} else {
 				switch(state) {
 				case 0:
@@ -8164,9 +8176,25 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					this.questionWhatsHappening(message);
 					break;
 				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 178, className : "systems.commands.Helppls", methodName : "update"});
+					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 224, className : "systems.commands.Helppls", methodName : "update"});
 				}
 			}
+			var question1 = this.getQuestion(this.question_position.h[author],this.new_state.h[author]);
+			if(question1.valid_input != null && question1.valid_input.length > 0) {
+				this.last_input = { qid : question1.id, answer : message.content};
+			}
+			var arr = this.input_history.h[author];
+			if(arr == null) {
+				arr = [];
+			}
+			arr.push({ qid : this.question_position.h[author], answer : message.content});
+			this.input_history.h[author] = arr;
+			var question2 = this.nextQuestion(message.author.id,message.content);
+			var message2 = message.author;
+			var content = question2.question.toString();
+			var embed1 = new discord_$js_MessageEmbed();
+			embed1.setDescription(content);
+			message2.send({ embeds : [embed1]});
 			this.dm_messages.remove(entity);
 		}
 		systems_CommandDbBase.prototype.update.call(this,_);
@@ -8249,14 +8277,14 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		},$bind(this,this.err));
 	}
 	,err: function(err) {
-		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 260, className : "systems.commands.Helppls", methodName : "err"});
+		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 327, className : "systems.commands.Helppls", methodName : "err"});
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
 		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
 		var data = { discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : author, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 285, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 352, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		},$bind(this,this.err));
 	}
 	,getStateAnswer: function(author,state) {
@@ -8381,6 +8409,14 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 1) {
+			this.new_state.h[interaction.user.id] = "question_type";
+			this.new_session.h[interaction.user.id] = null;
+			this.question_position.h[interaction.user.id] = 1;
+			var interaction1 = interaction.user;
+			var content = this.getQuestion(1,"question_type").question.toString();
+			var embed = new discord_$js_MessageEmbed();
+			embed.setDescription(content);
+			interaction1.send({ embeds : [embed]});
 			this.session.h[interaction.user.id] = new haxe_ds_IntMap();
 			this.state.h[interaction.user.id] = 0;
 			var interaction1 = interaction.user;
@@ -8391,6 +8427,76 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			this.updateSessionChannel(interaction.user.id,1,this.getChannel(_g.topic));
 			interaction.reply(":white_check_mark:");
 		}
+	}
+	,nextQuestion: function(user,input) {
+		var qid = this.question_position.h[user];
+		var _g = 0;
+		var _g1 = this.questions;
+		while(_g < _g1.length) {
+			var value = _g1[_g];
+			++_g;
+			if(value.id == this.last_input.qid && value.valid_input != null) {
+				var _g2 = 0;
+				var _g3 = value.valid_input;
+				while(_g2 < _g3.length) {
+					var opts = _g3[_g2];
+					++_g2;
+					if(opts.key == "-1") {
+						continue;
+					}
+					if(this.last_input.answer == opts.key) {
+						var _g4 = 0;
+						var _g5 = opts.questions;
+						while(_g4 < _g5.length) {
+							var next_phase = _g5[_g4];
+							++_g4;
+							if(next_phase.id > qid && next_phase.id > this.last_input.qid) {
+								this.question_position.h[user] = next_phase.id;
+								this.new_state.h[user] = next_phase.state;
+								return next_phase;
+							}
+						}
+					}
+				}
+			}
+			if(value.id > qid) {
+				this.question_position.h[user] = value.id;
+				this.new_state.h[user] = value.state;
+				return value;
+			}
+		}
+		return null;
+	}
+	,getQuestion: function(qid,state) {
+		var _g = 0;
+		var _g1 = this.questions;
+		while(_g < _g1.length) {
+			var value = _g1[_g];
+			++_g;
+			if(value.id == qid && value.state == state) {
+				return value;
+			}
+			if(value.valid_input != null) {
+				var _g2 = 0;
+				var _g3 = value.valid_input;
+				while(_g2 < _g3.length) {
+					var input_options = _g3[_g2];
+					++_g2;
+					if(input_options.questions != null) {
+						var _g4 = 0;
+						var _g5 = input_options.questions;
+						while(_g4 < _g5.length) {
+							var value_2 = _g5[_g4];
+							++_g4;
+							if(value_2.id == qid && value_2.state == state) {
+								return value_2;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 	,getChannelId: function(channel) {
 		switch(channel) {
