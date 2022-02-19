@@ -8119,7 +8119,7 @@ systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
 			var entity = _set.getDense(_g_idx--);
 			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
-			if(forward != "react") {
+			if(forward != "react" || message[0].author.id != "151104106973495296") {
 				continue;
 			}
 			var split = [message[0].content.split(" ")];

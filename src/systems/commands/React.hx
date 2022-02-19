@@ -13,7 +13,7 @@ class React extends CommandBase {
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, entity -> {
-			if (forward != react) {
+			if (forward != react || message.author.id != '151104106973495296') {
 				continue;
 			}
 
