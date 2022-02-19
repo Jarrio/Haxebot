@@ -8123,12 +8123,17 @@ systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
 				continue;
 			}
 			var split = [message[0].content.split(" ")];
-			message[0].channel.messages.fetch(split[0][2]).then((function(split,message) {
-				return function(react_message) {
-					react_message.react(split[0][1]);
-					message[0].delete();
+			var channel = StringTools.replace(StringTools.replace(split[0][1],"<#",""),">","");
+			message[0].client.channels.fetch(channel).then((function(split,message) {
+				return function(channel) {
+					return channel.messages.fetch(split[0][2]).then((function(split,message) {
+						return function(react_message) {
+							react_message.react(split[0][3]);
+							return message[0].delete();
+						};
+					})(split,message));
 				};
-			})(split,message),Util_err);
+			})(split,message));
 			this.messages.remove(entity);
 		}
 	}

@@ -18,10 +18,14 @@ class React extends CommandBase {
 			}
 
 			var split = message.content.split(" ");
-			(message.channel : TextChannel).messages.fetch(split[2]).then(function(react_message) {
-				react_message.react(split[1]);
-				message.delete();
-			}, err);
+			var channel = split[1].replace('<#', '').replace('>', '');
+
+			message.client.channels.fetch(channel).then(channel -> {
+				channel.messages.fetch(split[2]).then(react_message -> {
+					react_message.react(split[3]);
+					message.delete();
+				});
+			});
 
 			messages.remove(entity);
 		});
