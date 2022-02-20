@@ -50,10 +50,13 @@ typedef TSession = {
 	var topic:String;
 	var timestamp:Float;
 	var author_id:String;
-	var questions:Array<{
-		qid:Int,
-		answer:String
-	}>;
+	var questions:Array<TQuestionResponse>;
+}
+
+typedef TQuestionResponse = {
+	var qid:Int;
+	var question:String;
+	var answer:String;
 }
 
 class Helppls extends CommandDbBase {
@@ -67,8 +70,8 @@ class Helppls extends CommandDbBase {
 	var new_session:Map<String, TSession> = [];
 
 	// TODO: cheat for figuring out purposes
-	var input_history:Map<String, Array<{qid:Int, answer:String}>> = [];
-	var last_input:{qid:Int, answer:String} = null;
+	var input_history:Map<String, Array<TQuestionResponse>> = [];
+	var last_input:Map<String, TQuestionResponse> = [];
 
 	public function new(universe) {
 		super(universe);
@@ -198,61 +201,16 @@ class Helppls extends CommandDbBase {
 				this.updateSessionAnswer(author, state, reply);
 			}
 
-			switch (state) {
-				case none:
-					var question = this.questionChannel(message.author.id);
-					message.author.send({embeds: [this.createEmbed(question)]});
-				case channel:
-					this.questionIsThereAnError(message);
-				case is_there_an_error:
-					if (message.content == '1') {
-						this.questionWhatError(message);
-					} else {
-						this.questionPasteSomeCode(message);
-					}
-				case what_error_message:
-					this.questionPasteSomeCode(message);
-				case paste_some_code:
-					this.questionExpectedBehaviour(message);
-				case expected_behaviour:
-					this.questionWhatsHappening(message);
-				case whats_happening:
-					this.questionWhatTitle(message);
-				case what_title:
-					this.handleFinished(message);
-				default:
-					trace('something else $state');
-			}
-
 			var question = this.getQuestion(this.question_position.get(author), this.new_state.get(author));
 			if (question.valid_input != null && question.valid_input.length > 0) {
-				this.last_input = {qid: question.id, answer: message.content};
+				this.last_input.set(author, {qid: question.id, question: null, answer: message.content});
 			}
 
-			var arr = this.input_history.get(author);
-			if (arr == null) {
-				arr = [];
-			}
-
-			arr.push({
-				qid: this.question_position.get(author),
-				answer: message.content
-			});
-
-			this.input_history.set(author, arr);
-
-			var question = this.nextQuestion(message.author.id, message.content);
+			var question = this.nextQuestion(message.author.id);
 			message.author.send({embeds: [this.createEmbed(question.question.toString())]});
-
 			this.dm_messages.remove(entity);
 		});
 		super.update(_);
-	}
-
-	function question(message:Message, question:String, state:QuestionState) {
-		this.toggleState(message.author.id, state);
-		this.updateSessionQuestion(message.author.id, state, question);
-		message.author.send({embeds: [this.createEmbed(question)]});
 	}
 
 	inline function toggleState(author:String, state:QuestionState) {
@@ -323,10 +281,6 @@ class Helppls extends CommandDbBase {
 		}, err);
 	}
 
-	function err(err:Dynamic) {
-		trace(err);
-	}
-
 	function remoteSaveQuestion(message:Message, thread:String) {
 		var author = message.author.id;
 		var now = Timestamp.fromDate(Date.now());
@@ -336,12 +290,7 @@ class Helppls extends CommandDbBase {
 			thread_id: thread,
 			validated_by: null,
 			solved: false,
-			title: this.getStateAnswer(author, what_title),
-			topic: this.getStateAnswer(author, QuestionState.channel),
-			error_message: this.getStateAnswer(author, QuestionState.what_error_message),
-			code_lines: this.getStateAnswer(author, QuestionState.paste_some_code),
-			expected_behaviour: this.getStateAnswer(author, QuestionState.expected_behaviour),
-			whats_happening: this.getStateAnswer(author, QuestionState.whats_happening),
+			session: this.new_session.get(author),
 			source_url: null,
 			description: null,
 			added_by: author,
@@ -360,27 +309,6 @@ class Helppls extends CommandDbBase {
 		return this.session.get(author).get(state).answer;
 	}
 
-	function updateSessionQuestion(user:String, state:QuestionState, question:String) {
-		var active_session = this.session[user];
-		if (active_session == null) {
-			active_session = new Map<QuestionState, TQuestion>();
-		}
-
-		active_session.set(state, {
-			channel: '',
-			question: question,
-			answer: null
-		});
-
-		this.session.set(user, active_session);
-	}
-
-	function updateSessionChannel(user:String, state:QuestionState, channel:String) {
-		var active_session = this.session[user];
-		active_session.get(state).channel = this.getChannelId(channel);
-		this.session.set(user, active_session);
-	}
-
 	function updateSessionAnswer(user:String, state:QuestionState, answer:String) {
 		if (answer == null || answer == '') {
 			return;
@@ -389,78 +317,16 @@ class Helppls extends CommandDbBase {
 		active_session.get(state).answer = answer;
 
 		this.session.set(user, active_session);
-	}
 
-	function questionChannel(user:String) {
-		this.state.set(user, channel);
-		var question = 'Which category best summarises your project?';
-		this.updateSessionQuestion(user, channel, question);
+		var session = this.new_session.get(user);
+		var qid = this.question_position.get(user);
 
-		question += '\n1 - flixel\n2 - heaps\n3 - ceramic\n4 - openfl\n5 - lime\n6 - nme\n7 - haxe\n8 - other';
-		return question;
-	}
-
-	function questionIsThereAnError(message:Message) {
-		this.toggleState(message.author.id, is_there_an_error);
-		var question = 'Is there an Error Message?';
-		this.updateSessionQuestion(message.author.id, is_there_an_error, question);
-
-		question += '\n1 - Yes\n2 - No';
-		message.author.send({embeds: [this.createEmbed(question)]});
-	}
-
-	function questionWhatError(message:Message) {
-		this.toggleState(message.author.id, what_error_message);
-		var question = 'Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)';
-		this.updateSessionQuestion(message.author.id, what_error_message, question);
-		message.author.send({embeds: [this.createEmbed(question)]});
-	}
-
-	function questionPasteSomeCode(message:Message) {
-		var is_error_message = (this.session.get(message.author.id).exists(what_error_message));
-		var json = null;
-		if (is_error_message) {
-			json = this.parseErrorMessage(this.session.get(message.author.id).get(what_error_message).answer);
+		var response = {
+			qid: qid,
+			question: "",
+			answer: answer
 		}
-
-		var from = 0;
-		var to = 0;
-		var question = '';
-		if (json != null) {
-			from = json.line - 5;
-			to = json.line + 5;
-			question = 'Paste lines **__${from}__**-**__${to}__** from file **${json.file}**';
-		} else {
-			question = 'Paste code lines from relevant file';
-		}
-
-		this.toggleState(message.author.id, paste_some_code);
-
-		this.updateSessionQuestion(message.author.id, paste_some_code, question);
-		message.author.send({embeds: [this.createEmbed(question)]});
-	}
-
-	function questionExpectedBehaviour(message:Message) {
-		this.toggleState(message.author.id, expected_behaviour);
-		var question = 'What do you expect to happen?';
-		this.updateSessionQuestion(message.author.id, expected_behaviour, question);
-		message.author.send({embeds: [this.createEmbed(question)]});
-	}
-
-	function questionWhatsHappening(message:Message) {
-		this.toggleState(message.author.id, whats_happening);
-		var question = 'Briefly describe what is happening';
-		this.updateSessionQuestion(message.author.id, whats_happening, question);
-
-		message.author.send({embeds: [this.createEmbed(question)]});
-	}
-
-	function questionWhatTitle(message:Message) {
-		this.toggleState(message.author.id, what_title);
-		var question = 'Please summarise a title for your issue';
-		this.updateSessionQuestion(message.author.id, what_title, question);
-
-		message.author.send({embeds: [this.createEmbed(question)]});
+		session.questions.push(response);
 	}
 
 	function parseErrorMessage(input:String) {
@@ -497,18 +363,14 @@ class Helppls extends CommandDbBase {
 				this.question_position.set(interaction.user.id, 1);
 				interaction.user.send({embeds: [this.createEmbed(this.getQuestion(1, question_type).question.toString())]});
 
-				this.session.set(interaction.user.id, []);
-				this.toggleState(interaction.user.id, none);
-				interaction.user.send({embeds: [this.createEmbed(this.questionChannel(interaction.user.id))]});
-				this.updateSessionChannel(interaction.user.id, channel, this.getChannel(topic));
-				interaction.reply(':white_check_mark:');
 			default:
 		}
 	}
 
 	// new question process!!!!
-	function nextQuestion(user:String, ?input:String) {
+	function nextQuestion(user:String) {
 		var qid = this.question_position.get(user);
+		var last_input = this.last_input.get(user);
 
 		for (value in this.questions) {
 			if (value.id == last_input.qid && value.valid_input != null) {
@@ -631,16 +493,11 @@ typedef TStoreContent = {
 	var added_by:String;
 	var timestamp:Timestamp;
 	var checked:Timestamp;
+	var session:TSession;
 	var description:String;
 	var source_url:String;
-	var title:String;
-	var topic:String;
 	var solved:Bool;
 	var validated_by:String;
-	var error_message:String;
-	var code_lines:String;
-	var expected_behaviour:String;
-	var whats_happening:String;
 	var discussion:Array<TMessage>;
 }
 

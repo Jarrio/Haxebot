@@ -7993,7 +7993,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 });
 var systems_commands_Helppls = function(universe) {
 	this.toggle = false;
-	this.last_input = null;
+	this.last_input = new haxe_ds_StringMap();
 	this.input_history = new haxe_ds_StringMap();
 	this.new_session = new haxe_ds_StringMap();
 	this.question_position = new haxe_ds_StringMap();
@@ -8004,7 +8004,7 @@ var systems_commands_Helppls = function(universe) {
 	this.dm_messages = universe.families.get(1);
 	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
-	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 75, className : "systems.commands.Helppls", methodName : "new"});
+	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 78, className : "systems.commands.Helppls", methodName : "new"});
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8019,10 +8019,9 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,input_history: null
 	,last_input: null
 	,checkExistingThreads: function(data) {
-		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
 		if(new Date().getTime() - timestamp < 60000) {
-			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 82, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 85, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
 			return;
 		}
 		var callback = function(messages) {
@@ -8091,8 +8090,8 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 							});
 						}
 					});
-				},$bind(_gthis,_gthis.err));
-			},$bind(_gthis,_gthis.err));
+				},Util_err);
+			},Util_err);
 		};
 		this.extractMessageHistory(data.start_message_id,data.thread_id,callback);
 	}
@@ -8105,7 +8104,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				docs.forEach(function(doc) {
 					_gthis.checkExistingThreads(doc.data());
 				});
-			},$bind(this,this.err));
+			},Util_err);
 			this.toggle = true;
 		}
 		var _this = this.dm_messages;
@@ -8139,73 +8138,19 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				this.updateSessionAnswer(author,state,reply);
 			}
-			if(state == null) {
-				haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 224, className : "systems.commands.Helppls", methodName : "update"});
-			} else {
-				switch(state) {
-				case 0:
-					var question = this.questionChannel(message.author.id);
-					var message1 = message.author;
-					var embed = new discord_$js_MessageEmbed();
-					embed.setDescription(question);
-					message1.send({ embeds : [embed]});
-					break;
-				case 1:
-					this.questionIsThereAnError(message);
-					break;
-				case 2:
-					this.handleFinished(message);
-					break;
-				case 3:
-					if(message.content == "1") {
-						this.questionWhatError(message);
-					} else {
-						this.questionPasteSomeCode(message);
-					}
-					break;
-				case 4:
-					this.questionPasteSomeCode(message);
-					break;
-				case 5:
-					this.questionExpectedBehaviour(message);
-					break;
-				case 6:
-					this.questionWhatTitle(message);
-					break;
-				case 7:
-					this.questionWhatsHappening(message);
-					break;
-				default:
-					haxe_Log.trace("something else " + state,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 224, className : "systems.commands.Helppls", methodName : "update"});
-				}
+			var question = this.getQuestion(this.question_position.h[author],this.new_state.h[author]);
+			if(question.valid_input != null && question.valid_input.length > 0) {
+				this.last_input.h[author] = { qid : question.id, question : null, answer : message.content};
 			}
-			var question1 = this.getQuestion(this.question_position.h[author],this.new_state.h[author]);
-			if(question1.valid_input != null && question1.valid_input.length > 0) {
-				this.last_input = { qid : question1.id, answer : message.content};
-			}
-			var arr = this.input_history.h[author];
-			if(arr == null) {
-				arr = [];
-			}
-			arr.push({ qid : this.question_position.h[author], answer : message.content});
-			this.input_history.h[author] = arr;
-			var question2 = this.nextQuestion(message.author.id,message.content);
-			var message2 = message.author;
-			var content = question2.question.toString();
-			var embed1 = new discord_$js_MessageEmbed();
-			embed1.setDescription(content);
-			message2.send({ embeds : [embed1]});
+			var question1 = this.nextQuestion(message.author.id);
+			var message1 = message.author;
+			var content = question1.question.toString();
+			var embed = new discord_$js_MessageEmbed();
+			embed.setDescription(content);
+			message1.send({ embeds : [embed]});
 			this.dm_messages.remove(entity);
 		}
 		systems_CommandDbBase.prototype.update.call(this,_);
-	}
-	,question: function(message,question,state) {
-		this.state.h[message.author.id] = state;
-		this.updateSessionQuestion(message.author.id,state,question);
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription(question);
-		message1.send({ embeds : [embed]});
 	}
 	,toggleState: function(author,state) {
 		this.state.h[author] = state;
@@ -8265,27 +8210,23 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					channel.send("**__Please reply to the above issue within the thread.__**");
 				});
 			});
-		},$bind(this,this.err));
+		},Util_err);
 	}
 	,extractMessageHistory: function(start_id,thread_id,callback) {
-		var _gthis = this;
 		if(!Main.connected) {
 			return;
 		}
 		Main.client.channels.fetch(thread_id).then(function(channel) {
-			channel.messages.fetch({ after : "942949610924691518"},{ force : true}).then(callback,$bind(_gthis,_gthis.err));
-		},$bind(this,this.err));
-	}
-	,err: function(err) {
-		haxe_Log.trace(err,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 327, className : "systems.commands.Helppls", methodName : "err"});
+			channel.messages.fetch({ after : "942949610924691518"},{ force : true}).then(callback,Util_err);
+		},Util_err);
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
 		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
-		var data = { discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, title : this.getStateAnswer(author,2), topic : this.getStateAnswer(author,1), error_message : this.getStateAnswer(author,4), code_lines : this.getStateAnswer(author,5), expected_behaviour : this.getStateAnswer(author,7), whats_happening : this.getStateAnswer(author,6), source_url : null, description : null, added_by : author, timestamp : now, checked : now};
+		var data = { discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, session : this.new_session.h[author], source_url : null, description : null, added_by : author, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 352, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
-		},$bind(this,this.err));
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 301, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+		},Util_err);
 	}
 	,getStateAnswer: function(author,state) {
 		var question = this.session.h[author].h[state];
@@ -8294,19 +8235,6 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		return this.session.h[author].h[state].answer;
 	}
-	,updateSessionQuestion: function(user,state,question) {
-		var active_session = this.session.h[user];
-		if(active_session == null) {
-			active_session = new haxe_ds_IntMap();
-		}
-		active_session.h[state] = { channel : "", question : question, answer : null};
-		this.session.h[user] = active_session;
-	}
-	,updateSessionChannel: function(user,state,channel) {
-		var active_session = this.session.h[user];
-		active_session.h[state].channel = this.getChannelId(channel);
-		this.session.h[user] = active_session;
-	}
 	,updateSessionAnswer: function(user,state,answer) {
 		if(answer == null || answer == "") {
 			return;
@@ -8314,78 +8242,10 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var active_session = this.session.h[user];
 		active_session.h[state].answer = answer;
 		this.session.h[user] = active_session;
-	}
-	,questionChannel: function(user) {
-		this.state.h[user] = 1;
-		var question = "Which category best summarises your project?";
-		this.updateSessionQuestion(user,1,"Which category best summarises your project?");
-		question = "Which category best summarises your project?" + "\n1 - flixel\n2 - heaps\n3 - ceramic\n4 - openfl\n5 - lime\n6 - nme\n7 - haxe\n8 - other";
-		return question;
-	}
-	,questionIsThereAnError: function(message) {
-		this.state.h[message.author.id] = 3;
-		var question = "Is there an Error Message?";
-		this.updateSessionQuestion(message.author.id,3,"Is there an Error Message?");
-		question = "Is there an Error Message?" + "\n1 - Yes\n2 - No";
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription(question);
-		message1.send({ embeds : [embed]});
-	}
-	,questionWhatError: function(message) {
-		this.state.h[message.author.id] = 4;
-		this.updateSessionQuestion(message.author.id,4,"Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)");
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("Paste Error Message (VSCode - Problems Tab -> Right Click -> Copy)");
-		message1.send({ embeds : [embed]});
-	}
-	,questionPasteSomeCode: function(message) {
-		var is_error_message = this.session.h[message.author.id].h.hasOwnProperty(4);
-		var json = null;
-		if(is_error_message) {
-			json = this.parseErrorMessage(this.session.h[message.author.id].h[4].answer);
-		}
-		var from = 0;
-		var to = 0;
-		var question = "";
-		if(json != null) {
-			from = json.line - 5;
-			to = json.line + 5;
-			question = "Paste lines **__" + from + "__**-**__" + to + "__** from file **" + json.file + "**";
-		} else {
-			question = "Paste code lines from relevant file";
-		}
-		this.state.h[message.author.id] = 5;
-		this.updateSessionQuestion(message.author.id,5,question);
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription(question);
-		message1.send({ embeds : [embed]});
-	}
-	,questionExpectedBehaviour: function(message) {
-		this.state.h[message.author.id] = 7;
-		this.updateSessionQuestion(message.author.id,7,"What do you expect to happen?");
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("What do you expect to happen?");
-		message1.send({ embeds : [embed]});
-	}
-	,questionWhatsHappening: function(message) {
-		this.state.h[message.author.id] = 6;
-		this.updateSessionQuestion(message.author.id,6,"Briefly describe what is happening");
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("Briefly describe what is happening");
-		message1.send({ embeds : [embed]});
-	}
-	,questionWhatTitle: function(message) {
-		this.state.h[message.author.id] = 2;
-		this.updateSessionQuestion(message.author.id,2,"Please summarise a title for your issue");
-		var message1 = message.author;
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription("Please summarise a title for your issue");
-		message1.send({ embeds : [embed]});
+		var session = this.new_session.h[user];
+		var qid = this.question_position.h[user];
+		var response = { qid : qid, question : "", answer : answer};
+		session.questions.push(response);
 	}
 	,parseErrorMessage: function(input) {
 		var regex = new EReg("```\n(.*):([0-9]+) - (.*)\n```","gmi");
@@ -8407,8 +8267,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 	}
 	,run: function(command,interaction) {
-		var _g = command.content;
-		if(_g._hx_index == 1) {
+		if(command.content._hx_index == 1) {
 			this.new_state.h[interaction.user.id] = "question_type";
 			this.new_session.h[interaction.user.id] = null;
 			this.question_position.h[interaction.user.id] = 1;
@@ -8417,25 +8276,17 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			var embed = new discord_$js_MessageEmbed();
 			embed.setDescription(content);
 			interaction1.send({ embeds : [embed]});
-			this.session.h[interaction.user.id] = new haxe_ds_IntMap();
-			this.state.h[interaction.user.id] = 0;
-			var interaction1 = interaction.user;
-			var content = this.questionChannel(interaction.user.id);
-			var embed = new discord_$js_MessageEmbed();
-			embed.setDescription(content);
-			interaction1.send({ embeds : [embed]});
-			this.updateSessionChannel(interaction.user.id,1,this.getChannel(_g.topic));
-			interaction.reply(":white_check_mark:");
 		}
 	}
-	,nextQuestion: function(user,input) {
+	,nextQuestion: function(user) {
 		var qid = this.question_position.h[user];
+		var last_input = this.last_input.h[user];
 		var _g = 0;
 		var _g1 = this.questions;
 		while(_g < _g1.length) {
 			var value = _g1[_g];
 			++_g;
-			if(value.id == this.last_input.qid && value.valid_input != null) {
+			if(value.id == last_input.qid && value.valid_input != null) {
 				var _g2 = 0;
 				var _g3 = value.valid_input;
 				while(_g2 < _g3.length) {
@@ -8444,13 +8295,13 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					if(opts.key == "-1") {
 						continue;
 					}
-					if(this.last_input.answer == opts.key) {
+					if(last_input.answer == opts.key) {
 						var _g4 = 0;
 						var _g5 = opts.questions;
 						while(_g4 < _g5.length) {
 							var next_phase = _g5[_g4];
 							++_g4;
-							if(next_phase.id > qid && next_phase.id > this.last_input.qid) {
+							if(next_phase.id > qid && next_phase.id > last_input.qid) {
 								this.question_position.h[user] = next_phase.id;
 								this.new_state.h[user] = next_phase.state;
 								return next_phase;
