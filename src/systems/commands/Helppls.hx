@@ -1,5 +1,8 @@
 package systems.commands;
 
+import shared.TStoreContent;
+import shared.TSession;
+import shared.HelpState;
 import discord_js.User;
 import discord_js.MessageReaction;
 import discord_js.Collection;
@@ -14,16 +17,6 @@ import components.Command;
 import discord_builder.BaseCommandInteraction;
 import firebase.web.firestore.Timestamp;
 
-typedef TMessage = {
-	var content:String;
-	var user:{
-		var id:String;
-		var username:String;
-		var avartarURL:String;
-	}
-	var posted:Timestamp;
-}
-
 typedef THelpQuestions = {
 	var id:Int;
 	var question:Array<String>;
@@ -37,40 +30,12 @@ typedef TValidInput = {
 	var questions:Array<THelpQuestions>;
 }
 
-enum abstract HelpState(String) from String {
-	var question_type;
-	var error_message;
-	var provide_code;
-	var expected_behaviour;
-	var what_is_happening;
-	var title;
-}
-
-typedef TSession = {
-	var topic:String;
-	var timestamp:Float;
-	var author_id:String;
-	var questions:Array<TQuestionResponse>;
-}
-
-typedef TQuestionResponse = {
-	var qid:Int;
-	var question:String;
-	var answer:String;
-}
-
 class Helppls extends CommandDbBase {
-	var questions:Array<THelpQuestions>;
-	var state:Map<String, QuestionState> = [];
-	var session:Map<String, Map<QuestionState, TQuestion>> = [];
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
-
-	var new_state:Map<String, HelpState> = [];
-	var question_position:Map<String, Int> = [];
-	var new_session:Map<String, TSession> = [];
-
-	// TODO: cheat for figuring out purposes
-	var input_history:Map<String, Array<TQuestionResponse>> = [];
+	var questions:Array<THelpQuestions> = [];
+	var state:Map<String, HelpState> = [];
+	var qid:Map<String, Int> = [];
+	var session:Map<String, TSession> = [];
 	var last_input:Map<String, TQuestionResponse> = [];
 
 	public function new(universe) {
@@ -189,9 +154,7 @@ class Helppls extends CommandDbBase {
 			if (state != none) {
 				var reply = message.content;
 				switch (state) {
-					case channel:
-						reply = this.getChannelId(this.getChannel(reply));
-					case what_error_message:
+					case error_message:
 						var data = this.parseVSCodeJson(reply);
 						if (data != null) {
 							reply = '```\n${data.resource}:${data.startLineNumber} - ${data.message}\n```';
@@ -201,65 +164,55 @@ class Helppls extends CommandDbBase {
 				this.updateSessionAnswer(author, state, reply);
 			}
 
-			var question = this.getQuestion(this.question_position.get(author), this.new_state.get(author));
+			var question = this.getQuestion(this.qid.get(author), this.state.get(author));
 			if (question.valid_input != null && question.valid_input.length > 0) {
-				this.last_input.set(author, {qid: question.id, question: null, answer: message.content});
+				this.last_input.set(author, {qid: question.id, question: null, state: null, answer: message.content});
 			}
 
 			var question = this.nextQuestion(message.author.id);
-			message.author.send({embeds: [this.createEmbed(question.question.toString())]});
+			if (question.state == HelpState.finished) {
+				this.handleFinished(message);
+			} else {
+				var out = question.question.toString();
+				if (question.valid_input != null) {
+					for (opt in question.valid_input) {
+						if (opt.key == '-1') {
+							continue;
+						}
+						out += '\n' + opt.key + ' - ' + opt.name;
+					}
+				}
+				message.author.send({embeds: [this.createEmbed(out)]});
+			}
 			this.dm_messages.remove(entity);
 		});
 		super.update(_);
 	}
 
-	inline function toggleState(author:String, state:QuestionState) {
-		this.state.set(author, state);
-	}
-
 	function handleFinished(message:Message) {
 		var author = message.author.id;
 		var embed = new MessageEmbed();
+		var session = this.session.get(author);
 
-		for (key => value in this.session.get(author)) {
-			var answer = value.answer;
+		for (value in session.questions) {
+				var answer = value.answer;
 
-			switch (key) {
-				case paste_some_code:
-					var is_error_message = (this.session.get(author).exists(what_error_message));
-					var json = null;
-					if (is_error_message) {
-						json = this.parseErrorMessage(this.session.get(author).get(what_error_message).answer);
-					}
+				switch (value.state) {
+					case HelpState.provide_code:
+							answer = '```hx\n' + answer + '\n```';
+					case title:
+						continue;
+					default:
+				}
 
-					if (json != null) {
-						var from = json.line - 5;
-						var to = json.line + 5;
-						var split = answer.split('\n');
-						var code = '';
-						for (key => line in split) {
-							code += '${key + from}   ${line.trim()} \n';
-						}
-
-						answer = '```hx\n' + code + '\n```';
-					}
-				case channel:
-					answer = '<#$answer>';
-				case is_there_an_error:
+				if (value.state == HelpState.question_type) {
 					continue;
-				case what_title:
-					continue;
-				default:
-			}
+				}
 
-			if (key == is_there_an_error) {
-				continue;
-			}
-
-			embed.addField(value.question, answer);
+				embed.addField(value.question, answer);
 		}
 
-		var title = this.session.get(author).get(what_title).answer;
+		var title = this.getResponseFromSession(author, title).answer;
 		message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
 			channel.send({embeds: [embed]}).then(function(channel_message) {
 				channel_message.startThread({name: title}).then(function(thread) {
@@ -269,6 +222,16 @@ class Helppls extends CommandDbBase {
 				});
 			});
 		}, err);
+	}
+
+	function getResponseFromSession(author:String, state:HelpState) {
+		var session = this.session.get(author);
+		for (item in session.questions){
+			if (item.state == state) {
+				return item;
+			}
+		}
+		return null;
 	}
 
 	function extractMessageHistory(start_id:String, thread_id:String, callback:(messages:Collection<String, Message>) -> Void) {
@@ -290,7 +253,7 @@ class Helppls extends CommandDbBase {
 			thread_id: thread,
 			validated_by: null,
 			solved: false,
-			session: this.new_session.get(author),
+			session: this.session.get(author),
 			source_url: null,
 			description: null,
 			added_by: author,
@@ -301,32 +264,22 @@ class Helppls extends CommandDbBase {
 		this.addDoc('test', data, (_) -> trace('added'), err);
 	}
 
-	function getStateAnswer(author:String, state:QuestionState) {
-		var question = this.session.get(author).get(state);
-		if (question == null || question.answer == null) {
-			return null;
-		}
-		return this.session.get(author).get(state).answer;
-	}
-
-	function updateSessionAnswer(user:String, state:QuestionState, answer:String) {
+	function updateSessionAnswer(user:String, state:HelpState, answer:String) {
 		if (answer == null || answer == '') {
 			return;
 		}
-		var active_session = this.session[user];
-		active_session.get(state).answer = answer;
 
-		this.session.set(user, active_session);
-
-		var session = this.new_session.get(user);
-		var qid = this.question_position.get(user);
+		var qid = this.qid.get(user);
+		var q = this.getQuestion(qid, state);
 
 		var response = {
 			qid: qid,
-			question: "",
+			question: q.question.toString(),
+			state: state,
 			answer: answer
 		}
-		session.questions.push(response);
+
+		this.session.get(user).questions.push(response);
 	}
 
 	function parseErrorMessage(input:String) {
@@ -358,10 +311,25 @@ class Helppls extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Helppls(topic):
-				this.new_state.set(interaction.user.id, HelpState.question_type);
-				this.new_session.set(interaction.user.id, null);
-				this.question_position.set(interaction.user.id, 1);
-				interaction.user.send({embeds: [this.createEmbed(this.getQuestion(1, question_type).question.toString())]});
+				this.state.set(interaction.user.id, HelpState.question_type);
+				this.session.set(interaction.user.id, {
+					topic: topic.replace('<#', '').replace('>', ''),
+					questions: [],
+					author_id: interaction.user.id,
+					timestamp: interaction.createdTimestamp
+				});
+				this.qid.set(interaction.user.id, 1);
+				var question = this.getQuestion(1, question_type);
+				var out = question.question.toString();
+				if (question.valid_input != null) {
+					for (opt in question.valid_input) {
+						if (opt.key == '-1') {
+							continue;
+						}
+						out += '\n' + opt.key + ' - ' + opt.name;
+					}
+				}
+				interaction.user.send({embeds: [this.createEmbed(out)]});
 
 			default:
 		}
@@ -369,7 +337,7 @@ class Helppls extends CommandDbBase {
 
 	// new question process!!!!
 	function nextQuestion(user:String) {
-		var qid = this.question_position.get(user);
+		var qid = this.qid.get(user);
 		var last_input = this.last_input.get(user);
 
 		for (value in this.questions) {
@@ -382,8 +350,8 @@ class Helppls extends CommandDbBase {
 					if (last_input.answer == opts.key) {
 						for (next_phase in opts.questions) {
 							if (next_phase.id > qid && next_phase.id > last_input.qid) {
-								this.question_position.set(user, next_phase.id);
-								this.new_state.set(user, next_phase.state);
+								this.qid.set(user, next_phase.id);
+								this.state.set(user, next_phase.state);
 								return next_phase;
 							}
 						}
@@ -392,8 +360,8 @@ class Helppls extends CommandDbBase {
 			}
 
 			if (value.id > qid) {
-				this.question_position.set(user, value.id);
-				this.new_state.set(user, value.state);
+				this.qid.set(user, value.id);
+				this.state.set(user, value.state);
 				return value;
 			}
 		}
@@ -475,46 +443,8 @@ typedef VSCodeErrorMessage = {
 	var endColumn:Int;
 }
 
-typedef FileQuestions = {
-	var question:String;
-	var sub_request:String;
-	var valid_answers:Array<String>;
-}
-
-typedef TQuestion = {
-	var channel:String;
-	var question:String;
-	var answer:String;
-}
-
-typedef TStoreContent = {
-	var start_message_id:String;
-	var thread_id:String;
-	var added_by:String;
-	var timestamp:Timestamp;
-	var checked:Timestamp;
-	var session:TSession;
-	var description:String;
-	var source_url:String;
-	var solved:Bool;
-	var validated_by:String;
-	var discussion:Array<TMessage>;
-}
-
 enum abstract QuestionType(Int) {
 	var int;
 	var string;
 	var bool;
-}
-
-enum abstract QuestionState(Int) {
-	var none;
-	var channel;
-	var what_title;
-	var is_there_an_error;
-	var what_error_message;
-	var paste_some_code;
-	var whats_happening;
-	var expected_behaviour;
-	var finished;
 }

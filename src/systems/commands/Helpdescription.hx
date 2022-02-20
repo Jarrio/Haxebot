@@ -1,9 +1,9 @@
 package systems.commands;
 
+import shared.TStoreContent;
 import discord_js.MessageEmbed;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
-import systems.commands.Helppls.TStoreContent;
 
 class Helpdescription extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
