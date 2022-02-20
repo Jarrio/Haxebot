@@ -397,6 +397,8 @@ class Run extends System {
 							return;
 						}
 					} catch (e) {
+						var compile_output = this.cleanOutput(e.message, filename, class_entry);
+						message.reply({content: mention + '```\n${compile_output}```'});
 						trace(e);
 					}
 					return;
