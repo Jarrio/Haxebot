@@ -3,9 +3,11 @@ package shared;
 import firebase.web.firestore.Timestamp;
 
 typedef TStoreContent = {
+	var title:Array<String>;
 	var start_message_id:String;
 	var thread_id:String;
 	var added_by:String;
+	var topic:String;
 	var timestamp:Timestamp;
 	var checked:Timestamp;
 	var session:TSession;

@@ -13,3 +13,14 @@ typedef TQuestionResponse = {
 	var question:String;
 	var answer:String;
 }
+
+// @:forward
+// abstract StringArray(String) to String {
+// 	public function new(string:Array<String>) {
+// 		this = string.toString().replace(',', ' ');
+// 	}
+
+// 	@:from static function fromString(string:Array<String>) {
+// 		return new StringArray(string);
+// 	}
+// }

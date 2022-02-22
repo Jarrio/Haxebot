@@ -8215,10 +8215,12 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,remoteSaveQuestion: function(message,thread) {
 		var author = message.author.id;
+		var session = this.session.h[author];
 		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
-		var data = { discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, session : this.session.h[author], source_url : null, description : null, added_by : author, timestamp : now, checked : now};
+		var title = this.getResponseFromSession(author,"title").answer;
+		var data = { title : title.split(" "), discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, topic : session.topic, session : session, source_url : null, description : null, added_by : author, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 264, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 269, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		},Util_err);
 	}
 	,updateSessionAnswer: function(user,state,answer) {

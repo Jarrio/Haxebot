@@ -195,7 +195,7 @@ class Helppls extends CommandDbBase {
 		var session = this.session.get(author);
 
 		for (value in session.questions) {
-				var answer = value.answer;
+				var answer:String = (value.answer);
 
 				switch (value.state) {
 					case HelpState.provide_code:
@@ -215,7 +215,7 @@ class Helppls extends CommandDbBase {
 		var title = this.getResponseFromSession(author, title).answer;
 		message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
 			channel.send({embeds: [embed]}).then(function(channel_message) {
-				channel_message.startThread({name: title}).then(function(thread) {
+				channel_message.startThread({name: (title)}).then(function(thread) {
 					this.remoteSaveQuestion(message, thread.id);
 					message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
 					channel.send("**__Please reply to the above issue within the thread.__**");
@@ -246,14 +246,19 @@ class Helppls extends CommandDbBase {
 
 	function remoteSaveQuestion(message:Message, thread:String) {
 		var author = message.author.id;
+		var session = this.session.get(author);
 		var now = Timestamp.fromDate(Date.now());
+		var title = this.getResponseFromSession(author, title).answer;
+
 		var data:TStoreContent = {
+			title: title.split(' '),
 			discussion: null,
 			start_message_id: message.id,
 			thread_id: thread,
 			validated_by: null,
 			solved: false,
-			session: this.session.get(author),
+			topic: session.topic,
+			session: session,
 			source_url: null,
 			description: null,
 			added_by: author,
@@ -278,7 +283,7 @@ class Helppls extends CommandDbBase {
 			state: state,
 			answer: answer
 		}
-
+		
 		this.session.get(user).questions.push(response);
 	}
 
@@ -330,7 +335,6 @@ class Helppls extends CommandDbBase {
 					}
 				}
 				interaction.user.send({embeds: [this.createEmbed(out)]});
-
 			default:
 		}
 	}
@@ -347,7 +351,7 @@ class Helppls extends CommandDbBase {
 						continue;
 					}
 
-					if (last_input.answer == opts.key) {
+					if ((last_input.answer) == opts.key) {
 						for (next_phase in opts.questions) {
 							if (next_phase.id > qid && next_phase.id > last_input.qid) {
 								this.qid.set(user, next_phase.id);
