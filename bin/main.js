@@ -8115,7 +8115,18 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 			var author = message.author.id;
 			var state = this.state.h[author];
-			if(state != "none") {
+			if(message.content.toLowerCase() == "cancel" || message.content.toLowerCase() == "c") {
+				this.clearData(author);
+				message.reply({ content : "Cancelled."}).then(null,Util_err);
+				this.dm_messages.remove(entity);
+				return;
+			}
+			if(state == "title" && message.content.length > 100) {
+				message.reply({ content : "Titles have a character limit " + message.content.length + "/**__100__**."}).then(null,Util_err);
+				this.dm_messages.remove(entity);
+				return;
+			}
+			if(state != "none" && message.content != "skip") {
 				var reply = message.content;
 				if(state != null) {
 					if(state == "error_message") {
@@ -8157,11 +8168,30 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		systems_CommandDbBase.prototype.update.call(this,_);
 	}
+	,clearData: function(author) {
+		var _this = this.state;
+		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
+			delete(_this.h[author]);
+		}
+		var _this = this.last_input;
+		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
+			delete(_this.h[author]);
+		}
+		var _this = this.session;
+		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
+			delete(_this.h[author]);
+		}
+		var _this = this.qid;
+		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
+			delete(_this.h[author]);
+		}
+	}
 	,handleFinished: function(message) {
 		var _gthis = this;
 		var author = message.author.id;
 		var embed = new discord_$js_MessageEmbed();
 		var session = this.session.h[author];
+		var content = "";
 		var _g = 0;
 		var _g1 = session.questions;
 		while(_g < _g1.length) {
@@ -8179,7 +8209,12 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(value.state == "question_type") {
 				continue;
 			}
-			embed.addField(value.question,answer);
+			content += answer;
+		}
+		embed.setDescription(content);
+		if(content.length < 60) {
+			message.reply({ content : "Not enough answers to provide sufficient support"});
+			return;
 		}
 		var title = this.getResponseFromSession(author,"title").answer;
 		message.client.channels.fetch(this.getChannelId("other")).then(function(channel) {
@@ -8220,7 +8255,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var title = this.getResponseFromSession(author,"title").answer;
 		var data = { title : title.split(" "), discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, topic : session.topic, session : session, source_url : null, description : null, added_by : author, timestamp : now, checked : now};
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 269, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 300, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 		},Util_err);
 	}
 	,updateSessionAnswer: function(user,state,answer) {

@@ -151,7 +151,20 @@ class Helppls extends CommandDbBase {
 			var author = message.author.id;
 			var state = this.state.get(author);
 
-			if (state != none) {
+			if (message.content.toLowerCase() == 'cancel' || message.content.toLowerCase() == 'c') {
+				this.clearData(author);
+				message.reply({content: 'Cancelled.'}).then(null, err);
+				this.dm_messages.remove(entity);
+				return;
+			}
+
+			if (state == title && message.content.length > 100) {
+				message.reply({content: 'Titles have a character limit ${message.content.length}/**__100__**.'}).then(null, err);
+				this.dm_messages.remove(entity);
+				return;
+			}
+
+			if (state != none && message.content != 'skip') {
 				var reply = message.content;
 				switch (state) {
 					case error_message:
@@ -189,13 +202,22 @@ class Helppls extends CommandDbBase {
 		super.update(_);
 	}
 
+	function clearData(author:String) {
+		this.state.remove(author);
+		this.last_input.remove(author);
+		this.session.remove(author);
+		this.qid.remove(author);
+	}
+
 	function handleFinished(message:Message) {
 		var author = message.author.id;
 		var embed = new MessageEmbed();
 		var session = this.session.get(author);
 
+		var content = '';
 		for (value in session.questions) {
 				var answer:String = (value.answer);
+				var output = '${value.question}\n';
 
 				switch (value.state) {
 					case HelpState.provide_code:
@@ -205,11 +227,20 @@ class Helppls extends CommandDbBase {
 					default:
 				}
 
+				output += '$answer';
+
 				if (value.state == HelpState.question_type) {
 					continue;
 				}
 
-				embed.addField(value.question, answer);
+				content += answer;
+		}
+
+		embed.setDescription(content);
+
+		if (content.length < 60) {
+			message.reply({content: "Not enough answers to provide sufficient support"});
+			return;
 		}
 
 		var title = this.getResponseFromSession(author, title).answer;

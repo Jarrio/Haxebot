@@ -6,22 +6,29 @@
 		],
 		"valid_input": [
 			{
-				"key": "-1",
-				"name": "General"
+				"key": "1",
+				"name": "General",
+				"questions": [
+					{
+						"id": 2,
+						"question": "Please describe your issue",
+						"state": "describe"
+					}
+				]
 			},
 			{
 				"key": "2",
 				"name": "Error message",
 				"questions": [
 					{
-						"id": 2, 
+						"id": 3, 
 						"question": [
 							"What is your error message?"
 						],
 						"state": "error_message"
 					},
 					{
-						"id": 3,
+						"id": 4,
 						"question": [
 							"Please provide a brief snippet of code related to the error."
 						],
@@ -34,14 +41,14 @@
 				"name": "Unexpected behaviour",
 				"questions": [
 					{
-						"id": 4, 
+						"id": 5, 
 						"question": [
 							"What do you expect to happen?"
 						],
 						"state": "expected_behaviour"
 					},
 					{
-						"id": 5,
+						"id": 6,
 						"question": [
 							"What is happening?"
 						],
@@ -61,12 +68,12 @@
 		"state": "question_type"
 	},
 	{
-		"id": 6,
+		"id": 7,
 		"question": "Please enter a title for your thread.",
 		"state": "title"
 	},
 	{
-		"id": 7,
+		"id": 8,
 		"question": "Finish test",
 		"state": "finished"
 	}
