@@ -3,6 +3,7 @@ package shared;
 import firebase.web.firestore.Timestamp;
 
 typedef TStoreContent = {
+	var id:Int;
 	var title:Array<String>;
 	var start_message_id:String;
 	var thread_id:String;

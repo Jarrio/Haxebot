@@ -1,5 +1,7 @@
 package systems.commands;
 
+import js.lib.Promise;
+import firebase.web.firestore.DocumentReference;
 import shared.TStoreContent;
 import shared.TSession;
 import shared.HelpState;
@@ -238,7 +240,7 @@ class Helppls extends CommandDbBase {
 
 		embed.setDescription(content);
 
-		if (content.length < 60) {
+		if (content.length < 30) {
 			message.reply({content: "Not enough answers to provide sufficient support"});
 			return;
 		}
@@ -282,6 +284,7 @@ class Helppls extends CommandDbBase {
 		var title = this.getResponseFromSession(author, title).answer;
 
 		var data:TStoreContent = {
+			id: -1,
 			title: title.split(' '),
 			discussion: null,
 			start_message_id: message.id,
@@ -297,7 +300,22 @@ class Helppls extends CommandDbBase {
 			checked: now
 		};
 
-		this.addDoc('test', data, (_) -> trace('added'), err);
+		var doc = doc(db, 'test2/${session.topic}');
+
+		Firestore.runTransaction(this.db, function(transaction) {
+			return transaction.get(doc).then(function(doc) {
+				if (!doc.exists()) {
+					return {id: -1};
+				}
+				var data:{id:Int} = (doc.data());
+				data.id = data.id + 1;
+				transaction.update(doc.ref, data);
+				return data;
+			}); 
+		}).then(function(value) {
+			data.id = value.id;
+			this.addDoc('test2/${session.topic}/threads', data, (_) -> trace('added'), err);
+		}, err);
 	}
 
 	function updateSessionAnswer(user:String, state:HelpState, answer:String) {
@@ -327,7 +345,6 @@ class Helppls extends CommandDbBase {
 				message: regex.matched(3)
 			}
 		}
-
 		return null;
 	}
 

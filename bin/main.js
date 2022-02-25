@@ -8002,7 +8002,7 @@ var systems_commands_Helppls = function(universe) {
 	this.dm_messages = universe.families.get(1);
 	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
-	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 43, className : "systems.commands.Helppls", methodName : "new"});
+	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 45, className : "systems.commands.Helppls", methodName : "new"});
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8016,7 +8016,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,checkExistingThreads: function(data) {
 		var timestamp = data.timestamp.toDate().getTime();
 		if(new Date().getTime() - timestamp < 60000) {
-			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 50, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
+			haxe_Log.trace("60 seconds has not passed",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 52, className : "systems.commands.Helppls", methodName : "checkExistingThreads"});
 			return;
 		}
 		var callback = function(messages) {
@@ -8212,7 +8212,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			content += answer;
 		}
 		embed.setDescription(content);
-		if(content.length < 60) {
+		if(content.length < 30) {
 			message.reply({ content : "Not enough answers to provide sufficient support"});
 			return;
 		}
@@ -8253,9 +8253,24 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var session = this.session.h[author];
 		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
 		var title = this.getResponseFromSession(author,"title").answer;
-		var data = { title : title.split(" "), discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, topic : session.topic, session : session, source_url : null, description : null, added_by : author, timestamp : now, checked : now};
-		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test"),data).then(function(_) {
-			haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 300, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+		var data = { id : -1, title : title.split(" "), discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, topic : session.topic, session : session, source_url : null, description : null, added_by : author, timestamp : now, checked : now};
+		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + session.topic);
+		firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
+			return transaction.get(doc).then(function(doc) {
+				if(!doc.exists()) {
+					return { id : -1};
+				}
+				var data = doc.data();
+				data.id += 1;
+				transaction.update(doc.ref,data);
+				return data;
+			});
+		}).then(function(value) {
+			data.id = value.id;
+			var path = "test2/" + session.topic + "/threads";
+			firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),data).then(function(_) {
+				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 317, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			},Util_err);
 		},Util_err);
 	}
 	,updateSessionAnswer: function(user,state,answer) {
