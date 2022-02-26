@@ -2207,7 +2207,7 @@ package discord_js;
 	public final members : Collection<String, GuildMember>;
 	public var name : String;
 	public final parent : Null<CategoryChannel>;
-	public var parentID : Null<String>;
+	public var parentId : Null<String>;
 	public var permissionOverwrites : Collection<String, PermissionOverwrites>;
 	public final permissionsLocked : Null<Bool>;
 	public final position : Float;
