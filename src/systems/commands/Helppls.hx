@@ -39,7 +39,11 @@ class Helppls extends CommandDbBase {
 	var qid:Map<String, Int> = [];
 	var session:Map<String, TSession> = [];
 	var last_input:Map<String, TQuestionResponse> = [];
-
+	#if block
+	final review_thread = '946834684741050398';
+	#else
+	final review_thread = '';
+	#end
 	public function new(universe) {
 		super(universe);
 		this.questions = loadFile(this.name);
@@ -92,13 +96,13 @@ class Helppls extends CommandDbBase {
 
 			Main.client.channels.fetch(data.thread_id).then(function(channel) {
 				channel.send({content: 'Was this thread solved?'}).then(function(message) {
-					DiscordUtil.reactionTracker(message, (collected:MessageReaction, user:User) -> {
+					DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
 						if (user.bot) {
 							return;
 						}
 						if (collected.emoji.name == "✅") {
 							channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
-								DiscordUtil.reactionTracker(message, (collected:MessageReaction, user:User) -> {
+								DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
 									if (user.bot) {
 										return;
 									}
@@ -113,13 +117,19 @@ class Helppls extends CommandDbBase {
 												}
 											], () -> {
 												channel.send('<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?');
-												var q = query(collection(db, 'test'), where('thread_id', '==', data.thread_id));
+												
+												var q:Query<TStoreContent> = query(collection(db, 'test2', data.topic, 'threads'), where('thread_id', '==', data.thread_id));
 												Firestore.getDocs(q).then((docs) -> {
 													if (docs.size != 1) {
 														return;
 													}
-													Firestore.updateDoc(docs.docs[0].ref, {discussion: discussion});
-												});
+													var content = docs.docs[0].data();
+													content.solved = true;
+													content.discussion = discussion;
+													trace('here');
+													this.validateThread(docs.docs[0].ref, content);
+													Firestore.updateDoc(docs.docs[0].ref, 'discussion', discussion, 'solved', true);
+												}, err);
 											});
 										}
 									}
@@ -133,11 +143,92 @@ class Helppls extends CommandDbBase {
 		this.extractMessageHistory(data.start_message_id, data.thread_id, callback);
 	}
 
+	function validateThread(ref:DocumentReference<TStoreContent>, thread:TStoreContent) {
+		if (thread.validated_by != null || !thread.solved) {
+			return;
+		}
+		DiscordUtil.getChannel(this.review_thread, (channel) -> {
+			if (channel == null) {
+				return;
+			}
+			var embed = this.createThreadEmbed(thread);
+			channel.send({embeds: [embed], content: "Should this thread be indexed?"}).then(function(message) {
+				DiscordUtil.reactionTracker(message, (collector, collected:MessageReaction, user:User) -> {
+					if (user.bot) {
+						return;
+					}
+					if (collected.emoji.name == "✅") {
+						thread.validated_by = user.id;
+						Firestore.updateDoc(ref, 'validated_by', user.id).then(function(_) {
+							collector.stop('validated');
+						}, err); 
+					}
+				});
+			});
+		});
+	}
+
+	function createThreadEmbed(?remote:TStoreContent, ?local:TSession) {
+		var embed = new MessageEmbed();
+		var content = '';
+		var session = null;
+
+		if (remote == null) {
+			session = local;
+		} else {
+			session = remote.session;
+		}
+
+		for (value in session.questions) {
+			var answer:String = (value.answer);
+			var output = '**${value.question}**';
+
+			switch (value.state) {
+				case HelpState.provide_code:
+					answer = '```hx\n' + answer + '\n```';
+				case title:
+					continue;
+				case question_type:
+					answer = '${(answer:QuestionType)}';
+				default:
+			}
+			content += '\n' + output + '\n' + answer;
+		}
+
+		embed.setDescription(content);
+		return embed;
+	}
+
 	var toggle = false;
+
+	function checkDocs() {
+		var topics = ['haxe', 'haxeui', 'tools', 'flixel', 'heaps', 'ceramic','openfl'];
+		var docs = [];
+		for (item in topics) {
+			
+			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), orderBy('timestamp', DESCENDING));
+			Firestore.getDocs(q).then(function(docs) {
+				if (docs.empty) {
+					return;
+				}
+				var now = Date.now().getTime();
+				for (doc in docs.docs) {
+					var data = doc.data();
+					var start = data.timestamp.toDate().getTime();
+					if (now - start < 60000) {
+						continue;
+					}
+					this.checkExistingThreads(data);
+				}
+
+			}, err);
+		}
+	}
 
 	override function update(_) {
 		if (!this.toggle && Main.commands_active) {
 			var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
+			this.checkDocs();
 			Firestore.getDocs(q).then((docs) -> {
 				docs.forEach((doc) -> {
 					this.checkExistingThreads(doc.data());
@@ -162,6 +253,12 @@ class Helppls extends CommandDbBase {
 
 			if (state == title && message.content.length > 100) {
 				message.reply({content: 'Titles have a character limit ${message.content.length}/**__100__**.'}).then(null, err);
+				this.dm_messages.remove(entity);
+				return;
+			}
+
+			if (message.content.length == 0) {
+				message.reply({content: 'Please enter *something*'}).then(null, err);
 				this.dm_messages.remove(entity);
 				return;
 			}
@@ -209,49 +306,34 @@ class Helppls extends CommandDbBase {
 		this.last_input.remove(author);
 		this.session.remove(author);
 		this.qid.remove(author);
+		Main.dm_help_tracking.remove(author);
 	}
 
 	function handleFinished(message:Message) {
 		var author = message.author.id;
-		var embed = new MessageEmbed();
 		var session = this.session.get(author);
+		var topic = session.topic;
+		var embed = this.createThreadEmbed(session);
 
-		var content = '';
-		for (value in session.questions) {
-				var answer:String = (value.answer);
-				var output = '${value.question}\n';
-
-				switch (value.state) {
-					case HelpState.provide_code:
-							answer = '```hx\n' + answer + '\n```';
-					case title:
-						continue;
-					default:
-				}
-
-				output += '$answer';
-
-				if (value.state == HelpState.question_type) {
-					continue;
-				}
-
-				content += answer;
-		}
-
-		embed.setDescription(content);
-
-		if (content.length < 30) {
+		if (embed.description.length < 30) {
+			trace(embed.description);
+			this.clearData(author);
 			message.reply({content: "Not enough answers to provide sufficient support"});
 			return;
 		}
 
+		#if block
+		topic = 'test';
+		#end
 		var title = this.getResponseFromSession(author, title).answer;
-		message.client.channels.fetch(this.getChannelId('other')).then(function(channel) {
+
+		message.client.channels.fetch(this.getChannelId(topic)).then(function(channel) {
 			channel.send({embeds: [embed]}).then(function(channel_message) {
-				channel_message.startThread({name: (title)}).then(function(thread) {
+				channel_message.startThread({name: title}).then(function(thread) {
 					this.remoteSaveQuestion(message, thread.id);
 					message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
 					channel.send("**__Please reply to the above issue within the thread.__**");
+					this.clearData(author);
 				});
 			});
 		}, err);
@@ -273,7 +355,7 @@ class Helppls extends CommandDbBase {
 		}
 
 		Main.client.channels.fetch(thread_id).then(function(channel) {
-			channel.messages.fetch({after: '942949610924691518'}, {force: true}).then(callback, err);
+			channel.messages.fetch({after: start_id}, {force: true}).then(callback, err);
 		}, err);
 	}
 
@@ -443,29 +525,26 @@ class Helppls extends CommandDbBase {
 
 	function getChannelId(channel:String) {
 		return switch (channel) {
-			case 'flixel': '165234904815239168';
-			case 'heaps': '501408700142059520';
-			case 'ceramic': '853414608747364352';
-			case 'openfl': '769686284318146561';
-			case 'lime': '769686258049351722';
-			case 'nme': '162656395110514688';
-			case 'haxe': '162395145352904705';
-			// case 'other': '596744553030090880';
-			case 'other': '597067735771381771';
+			// case 'haxe': '162395145352904705';
+			// case 'haxeui': '565569107701923852';
+			// case 'tools': '459827960006967325';
+			// case 'heaps': '501408700142059520';
+			// case 'ceramic': '853414608747364352';
+			// case 'openfl': '769686284318146561';
+			case 'test': '597067735771381771';
 			default: channel;
 		}
 	}
 
-	function getChannel(channel:String) {
+	function getAnnouncementThreadId(channel:String) {
 		return switch (channel) {
-			case '1': 'flixel';
-			case '2': 'heaps';
-			case '3': 'ceramic';
-			case '4': 'openfl';
-			case '5': 'lime';
-			case '6': 'nme';
-			case '7': 'haxe';
-			case '8': 'other';
+			case 'haxe': '';
+			case 'haxeui': '';
+			case 'tools': '';
+			case 'heaps': '';
+			case 'ceramic': '';
+			case 'openfl': '';
+			case 'test': '946810894162219048';
 			default: channel;
 		}
 	}
@@ -493,10 +572,4 @@ typedef VSCodeErrorMessage = {
 	var startColumn:Int;
 	var endLineNumber:Int;
 	var endColumn:Int;
-}
-
-enum abstract QuestionType(Int) {
-	var int;
-	var string;
-	var bool;
 }

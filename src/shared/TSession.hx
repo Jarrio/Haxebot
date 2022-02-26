@@ -14,13 +14,17 @@ typedef TQuestionResponse = {
 	var answer:String;
 }
 
-// @:forward
-// abstract StringArray(String) to String {
-// 	public function new(string:Array<String>) {
-// 		this = string.toString().replace(',', ' ');
-// 	}
+enum abstract QuestionType(String) to String {
+	var general = 'General';
+	var error_message = 'Error Message';
+	var unexpected_behaviour = 'Unexpected Behaviour';
 
-// 	@:from static function fromString(string:Array<String>) {
-// 		return new StringArray(string);
-// 	}
-// }
+	@:from static function fromString(i:String) {
+		return switch (i) {
+			case "1": general;
+			case "2": error_message;
+			case "3": unexpected_behaviour;
+			default: general;
+		};
+	}
+}
