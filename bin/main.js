@@ -7922,6 +7922,9 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 		var message = "Hey there";
 		if(Math.random() < 0.35) {
 			switch(interaction.user.id) {
+			case "215582414544699393":
+				message = "Hello Bulby! ReAD ArCH NeWS! :face_with_hand_over_mouth:";
+				break;
 			case "415825875146375168":
 				message = "Hey semmi, got any cool music tonight? \\o/";
 				break;
@@ -7938,7 +7941,6 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = "Hey you, what's up?";
 			}
 		}
-		haxe_Log.trace("upgrade working",{ fileName : "src/systems/commands/Hi.hx", lineNumber : 23, className : "systems.commands.Hi", methodName : "run"});
 		interaction.reply({ content : message});
 	}
 	,get_name: function() {
