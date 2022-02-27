@@ -2,8 +2,9 @@ package shared;
 
 import firebase.web.firestore.Timestamp;
 
-typedef TStoreContent = {
+typedef TThreadData = {
 	var id:Int;
+	var author:TAuthor;
 	var title:Array<String>;
 	var start_message_id:String;
 	var thread_id:String;
@@ -11,12 +12,42 @@ typedef TStoreContent = {
 	var topic:String;
 	var timestamp:Timestamp;
 	var checked:Timestamp;
-	var session:TSession;
-	var description:String;
 	var source_url:String;
+	var session:TSession;
 	var solved:Bool;
 	var validated_by:String;
 	var discussion:Array<TMessage>;
+	var solution:TThreadSolution;
+	var solution_requested:Timestamp;
+}
+
+typedef TThreadSolution = {
+	var description:String;
+	var user:TAuthor;
+	var authorised_id:String;
+	var timestamp:Timestamp;
+}
+
+typedef TAuthor = {
+	var id:String;
+	var name:String; 
+	var icon_url:String;
+}
+
+@:forward
+abstract TStoreContent(TThreadData) from TThreadData {
+	public function new(value) {
+		this = value;
+	}
+
+	public function getQuestion(state:HelpState) {
+		for (item in this.session.questions) {
+			if (item.state == state) {
+				return item;
+			}
+		}
+		return null;
+	}
 }
 
 typedef TMessage = {

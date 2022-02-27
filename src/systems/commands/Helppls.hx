@@ -1,6 +1,6 @@
 package systems.commands;
 
-import js.lib.Promise;
+import ecs.Entity;
 import firebase.web.firestore.DocumentReference;
 import shared.TStoreContent;
 import shared.TSession;
@@ -39,11 +39,20 @@ class Helppls extends CommandDbBase {
 	var qid:Map<String, Int> = [];
 	var session:Map<String, TSession> = [];
 	var last_input:Map<String, TQuestionResponse> = [];
+	var threads_last_checked:Float = -1;
+	final valid_filters = ['skip', 'cancel', 'c'];
+	final thread_timeout = 60000 * 30;
 	#if block
+	final check_threads_interval = 60000 * 30;
+	final check_verified_interval = 60000;
 	final review_thread = '946834684741050398';
 	#else
 	final review_thread = '';
+	final check_threads_interval = 60000 * 30;
+	final check_verified_interval = 60000 * 60 * 24;
 	#end
+
+	
 	public function new(universe) {
 		super(universe);
 		this.questions = loadFile(this.name);
@@ -53,22 +62,15 @@ class Helppls extends CommandDbBase {
 		var timestamp = data.timestamp.toDate().getTime();
 
 		if (Date.now().getTime() - timestamp < 60000) {
-			trace('60 seconds has not passed');
 			return;
 		}
 
 		var callback = function(messages:Collection<String, Message>) {
 			var discussion = new Array<TMessage>();
-			var respondants = new Map<String, Int>();
-			for (key => message in messages) {
+			for (message in messages) {
 				if (message.author.bot) {
 					continue;
 				}
-				var get = 0;
-				if (respondants.exists(message.author.id)) {
-					get = respondants.get(message.author.id);
-				}
-				respondants.set(message.author.id, get + 1);
 
 				discussion.push({
 					content: message.content,
@@ -84,15 +86,6 @@ class Helppls extends CommandDbBase {
 			discussion.sort(function(a, b) {
 				return Math.round(a.posted.toDate().getTime() - b.posted.toDate().getTime());
 			});
-
-			var highest = -1;
-			var highest_id = null;
-			for (uid => messages in respondants) {
-				if (messages > highest) {
-					highest = messages;
-					highest_id = uid;
-				}
-			}
 
 			Main.client.channels.fetch(data.thread_id).then(function(channel) {
 				channel.send({content: 'Was this thread solved?'}).then(function(message) {
@@ -124,11 +117,19 @@ class Helppls extends CommandDbBase {
 														return;
 													}
 													var content = docs.docs[0].data();
-													content.solved = true;
 													content.discussion = discussion;
-													trace('here');
-													this.validateThread(docs.docs[0].ref, content);
-													Firestore.updateDoc(docs.docs[0].ref, 'discussion', discussion, 'solved', true);
+													content.solution = {
+														description: null,
+														authorised_id: user.id,
+														timestamp: null,
+														user: {
+															id: user.id,
+															name: user.tag,
+															icon_url: user.avatarURL()
+														}
+													}
+													
+													Firestore.updateDoc(docs.docs[0].ref, 'discussion', discussion, 'solution', content.solution).then(null, err);
 												}, err);
 											});
 										}
@@ -144,7 +145,7 @@ class Helppls extends CommandDbBase {
 	}
 
 	function validateThread(ref:DocumentReference<TStoreContent>, thread:TStoreContent) {
-		if (thread.validated_by != null || !thread.solved) {
+		if (thread.validated_by != null && !thread.solved) {
 			return;
 		}
 		DiscordUtil.getChannel(this.review_thread, (channel) -> {
@@ -152,6 +153,12 @@ class Helppls extends CommandDbBase {
 				return;
 			}
 			var embed = this.createThreadEmbed(thread);
+			var title = thread.getQuestion(title);
+			var topic = thread.topic;
+
+			embed.setTitle(title.answer);
+			embed.description += '\n Topic: ${topic}';
+
 			channel.send({embeds: [embed], content: "Should this thread be indexed?"}).then(function(message) {
 				DiscordUtil.reactionTracker(message, (collector, collected:MessageReaction, user:User) -> {
 					if (user.bot) {
@@ -177,6 +184,7 @@ class Helppls extends CommandDbBase {
 			session = local;
 		} else {
 			session = remote.session;
+			embed.setAuthor({name: remote.author.name, iconURL: remote.author.icon_url});
 		}
 
 		for (value in session.questions) {
@@ -199,13 +207,9 @@ class Helppls extends CommandDbBase {
 		return embed;
 	}
 
-	var toggle = false;
-
 	function checkDocs() {
 		var topics = ['haxe', 'haxeui', 'tools', 'flixel', 'heaps', 'ceramic','openfl'];
-		var docs = [];
 		for (item in topics) {
-			
 			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), orderBy('timestamp', DESCENDING));
 			Firestore.getDocs(q).then(function(docs) {
 				if (docs.empty) {
@@ -226,41 +230,49 @@ class Helppls extends CommandDbBase {
 	}
 
 	override function update(_) {
-		if (!this.toggle && Main.commands_active) {
-			var q:Query<TStoreContent> = query(collection(db, 'test'), orderBy('timestamp', DESCENDING));
+		if (Date.now().getTime() - this.threads_last_checked > this.check_threads_interval && Main.commands_active) {
 			this.checkDocs();
-			Firestore.getDocs(q).then((docs) -> {
-				docs.forEach((doc) -> {
-					this.checkExistingThreads(doc.data());
-				});
-			}, err);
-			toggle = true;
+			this.threads_last_checked = Date.now().getTime();
+		}
+
+		for (key => value in Main.dm_help_tracking) {
+			if (Date.now().getTime() - value < this.thread_timeout) {
+				continue;
+			}
+			this.clearData(key);
 		}
 
 		iterate(dm_messages, entity -> {
 			if (type != CommandForward.helppls) {
 				continue;
 			}
+
 			var author = message.author.id;
 			var state = this.state.get(author);
+			var lowercase_content = message.content.toLowerCase();
+			var question = this.getQuestion(this.state.get(author));
 
-			if (message.content.toLowerCase() == 'cancel' || message.content.toLowerCase() == 'c') {
+			if (state == question_type) {
+				var matched = this.isValidInput(message.content, question.valid_input);
+
+				if (!matched) {
+					if (!this.isFilter(message.content)) {
+						return this.reply(entity, message, 'Invalid input, please try again.');
+					}
+				}
+			}
+
+			if (lowercase_content == 'cancel' || lowercase_content == 'c') {
 				this.clearData(author);
-				message.reply({content: 'Cancelled.'}).then(null, err);
-				this.dm_messages.remove(entity);
-				return;
+				return this.reply(entity, message, 'Cancelled.');
 			}
 
 			if (state == title && message.content.length > 100) {
-				message.reply({content: 'Titles have a character limit ${message.content.length}/**__100__**.'}).then(null, err);
-				this.dm_messages.remove(entity);
-				return;
+				return this.reply(entity, message, 'Titles have a character limit ${message.content.length}/**__100__**.');
 			}
 
 			if (message.content.length == 0) {
-				message.reply({content: 'Please enter *something*'}).then(null, err);
-				this.dm_messages.remove(entity);
-				return;
+				return this.reply(entity, message, 'Please enter *something*');
 			}
 
 			if (state != none && message.content != 'skip') {
@@ -276,12 +288,12 @@ class Helppls extends CommandDbBase {
 				this.updateSessionAnswer(author, state, reply);
 			}
 
-			var question = this.getQuestion(this.qid.get(author), this.state.get(author));
+			
 			if (question.valid_input != null && question.valid_input.length > 0) {
 				this.last_input.set(author, {qid: question.id, question: null, state: null, answer: message.content});
 			}
 
-			var question = this.nextQuestion(message.author.id);
+			question = this.nextQuestion(message.author.id);
 			if (question.state == HelpState.finished) {
 				this.handleFinished(message);
 			} else {
@@ -301,6 +313,29 @@ class Helppls extends CommandDbBase {
 		super.update(_);
 	}
 
+	function reply(entity:Entity, message:Message, content:String) {
+		message.reply({content: content}).then(null, err);
+		this.dm_messages.remove(entity);
+	}
+
+	function isFilter(input:String) {
+		for (item in this.valid_filters) {
+			if (item == input) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function isValidInput(content:String, input:Array<TValidInput>) {
+		for (item in input) {
+			if (content.toLowerCase() == item.key) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function clearData(author:String) {
 		this.state.remove(author);
 		this.last_input.remove(author);
@@ -314,6 +349,7 @@ class Helppls extends CommandDbBase {
 		var session = this.session.get(author);
 		var topic = session.topic;
 		var embed = this.createThreadEmbed(session);
+		embed.setAuthor({name: message.author.tag, iconURL: message.author.avatarURL()});
 
 		if (embed.description.length < 30) {
 			trace(embed.description);
@@ -330,7 +366,7 @@ class Helppls extends CommandDbBase {
 		message.client.channels.fetch(this.getChannelId(topic)).then(function(channel) {
 			channel.send({embeds: [embed]}).then(function(channel_message) {
 				channel_message.startThread({name: title}).then(function(thread) {
-					this.remoteSaveQuestion(message, thread.id);
+					this.remoteSaveQuestion(message, channel_message.url, thread.id);
 					message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
 					channel.send("**__Please reply to the above issue within the thread.__**");
 					this.clearData(author);
@@ -359,13 +395,18 @@ class Helppls extends CommandDbBase {
 		}, err);
 	}
 
-	function remoteSaveQuestion(message:Message, thread:String) {
+	function remoteSaveQuestion(message:Message, url:String, thread:String) {
 		var author = message.author.id;
 		var session = this.session.get(author);
 		var now = Timestamp.fromDate(Date.now());
 		var title = this.getResponseFromSession(author, title).answer;
-
+		
 		var data:TStoreContent = {
+			author: {
+				name: message.author.tag,
+				id: message.author.id,
+				icon_url: message.author.avatarURL()
+			},
 			id: -1,
 			title: title.split(' '),
 			discussion: null,
@@ -375,11 +416,12 @@ class Helppls extends CommandDbBase {
 			solved: false,
 			topic: session.topic,
 			session: session,
-			source_url: null,
-			description: null,
+			source_url: url,
 			added_by: author,
 			timestamp: now,
-			checked: now
+			checked: now,
+			solution: null,
+			solution_requested: null
 		};
 
 		var doc = doc(db, 'test2/${session.topic}');
@@ -406,7 +448,7 @@ class Helppls extends CommandDbBase {
 		}
 
 		var qid = this.qid.get(user);
-		var q = this.getQuestion(qid, state);
+		var q = this.getQuestion(state);
 
 		var response = {
 			qid: qid,
@@ -454,7 +496,7 @@ class Helppls extends CommandDbBase {
 					timestamp: interaction.createdTimestamp
 				});
 				this.qid.set(interaction.user.id, 1);
-				var question = this.getQuestion(1, question_type);
+				var question = this.getQuestion(question_type);
 				var out = question.question.toString();
 				if (question.valid_input != null) {
 					for (opt in question.valid_input) {
@@ -502,9 +544,9 @@ class Helppls extends CommandDbBase {
 		return null;
 	}
 
-	function getQuestion(qid:Int, state:HelpState) {
+	function getQuestion(state:HelpState) {
 		for (value in this.questions) {
-			if (value.id == qid && value.state == state) {
+			if (value.state == state) {
 				return value;
 			}
 
@@ -512,7 +554,7 @@ class Helppls extends CommandDbBase {
 				for (input_options in value.valid_input) {
 					if (input_options.questions != null) {
 						for (value_2 in input_options.questions) {
-							if (value_2.id == qid && value_2.state == state) {
+							if (value_2.state == state) {
 								return value_2;
 							}
 						}
