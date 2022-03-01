@@ -8,10 +8,6 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
-var _$Date_Date_$Impl_$ = function() { };
-$hxClasses["_Date.Date_Impl_"] = _$Date_Date_$Impl_$;
-_$Date_Date_$Impl_$.__name__ = "_Date.Date_Impl_";
-_$Date_Date_$Impl_$.now = null;
 var DateTools = function() { };
 $hxClasses["DateTools"] = DateTools;
 DateTools.__name__ = "DateTools";
@@ -1818,8 +1814,8 @@ function Util_loadFile(filename,pos) {
 		data = JSON.parse(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1,{ fileName : "src/Util.hx", lineNumber : 12, className : "_Util.Util_Fields_", methodName : "loadFile"});
-		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 13, className : "_Util.Util_Fields_", methodName : "loadFile", customParams : [pos]});
+		haxe_Log.trace(_g1,{ fileName : "src/Util.hx", lineNumber : 13, className : "_Util.Util_Fields_", methodName : "loadFile"});
+		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 14, className : "_Util.Util_Fields_", methodName : "loadFile", customParams : [pos]});
 	}
 	return data;
 }
@@ -1836,8 +1832,20 @@ function Util_hasRole(role,interaction) {
 		return false;
 	}
 }
+function Util_dateWithinTimeout(a,b,timeout) {
+	if(a == null || b == null) {
+		return false;
+	}
+	return a.getTime() - b.getTime() < timeout;
+}
+function Util_fbDateWithinTimeout(a,b,timeout) {
+	if(a == null || b == null) {
+		return false;
+	}
+	return a.toDate().getTime() - b.toDate().getTime() < timeout;
+}
 function Util_err(err) {
-	haxe_Log.trace(err,{ fileName : "src/Util.hx", lineNumber : 24, className : "_Util.Util_Fields_", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Util.hx", lineNumber : 41, className : "_Util.Util_Fields_", methodName : "err"});
 }
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
@@ -7254,6 +7262,7 @@ shared_QuestionType.fromString = function(i) {
 	}
 };
 var shared_TStoreContent = {};
+shared_TStoreContent.__properties__ = {get_is_validated:"get_is_validated",get_validate_timestamp:"get_validate_timestamp",get_is_valid:"get_is_valid",get_solution_attempt:"get_solution_attempt"};
 shared_TStoreContent._new = function(value) {
 	return value;
 };
@@ -7268,6 +7277,32 @@ shared_TStoreContent.getQuestion = function(this1,state) {
 		}
 	}
 	return null;
+};
+shared_TStoreContent.get_solution_attempt = function(this1) {
+	var count = 0;
+	if(this1.solution != null && this1.solution.attempt != null) {
+		count = this1.solution.attempt;
+	}
+	return count;
+};
+shared_TStoreContent.get_is_valid = function(this1) {
+	if(this1.valid == null || this1.valid == false) {
+		return false;
+	}
+	return true;
+};
+shared_TStoreContent.get_validate_timestamp = function(this1) {
+	if(this1.validated_timestamp == null) {
+		return null;
+	}
+	return this1.validated_timestamp.toDate();
+};
+shared_TStoreContent.get_is_validated = function(this1) {
+	if(this1.valid != null && this1.validated_by != null && this1.validated_by.length > 0) {
+		return this1.validated_timestamp != null;
+	} else {
+		return false;
+	}
 };
 var sys_FileSystem = function() { };
 $hxClasses["sys.FileSystem"] = sys_FileSystem;
@@ -7977,13 +8012,15 @@ var systems_commands_Helpdescription = function(_universe) {
 	this.review_thread = "946834684741050398";
 	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
+	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
 $hxClasses["systems.commands.Helpdescription"] = systems_commands_Helpdescription;
 systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
-	check_threads_interval: null
+	validate_timout: null
+	,check_threads_interval: null
 	,check_verified_interval: null
 	,review_thread: null
 	,run: function(command,interaction) {
@@ -8003,16 +8040,16 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 			interaction.reply("This channel is not a valid topic. Did you run the command from a valid thread?").then(null,Util_err);
 			return;
 		}
-		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2","flixel","threads"),firebase_web_firestore_Firestore.where("thread_id","==",interaction.channelId));
+		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2","haxe","threads"),firebase_web_firestore_Firestore.where("thread_id","==",interaction.channelId));
 		var embed = new discord_$js_MessageEmbed();
 		embed.setDescription(description);
 		firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
 			if(docs.empty) {
 				embed.setTitle("Error Occured");
-				haxe_Log.trace(interaction,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 47, className : "systems.commands.Helpdescription", methodName : "findThread"});
-				haxe_Log.trace(description,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 48, className : "systems.commands.Helpdescription", methodName : "findThread"});
-				haxe_Log.trace(topic,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 49, className : "systems.commands.Helpdescription", methodName : "findThread"});
-				interaction.reply({ content : "<@151104106973495296>", embeds : [embed]});
+				haxe_Log.trace(interaction,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 49, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				haxe_Log.trace(description,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 50, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				haxe_Log.trace(topic,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 51, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				interaction.reply({ content : "*Boop <@151104106973495296>*", embeds : [embed]});
 				return;
 			}
 			var ref = docs.docs[0].ref;
@@ -8024,9 +8061,8 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 			data.solved = true;
 			data.solution.description = description;
 			firebase_web_firestore_Firestore.setDoc(ref,data).then(function(succ) {
-				_gthis.validateThread(ref,data);
-				embed.setTitle("Thread Solution");
 				interaction.reply({ content : "Thanks! <@" + interaction.user.id + ">", embeds : [embed]}).then(function(succ) {
+					_gthis.validateThread(ref,data);
 					var command = Main.getCommand(_gthis.get_name());
 					if(command != null) {
 						util_DiscordUtil.setCommandPermission(command,[{ id : interaction.user.id, type : "USER", permission : false}]);
@@ -8037,8 +8073,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	}
 	,validateThread: function(ref,thread) {
 		var _gthis = this;
-		if(thread.validated_by != null && !thread.solved) {
-			haxe_Log.trace("somothing got out of sync? " + ref.id,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 83, className : "systems.commands.Helpdescription", methodName : "validateThread"});
+		if(Util_dateWithinTimeout(new Date(),shared_TStoreContent.get_validate_timestamp(thread),this.validate_timout)) {
 			return;
 		}
 		util_DiscordUtil.getChannel(this.review_thread,function(channel) {
@@ -8049,19 +8084,31 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 			var title = shared_TStoreContent.getQuestion(thread,"title");
 			var topic = thread.topic;
 			embed.setTitle("__" + title.answer + "__");
-			var description = "**Topic**\n" + topic + " " + embed.description + "\n**Solution Summary**:\n" + thread.solution.description;
+			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
+			if(thread.solution != null && thread.solution.description == null) {
+				solution_summary = null;
+			}
+			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
 			embed.setDescription(description);
 			channel.send({ embeds : [embed], content : "Should this thread be indexed?"}).then(function(message) {
+				firebase_web_firestore_Firestore.updateDoc(ref,"validate_timestamp",new Date());
 				util_DiscordUtil.reactionTracker(message,function(collector,collected,user) {
 					if(user.bot) {
 						return;
 					}
+					var valid = null;
 					if(collected.emoji.name == "✅") {
-						thread.validated_by = user.id;
-						firebase_web_firestore_Firestore.updateDoc(ref,"validated_by",user.id).then(function(_) {
-							collector.stop("validated");
-						},Util_err);
+						valid = true;
 					}
+					if(collected.emoji.name == "❎") {
+						valid = false;
+					}
+					if(valid == null) {
+						return;
+					}
+					firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
+						collector.stop("Reviewed validation.");
+					},Util_err);
 				});
 			});
 		});
@@ -8123,6 +8170,8 @@ var systems_commands_Helppls = function(universe) {
 	this.review_thread = "946834684741050398";
 	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
+	this.solution_timeout = 60000;
+	this.validate_timout = 60000;
 	this.thread_timeout = 1800000;
 	this.valid_filters = ["skip","cancel","c"];
 	this.threads_last_checked = -1;
@@ -8135,7 +8184,7 @@ var systems_commands_Helppls = function(universe) {
 	this.dm_messages = universe.families.get(1);
 	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
-	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 59, className : "systems.commands.Helppls", methodName : "new"});
+	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 62, className : "systems.commands.Helppls", methodName : "new"});
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8149,12 +8198,22 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,threads_last_checked: null
 	,valid_filters: null
 	,thread_timeout: null
+	,validate_timout: null
+	,solution_timeout: null
 	,check_threads_interval: null
 	,check_verified_interval: null
 	,review_thread: null
 	,checkExistingThreads: function(data) {
+		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
-		if(new Date().getTime() - timestamp < 60000) {
+		var now = new Date().getTime();
+		if(now - timestamp < 60000) {
+			return;
+		}
+		if(data.solution != null && data.solution.timestamp != null) {
+			timestamp = data.solution.timestamp.toDate().getTime();
+		}
+		if(data.solution != null && data.solution.timestamp != null && now - timestamp < this.solution_timeout) {
 			return;
 		}
 		var callback = function(messages) {
@@ -8172,48 +8231,60 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			discussion.sort(function(a,b) {
 				return Math.round(a.posted.toDate().getTime() - b.posted.toDate().getTime());
 			});
-			Main.client.channels.fetch(data.thread_id).then(function(channel) {
-				channel.send({ content : "Was this thread solved?"}).then(function(message) {
-					util_DiscordUtil.reactionTracker(message,function(_,collected,user) {
-						if(user.bot) {
-							return;
-						}
-						if(collected.emoji.name == "✅") {
-							channel.send({ content : "Would you be willing to write a brief description on the solution?"}).then(function(message) {
-								util_DiscordUtil.reactionTracker(message,function(_,collected,user) {
-									if(user.bot) {
-										return;
-									}
-									if(collected.emoji.name == "✅") {
-										var command = Main.getCommand("helpdescription");
-										if(command != null) {
-											util_DiscordUtil.setCommandPermission(command,[{ id : user.id, type : "USER", permission : true}],function() {
-												channel.send("<@" + user.id + "> could you run the `/helpdescription` command and give a brief description about the solution to the problem?");
-												var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2",data.topic,"threads"),firebase_web_firestore_Firestore.where("thread_id","==",data.thread_id));
-												firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
-													if(docs.size != 1) {
-														return;
-													}
-													var content = docs.docs[0].data();
+			util_DiscordUtil.getChannel(data.thread_id,function(channel) {
+				var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2",data.topic,"threads"),firebase_web_firestore_Firestore.where("thread_id","==",data.thread_id));
+				firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
+					if(docs.size != 1) {
+						return;
+					}
+					var content = docs.docs[0].data();
+					content.discussion = discussion;
+					if(shared_TStoreContent.get_solution_attempt(content) == 3) {
+						channel.send({ content : "A solution has been requested 3 times, will skip and go to validation."});
+						firebase_web_firestore_Firestore.updateDoc(docs.docs[0].ref,"solution",content.solution,"solved",true,"discussion",discussion);
+						_gthis.validateThread(docs.docs[0].ref,content);
+						return;
+					}
+					channel.send({ content : "Was this thread solved?"}).then(function(message) {
+						util_DiscordUtil.reactionTracker(message,function(_,collected,user) {
+							if(user.bot) {
+								return;
+							}
+							if(collected.emoji.name == "✅") {
+								channel.send({ content : "Would you be willing to write a brief description on the solution?"}).then(function(message) {
+									util_DiscordUtil.reactionTracker(message,function(_,collected,user) {
+										if(user.bot) {
+											return;
+										}
+										if(collected.emoji.name == "✅") {
+											var command = Main.getCommand("helpdescription");
+											if(command != null) {
+												util_DiscordUtil.setCommandPermission(command,[{ id : user.id, type : "USER", permission : true}],function() {
+													channel.send("<@" + user.id + "> could you run the `/helpdescription` command and give a brief description about the solution to the problem?");
 													content.discussion = discussion;
-													content.solution = { description : null, authorised_id : user.id, timestamp : null, user : { id : user.id, name : user.tag, icon_url : user.avatarURL()}};
+													var callback = shared_TStoreContent.get_solution_attempt(content);
+													var callback1 = firebase_web_firestore_Timestamp.now();
+													var user1 = user.id;
+													var user2 = user.tag;
+													var callback2 = user.avatarURL();
+													content.solution = { attempt : callback, description : null, timestamp : callback1, user : { id : user1, name : user2, icon_url : callback2}};
 													firebase_web_firestore_Firestore.updateDoc(docs.docs[0].ref,"discussion",discussion,"solution",content.solution).then(null,Util_err);
 												},Util_err);
-											});
+											}
 										}
-									}
+									});
 								});
-							});
-						}
-					});
+							}
+						});
+					},Util_err);
 				},Util_err);
-			},Util_err);
+			});
 		};
 		this.extractMessageHistory(data.start_message_id,data.thread_id,callback);
 	}
 	,validateThread: function(ref,thread) {
 		var _gthis = this;
-		if(thread.validated_by != null && !thread.solved) {
+		if(Util_dateWithinTimeout(new Date(),shared_TStoreContent.get_validate_timestamp(thread),this.validate_timout)) {
 			return;
 		}
 		util_DiscordUtil.getChannel(this.review_thread,function(channel) {
@@ -8223,33 +8294,41 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			var embed = _gthis.createThreadEmbed(thread);
 			var title = shared_TStoreContent.getQuestion(thread,"title");
 			var topic = thread.topic;
-			embed.setTitle(title.answer);
-			embed.description += "\n Topic: " + topic;
+			embed.setTitle("__" + title.answer + "__");
+			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
+			if(thread.solution != null && thread.solution.description == null) {
+				solution_summary = null;
+			}
+			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
+			embed.setDescription(description);
 			channel.send({ embeds : [embed], content : "Should this thread be indexed?"}).then(function(message) {
+				firebase_web_firestore_Firestore.updateDoc(ref,"validate_timestamp",new Date());
 				util_DiscordUtil.reactionTracker(message,function(collector,collected,user) {
 					if(user.bot) {
 						return;
 					}
+					var valid = null;
 					if(collected.emoji.name == "✅") {
-						thread.validated_by = user.id;
-						firebase_web_firestore_Firestore.updateDoc(ref,"validated_by",user.id).then(function(_) {
-							collector.stop("validated");
-						},Util_err);
+						valid = true;
 					}
+					if(collected.emoji.name == "❎") {
+						valid = false;
+					}
+					if(valid == null) {
+						return;
+					}
+					firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
+						collector.stop("Reviewed validation.");
+					},Util_err);
 				});
 			});
 		});
 	}
-	,createThreadEmbed: function(remote,local) {
+	,createThreadEmbed: function(data) {
 		var embed = new discord_$js_MessageEmbed();
 		var content = "";
-		var session = null;
-		if(remote == null) {
-			session = local;
-		} else {
-			session = remote.session;
-			embed.setAuthor({ name : remote.author.name, iconURL : remote.author.icon_url});
-		}
+		var session = data.session;
+		embed.setAuthor({ name : data.author.name, iconURL : data.author.icon_url});
 		var _g = 0;
 		var _g1 = session.questions;
 		while(_g < _g1.length) {
@@ -8280,25 +8359,47 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		while(_g < topics.length) {
 			var item = topics[_g];
 			++_g;
-			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2",item,"threads"),firebase_web_firestore_Firestore.where("solved","==",false),firebase_web_firestore_Firestore.orderBy("timestamp","desc"));
-			firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
-				if(docs.empty) {
-					return;
-				}
-				var now = new Date().getTime();
-				var _g = 0;
-				var _g1 = docs.docs;
-				while(_g < _g1.length) {
-					var doc = _g1[_g];
-					++_g;
-					var data = doc.data();
-					var start = data.timestamp.toDate().getTime();
-					if(now - start < 60000) {
-						continue;
+			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2",item,"threads"),firebase_web_firestore_Firestore.where("solved","==",false),firebase_web_firestore_Firestore.where("valid","==",null),firebase_web_firestore_Firestore.orderBy("timestamp","desc"));
+			firebase_web_firestore_Firestore.getDocs(q).then((function() {
+				return function(docs) {
+					if(docs.empty) {
+						return;
 					}
-					_gthis.checkExistingThreads(data);
-				}
-			},Util_err);
+					var now = new Date().getTime();
+					var _g = 0;
+					var _g1 = docs.docs;
+					while(_g < _g1.length) {
+						var doc = [_g1[_g]];
+						++_g;
+						var data = [doc[0].data()];
+						var start = data[0].timestamp.toDate().getTime();
+						if(data[0].solution != null && data[0].solution.timestamp != null) {
+							if(!Util_fbDateWithinTimeout(firebase_web_firestore_Timestamp.now(),data[0].solution.timestamp,_gthis.solution_timeout)) {
+								var command = Main.getCommand("helpdescription");
+								if(command != null) {
+									util_DiscordUtil.setCommandPermission(command,[{ id : data[0].solution.user.id, type : "USER", permission : false}],(function(data,doc) {
+										return function() {
+											data[0].solution.timestamp = null;
+											data[0].solution.user = null;
+											data[0].solution.attempt += 1;
+											firebase_web_firestore_Firestore.updateDoc(doc[0].ref,data[0]).catch(Util_err);
+											util_DiscordUtil.getChannel(data[0].thread_id,(function() {
+												return function(channel) {
+													channel.send({ content : "Timeout: Last user didn't send a solution summary"});
+												};
+											})());
+										};
+									})(data,doc));
+								}
+							}
+						}
+						if(now - start < 60000) {
+							continue;
+						}
+						_gthis.checkExistingThreads(data[0]);
+					}
+				};
+			})(),Util_err);
 		}
 	}
 	,update: function(_) {
@@ -8451,10 +8552,10 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var author = message.author.id;
 		var session = this.session.h[author];
-		var embed = this.createThreadEmbed(null,session);
+		var embed = this.createThreadEmbed(session);
 		embed.setAuthor({ name : message.author.tag, iconURL : message.author.avatarURL()});
 		if(embed.description.length < 30) {
-			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 356, className : "systems.commands.Helppls", methodName : "handleFinished"});
+			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 419, className : "systems.commands.Helppls", methodName : "handleFinished"});
 			this.clearData(author);
 			message.reply({ content : "Not enough answers to provide sufficient support"});
 			return;
@@ -8472,7 +8573,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		},Util_err);
 	}
 	,getResponseFromSession: function(author,state) {
-		var session = this.session.h[author];
+		var session = this.session.h[author].session;
 		var _g = 0;
 		var _g1 = session.questions;
 		while(_g < _g1.length) {
@@ -8494,11 +8595,14 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,remoteSaveQuestion: function(message,url,thread) {
 		var author = message.author.id;
-		var session = this.session.h[author];
-		var now = firebase_web_firestore_Timestamp.fromDate(new Date());
+		var content = this.session.h[author];
+		var now = firebase_web_firestore_Timestamp.now();
 		var title = this.getResponseFromSession(author,"title").answer;
-		var data = { author : { name : message.author.tag, id : message.author.id, icon_url : message.author.avatarURL()}, id : -1, title : title.split(" "), discussion : null, start_message_id : message.id, thread_id : thread, validated_by : null, solved : false, topic : session.topic, session : session, source_url : url, added_by : author, timestamp : now, checked : now, solution : null, solution_requested : null};
-		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + session.topic);
+		content.source_url = url;
+		content.title = title;
+		content.thread_id = thread;
+		content.timestamp = now;
+		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + content.topic);
 		firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
 			return transaction.get(doc).then(function(doc) {
 				if(!doc.exists()) {
@@ -8510,10 +8614,10 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				return data;
 			});
 		}).then(function(value) {
-			data.id = value.id;
-			var path = "test2/" + session.topic + "/threads";
-			firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),data).then(function(_) {
-				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 442, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+			content.id = value.id;
+			var path = "test2/" + content.topic + "/threads";
+			firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),content).then(function(_) {
+				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 486, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 			},Util_err);
 		},Util_err);
 	}
@@ -8524,7 +8628,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var qid = this.qid.h[user];
 		var q = this.getQuestion(state);
 		var response = { qid : qid, question : q.question.toString(), state : state, answer : answer};
-		this.session.h[user].questions.push(response);
+		this.session.h[user].session.questions.push(response);
 	}
 	,parseErrorMessage: function(input) {
 		var regex = new EReg("```\n(.*):([0-9]+) - (.*)\n```","gmi");
@@ -8551,7 +8655,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			this.state.h[interaction.user.id] = "question_type";
 			var this1 = this.session;
 			var key = interaction.user.id;
-			var value = { topic : StringTools.replace(StringTools.replace(_g.topic,"<#",""),">",""), questions : [], author_id : interaction.user.id, timestamp : interaction.createdTimestamp};
+			var value = { author : { name : interaction.user.tag, id : interaction.user.id, icon_url : interaction.user.avatarURL()}, id : -1, title : null, discussion : null, start_message_id : null, thread_id : null, validated_by : null, solved : false, topic : _g.topic, session : { topic : null, questions : [], author_id : interaction.user.id, timestamp : interaction.createdTimestamp}, source_url : "", timestamp : firebase_web_firestore_Timestamp.now(), solution : null, valid : null, solution_requested : null, validated_timestamp : null};
 			this1.h[key] = value;
 			this.qid.h[interaction.user.id] = 1;
 			var question = this.getQuestion("question_type");
@@ -8696,9 +8800,6 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 		var message = "Hey there";
 		if(Math.random() < 0.35) {
 			switch(interaction.user.id) {
-			case "215582414544699393":
-				message = "Hello Bulby! How's the interpreters going? :face_with_hand_over_mouth:";
-				break;
 			case "415825875146375168":
 				message = "Hey semmi, got any cool music tonight? \\o/";
 				break;
@@ -8715,6 +8816,7 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = "Hey you, what's up?";
 			}
 		}
+		haxe_Log.trace("upgrade working",{ fileName : "src/systems/commands/Hi.hx", lineNumber : 23, className : "systems.commands.Hi", methodName : "run"});
 		interaction.reply({ content : message});
 	}
 	,get_name: function() {

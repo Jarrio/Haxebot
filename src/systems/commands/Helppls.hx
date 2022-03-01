@@ -37,22 +37,26 @@ class Helppls extends CommandDbBase {
 	var questions:Array<THelpQuestions> = [];
 	var state:Map<String, HelpState> = [];
 	var qid:Map<String, Int> = [];
-	var session:Map<String, TSession> = [];
+	var session:Map<String, TStoreContent> = [];
 	var last_input:Map<String, TQuestionResponse> = [];
 	var threads_last_checked:Float = -1;
 	final valid_filters = ['skip', 'cancel', 'c'];
 	final thread_timeout = 60000 * 30;
+
 	#if block
+	final validate_timout = 60000;
+	final solution_timeout = 60000;
 	final check_threads_interval = 60000 * 30;
 	final check_verified_interval = 60000;
 	final review_thread = '946834684741050398';
-	#else
+	#else	
 	final review_thread = '';
+	final solution_timeout = 60000 * 30;
 	final check_threads_interval = 60000 * 30;
+	final validate_timout = 60000 * 60 * 24;
 	final check_verified_interval = 60000 * 60 * 24;
 	#end
 
-	
 	public function new(universe) {
 		super(universe);
 		this.questions = loadFile(this.name);
@@ -60,8 +64,16 @@ class Helppls extends CommandDbBase {
 
 	function checkExistingThreads(data:TStoreContent) {
 		var timestamp = data.timestamp.toDate().getTime();
+		var now = Date.now().getTime();
+		if (now - timestamp < 60000) {
+			return;
+		}
 
-		if (Date.now().getTime() - timestamp < 60000) {
+		if (data.solution != null && data.solution.timestamp != null) {
+			timestamp = data.solution.timestamp.toDate().getTime();
+		}
+
+		if (data.solution != null && data.solution.timestamp != null && now - timestamp < this.solution_timeout) {
 			return;
 		}
 
@@ -87,67 +99,78 @@ class Helppls extends CommandDbBase {
 				return Math.round(a.posted.toDate().getTime() - b.posted.toDate().getTime());
 			});
 
-			Main.client.channels.fetch(data.thread_id).then(function(channel) {
-				channel.send({content: 'Was this thread solved?'}).then(function(message) {
-					DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
-						if (user.bot) {
-							return;
-						}
-						if (collected.emoji.name == "✅") {
-							channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
-								DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
-									if (user.bot) {
-										return;
-									}
-									if (collected.emoji.name == "✅") {
-										var command = Main.getCommand('helpdescription');
-										if (command != null) {
-											command.setCommandPermission([
-												{
-													id: user.id,
-													type: USER,
-													permission: true
-												}
-											], () -> {
-												channel.send('<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?');
-												
-												var q:Query<TStoreContent> = query(collection(db, 'test2', data.topic, 'threads'), where('thread_id', '==', data.thread_id));
-												Firestore.getDocs(q).then((docs) -> {
-													if (docs.size != 1) {
-														return;
+			DiscordUtil.getChannel(data.thread_id, function(channel) {
+				var q:Query<TStoreContent> = query(collection(db, 'test2', data.topic, 'threads'), where('thread_id', '==', data.thread_id));
+				Firestore.getDocs(q).then((docs) -> {
+					if (docs.size != 1) {
+						return;
+					}
+
+					var content = docs.docs[0].data();
+					content.discussion = discussion;
+
+					if (content.solution_attempt == 3) {
+						channel.send({content: 'A solution has been requested 3 times, will skip and go to validation.'});
+						Firestore.updateDoc(docs.docs[0].ref, 'solution', content.solution, 'solved', true, 'discussion', discussion);
+						this.validateThread(docs.docs[0].ref, content);
+						return;
+					}
+
+					channel.send({content: 'Was this thread solved?'}).then(function(message) {
+						DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
+							if (user.bot) {
+								return;
+							}
+							if (collected.emoji.name == "✅") {
+								channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
+									DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
+										if (user.bot) {
+											return;
+										}
+										if (collected.emoji.name == "✅") {
+											var command = Main.getCommand('helpdescription');
+											if (command != null) {
+												command.setCommandPermission([
+													{
+														id: user.id,
+														type: USER,
+														permission: true
 													}
-													var content = docs.docs[0].data();
+												], () -> {
+													channel.send('<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?');
 													content.discussion = discussion;
 													content.solution = {
+														attempt: content.solution_attempt,
 														description: null,
-														authorised_id: user.id,
-														timestamp: null,
+														timestamp: Timestamp.now(),
 														user: {
 															id: user.id,
 															name: user.tag,
 															icon_url: user.avatarURL()
 														}
 													}
-													
-													Firestore.updateDoc(docs.docs[0].ref, 'discussion', discussion, 'solution', content.solution).then(null, err);
+
+													Firestore.updateDoc(docs.docs[0].ref, 'discussion', discussion, 'solution', content.solution)
+														.then(null, err);
 												}, err);
-											});
+											}
 										}
-									}
+									});
 								});
-							});
-						}
-					});
+							}
+						});
+					}, err);
 				}, err);
-			}, err);
+			});
 		}
 		this.extractMessageHistory(data.start_message_id, data.thread_id, callback);
 	}
 
 	function validateThread(ref:DocumentReference<TStoreContent>, thread:TStoreContent) {
-		if (thread.validated_by != null && !thread.solved) {
+		if (dateWithinTimeout(Date.now(), thread.validate_timestamp, this.validate_timout)) {
 			return;
 		}
+
 		DiscordUtil.getChannel(this.review_thread, (channel) -> {
 			if (channel == null) {
 				return;
@@ -156,48 +179,62 @@ class Helppls extends CommandDbBase {
 			var title = thread.getQuestion(title);
 			var topic = thread.topic;
 
-			embed.setTitle(title.answer);
-			embed.description += '\n Topic: ${topic}';
+			embed.setTitle('__${title.answer}__');
+			var solution_summary = '**Solution Summary**:\n${thread.solution.description}';
+			if (thread.solution != null && thread.solution.description == null) {
+				solution_summary = null;
+			}
+
+			var description = '**Topic**\n$topic ${embed.description}\n$solution_summary';
+			embed.setDescription(description);
 
 			channel.send({embeds: [embed], content: "Should this thread be indexed?"}).then(function(message) {
+				Firestore.updateDoc(ref, 'validate_timestamp', Date.now());
 				DiscordUtil.reactionTracker(message, (collector, collected:MessageReaction, user:User) -> {
 					if (user.bot) {
 						return;
 					}
+
+					var valid = null;
+
 					if (collected.emoji.name == "✅") {
-						thread.validated_by = user.id;
-						Firestore.updateDoc(ref, 'validated_by', user.id).then(function(_) {
-							collector.stop('validated');
-						}, err); 
+						valid = true;
 					}
+
+					if (collected.emoji.name == "❎") {
+						valid = false;
+					}
+
+					if (valid == null) {
+						return;
+					}
+
+					Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id, 'validated_timestamp', Timestamp.now()).then(function(_) {
+						collector.stop('Reviewed validation.');
+					}, err);
 				});
 			});
 		});
 	}
 
-	function createThreadEmbed(?remote:TStoreContent, ?local:TSession) {
+	function createThreadEmbed(data:TStoreContent) {
 		var embed = new MessageEmbed();
 		var content = '';
-		var session = null;
+		var session = data.session;
 
-		if (remote == null) {
-			session = local;
-		} else {
-			session = remote.session;
-			embed.setAuthor({name: remote.author.name, iconURL: remote.author.icon_url});
-		}
+		embed.setAuthor({name: data.author.name, iconURL: data.author.icon_url});
 
 		for (value in session.questions) {
 			var answer:String = (value.answer);
 			var output = '**${value.question}**';
 
 			switch (value.state) {
-				case HelpState.provide_code:
+				case provide_code:
 					answer = '```hx\n' + answer + '\n```';
 				case title:
 					continue;
 				case question_type:
-					answer = '${(answer:QuestionType)}';
+					answer = '${(answer : QuestionType)}';
 				default:
 			}
 			content += '\n' + output + '\n' + answer;
@@ -208,9 +245,9 @@ class Helppls extends CommandDbBase {
 	}
 
 	function checkDocs() {
-		var topics = ['haxe', 'haxeui', 'tools', 'flixel', 'heaps', 'ceramic','openfl'];
+		var topics = ['haxe', 'haxeui', 'tools', 'flixel', 'heaps', 'ceramic', 'openfl'];
 		for (item in topics) {
-			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), orderBy('timestamp', DESCENDING));
+			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), where('valid', '==', null), orderBy('timestamp', DESCENDING));
 			Firestore.getDocs(q).then(function(docs) {
 				if (docs.empty) {
 					return;
@@ -219,12 +256,35 @@ class Helppls extends CommandDbBase {
 				for (doc in docs.docs) {
 					var data = doc.data();
 					var start = data.timestamp.toDate().getTime();
+					if (data.solution != null && data.solution.timestamp != null) {
+						if(!fbDateWithinTimeout(Timestamp.now(), data.solution.timestamp, this.solution_timeout)) {
+							var command = Main.getCommand('helpdescription');
+							if (command != null) {
+								command.setCommandPermission([
+									{
+										id: data.solution.user.id,
+										type: USER,
+										permission: false
+									}
+								], () -> {
+									data.solution.timestamp = null;
+									data.solution.user = null;
+									data.solution.attempt += 1;
+
+									Firestore.updateDoc(doc.ref, data).catchError(err);
+									DiscordUtil.getChannel(data.thread_id, (channel) -> {
+										channel.send({content: "Timeout: Last user didn't send a solution summary"});
+									});
+								});
+							}
+						}
+					}
+
 					if (now - start < 60000) {
 						continue;
 					}
 					this.checkExistingThreads(data);
 				}
-
 			}, err);
 		}
 	}
@@ -288,9 +348,13 @@ class Helppls extends CommandDbBase {
 				this.updateSessionAnswer(author, state, reply);
 			}
 
-			
 			if (question.valid_input != null && question.valid_input.length > 0) {
-				this.last_input.set(author, {qid: question.id, question: null, state: null, answer: message.content});
+				this.last_input.set(author, {
+					qid: question.id,
+					question: null,
+					state: null,
+					answer: message.content
+				});
 			}
 
 			question = this.nextQuestion(message.author.id);
@@ -376,8 +440,8 @@ class Helppls extends CommandDbBase {
 	}
 
 	function getResponseFromSession(author:String, state:HelpState) {
-		var session = this.session.get(author);
-		for (item in session.questions){
+		var session = this.session.get(author).session;
+		for (item in session.questions) {
 			if (item.state == state) {
 				return item;
 			}
@@ -397,34 +461,15 @@ class Helppls extends CommandDbBase {
 
 	function remoteSaveQuestion(message:Message, url:String, thread:String) {
 		var author = message.author.id;
-		var session = this.session.get(author);
-		var now = Timestamp.fromDate(Date.now());
+		var content = this.session.get(author);
+		var now = Timestamp.now();
 		var title = this.getResponseFromSession(author, title).answer;
-		
-		var data:TStoreContent = {
-			author: {
-				name: message.author.tag,
-				id: message.author.id,
-				icon_url: message.author.avatarURL()
-			},
-			id: -1,
-			title: title.split(' '),
-			discussion: null,
-			start_message_id: message.id,
-			thread_id: thread,
-			validated_by: null,
-			solved: false,
-			topic: session.topic,
-			session: session,
-			source_url: url,
-			added_by: author,
-			timestamp: now,
-			checked: now,
-			solution: null,
-			solution_requested: null
-		};
+		content.source_url = url;
+		content.title = title;
+		content.thread_id = thread;
+		content.timestamp = now;
 
-		var doc = doc(db, 'test2/${session.topic}');
+		var doc = doc(db, 'test2/${content.topic}');
 
 		Firestore.runTransaction(this.db, function(transaction) {
 			return transaction.get(doc).then(function(doc) {
@@ -435,10 +480,10 @@ class Helppls extends CommandDbBase {
 				data.id = data.id + 1;
 				transaction.update(doc.ref, data);
 				return data;
-			}); 
+			});
 		}).then(function(value) {
-			data.id = value.id;
-			this.addDoc('test2/${session.topic}/threads', data, (_) -> trace('added'), err);
+			content.id = value.id;
+			this.addDoc('test2/${content.topic}/threads', content, (_) -> trace('added'), err);
 		}, err);
 	}
 
@@ -456,8 +501,8 @@ class Helppls extends CommandDbBase {
 			state: state,
 			answer: answer
 		}
-		
-		this.session.get(user).questions.push(response);
+
+		this.session.get(user).session.questions.push(response);
 	}
 
 	function parseErrorMessage(input:String) {
@@ -489,12 +534,35 @@ class Helppls extends CommandDbBase {
 		switch (command.content) {
 			case Helppls(topic):
 				this.state.set(interaction.user.id, HelpState.question_type);
+
 				this.session.set(interaction.user.id, {
-					topic: topic.replace('<#', '').replace('>', ''),
-					questions: [],
-					author_id: interaction.user.id,
-					timestamp: interaction.createdTimestamp
+					author: {
+						name: interaction.user.tag,
+						id: interaction.user.id,
+						icon_url: interaction.user.avatarURL()
+					},
+					id: -1,
+					title: null,
+					discussion: null,
+					start_message_id: null,
+					thread_id: null,
+					validated_by: null,
+					solved: false,
+					topic: topic,
+					session: {
+						topic: null,
+						questions: [],
+						author_id: interaction.user.id,
+						timestamp: interaction.createdTimestamp
+					},
+					source_url: "",
+					timestamp: Timestamp.now(),
+					solution: null,
+					valid: null,
+					solution_requested: null,
+					validated_timestamp: null
 				});
+
 				this.qid.set(interaction.user.id, 1);
 				var question = this.getQuestion(question_type);
 				var out = question.question.toString();

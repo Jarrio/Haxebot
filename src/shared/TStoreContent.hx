@@ -5,26 +5,26 @@ import firebase.web.firestore.Timestamp;
 typedef TThreadData = {
 	var id:Int;
 	var author:TAuthor;
-	var title:Array<String>;
+	var title:String;
 	var start_message_id:String;
 	var thread_id:String;
-	var added_by:String;
 	var topic:String;
 	var timestamp:Timestamp;
-	var checked:Timestamp;
 	var source_url:String;
 	var session:TSession;
 	var solved:Bool;
-	var validated_by:String;
 	var discussion:Array<TMessage>;
 	var solution:TThreadSolution;
 	var solution_requested:Timestamp;
+	var valid:Bool;
+	var validated_by:String;
+	var validated_timestamp:Timestamp;
 }
 
 typedef TThreadSolution = {
+	var attempt:Int;
 	var description:String;
 	var user:TAuthor;
-	var authorised_id:String;
 	var timestamp:Timestamp;
 }
 
@@ -47,6 +47,36 @@ abstract TStoreContent(TThreadData) from TThreadData {
 			}
 		}
 		return null;
+	}
+
+	public var solution_attempt(get, never):Int;
+	function get_solution_attempt() {
+		var count = 0;
+		if (this.solution != null && this.solution.attempt != null) {
+			count = this.solution.attempt;
+		}
+		return count;
+	}
+
+	public var is_valid(get, never):Bool;
+	function get_is_valid() {
+	 	if (this.valid == null || this.valid == false) {
+	 		return false;
+	 	}
+		return true;
+	}
+
+	public var validate_timestamp(get, never):Date;
+	private function get_validate_timestamp() {
+		if (this.validated_timestamp == null) {
+			return null;
+		}
+		return this.validated_timestamp.toDate();
+	}
+
+	public var is_validated(get, never):Bool;
+	private function get_is_validated() {
+		return this.valid != null && this.validated_by != null && this.validated_by.length > 0 && this.validated_timestamp != null;
 	}
 }
 

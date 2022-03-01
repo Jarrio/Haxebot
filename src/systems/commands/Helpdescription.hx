@@ -1,5 +1,6 @@
 package systems.commands;
 
+import firebase.web.firestore.Timestamp;
 import discord_js.User;
 import discord_js.MessageReaction;
 import shared.TSession;
@@ -10,6 +11,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 
 class Helpdescription extends CommandDbBase {
+	final validate_timout = 60000 * 60 * 24;
 	#if block
 	final check_threads_interval = 60000 * 30;
 	final check_verified_interval = 60000;
@@ -38,7 +40,7 @@ class Helpdescription extends CommandDbBase {
 			interaction.reply('This channel is not a valid topic. Did you run the command from a valid thread?').then(null, err);
 			return;
 		}
-		var q:Query<TStoreContent> = query(collection(db, 'test2', 'flixel', 'threads'), where('thread_id', EQUAL_TO, interaction.channelId));
+		var q:Query<TStoreContent> = query(collection(db, 'test2', 'haxe', 'threads'), where('thread_id', EQUAL_TO, interaction.channelId));
 		var embed = new MessageEmbed();
 		embed.setDescription(description);
 		Firestore.getDocs(q).then(function(docs) {
@@ -62,9 +64,8 @@ class Helpdescription extends CommandDbBase {
 			data.solution.description = description;
 			
 			Firestore.setDoc(ref, data).then(function(succ) {
-				this.validateThread(ref, data);
-				embed.setTitle('Thread Solution');
 				interaction.reply({content: 'Thanks! <@${interaction.user.id}>', embeds: [embed]}).then(function(succ) {
+					this.validateThread(ref, data);
 					var command = Main.getCommand(this.name);
 					if (command != null) {
 						command.setCommandPermission([{
@@ -79,10 +80,10 @@ class Helpdescription extends CommandDbBase {
 	}
 
 	function validateThread(ref:DocumentReference<TStoreContent>, thread:TStoreContent) {
-		if (thread.validated_by != null && !thread.solved) {
-			trace('somothing got out of sync? ${ref.id}');
+		if (dateWithinTimeout(Date.now(), thread.validate_timestamp, this.validate_timout)) {
 			return;
 		}
+		
 		DiscordUtil.getChannel(this.review_thread, (channel) -> {
 			if (channel == null) {
 				return;
@@ -92,20 +93,39 @@ class Helpdescription extends CommandDbBase {
 			var topic = thread.topic;
 
 			embed.setTitle('__${title.answer}__');
-			var description = '**Topic**\n$topic ${embed.description}\n**Solution Summary**:\n${thread.solution.description}';
+			var solution_summary = '**Solution Summary**:\n${thread.solution.description}';
+			if (thread.solution != null && thread.solution.description == null) {
+				solution_summary = null;
+			}
+
+			var description = '**Topic**\n$topic ${embed.description}\n$solution_summary';
+
 			embed.setDescription(description);
 
 			channel.send({embeds: [embed], content: "Should this thread be indexed?"}).then(function(message) {
+				Firestore.updateDoc(ref, 'validate_timestamp', Date.now());
 				DiscordUtil.reactionTracker(message, (collector, collected:MessageReaction, user:User) -> {
 					if (user.bot) {
 						return;
 					}
+
+					var valid = null;
+					
 					if (collected.emoji.name == "✅") {
-						thread.validated_by = user.id;
-						Firestore.updateDoc(ref, 'validated_by', user.id).then(function(_) {
-							collector.stop('validated');
-						}, err);
+						valid = true;
 					}
+
+					if (collected.emoji.name == "❎") {
+						valid = false;
+					}
+
+					if (valid == null) {
+						return;
+					}
+
+					Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id, 'validated_timestamp', Timestamp.now()).then(function(_) {
+						collector.stop('Reviewed validation.');
+					}, err);
 				});
 			});
 		});
@@ -118,7 +138,6 @@ class Helpdescription extends CommandDbBase {
 
 		embed.setAuthor({name: remote.author.name, iconURL: remote.author.icon_url});
 		
-
 		for (value in session.questions) {
 			var answer:String = (value.answer);
 			var output = '**${value.question}**';
