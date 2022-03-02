@@ -89,13 +89,12 @@ class Helpdescription extends CommandDbBase {
 				return;
 			}
 			var embed = this.createThreadEmbed(thread);
-			var title = thread.getQuestion(title);
 			var topic = thread.topic;
 
-			embed.setTitle('__${title.answer}__');
+		
 			var solution_summary = '**Solution Summary**:\n${thread.solution.description}';
 			if (thread.solution != null && thread.solution.description == null) {
-				solution_summary = null;
+				solution_summary = "";
 			}
 
 			var description = '**Topic**\n$topic ${embed.description}\n$solution_summary';
@@ -136,6 +135,9 @@ class Helpdescription extends CommandDbBase {
 		var content = '';
 		var session = remote.session;
 
+		var title = remote.getQuestion(title);
+		embed.setTitle('__${title.answer}__');
+		embed.setURL(remote.source_url);
 		embed.setAuthor({name: remote.author.name, iconURL: remote.author.icon_url});
 		
 		for (value in session.questions) {

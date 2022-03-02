@@ -50,7 +50,7 @@ class Helppls extends CommandDbBase {
 	final check_verified_interval = 60000;
 	final review_thread = '946834684741050398';
 	#else	
-	final review_thread = '';
+	final review_thread = '948626893148663838';
 	final solution_timeout = 60000 * 30;
 	final check_threads_interval = 60000 * 30;
 	final validate_timout = 60000 * 60 * 24;
@@ -121,6 +121,7 @@ class Helppls extends CommandDbBase {
 							if (user.bot) {
 								return;
 							}
+							
 							if (collected.emoji.name == "✅") {
 								channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
 									DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
@@ -175,14 +176,14 @@ class Helppls extends CommandDbBase {
 			if (channel == null) {
 				return;
 			}
-			var embed = this.createThreadEmbed(thread);
-			var title = thread.getQuestion(title);
-			var topic = thread.topic;
 
-			embed.setTitle('__${title.answer}__');
+			var embed = this.createThreadEmbed(thread);
+			embed.setURL(thread.source_url);
+
+			var topic = thread.topic;
 			var solution_summary = '**Solution Summary**:\n${thread.solution.description}';
 			if (thread.solution != null && thread.solution.description == null) {
-				solution_summary = null;
+				solution_summary = "";
 			}
 
 			var description = '**Topic**\n$topic ${embed.description}\n$solution_summary';
@@ -222,6 +223,8 @@ class Helppls extends CommandDbBase {
 		var content = '';
 		var session = data.session;
 
+		var title = data.getQuestion(title);
+		embed.setTitle('__${title.answer}__');
 		embed.setAuthor({name: data.author.name, iconURL: data.author.icon_url});
 
 		for (value in session.questions) {

@@ -1,4 +1,3 @@
-import discord_js.ApplicationCommandPermissionsManager;
 import js.node.Timers;
 import discord_js.ApplicationCommandManager.ApplicationCommandData;
 import discord_js.Snowflake;

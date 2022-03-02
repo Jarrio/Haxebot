@@ -766,13 +766,12 @@ Main.start = function() {
 		u.families.tryActivate(idx);
 	}
 	Main.universe = u;
-	haxe_Log.trace("DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG",{ fileName : "src/Main.hx", lineNumber : 61, className : "Main", methodName : "start"});
 	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES","DIRECT_MESSAGES","GUILD_MEMBERS","GUILD_MESSAGE_REACTIONS"]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 75, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 74, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var get_commands = Main.parseCommands();
@@ -786,7 +785,7 @@ Main.start = function() {
 					if(count + 1 != get_commands.length) {
 						createCommand();
 					} else {
-						haxe_Log.trace("Commands activated!",{ fileName : "src/Main.hx", lineNumber : 89, className : "Main", methodName : "start"});
+						haxe_Log.trace("Commands activated!",{ fileName : "src/Main.hx", lineNumber : 88, className : "Main", methodName : "start"});
 						Main.commands_active = true;
 					}
 				},Util_err);
@@ -845,8 +844,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 118, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 117, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 118, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -907,9 +906,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 175, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 176, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 177, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 174, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 175, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 176, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -944,14 +943,14 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 204, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 203, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 211, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 210, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -7956,6 +7955,20 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			haxe_Log.trace("no help content configured",{ fileName : "src/systems/commands/Help.hx", lineNumber : 15, className : "systems.commands.Help", methodName : "run"});
 			return;
 		}
+		if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,interaction.user.id)) {
+			var _g = 0;
+			var _g1 = this.data;
+			while(_g < _g1.length) {
+				var content = _g1[_g];
+				++_g;
+				if(content.type != "helppls_dm") {
+					continue;
+				}
+				interaction.reply({ content : content.content.toString()}).then(null,Util_err);
+				break;
+			}
+			return;
+		}
 		var _g = command.content;
 		if(_g._hx_index == 10) {
 			var _g1 = _g.category;
@@ -7972,15 +7985,15 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 						continue;
 					}
 					if(item.type == "run") {
-						msg += "- `!" + item.type + "`: " + item.content;
+						msg += "- `!" + item.type + "`: " + item.content.toString();
 					} else {
-						msg += "- `/" + item.type + "`: " + item.content;
+						msg += "- `/" + item.type + "`: " + item.content.toString();
 					}
 					if(key != this.data.length - 1) {
 						msg += "\n";
 					}
 				} else if(item.type == _g1) {
-					msg = "/`" + item.type + "`: " + item.content;
+					msg = "/`" + item.type + "`: " + item.content.toString();
 					break;
 				}
 			}
@@ -7998,6 +8011,8 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 var systems_commands_HelpType = {};
 systems_commands_HelpType.fromString = function(value) {
 	switch(value.toLowerCase()) {
+	case "helppls_dm":
+		return "helppls_dm";
 	case "notify":
 		return "notify";
 	case "rtfm":
@@ -8009,9 +8024,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.review_thread = "946834684741050398";
-	this.check_verified_interval = 60000;
+	this.check_verified_interval = 86400000;
 	this.check_threads_interval = 1800000;
+	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -8020,9 +8035,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
+	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
-	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 6) {
@@ -8081,12 +8096,10 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 				return;
 			}
 			var embed = _gthis.createThreadEmbed(thread);
-			var title = shared_TStoreContent.getQuestion(thread,"title");
 			var topic = thread.topic;
-			embed.setTitle("__" + title.answer + "__");
 			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
 			if(thread.solution != null && thread.solution.description == null) {
-				solution_summary = null;
+				solution_summary = "";
 			}
 			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
 			embed.setDescription(description);
@@ -8117,6 +8130,9 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		var embed = new discord_$js_MessageEmbed();
 		var content = "";
 		var session = remote.session;
+		var title = shared_TStoreContent.getQuestion(remote,"title");
+		embed.setTitle("__" + title.answer + "__");
+		embed.setURL(remote.source_url);
 		embed.setAuthor({ name : remote.author.name, iconURL : remote.author.icon_url});
 		var _g = 0;
 		var _g1 = session.questions;
@@ -8158,7 +8174,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return "haxe";
+			return null;
 		}
 	}
 	,get_name: function() {
@@ -8167,11 +8183,11 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	,__class__: systems_commands_Helpdescription
 });
 var systems_commands_Helppls = function(universe) {
-	this.review_thread = "946834684741050398";
-	this.check_verified_interval = 60000;
+	this.check_verified_interval = 86400000;
+	this.validate_timout = 86400000;
 	this.check_threads_interval = 1800000;
-	this.solution_timeout = 60000;
-	this.validate_timout = 60000;
+	this.solution_timeout = 1800000;
+	this.review_thread = "948626893148663838";
 	this.thread_timeout = 1800000;
 	this.valid_filters = ["skip","cancel","c"];
 	this.threads_last_checked = -1;
@@ -8198,11 +8214,11 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,threads_last_checked: null
 	,valid_filters: null
 	,thread_timeout: null
-	,validate_timout: null
+	,review_thread: null
 	,solution_timeout: null
 	,check_threads_interval: null
+	,validate_timout: null
 	,check_verified_interval: null
-	,review_thread: null
 	,checkExistingThreads: function(data) {
 		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
@@ -8292,12 +8308,11 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				return;
 			}
 			var embed = _gthis.createThreadEmbed(thread);
-			var title = shared_TStoreContent.getQuestion(thread,"title");
+			embed.setURL(thread.source_url);
 			var topic = thread.topic;
-			embed.setTitle("__" + title.answer + "__");
 			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
 			if(thread.solution != null && thread.solution.description == null) {
-				solution_summary = null;
+				solution_summary = "";
 			}
 			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
 			embed.setDescription(description);
@@ -8328,6 +8343,8 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var embed = new discord_$js_MessageEmbed();
 		var content = "";
 		var session = data.session;
+		var title = shared_TStoreContent.getQuestion(data,"title");
+		embed.setTitle("__" + title.answer + "__");
 		embed.setAuthor({ name : data.author.name, iconURL : data.author.icon_url});
 		var _g = 0;
 		var _g1 = session.questions;
@@ -8552,16 +8569,17 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var author = message.author.id;
 		var session = this.session.h[author];
+		var topic = session.topic;
 		var embed = this.createThreadEmbed(session);
 		embed.setAuthor({ name : message.author.tag, iconURL : message.author.avatarURL()});
 		if(embed.description.length < 30) {
-			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 419, className : "systems.commands.Helppls", methodName : "handleFinished"});
+			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 422, className : "systems.commands.Helppls", methodName : "handleFinished"});
 			this.clearData(author);
 			message.reply({ content : "Not enough answers to provide sufficient support"});
 			return;
 		}
 		var title = this.getResponseFromSession(author,"title").answer;
-		message.client.channels.fetch(this.getChannelId("test")).then(function(channel) {
+		message.client.channels.fetch(this.getChannelId(topic)).then(function(channel) {
 			channel.send({ embeds : [embed]}).then(function(channel_message) {
 				channel_message.startThread({ name : title}).then(function(thread) {
 					_gthis.remoteSaveQuestion(message,channel_message.url,thread.id);
@@ -8617,7 +8635,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			content.id = value.id;
 			var path = "test2/" + content.topic + "/threads";
 			firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),content).then(function(_) {
-				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 486, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 489, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 			},Util_err);
 		},Util_err);
 	}
@@ -9036,6 +9054,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,set_permissions: null
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
 		var tmp;
 		if(!this.set_permissions && Main.commands_active) {
@@ -9052,6 +9071,20 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				util_DiscordUtil.setCommandPermission(command,[{ id : "661960123035418629", type : "USER", permission : true}]);
 			}
 		}
+		if(this.channel == null && this.checking_channel == false) {
+			this.checking_channel = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking_channel = false;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 76, className : "systems.commands.Roundup", methodName : "update"});
+			});
+		}
+		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
+			return;
+		}
+		this.last_checked = new Date().getTime();
+		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -9985,7 +10018,7 @@ Main.commands = new haxe_ds_StringMap();
 Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;
@@ -10012,6 +10045,8 @@ systems_commands_Api.lime = "https://api.lime.software/";
 systems_commands_HelpType.run = "run";
 systems_commands_HelpType.rtfm = "rtfm";
 systems_commands_HelpType.notify = "notify";
+systems_commands_HelpType.helppls = "helppls";
+systems_commands_HelpType.helppls_dm = "helppls_dm";
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
