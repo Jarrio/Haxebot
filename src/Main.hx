@@ -37,6 +37,12 @@ class Main {
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
 
+	#if block
+	public static final guild_id:String = "416069724158427137";
+	#else
+	public static final guild_id:String = "162395145352904705";
+	#end
+
 	public static function start() {
 		universe = Universe.create({
 			entities: 1000,
@@ -44,7 +50,7 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, React, Haxelib, Notify, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
+						Hi, Help, Haxelib, Helppls, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
 					]
 				}
 			]
@@ -82,8 +88,8 @@ class Main {
 							trace('Commands activated!');
 							commands_active = true;
 						}
-					}, (err) -> trace(err));
-				}, 1250);
+					}, err);
+				}, 250);
 			}
 			createCommand();
 		});

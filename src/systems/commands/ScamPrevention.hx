@@ -136,9 +136,9 @@ class ScamPrevention extends CommandBase {
 									message.delete();
 									this.resetChecks(id);
 								});
-							}, (err) -> trace(err));
-						}, (err) -> trace(err));
-				}, (err) -> trace(err));
+							}, err);
+						}, err);
+				}, err);
 			}
 		}
 	}

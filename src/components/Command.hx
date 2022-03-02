@@ -12,10 +12,12 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	React(emoji:String, message_id:String);
+	Helppls(topic:String);
 	Boop(user:User);
 	Poll(question:String, time:Int);
 	Roundup(number:Float);
 	Rtfm(channel:String);
+	Helpdescription(description:String);
 	Api(channel:String);
 	Notify(channel:String);
 	Code(code:String);

@@ -21,16 +21,21 @@ extern class ApplicationCommandPermissionsManager {
 }
 
 typedef SetApplicationCommandPermissionsOptions = {
-	> AddApplicationCommandPermissionsOptions,
-	@:optional var fullPermissions:Array<{}>;
+	> BaseApplicationCommandPermissionsOptions,
+	@:optional var fullPermissions:Array<GuildApplicationCommandPermissionData>;
 	@:optional var permissions:Array<ApplicationCommandPermissionData>;
 }
 
 typedef AddApplicationCommandPermissionsOptions = {
-	@:optional var guild:GuildResolvable;
-	@:optional var command:ApplicationCommandResolvable;
-
+	> BaseApplicationCommandPermissionsOptions,
+	var permissions:Array<ApplicationCommandPermissionData>;
 }
+
+typedef GuildApplicationCommandPermissionData = {
+	@:optional var id:Snowflake;
+	@:optional var permissions:Array<ApplicationCommandPermissionData>;
+}
+
 
 typedef ApplicationCommandPermissionData = {
 	var id:Snowflake;
@@ -39,8 +44,8 @@ typedef ApplicationCommandPermissionData = {
 }
 
 typedef BaseApplicationCommandPermissionsOptions = {
-	var guild:GuildResolvable;
-	var command:EitherType<ApplicationCommand, Snowflake>;
+	@:optional var guild:GuildResolvable;
+	@:optional var command:EitherType<ApplicationCommand, Snowflake>;
 }
 
 typedef RemoveApplicationCommandPermissionsOptions = {

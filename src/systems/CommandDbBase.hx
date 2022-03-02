@@ -1,7 +1,9 @@
 package systems;
 
-import firebase.firestore.Firestore;
-import firebase.app.FirebaseApp;
+import firebase.web.firestore.DocumentReference;
+import firebase.web.app.FirebaseApp;
+import firebase.web.firestore.Firestore;
+import firebase.web.firestore.Firestore.*;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import ecs.System;
@@ -12,7 +14,7 @@ abstract class CommandDbBase extends System {
 	@:fastFamily var commands:{command:Command, interaction:BaseCommandInteraction};
 
 	override function update(_) {
-		if (!Main.connected) {
+		if (!Main.connected || !Main.commands_active) {
 			return;
 		}
 		iterate(commands, entity -> {
@@ -21,6 +23,10 @@ abstract class CommandDbBase extends System {
 				this.commands.remove(entity);
 			}
 		});
+	}
+	
+	public inline function addDoc<T>(path:String, data:T, success:(doc:DocumentReference<T>) -> Void, failure:(error:Dynamic) -> Void) {
+		Firestore.addDoc(collection(this.db, path), data).then(success, failure);
 	}
 
 	private inline function get_db() {

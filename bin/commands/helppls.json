@@ -1,0 +1,80 @@
+[
+	{
+		"id": 1,
+		"question": [
+			"What kind of question do you need to ask?"
+		],
+		"valid_input": [
+			{
+				"key": "1",
+				"name": "General",
+				"questions": [
+					{
+						"id": 2,
+						"question": "Please describe your issue",
+						"state": "describe"
+					}
+				]
+			},
+			{
+				"key": "2",
+				"name": "Error message",
+				"questions": [
+					{
+						"id": 3, 
+						"question": [
+							"What is your error message?"
+						],
+						"state": "error_message"
+					},
+					{
+						"id": 4,
+						"question": [
+							"Please provide a brief snippet of code related to the error."
+						],
+						"state": "provide_code"
+					}
+				]
+			},
+			{
+				"key": "3",
+				"name": "Unexpected behaviour",
+				"questions": [
+					{
+						"id": 5, 
+						"question": [
+							"What do you expect to happen?"
+						],
+						"state": "expected_behaviour"
+					},
+					{
+						"id": 6,
+						"question": [
+							"What is happening?"
+						],
+						"state": "what_is_happening"
+					}
+				]
+			},
+			{
+				"key": "-1",
+				"name": "Discussion"
+			},
+			{
+				"key": "-1",
+				"name": "Other"
+			}
+		],
+		"state": "question_type"
+	},
+	{
+		"id": 7,
+		"question": "Please enter a title for your thread.",
+		"state": "title"
+	},
+	{
+		"id": 8,
+		"question": "Finish test",
+		"state": "finished"
+	}
+]

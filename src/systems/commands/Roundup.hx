@@ -53,22 +53,15 @@ class Roundup extends CommandBase {
 		super.update(_);
 		if (!this.set_permissions && Main.commands_active && Main.commands.exists(this.name)) {
 			this.set_permissions = true;
-
 			var command = Main.getCommand(this.name);
 			if (command != null) {
-				command.permissions.set({
-					guild: '162395145352904705',
-					command: command.id,
-					permissions: [
-						{
-							id: '661960123035418629',
-							type: USER,
-							permission: true
-						}
-					]
-				}).then(function(command) {
-					trace('Updated permissions for ' + this.name);
-				});
+				command.setCommandPermission([
+					{
+						id: '661960123035418629',
+						type: USER,
+						permission: true
+					}
+				]);
 			}
 		}
 		#if block
