@@ -8785,9 +8785,22 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		return null;
 	}
 	,getChannelId: function(channel) {
-		if(channel == "test") {
+		switch(channel) {
+		case "ceramic":
+			return "853414608747364352";
+		case "haxe":
+			return "162395145352904705";
+		case "haxeui":
+			return "565569107701923852";
+		case "heaps":
+			return "501408700142059520";
+		case "openfl":
+			return "769686284318146561";
+		case "test":
 			return "597067735771381771";
-		} else {
+		case "tools":
+			return "459827960006967325";
+		default:
 			return channel;
 		}
 	}

@@ -638,12 +638,12 @@ class Helppls extends CommandDbBase {
 
 	function getChannelId(channel:String) {
 		return switch (channel) {
-			// case 'haxe': '162395145352904705';
-			// case 'haxeui': '565569107701923852';
-			// case 'tools': '459827960006967325';
-			// case 'heaps': '501408700142059520';
-			// case 'ceramic': '853414608747364352';
-			// case 'openfl': '769686284318146561';
+			case 'haxe': '162395145352904705';
+			case 'haxeui': '565569107701923852';
+			case 'tools': '459827960006967325';
+			case 'heaps': '501408700142059520';
+			case 'ceramic': '853414608747364352';
+			case 'openfl': '769686284318146561';
 			case 'test': '597067735771381771';
 			default: channel;
 		}
