@@ -6,6 +6,7 @@ import ecs.System;
 
 abstract class CommandBase extends System {
 	@:fastFamily var commands:{command:Command, interaction:BaseCommandInteraction};
+
 	override function update(_) {
 		if (!Main.connected || !Main.commands_active) {
 			return;
@@ -21,5 +22,10 @@ abstract class CommandBase extends System {
 	abstract function run(command:Command, interaction:BaseCommandInteraction):Void;
 
 	var name(get, never):String;
+
 	abstract function get_name():String;
+
+	inline function err(err) {
+		trace(err);
+	}
 }

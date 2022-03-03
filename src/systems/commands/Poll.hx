@@ -71,10 +71,6 @@ class Poll extends CommandBase {
 		}
 	}
 
-	function err(err) {
-		trace(err);
-	}
-
 	inline function createEmbed(content:String) {
 		var embed = new MessageEmbed();
 

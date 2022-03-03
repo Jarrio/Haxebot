@@ -117,6 +117,12 @@ class Helppls extends CommandDbBase {
 					}
 
 					channel.send({content: 'Was this thread solved?'}).then(function(message) {
+						if (content.solution != null) {
+							content.solution.attempt += 1;
+							content.solution.timestamp = Timestamp.now();
+							Firestore.updateDoc(docs.docs[0].ref, 'solution', content.solution);
+						}
+						
 						DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
 							if (user.bot) {
 								return;
@@ -259,7 +265,7 @@ class Helppls extends CommandDbBase {
 				for (doc in docs.docs) {
 					var data = doc.data();
 					var start = data.timestamp.toDate().getTime();
-					if (data.solution != null && data.solution.timestamp != null) {
+					if (data.solution != null && data.solution.timestamp != null && data.solution.user != null) {
 						if(!fbDateWithinTimeout(Timestamp.now(), data.solution.timestamp, this.solution_timeout)) {
 							var command = Main.getCommand('helpdescription');
 							if (command != null) {
@@ -537,7 +543,6 @@ class Helppls extends CommandDbBase {
 		switch (command.content) {
 			case Helppls(topic):
 				this.state.set(interaction.user.id, HelpState.question_type);
-
 				this.session.set(interaction.user.id, {
 					author: {
 						name: interaction.user.tag,
@@ -644,8 +649,12 @@ class Helppls extends CommandDbBase {
 			case 'heaps': '501408700142059520';
 			case 'ceramic': '853414608747364352';
 			case 'openfl': '769686284318146561';
+			case 'flixel': '165234904815239168';
 			case 'test': '597067735771381771';
-			default: channel;
+			default: {
+				trace('failed to find a channel id');
+				channel;
+			};
 		}
 	}
 

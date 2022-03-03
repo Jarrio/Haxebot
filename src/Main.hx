@@ -205,6 +205,10 @@ class Main {
 		return null;
 	}
 
+	static function err(err) {
+		trace(err);
+	}
+	
 	static function saveCommand(command:ApplicationCommand) {
 		Main.commands.set(command.name, command);
 		trace('registered ${command.name}');
