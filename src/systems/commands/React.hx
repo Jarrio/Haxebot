@@ -21,7 +21,7 @@ class React extends CommandBase {
 			var channel = split[1].replace('<#', '').replace('>', '');
 
 			message.client.channels.fetch(channel).then(channel -> {
-				channel.messages.fetch(split[2]).then(react_message -> {
+				channel.messages.fetch(split[2]).then(function(react_message){
 					react_message.react(split[3]);
 					message.delete();
 				});

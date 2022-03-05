@@ -465,7 +465,7 @@ class Helppls extends CommandDbBase {
 		}
 
 		Main.client.channels.fetch(thread_id).then(function(channel) {
-			channel.messages.fetch({after: start_id}, {force: true}).then(callback, err);
+			channel.messages.fetch({after: start_id}, {force: true}).then(cast callback, err);
 		}, err);
 	}
 
