@@ -16,7 +16,7 @@ class Hi extends CommandBase {
 				default: "Hey you, what's up?";
 			}
 		}
-		interaction.reply({content: message});
+		interaction.reply({content: message}).then(null, err);
 	}
 
 	function get_name():String {

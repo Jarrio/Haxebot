@@ -8884,7 +8884,7 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = "Hey you, what's up?";
 			}
 		}
-		interaction.reply({ content : message});
+		interaction.reply({ content : message}).then(null,$bind(this,this.err));
 	}
 	,get_name: function() {
 		return "hi";
