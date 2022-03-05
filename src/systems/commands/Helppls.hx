@@ -105,6 +105,7 @@ class Helppls extends CommandDbBase {
 					if (docs.size != 1) {
 						return;
 					}
+					
 
 					var content = docs.docs[0].data();
 					content.discussion = discussion;
