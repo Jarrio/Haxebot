@@ -50,7 +50,7 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, Haxelib, Helppls, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
+						Hi, Help, Haxelib, Helppls, React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
 					]
 				}
 			]

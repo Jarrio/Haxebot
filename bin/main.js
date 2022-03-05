@@ -644,8 +644,8 @@ Main.universe = null;
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(13);
-	var this11 = new Array(13);
+	var this1 = new Array(14);
+	var this11 = new Array(14);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -723,41 +723,45 @@ Main.start = function() {
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_React(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Roundup(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Run(u);
+	var s = new systems_commands_Roundup(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_Run(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_ScamPrevention(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
+	s.onEnabled();
+	var s = new systems_commands_ScamPrevention(u);
+	phase.systems[13] = s;
+	phase.enabledSystems[13] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -9038,6 +9042,56 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
 	,__class__: systems_commands_Poll
+});
+var systems_commands_React = function(_universe) {
+	this.set_permission = false;
+	systems_CommandBase.call(this,_universe);
+	this.messages = this.universe.families.get(1);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
+};
+$hxClasses["systems.commands.React"] = systems_commands_React;
+systems_commands_React.__name__ = "systems.commands.React";
+systems_commands_React.__super__ = systems_CommandBase;
+systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
+	set_permission: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
+			if(forward != "react" || message[0].author.id != "151104106973495296") {
+				continue;
+			}
+			var split = [message[0].content.split(" ")];
+			var channel = StringTools.replace(StringTools.replace(split[0][1],"<#",""),">","");
+			message[0].client.channels.fetch(channel).then((function(split,message) {
+				return function(channel) {
+					return channel.messages.fetch(split[0][2]).then((function(split,message) {
+						return function(react_message) {
+							react_message.react(split[0][3]);
+							message[0].delete();
+						};
+					})(split,message));
+				};
+			})(split,message));
+			this.messages.remove(entity);
+		}
+	}
+	,get_name: function() {
+		return "react";
+	}
+	,run: function(command,interaction) {
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_React
 });
 var systems_commands_Roundup = function(_universe) {
 	this.set_permissions = false;
