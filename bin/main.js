@@ -8904,38 +8904,39 @@ systems_commands_Notify.__super__ = systems_CommandBase;
 systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	getRole: function(channel) {
 		switch(channel) {
-		case "<#165234904815239168>":case "flixel":
+		case "165234904815239168":case "flixel":
 			return "761714697468248125";
-		case "<#286485321925918721>":case "announcements":
-			return "761714325227700225";
-		case "<#501447516852715525>":case "kha":
-			return "761714809179209818";
-		case "<#565569107701923852>":case "haxeui":
+		case "565569107701923852":case "haxeui":
 			return "761714853403820052";
-		case "<#853414608747364352>":case "ceramic":
+		case "853414608747364352":case "ceramic":
 			return "914171888748609546";
-		case "<#561254298449739776>":case "dvorak":
+		case "286485321925918721":case "announcements":
+			return "761714325227700225";
+		case "561254298449739776":case "dvorak":
 			return "903006951896666153";
-		case "<#501408700142059520>":case "heaps":
+		case "501408700142059520":case "heaps":
 			return "761714775902126080";
+		case "501447516852715525":case "kha":
+			return "761714809179209818";
 		default:
 			return "err";
 		}
 	}
 	,run: function(command,interaction) {
+		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 9) {
-			var _g1 = 0;
-			var _g2 = _g.channel.split(" ");
-			while(_g1 < _g2.length) {
-				var channel = [_g2[_g1]];
-				++_g1;
-				var role = this.getRole(channel[0]);
-				if(role == "err") {
-					continue;
-				}
+			var channel = _g.channel;
+			var role = this.getRole(channel);
+			if(role == "err") {
+				haxe_Log.trace(channel,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 34, className : "systems.commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 35, className : "systems.commands.Notify", methodName : "run"});
+				interaction.reply("Invalid channel");
+				return;
+			}
+			interaction.member.fetch(true).then(function(member) {
 				var found = false;
-				var jsIterator = interaction.member.roles.cache.entries();
+				var jsIterator = member.roles.cache.entries();
 				var _g_lastStep = jsIterator.next();
 				while(!_g_lastStep.done) {
 					var v = _g_lastStep.value;
@@ -8947,19 +8948,15 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 					}
 				}
 				if(found) {
-					interaction.member.roles.remove(role).then((function(channel) {
-						return function(success) {
-							interaction.reply("Unsubscribed from " + channel[0] + " updates");
-						};
-					})(channel),$bind(this,this.err));
+					interaction.member.roles.remove(role).then(function(success) {
+						interaction.reply("Unsubscribed from <#" + channel + "> updates");
+					},$bind(_gthis,_gthis.err));
 				} else {
-					interaction.member.roles.add(role).then((function(channel) {
-						return function(success) {
-							interaction.reply("Subscribed to " + channel[0] + " updates");
-						};
-					})(channel),$bind(this,this.err));
+					interaction.member.roles.add(role).then(function(success) {
+						interaction.reply("Subscribed to <#" + channel + "> updates");
+					},$bind(_gthis,_gthis.err));
 				}
-			}
+			},$bind(this,this.err));
 		}
 	}
 	,get_name: function() {
