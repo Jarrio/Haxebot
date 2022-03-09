@@ -816,53 +816,55 @@ Main.start = function() {
 			}
 			return;
 		}
-		if(StringTools.startsWith(message.content,"!run")) {
-			var code = message.toString();
-			var _ecsTmpEntity = Main.universe.createEntity();
-			Main.universe.components.set(_ecsTmpEntity,4,code);
-			Main.universe.components.set(_ecsTmpEntity,3,message);
-			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-			var ecsTmpFamily = Main.universe.families.get(2);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
+		if(channel.type == "GUILD_TEXT" && !message.author.bot) {
+			if(StringTools.startsWith(message.content,"!run")) {
+				var code = message.toString();
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,code);
+				Main.universe.components.set(_ecsTmpEntity,3,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 			}
-			var ecsTmpFamily = Main.universe.families.get(1);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
+			if(StringTools.startsWith(message.content,"!react")) {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"react");
+				Main.universe.components.set(_ecsTmpEntity,3,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 			}
-		}
-		if(StringTools.startsWith(message.content,"!react")) {
-			var _ecsTmpEntity = Main.universe.createEntity();
-			Main.universe.components.set(_ecsTmpEntity,2,"react");
-			Main.universe.components.set(_ecsTmpEntity,3,message);
-			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-			var ecsTmpFamily = Main.universe.families.get(1);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
-			}
-			var ecsTmpFamily = Main.universe.families.get(2);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
-			}
-		}
-		if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
-			var _ecsTmpEntity = Main.universe.createEntity();
-			Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
-			Main.universe.components.set(_ecsTmpEntity,3,message);
-			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-			var ecsTmpFamily = Main.universe.families.get(1);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
-			}
-			var ecsTmpFamily = Main.universe.families.get(2);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
+			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
+				Main.universe.components.set(_ecsTmpEntity,3,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 			}
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 121, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 122, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 123, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 124, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -923,9 +925,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 178, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 179, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 182, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -962,18 +964,18 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 209, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 211, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 214, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 216, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 221, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 223, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -9471,7 +9473,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
 			return false;
 		}
-		return !new EReg("(\\}\\})|(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
+		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
 	}
 	,insertLoopBreak: function(code) {
 		var varname = "";
@@ -9818,6 +9820,29 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		};
 		links.request();
 	}
+	,checkEquality: function(message) {
+		var orig = null;
+		var messages = this.trigger_messages.h[message.author.id];
+		if(Object.prototype.hasOwnProperty.call(this.trigger_messages.h,message.author.id) && messages != null) {
+			orig = messages[0];
+		}
+		if(orig == null) {
+			return;
+		}
+		var count = messages.length;
+		var matches = 0;
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			if(message.content == orig.content) {
+				++matches;
+			}
+		}
+		if(matches == count) {
+			haxe_Log.trace("scam",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "checkEquality"});
+		}
+	}
 	,checkHistory: function() {
 		var _gthis = this;
 		var h = this.time_since.h;
@@ -9859,49 +9884,41 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 										}
 									}
 								}
-								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 118, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 143, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 								var channel = message[0].channel;
-								channel.sendTyping().then((function(message,id) {
+								var _g = 0;
+								var _g1 = _gthis.phishing_urls;
+								while(_g < _g1.length) {
+									var link = _g1[_g];
+									++_g;
+									if(message[0].content.indexOf(link) != -1) {
+										guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
+										channel.send("User <@" + id[0] + "> has been auto banned for phishing links.").then(null,$bind(_gthis,_gthis.err));
+										return;
+									}
+								}
+								var embed = _gthis.reformatMessage(message[0]);
+								message[0].reply({ content : "<@&198916468312637440> Please review this message by: <@" + message[0].author.id + ">", embeds : [embed]}).then((function(message,id) {
 									return function(_) {
-										var _g = 0;
-										var _g1 = _gthis.phishing_urls;
-										while(_g < _g1.length) {
-											var link = _g1[_g];
-											++_g;
-											if(message[0].content.indexOf(link) != -1) {
-												channel.sendTyping().then((function(id) {
-													return function(_) {
-														guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
-														channel.send("User <@" + id[0] + "> has been auto banned for phishing links.");
-													};
-												})(id),null);
-												return;
-											}
+										message[0].delete().then(null,$bind(_gthis,_gthis.err));
+										var _this = _gthis.time_since;
+										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+											delete(_this.h[id[0]]);
 										}
-										var embed = _gthis.reformatMessage(message[0]);
-										message[0].reply({ content : "<@&198916468312637440> Please review this message by: <@" + message[0].author.id + ">", embeds : [embed]}).then((function(message,id) {
-											return function(_) {
-												message[0].delete();
-												var _this = _gthis.time_since;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-												var _this = _gthis.sequential_tags;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-												var _this = _gthis.user_list;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-												var _this = _gthis.trigger_messages;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-											};
-										})(message,id));
+										var _this = _gthis.sequential_tags;
+										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+											delete(_this.h[id[0]]);
+										}
+										var _this = _gthis.user_list;
+										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+											delete(_this.h[id[0]]);
+										}
+										var _this = _gthis.trigger_messages;
+										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+											delete(_this.h[id[0]]);
+										}
 									};
-								})(message,id),$bind(_gthis,_gthis.err));
+								})(message,id));
 							};
 						})(message,id),$bind(_gthis,_gthis.err));
 					};
