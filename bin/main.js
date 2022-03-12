@@ -8213,6 +8213,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	,__class__: systems_commands_Helpdescription
 });
 var systems_commands_Helppls = function(universe) {
+	this.initial_request_timeout = 14400000;
 	this.check_verified_interval = 86400000;
 	this.validate_timout = 86400000;
 	this.check_threads_interval = 1800000;
@@ -8230,7 +8231,8 @@ var systems_commands_Helppls = function(universe) {
 	this.dm_messages = universe.families.get(1);
 	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
-	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 62, className : "systems.commands.Helppls", methodName : "new"});
+	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 65, className : "systems.commands.Helppls", methodName : "new"});
+	this.threads_last_checked = new Date().getTime();
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8249,17 +8251,18 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,check_threads_interval: null
 	,validate_timout: null
 	,check_verified_interval: null
+	,initial_request_timeout: null
 	,checkExistingThreads: function(data) {
 		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
 		var now = new Date().getTime();
-		if(now - timestamp < 60000) {
+		if(now - timestamp < this.initial_request_timeout) {
 			return;
 		}
 		if(data.solution != null && data.solution.timestamp != null) {
 			timestamp = data.solution.timestamp.toDate().getTime();
 		}
-		if(data.solution != null && data.solution.timestamp != null && now - timestamp < this.solution_timeout) {
+		if(now - timestamp < this.solution_timeout) {
 			return;
 		}
 		var callback = function(messages) {
@@ -8417,14 +8420,13 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 					if(docs.empty) {
 						return;
 					}
-					var now = new Date().getTime();
 					var _g = 0;
 					var _g1 = docs.docs;
 					while(_g < _g1.length) {
 						var doc = [_g1[_g]];
 						++_g;
 						var data = [doc[0].data()];
-						var start = data[0].timestamp.toDate().getTime();
+						data[0].timestamp.toDate();
 						if(data[0].solution != null && data[0].solution.timestamp != null && data[0].solution.user != null) {
 							if(!Util_fbDateWithinTimeout(firebase_web_firestore_Timestamp.now(),data[0].solution.timestamp,_gthis.solution_timeout)) {
 								var command = Main.getCommand("helpdescription");
@@ -8444,9 +8446,6 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 									})(data,doc));
 								}
 							}
-						}
-						if(now - start < 60000) {
-							continue;
 						}
 						_gthis.checkExistingThreads(data[0]);
 					}
@@ -8608,7 +8607,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var embed = this.createThreadEmbed(session);
 		embed.setAuthor({ name : message.author.tag, iconURL : message.author.avatarURL()});
 		if(embed.description.length < 30) {
-			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 429, className : "systems.commands.Helppls", methodName : "handleFinished"});
+			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 433, className : "systems.commands.Helppls", methodName : "handleFinished"});
 			this.clearData(author);
 			message.reply({ content : "Not enough answers to provide sufficient support"});
 			return;
@@ -8672,7 +8671,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			content.id = value.id;
 			var path = "test2/" + content.topic + "/threads";
 			firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),content).then(function(_) {
-				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 496, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
+				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 500, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
 			},$bind(_gthis,_gthis.err));
 		},$bind(this,this.err));
 	}
@@ -8823,7 +8822,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		case "tools":
 			return "459827960006967325";
 		default:
-			haxe_Log.trace("failed to find a channel id",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 656, className : "systems.commands.Helppls", methodName : "getChannelId"});
+			haxe_Log.trace("failed to find a channel id",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 660, className : "systems.commands.Helppls", methodName : "getChannelId"});
 			return channel;
 		}
 	}

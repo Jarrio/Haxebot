@@ -1,5 +1,6 @@
 package systems.commands;
 
+import discord_js.Activity;
 import ecs.Entity;
 import firebase.web.firestore.DocumentReference;
 import shared.TStoreContent;
@@ -48,6 +49,7 @@ class Helppls extends CommandDbBase {
 	final solution_timeout = 60000;
 	final check_threads_interval = 60000 * 30;
 	final check_verified_interval = 60000;
+	final initial_request_timeout = 60000 * 5;
 	final review_thread = '946834684741050398';
 	#else	
 	final review_thread = '948626893148663838';
@@ -55,25 +57,30 @@ class Helppls extends CommandDbBase {
 	final check_threads_interval = 60000 * 30;
 	final validate_timout = 60000 * 60 * 24;
 	final check_verified_interval = 60000 * 60 * 24;
+	final initial_request_timeout = 60000 * 60 * 4;
 	#end
 
 	public function new(universe) {
 		super(universe);
 		this.questions = loadFile(this.name);
+		#if !block
+		this.threads_last_checked = Date.now().getTime();
+		#end
 	}
 
 	function checkExistingThreads(data:TStoreContent) {
 		var timestamp = data.timestamp.toDate().getTime();
 		var now = Date.now().getTime();
-		if (now - timestamp < 60000) {
+
+		if (now - timestamp < this.initial_request_timeout) {
 			return;
 		}
-
+		
 		if (data.solution != null && data.solution.timestamp != null) {
 			timestamp = data.solution.timestamp.toDate().getTime();
 		}
 
-		if (data.solution != null && data.solution.timestamp != null && now - timestamp < this.solution_timeout) {
+		if (now - timestamp < this.solution_timeout) {
 			return;
 		}
 
@@ -290,9 +297,6 @@ class Helppls extends CommandDbBase {
 						}
 					}
 
-					if (now - start < 60000) {
-						continue;
-					}
 					this.checkExistingThreads(data);
 				}
 			}, err);
