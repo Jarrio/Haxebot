@@ -21,6 +21,11 @@ function hasRole(role:String, interaction:BaseCommandInteraction) {
 	return (interaction.guild.available && guild!.members!.has(interaction.user.id));
 }
 
+function withinTime(time:Float, timeout:Float) {
+	var now = Date.now().getTime();
+	return now - time < timeout;
+}
+
 function dateWithinTimeout(a:Date, b:Date, timeout:Float) {
 	if (a == null || b == null) {
 		return false;

@@ -1856,6 +1856,10 @@ function Util_hasRole(role,interaction) {
 		return false;
 	}
 }
+function Util_withinTime(time,timeout) {
+	var now = new Date().getTime();
+	return now - time < timeout;
+}
 function Util_dateWithinTimeout(a,b,timeout) {
 	if(a == null || b == null) {
 		return false;
@@ -8149,8 +8153,25 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 					if(valid == null) {
 						return;
 					}
-					firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
-						collector.stop("Reviewed validation.");
+					var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + topic);
+					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
+						return transaction.get(doc).then(function(doc) {
+							if(!doc.exists()) {
+								return { id : -1, threads : 0};
+							}
+							var data = doc.data();
+							data.id += 1;
+							data.threads += 1;
+							transaction.update(doc.ref,data);
+							return data;
+						});
+					}).then(function(value) {
+						if(value.id == -1) {
+							return;
+						}
+						firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
+							collector.stop("Reviewed validation.");
+						},$bind(_gthis,_gthis.err));
 					},$bind(_gthis,_gthis.err));
 				});
 			});
@@ -9819,29 +9840,6 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		};
 		links.request();
 	}
-	,checkEquality: function(message) {
-		var orig = null;
-		var messages = this.trigger_messages.h[message.author.id];
-		if(Object.prototype.hasOwnProperty.call(this.trigger_messages.h,message.author.id) && messages != null) {
-			orig = messages[0];
-		}
-		if(orig == null) {
-			return;
-		}
-		var count = messages.length;
-		var matches = 0;
-		var _g = 0;
-		while(_g < messages.length) {
-			var message = messages[_g];
-			++_g;
-			if(message.content == orig.content) {
-				++matches;
-			}
-		}
-		if(matches == count) {
-			haxe_Log.trace("scam",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "checkEquality"});
-		}
-	}
 	,checkHistory: function() {
 		var _gthis = this;
 		var h = this.time_since.h;
@@ -9883,41 +9881,49 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 										}
 									}
 								}
-								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 143, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
+								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 118, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
 								var channel = message[0].channel;
-								var _g = 0;
-								var _g1 = _gthis.phishing_urls;
-								while(_g < _g1.length) {
-									var link = _g1[_g];
-									++_g;
-									if(message[0].content.indexOf(link) != -1) {
-										guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
-										channel.send("User <@" + id[0] + "> has been auto banned for phishing links.").then(null,$bind(_gthis,_gthis.err));
-										return;
-									}
-								}
-								var embed = _gthis.reformatMessage(message[0]);
-								message[0].reply({ content : "<@&198916468312637440> Please review this message by: <@" + message[0].author.id + ">", embeds : [embed]}).then((function(message,id) {
+								channel.sendTyping().then((function(message,id) {
 									return function(_) {
-										message[0].delete().then(null,$bind(_gthis,_gthis.err));
-										var _this = _gthis.time_since;
-										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-											delete(_this.h[id[0]]);
+										var _g = 0;
+										var _g1 = _gthis.phishing_urls;
+										while(_g < _g1.length) {
+											var link = _g1[_g];
+											++_g;
+											if(message[0].content.indexOf(link) != -1) {
+												channel.sendTyping().then((function(id) {
+													return function(_) {
+														guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
+														channel.send("User <@" + id[0] + "> has been auto banned for phishing links.");
+													};
+												})(id),null);
+												return;
+											}
 										}
-										var _this = _gthis.sequential_tags;
-										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-											delete(_this.h[id[0]]);
-										}
-										var _this = _gthis.user_list;
-										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-											delete(_this.h[id[0]]);
-										}
-										var _this = _gthis.trigger_messages;
-										if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-											delete(_this.h[id[0]]);
-										}
+										var embed = _gthis.reformatMessage(message[0]);
+										message[0].reply({ content : "<@&198916468312637440> Please review this message by: <@" + message[0].author.id + ">", embeds : [embed]}).then((function(message,id) {
+											return function(_) {
+												message[0].delete();
+												var _this = _gthis.time_since;
+												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+													delete(_this.h[id[0]]);
+												}
+												var _this = _gthis.sequential_tags;
+												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+													delete(_this.h[id[0]]);
+												}
+												var _this = _gthis.user_list;
+												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+													delete(_this.h[id[0]]);
+												}
+												var _this = _gthis.trigger_messages;
+												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
+													delete(_this.h[id[0]]);
+												}
+											};
+										})(message,id));
 									};
-								})(message,id));
+								})(message,id),$bind(_gthis,_gthis.err));
 							};
 						})(message,id),$bind(_gthis,_gthis.err));
 					};

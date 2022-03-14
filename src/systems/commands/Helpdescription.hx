@@ -122,8 +122,26 @@ class Helpdescription extends CommandDbBase {
 						return;
 					}
 
-					Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id, 'validated_timestamp', Timestamp.now()).then(function(_) {
-						collector.stop('Reviewed validation.');
+					var doc = doc(db, 'test2/$topic');
+
+					Firestore.runTransaction(this.db, function(transaction) {
+						return transaction.get(doc).then(function(doc) {
+							if (!doc.exists()) {
+								return {id: -1, threads: 0};
+							}
+							var data:TThreadInfo = doc.data();
+							data.id = data.id + 1;
+							data.threads = data.threads + 1;
+							transaction.update(doc.ref, data);
+							return data;
+						});
+					}).then(function(value) {
+						if (value.id == -1) {
+							return;
+						}
+						Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id, 'validated_timestamp', Timestamp.now()).then(function(_) {
+							collector.stop('Reviewed validation.');
+						}, err);
 					}, err);
 				});
 			});
@@ -177,3 +195,8 @@ class Helpdescription extends CommandDbBase {
 		return 'helpdescription';
 	}
 }
+
+typedef TThreadInfo = {
+	var id:Int;
+	var threads:Int;
+}; 

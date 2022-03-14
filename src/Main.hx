@@ -103,17 +103,19 @@ class Main {
 				return;
 			}
 
-			if (message.content.startsWith("!run")) {
-				var code:RunMessage = message.toString();
-				universe.setComponents(universe.createEntity(), code, message);
-			}
+			if (channel.type == 'GUILD_TEXT' && !message.author.bot) {
+				if (message.content.startsWith("!run")) {
+					var code:RunMessage = message.toString();
+					universe.setComponents(universe.createEntity(), code, message);
+				}
 
-			if (message.content.startsWith("!react")) {
-				universe.setComponents(universe.createEntity(), CommandForward.react, message);
-			}
+				if (message.content.startsWith("!react")) {
+					universe.setComponents(universe.createEntity(), CommandForward.react, message);
+				}
 
-			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
-				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+				if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+					universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+				}
 			}
 		});
 
@@ -208,7 +210,7 @@ class Main {
 	static function err(err) {
 		trace(err);
 	}
-	
+
 	static function saveCommand(command:ApplicationCommand) {
 		Main.commands.set(command.name, command);
 		trace('registered ${command.name}');
