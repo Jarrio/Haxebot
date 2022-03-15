@@ -1,5 +1,12 @@
 package discord_js;
 
+import discord_js.FileOptions;
+import discord_js.MessageMentionOptions;
+import discord_js.MessageEmbed;
+import discord_js.Message;
+import discord_js.DMChannel;
+import haxe.extern.EitherType;
+
 @:jsRequire("discord.js", "TextChannel") extern class TextChannel {
 	function new(guild:Guild, ?data:Dynamic);
 	public var messages : MessageManager;
@@ -3310,6 +3317,7 @@ package discord_js;
 	@:overload(function(content:Dynamic, options:ts.AnyOf4<MessageEmbed, MessageAttachment, Array<ts.AnyOf2<MessageEmbed, MessageAttachment>>, Dynamic>):js.lib.Promise<Message> { })
 	@:overload(function(content:Dynamic, options:Dynamic):js.lib.Promise<Array<Message>> { })
 	@:overload(function(content:Dynamic, options:MessageOptions):js.lib.Promise<ts.AnyOf2<Message, Array<Message>>> { })
-	dynamic function send(content:ts.AnyOf10<String, Float, { }, Bool, js.lib.Symbol, MessageEmbed, MessageAttachment, Array<ts.AnyOf2<MessageEmbed, MessageAttachment>>, haxe.ds.ReadOnlyArray<Dynamic>, Dynamic>):js.lib.Promise<Message>;
+	dynamic function send(options:MessageOptions):js.lib.Promise<Message>;
 	static var prototype : TextChannel;
 }
+
