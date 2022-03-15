@@ -42,7 +42,7 @@ typedef EmbedFooterData = {
 	public function setImage(url:String):MessageEmbed;
 	public function setThumbnail(url:String):MessageEmbed;
 	public function setTimestamp(?timestamp:ts.AnyOf2<Float, js.lib.Date>):MessageEmbed;
-	public function setTitle(title:Dynamic):MessageEmbed;
+	public function setTitle(title:String):MessageEmbed;
 	public function setURL(url:String):MessageEmbed;
 	public function spliceFields(index:Float, deleteCount:Float, fields:haxe.extern.Rest<Any>):MessageEmbed;
 	public function toJSON():Dynamic;

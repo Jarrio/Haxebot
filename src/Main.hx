@@ -113,9 +113,7 @@ class Main {
 					universe.setComponents(universe.createEntity(), CommandForward.react, message);
 				}
 
-				if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
-					universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
-				}
+				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 			}
 		});
 

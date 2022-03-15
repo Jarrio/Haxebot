@@ -770,6 +770,7 @@ Main.start = function() {
 		u.families.tryActivate(idx);
 	}
 	Main.universe = u;
+	haxe_Log.trace("DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG",{ fileName : "src/Main.hx", lineNumber : 60, className : "Main", methodName : "start"});
 	Main.client = new discord_$js_Client({ intents : ["GUILDS","GUILD_MESSAGES","DIRECT_MESSAGES","GUILD_MEMBERS","GUILD_MESSAGE_REACTIONS"]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
@@ -846,25 +847,23 @@ Main.start = function() {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
-			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
-				Main.universe.components.set(_ecsTmpEntity,3,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
+			var _ecsTmpEntity = Main.universe.createEntity();
+			Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
+			Main.universe.components.set(_ecsTmpEntity,3,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
 			}
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 123, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 124, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 121, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 122, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -925,9 +924,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 182, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 178, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 179, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -964,18 +963,18 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 211, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 209, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 216, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 214, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 223, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 221, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -8058,9 +8057,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.check_verified_interval = 86400000;
+	this.review_thread = "946834684741050398";
+	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
-	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -8069,9 +8068,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
-	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
+	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 7) {
@@ -8225,7 +8224,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return null;
+			return "haxe";
 		}
 	}
 	,get_name: function() {
@@ -8234,12 +8233,12 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	,__class__: systems_commands_Helpdescription
 });
 var systems_commands_Helppls = function(universe) {
-	this.initial_request_timeout = 14400000;
-	this.check_verified_interval = 86400000;
-	this.validate_timout = 86400000;
+	this.review_thread = "946834684741050398";
+	this.initial_request_timeout = 300000;
+	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
-	this.solution_timeout = 1800000;
-	this.review_thread = "948626893148663838";
+	this.solution_timeout = 60000;
+	this.validate_timout = 60000;
 	this.thread_timeout = 1800000;
 	this.valid_filters = ["skip","cancel","c"];
 	this.threads_last_checked = -1;
@@ -8253,7 +8252,6 @@ var systems_commands_Helppls = function(universe) {
 	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(2);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(3);
 	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 65, className : "systems.commands.Helppls", methodName : "new"});
-	this.threads_last_checked = new Date().getTime();
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8267,12 +8265,12 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,threads_last_checked: null
 	,valid_filters: null
 	,thread_timeout: null
-	,review_thread: null
+	,validate_timout: null
 	,solution_timeout: null
 	,check_threads_interval: null
-	,validate_timout: null
 	,check_verified_interval: null
 	,initial_request_timeout: null
+	,review_thread: null
 	,checkExistingThreads: function(data) {
 		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
@@ -8624,7 +8622,6 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var author = message.author.id;
 		var session = this.session.h[author];
-		var topic = session.topic;
 		var embed = this.createThreadEmbed(session);
 		embed.setAuthor({ name : message.author.tag, iconURL : message.author.avatarURL()});
 		if(embed.description.length < 30) {
@@ -8634,7 +8631,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			return;
 		}
 		var title = this.getResponseFromSession(author,"title").answer;
-		message.client.channels.fetch(this.getChannelId(topic)).then(function(channel) {
+		message.client.channels.fetch(this.getChannelId("test")).then(function(channel) {
 			channel.send({ embeds : [embed]}).then(function(channel_message) {
 				channel_message.startThread({ name : title}).then(function(thread) {
 					_gthis.remoteSaveQuestion(message,channel_message.url,thread.id);
@@ -9173,7 +9170,6 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,set_permissions: null
 	,update: function(_) {
-		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
 		var tmp;
 		if(!this.set_permissions && Main.commands_active) {
@@ -9190,20 +9186,6 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				util_DiscordUtil.setCommandPermission(command,[{ id : "661960123035418629", type : "USER", permission : true}]);
 			}
 		}
-		if(this.channel == null && this.checking_channel == false) {
-			this.checking_channel = true;
-			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
-				_gthis.channel = channel;
-				_gthis.checking_channel = false;
-			},function(error) {
-				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 76, className : "systems.commands.Roundup", methodName : "update"});
-			});
-		}
-		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
-			return;
-		}
-		this.last_checked = new Date().getTime();
-		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -9699,6 +9681,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,__properties__: {get_base_path:"get_base_path"}
 });
 var systems_commands_ScamPrevention = function(_universe) {
+	this.last_message_interval = 10000;
 	this.phishing_urls = [];
 	this.trigger_messages = new haxe_ds_StringMap();
 	this.user_list = new haxe_ds_StringMap();
@@ -9719,6 +9702,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 	,trigger_messages: null
 	,phishing_urls: null
 	,phishing_update_time: null
+	,last_message_interval: null
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
 		var _this = this.messages;
@@ -9732,17 +9716,21 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			if(forward != "scam_prevention") {
 				continue;
 			}
-			var user = message.author.id;
-			var count = 0;
-			if(Object.prototype.hasOwnProperty.call(this.sequential_tags.h,user)) {
-				count = this.sequential_tags.h[user];
+			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+				var user = message.author.id;
+				var count = 0;
+				if(Object.prototype.hasOwnProperty.call(this.sequential_tags.h,user)) {
+					count = this.sequential_tags.h[user];
+				}
+				this.sequential_tags.h[user] = count + 1;
 			}
-			this.sequential_tags.h[user] = count + 1;
-			var user1 = message.author.id;
-			var this1 = this.time_since;
-			var value = new Date().getTime();
-			this1.h[user1] = value;
-			this.addMessage(message.author.id,message);
+			if(Util_withinTime(message.createdTimestamp,this.last_message_interval)) {
+				var user1 = message.author.id;
+				var this1 = this.time_since;
+				var value = new Date().getTime();
+				this1.h[user1] = value;
+				this.addMessage(message.author.id,message);
+			}
 			this.messages.remove(_);
 		}
 		var _gthis = this;
@@ -9754,15 +9742,56 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 80, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 81, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 114, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 115, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
 			};
 			links.request();
 		}
-		this.checkHistory();
+		var h = this.trigger_messages.h;
+		var messages_keys = Object.keys(h);
+		var messages_length = messages_keys.length;
+		var messages_current = 0;
+		while(messages_current < messages_length) {
+			var messages = h[messages_keys[messages_current++]];
+			if(this.checkPhishingLinks(messages)) {
+				this.banUser(messages[0]);
+				continue;
+			}
+			if(messages.length < 3) {
+				continue;
+			}
+			var review = false;
+			if(this.checkTags(messages)) {
+				review = true;
+			}
+			if(this.checkEquality(messages)) {
+				review = true;
+			}
+			if(!review) {
+				continue;
+			}
+			this.reviewMessage(messages);
+			var id = messages[0].author.id;
+			var _this = this.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this1 = this.sequential_tags;
+			if(Object.prototype.hasOwnProperty.call(_this1.h,id)) {
+				delete(_this1.h[id]);
+			}
+			var _this2 = this.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this2.h,id)) {
+				delete(_this2.h[id]);
+			}
+			var _this3 = this.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this3.h,id)) {
+				delete(_this3.h[id]);
+			}
+		}
 		var h = this.time_since.h;
 		var _g1_keys = Object.keys(h);
 		var _g1_length = _g1_keys.length;
@@ -9772,7 +9801,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			var _g2_value = h[key];
 			var id = key;
 			var value = _g2_value;
-			if(new Date().getTime() - value > 10000) {
+			if(new Date().getTime() - value > this.last_message_interval) {
 				var _this = this.time_since;
 				if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
 					delete(_this.h[id]);
@@ -9792,6 +9821,24 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			}
 		}
 	}
+	,reviewMessage: function(messages) {
+		var _gthis = this;
+		var message = messages[0];
+		var embed = this.reformatMessage(null,message);
+		if(embed == null || embed.description.length == 0) {
+			return;
+		}
+		this.timeoutUser(message,function(_) {
+			message.reply({ content : "<@&198916468312637440> Please review this message by: <@" + message.author.id + ">", embeds : [embed]}).then(function(_) {
+				var _g = 0;
+				while(_g < messages.length) {
+					var message = messages[_g];
+					++_g;
+					message.delete().then(null,$bind(_gthis,_gthis.err));
+				}
+			},$bind(_gthis,_gthis.err));
+		});
+	}
 	,resetChecks: function(id) {
 		var _this = this.time_since;
 		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
@@ -9810,16 +9857,6 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			delete(_this.h[id]);
 		}
 	}
-	,getLastMessage: function(id) {
-		var messages = this.trigger_messages.h[id];
-		if(messages == null) {
-			return null;
-		}
-		if(messages.length != 3) {
-			return null;
-		}
-		return messages[messages.length - 1];
-	}
 	,getPhishingLinks: function() {
 		var _gthis = this;
 		if(new Date().getTime() - this.phishing_update_time < 21600000) {
@@ -9832,115 +9869,143 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 80, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 81, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 114, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 115, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
 		};
 		links.request();
 	}
-	,checkHistory: function() {
+	,timeoutUser: function(message,callback) {
 		var _gthis = this;
-		var h = this.time_since.h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			var _g1_value = h[key];
-			var id = [key];
-			var time = [_g1_value];
-			var tag_count = this.sequential_tags.h[id[0]];
-			if(tag_count < 3) {
-				continue;
+		message.guild.members.fetch(message.author.id).then(function(guild_member) {
+			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
+			guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then(callback,$bind(_gthis,_gthis.err));
+			var id = message.author.id;
+			var _this = _gthis.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
 			}
-			if(new Date().getTime() - time[0] < 10000) {
-				var messages = this.trigger_messages.h[id[0]];
-				var message = [messages == null ? null : messages.length != 3 ? null : messages[messages.length - 1]];
-				if(message[0] == null) {
-					continue;
+			var _this = _gthis.sequential_tags;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+		},$bind(this,this.err));
+	}
+	,banUser: function(message,callback) {
+		var _gthis = this;
+		message.guild.members.fetch(message.author.id).then(function(guild_member) {
+			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"BAN");
+			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
+			var id = message.author.id;
+			var _this = _gthis.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.sequential_tags;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,$bind(_gthis,_gthis.err));
+		},$bind(this,this.err));
+	}
+	,logMessage: function(id,embed,action) {
+		embed.description += "\n\n Action: **__" + action + "__**";
+		Main.client.channels.fetch("952952631079362650").then(function(channel) {
+			channel.send({ content : "<@" + id + ">", embeds : [embed]});
+		},$bind(this,this.err));
+	}
+	,checkPhishingLinks: function(messages) {
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			var _g1 = 0;
+			var _g2 = this.phishing_urls;
+			while(_g1 < _g2.length) {
+				var link = _g2[_g1];
+				++_g1;
+				if(message.content.indexOf(link) != -1) {
+					return true;
 				}
-				message[0].guild.members.fetch(id[0]).then((function(message,time,id) {
-					return function(guild_member) {
-						_gthis.time_since.h[id[0]] = time[0] - 15000;
-						guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then((function(message,id) {
-							return function(_) {
-								var messages = _gthis.trigger_messages.h[id[0]];
-								if(messages != null) {
-									var _g = 0;
-									while(_g < messages.length) {
-										var item = messages[_g];
-										++_g;
-										if(message[0].content != item.content || message[0].id == item.id) {
-											continue;
-										}
-										try {
-											item.delete();
-										} catch( _g1 ) {
-										}
-									}
-								}
-								haxe_Log.trace("user: " + guild_member.user.tag + " has been timed out",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 118, className : "systems.commands.ScamPrevention", methodName : "checkHistory"});
-								var channel = message[0].channel;
-								channel.sendTyping().then((function(message,id) {
-									return function(_) {
-										var _g = 0;
-										var _g1 = _gthis.phishing_urls;
-										while(_g < _g1.length) {
-											var link = _g1[_g];
-											++_g;
-											if(message[0].content.indexOf(link) != -1) {
-												channel.sendTyping().then((function(id) {
-													return function(_) {
-														guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
-														channel.send("User <@" + id[0] + "> has been auto banned for phishing links.");
-													};
-												})(id),null);
-												return;
-											}
-										}
-										var embed = _gthis.reformatMessage(message[0]);
-										message[0].reply({ content : "<@&198916468312637440> Please review this message by: <@" + message[0].author.id + ">", embeds : [embed]}).then((function(message,id) {
-											return function(_) {
-												message[0].delete();
-												var _this = _gthis.time_since;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-												var _this = _gthis.sequential_tags;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-												var _this = _gthis.user_list;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-												var _this = _gthis.trigger_messages;
-												if(Object.prototype.hasOwnProperty.call(_this.h,id[0])) {
-													delete(_this.h[id[0]]);
-												}
-											};
-										})(message,id));
-									};
-								})(message,id),$bind(_gthis,_gthis.err));
-							};
-						})(message,id),$bind(_gthis,_gthis.err));
-					};
-				})(message,time,id),$bind(this,this.err));
 			}
 		}
+		return false;
 	}
-	,reformatMessage: function(message) {
+	,checkTags: function(messages) {
+		var tag_count = 0;
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+				if(tag_count >= 3) {
+					break;
+				}
+				++tag_count;
+			}
+		}
+		if(tag_count >= 3) {
+			return true;
+		}
+		return false;
+	}
+	,checkEquality: function(messages) {
+		var equality_count = 0;
+		var channel_count = 0;
+		var compare = messages[0];
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			var content = message.content;
+			if(compare.content == content) {
+				++equality_count;
+			}
+			if(compare.channel.id != message.channel.id) {
+				++channel_count;
+			}
+		}
+		if(equality_count == messages.length && equality_count >= 3 && channel_count >= 4) {
+			return true;
+		}
+		return false;
+	}
+	,reformatMessage: function(title,message,format) {
+		if(format == null) {
+			format = true;
+		}
 		var embed = new discord_$js_MessageEmbed();
 		var content = message.content;
-		var link_regex = new EReg("(https?://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\\d*)/?([a-z_/0-9\\-#.]*)\\??([a-z_/0-9\\-#=&]*)","ig");
-		if(link_regex.match(content)) {
-			content = content.replace(link_regex.r,"[Link Removed]");
+		if(title != null) {
+			embed.setTitle(title);
+		}
+		if(format) {
+			var link_regex = new EReg("(https?://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\\d*)/?([a-z_/0-9\\-#.]*)\\??([a-z_/0-9\\-#=&]*)","ig");
+			if(link_regex.match(content)) {
+				content = content.replace(link_regex.r,"[Link Removed]");
+			}
 		}
 		var rand = Math.random();
 		var avatar = rand >= 0 && rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true&rf=1" : rand >= 0.33 && rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";
-		embed.setAuthor({ name : "Caution!", iconURL : avatar});
+		embed.setAuthor({ name : "" + message.author.tag, iconURL : avatar});
 		embed.setDescription(content);
 		return embed;
 	}
@@ -10139,7 +10204,7 @@ Main.commands = new haxe_ds_StringMap();
 Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
-Main.guild_id = "162395145352904705";
+Main.guild_id = "416069724158427137";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;
