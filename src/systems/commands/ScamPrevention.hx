@@ -129,7 +129,7 @@ class ScamPrevention extends CommandBase {
 			guild_member.ban({
 				days: 1,
 				reason: "found phishing links, auto banned."
-			});
+			}).then(null, err);
 			this.resetChecks(message.author.id);
 			message.channel.asType0.send('User <@${message.author.id}> has been auto banned for sending scam links.').then(callback, err);
 		}, err);

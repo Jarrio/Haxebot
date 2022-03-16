@@ -9902,7 +9902,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		var _gthis = this;
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"BAN");
-			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."});
+			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,$bind(_gthis,_gthis.err));
 			var id = message.author.id;
 			var _this = _gthis.time_since;
 			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
@@ -10128,7 +10128,7 @@ systems_commands_mod_Ban.prototype = $extend(systems_CommandBase.prototype,{
 														if(days == null) {
 															days = 1;
 														}
-														member.ban({ days : days, reason : reason});
+														member.ban({ days : days, reason : reason}).then(null,$bind(_gthis,_gthis.err));
 													};
 												})(),$bind(_gthis,_gthis.err));
 											};

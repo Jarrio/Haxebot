@@ -94,10 +94,11 @@ class Ban extends CommandBase {
 											if (days == null) {
 												days = 1;
 											}
+
 											member.ban({
 												days: days,
 												reason: reason
-											});
+											}).then(null, err);
 										}, err);
 									});
 								}
