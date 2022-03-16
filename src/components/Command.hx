@@ -1,6 +1,5 @@
 package components;
 
-import systems.commands.Poll.PollTypes;
 import discord_js.User;
 
 typedef Command = {
@@ -11,6 +10,7 @@ typedef Command = {
 @:keep
 enum CommandOptions {
 	Hi;
+	Ban(user:User, reason:String, delete_messages:String);
 	React(emoji:String, message_id:String);
 	Helppls(topic:String);
 	Boop(user:User);

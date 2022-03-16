@@ -11,7 +11,7 @@ import haxe.extern.EitherType;
 	function new(guild:Guild, ?data:Dynamic);
 	public var messages : MessageManager;
 	public var nsfw : Bool;
-	public var type : String;
+	public var type : ChannelType;
 	public var rateLimitPerUser : Float;
 	public var topic : Null<String>;
 	public var threads:ThreadManager;

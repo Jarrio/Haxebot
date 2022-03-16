@@ -22,7 +22,7 @@ class React extends CommandBase {
 
 			message.client.channels.fetch(channel).then(channel -> {
 				channel.messages.fetch(split[2]).then(function(react_message){
-					react_message.react(split[3]);
+					react_message.asType0.react(split[3]);
 					message.delete();
 				});
 			});

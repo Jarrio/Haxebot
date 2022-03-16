@@ -29,3 +29,4 @@ abstract class CommandBase extends System {
 		trace(err);
 	}
 }
+

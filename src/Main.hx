@@ -25,6 +25,7 @@ import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
 import systems.commands.*;
+import systems.commands.mod.*;
 import firebase.web.app.FirebaseApp;
 
 class Main {
@@ -50,7 +51,7 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, Haxelib, Helppls, React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
+						Hi, Help, Ban, Haxelib, Helppls, React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
 					]
 				}
 			]
@@ -81,13 +82,14 @@ class Main {
 				Timers.setTimeout(function() {
 					Main.client.application.commands.create(cast get_commands[count]).then(function(command) {
 						saveCommand(command);
-						count++;
+						
 						if (count + 1 != get_commands.length) {
 							createCommand();
 						} else {
 							trace('Commands activated!');
 							commands_active = true;
 						}
+						count++;
 					}, err);
 				}, 250);
 			}
@@ -96,14 +98,14 @@ class Main {
 
 		client.on('messageCreate', (message:Message) -> {
 			var channel = (message.channel : TextChannel);
-			if (channel.type == 'DM' && !message.author.bot) {
+			if (channel.type == DM && !message.author.bot) {
 				if (dm_help_tracking.exists(message.author.id)) {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
 				}
 				return;
 			}
 
-			if (channel.type == 'GUILD_TEXT' && !message.author.bot) {
+			if (channel.type == GUILD_TEXT && !message.author.bot) {
 				if (message.content.startsWith("!run")) {
 					var code:RunMessage = message.toString();
 					universe.setComponents(universe.createEntity(), code, message);
@@ -137,6 +139,7 @@ class Main {
 					dm_help_tracking.set(interaction.user.id, time);
 				default:
 			}
+
 			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 
 			for (value in config.commands) {
@@ -238,6 +241,11 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
+			#if block
+			if (command.name != "ban") {
+				continue;
+			}
+			#end
 			var permission = command.is_public == null ? true : command.is_public;
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultPermission(permission);
 			if (command.params != null) {
