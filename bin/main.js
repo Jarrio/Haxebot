@@ -2495,6 +2495,7 @@ ecs_Phase.prototype = {
 		if(this.enabled) {
 			return;
 		}
+		this.enabled = true;
 		var _g = 0;
 		var _g1 = this.systems.length;
 		while(_g < _g1) {
@@ -2508,6 +2509,7 @@ ecs_Phase.prototype = {
 		if(!this.enabled) {
 			return;
 		}
+		this.enabled = false;
 		var _g = 0;
 		var _g1 = this.systems.length;
 		while(_g < _g1) {
@@ -2569,8 +2571,8 @@ ecs_Universe.prototype = {
 		return this.entities.create();
 	}
 	,deleteEntity: function(_entity) {
-		this.components.clear(_entity);
 		this.families.whenEntityDestroyed(_entity);
+		this.components.clear(_entity);
 		this.entities.destroy(ecs_Entity.id(_entity));
 	}
 	,getPhase: function(_name) {
@@ -2619,6 +2621,13 @@ ecs_core_ComponentManager.prototype = {
 		bits_Bits.unset(this.flags[ecs_Entity.id(_entity)],_id);
 	}
 	,clear: function(_entity) {
+		var _g = 0;
+		var _g1 = this.components;
+		while(_g < _g1.length) {
+			var set = _g1[_g];
+			++_g;
+			set.set(_entity,null);
+		}
 		bits_Bits.clear(this.flags[ecs_Entity.id(_entity)]);
 	}
 	,__class__: ecs_core_ComponentManager
@@ -2691,15 +2700,12 @@ ecs_core_FamilyManager.prototype = {
 		}
 	}
 	,whenEntityDestroyed: function(_entity) {
-		var compFlags = this.components.flags[ecs_Entity.id(_entity)];
 		var _g = 0;
 		var _g1 = this.families;
 		while(_g < _g1.length) {
 			var family = _g1[_g];
 			++_g;
-			if(!bits_Bits.areSet(compFlags,family.componentsMask)) {
-				family.remove(_entity);
-			}
+			family.remove(_entity);
 		}
 	}
 	,__class__: ecs_core_FamilyManager
