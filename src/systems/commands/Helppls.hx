@@ -386,14 +386,14 @@ class Helppls extends CommandDbBase {
 				}
 				message.author.send({embeds: [this.createEmbed(out)]});
 			}
-			this.dm_messages.remove(entity);
+			this.universe.deleteEntity(entity);
 		});
 		super.update(_);
 	}
 
 	function reply(entity:Entity, message:Message, content:String) {
 		message.reply({content: content}).then(null, err);
-		this.dm_messages.remove(entity);
+		this.universe.deleteEntity(entity);
 	}
 
 	function isFilter(input:String) {

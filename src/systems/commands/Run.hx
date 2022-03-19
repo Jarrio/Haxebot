@@ -38,7 +38,7 @@ class Run extends System {
 		iterate(code_messages, entity -> {
 			if (message.startsWith('!run')) {
 				this.run(message, response);
-				this.code_messages.remove(entity);
+				this.universe.deleteEntity(entity);
 			}
 		});
 	}

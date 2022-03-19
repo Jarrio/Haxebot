@@ -1,0 +1,12 @@
+TypeError: Cannot read properties of undefined (reading '0')
+    at Object.bits_Bits.set (/root/Haxebot/bin/main.js:1922:3)
+    at ecs_core_ComponentManager.set (/root/Haxebot/bin/main.js:2616:13)
+    at Client.<anonymous> (/root/Haxebot/bin/main.js:854:29)
+    at Client.emit (node:events:390:28)
+    at MessageCreateAction.handle (/root/Haxebot/bin/node_modules/discord.js/src/client/actions/MessageCreate.js:26:14)
+    at Object.module.exports [as MESSAGE_CREATE] (/root/Haxebot/bin/node_modules/discord.js/src/client/websocket/handlers/MESSAGE_CREATE.js:4:32)
+    at WebSocketManager.handlePacket (/root/Haxebot/bin/node_modules/discord.js/src/client/websocket/WebSocketManager.js:351:31)
+    at WebSocketShard.onPacket (/root/Haxebot/bin/node_modules/discord.js/src/client/websocket/WebSocketShard.js:444:22)
+    at WebSocketShard.onMessage (/root/Haxebot/bin/node_modules/discord.js/src/client/websocket/WebSocketShard.js:301:10)
+    at WebSocket.onMessage (/root/Haxebot/bin/node_modules/ws/lib/event-target.js:199:18)
+----

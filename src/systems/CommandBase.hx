@@ -14,7 +14,7 @@ abstract class CommandBase extends System {
 		iterate(commands, entity -> {
 			if (command.name == this.name) {
 				this.run(command, interaction);
-				this.commands.remove(entity);
+				this.universe.deleteEntity(entity);
 			}
 		});
 	}

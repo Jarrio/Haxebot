@@ -27,7 +27,7 @@ class React extends CommandBase {
 				});
 			});
 
-			messages.remove(entity);
+			this.universe.deleteEntity(entity);
 		});
 	}
 

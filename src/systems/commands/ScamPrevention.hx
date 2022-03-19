@@ -26,7 +26,7 @@ class ScamPrevention extends CommandBase {
 
 	override function update(_:Float) {
 		super.update(_);
-		iterate(messages, _ -> {
+		iterate(messages, entity -> {
 			if (forward != scam_prevention) {
 				continue;
 			}
@@ -36,9 +36,9 @@ class ScamPrevention extends CommandBase {
 				this.addMessage(message.author.id, message);
 			}
 
-			messages.remove(_);
+			this.universe.deleteEntity(entity);
 		});
-
+	
 		this.getPhishingLinks();
 
 		for (messages in this.trigger_messages) {

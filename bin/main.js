@@ -7634,7 +7634,7 @@ systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
 			if(command.name == this.get_name()) {
 				this.run(command,interaction);
-				this.commands.remove(entity);
+				this.universe.deleteEntity(entity);
 			}
 		}
 	}
@@ -7673,7 +7673,7 @@ systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
 			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
 			if(command.name == this.get_name()) {
 				this.run(command,interaction);
-				this.commands.remove(entity);
+				this.universe.deleteEntity(entity);
 			}
 		}
 	}
@@ -8576,13 +8576,13 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 				embed.setDescription(out);
 				message1.send({ embeds : [embed]});
 			}
-			this.dm_messages.remove(entity);
+			this.universe.deleteEntity(entity);
 		}
 		systems_CommandDbBase.prototype.update.call(this,_);
 	}
 	,reply: function(entity,message,content) {
 		message.reply({ content : content}).then(null,$bind(this,this.err));
-		this.dm_messages.remove(entity);
+		this.universe.deleteEntity(entity);
 	}
 	,isFilter: function(input) {
 		var _g = 0;
@@ -9108,7 +9108,7 @@ systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
 					})(split,message));
 				};
 			})(split,message));
-			this.messages.remove(entity);
+			this.universe.deleteEntity(entity);
 		}
 	}
 	,get_name: function() {
@@ -9348,7 +9348,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			var response = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
 			if(StringTools.startsWith(message,"!run")) {
 				this.run(message,response);
-				this.code_messages.remove(entity);
+				this.universe.deleteEntity(entity);
 			}
 		}
 	}
@@ -9737,9 +9737,9 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		var _active = _this.isActive();
 		var _g_idx = _set.size() - 1;
 		while(_active && _g_idx >= 0) {
-			var _ = _set.getDense(_g_idx--);
-			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(_);
-			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(_);
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
 			if(forward != "scam_prevention") {
 				continue;
 			}
@@ -9750,7 +9750,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				this1.h[user] = value;
 				this.addMessage(message.author.id,message);
 			}
-			this.messages.remove(_);
+			this.universe.deleteEntity(entity);
 		}
 		var _gthis = this;
 		if(!(new Date().getTime() - this.phishing_update_time < 21600000)) {
