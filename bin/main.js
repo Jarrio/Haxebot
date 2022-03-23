@@ -9761,8 +9761,8 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -9876,8 +9876,8 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -9942,6 +9942,14 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				var link = _g2[_g1];
 				++_g1;
 				if(message.content.indexOf(link) != -1) {
+					var regex = new EReg("((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
+					if(regex.match(message.content)) {
+						var url = new URL(regex.matched(1));
+						var url_host_regex = new EReg("(.*)?.?(discordapp.com)","gu");
+						if(url_host_regex.match(url.hostname)) {
+							return false;
+						}
+					}
 					return true;
 				}
 			}

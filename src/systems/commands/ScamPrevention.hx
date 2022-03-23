@@ -1,5 +1,6 @@
 package systems.commands;
 
+import js.html.URL;
 import discord_js.MessageEmbed;
 import discord_js.TextChannel;
 import sys.io.File;
@@ -147,6 +148,14 @@ class ScamPrevention extends CommandBase {
 		for (message in messages) {
 			for (link in this.phishing_urls) {
 				if (message.content.contains(link)) {
+					var regex = ~/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/gm;
+					if (regex.match(message.content)) {
+						var url = new URL(regex.matched(1));
+						var url_host_regex = ~/(.*)?.?(discordapp.com)/gu;
+						if (url_host_regex.match(url.hostname)) {
+							return false;
+						}
+					}
 					return true;
 				}
 			}
