@@ -44,6 +44,9 @@ class Run extends System {
 	}
 
 	function run(message:String, response:Message) {
+		// #if block
+		// return;
+		// #end
 		if (this.haxe_version == null) {
 			var process = './haxe/haxe';
 			if (!FileSystem.exists(process)) {
@@ -69,7 +72,21 @@ class Run extends System {
 	}
 
 	function extractCode(message:String, response:Message) {
-		var check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
+		
+		var check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
+		if (check_code.match(message)) {
+			var regex = ~/(<code class="prettyprint haxe">)(.*?)(<\/code>)/gmius;
+			var get_code = new Http('https://try.haxe.org/embed/${check_code.matched(2)}');
+			get_code.onData = (data) -> {
+				if (regex.match(data)) {
+					this.parse(regex.matched(2).htmlUnescape(), response);
+				}
+			}
+			get_code.request();
+			return;
+		}
+		
+		check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
 		if (check_code.match(message)) {
 			this.parse(check_code.matched(4), response);
 			return;
@@ -82,18 +99,7 @@ class Run extends System {
 			return;
 		}
 
-		check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
-		if (check_code.match(message)) {
-			var regex = ~/(<code class="prettyprint haxe">)(.*?)(<\/code>)/gmius;
-			var get_code = new Http('https://try.haxe.org/embed/${check_code.matched(2)}');
-			get_code.onData = (data) -> {
-				if (regex.match(data)) {
-					this.parse(regex.matched(2).htmlUnescape(), response);
-				}
-			}
-			get_code.request();
-			return;
-		}
+
 
 		this.parse(null, response);
 	}

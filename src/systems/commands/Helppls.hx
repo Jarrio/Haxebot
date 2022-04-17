@@ -477,9 +477,7 @@ class Helppls extends CommandDbBase {
 		var author = message.author.id;
 		var content = this.session.get(author);
 		var now = Timestamp.now();
-		var title = this.getResponseFromSession(author, title).answer;
 		content.source_url = url;
-		content.title = title;
 		content.thread_id = thread;
 		content.timestamp = now;
 
@@ -573,7 +571,8 @@ class Helppls extends CommandDbBase {
 					solution: null,
 					valid: null,
 					solution_requested: null,
-					validated_timestamp: null
+					validated_timestamp: null,
+					posted_discord: true
 				});
 
 				this.qid.set(interaction.user.id, 1);

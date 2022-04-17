@@ -4,6 +4,7 @@ import firebase.web.firestore.Timestamp;
 
 typedef TThreadData = {
 	var id:Int;
+	@:optional var uid:String;
 	var author:TAuthor;
 	var title:String;
 	var start_message_id:String;
@@ -17,6 +18,7 @@ typedef TThreadData = {
 	var solution:TThreadSolution;
 	var solution_requested:Timestamp;
 	var valid:Bool;
+	var posted_discord:Bool;
 	var validated_by:String;
 	var validated_timestamp:Timestamp;
 }

@@ -8,6 +8,7 @@
     "discord-api-types": "0.20.2",
     "discord.js": "^13.6.0",
     "firebase": "^9.6.2",
+    "node-fetch": "^2.6.7",
     "node-html-parser": "^5.1.0",
     "vm2": "^3.9.5"
   },
