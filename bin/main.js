@@ -774,7 +774,6 @@ Main.start = function() {
 		u.families.tryActivate(idx);
 	}
 	Main.universe = u;
-	haxe_Log.trace("DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG",{ fileName : "src/Main.hx", lineNumber : 61, className : "Main", methodName : "start"});
 	Main.client = new discord_$js_Client({ intents : [1,512,4096,2,1024]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
@@ -996,9 +995,6 @@ Main.parseCommands = function() {
 	while(_g < command_defs.length) {
 		var command = command_defs[_g];
 		++_g;
-		if(command.name != "ban") {
-			continue;
-		}
 		var permission = command.is_public == null ? true : command.is_public;
 		var main_command = new discord_$builder_SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultPermission(permission);
 		if(command.params != null) {
@@ -8077,9 +8073,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.review_thread = "946834684741050398";
-	this.check_verified_interval = 60000;
+	this.check_verified_interval = 86400000;
 	this.check_threads_interval = 1800000;
+	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -8088,9 +8084,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
+	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
-	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 8) {
@@ -8244,7 +8240,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return "haxe";
+			return null;
 		}
 	}
 	,get_name: function() {
@@ -8253,12 +8249,12 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	,__class__: systems_commands_Helpdescription
 });
 var systems_commands_Helppls = function(universe) {
-	this.review_thread = "946834684741050398";
-	this.initial_request_timeout = 300000;
-	this.check_verified_interval = 60000;
+	this.initial_request_timeout = 14400000;
+	this.check_verified_interval = 86400000;
+	this.validate_timout = 86400000;
 	this.check_threads_interval = 1800000;
-	this.solution_timeout = 60000;
-	this.validate_timout = 60000;
+	this.solution_timeout = 1800000;
+	this.review_thread = "948626893148663838";
 	this.thread_timeout = 1800000;
 	this.valid_filters = ["skip","cancel","c"];
 	this.threads_last_checked = -1;
@@ -8272,6 +8268,7 @@ var systems_commands_Helppls = function(universe) {
 	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(4);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(1);
 	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 65, className : "systems.commands.Helppls", methodName : "new"});
+	this.threads_last_checked = new Date().getTime();
 };
 $hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
 systems_commands_Helppls.__name__ = "systems.commands.Helppls";
@@ -8285,12 +8282,12 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 	,threads_last_checked: null
 	,valid_filters: null
 	,thread_timeout: null
-	,validate_timout: null
+	,review_thread: null
 	,solution_timeout: null
 	,check_threads_interval: null
+	,validate_timout: null
 	,check_verified_interval: null
 	,initial_request_timeout: null
-	,review_thread: null
 	,checkExistingThreads: function(data) {
 		var _gthis = this;
 		var timestamp = data.timestamp.toDate().getTime();
@@ -8640,6 +8637,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var author = message.author.id;
 		var session = this.session.h[author];
+		var topic = session.topic;
 		var embed = this.createThreadEmbed(session);
 		embed.setAuthor({ name : message.author.tag, iconURL : message.author.avatarURL()});
 		if(embed.description.length < 30) {
@@ -8649,7 +8647,7 @@ systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
 			return;
 		}
 		var title = this.getResponseFromSession(author,"title").answer;
-		message.client.channels.fetch(this.getChannelId("test")).then(function(channel) {
+		message.client.channels.fetch(this.getChannelId(topic)).then(function(channel) {
 			channel.send({ embeds : [embed]}).then(function(channel_message) {
 				channel_message.startThread({ name : title}).then(function(thread) {
 					_gthis.remoteSaveQuestion(message,channel_message.url,thread.id);
@@ -9186,6 +9184,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,set_permissions: null
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
 		var tmp;
 		if(!this.set_permissions && Main.commands_active) {
@@ -9202,6 +9201,20 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				util_DiscordUtil.setCommandPermission(command,[{ id : "661960123035418629", type : "USER", permission : true}]);
 			}
 		}
+		if(this.channel == null && this.checking_channel == false) {
+			this.checking_channel = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking_channel = false;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 76, className : "systems.commands.Roundup", methodName : "update"});
+			});
+		}
+		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
+			return;
+		}
+		this.last_checked = new Date().getTime();
+		this.getHaxeIoPage();
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -9397,7 +9410,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 111, className : "systems.commands.Run", methodName : "deleteFile"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 109, className : "systems.commands.Run", methodName : "deleteFile"});
 		}
 	}
 	,extractLibs: function(code) {
@@ -9559,7 +9572,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 			code_content = this.insertLoopBreak(code_content);
 			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + message.author.tag + " | time: " + Std.string(new Date())),function(error) {
 				if(error != null) {
-					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 286, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace(error,{ fileName : "src/systems/commands/Run.hx", lineNumber : 284, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 				}
 				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
 				var $process = "./haxe/haxe";
@@ -9568,7 +9581,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 				}
 				var ls = js_node_ChildProcess.spawn($process,libs.concat(commands),{ timeout : _gthis.timeout});
 				ls.stderr.once("data",function(data) {
-					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 311, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Run.hx", lineNumber : 309, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					var compile_output = _gthis.cleanOutput(data,filename,class_entry);
 					message.reply({ content : mention + ("```\n" + compile_output + "```")});
 					ls.kill("SIGTERM");
@@ -9577,7 +9590,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 					var response = "";
 					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
 					if(!sys_FileSystem.exists(js_file)) {
-						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 322, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Run.hx", lineNumber : 320, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 						ls.kill("SIGTERM");
 						return;
 					}
@@ -9644,7 +9657,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
-								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 399, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 397, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 								return message.delete().then(null,null);
 							},null);
 							ls.kill();
@@ -9654,7 +9667,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						var _g1 = haxe_Exception.caught(_g);
 						var compile_output = _gthis.cleanOutput(_g1.get_message(),filename,class_entry);
 						message.reply({ content : mention + ("```\n" + compile_output + "```")});
-						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 408, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 406, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
@@ -9662,7 +9675,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 415, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 413, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -10326,7 +10339,7 @@ Main.commands = new haxe_ds_StringMap();
 Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;

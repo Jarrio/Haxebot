@@ -85,7 +85,7 @@ class Run extends System {
 			get_code.request();
 			return;
 		}
-		
+
 		check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
 		if (check_code.match(message)) {
 			this.parse(check_code.matched(4), response);
@@ -98,9 +98,7 @@ class Run extends System {
 			this.parse(check_code.matched(1), response);
 			return;
 		}
-
-
-
+		
 		this.parse(null, response);
 	}
 
