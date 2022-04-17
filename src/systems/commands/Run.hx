@@ -98,7 +98,7 @@ class Run extends System {
 			this.parse(check_code.matched(1), response);
 			return;
 		}
-		
+
 		this.parse(null, response);
 	}
 
@@ -373,7 +373,7 @@ class Run extends System {
 						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
 						embed.setDescription(desc);
 
-						var url = this.codeSource(code);
+						var url = this.codeSource(message.content);
 						var author = {
 							name: '@' + message.author.tag,
 							iconURL: message.author.displayAvatarURL()

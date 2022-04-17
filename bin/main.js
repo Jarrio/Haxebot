@@ -9642,7 +9642,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						}
 						var desc = "**Code:**\n```hx\n" + get_paths.code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
 						embed.setDescription(desc);
-						var url = _gthis.codeSource(code);
+						var url = _gthis.codeSource(message.content);
 						var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
 						if(url == "") {
 							embed.setAuthor(author);
