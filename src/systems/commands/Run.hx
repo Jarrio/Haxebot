@@ -210,7 +210,7 @@ class Run extends System {
 				return false;
 			}
 		}
-		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
 	function insertLoopBreak(code:String) {

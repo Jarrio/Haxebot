@@ -9507,7 +9507,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
 			return false;
 		}
-		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
+		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
 	}
 	,insertLoopBreak: function(code) {
 		var varname = "";
