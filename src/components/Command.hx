@@ -13,6 +13,7 @@ enum CommandOptions {
 	Ban(user:User, reason:String, delete_messages:String);
 	React(emoji:String, message_id:String);
 	Helppls(topic:String);
+	Trace(code:String);
 	Boop(user:User);
 	Poll(question:String, time:Int);
 	Roundup(number:Float);

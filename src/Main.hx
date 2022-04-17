@@ -51,7 +51,7 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, Ban, Haxelib, Helppls, React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention
+						Hi, Help, Ban, Haxelib, Helppls, React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention, Trace
 					]
 				}
 			]
@@ -242,7 +242,7 @@ class Main {
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
 			#if block
-			if (command.name != "ban") {
+			if (command.name != "trace") {
 				continue;
 			}
 			#end
