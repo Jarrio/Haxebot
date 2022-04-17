@@ -13,6 +13,7 @@ class Hi extends CommandBase {
 				case '781745960829059072': "Hi FS, don't make me go sleep :(";
 				case '415825875146375168': "Hey semmi, got any cool music tonight? \\o/";
 				case '215582414544699393': "Hello Bulby! ReAD ArCH NeWS! :face_with_hand_over_mouth:";
+				case '231872730478280705': "Hey logo, how jammy are you feeling today? :jam:";
 				default: "Hey you, what's up?";
 			}
 		}

@@ -8905,6 +8905,9 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 			case "215582414544699393":
 				message = "Hello Bulby! ReAD ArCH NeWS! :face_with_hand_over_mouth:";
 				break;
+			case "231872730478280705":
+				message = "Hey logo, how jammy are you feeling today? :jam:";
+				break;
 			case "415825875146375168":
 				message = "Hey semmi, got any cool music tonight? \\o/";
 				break;
