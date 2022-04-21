@@ -7,9 +7,6 @@ import components.Command;
 
 class Session extends CommandBase {
 	var rooms:Map<String, Room> = [];
-	override function onAdded() {
-		
-	}
 	
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
