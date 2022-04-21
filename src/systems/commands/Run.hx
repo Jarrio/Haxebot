@@ -1,20 +1,15 @@
 package systems.commands;
 
+import util.Random;
 import ecs.System;
-import discord_builder.BaseCommandInteraction;
-import js.lib.Object;
 import vm2.NodeVM;
-import js.Browser;
-import js.node.Process;
-import vm2.VM;
-import discord_js.Role;
 import js.node.Fs;
+import js.node.Timers;
 import haxe.Http;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
 import discord_js.Message;
-import components.Command;
 import js.node.ChildProcess.spawn;
 
 enum abstract RunMessage(String) from String to String {}
@@ -26,10 +21,7 @@ class Run extends System {
 	var code_requests:Map<String, Array<Float>> = [];
 	var channel:TextChannel;
 	var checked:Bool = false;
-	override function onAdded() {
-
-	}
-
+	var timeout = 5000;
 	override function update(_) {
 		if (!Main.connected) {
 			return;
@@ -44,14 +36,17 @@ class Run extends System {
 		}
 
 		iterate(code_messages, entity -> {
-			if (message.startsWith('!run ')) {
+			if (message.startsWith('!run')) {
 				this.run(message, response);
-				this.code_messages.remove(entity);
+				this.universe.deleteEntity(entity);
 			}
 		});
 	}
 
 	function run(message:String, response:Message) {
+		// #if block
+		// return;
+		// #end
 		if (this.haxe_version == null) {
 			var process = './haxe/haxe';
 			if (!FileSystem.exists(process)) {
@@ -63,7 +58,7 @@ class Run extends System {
 				ls.kill();
 			});
 		}
-		
+
 		this.extractCode(message, response);
 	}
 
@@ -77,13 +72,8 @@ class Run extends System {
 	}
 
 	function extractCode(message:String, response:Message) {
-		var check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
-		if (check_code.match(message)) {
-			this.parse(check_code.matched(4), response);
-			return;
-		}
-
-		check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
+		
+		var check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
 		if (check_code.match(message)) {
 			var regex = ~/(<code class="prettyprint haxe">)(.*?)(<\/code>)/gmius;
 			var get_code = new Http('https://try.haxe.org/embed/${check_code.matched(2)}');
@@ -96,11 +86,19 @@ class Run extends System {
 			return;
 		}
 
-		check_code = ~/!run (.*)/gmis;
+		check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
 		if (check_code.match(message)) {
+			this.parse(check_code.matched(4), response);
+			return;
+		}
+
+		check_code = ~/!run[\s|\n| \n](.*)/gmis;
+		if (check_code.match(message)) {
+			trace(check_code.matched(1));
 			this.parse(check_code.matched(1), response);
 			return;
 		}
+
 		this.parse(null, response);
 	}
 
@@ -151,7 +149,7 @@ class Run extends System {
 	function cleanOutput(data:String, filename:String, class_entry) {
 		data = data.toString();
 		var remove_vm = ~/(\[(.*|vm)\].*)$/igmu;
-		
+
 		data = data.replace(filename, class_entry).replace('', '');
 		data = data.replace(this.base_path, "");
 		data = data.replace("/hx/", "");
@@ -212,7 +210,28 @@ class Run extends System {
 				return false;
 			}
 		}
-		return !~/(\}\})|(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+	}
+
+	function insertLoopBreak(code:String) {
+		var varname = '';
+
+		var regex = ~/(while\s*\(.*\)\s*\{|while\s*\(.*?\))/gmui;
+		var copy = code;
+		var matched = [];
+
+		while (regex.match(code)) {
+			matched.push(regex.matched(1));
+			code = regex.matchedRight();
+		}
+
+		for (match in matched) {
+			varname = '___' + Random.string(6);
+			var start = 'final $varname = Date.now().getTime();';
+			var condition = 'if (Date.now().getTime() - $varname > ${this.timeout}) { break; }';
+			copy = copy.replace(match, start + '\n' + match + '\n' + condition);
+		}
+		return copy;
 	}
 
 	function runCodeOnThread(code:String, message:Message) {
@@ -258,6 +277,8 @@ class Run extends System {
 			}
 
 			code_content = format + '\n' + code_content;
+			code_content = this.insertLoopBreak(code_content);
+
 			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${message.author.tag} | time: ${Date.now()}', (error) -> {
 				if (error != null) {
 					trace(error);
@@ -271,15 +292,15 @@ class Run extends System {
 					'-js',
 					'${this.base_path}/bin/$filename.js'
 				];
-				
+
 				var process = './haxe/haxe';
 				if (!FileSystem.exists(process)) {
 					process = 'haxe';
 				}
 
-				var ls = spawn(process, libs.concat(commands), {timeout: 10000});
+				var ls = spawn(process, libs.concat(commands), {timeout: this.timeout});
 
-				//to debug code output
+				// to debug code output
 				// ls.stdout.on('data', (data:String) -> {
 				// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
 				// });
@@ -291,7 +312,7 @@ class Run extends System {
 					ls.kill('SIGTERM');
 					return;
 				});
-				
+
 				ls.once('close', (data) -> {
 					var response = "";
 					var js_file = '${this.base_path}/bin/$filename.js';
@@ -301,11 +322,13 @@ class Run extends System {
 						return;
 					}
 					var obj = null;
+
 					var vm = new NodeVM({
 						sandbox: obj,
 						console: 'redirect',
+						timeout: this.timeout,
 					});
-					
+
 					vm.on('console.log', (data, info) -> {
 						var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
 						if (regex.match(data)) {
@@ -320,7 +343,8 @@ class Run extends System {
 					});
 
 					try {
-						vm.runFile(js_file);
+						vm.run(sys.io.File.getContent(js_file));
+
 						var x = response.split('\n');
 						var truncated = false;
 						if (x.length > 24) {
@@ -336,7 +360,7 @@ class Run extends System {
 						var code_output = '';
 						var split = response.split('\n');
 						for (key => item in split) {
-							if (key >= split.length -1) {
+							if (key >= split.length - 1) {
 								break;
 							}
 							code_output += '$key. $item \n';
@@ -349,20 +373,25 @@ class Run extends System {
 						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
 						embed.setDescription(desc);
 
-						var url = this.codeSource(code);
+						var url = this.codeSource(message.content);
+						var author = {
+							name: '@' + message.author.tag,
+							iconURL: message.author.displayAvatarURL()
+						}
+
 						if (url == "") {
-							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+							embed.setAuthor(author);
 						} else {
 							var tag = url.split('#')[1];
 							embed.setTitle('TryHaxe #$tag');
 							embed.setURL(url);
-							embed.setAuthor('@${message.author.tag}', message.author.displayAvatarURL());
+							embed.setAuthor(author);
 						}
-						
+
 						var date = Date.fromTime(message.createdTimestamp);
 						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
-						embed.setFooter('Haxe ${this.haxe_version}', 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1');						
+						embed.setFooter({text: 'Haxe ${this.haxe_version}', iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'});
 						if (response.length > 0 && data == 0) {
 							message.reply({embeds: [embed]}).then((succ) -> {
 								trace('${message.author.tag} at $format_date with file id: ${filename}');
@@ -372,9 +401,11 @@ class Run extends System {
 							return;
 						}
 					} catch (e) {
+						var compile_output = this.cleanOutput(e.message, filename, class_entry);
+						message.reply({content: mention + '```\n${compile_output}```'});
 						trace(e);
 					}
-					return; 
+					return;
 				});
 			});
 			return;

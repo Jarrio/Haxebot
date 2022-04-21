@@ -6,6 +6,11 @@
 	},
 	{
 		"show_help": true,
+		"type": "poll",
+		"content": "Just a quick an easy way to create a basic poll for up to 3 days"
+	},
+	{
+		"show_help": true,
 		"type": "rtfm",
 		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `/rtfm heaps`"
 	},
@@ -22,6 +27,19 @@
 	{
 		"show_help": false,
 		"type": "fnf",
-		"content": "Hey, did you read the rules? We can't help with project/game specific issues. Please check out the appropriate discord server - https://discord.gg/YVMMkvjqhF"
+		"content": "Hey, did you read the rules? We can't help with project/game specific issues. Please check out the appropriate discord server - https://discord.gg/RZAcgZJnG8"
+	},
+	{
+		"show_help": true,
+		"type": "helppls",
+		"content": [
+			"This is a question and answer process that helps users get aid, whilst also providing extra help to the helpers. \n",
+			"Something that happens a lot is users will request for help without providing enough information for someone to help answer their question - this tool is here to work as a middle man to index and present that information in a clear way to get help faster. \n"
+		]
+	},
+	{
+		"show_help": false,
+		"type": "helppls_dm",
+		"content": ["If you would like to cancel your request or skip a question type `cancel` or `skip`. \n\nIf you are having issues or have found a bug please post all the information you can to the <#921583403520892939> channel."]
 	}
 ]

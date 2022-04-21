@@ -1,5 +1,6 @@
 package discord_js;
 
+import discord_js.ApplicationCommandManager.ApplicationCommandResolvable;
 import discord_js.RoleResolvable;
 import discord_js.UserResolvable;
 import haxe.extern.EitherType;
@@ -20,23 +21,31 @@ extern class ApplicationCommandPermissionsManager {
 }
 
 typedef SetApplicationCommandPermissionsOptions = {
-	> AddApplicationCommandPermissionsOptions,
-	@:optional var fullPermissions:Array<{}>;
-}
-
-typedef AddApplicationCommandPermissionsOptions = {
+	> BaseApplicationCommandPermissionsOptions,
+	@:optional var fullPermissions:Array<GuildApplicationCommandPermissionData>;
 	@:optional var permissions:Array<ApplicationCommandPermissionData>;
 }
 
+typedef AddApplicationCommandPermissionsOptions = {
+	> BaseApplicationCommandPermissionsOptions,
+	var permissions:Array<ApplicationCommandPermissionData>;
+}
+
+typedef GuildApplicationCommandPermissionData = {
+	@:optional var id:Snowflake;
+	@:optional var permissions:Array<ApplicationCommandPermissionData>;
+}
+
+
 typedef ApplicationCommandPermissionData = {
 	var id:Snowflake;
-	var type:Int;
+	var type:ApplicationCommandPermissionType;
 	var permission:Bool;
 }
 
 typedef BaseApplicationCommandPermissionsOptions = {
-	var guild:GuildResolvable;
-	var command:EitherType<ApplicationCommand, Snowflake>;
+	@:optional var guild:GuildResolvable;
+	@:optional var command:EitherType<ApplicationCommand, Snowflake>;
 }
 
 typedef RemoveApplicationCommandPermissionsOptions = {

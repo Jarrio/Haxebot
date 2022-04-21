@@ -1,0 +1,18 @@
+[submodule ".haxelib/firebase/git"]
+	path = .haxelib/firebase/git
+	url = https://github.com/Jarrio/firebase
+[submodule ".haxelib/safety/git"]
+	path = .haxelib/safety/git
+	url = https://github.com/RealyUniqueName/Safety
+[submodule ".haxelib/hxnodejs/git"]
+	path = .haxelib/hxnodejs/git
+	url = https://github.com/HaxeFoundation/hxnodejs
+[submodule ".haxelib/aidan-ecs/git"]
+	path = .haxelib/aidan-ecs/git
+	url = https://github.com/Aidan63/ecs
+[submodule ".haxelib/bits/git"]
+	path = .haxelib/bits/git
+	url = https://github.com/RealyUniqueName/Bits
+[submodule ".haxelib/jsimport/jsimport"]
+	path = .haxelib/jsimport/jsimport
+	url = https://github.com/haxiomic/jsImport

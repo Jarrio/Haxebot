@@ -24,28 +24,28 @@ class Api extends CommandBase {
 					case '165234904815239168': flixel;
 					case '501408700142059520': heaps;
 					case '769686258049351722': lime;
-					case '769686284318146561': openfl; //openfl channel
+					case '769686284318146561': openfl; // openfl channel
 					default: haxe;
 				}
-		
+
 				if (content.contains('Flx') || content.contains('flixel.')) {
 					docs = flixel;
 				}
-		
+
 				if (content.contains('haxe.')) {
 					docs = haxe;
 				}
-		
-				//temporarily pull docs from flixel's doc because i think the parser is having issues with
-				//openfl docs
+
+				// temporarily pull docs from flixel's doc because i think the parser is having issues with
+				// openfl docs
 				if (content.contains('openfl.')) {
 					docs = openfl;
 				}
-		
+
 				if (content.contains('lime.')) {
 					docs = lime;
 				}
-		
+
 				var check = ['h2d', 'h3d', 'hxd', 'hxsl'];
 				for (item in check) {
 					if (!content.contains(item)) {
@@ -54,7 +54,7 @@ class Api extends CommandBase {
 					docs = heaps;
 					break;
 				}
-		
+
 				extractDoxData(new ApiParams(docs, command), interaction);
 			default:
 		}
@@ -69,7 +69,7 @@ class Api extends CommandBase {
 			if (body == null) {
 				return;
 			}
-			
+
 			var sections = body.querySelectorAll('.section');
 			var cls_desc = body.querySelector('.doc-main').innerText;
 			var embed = new MessageEmbed();
@@ -78,7 +78,7 @@ class Api extends CommandBase {
 			embed.setURL(http.url);
 
 			var reply_body = '';
-			
+
 			for (key => item in body.querySelectorAll('.fields')) {
 				var id_check = ~/<span class="identifier">(.*?)<\/span/gm;
 				for (field in item.querySelectorAll('.field')) {
@@ -95,9 +95,9 @@ class Api extends CommandBase {
 						type = type.replace('static', '');
 						type = type.replace('read only', '(read only) ');
 						var desc = field.querySelector('.doc').innerText;
-						
+
 						var section = sections[key].innerText;
-						
+
 						reply_body += '**${section.substr(0, section.length - 1)}** \n```hx\n$type\n```';
 						if (desc.trim().length > 0) {
 							reply_body += '**Description**\n```$desc```';
@@ -109,7 +109,7 @@ class Api extends CommandBase {
 					}
 				}
 			}
-			
+
 			if (cls_desc.trim().length > 0) {
 				reply_body += '```\n$cls_desc\n```';
 			}
@@ -121,9 +121,8 @@ class Api extends CommandBase {
 		}
 
 		http.onError = function(msg) {
-			//trace('$msg | ${http.url}');
+			// trace('$msg | ${http.url}');
 			interaction.reply('An error occured finding the request.');
-			
 		}
 		http.request();
 	}
@@ -138,15 +137,13 @@ abstract ApiParams(TApiParams) {
 	public inline function new(base:String, command:Command) {
 		var split = null;
 		switch (command.content) {
-			case CommandOptions.Api(path): 
+			case CommandOptions.Api(path):
 				split = path.split(' ');
 			default:
 		}
-		
-		
+
 		if (split[2] != null) {
-			
-			base = switch(split[2].toLowerCase()) {
+			base = switch (split[2].toLowerCase()) {
 				case 'flixel': systems.commands.Api.flixel;
 				case 'haxe': systems.commands.Api.haxe;
 				case 'heaps': systems.commands.Api.heaps;

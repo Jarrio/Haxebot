@@ -13,7 +13,10 @@
 --library discordjs-rest
 --library discord-builder
 --library node
+--library firebase
 --library shadows
+--library jsimport
+
 -D ecs.static_loading
 --js bin/main.js
 --macro Safety.safeNavigation('', true)
