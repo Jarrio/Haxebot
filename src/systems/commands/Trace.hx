@@ -174,7 +174,9 @@ class Trace extends CommandBase {
 						if (response.length > 0 && data == 0) {
 							interaction.reply({embeds: [embed]}).then((succ) -> {
 								trace('${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}');
-							}, null);
+							}, function(err) {
+								trace(err);
+							});
 							ls.kill();
 							return;
 						}

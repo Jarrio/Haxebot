@@ -22,6 +22,7 @@ class Run extends System {
 	var channel:TextChannel;
 	var checked:Bool = false;
 	var timeout = 5000;
+
 	override function update(_) {
 		if (!Main.connected) {
 			return;
@@ -72,7 +73,6 @@ class Run extends System {
 	}
 
 	function extractCode(message:String, response:Message) {
-		
 		var check_code = ~/^(!run #([a-zA-Z0-9]{5,8}))/gi;
 		if (check_code.match(message)) {
 			var regex = ~/(<code class="prettyprint haxe">)(.*?)(<\/code>)/gmius;
@@ -395,8 +395,12 @@ class Run extends System {
 						if (response.length > 0 && data == 0) {
 							message.reply({embeds: [embed]}).then((succ) -> {
 								trace('${message.author.tag} at $format_date with file id: ${filename}');
-								message.delete().then(null, null);
-							}, null);
+								message.delete().then(null, function(err) {
+									trace(err);
+								});
+							}, function(err) {
+								trace(err);
+							});
 							ls.kill();
 							return;
 						}
