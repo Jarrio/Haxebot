@@ -234,6 +234,45 @@ class Run extends System {
 		return copy;
 	}
 
+	function parseError(error:String, code:String) {
+		var embed = new MessageEmbed();
+		embed.setTitle('Compilation Error');
+		
+		var regex = ~/(Main|Test).hx:([0-9]+): characters ([0-9]+)-([0-9]+) : (.*)/gm;
+		if (regex.match(error)) {
+			var line = regex.matched(2).parseInt();
+			var start_char = regex.matched(3).parseInt();
+			var end_char = regex.matched(4).parseInt();
+			var str = '';
+			var new_code = '';
+			for (key => value in code.split('\n')) {
+				
+				if (key != (line - 1)) {
+					new_code += value + '\n';
+					continue;
+				}
+
+				for (i in 0...value.length) {
+					var pos = i + 1;
+					var char = value.charAt(i);
+					if (pos < start_char) {
+						str += char;
+					} else if (pos == start_char) {
+						str += '->$char';
+					} else if (pos == end_char) {
+						str += '${char}<-';
+					}
+				}
+				new_code += str + '\n';
+			}
+			embed.setDescription('```hx\n' + new_code + '```');
+			embed.addField('Error', error);
+			return embed;
+		}
+	
+		return null;
+	}
+
 	function runCodeOnThread(code:String, message:Message) {
 		if (!this.isSafe(code, message)) {
 			message.reply({content: 'Your code contains bad things.'});
@@ -273,7 +312,7 @@ class Run extends System {
 					code_content = other_instances.replace(code_content, filename);
 				}
 			} else {
-				code_content = 'class $filename {static function main() {${get_paths.code}}}';
+				code_content = 'class $filename {\n\tstatic function main() {\n\t\t${get_paths.code}\n\t}\n}';
 			}
 
 			code_content = format + '\n' + code_content;
@@ -307,8 +346,16 @@ class Run extends System {
 
 				ls.stderr.once('data', (data) -> {
 					trace('error: ' + data);
+					
 					var compile_output = this.cleanOutput(data, filename, class_entry);
-					message.reply({content: mention + '```\n${compile_output}```'});
+					var embed = this.parseError(compile_output, code_content);
+					if (embed == null) {
+						message.reply({content: mention + '```\n${compile_output}```'});
+					} else {
+						embed.description = this.cleanOutput(embed.description, filename, class_entry);
+						message.reply({embeds: [embed]});
+					}
+					
 					ls.kill('SIGTERM');
 					return;
 				});

@@ -44,7 +44,7 @@ class Trace extends CommandBase {
 		try {
 			var path = FileSystem.absolutePath('.') + '/haxebot';
 			var folders = FileSystem.readDirectory(path);
-			trace(path);
+
 			for (folder in folders) {
 				before = Date.fromString(folder).getTime();
 				if (now - before < clear_frame) {
@@ -56,6 +56,44 @@ class Trace extends CommandBase {
 		} catch (e) {
 			trace(e);
 		}
+	}
+
+	function parseError(error:String, code:String) {
+		var embed = new MessageEmbed();
+		embed.setTitle('Compilation Error');
+
+		var regex = ~/(Main|Test).hx:([0-9]+): characters ([0-9]+)-([0-9]+) : (.*)/gm;
+		if (regex.match(error)) {
+			var line = regex.matched(2).parseInt();
+			var start_char = regex.matched(3).parseInt();
+			var end_char = regex.matched(4).parseInt();
+			var str = '';
+			var new_code = '';
+			for (key => value in code.split('\n')) {
+				if (key != (line - 1)) {
+					new_code += value + '\n';
+					continue;
+				}
+
+				for (i in 0...value.length) {
+					var pos = i + 1;
+					var char = value.charAt(i);
+					if (pos < start_char) {
+						str += char;
+					} else if (pos == start_char) {
+						str += '->$char';
+					} else if (pos == end_char) {
+						str += '${char}<-';
+					}
+				}
+				new_code += str + '\n';
+			}
+			embed.setDescription('```hx\n' + new_code + '```');
+			embed.addField('Error', error);
+			return embed;
+		}
+
+		return null;
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -71,7 +109,7 @@ class Trace extends CommandBase {
 
 	function runCode(code:String, interaction:BaseCommandInteraction) {
 		var filename = 'T' + Date.now().getTime() + Math.floor(Math.random() * 100000);
-		var final_code = this.insertLoopBreak('class $filename {static function main() {trace($code);}}');
+		var final_code = this.insertLoopBreak('class $filename {\n\tstatic function main() {\n\t\ttrace($code);\n\t}\n}');
 		var mention = '<@${interaction.user.id}>';
 
 		Fs.appendFile('${this.base_path}/hx/$filename.hx', final_code + '\n//User:${interaction.user.tag} id: ${interaction.user.id}| time: ${Date.now()}',
@@ -98,8 +136,18 @@ class Trace extends CommandBase {
 
 				ls.stderr.once('data', (data) -> {
 					trace('error: ' + data);
-					var compile_output = this.cleanOutput(data, filename, 'Main');
-					interaction.reply({content: mention + '```\n${compile_output}```'});
+					
+					var compile_output = this.cleanOutput(data, filename, "Main");
+					var embed = this.parseError(compile_output, final_code);
+					if (embed == null) {
+						interaction.reply({content: mention + '```\n${compile_output}```'});
+					} else {
+						embed.description = this.cleanOutput(embed.description, filename, "Main");
+						interaction.reply({embeds: [embed]});
+					}
+					
+					ls.kill('SIGTERM');
+					return;
 				});
 
 				ls.once('close', (data) -> {
@@ -137,6 +185,7 @@ class Trace extends CommandBase {
 						if (x.length > 24) {
 							truncated = true;
 							response = "";
+
 							for (line in x.slice(x.length - 23)) {
 								response += line + "\n";
 							}
