@@ -32,8 +32,6 @@ class ScamPrevention extends CommandBase {
 				continue;
 			}
 
-			trace('test');
-
 			if (withinTime(message.createdTimestamp, last_message_interval)) {
 				this.updateTime(message.author.id);
 				this.addMessage(message.author.id, message);
