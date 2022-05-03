@@ -1,3 +1,5 @@
+import discord_api_types.Routes;
+import discordjs.rest.REST;
 import js.node.Timers;
 import discord_js.ApplicationCommandManager.ApplicationCommandData;
 import discord_js.Snowflake;
@@ -27,6 +29,7 @@ import haxe.Timer;
 import systems.commands.*;
 import systems.commands.mod.*;
 import firebase.web.app.FirebaseApp;
+import js.lib.Promise;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -44,6 +47,13 @@ class Main {
 	public static final guild_id:String = "162395145352904705";
 	#end
 
+	@:jsasync
+	public static function token(rest:REST):Promise<Dynamic> {
+		var commands = parseCommands();
+		var get = rest.put(Routes.applicationGuildCommands(Main.config.client_id, Main.guild_id), {body: commands}).jsawait();
+		return get;
+	}
+	
 	public static function start() {
 		universe = Universe.create({
 			entities: 1000,
@@ -51,7 +61,12 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, Ban, Haxelib, Helppls, React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention, Trace
+						Hi, Help, Ban, Haxelib, 
+						#if update 
+						Helppls,
+						Ban,
+						Helpdescription, 
+						#end React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention, Trace
 					]
 				}
 			]
@@ -77,23 +92,30 @@ class Main {
 			connected = true;
 
 			var get_commands = parseCommands();
+			var rest = new REST({version: '9'}).setToken(Main.config.discord_token);
+			var res = token(rest);
+			res.then(function(foo) {
+				commands_active = true;
+			}, err);
+			trace(res);
+
 			var count = 0;
-			function createCommand() {
-				Timers.setTimeout(function() {
-					Main.client.application.commands.create(cast get_commands[count]).then(function(command) {
-						saveCommand(command);
+			// function createCommand() {
+			// 	Timers.setTimeout(function() {
+			// 		Main.client.application.commands.create(cast get_commands[count]).then(function(command) {
+			// 			saveCommand(command);
 						
-						if (count + 1 != get_commands.length) {
-							createCommand();
-						} else {
-							trace('Commands activated!');
-							commands_active = true;
-						}
-						count++;
-					}, err);
-				}, 250);
-			}
-			createCommand();
+			// 			if (count + 1 != get_commands.length) {
+			// 				createCommand();
+			// 			} else {
+			// 				trace('Commands activated!');
+			// 				commands_active = true;
+			// 			}
+			// 			count++;
+			// 		}, err);
+			// 	}, 250);
+			// }
+			//createCommand();
 		});
 
 		client.on('messageCreate', (message:Message) -> {
@@ -242,7 +264,7 @@ class Main {
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
 			#if block
-			if (command.name != "trace") {
+			if (command.name != "scamprevention") {
 				continue;
 			}
 			#end

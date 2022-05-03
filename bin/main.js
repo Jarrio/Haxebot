@@ -641,11 +641,17 @@ Main.app = null;
 Main.client = null;
 Main.config = null;
 Main.universe = null;
+Main.token = async function(rest) {
+	
+	var commands = Main.parseCommands();
+	var get = (await rest.put(Routes.applicationGuildCommands(Main.config.client_id,Main.guild_id),{ body : commands}));
+	return get;
+};
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(16);
-	var this11 = new Array(16);
+	var this1 = new Array(15);
+	var this11 = new Array(15);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -723,53 +729,49 @@ Main.start = function() {
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helppls(u);
+	var s = new systems_commands_React(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_React(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Roundup(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Roundup(u);
+	var s = new systems_commands_Run(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Run(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_ScamPrevention(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new systems_commands_ScamPrevention(u);
+	var s = new systems_commands_Trace(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
-	s.onEnabled();
-	var s = new systems_commands_Trace(u);
-	phase.systems[15] = s;
-	phase.enabledSystems[15] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -783,27 +785,16 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 75, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 90, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
-		var get_commands = Main.parseCommands();
-		var count = 0;
-		var createCommand = null;
-		createCommand = function() {
-			js_node_Timers.setTimeout(function() {
-				Main.client.application.commands.create(get_commands[count]).then(function(command) {
-					Main.saveCommand(command);
-					if(count + 1 != get_commands.length) {
-						createCommand();
-					} else {
-						haxe_Log.trace("Commands activated!",{ fileName : "src/Main.hx", lineNumber : 89, className : "Main", methodName : "start"});
-						Main.commands_active = true;
-					}
-					count += 1;
-				},Main.err);
-			},250);
-		};
-		createCommand();
+		Main.parseCommands();
+		var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
+		var res = Main.token(rest);
+		res.then(function(foo) {
+			Main.commands_active = true;
+		},Main.err);
+		haxe_Log.trace(res,{ fileName : "src/Main.hx", lineNumber : 100, className : "Main", methodName : "start"});
 	});
 	Main.client.on("messageCreate",function(message) {
 		var channel = message.channel;
@@ -869,8 +860,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 123, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 124, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 145, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 146, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -931,9 +922,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 182, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 183, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 203, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 204, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 205, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -970,18 +961,18 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 212, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 234, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 217, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 239, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 224, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 246, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -2360,6 +2351,10 @@ var discord_$js_WebSocketManager = require("discord.js").WebSocketManager;
 var discord_$js_WebSocketShard = require("discord.js").WebSocketShard;
 var discord_$js_Webhook = require("discord.js").Webhook;
 var discord_$js_WebhookClient = require("discord.js").WebhookClient;
+var discordjs_rest_CDN = require("@discordjs/rest").CDN;
+var node_Events = require("events");
+var discordjs_rest_REST = require("@discordjs/rest").REST;
+var discordjs_rest_RequestManager = require("@discordjs/rest").RequestManager;
 var ecs_Components = function(_size) {
 	var this1 = new Array(_size);
 	this.components = this1;
@@ -6888,6 +6883,187 @@ haxe_iterators_StringKeyValueIterator.prototype = {
 	}
 	,__class__: haxe_iterators_StringKeyValueIterator
 };
+var haxe_macro_Compiler = function() { };
+$hxClasses["haxe.macro.Compiler"] = haxe_macro_Compiler;
+haxe_macro_Compiler.__name__ = "haxe.macro.Compiler";
+var haxe_macro_StringLiteralKind = $hxEnums["haxe.macro.StringLiteralKind"] = { __ename__:"haxe.macro.StringLiteralKind",__constructs__:null
+	,DoubleQuotes: {_hx_name:"DoubleQuotes",_hx_index:0,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
+	,SingleQuotes: {_hx_name:"SingleQuotes",_hx_index:1,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
+};
+haxe_macro_StringLiteralKind.__constructs__ = [haxe_macro_StringLiteralKind.DoubleQuotes,haxe_macro_StringLiteralKind.SingleQuotes];
+haxe_macro_StringLiteralKind.__empty_constructs__ = [haxe_macro_StringLiteralKind.DoubleQuotes,haxe_macro_StringLiteralKind.SingleQuotes];
+var haxe_macro_Constant = $hxEnums["haxe.macro.Constant"] = { __ename__:"haxe.macro.Constant",__constructs__:null
+	,CInt: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CInt",$_.__params__ = ["v"],$_)
+	,CFloat: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CFloat",$_.__params__ = ["f"],$_)
+	,CString: ($_=function(s,kind) { return {_hx_index:2,s:s,kind:kind,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CString",$_.__params__ = ["s","kind"],$_)
+	,CIdent: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CIdent",$_.__params__ = ["s"],$_)
+	,CRegexp: ($_=function(r,opt) { return {_hx_index:4,r:r,opt:opt,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CRegexp",$_.__params__ = ["r","opt"],$_)
+};
+haxe_macro_Constant.__constructs__ = [haxe_macro_Constant.CInt,haxe_macro_Constant.CFloat,haxe_macro_Constant.CString,haxe_macro_Constant.CIdent,haxe_macro_Constant.CRegexp];
+haxe_macro_Constant.__empty_constructs__ = [];
+var haxe_macro_Binop = $hxEnums["haxe.macro.Binop"] = { __ename__:"haxe.macro.Binop",__constructs__:null
+	,OpAdd: {_hx_name:"OpAdd",_hx_index:0,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpMult: {_hx_name:"OpMult",_hx_index:1,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpDiv: {_hx_name:"OpDiv",_hx_index:2,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpSub: {_hx_name:"OpSub",_hx_index:3,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpAssign: {_hx_name:"OpAssign",_hx_index:4,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpEq: {_hx_name:"OpEq",_hx_index:5,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpNotEq: {_hx_name:"OpNotEq",_hx_index:6,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpGt: {_hx_name:"OpGt",_hx_index:7,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpGte: {_hx_name:"OpGte",_hx_index:8,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpLt: {_hx_name:"OpLt",_hx_index:9,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpLte: {_hx_name:"OpLte",_hx_index:10,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpAnd: {_hx_name:"OpAnd",_hx_index:11,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpOr: {_hx_name:"OpOr",_hx_index:12,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpXor: {_hx_name:"OpXor",_hx_index:13,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpBoolAnd: {_hx_name:"OpBoolAnd",_hx_index:14,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpBoolOr: {_hx_name:"OpBoolOr",_hx_index:15,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpShl: {_hx_name:"OpShl",_hx_index:16,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpShr: {_hx_name:"OpShr",_hx_index:17,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpUShr: {_hx_name:"OpUShr",_hx_index:18,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpMod: {_hx_name:"OpMod",_hx_index:19,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpAssignOp: ($_=function(op) { return {_hx_index:20,op:op,__enum__:"haxe.macro.Binop",toString:$estr}; },$_._hx_name="OpAssignOp",$_.__params__ = ["op"],$_)
+	,OpInterval: {_hx_name:"OpInterval",_hx_index:21,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpArrow: {_hx_name:"OpArrow",_hx_index:22,__enum__:"haxe.macro.Binop",toString:$estr}
+	,OpIn: {_hx_name:"OpIn",_hx_index:23,__enum__:"haxe.macro.Binop",toString:$estr}
+};
+haxe_macro_Binop.__constructs__ = [haxe_macro_Binop.OpAdd,haxe_macro_Binop.OpMult,haxe_macro_Binop.OpDiv,haxe_macro_Binop.OpSub,haxe_macro_Binop.OpAssign,haxe_macro_Binop.OpEq,haxe_macro_Binop.OpNotEq,haxe_macro_Binop.OpGt,haxe_macro_Binop.OpGte,haxe_macro_Binop.OpLt,haxe_macro_Binop.OpLte,haxe_macro_Binop.OpAnd,haxe_macro_Binop.OpOr,haxe_macro_Binop.OpXor,haxe_macro_Binop.OpBoolAnd,haxe_macro_Binop.OpBoolOr,haxe_macro_Binop.OpShl,haxe_macro_Binop.OpShr,haxe_macro_Binop.OpUShr,haxe_macro_Binop.OpMod,haxe_macro_Binop.OpAssignOp,haxe_macro_Binop.OpInterval,haxe_macro_Binop.OpArrow,haxe_macro_Binop.OpIn];
+haxe_macro_Binop.__empty_constructs__ = [haxe_macro_Binop.OpAdd,haxe_macro_Binop.OpMult,haxe_macro_Binop.OpDiv,haxe_macro_Binop.OpSub,haxe_macro_Binop.OpAssign,haxe_macro_Binop.OpEq,haxe_macro_Binop.OpNotEq,haxe_macro_Binop.OpGt,haxe_macro_Binop.OpGte,haxe_macro_Binop.OpLt,haxe_macro_Binop.OpLte,haxe_macro_Binop.OpAnd,haxe_macro_Binop.OpOr,haxe_macro_Binop.OpXor,haxe_macro_Binop.OpBoolAnd,haxe_macro_Binop.OpBoolOr,haxe_macro_Binop.OpShl,haxe_macro_Binop.OpShr,haxe_macro_Binop.OpUShr,haxe_macro_Binop.OpMod,haxe_macro_Binop.OpInterval,haxe_macro_Binop.OpArrow,haxe_macro_Binop.OpIn];
+var haxe_macro_Unop = $hxEnums["haxe.macro.Unop"] = { __ename__:"haxe.macro.Unop",__constructs__:null
+	,OpIncrement: {_hx_name:"OpIncrement",_hx_index:0,__enum__:"haxe.macro.Unop",toString:$estr}
+	,OpDecrement: {_hx_name:"OpDecrement",_hx_index:1,__enum__:"haxe.macro.Unop",toString:$estr}
+	,OpNot: {_hx_name:"OpNot",_hx_index:2,__enum__:"haxe.macro.Unop",toString:$estr}
+	,OpNeg: {_hx_name:"OpNeg",_hx_index:3,__enum__:"haxe.macro.Unop",toString:$estr}
+	,OpNegBits: {_hx_name:"OpNegBits",_hx_index:4,__enum__:"haxe.macro.Unop",toString:$estr}
+	,OpSpread: {_hx_name:"OpSpread",_hx_index:5,__enum__:"haxe.macro.Unop",toString:$estr}
+};
+haxe_macro_Unop.__constructs__ = [haxe_macro_Unop.OpIncrement,haxe_macro_Unop.OpDecrement,haxe_macro_Unop.OpNot,haxe_macro_Unop.OpNeg,haxe_macro_Unop.OpNegBits,haxe_macro_Unop.OpSpread];
+haxe_macro_Unop.__empty_constructs__ = [haxe_macro_Unop.OpIncrement,haxe_macro_Unop.OpDecrement,haxe_macro_Unop.OpNot,haxe_macro_Unop.OpNeg,haxe_macro_Unop.OpNegBits,haxe_macro_Unop.OpSpread];
+var haxe_macro_QuoteStatus = $hxEnums["haxe.macro.QuoteStatus"] = { __ename__:"haxe.macro.QuoteStatus",__constructs__:null
+	,Unquoted: {_hx_name:"Unquoted",_hx_index:0,__enum__:"haxe.macro.QuoteStatus",toString:$estr}
+	,Quoted: {_hx_name:"Quoted",_hx_index:1,__enum__:"haxe.macro.QuoteStatus",toString:$estr}
+};
+haxe_macro_QuoteStatus.__constructs__ = [haxe_macro_QuoteStatus.Unquoted,haxe_macro_QuoteStatus.Quoted];
+haxe_macro_QuoteStatus.__empty_constructs__ = [haxe_macro_QuoteStatus.Unquoted,haxe_macro_QuoteStatus.Quoted];
+var haxe_macro_FunctionKind = $hxEnums["haxe.macro.FunctionKind"] = { __ename__:"haxe.macro.FunctionKind",__constructs__:null
+	,FAnonymous: {_hx_name:"FAnonymous",_hx_index:0,__enum__:"haxe.macro.FunctionKind",toString:$estr}
+	,FNamed: ($_=function(name,inlined) { return {_hx_index:1,name:name,inlined:inlined,__enum__:"haxe.macro.FunctionKind",toString:$estr}; },$_._hx_name="FNamed",$_.__params__ = ["name","inlined"],$_)
+	,FArrow: {_hx_name:"FArrow",_hx_index:2,__enum__:"haxe.macro.FunctionKind",toString:$estr}
+};
+haxe_macro_FunctionKind.__constructs__ = [haxe_macro_FunctionKind.FAnonymous,haxe_macro_FunctionKind.FNamed,haxe_macro_FunctionKind.FArrow];
+haxe_macro_FunctionKind.__empty_constructs__ = [haxe_macro_FunctionKind.FAnonymous,haxe_macro_FunctionKind.FArrow];
+var haxe_macro_ExprDef = $hxEnums["haxe.macro.ExprDef"] = { __ename__:"haxe.macro.ExprDef",__constructs__:null
+	,EConst: ($_=function(c) { return {_hx_index:0,c:c,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EConst",$_.__params__ = ["c"],$_)
+	,EArray: ($_=function(e1,e2) { return {_hx_index:1,e1:e1,e2:e2,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EArray",$_.__params__ = ["e1","e2"],$_)
+	,EBinop: ($_=function(op,e1,e2) { return {_hx_index:2,op:op,e1:e1,e2:e2,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EBinop",$_.__params__ = ["op","e1","e2"],$_)
+	,EField: ($_=function(e,field) { return {_hx_index:3,e:e,field:field,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EField",$_.__params__ = ["e","field"],$_)
+	,EParenthesis: ($_=function(e) { return {_hx_index:4,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EParenthesis",$_.__params__ = ["e"],$_)
+	,EObjectDecl: ($_=function(fields) { return {_hx_index:5,fields:fields,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EObjectDecl",$_.__params__ = ["fields"],$_)
+	,EArrayDecl: ($_=function(values) { return {_hx_index:6,values:values,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EArrayDecl",$_.__params__ = ["values"],$_)
+	,ECall: ($_=function(e,params) { return {_hx_index:7,e:e,params:params,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECall",$_.__params__ = ["e","params"],$_)
+	,ENew: ($_=function(t,params) { return {_hx_index:8,t:t,params:params,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ENew",$_.__params__ = ["t","params"],$_)
+	,EUnop: ($_=function(op,postFix,e) { return {_hx_index:9,op:op,postFix:postFix,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EUnop",$_.__params__ = ["op","postFix","e"],$_)
+	,EVars: ($_=function(vars) { return {_hx_index:10,vars:vars,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EVars",$_.__params__ = ["vars"],$_)
+	,EFunction: ($_=function(kind,f) { return {_hx_index:11,kind:kind,f:f,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EFunction",$_.__params__ = ["kind","f"],$_)
+	,EBlock: ($_=function(exprs) { return {_hx_index:12,exprs:exprs,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EBlock",$_.__params__ = ["exprs"],$_)
+	,EFor: ($_=function(it,expr) { return {_hx_index:13,it:it,expr:expr,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EFor",$_.__params__ = ["it","expr"],$_)
+	,EIf: ($_=function(econd,eif,eelse) { return {_hx_index:14,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EIf",$_.__params__ = ["econd","eif","eelse"],$_)
+	,EWhile: ($_=function(econd,e,normalWhile) { return {_hx_index:15,econd:econd,e:e,normalWhile:normalWhile,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EWhile",$_.__params__ = ["econd","e","normalWhile"],$_)
+	,ESwitch: ($_=function(e,cases,edef) { return {_hx_index:16,e:e,cases:cases,edef:edef,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ESwitch",$_.__params__ = ["e","cases","edef"],$_)
+	,ETry: ($_=function(e,catches) { return {_hx_index:17,e:e,catches:catches,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ETry",$_.__params__ = ["e","catches"],$_)
+	,EReturn: ($_=function(e) { return {_hx_index:18,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EReturn",$_.__params__ = ["e"],$_)
+	,EBreak: {_hx_name:"EBreak",_hx_index:19,__enum__:"haxe.macro.ExprDef",toString:$estr}
+	,EContinue: {_hx_name:"EContinue",_hx_index:20,__enum__:"haxe.macro.ExprDef",toString:$estr}
+	,EUntyped: ($_=function(e) { return {_hx_index:21,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EUntyped",$_.__params__ = ["e"],$_)
+	,EThrow: ($_=function(e) { return {_hx_index:22,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EThrow",$_.__params__ = ["e"],$_)
+	,ECast: ($_=function(e,t) { return {_hx_index:23,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECast",$_.__params__ = ["e","t"],$_)
+	,EDisplay: ($_=function(e,displayKind) { return {_hx_index:24,e:e,displayKind:displayKind,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EDisplay",$_.__params__ = ["e","displayKind"],$_)
+	,EDisplayNew: ($_=function(t) { return {_hx_index:25,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EDisplayNew",$_.__params__ = ["t"],$_)
+	,ETernary: ($_=function(econd,eif,eelse) { return {_hx_index:26,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ETernary",$_.__params__ = ["econd","eif","eelse"],$_)
+	,ECheckType: ($_=function(e,t) { return {_hx_index:27,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECheckType",$_.__params__ = ["e","t"],$_)
+	,EMeta: ($_=function(s,e) { return {_hx_index:28,s:s,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EMeta",$_.__params__ = ["s","e"],$_)
+	,EIs: ($_=function(e,t) { return {_hx_index:29,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EIs",$_.__params__ = ["e","t"],$_)
+};
+haxe_macro_ExprDef.__constructs__ = [haxe_macro_ExprDef.EConst,haxe_macro_ExprDef.EArray,haxe_macro_ExprDef.EBinop,haxe_macro_ExprDef.EField,haxe_macro_ExprDef.EParenthesis,haxe_macro_ExprDef.EObjectDecl,haxe_macro_ExprDef.EArrayDecl,haxe_macro_ExprDef.ECall,haxe_macro_ExprDef.ENew,haxe_macro_ExprDef.EUnop,haxe_macro_ExprDef.EVars,haxe_macro_ExprDef.EFunction,haxe_macro_ExprDef.EBlock,haxe_macro_ExprDef.EFor,haxe_macro_ExprDef.EIf,haxe_macro_ExprDef.EWhile,haxe_macro_ExprDef.ESwitch,haxe_macro_ExprDef.ETry,haxe_macro_ExprDef.EReturn,haxe_macro_ExprDef.EBreak,haxe_macro_ExprDef.EContinue,haxe_macro_ExprDef.EUntyped,haxe_macro_ExprDef.EThrow,haxe_macro_ExprDef.ECast,haxe_macro_ExprDef.EDisplay,haxe_macro_ExprDef.EDisplayNew,haxe_macro_ExprDef.ETernary,haxe_macro_ExprDef.ECheckType,haxe_macro_ExprDef.EMeta,haxe_macro_ExprDef.EIs];
+haxe_macro_ExprDef.__empty_constructs__ = [haxe_macro_ExprDef.EBreak,haxe_macro_ExprDef.EContinue];
+var haxe_macro_DisplayKind = $hxEnums["haxe.macro.DisplayKind"] = { __ename__:"haxe.macro.DisplayKind",__constructs__:null
+	,DKCall: {_hx_name:"DKCall",_hx_index:0,__enum__:"haxe.macro.DisplayKind",toString:$estr}
+	,DKDot: {_hx_name:"DKDot",_hx_index:1,__enum__:"haxe.macro.DisplayKind",toString:$estr}
+	,DKStructure: {_hx_name:"DKStructure",_hx_index:2,__enum__:"haxe.macro.DisplayKind",toString:$estr}
+	,DKMarked: {_hx_name:"DKMarked",_hx_index:3,__enum__:"haxe.macro.DisplayKind",toString:$estr}
+	,DKPattern: ($_=function(outermost) { return {_hx_index:4,outermost:outermost,__enum__:"haxe.macro.DisplayKind",toString:$estr}; },$_._hx_name="DKPattern",$_.__params__ = ["outermost"],$_)
+};
+haxe_macro_DisplayKind.__constructs__ = [haxe_macro_DisplayKind.DKCall,haxe_macro_DisplayKind.DKDot,haxe_macro_DisplayKind.DKStructure,haxe_macro_DisplayKind.DKMarked,haxe_macro_DisplayKind.DKPattern];
+haxe_macro_DisplayKind.__empty_constructs__ = [haxe_macro_DisplayKind.DKCall,haxe_macro_DisplayKind.DKDot,haxe_macro_DisplayKind.DKStructure,haxe_macro_DisplayKind.DKMarked];
+var haxe_macro_ComplexType = $hxEnums["haxe.macro.ComplexType"] = { __ename__:"haxe.macro.ComplexType",__constructs__:null
+	,TPath: ($_=function(p) { return {_hx_index:0,p:p,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TPath",$_.__params__ = ["p"],$_)
+	,TFunction: ($_=function(args,ret) { return {_hx_index:1,args:args,ret:ret,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TFunction",$_.__params__ = ["args","ret"],$_)
+	,TAnonymous: ($_=function(fields) { return {_hx_index:2,fields:fields,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TAnonymous",$_.__params__ = ["fields"],$_)
+	,TParent: ($_=function(t) { return {_hx_index:3,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TParent",$_.__params__ = ["t"],$_)
+	,TExtend: ($_=function(p,fields) { return {_hx_index:4,p:p,fields:fields,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TExtend",$_.__params__ = ["p","fields"],$_)
+	,TOptional: ($_=function(t) { return {_hx_index:5,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TOptional",$_.__params__ = ["t"],$_)
+	,TNamed: ($_=function(n,t) { return {_hx_index:6,n:n,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TNamed",$_.__params__ = ["n","t"],$_)
+	,TIntersection: ($_=function(tl) { return {_hx_index:7,tl:tl,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TIntersection",$_.__params__ = ["tl"],$_)
+};
+haxe_macro_ComplexType.__constructs__ = [haxe_macro_ComplexType.TPath,haxe_macro_ComplexType.TFunction,haxe_macro_ComplexType.TAnonymous,haxe_macro_ComplexType.TParent,haxe_macro_ComplexType.TExtend,haxe_macro_ComplexType.TOptional,haxe_macro_ComplexType.TNamed,haxe_macro_ComplexType.TIntersection];
+haxe_macro_ComplexType.__empty_constructs__ = [];
+var haxe_macro_TypeParam = $hxEnums["haxe.macro.TypeParam"] = { __ename__:"haxe.macro.TypeParam",__constructs__:null
+	,TPType: ($_=function(t) { return {_hx_index:0,t:t,__enum__:"haxe.macro.TypeParam",toString:$estr}; },$_._hx_name="TPType",$_.__params__ = ["t"],$_)
+	,TPExpr: ($_=function(e) { return {_hx_index:1,e:e,__enum__:"haxe.macro.TypeParam",toString:$estr}; },$_._hx_name="TPExpr",$_.__params__ = ["e"],$_)
+};
+haxe_macro_TypeParam.__constructs__ = [haxe_macro_TypeParam.TPType,haxe_macro_TypeParam.TPExpr];
+haxe_macro_TypeParam.__empty_constructs__ = [];
+var haxe_macro_Access = $hxEnums["haxe.macro.Access"] = { __ename__:"haxe.macro.Access",__constructs__:null
+	,APublic: {_hx_name:"APublic",_hx_index:0,__enum__:"haxe.macro.Access",toString:$estr}
+	,APrivate: {_hx_name:"APrivate",_hx_index:1,__enum__:"haxe.macro.Access",toString:$estr}
+	,AStatic: {_hx_name:"AStatic",_hx_index:2,__enum__:"haxe.macro.Access",toString:$estr}
+	,AOverride: {_hx_name:"AOverride",_hx_index:3,__enum__:"haxe.macro.Access",toString:$estr}
+	,ADynamic: {_hx_name:"ADynamic",_hx_index:4,__enum__:"haxe.macro.Access",toString:$estr}
+	,AInline: {_hx_name:"AInline",_hx_index:5,__enum__:"haxe.macro.Access",toString:$estr}
+	,AMacro: {_hx_name:"AMacro",_hx_index:6,__enum__:"haxe.macro.Access",toString:$estr}
+	,AFinal: {_hx_name:"AFinal",_hx_index:7,__enum__:"haxe.macro.Access",toString:$estr}
+	,AExtern: {_hx_name:"AExtern",_hx_index:8,__enum__:"haxe.macro.Access",toString:$estr}
+	,AAbstract: {_hx_name:"AAbstract",_hx_index:9,__enum__:"haxe.macro.Access",toString:$estr}
+	,AOverload: {_hx_name:"AOverload",_hx_index:10,__enum__:"haxe.macro.Access",toString:$estr}
+};
+haxe_macro_Access.__constructs__ = [haxe_macro_Access.APublic,haxe_macro_Access.APrivate,haxe_macro_Access.AStatic,haxe_macro_Access.AOverride,haxe_macro_Access.ADynamic,haxe_macro_Access.AInline,haxe_macro_Access.AMacro,haxe_macro_Access.AFinal,haxe_macro_Access.AExtern,haxe_macro_Access.AAbstract,haxe_macro_Access.AOverload];
+haxe_macro_Access.__empty_constructs__ = [haxe_macro_Access.APublic,haxe_macro_Access.APrivate,haxe_macro_Access.AStatic,haxe_macro_Access.AOverride,haxe_macro_Access.ADynamic,haxe_macro_Access.AInline,haxe_macro_Access.AMacro,haxe_macro_Access.AFinal,haxe_macro_Access.AExtern,haxe_macro_Access.AAbstract,haxe_macro_Access.AOverload];
+var haxe_macro_FieldType = $hxEnums["haxe.macro.FieldType"] = { __ename__:"haxe.macro.FieldType",__constructs__:null
+	,FVar: ($_=function(t,e) { return {_hx_index:0,t:t,e:e,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FVar",$_.__params__ = ["t","e"],$_)
+	,FFun: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FFun",$_.__params__ = ["f"],$_)
+	,FProp: ($_=function(get,set,t,e) { return {_hx_index:2,get:get,set:set,t:t,e:e,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FProp",$_.__params__ = ["get","set","t","e"],$_)
+};
+haxe_macro_FieldType.__constructs__ = [haxe_macro_FieldType.FVar,haxe_macro_FieldType.FFun,haxe_macro_FieldType.FProp];
+haxe_macro_FieldType.__empty_constructs__ = [];
+var haxe_macro_TypeDefKind = $hxEnums["haxe.macro.TypeDefKind"] = { __ename__:"haxe.macro.TypeDefKind",__constructs__:null
+	,TDEnum: {_hx_name:"TDEnum",_hx_index:0,__enum__:"haxe.macro.TypeDefKind",toString:$estr}
+	,TDStructure: {_hx_name:"TDStructure",_hx_index:1,__enum__:"haxe.macro.TypeDefKind",toString:$estr}
+	,TDClass: ($_=function(superClass,interfaces,isInterface,isFinal,isAbstract) { return {_hx_index:2,superClass:superClass,interfaces:interfaces,isInterface:isInterface,isFinal:isFinal,isAbstract:isAbstract,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDClass",$_.__params__ = ["superClass","interfaces","isInterface","isFinal","isAbstract"],$_)
+	,TDAlias: ($_=function(t) { return {_hx_index:3,t:t,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDAlias",$_.__params__ = ["t"],$_)
+	,TDAbstract: ($_=function(tthis,from,to) { return {_hx_index:4,tthis:tthis,from:from,to:to,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDAbstract",$_.__params__ = ["tthis","from","to"],$_)
+	,TDField: ($_=function(kind,access) { return {_hx_index:5,kind:kind,access:access,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDField",$_.__params__ = ["kind","access"],$_)
+};
+haxe_macro_TypeDefKind.__constructs__ = [haxe_macro_TypeDefKind.TDEnum,haxe_macro_TypeDefKind.TDStructure,haxe_macro_TypeDefKind.TDClass,haxe_macro_TypeDefKind.TDAlias,haxe_macro_TypeDefKind.TDAbstract,haxe_macro_TypeDefKind.TDField];
+haxe_macro_TypeDefKind.__empty_constructs__ = [haxe_macro_TypeDefKind.TDEnum,haxe_macro_TypeDefKind.TDStructure];
+var haxe_macro_Error = function(message,pos,previous) {
+	haxe_Exception.call(this,message,previous);
+	this.pos = pos;
+	this.__skipStack++;
+};
+$hxClasses["haxe.macro.Error"] = haxe_macro_Error;
+haxe_macro_Error.__name__ = "haxe.macro.Error";
+haxe_macro_Error.__super__ = haxe_Exception;
+haxe_macro_Error.prototype = $extend(haxe_Exception.prototype,{
+	pos: null
+	,__class__: haxe_macro_Error
+});
+var haxe_macro_ImportMode = $hxEnums["haxe.macro.ImportMode"] = { __ename__:"haxe.macro.ImportMode",__constructs__:null
+	,INormal: {_hx_name:"INormal",_hx_index:0,__enum__:"haxe.macro.ImportMode",toString:$estr}
+	,IAsName: ($_=function(alias) { return {_hx_index:1,alias:alias,__enum__:"haxe.macro.ImportMode",toString:$estr}; },$_._hx_name="IAsName",$_.__params__ = ["alias"],$_)
+	,IAll: {_hx_name:"IAll",_hx_index:2,__enum__:"haxe.macro.ImportMode",toString:$estr}
+};
+haxe_macro_ImportMode.__constructs__ = [haxe_macro_ImportMode.INormal,haxe_macro_ImportMode.IAsName,haxe_macro_ImportMode.IAll];
+haxe_macro_ImportMode.__empty_constructs__ = [haxe_macro_ImportMode.INormal,haxe_macro_ImportMode.IAll];
 var js_Boot = function() { };
 $hxClasses["js.Boot"] = js_Boot;
 js_Boot.__name__ = "js.Boot";
@@ -7276,6 +7452,15 @@ js_node_url_URLSearchParamsEntry.get_name = function(this1) {
 js_node_url_URLSearchParamsEntry.get_value = function(this1) {
 	return this1[1];
 };
+var jsasync_JSAsync = function() { };
+$hxClasses["jsasync.JSAsync"] = jsasync_JSAsync;
+jsasync_JSAsync.__name__ = "jsasync.JSAsync";
+var jsasync_JSAsyncTools = function() { };
+$hxClasses["jsasync.JSAsyncTools"] = jsasync_JSAsyncTools;
+jsasync_JSAsyncTools.__name__ = "jsasync.JSAsyncTools";
+var jsasync_impl_Helper = function() { };
+$hxClasses["jsasync.impl.Helper"] = jsasync_impl_Helper;
+jsasync_impl_Helper.__name__ = "jsasync.impl.Helper";
 var node_buffer_Buffer = require("buffer").Buffer;
 var node_$html_$parser_Node = require("node-html-parser").Node;
 var node_$html_$parser_HTMLElement = require("node-html-parser").HTMLElement;
@@ -8253,649 +8438,6 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	}
 	,__class__: systems_commands_Helpdescription
 });
-var systems_commands_Helppls = function(universe) {
-	this.initial_request_timeout = 14400000;
-	this.check_verified_interval = 86400000;
-	this.validate_timout = 86400000;
-	this.check_threads_interval = 1800000;
-	this.solution_timeout = 1800000;
-	this.review_thread = "948626893148663838";
-	this.thread_timeout = 1800000;
-	this.valid_filters = ["skip","cancel","c"];
-	this.threads_last_checked = -1;
-	this.last_input = new haxe_ds_StringMap();
-	this.session = new haxe_ds_StringMap();
-	this.qid = new haxe_ds_StringMap();
-	this.state = new haxe_ds_StringMap();
-	this.questions = [];
-	systems_CommandDbBase.call(this,universe);
-	this.dm_messages = universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = universe.components.getTable(4);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = universe.components.getTable(1);
-	this.questions = Util_loadFile(this.get_name(),{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 65, className : "systems.commands.Helppls", methodName : "new"});
-	this.threads_last_checked = new Date().getTime();
-};
-$hxClasses["systems.commands.Helppls"] = systems_commands_Helppls;
-systems_commands_Helppls.__name__ = "systems.commands.Helppls";
-systems_commands_Helppls.__super__ = systems_CommandDbBase;
-systems_commands_Helppls.prototype = $extend(systems_CommandDbBase.prototype,{
-	questions: null
-	,state: null
-	,qid: null
-	,session: null
-	,last_input: null
-	,threads_last_checked: null
-	,valid_filters: null
-	,thread_timeout: null
-	,review_thread: null
-	,solution_timeout: null
-	,check_threads_interval: null
-	,validate_timout: null
-	,check_verified_interval: null
-	,initial_request_timeout: null
-	,checkExistingThreads: function(data) {
-		var _gthis = this;
-		var timestamp = data.timestamp.toDate().getTime();
-		var now = new Date().getTime();
-		if(now - timestamp < this.initial_request_timeout) {
-			return;
-		}
-		if(data.solution != null && data.solution.timestamp != null) {
-			timestamp = data.solution.timestamp.toDate().getTime();
-		}
-		if(now - timestamp < this.solution_timeout) {
-			return;
-		}
-		var callback = function(messages) {
-			var discussion = [];
-			var jsIterator = messages.values();
-			var _g_lastStep = jsIterator.next();
-			while(!_g_lastStep.done) {
-				var v = _g_lastStep.value;
-				_g_lastStep = jsIterator.next();
-				if(v.author.bot) {
-					continue;
-				}
-				discussion.push({ content : v.content, user : { id : v.author.id, username : v.author.username, avartarURL : v.author.avatarURL()}, posted : firebase_web_firestore_Timestamp.fromDate(v.createdAt)});
-			}
-			discussion.sort(function(a,b) {
-				return Math.round(a.posted.toDate().getTime() - b.posted.toDate().getTime());
-			});
-			util_DiscordUtil.getChannel(data.thread_id,function(channel) {
-				var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2",data.topic,"threads"),firebase_web_firestore_Firestore.where("thread_id","==",data.thread_id));
-				firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
-					if(docs.size != 1) {
-						return;
-					}
-					var content = docs.docs[0].data();
-					content.discussion = discussion;
-					if(shared_TStoreContent.get_solution_attempt(content) == 3) {
-						channel.send({ content : "A solution has been requested 3 times, will skip and go to validation."});
-						firebase_web_firestore_Firestore.updateDoc(docs.docs[0].ref,"solution",content.solution,"solved",true,"discussion",discussion);
-						_gthis.validateThread(docs.docs[0].ref,content);
-						return;
-					}
-					channel.send({ content : "Was this thread solved?"}).then(function(message) {
-						if(content.solution != null) {
-							content.solution.attempt += 1;
-							content.solution.timestamp = firebase_web_firestore_Timestamp.now();
-							firebase_web_firestore_Firestore.updateDoc(docs.docs[0].ref,"solution",content.solution);
-						}
-						util_DiscordUtil.reactionTracker(message,function(_,collected,user) {
-							if(user.bot) {
-								return;
-							}
-							if(collected.emoji.name == "✅") {
-								channel.send({ content : "Would you be willing to write a brief description on the solution?"}).then(function(message) {
-									util_DiscordUtil.reactionTracker(message,function(_,collected,user) {
-										if(user.bot) {
-											return;
-										}
-										if(collected.emoji.name == "✅") {
-											var command = Main.getCommand("helpdescription");
-											if(command != null) {
-												util_DiscordUtil.setCommandPermission(command,[{ id : user.id, type : "USER", permission : true}],function() {
-													channel.send("<@" + user.id + "> could you run the `/helpdescription` command and give a brief description about the solution to the problem?");
-													content.discussion = discussion;
-													var callback = shared_TStoreContent.get_solution_attempt(content);
-													var callback1 = firebase_web_firestore_Timestamp.now();
-													var user1 = user.id;
-													var user2 = user.tag;
-													var callback2 = user.avatarURL();
-													content.solution = { attempt : callback, description : null, timestamp : callback1, user : { id : user1, name : user2, icon_url : callback2}};
-													firebase_web_firestore_Firestore.updateDoc(docs.docs[0].ref,"discussion",discussion,"solution",content.solution).then(null,$bind(_gthis,_gthis.err));
-												},$bind(_gthis,_gthis.err));
-											}
-										}
-									});
-								});
-							}
-						});
-					},$bind(_gthis,_gthis.err));
-				},$bind(_gthis,_gthis.err));
-			});
-		};
-		this.extractMessageHistory(data.start_message_id,data.thread_id,callback);
-	}
-	,validateThread: function(ref,thread) {
-		var _gthis = this;
-		if(Util_dateWithinTimeout(new Date(),shared_TStoreContent.get_validate_timestamp(thread),this.validate_timout)) {
-			return;
-		}
-		util_DiscordUtil.getChannel(this.review_thread,function(channel) {
-			if(channel == null) {
-				return;
-			}
-			var embed = _gthis.createThreadEmbed(thread);
-			embed.setURL(thread.source_url);
-			var topic = thread.topic;
-			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
-			if(thread.solution != null && thread.solution.description == null) {
-				solution_summary = "";
-			}
-			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
-			embed.setDescription(description);
-			channel.send({ embeds : [embed], content : "Should this thread be indexed?"}).then(function(message) {
-				firebase_web_firestore_Firestore.updateDoc(ref,"validate_timestamp",new Date());
-				util_DiscordUtil.reactionTracker(message,function(collector,collected,user) {
-					if(user.bot) {
-						return;
-					}
-					var valid = null;
-					if(collected.emoji.name == "✅") {
-						valid = true;
-					}
-					if(collected.emoji.name == "❎") {
-						valid = false;
-					}
-					if(valid == null) {
-						return;
-					}
-					firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
-						collector.stop("Reviewed validation.");
-					},$bind(_gthis,_gthis.err));
-				});
-			});
-		});
-	}
-	,createThreadEmbed: function(data) {
-		var embed = new discord_$js_MessageEmbed();
-		var content = "";
-		var session = data.session;
-		var title = shared_TStoreContent.getQuestion(data,"title");
-		embed.setTitle("__" + title.answer + "__");
-		embed.setAuthor({ name : data.author.name, iconURL : data.author.icon_url});
-		var _g = 0;
-		var _g1 = session.questions;
-		while(_g < _g1.length) {
-			var value = _g1[_g];
-			++_g;
-			var answer = value.answer;
-			var output = "**" + value.question + "**";
-			switch(value.state) {
-			case "provide_code":
-				answer = "```hx\n" + answer + "\n```";
-				break;
-			case "question_type":
-				answer = "" + shared_QuestionType.fromString(answer);
-				break;
-			case "title":
-				continue;
-			default:
-			}
-			content += "\n" + output + "\n" + answer;
-		}
-		embed.setDescription(content);
-		return embed;
-	}
-	,checkDocs: function() {
-		var _gthis = this;
-		var topics = ["haxe","haxeui","tools","flixel","heaps","ceramic","openfl"];
-		var _g = 0;
-		while(_g < topics.length) {
-			var item = topics[_g];
-			++_g;
-			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2",item,"threads"),firebase_web_firestore_Firestore.where("solved","==",false),firebase_web_firestore_Firestore.where("valid","==",null),firebase_web_firestore_Firestore.orderBy("timestamp","desc"));
-			firebase_web_firestore_Firestore.getDocs(q).then((function() {
-				return function(docs) {
-					if(docs.empty) {
-						return;
-					}
-					var _g = 0;
-					var _g1 = docs.docs;
-					while(_g < _g1.length) {
-						var doc = [_g1[_g]];
-						++_g;
-						var data = [doc[0].data()];
-						data[0].timestamp.toDate();
-						if(data[0].solution != null && data[0].solution.timestamp != null && data[0].solution.user != null) {
-							if(!Util_fbDateWithinTimeout(firebase_web_firestore_Timestamp.now(),data[0].solution.timestamp,_gthis.solution_timeout)) {
-								var command = Main.getCommand("helpdescription");
-								if(command != null) {
-									util_DiscordUtil.setCommandPermission(command,[{ id : data[0].solution.user.id, type : "USER", permission : false}],(function(data,doc) {
-										return function() {
-											data[0].solution.timestamp = null;
-											data[0].solution.user = null;
-											data[0].solution.attempt += 1;
-											firebase_web_firestore_Firestore.updateDoc(doc[0].ref,data[0]).catch($bind(_gthis,_gthis.err));
-											util_DiscordUtil.getChannel(data[0].thread_id,(function() {
-												return function(channel) {
-													channel.send({ content : "Timeout: Last user didn't send a solution summary"});
-												};
-											})());
-										};
-									})(data,doc));
-								}
-							}
-						}
-						_gthis.checkExistingThreads(data[0]);
-					}
-				};
-			})(),$bind(this,this.err));
-		}
-	}
-	,update: function(_) {
-		if(new Date().getTime() - this.threads_last_checked > this.check_threads_interval && Main.commands_active) {
-			this.checkDocs();
-			this.threads_last_checked = new Date().getTime();
-		}
-		var h = Main.dm_help_tracking.h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			var _g1_value = h[key];
-			if(new Date().getTime() - _g1_value < this.thread_timeout) {
-				continue;
-			}
-			this.clearData(key);
-		}
-		var _this = this.dm_messages;
-		var _set = _this.entities;
-		var _active = _this.isActive();
-		var _g_idx = _set.size() - 1;
-		while(_active && _g_idx >= 0) {
-			var entity = _set.getDense(_g_idx--);
-			var type = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
-			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
-			if(type != "helppls") {
-				continue;
-			}
-			var author = message.author.id;
-			var state = this.state.h[author];
-			var lowercase_content = message.content.toLowerCase();
-			var question = this.getQuestion(this.state.h[author]);
-			if(state == "question_type") {
-				var matched = this.isValidInput(message.content,question.valid_input);
-				if(!matched) {
-					if(!this.isFilter(message.content)) {
-						this.reply(entity,message,"Invalid input, please try again.");
-						return;
-					}
-				}
-			}
-			if(lowercase_content == "cancel" || lowercase_content == "c") {
-				this.clearData(author);
-				this.reply(entity,message,"Cancelled.");
-				return;
-			}
-			if(state == "title" && message.content.length > 100) {
-				this.reply(entity,message,"Titles have a character limit " + message.content.length + "/**__100__**.");
-				return;
-			}
-			if(message.content.length == 0) {
-				this.reply(entity,message,"Please enter *something*");
-				return;
-			}
-			if(state != "none" && message.content != "skip") {
-				var reply = message.content;
-				if(state != null) {
-					if(state == "error_message") {
-						var data = this.parseVSCodeJson(reply);
-						if(data != null) {
-							reply = "```\n" + data.resource + ":" + data.startLineNumber + " - " + data.message + "\n```";
-						}
-					}
-				}
-				this.updateSessionAnswer(author,state,reply);
-			}
-			if(question.valid_input != null && question.valid_input.length > 0) {
-				this.last_input.h[author] = { qid : question.id, question : null, state : null, answer : message.content};
-			}
-			question = this.nextQuestion(message.author.id);
-			if(question.state == "finished") {
-				this.handleFinished(message);
-			} else {
-				var out = question.question.toString();
-				if(question.valid_input != null) {
-					var _g = 0;
-					var _g1 = question.valid_input;
-					while(_g < _g1.length) {
-						var opt = _g1[_g];
-						++_g;
-						if(opt.key == "-1") {
-							continue;
-						}
-						out += "\n" + opt.key + " - " + opt.name;
-					}
-				}
-				var message1 = message.author;
-				var embed = new discord_$js_MessageEmbed();
-				embed.setDescription(out);
-				message1.send({ embeds : [embed]});
-			}
-			this.universe.deleteEntity(entity);
-		}
-		systems_CommandDbBase.prototype.update.call(this,_);
-	}
-	,reply: function(entity,message,content) {
-		message.reply({ content : content}).then(null,$bind(this,this.err));
-		this.universe.deleteEntity(entity);
-	}
-	,isFilter: function(input) {
-		var _g = 0;
-		var _g1 = this.valid_filters;
-		while(_g < _g1.length) {
-			var item = _g1[_g];
-			++_g;
-			if(item == input) {
-				return true;
-			}
-		}
-		return false;
-	}
-	,isValidInput: function(content,input) {
-		var _g = 0;
-		while(_g < input.length) {
-			var item = input[_g];
-			++_g;
-			if(content.toLowerCase() == item.key) {
-				return true;
-			}
-		}
-		return false;
-	}
-	,clearData: function(author) {
-		var _this = this.state;
-		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
-			delete(_this.h[author]);
-		}
-		var _this = this.last_input;
-		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
-			delete(_this.h[author]);
-		}
-		var _this = this.session;
-		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
-			delete(_this.h[author]);
-		}
-		var _this = this.qid;
-		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
-			delete(_this.h[author]);
-		}
-		var _this = Main.dm_help_tracking;
-		if(Object.prototype.hasOwnProperty.call(_this.h,author)) {
-			delete(_this.h[author]);
-		}
-	}
-	,handleFinished: function(message) {
-		var _gthis = this;
-		var author = message.author.id;
-		var session = this.session.h[author];
-		var topic = session.topic;
-		var embed = this.createThreadEmbed(session);
-		embed.setAuthor({ name : message.author.tag, iconURL : message.author.avatarURL()});
-		if(embed.description.length < 30) {
-			haxe_Log.trace(embed.description,{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 433, className : "systems.commands.Helppls", methodName : "handleFinished"});
-			this.clearData(author);
-			message.reply({ content : "Not enough answers to provide sufficient support"});
-			return;
-		}
-		var title = this.getResponseFromSession(author,"title").answer;
-		message.client.channels.fetch(this.getChannelId(topic)).then(function(channel) {
-			channel.send({ embeds : [embed]}).then(function(channel_message) {
-				channel_message.startThread({ name : title}).then(function(thread) {
-					_gthis.remoteSaveQuestion(message,channel_message.url,thread.id);
-					message.author.send({ content : "Your thread(__<#" + thread.id + ">__) has been created!"});
-					channel.send("**__Please reply to the above issue within the thread.__**");
-					_gthis.clearData(author);
-				});
-			});
-		},$bind(this,this.err));
-	}
-	,getResponseFromSession: function(author,state) {
-		var session = this.session.h[author].session;
-		var _g = 0;
-		var _g1 = session.questions;
-		while(_g < _g1.length) {
-			var item = _g1[_g];
-			++_g;
-			if(item.state == state) {
-				return item;
-			}
-		}
-		return null;
-	}
-	,extractMessageHistory: function(start_id,thread_id,callback) {
-		var _gthis = this;
-		if(!Main.connected) {
-			return;
-		}
-		Main.client.channels.fetch(thread_id).then(function(channel) {
-			channel.messages.fetch({ after : start_id},{ force : true}).then(callback,$bind(_gthis,_gthis.err));
-		},$bind(this,this.err));
-	}
-	,remoteSaveQuestion: function(message,url,thread) {
-		var _gthis = this;
-		var author = message.author.id;
-		var content = this.session.h[author];
-		var now = firebase_web_firestore_Timestamp.now();
-		content.source_url = url;
-		content.thread_id = thread;
-		content.timestamp = now;
-		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + content.topic);
-		firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
-			return transaction.get(doc).then(function(doc) {
-				if(!doc.exists()) {
-					return { id : -1};
-				}
-				var data = doc.data();
-				data.id += 1;
-				transaction.update(doc.ref,data);
-				return data;
-			});
-		}).then(function(value) {
-			content.id = value.id;
-			var path = "test2/" + content.topic + "/threads";
-			firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),content).then(function(_) {
-				haxe_Log.trace("added",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 498, className : "systems.commands.Helppls", methodName : "remoteSaveQuestion"});
-			},$bind(_gthis,_gthis.err));
-		},$bind(this,this.err));
-	}
-	,updateSessionAnswer: function(user,state,answer) {
-		if(answer == null || answer == "") {
-			return;
-		}
-		var qid = this.qid.h[user];
-		var q = this.getQuestion(state);
-		var response = { qid : qid, question : q.question.toString(), state : state, answer : answer};
-		this.session.h[user].session.questions.push(response);
-	}
-	,parseErrorMessage: function(input) {
-		var regex = new EReg("```\n(.*):([0-9]+) - (.*)\n```","gmi");
-		if(regex.match(input)) {
-			return { file : regex.matched(1), line : Std.parseInt(regex.matched(2)), message : regex.matched(3)};
-		}
-		return null;
-	}
-	,parseVSCodeJson: function(input) {
-		try {
-			var obj = JSON.parse(input);
-			var split = obj[0].resource.split("/");
-			if(split.length >= 2) {
-				obj[0].resource = split[split.length - 2] + "/" + split[split.length - 1];
-			}
-			return obj[0];
-		} catch( _g ) {
-			return null;
-		}
-	}
-	,run: function(command,interaction) {
-		var _g = command.content;
-		if(_g._hx_index == 3) {
-			this.state.h[interaction.user.id] = "question_type";
-			var this1 = this.session;
-			var key = interaction.user.id;
-			var value = { author : { name : interaction.user.tag, id : interaction.user.id, icon_url : interaction.user.avatarURL()}, id : -1, title : null, discussion : null, start_message_id : null, thread_id : null, validated_by : null, solved : false, topic : _g.topic, session : { topic : null, questions : [], author_id : interaction.user.id, timestamp : interaction.createdTimestamp}, source_url : "", timestamp : firebase_web_firestore_Timestamp.now(), solution : null, valid : null, solution_requested : null, validated_timestamp : null, posted_discord : true};
-			this1.h[key] = value;
-			this.qid.h[interaction.user.id] = 1;
-			var question = this.getQuestion("question_type");
-			var out = question.question.toString();
-			if(question.valid_input != null) {
-				var _g = 0;
-				var _g1 = question.valid_input;
-				while(_g < _g1.length) {
-					var opt = _g1[_g];
-					++_g;
-					if(opt.key == "-1") {
-						continue;
-					}
-					out += "\n" + opt.key + " - " + opt.name;
-				}
-			}
-			var interaction1 = interaction.user;
-			var embed = new discord_$js_MessageEmbed();
-			embed.setDescription(out);
-			interaction1.send({ embeds : [embed]});
-		}
-	}
-	,nextQuestion: function(user) {
-		var qid = this.qid.h[user];
-		var last_input = this.last_input.h[user];
-		var _g = 0;
-		var _g1 = this.questions;
-		while(_g < _g1.length) {
-			var value = _g1[_g];
-			++_g;
-			if(value.id == last_input.qid && value.valid_input != null) {
-				var _g2 = 0;
-				var _g3 = value.valid_input;
-				while(_g2 < _g3.length) {
-					var opts = _g3[_g2];
-					++_g2;
-					if(opts.key == "-1") {
-						continue;
-					}
-					if(last_input.answer == opts.key) {
-						var _g4 = 0;
-						var _g5 = opts.questions;
-						while(_g4 < _g5.length) {
-							var next_phase = _g5[_g4];
-							++_g4;
-							if(next_phase.id > qid && next_phase.id > last_input.qid) {
-								this.qid.h[user] = next_phase.id;
-								this.state.h[user] = next_phase.state;
-								return next_phase;
-							}
-						}
-					}
-				}
-			}
-			if(value.id > qid) {
-				this.qid.h[user] = value.id;
-				this.state.h[user] = value.state;
-				return value;
-			}
-		}
-		return null;
-	}
-	,getQuestion: function(state) {
-		var _g = 0;
-		var _g1 = this.questions;
-		while(_g < _g1.length) {
-			var value = _g1[_g];
-			++_g;
-			if(value.state == state) {
-				return value;
-			}
-			if(value.valid_input != null) {
-				var _g2 = 0;
-				var _g3 = value.valid_input;
-				while(_g2 < _g3.length) {
-					var input_options = _g3[_g2];
-					++_g2;
-					if(input_options.questions != null) {
-						var _g4 = 0;
-						var _g5 = input_options.questions;
-						while(_g4 < _g5.length) {
-							var value_2 = _g5[_g4];
-							++_g4;
-							if(value_2.state == state) {
-								return value_2;
-							}
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
-	,getChannelId: function(channel) {
-		switch(channel) {
-		case "ceramic":
-			return "853414608747364352";
-		case "flixel":
-			return "165234904815239168";
-		case "haxe":
-			return "162395145352904705";
-		case "haxeui":
-			return "565569107701923852";
-		case "heaps":
-			return "501408700142059520";
-		case "openfl":
-			return "769686284318146561";
-		case "test":
-			return "597067735771381771";
-		case "tools":
-			return "459827960006967325";
-		default:
-			haxe_Log.trace("failed to find a channel id",{ fileName : "src/systems/commands/Helppls.hx", lineNumber : 659, className : "systems.commands.Helppls", methodName : "getChannelId"});
-			return channel;
-		}
-	}
-	,getAnnouncementThreadId: function(channel) {
-		switch(channel) {
-		case "ceramic":
-			return "";
-		case "haxe":
-			return "";
-		case "haxeui":
-			return "";
-		case "heaps":
-			return "";
-		case "openfl":
-			return "";
-		case "test":
-			return "946810894162219048";
-		case "tools":
-			return "";
-		default:
-			return channel;
-		}
-	}
-	,createEmbed: function(content) {
-		var embed = new discord_$js_MessageEmbed();
-		embed.setDescription(content);
-		return embed;
-	}
-	,get_name: function() {
-		return "helppls";
-	}
-	,dm_messages: null
-	,table87a8f92f715c03d0822a55d9b93a210d: null
-	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
-	,__class__: systems_commands_Helppls
-});
 var systems_commands_Hi = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
@@ -9802,6 +9344,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			if(forward != "scam_prevention") {
 				continue;
 			}
+			haxe_Log.trace("test",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 35, className : "systems.commands.ScamPrevention", methodName : "update"});
 			if(Util_withinTime(message.createdTimestamp,this.last_message_interval)) {
 				var user = message.author.id;
 				var this1 = this.time_since;
@@ -9820,8 +9363,8 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 113, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 114, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -9835,7 +9378,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		while(messages_current < messages_length) {
 			var messages = h[messages_keys[messages_current++]];
 			if(this.checkPhishingLinks(messages)) {
-				this.banUser(messages[0]);
+				this.banUser(messages);
 				continue;
 			}
 			if(messages.length < 3) {
@@ -9933,8 +9476,8 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 113, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 114, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -9961,10 +9504,16 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 			}
 		},$bind(this,this.err));
 	}
-	,banUser: function(message,callback) {
+	,banUser: function(messages,callback) {
 		var _gthis = this;
+		var message = messages[0];
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
-			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"BAN");
+			var _g = 0;
+			while(_g < messages.length) {
+				var message1 = messages[_g];
+				++_g;
+				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
+			}
 			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,$bind(_gthis,_gthis.err));
 			var id = message.author.id;
 			var _this = _gthis.time_since;
@@ -9999,11 +9548,15 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				var link = _g2[_g1];
 				++_g1;
 				if(message.content.indexOf(link) != -1) {
-					var regex = new EReg("((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
+					var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
 					if(regex.match(message.content)) {
 						var url = new URL(regex.matched(1));
 						var url_host_regex = new EReg("(.*)?.?(discordapp.com)","gu");
 						if(url_host_regex.match(url.hostname)) {
+							return false;
+						}
+						if(url.hostname.length == 0 || url.hostname == null) {
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 165, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 					}

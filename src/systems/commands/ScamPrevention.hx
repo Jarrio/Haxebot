@@ -32,6 +32,8 @@ class ScamPrevention extends CommandBase {
 				continue;
 			}
 
+			trace('test');
+
 			if (withinTime(message.createdTimestamp, last_message_interval)) {
 				this.updateTime(message.author.id);
 				this.addMessage(message.author.id, message);
@@ -44,7 +46,7 @@ class ScamPrevention extends CommandBase {
 
 		for (messages in this.trigger_messages) {
 			if (this.checkPhishingLinks(messages)) {
-				this.banUser(messages[0]);
+				this.banUser(messages);
 				continue;
 			}
 
@@ -124,9 +126,12 @@ class ScamPrevention extends CommandBase {
 		}, err);
 	}
 
-	function banUser(message:Message, ?callback:(_:Dynamic) -> Void) {
+	function banUser(messages:Array<Message>, ?callback:(_:Dynamic) -> Void) {
+		var message = messages[0];
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
-			this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), BAN);
+			for (message in messages) {
+				this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), BAN);
+			}
 			guild_member.ban({
 				days: 1,
 				reason: "found phishing links, auto banned."
@@ -148,11 +153,16 @@ class ScamPrevention extends CommandBase {
 		for (message in messages) {
 			for (link in this.phishing_urls) {
 				if (message.content.contains(link)) {
-					var regex = ~/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/gm;
+					var regex = ~/((((https?:)(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/gm;
 					if (regex.match(message.content)) {
 						var url = new URL(regex.matched(1));
 						var url_host_regex = ~/(.*)?.?(discordapp.com)/gu;
 						if (url_host_regex.match(url.hostname)) {
+							return false;
+						}
+
+						if (url.hostname.length == 0 || url.hostname == null) { 
+							trace(regex.matched(1));
 							return false;
 						}
 					}

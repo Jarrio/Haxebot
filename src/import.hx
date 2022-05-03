@@ -11,3 +11,8 @@ import util.DiscordUtil;
 import firebase.web.firestore.Firestore;
 import firebase.web.firestore.Query;
 import firebase.web.firestore.Firestore.*;
+
+import jsasync.JSAsync.jsasync;
+import jsasync.JSAsyncTools.jsawait;
+
+using jsasync.JSAsyncTools;
