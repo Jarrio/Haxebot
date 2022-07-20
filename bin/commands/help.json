@@ -17,7 +17,7 @@
 	{
 		"show_help": true,
 		"type": "notify",
-		"content": "Type a channel to recieve notifications from key people within those communities when big things change"
+		"content": "Type a channel to receive notifications from key people within those communities when big things change"
 	},
 	{
 		"show_help": true,
