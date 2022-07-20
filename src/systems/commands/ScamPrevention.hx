@@ -1,9 +1,9 @@
 package systems.commands;
 
+import sys.io.File;
 import js.html.URL;
 import discord_js.MessageEmbed;
 import discord_js.TextChannel;
-import sys.io.File;
 import haxe.Json;
 import haxe.Http;
 import discord_js.User;
@@ -39,7 +39,7 @@ class ScamPrevention extends CommandBase {
 
 			this.universe.deleteEntity(entity);
 		});
-	
+
 		this.getPhishingLinks();
 
 		for (messages in this.trigger_messages) {
@@ -154,17 +154,25 @@ class ScamPrevention extends CommandBase {
 					var regex = ~/((((https?:)(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/gm;
 					if (regex.match(message.content)) {
 						var url = new URL(regex.matched(1));
-						var url_host_regex = ~/(.*)?.?(discordapp.com)/gu;
-						if (url_host_regex.match(url.hostname)) {
+						var arr = [~/(.*)?.?(discordapp.com)/gu, ~/(.*)?.?(twitch.tv)/gu];
+						var whitelisted = false;
+						for (url_host_regex in arr) {
+							if (url_host_regex.match(url.hostname)) {
+								whitelisted = true;
+							}
+						}
+
+						if (whitelisted) {
 							return false;
 						}
 
-						if (url.hostname.length == 0 || url.hostname == null) { 
+						if (url.hostname.length == 0 || url.hostname == null) {
 							trace(regex.matched(1));
 							return false;
 						}
+
+						return true;
 					}
-					return true;
 				}
 			}
 		}
@@ -219,7 +227,7 @@ class ScamPrevention extends CommandBase {
 		if (title != null) {
 			embed.setTitle(title);
 		}
-		
+
 		if (format) {
 			var link_regex = ~/(https?:\/\/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\d*)\/?([a-z_\/0-9\-#.]*)\??([a-z_\/0-9\-#=&]*)/ig;
 

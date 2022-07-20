@@ -9550,16 +9550,25 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
 					if(regex.match(message.content)) {
 						var url = new URL(regex.matched(1));
-						var url_host_regex = new EReg("(.*)?.?(discordapp.com)","gu");
-						if(url_host_regex.match(url.hostname)) {
+						var arr = [new EReg("(.*)?.?(discordapp.com)","gu"),new EReg("(.*)?.?(twitch.tv)","gu")];
+						var whitelisted = false;
+						var _g3 = 0;
+						while(_g3 < arr.length) {
+							var url_host_regex = arr[_g3];
+							++_g3;
+							if(url_host_regex.match(url.hostname)) {
+								whitelisted = true;
+							}
+						}
+						if(whitelisted) {
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 163, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 170, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
+						return true;
 					}
-					return true;
 				}
 			}
 		}
