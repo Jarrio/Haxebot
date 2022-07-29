@@ -41,5 +41,10 @@
 		"show_help": false,
 		"type": "helppls_dm",
 		"content": ["If you would like to cancel your request or skip a question type `cancel` or `skip`. \n\nIf you are having issues or have found a bug please post all the information you can to the <#921583403520892939> channel."]
+	},
+	{
+		"show_help": true,
+		"type": "guide",
+		"content": ["There are ways to request help that will get you the help you need faster. Check out the following guide: \n <https://github.com/runkanrenchu/syntax-guide/blob/master/HOW%20TO%20ASK.md>"]
 	}
 ]
