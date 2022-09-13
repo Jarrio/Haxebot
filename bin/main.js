@@ -10068,9 +10068,9 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 		externs_Fetch("https://api-free.deepl.com" + "/v2/usage",{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
 			return resp.json().then(function(body) {
 				_gthis.usage = body;
-				haxe_Log.trace("Character count: " + _gthis.usage.character_count + "/" + _gthis.usage.character_limit,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 36, className : "systems.commands.Translate", methodName : "getCount"});
+				haxe_Log.trace("Character count: " + _gthis.usage.character_count + "/" + _gthis.usage.character_limit,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 37, className : "systems.commands.Translate", methodName : "getCount"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 37, className : "systems.commands.Translate", methodName : "getCount"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 38, className : "systems.commands.Translate", methodName : "getCount"});
 			});
 		});
 	}
@@ -10092,10 +10092,10 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 				interaction.reply(content).then(function(_) {
 					_gthis.getCount();
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 52, className : "systems.commands.Translate", methodName : "getTranslation"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 53, className : "systems.commands.Translate", methodName : "getTranslation"});
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 53, className : "systems.commands.Translate", methodName : "getTranslation"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 54, className : "systems.commands.Translate", methodName : "getTranslation"});
 			});
 		});
 	}
@@ -10110,9 +10110,9 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 					str += "{\r\n\t\t\t\t\t\t\"name\": \"" + item.name + "\",\r\n\t\t\t\t\t\t\"value\": \"" + item.language + "\"\r\n\t\t\t\t\t},";
 				}
 				str += "]";
-				haxe_Log.trace(str,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 68, className : "systems.commands.Translate", methodName : "getLanguages"});
+				haxe_Log.trace(str,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 69, className : "systems.commands.Translate", methodName : "getLanguages"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 69, className : "systems.commands.Translate", methodName : "getLanguages"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 70, className : "systems.commands.Translate", methodName : "getLanguages"});
 			});
 		});
 	}
