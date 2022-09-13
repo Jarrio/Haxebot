@@ -18,6 +18,7 @@ enum CommandOptions {
 	Poll(question:String, time:Int);
 	Roundup(number:Float);
 	Rtfm(channel:String);
+	Translate(to:String, message:String, from:String);
 	Helpdescription(description:String);
 	Api(channel:String);
 	Notify(channel:String);

@@ -61,7 +61,7 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, Ban, Haxelib, 
+						Hi, Help, Ban, Haxelib, Translate,
 						#if update 
 						Helppls,
 						Ban,
@@ -278,7 +278,10 @@ class Main {
 								.setDescription(param.description)
 								.setRequired(param.required));
 						case string:
-							var cmd = new SlashCommandStringOption().setName(param.name).setDescription(param.description).setRequired(param.required);
+							var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required);
+							if (param.description != null) {
+								cmd = cmd.setDescription(param.description);
+							}
 							if (param.choices != null) {
 								for (option in param.choices) {
 									cmd.addChoice(option.name, option.value);
@@ -337,6 +340,7 @@ typedef TConfig = {
 	var client_id:String;
 	var server_id:String;
 	var discord_token:String;
+	var deepl_key:String;
 	var last_roundup_posted:Int;
 	var commands:Array<TCommands>;
 }
