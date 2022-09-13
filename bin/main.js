@@ -8131,9 +8131,15 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		var _g = command.content;
 		if(_g._hx_index == 14) {
 			var _g1 = _g.command;
-			if(_g1 != "list" && !role_status) {
-				interaction.reply("Invalid Permissions.").then(null,$bind(this,this.err));
-				return;
+			var route = _g1;
+			if(_g1.indexOf(" ") != -1) {
+				route = _g1.split(" ")[0];
+			}
+			if(route != "list" && route != "info" && route != "search") {
+				if(!role_status) {
+					interaction.reply("Invalid Permissions.").then(null,$bind(this,this.err));
+					return;
+				}
 			}
 			var channel = interaction.channel;
 			var commands = [];
@@ -8157,7 +8163,11 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 				output += data;
 			});
 			ls.stdout.once("close",function(data) {
-				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib").setDescription(output);
+				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
+				if(output.length > 4000) {
+					output = HxOverrides.substr(output,0,4000) + "...";
+				}
+				embed.setDescription(output);
 				return interaction.reply({ embeds : [embed]}).then(null,$bind(_gthis,_gthis.err));
 			});
 			ls.stderr.on("data",function(data) {

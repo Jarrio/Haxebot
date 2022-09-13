@@ -26,17 +26,24 @@ class Haxelib extends CommandBase {
 		var role_status = hasRole(this.super_mod_id, interaction);
 		switch (command.content) {
 			case Haxelib(command):
-				if (command != "list" && !role_status) {
-					interaction.reply('Invalid Permissions.').then(null, err);
-					return;
+				var route = command;
+
+				if (route.contains(" ")) {
+					route = route.split(" ")[0];
 				}
 
+				if (route != "list" && route != "info" && route != "search") {
+					if (!role_status) {
+						interaction.reply('Invalid Permissions.').then(null, err);
+						return;
+					}
+				}
 				var channel = (interaction.channel);
 				var commands = [];
 				for (c in command.split(' ')) {
 					commands.push(c);
 				}
-		
+
 				var process = './haxe/haxelib';
 				if (!FileSystem.exists(process)) {
 					process = 'haxelib';
@@ -45,16 +52,19 @@ class Haxelib extends CommandBase {
 				var ls = spawn(process, commands);
 				var output = '';
 				ls.stdout.on('data', function(data:String) {
-					//Filter out download progress to output message
+					//Filter out download progress from output message
 					if (data.contains('KB') || data.contains('%')) {
 						return;
 					}
-					
 					output += data;
 				});
 
 				ls.stdout.once('close', (data) -> {
-					var embed = new MessageEmbed().setTitle('Haxelib').setDescription(output);
+					var embed = new MessageEmbed().setTitle('Haxelib');
+					if (output.length > 4000) {
+						output = output.substr(0, 4000) + '...';
+					}
+					embed.setDescription(output);
 					interaction.reply({embeds: [embed]}).then(null, err);
 				});
 
@@ -62,11 +72,11 @@ class Haxelib extends CommandBase {
 					var embed = new MessageEmbed();
 					embed.type = 'article';
 					embed.addField('Haxelib Error', data);
-		
+
 					channel.send(embed);
 				});
 			default:
-	}	
+	}
 
 	}
 
@@ -78,7 +88,7 @@ class Haxelib extends CommandBase {
 		this.message_history.set(command, embed);
 		return true;
 	}
-	
+
 	function get_name():String {
 		return 'haxelib';
 	}
