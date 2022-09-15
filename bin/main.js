@@ -650,8 +650,8 @@ Main.token = async function(rest) {
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(16);
-	var this11 = new Array(16);
+	var this1 = new Array(17);
+	var this11 = new Array(17);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -717,65 +717,69 @@ Main.start = function() {
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new systems_commands_Help(u);
+	var s = new systems_commands_Archive(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new systems_commands_mod_Ban(u);
+	var s = new systems_commands_Help(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new systems_commands_Haxelib(u);
+	var s = new systems_commands_mod_Ban(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Translate(u);
+	var s = new systems_commands_Haxelib(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_React(u);
+	var s = new systems_commands_Translate(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_React(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Roundup(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Run(u);
+	var s = new systems_commands_Roundup(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_Run(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new systems_commands_ScamPrevention(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new systems_commands_Trace(u);
+	var s = new systems_commands_ScamPrevention(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
+	s.onEnabled();
+	var s = new systems_commands_Trace(u);
+	phase.systems[16] = s;
+	phase.enabledSystems[16] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -797,8 +801,8 @@ Main.start = function() {
 		var res = Main.token(rest);
 		res.then(function(foo) {
 			Main.commands_active = true;
+			haxe_Log.trace(foo,{ fileName : "src/Main.hx", lineNumber : 99, className : "Main", methodName : "start"});
 		},Main.err);
-		haxe_Log.trace(res,{ fileName : "src/Main.hx", lineNumber : 100, className : "Main", methodName : "start"});
 	});
 	Main.client.on("messageCreate",function(message) {
 		var channel = message.channel;
@@ -864,8 +868,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 145, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 146, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 146, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 147, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(!interaction.isCommand()) {
@@ -926,9 +930,9 @@ Main.start = function() {
 			}
 		}
 		if(command.content == null) {
-			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 203, className : "Main", methodName : "start"});
-			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 204, className : "Main", methodName : "start"});
-			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 205, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 204, className : "Main", methodName : "start"});
+			haxe_Log.trace(enum_id,{ fileName : "src/Main.hx", lineNumber : 205, className : "Main", methodName : "start"});
+			haxe_Log.trace("Unmatched command. (" + command.name + ")",{ fileName : "src/Main.hx", lineNumber : 206, className : "Main", methodName : "start"});
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -965,18 +969,18 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 234, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 235, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 239, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 240, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 246, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 247, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -2217,24 +2221,25 @@ bits_BitsData.get_length = function(this1) {
 };
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
-	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:1,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
-	,React: ($_=function(emoji,message_id) { return {_hx_index:2,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
-	,Helppls: ($_=function(topic) { return {_hx_index:3,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
-	,Trace: ($_=function(code) { return {_hx_index:4,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
-	,Boop: ($_=function(user) { return {_hx_index:5,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
-	,Poll: ($_=function(question,time) { return {_hx_index:6,question:question,time:time,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","time"],$_)
-	,Roundup: ($_=function(number) { return {_hx_index:7,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
-	,Rtfm: ($_=function(channel) { return {_hx_index:8,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
-	,Translate: ($_=function(to,message,from) { return {_hx_index:9,to:to,message:message,from:from,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Translate",$_.__params__ = ["to","message","from"],$_)
-	,Helpdescription: ($_=function(description) { return {_hx_index:10,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helpdescription",$_.__params__ = ["description"],$_)
-	,Api: ($_=function(channel) { return {_hx_index:11,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["channel"],$_)
-	,Notify: ($_=function(channel) { return {_hx_index:12,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
-	,Code: ($_=function(code) { return {_hx_index:13,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
-	,Help: ($_=function(category) { return {_hx_index:14,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
-	,Haxelib: ($_=function(command) { return {_hx_index:15,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
+	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
+	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:2,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
+	,React: ($_=function(emoji,message_id) { return {_hx_index:3,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
+	,Helppls: ($_=function(topic) { return {_hx_index:4,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
+	,Trace: ($_=function(code) { return {_hx_index:5,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
+	,Boop: ($_=function(user) { return {_hx_index:6,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
+	,Poll: ($_=function(question,time) { return {_hx_index:7,question:question,time:time,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","time"],$_)
+	,Roundup: ($_=function(number) { return {_hx_index:8,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
+	,Rtfm: ($_=function(channel) { return {_hx_index:9,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
+	,Translate: ($_=function(to,message,from) { return {_hx_index:10,to:to,message:message,from:from,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Translate",$_.__params__ = ["to","message","from"],$_)
+	,Helpdescription: ($_=function(description) { return {_hx_index:11,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helpdescription",$_.__params__ = ["description"],$_)
+	,Api: ($_=function(channel) { return {_hx_index:12,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["channel"],$_)
+	,Notify: ($_=function(channel) { return {_hx_index:13,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
+	,Code: ($_=function(code) { return {_hx_index:14,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
+	,Help: ($_=function(category) { return {_hx_index:15,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
+	,Haxelib: ($_=function(command) { return {_hx_index:16,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
-components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib];
+components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive];
 var discord_$builder_SharedNameAndDescription = require("@discordjs/builders").SharedNameAndDescription;
 var discord_$builder_SharedSlashCommandOptions = require("@discordjs/builders").SharedSlashCommandOptions;
 var discord_$builder_AnySlashCommand = {};
@@ -7917,7 +7922,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 11) {
+		if(_g._hx_index == 12) {
 			var _g1 = _g.channel;
 			var docs;
 			switch(interaction.channel.id) {
@@ -7962,7 +7967,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			var base = docs;
 			var split = null;
 			var _g = command.content;
-			if(_g._hx_index == 11) {
+			if(_g._hx_index == 12) {
 				split = _g.channel.split(" ");
 			}
 			if(split[2] != null) {
@@ -8061,7 +8066,7 @@ var systems_commands_ApiParams = {};
 systems_commands_ApiParams._new = function(base,command) {
 	var split = null;
 	var _g = command.content;
-	if(_g._hx_index == 11) {
+	if(_g._hx_index == 12) {
 		split = _g.channel.split(" ");
 	}
 	if(split[2] != null) {
@@ -8089,6 +8094,47 @@ systems_commands_ApiParams._new = function(base,command) {
 	var this1 = { class_name : split[0].substring(split[0].lastIndexOf(".") + 1), path : split[0], identifier : split[1], page : split[1] != null ? url + ("#" + split[1]) : url};
 	return this1;
 };
+var systems_commands_Archive = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Archive"] = systems_commands_Archive;
+systems_commands_Archive.__name__ = "systems.commands.Archive";
+systems_commands_Archive.__super__ = systems_CommandBase;
+systems_commands_Archive.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		var _gthis = this;
+		if(command.content._hx_index == 1) {
+			var role = "1019915584546291712";
+			interaction.member.fetch(true).then(function(member) {
+				var found = false;
+				var jsIterator = member.roles.cache.entries();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
+					var key = v[0];
+					if(key == role) {
+						found = true;
+						break;
+					}
+				}
+				if(found) {
+					interaction.member.roles.remove(role).then(function(success) {
+						interaction.reply("Archives are hidden");
+					},$bind(_gthis,_gthis.err));
+				} else {
+					interaction.member.roles.add(role).then(function(success) {
+						interaction.reply("Archives are shown");
+					},$bind(_gthis,_gthis.err));
+				}
+			},$bind(this,this.err));
+		}
+	}
+	,get_name: function() {
+		return "archive";
+	}
+	,__class__: systems_commands_Archive
+});
 var systems_commands_Boop = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
@@ -8098,7 +8144,7 @@ systems_commands_Boop.__super__ = systems_CommandBase;
 systems_commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 5) {
+		if(_g._hx_index == 6) {
 			interaction.reply("*boop* <@" + _g.user.id + ">");
 		}
 	}
@@ -8138,7 +8184,7 @@ systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
-		if(_g._hx_index == 15) {
+		if(_g._hx_index == 16) {
 			var _g1 = _g.command;
 			var route = _g1;
 			if(_g1.indexOf(" ") != -1) {
@@ -8230,7 +8276,7 @@ systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 14) {
+		if(_g._hx_index == 15) {
 			var _g1 = _g.category;
 			var msg = "";
 			var _this = this.data;
@@ -8298,7 +8344,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 	,check_verified_interval: null
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 10) {
+		if(_g._hx_index == 11) {
 			if(!interaction.channel.isThread()) {
 				interaction.reply("This command is only available in a thread.").then(null,$bind(this,this.err));
 				return;
@@ -8527,7 +8573,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 12) {
+		if(_g._hx_index == 13) {
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
@@ -8579,7 +8625,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 6) {
+		if(_g._hx_index == 7) {
 			var question = _g.question;
 			var time = _g.time;
 			if(time > 4320) {
@@ -8792,7 +8838,7 @@ systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 7) {
+		if(_g._hx_index == 8) {
 			var _g1 = _g.number;
 			if(this.active) {
 				this.active = false;
@@ -8847,7 +8893,7 @@ systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 8) {
+		if(_g._hx_index == 9) {
 			var _g1 = _g.channel;
 			var compare = _g1;
 			if(_g1 == null) {
@@ -9855,7 +9901,7 @@ systems_commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 4) {
+		if(_g._hx_index == 5) {
 			var _g1 = _g.code;
 			if(!this.isSafe(_g1,interaction)) {
 				interaction.reply("That code is not safe.");
@@ -10050,7 +10096,7 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 9) {
+		if(_g._hx_index == 10) {
 			var _g1 = _g.message;
 			if(this.usage == null) {
 				interaction.reply("An error occured");
@@ -10135,7 +10181,7 @@ systems_commands_mod_Ban.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 1) {
+		if(_g._hx_index == 2) {
 			var user = _g.user;
 			var reason = _g.reason;
 			var delete_messages = _g.delete_messages;

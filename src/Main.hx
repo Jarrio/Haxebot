@@ -61,7 +61,7 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Help, Ban, Haxelib, Translate,
+						Hi, Archive, Help, Ban, Haxelib, Translate,
 						#if update 
 						Helppls,
 						Ban,
@@ -96,8 +96,9 @@ class Main {
 			var res = token(rest);
 			res.then(function(foo) {
 				commands_active = true;
+				trace(foo);
 			}, err);
-			trace(res);
+			
 
 			var count = 0;
 			// function createCommand() {

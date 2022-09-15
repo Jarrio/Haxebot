@@ -10,6 +10,7 @@ typedef Command = {
 @:keep
 enum CommandOptions {
 	Hi;
+	Archive;
 	Ban(user:User, reason:String, delete_messages:String);
 	React(emoji:String, message_id:String);
 	Helppls(topic:String);
