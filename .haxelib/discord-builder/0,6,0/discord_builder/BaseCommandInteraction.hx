@@ -1,5 +1,6 @@
 package discord_builder;
 
+import discord_js.ApplicationCommand.ApplicationCommandOptionChoice;
 import discord_js.MessageAttachment;
 import discord_js.FileOptions;
 import discord_js.MessageMentionOptions;
@@ -34,6 +35,7 @@ extern class BaseCommandInteraction extends Interaction {
 	@:overload(function(options:String):Promise<Message> {})
 	@:overload(function(options:InteractionReplyOptions):Promise<Message> {})
 	function reply():Promise<Message>;
+	function respond(options:Array<ApplicationCommandOptionChoice>):Promise<Void>;
 }
 
 typedef CommandInteractions = {

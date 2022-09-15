@@ -1,3 +1,4 @@
+import haxe.Rest;
 import discord_api_types.Routes;
 import discordjs.rest.REST;
 import js.node.Timers;
@@ -94,9 +95,11 @@ class Main {
 			var get_commands = parseCommands();
 			var rest = new REST({version: '9'}).setToken(Main.config.discord_token);
 			var res = token(rest);
-			res.then(function(foo) {
+			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
-				trace(foo);
+				for (item in foo) {
+					trace('${item.name} registered');
+				}
 			}, err);
 			
 
@@ -148,64 +151,11 @@ class Main {
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
-			if (!interaction.isCommand())
-				return;
-
-			var command:Command = {
-				name: interaction.commandName,
-				content: null
-			}
-
-			switch (command.name) {
-				case 'helppls':
-					var time = Date.now().getTime();
-					dm_help_tracking.set(interaction.user.id, time);
-				default:
-			}
-
-			var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
-
-			for (value in config.commands) {
-				if (value.name != command.name) {
-					continue;
-				}
-
-				if (value.params == null) {
-					command.content = Type.createEnum(CommandOptions, enum_id);
-					break;
-				} else {
-					var params = new Array<Dynamic>();
-					for (param in value.params) {
-						switch (param.type) {
-							case user:
-								params.push(interaction.options.getUser(param.name));
-							case bool:
-								params.push(interaction.options.getBoolean(param.name));
-							case mention:
-								params.push(interaction.options.getMentionable(param.name));
-							case channel:
-								params.push(interaction.options.getChannel(param.name));
-							case role:
-								params.push(interaction.options.getRole(param.name));
-							case string:
-								params.push(interaction.options.getString(param.name));
-							case number:
-								params.push(interaction.options.getNumber(param.name));
-							default:
-								throw 'Something went wrong.';
-						}
-					}
-					command.content = Type.createEnum(CommandOptions, enum_id, params);
-					break;
-				}
-			}
-
-			if (command.content == null) {
-				trace(interaction);
-				trace(enum_id);
-				trace('Unmatched command. (${command.name})');
+			var command = createCommand(interaction);
+			if (!interaction.isCommand() && !interaction.isAutocomplete()) {
 				return;
 			}
+
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
 
@@ -217,6 +167,67 @@ class Main {
 			}
 			universe.update(1);
 		}
+	}
+
+	public static function createCommand(interaction:BaseCommandInteraction) {
+		var command:Command = {
+			name: interaction.commandName,
+			content: null
+		}
+
+		switch (command.name) {
+			case 'helppls':
+				var time = Date.now().getTime();
+				dm_help_tracking.set(interaction.user.id, time);
+			default:
+		}
+
+		var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
+
+		for (value in config.commands) {
+			if (value.name != command.name) {
+				continue;
+			}
+
+			if (value.params == null) {
+				command.content = Type.createEnum(CommandOptions, enum_id);
+				break;
+			} else {
+				var params = new Array<Dynamic>();
+				for (param in value.params) {
+					switch (param.type) {
+						case user:
+							params.push(interaction.options.getUser(param.name));
+						case bool:
+							params.push(interaction.options.getBoolean(param.name));
+						case mention:
+							params.push(interaction.options.getMentionable(param.name));
+						case channel:
+							params.push(interaction.options.getChannel(param.name));
+						case role:
+							params.push(interaction.options.getRole(param.name));
+						case string:
+							params.push(interaction.options.getString(param.name));
+						case number:
+							params.push(interaction.options.getNumber(param.name));
+						default:
+							throw 'Something went wrong.';
+					}
+				}
+				
+				command.content = Type.createEnum(CommandOptions, enum_id, params);
+				break;
+			}
+		}
+
+		return command;
+
+		if (command.content == null) {
+			trace(interaction);
+			trace(enum_id);
+			trace('Unmatched command. (${command.name})');
+		}
+		return null;
 	}
 
 	public static function getCommand(name:String) {
@@ -273,42 +284,60 @@ class Main {
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultPermission(permission);
 			if (command.params != null) {
 				for (param in command.params) {
+					var autocomplete = false;
+					if (param.autocomplete != null)  {
+						autocomplete = param.autocomplete;
+					}
+
 					switch (param.type) {
 						case user:
 							main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required));
+								.setRequired(param.required)
+							);
 						case string:
-							var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required);
+							var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
 							if (param.description != null) {
 								cmd = cmd.setDescription(param.description);
 							}
-							if (param.choices != null) {
+							if (param.choices != null && !autocomplete) {
+								var choices = [];
 								for (option in param.choices) {
-									cmd.addChoice(option.name, option.value);
+									choices.push({name: option.name, value: option.value});
 								}
+								cmd.addChoices(...Rest.of(choices));
 							}
+							if (param.name == 'api') {
+								trace('here');
+								trace(autocomplete);
+							}
+
 							main_command.addStringOption(cmd);
 						case bool:
 							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required));
+								.setRequired(param.required)
+							);
 						case channel:
 							main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required));
+								.setRequired(param.required)
+							);
 						case role:
 							main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required));
+								.setRequired(param.required)
+							);
 						case mention:
 							main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required));
+								.setRequired(param.required)
+							);
 						case number:
 							main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required));
+								.setRequired(param.required)
+							);
 						default:
 					}
 				}
@@ -355,6 +384,7 @@ typedef TCommands = {
 	@:optional var is_public:Bool;
 	@:optional var params:Array<TCommands>;
 	@:optional var required:Bool;
+	@:optional var autocomplete:Bool;
 	@:optional var choices:Array<{name:String, value:EitherType<Int, String>}>;
 }
 

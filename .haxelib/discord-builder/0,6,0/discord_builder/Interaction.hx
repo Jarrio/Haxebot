@@ -25,6 +25,7 @@ extern class Interaction {
 	public function inCachedGuild():Bool;
 	public function inGuild():Bool;
 	public function inRawGuild():Bool;
+	public function isAutocomplete():Bool;
 	public function isButton():Bool;
 	public function isCommand():Bool;
 	public function isContextMenu():Bool;
