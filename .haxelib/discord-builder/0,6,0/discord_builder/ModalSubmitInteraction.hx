@@ -16,7 +16,7 @@ import discord_api_types.InteractionType;
 import discord_api_types.Snowflake;
 
 @:native
-extern class BaseCommandInteraction extends Interaction {
+extern class BaseCommandInteraction extends BaseCommandInteraction {
 	var ephemeral:Bool;
 	var command:Dynamic;
 	var commandId:Snowflake;
@@ -25,8 +25,6 @@ extern class BaseCommandInteraction extends Interaction {
 	var replied:Bool;
 	var type:InteractionType;
 	var options:CommandInteractions;
-	var fields:ModalSubmitFields;
-	var customId:String;
 	
 	function deferReply(options:InteractionDeferReplyOptions):Promise<Message>;
 	function deleteReply():Promise<Void>;

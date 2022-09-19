@@ -18,6 +18,7 @@ package discord_js;
 	public var lastPinAt:Date;
 	public var lastPinTimestamp:Float;
 	public var locked:Bool;
+	public var ownerId:String;
 	public var manageable:Bool;
 	public var memberCount:Int;
 	//public var members:ThreadMemeb;

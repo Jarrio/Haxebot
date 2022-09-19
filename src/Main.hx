@@ -31,6 +31,7 @@ import systems.commands.*;
 import systems.commands.mod.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
+import components.*;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -54,7 +55,7 @@ class Main {
 		var get = rest.put(Routes.applicationGuildCommands(Main.config.client_id, Main.guild_id), {body: commands}).jsawait();
 		return get;
 	}
-	
+
 	public static function start() {
 		universe = Universe.create({
 			entities: 1000,
@@ -62,12 +63,27 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi, Archive, Help, Ban, Haxelib, Translate,
-						#if update 
-						Helppls,
+						Hi,
+						Archive,
+						Help,
 						Ban,
-						Helpdescription, 
-						#end React, Notify, Helpdescription, Rtfm, Roundup, Run, Api, Poll, Boop, ScamPrevention, Trace
+						Haxelib,
+						Translate,
+						Showcase,
+						#if update
+						Helppls, Ban, Helpdescription,
+						#end
+						React,
+						Notify,
+						Helpdescription,
+						Rtfm,
+						Roundup,
+						Run,
+						Api,
+						Poll,
+						Boop,
+						ScamPrevention,
+						Trace
 					]
 				}
 			]
@@ -101,14 +117,13 @@ class Main {
 					trace('${item.name} registered');
 				}
 			}, err);
-			
 
 			var count = 0;
 			// function createCommand() {
 			// 	Timers.setTimeout(function() {
 			// 		Main.client.application.commands.create(cast get_commands[count]).then(function(command) {
 			// 			saveCommand(command);
-						
+
 			// 			if (count + 1 != get_commands.length) {
 			// 				createCommand();
 			// 			} else {
@@ -119,19 +134,23 @@ class Main {
 			// 		}, err);
 			// 	}, 250);
 			// }
-			//createCommand();
+			// createCommand();
 		});
 
 		client.on('messageCreate', (message:Message) -> {
+			if (message.author.bot) {
+				return;
+			}
 			var channel = (message.channel : TextChannel);
-			if (channel.type == DM && !message.author.bot) {
+
+			if (channel.type == DM) {
 				if (dm_help_tracking.exists(message.author.id)) {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
 				}
 				return;
 			}
 
-			if (channel.type == GUILD_TEXT && !message.author.bot) {
+			if (channel.type == GUILD_TEXT) {
 				if (message.content.startsWith("!run")) {
 					var code:RunMessage = message.toString();
 					universe.setComponents(universe.createEntity(), code, message);
@@ -140,9 +159,15 @@ class Main {
 				if (message.content.startsWith("!react")) {
 					universe.setComponents(universe.createEntity(), CommandForward.react, message);
 				}
-
-				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 			}
+
+			if (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360')) {
+				if (message.content.startsWith("[showcase]")) {
+					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
+				}
+			}
+
+			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 		});
 
 		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
@@ -151,11 +176,19 @@ class Main {
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
-			var command = createCommand(interaction);
-			if (!interaction.isCommand() && !interaction.isAutocomplete()) {
+			if (interaction.isModalSubmit()) {
+				if (interaction.customId == 'showcase') {
+					var title = interaction.fields.getTextInputValue('titlelink');
+					var description = interaction.fields.getTextInputValue('description');
+					universe.setComponents(universe.createEntity(), interaction, new ShowcaseModalSubmit(title, description));
+				}
 				return;
 			}
 
+			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
+				return;
+			}
+			var command = createCommand(interaction);
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
 
@@ -214,7 +247,7 @@ class Main {
 							throw 'Something went wrong.';
 					}
 				}
-				
+
 				command.content = Type.createEnum(CommandOptions, enum_id, params);
 				break;
 			}
@@ -285,7 +318,7 @@ class Main {
 			if (command.params != null) {
 				for (param in command.params) {
 					var autocomplete = false;
-					if (param.autocomplete != null)  {
+					if (param.autocomplete != null) {
 						autocomplete = param.autocomplete;
 					}
 
@@ -293,8 +326,7 @@ class Main {
 						case user:
 							main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required)
-							);
+								.setRequired(param.required));
 						case string:
 							var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
 							if (param.description != null) {
@@ -316,28 +348,23 @@ class Main {
 						case bool:
 							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required)
-							);
+								.setRequired(param.required));
 						case channel:
 							main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required)
-							);
+								.setRequired(param.required));
 						case role:
 							main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required)
-							);
+								.setRequired(param.required));
 						case mention:
 							main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required)
-							);
+								.setRequired(param.required));
 						case number:
 							main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
 								.setDescription(param.description)
-								.setRequired(param.required)
-							);
+								.setRequired(param.required));
 						default:
 					}
 				}
@@ -414,4 +441,5 @@ enum abstract CommandForward(String) {
 	var helppls;
 	var scam_prevention;
 	var react;
+	var showcase;
 }

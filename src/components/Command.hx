@@ -26,4 +26,5 @@ enum CommandOptions {
 	Code(code:String);
 	Help(category:String);
 	Haxelib(command:String);
+	Showcase;
 }
