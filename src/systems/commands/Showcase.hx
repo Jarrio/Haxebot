@@ -1,5 +1,8 @@
 package systems.commands;
 
+import js.Browser;
+import discord_builder.ActionRowBuilder;
+import discord_builder.ButtonBuilder;
 import discord_js.ThreadChannel;
 import components.ShowcaseModalSubmit;
 import discord_builder.APITextInputComponent;
@@ -15,7 +18,8 @@ class Showcase extends CommandBase {
 	var channel:TextChannel;
 	var checking = false;
 	@:fastFamily var modal:{command:BaseCommandInteraction, modal:ShowcaseModalSubmit};
-	@:fastFamily var xpost:{command:CommandForward, message:Message};
+	@:fastFamily var messages:{command:CommandForward, message:Message};
+	@:fastFamily var interactions:{command:CommandForward, interaction:BaseCommandInteraction};
 
 	override function update(_:Float) {
 		super.update(_);
@@ -36,7 +40,30 @@ class Showcase extends CommandBase {
 			this.universe.deleteEntity(entity);
 		});
 
-		iterate(xpost, entity -> {
+		iterate(messages, entity -> {
+			if (command == CommandForward.showcase_message) {
+				Browser.console.dir(message.attachments);
+				var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
+				if(!regex.match(message.content) && message.attachments.size == 0) {
+					var content = '```\n${message.content}\n```';
+					content += '\n Your message was removed due to not having any attachments or links. Please chat within threads only.';
+					message.author.send(content).then(function(succ) {
+						message.delete();
+					}, (err) -> trace(err));
+				}
+
+				// if (message.content.startsWith('[thread]')) {
+				// 	var input = new APITextInputComponent().setCustomId(message.id).setRequired(true).setStyle(Short);
+				// 	var modal = new ModalBuilder().setCustomId('showcase_title').setTitle('Showcase Thread Title');
+				// 	var row = new APIActionRowComponent().addComponents(input);
+				// 	modal.addComponents(row);
+					
+				// 	message.startThread({name: message.content.substr(8, 50)}).then(null, (err) -> err);
+				// }
+				this.universe.deleteEntity(entity);
+				return;
+			}
+
 			if (command != CommandForward.showcase && !channel.isThread()) {
 				return;
 			}
@@ -51,19 +78,29 @@ class Showcase extends CommandBase {
 			
 			this.universe.deleteEntity(entity);
 		});
+
+		iterate(interactions, entity -> {
+			if (command == CommandForward.showcase_agree) {
+				interaction.member.roles.add('1021517470080700468').then(function(success) {
+					interaction.reply({content: 'You can now show off your stuff at <#162664383082790912>', ephemeral: true});
+				}, err);
+			}
+
+			if (command == CommandForward.showcase_disagree) {
+				interaction.reply({content: "Keep on lurking :)", ephemeral: true});
+			}
+
+			this.universe.deleteEntity(entity);
+		});
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
-		var modal = new ModalBuilder().setCustomId('showcase').setTitle('Showcase');
+		var text = 'If your post does not contain either an __**attachment**__ or a __**link**__, the post will be removed. Any comments on any of the works posted in the <#162664383082790912> channel should be made within threads. \n\n**Guidelines**\n1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
+		var agree_btn = new ButtonBuilder().setCustomId('showcase_agree').setLabel('Agree').setStyle(Primary);
+		var disagree_btn = new ButtonBuilder().setCustomId('showcase_disagree').setLabel('Disagree').setStyle(Secondary);
+		var row = new APIActionRowComponent().addComponents(agree_btn, disagree_btn);
 
-		var title_input = new APITextInputComponent().setCustomId('titlelink').setLabel('Title or Link').setStyle(Short).setRequired(true);
-		var description_input = new APITextInputComponent().setCustomId('description').setLabel('Description').setRequired(false).setStyle(Paragraph);
-
-		var row_1 = new APIActionRowComponent().addComponents(title_input);
-		var row_2 = new APIActionRowComponent().addComponents(description_input);
-
-		modal.addComponents(row_1, row_2);
-		interaction.showModal(modal).then((succ) -> trace('win'), (err) -> trace(err));
+		interaction.reply({content: text, components: [row], ephemeral: true});
 	}
 
 	function get_name():String {

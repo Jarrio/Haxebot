@@ -56,6 +56,7 @@ typedef CommandInteractions = {
 
 typedef InteractionReplyOptions = {
 	@:optional var tts:Bool;
+	@:optional var ephemeral:Bool;
 	@:optional var nonce:String;
 	@:optional var content:String;
 	@:optional var components:Array<APIActionRowComponent<Dynamic>>;

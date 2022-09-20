@@ -156,6 +156,10 @@ class Main {
 					universe.setComponents(universe.createEntity(), code, message);
 				}
 
+				if (channel.id == '898957515654574121') {
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_message, message);
+				}
+
 				if (message.content.startsWith("!react")) {
 					universe.setComponents(universe.createEntity(), CommandForward.react, message);
 				}
@@ -167,6 +171,7 @@ class Main {
 				}
 			}
 
+			
 			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 		});
 
@@ -176,15 +181,17 @@ class Main {
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
-			if (interaction.isModalSubmit()) {
-				if (interaction.customId == 'showcase') {
-					var title = interaction.fields.getTextInputValue('titlelink');
-					var description = interaction.fields.getTextInputValue('description');
-					universe.setComponents(universe.createEntity(), interaction, new ShowcaseModalSubmit(title, description));
+			if (interaction.isButton()) {
+				if (interaction.customId == 'showcase_agree') {
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree, interaction);
 				}
+
+				if (interaction.customId == 'showcase_disagree') {
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
+				}
+				
 				return;
 			}
-
 			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
@@ -442,4 +449,7 @@ enum abstract CommandForward(String) {
 	var scam_prevention;
 	var react;
 	var showcase;
+	var showcase_agree;
+	var showcase_disagree;
+	var showcase_message;
 }
