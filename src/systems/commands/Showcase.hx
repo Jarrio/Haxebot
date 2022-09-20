@@ -42,7 +42,6 @@ class Showcase extends CommandBase {
 
 		iterate(messages, entity -> {
 			if (command == CommandForward.showcase_message) {
-				Browser.console.dir(message.attachments);
 				var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
 				if(!regex.match(message.content) && message.attachments.size == 0) {
 					var content = '```\n${message.content}\n```';
@@ -52,14 +51,6 @@ class Showcase extends CommandBase {
 					}, (err) -> trace(err));
 				}
 
-				// if (message.content.startsWith('[thread]')) {
-				// 	var input = new APITextInputComponent().setCustomId(message.id).setRequired(true).setStyle(Short);
-				// 	var modal = new ModalBuilder().setCustomId('showcase_title').setTitle('Showcase Thread Title');
-				// 	var row = new APIActionRowComponent().addComponents(input);
-				// 	modal.addComponents(row);
-					
-				// 	message.startThread({name: message.content.substr(8, 50)}).then(null, (err) -> err);
-				// }
 				this.universe.deleteEntity(entity);
 				return;
 			}

@@ -10064,11 +10064,10 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var _this = this.modal;
 		var _set = _this.entities;
-		var _g_set = _set;
-		var _g_active = _this.isActive();
+		var _active = _this.isActive();
 		var _g_idx = _set.size() - 1;
-		while(_g_active && _g_idx >= 0) {
-			var entity = _g_set.getDense(_g_idx--);
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
 			var modal = this.table57fe33dae47d23e66b521963cf6643b9.get(entity);
 			var command = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
 			this.channel.send("" + modal.title_or_link + " \n " + modal.description).then((function(command) {
@@ -10080,15 +10079,13 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var _this = this.messages;
 		var _set = _this.entities;
-		var _g1_set = _set;
-		var _g1_active = _this.isActive();
+		var _active = _this.isActive();
 		var _g1_idx = _set.size() - 1;
-		while(_g1_active && _g1_idx >= 0) {
-			var entity = _g1_set.getDense(_g1_idx--);
+		while(_active && _g1_idx >= 0) {
+			var entity = _set.getDense(_g1_idx--);
 			var command1 = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
 			if(command1 == "showcase_message") {
-				$global.console.dir(message[0].attachments);
 				var regex = new EReg("https?://(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&/=]*)","ig");
 				if(!regex.match(message[0].content) && message[0].attachments.size == 0) {
 					var content = "```\n" + message[0].content + "\n```";
@@ -10099,7 +10096,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 						};
 					})(message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 52, className : "systems.commands.Showcase", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 51, className : "systems.commands.Showcase", methodName : "update"});
 						};
 					})());
 				}
@@ -10116,18 +10113,17 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			var content1 = StringTools.trim(message[0].content.substring(10));
 			this.channel.send("Showcase: <#" + thread.id + "> \nBy: <@" + message[0].author.id + ">\n\n" + content1).then(null,(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 77, className : "systems.commands.Showcase", methodName : "update"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 68, className : "systems.commands.Showcase", methodName : "update"});
 				};
 			})());
 			this.universe.deleteEntity(entity);
 		}
 		var _this = this.interactions;
 		var _set = _this.entities;
-		var _g2_set = _set;
-		var _g2_active = _this.isActive();
+		var _active = _this.isActive();
 		var _g2_idx = _set.size() - 1;
-		while(_g2_active && _g2_idx >= 0) {
-			var entity = _g2_set.getDense(_g2_idx--);
+		while(_active && _g2_idx >= 0) {
+			var entity = _set.getDense(_g2_idx--);
 			var interaction = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
 			var command1 = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			if(command1 == "showcase_agree") {
