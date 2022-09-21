@@ -847,7 +847,6 @@ Main.start = function() {
 			return;
 		}
 		var channel = message.channel;
-		haxe_Log.trace(message.content,{ fileName : "src/Main.hx", lineNumber : 145, className : "Main", methodName : "start"});
 		if(channel.type == "DM") {
 			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
 				var _ecsTmpEntity = Main.universe.createEntity();
@@ -885,7 +884,7 @@ Main.start = function() {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
-			if(channel.id == "898957515654574121") {
+			if(channel.id == "162664383082790912") {
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,5,"showcase_message");
 				Main.universe.components.set(_ecsTmpEntity,1,message);
@@ -960,8 +959,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 179, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1114,18 +1113,18 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 286, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 291, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 299, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 298, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -1188,8 +1187,8 @@ Main.parseCommands = function() {
 						($_=cmd,$_.addChoices.apply($_,choices));
 					}
 					if(param.name == "api") {
-						haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 351, className : "Main", methodName : "parseCommands"});
-						haxe_Log.trace(autocomplete,{ fileName : "src/Main.hx", lineNumber : 352, className : "Main", methodName : "parseCommands"});
+						haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 350, className : "Main", methodName : "parseCommands"});
+						haxe_Log.trace(autocomplete,{ fileName : "src/Main.hx", lineNumber : 351, className : "Main", methodName : "parseCommands"});
 					}
 					main_command.addStringOption(cmd);
 					break;

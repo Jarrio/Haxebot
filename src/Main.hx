@@ -142,7 +142,6 @@ class Main {
 				return;
 			}
 			var channel = (message.channel : TextChannel);
-			trace(message.content);
 			
 			if (channel.type == DM) {
 				if (dm_help_tracking.exists(message.author.id)) {
@@ -157,7 +156,7 @@ class Main {
 					universe.setComponents(universe.createEntity(), code, message);
 				}
 
-				if (channel.id == '898957515654574121') {
+				if (channel.id == '162664383082790912') {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase_message, message);
 				}
 
