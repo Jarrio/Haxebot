@@ -9969,7 +9969,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 });
 var systems_commands_Showcase = function(_universe) {
 	this.checking = false;
-	this.channel_id = "898957515654574121";
+	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_universe);
 	this.modal = this.universe.families.get(2);
 	this.messages = this.universe.families.get(3);
