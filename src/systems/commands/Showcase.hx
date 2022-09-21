@@ -1,13 +1,9 @@
 package systems.commands;
 
-import js.Browser;
-import discord_builder.ActionRowBuilder;
 import discord_builder.ButtonBuilder;
 import discord_js.ThreadChannel;
 import components.ShowcaseModalSubmit;
-import discord_builder.APITextInputComponent;
 import discord_builder.APIActionRowComponent;
-import discord_builder.ModalBuilder;
 import discord_js.TextChannel;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
@@ -66,7 +62,10 @@ class Showcase extends CommandBase {
 			}
 
 			var content = message.content.substring(10).trim();
-			this.channel.send('Showcase: <#${thread.id}> \nBy: <@${message.author.id}>\n\n$content').then(null, (err) -> trace(err));
+			content += '\n\nBy: <@${message.author.id}>';
+			content += '\n*Discuss more at the showcase thread - <#${thread.id}>*';
+
+			this.channel.send(content).then(null, (err) -> trace(err));
 			
 			this.universe.deleteEntity(entity);
 		});
@@ -99,21 +98,3 @@ class Showcase extends CommandBase {
 		return 'showcase';
 	}
 }
-/*
-	{
-	"name": "link",
-	"type": "string",
-	"description": "link",
-	"required": false
-	}, {
-	"name": "title",
-	"type": "string",
-	"description": "link",
-	"required": false
-	}, {
-	"name": "description",
-	"type": "string",
-	"description": "link",
-	"required": false
-	}
- */
