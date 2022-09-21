@@ -2018,12 +2018,7 @@ function Util_loadFile(filename,pos) {
 function Util_hasRole(role,interaction) {
 	var guild = interaction.member.roles.cache.get(role);
 	if(interaction.guild.available) {
-		var _v_ = guild == null ? null : guild.members;
-		if(_v_ == null) {
-			return null;
-		} else {
-			return _v_.has(interaction.user.id);
-		}
+		return guild.members.has(interaction.user.id);
 	} else {
 		return false;
 	}
@@ -10035,6 +10030,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 });
 var systems_commands_Showcase = function(_universe) {
 	this.checking = false;
+	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_universe);
 	this.modal = this.universe.families.get(2);
 	this.messages = this.universe.families.get(3);
@@ -10048,18 +10044,19 @@ systems_commands_Showcase.__name__ = "systems.commands.Showcase";
 systems_commands_Showcase.__super__ = systems_CommandBase;
 systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 	channel: null
+	,channel_id: null
 	,checking: null
 	,update: function(_) {
 		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
 		if(this.channel == null && !this.checking) {
 			this.checking = true;
-			Main.client.channels.fetch("162664383082790912").then(function(channel) {
+			Main.client.channels.fetch(this.channel_id).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 31, className : "systems.commands.Showcase", methodName : "update"});
+				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 32, className : "systems.commands.Showcase", methodName : "update"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 32, className : "systems.commands.Showcase", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 33, className : "systems.commands.Showcase", methodName : "update"});
 			});
 		}
 		var _this = this.modal;
@@ -10096,7 +10093,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 						};
 					})(message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 51, className : "systems.commands.Showcase", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 52, className : "systems.commands.Showcase", methodName : "update"});
 						};
 					})());
 				}
@@ -10113,7 +10110,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			var content1 = StringTools.trim(message[0].content.substring(10));
 			this.channel.send("Showcase: <#" + thread.id + "> \nBy: <@" + message[0].author.id + ">\n\n" + content1).then(null,(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 68, className : "systems.commands.Showcase", methodName : "update"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 69, className : "systems.commands.Showcase", methodName : "update"});
 				};
 			})());
 			this.universe.deleteEntity(entity);
