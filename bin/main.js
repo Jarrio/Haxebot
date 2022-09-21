@@ -10060,7 +10060,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(command1 == "showcase_agree") {
 				interaction[0].member.roles.add("1021517470080700468").then((function(interaction) {
 					return function(success) {
-						interaction[0].reply({ content : "You can now show off your stuff at <#162664383082790912>", ephemeral : true});
+						interaction[0].reply({ content : "Thanks! You can now post in <#162664383082790912>", ephemeral : true});
 					};
 				})(interaction),$bind(this,this.err));
 			}

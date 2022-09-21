@@ -40,7 +40,7 @@ class Showcase extends CommandBase {
 		iterate(messages, entity -> {
 			if (command == CommandForward.showcase_message) {
 				var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
-				if(!regex.match(message.content) && message.attachments.size == 0) {
+				if (!regex.match(message.content) && message.attachments.size == 0) {
 					var content = '```\n${message.content}\n```';
 					content += '\n Your message was removed due to not having any attachments or links. Please chat within threads only.';
 					message.author.send(content).then(function(succ) {
@@ -66,14 +66,14 @@ class Showcase extends CommandBase {
 			content += '\n*Discuss more at the showcase thread - <#${thread.id}>*';
 
 			this.channel.send(content).then(null, (err) -> trace(err));
-			
+
 			this.universe.deleteEntity(entity);
 		});
 
 		iterate(interactions, entity -> {
 			if (command == CommandForward.showcase_agree) {
 				interaction.member.roles.add('1021517470080700468').then(function(success) {
-					interaction.reply({content: 'You can now show off your stuff at <#162664383082790912>', ephemeral: true});
+					interaction.reply({content: 'Thanks! You can now post in <#162664383082790912>', ephemeral: true});
 				}, err);
 			}
 
