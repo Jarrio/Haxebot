@@ -142,7 +142,8 @@ class Main {
 				return;
 			}
 			var channel = (message.channel : TextChannel);
-
+			trace(message.content);
+			
 			if (channel.type == DM) {
 				if (dm_help_tracking.exists(message.author.id)) {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);

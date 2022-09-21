@@ -847,6 +847,7 @@ Main.start = function() {
 			return;
 		}
 		var channel = message.channel;
+		haxe_Log.trace(message.content,{ fileName : "src/Main.hx", lineNumber : 145, className : "Main", methodName : "start"});
 		if(channel.type == "DM") {
 			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
 				var _ecsTmpEntity = Main.universe.createEntity();
@@ -959,8 +960,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 179, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1113,18 +1114,18 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 286, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 291, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 298, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 299, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
@@ -1187,8 +1188,8 @@ Main.parseCommands = function() {
 						($_=cmd,$_.addChoices.apply($_,choices));
 					}
 					if(param.name == "api") {
-						haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 350, className : "Main", methodName : "parseCommands"});
-						haxe_Log.trace(autocomplete,{ fileName : "src/Main.hx", lineNumber : 351, className : "Main", methodName : "parseCommands"});
+						haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 351, className : "Main", methodName : "parseCommands"});
+						haxe_Log.trace(autocomplete,{ fileName : "src/Main.hx", lineNumber : 352, className : "Main", methodName : "parseCommands"});
 					}
 					main_command.addStringOption(cmd);
 					break;
@@ -2018,7 +2019,12 @@ function Util_loadFile(filename,pos) {
 function Util_hasRole(role,interaction) {
 	var guild = interaction.member.roles.cache.get(role);
 	if(interaction.guild.available) {
-		return guild.members.has(interaction.user.id);
+		var _v_ = guild == null ? null : guild.members;
+		if(_v_ == null) {
+			return null;
+		} else {
+			return _v_.has(interaction.user.id);
+		}
 	} else {
 		return false;
 	}
@@ -2655,6 +2661,7 @@ var discord_$js_MessageCollector = require("discord.js").MessageCollector;
 var discord_$js_MessageEmbed = require("discord.js").MessageEmbed;
 var discord_$js_MessageManager = require("discord.js").MessageManager;
 var discord_$js_MessageMentions = require("discord.js").MessageMentions;
+var discord_$js_MessagePayload = require("discord.js").MessagePayload;
 var discord_$js_MessageReaction = require("discord.js").MessageReaction;
 var discord_$js_NewsChannel = require("discord.js").NewsChannel;
 var discord_$js_PartialGroupDMChannel = require("discord.js").PartialGroupDMChannel;
@@ -9962,7 +9969,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 });
 var systems_commands_Showcase = function(_universe) {
 	this.checking = false;
-	this.channel_id = "162664383082790912";
+	this.channel_id = "898957515654574121";
 	systems_CommandBase.call(this,_universe);
 	this.modal = this.universe.families.get(2);
 	this.messages = this.universe.families.get(3);
@@ -9986,9 +9993,9 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 28, className : "systems.commands.Showcase", methodName : "update"});
+				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 29, className : "systems.commands.Showcase", methodName : "update"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 29, className : "systems.commands.Showcase", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 30, className : "systems.commands.Showcase", methodName : "update"});
 			});
 		}
 		var _this = this.modal;
@@ -10025,7 +10032,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 						};
 					})(message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 48, className : "systems.commands.Showcase", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 49, className : "systems.commands.Showcase", methodName : "update"});
 						};
 					})());
 				}
@@ -10039,12 +10046,21 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(thread.ownerId != message[0].author.id) {
 				return;
 			}
+			var arr = [];
 			var content1 = StringTools.trim(message[0].content.substring(10));
+			var jsIterator = message[0].attachments.values();
+			var _g1_lastStep = jsIterator.next();
+			while(!_g1_lastStep.done) {
+				var v = _g1_lastStep.value;
+				_g1_lastStep = jsIterator.next();
+				arr.push(v);
+			}
 			content1 += "\n\nBy: <@" + message[0].author.id + ">";
 			content1 += "\n*Discuss more at the showcase thread - <#" + thread.id + ">*";
-			this.channel.send(content1).then(null,(function() {
+			var payload = new discord_$js_MessagePayload(message[0],{ content : content1, files : arr});
+			this.channel.send(payload).then(null,(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 68, className : "systems.commands.Showcase", methodName : "update"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 77, className : "systems.commands.Showcase", methodName : "update"});
 				};
 			})());
 			this.universe.deleteEntity(entity);

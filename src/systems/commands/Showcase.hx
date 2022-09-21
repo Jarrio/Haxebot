@@ -1,5 +1,6 @@
 package systems.commands;
 
+import discord_js.MessagePayload;
 import discord_builder.ButtonBuilder;
 import discord_js.ThreadChannel;
 import components.ShowcaseModalSubmit;
@@ -12,7 +13,7 @@ import discord_js.Message;
 
 class Showcase extends CommandBase {
 	var channel:TextChannel;
-	final channel_id = '162664383082790912';
+	final channel_id = '898957515654574121';
 	var checking = false;
 	@:fastFamily var modal:{command:BaseCommandInteraction, modal:ShowcaseModalSubmit};
 	@:fastFamily var messages:{command:CommandForward, message:Message};
@@ -61,11 +62,19 @@ class Showcase extends CommandBase {
 				return;
 			}
 
+			var arr = [];
+
 			var content = message.content.substring(10).trim();
+			for (a in message.attachments) {
+				arr.push(a);
+			}
+
 			content += '\n\nBy: <@${message.author.id}>';
 			content += '\n*Discuss more at the showcase thread - <#${thread.id}>*';
 
-			this.channel.send(content).then(null, (err) -> trace(err));
+			var payload = new MessagePayload(message, {content: content, files: arr});
+
+			this.channel.send(payload).then(null, (err) -> trace(err));
 
 			this.universe.deleteEntity(entity);
 		});
