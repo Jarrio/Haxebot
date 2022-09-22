@@ -1,8 +1,6 @@
 package systems.commands;
 
 import discord_js.WebhookClient;
-import discord_js.MessageEmbed;
-import discord_js.MessagePayload;
 import discord_builder.ButtonBuilder;
 import discord_js.ThreadChannel;
 import components.ShowcaseModalSubmit;

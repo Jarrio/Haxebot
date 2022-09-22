@@ -1,7 +1,6 @@
 import haxe.Rest;
 import discord_api_types.Routes;
 import discordjs.rest.REST;
-import js.node.Timers;
 import discord_js.ApplicationCommandManager.ApplicationCommandData;
 import discord_js.Snowflake;
 import discord_js.ApplicationCommand;
@@ -31,8 +30,6 @@ import systems.commands.*;
 import systems.commands.mod.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
-import haxe.macro.CompilationServer;
-import components.*;
 
 class Main {
 	public static var app:FirebaseApp;
