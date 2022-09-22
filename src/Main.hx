@@ -166,7 +166,7 @@ class Main {
 			}
 
 			if (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360')) {
-				if (message.content.startsWith("[test]") && message.author.id == "151104106973495296") {
+				if (message.content.startsWith("[showcase]")) {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
 				}
 			}

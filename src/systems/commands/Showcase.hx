@@ -15,7 +15,8 @@ import discord_js.Message;
 
 class Showcase extends CommandBase {
 	var channel:TextChannel;
-	final channel_id = '898957515654574121';
+	final channel_id = '162664383082790912';
+
 	var webhook:WebhookClient;
 	var checking = false;
 	@:fastFamily var modal:{command:BaseCommandInteraction, modal:ShowcaseModalSubmit};
