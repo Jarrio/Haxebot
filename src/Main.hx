@@ -52,7 +52,7 @@ class Main {
 
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
-		var get = rest.put(Routes.applicationGuildCommands(Main.config.client_id, Main.guild_id), {body: commands}).jsawait();
+		var get = rest.put(Routes.applicationGuildCommands(Main.config.client_id, Main.guild_id), {body: commands});
 		return get;
 	}
 
