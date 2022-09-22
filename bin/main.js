@@ -10048,7 +10048,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			var arr = [];
-			var content1 = StringTools.trim(message[0].content.substring(6));
+			var content1 = StringTools.trim(message[0].content.substring(10));
 			var jsIterator = message[0].attachments.values();
 			var _g1_lastStep = jsIterator.next();
 			while(!_g1_lastStep.done) {

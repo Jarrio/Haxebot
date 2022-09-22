@@ -73,7 +73,7 @@ class Showcase extends CommandBase {
 
 			var arr = [];
 
-			var content = message.content.substring(6).trim();
+			var content = message.content.substring(10).trim();
 			for (a in message.attachments) {
 				arr.push(a);
 			}
