@@ -1,4 +1,6 @@
 common.hxml
 --debug
 --dce no
+#--macro haxe.macro.CompilationServer.setModuleCheckPolicy([''], [Retype], false)
+-D ecs.no_debug_output
 -D source-map

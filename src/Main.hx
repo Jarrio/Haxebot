@@ -31,6 +31,7 @@ import systems.commands.*;
 import systems.commands.mod.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
+import haxe.macro.CompilationServer;
 import components.*;
 
 class Main {
@@ -49,7 +50,6 @@ class Main {
 	public static final guild_id:String = "162395145352904705";
 	#end
 
-	@:jsasync
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
 		var get = rest.put(Routes.applicationGuildCommands(Main.config.client_id, Main.guild_id), {body: commands}).jsawait();

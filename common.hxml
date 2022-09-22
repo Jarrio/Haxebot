@@ -15,8 +15,7 @@
 --library node
 --library firebase
 --library shadows
---library jsimport
---library jsasync
+
 
 -D ecs.static_loading
 --js bin/main.js
