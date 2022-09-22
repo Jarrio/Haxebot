@@ -166,7 +166,7 @@ class Main {
 			}
 
 			if (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360')) {
-				if (message.content.startsWith("[showcase]")) {
+				if (message.content.startsWith("[test]") && message.author.id == "151104106973495296") {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
 				}
 			}
@@ -399,6 +399,7 @@ typedef THelpPls = {
 
 typedef TConfig = {
 	var project_name:String;
+	var showcase_hook:String;
 	var firebase:FirebaseOptions;
 	var macros:Bool;
 	var client_id:String;

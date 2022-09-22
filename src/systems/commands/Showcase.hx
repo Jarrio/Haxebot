@@ -1,5 +1,7 @@
 package systems.commands;
 
+import discord_js.WebhookClient;
+import discord_js.MessageEmbed;
 import discord_js.MessagePayload;
 import discord_builder.ButtonBuilder;
 import discord_js.ThreadChannel;
@@ -13,11 +15,17 @@ import discord_js.Message;
 
 class Showcase extends CommandBase {
 	var channel:TextChannel;
-	final channel_id = '162664383082790912';
+	final channel_id = '898957515654574121';
+	var webhook:WebhookClient;
 	var checking = false;
 	@:fastFamily var modal:{command:BaseCommandInteraction, modal:ShowcaseModalSubmit};
 	@:fastFamily var messages:{command:CommandForward, message:Message};
 	@:fastFamily var interactions:{command:CommandForward, interaction:BaseCommandInteraction};
+
+	public function new(_) {
+		super(_);
+		this.webhook = new WebhookClient({url: Main.config.showcase_hook});
+	}
 
 	override function update(_:Float) {
 		super.update(_);
@@ -64,17 +72,23 @@ class Showcase extends CommandBase {
 
 			var arr = [];
 
-			var content = message.content.substring(10).trim();
+			var content = message.content.substring(6).trim();
 			for (a in message.attachments) {
 				arr.push(a);
 			}
 
-			content += '\n\nBy: <@${message.author.id}>';
-			content += '\n*Discuss more at the showcase thread - <#${thread.id}>*';
-
-			var payload = new MessagePayload(message, {content: content, files: arr});
-
-			this.channel.send(payload).then(null, (err) -> trace(err));
+			this.webhook.send({
+				content: content, 
+				username: message.author.username, 
+				avatarURL: message.author.avatarURL(),
+				files: arr
+			}).then(function(_) {
+				this.webhook.send({
+					content: '***Continue the conversation at - <#${thread.id}>***',
+					username: message.author.username,
+					avatarURL: message.author.avatarURL()
+				});
+			}, (err) -> trace(err));
 
 			this.universe.deleteEntity(entity);
 		});

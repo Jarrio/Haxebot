@@ -1,7 +1,13 @@
 package discord_js;
 
+typedef WebhookClientData = {
+	@:optional var url:String;
+	@:optional var id:String;
+	@:optional var token:String;
+}
+
 @:jsRequire("discord.js", "WebhookClient") extern class WebhookClient {
-	function new(id:String, token:String, ?options:ClientOptions);
+	function new(data:WebhookClientData, ?options:ClientOptions);
 	public var client : WebhookClient;
 	public var token : String;
 	private var _timeouts : js.lib.Set<Dynamic>;

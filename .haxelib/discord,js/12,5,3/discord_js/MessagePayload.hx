@@ -10,6 +10,7 @@ import discord_js.ThreadManager;
 	public var application : Null<ClientApplication>;
 	public var attachments : Collection<String, MessageAttachment>;
 	public var author : User;
+	public var options: {};
 
 	public function new(target:Message, ?options:{}):Void;
 

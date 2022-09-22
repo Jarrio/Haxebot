@@ -922,7 +922,7 @@ Main.start = function() {
 			}
 		}
 		if(channel.type == "GUILD_PUBLIC_THREAD" && channel.parentId == "1019922106370232360") {
-			if(StringTools.startsWith(message.content,"[showcase]")) {
+			if(StringTools.startsWith(message.content,"[test]") && message.author.id == "151104106973495296") {
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,5,"showcase");
 				Main.universe.components.set(_ecsTmpEntity,1,message);
@@ -9966,16 +9966,17 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 	,__class__: systems_commands_ScamPrevention
 	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_timestamp:"get_timestamp"})
 });
-var systems_commands_Showcase = function(_universe) {
+var systems_commands_Showcase = function(_) {
 	this.checking = false;
-	this.channel_id = "162664383082790912";
-	systems_CommandBase.call(this,_universe);
+	this.channel_id = "898957515654574121";
+	systems_CommandBase.call(this,_);
 	this.modal = this.universe.families.get(2);
 	this.messages = this.universe.families.get(3);
 	this.interactions = this.universe.families.get(4);
 	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(4);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.webhook = new discord_$js_WebhookClient({ url : Main.config.showcase_hook});
 };
 $hxClasses["systems.commands.Showcase"] = systems_commands_Showcase;
 systems_commands_Showcase.__name__ = "systems.commands.Showcase";
@@ -9983,6 +9984,7 @@ systems_commands_Showcase.__super__ = systems_CommandBase;
 systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 	channel: null
 	,channel_id: null
+	,webhook: null
 	,checking: null
 	,update: function(_) {
 		var _gthis = this;
@@ -9992,9 +9994,9 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 29, className : "systems.commands.Showcase", methodName : "update"});
+				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 37, className : "systems.commands.Showcase", methodName : "update"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 30, className : "systems.commands.Showcase", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 38, className : "systems.commands.Showcase", methodName : "update"});
 			});
 		}
 		var _this = this.modal;
@@ -10031,7 +10033,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 						};
 					})(message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 49, className : "systems.commands.Showcase", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 57, className : "systems.commands.Showcase", methodName : "update"});
 						};
 					})());
 				}
@@ -10041,12 +10043,12 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(command1 != "showcase" && !this.channel.isThread()) {
 				return;
 			}
-			var thread = js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel);
-			if(thread.ownerId != message[0].author.id) {
+			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
+			if(thread[0].ownerId != message[0].author.id) {
 				return;
 			}
 			var arr = [];
-			var content1 = StringTools.trim(message[0].content.substring(10));
+			var content1 = StringTools.trim(message[0].content.substring(6));
 			var jsIterator = message[0].attachments.values();
 			var _g1_lastStep = jsIterator.next();
 			while(!_g1_lastStep.done) {
@@ -10054,12 +10056,13 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 				_g1_lastStep = jsIterator.next();
 				arr.push(v);
 			}
-			content1 += "\n\nBy: <@" + message[0].author.id + ">";
-			content1 += "\n*Discuss more at the showcase thread - <#" + thread.id + ">*";
-			var payload = new discord_$js_MessagePayload(message[0],{ content : content1, files : arr});
-			this.channel.send(payload).then(null,(function() {
+			this.webhook.send({ content : content1, username : message[0].author.username, avatarURL : message[0].author.avatarURL(), files : arr}).then((function(thread,message) {
+				return function(_) {
+					_gthis.webhook.send({ content : "***Continue the conversation at - <#" + thread[0].id + ">***", username : message[0].author.username, avatarURL : message[0].author.avatarURL()});
+				};
+			})(thread,message),(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 77, className : "systems.commands.Showcase", methodName : "update"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 91, className : "systems.commands.Showcase", methodName : "update"});
 				};
 			})());
 			this.universe.deleteEntity(entity);
