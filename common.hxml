@@ -20,7 +20,6 @@
 -D ecs.static_loading
 --js bin/main.js
 --macro Safety.safeNavigation('', true)
---macro jsasync.JSAsync.use("")
 
 -main Main
 --macro includeFile('jscode.js')
