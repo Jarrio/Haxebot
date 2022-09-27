@@ -17,6 +17,7 @@
 --library shadows
 
 
+-D ecs.no_debug_output
 -D ecs.static_loading
 --js bin/main.js
 --macro Safety.safeNavigation('', true)

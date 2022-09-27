@@ -35,7 +35,7 @@ typedef EmbedFooterData = {
 	public function addField(name:Dynamic, value:Dynamic, ?inline_:Bool):MessageEmbed;
 	public function addFields(fields:haxe.extern.Rest<Any>):MessageEmbed;
 	public function attachFiles(file:Array<ts.AnyOf3<String, FileOptions, MessageAttachment>>):MessageEmbed;
-	public function setAuthor(options:EitherType<String, EmbedAuthorData>):MessageEmbed;
+	public function setAuthor(options:EmbedAuthorData):MessageEmbed;
 	public function setColor(color:ColorResolvable):MessageEmbed;
 	public function setDescription(description:Dynamic):MessageEmbed;
 	public function setFooter(data:EmbedFooterData):MessageEmbed;

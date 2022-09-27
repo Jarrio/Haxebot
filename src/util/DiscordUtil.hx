@@ -57,7 +57,7 @@ class DiscordUtil {
 		Main.client.channels.fetch(channel_id).then(callback, err);
 	}
 
-	static function err(err:Dynamic) {
+	static inline function err(err:Dynamic) {
 		trace(err);
 	}
 }
