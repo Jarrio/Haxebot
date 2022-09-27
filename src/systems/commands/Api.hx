@@ -2,9 +2,7 @@ package systems.commands;
 
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
-import haxe.Http;
 import components.Command;
-import NodeHtmlParser;
 
 typedef Data = {
 	var type:String;

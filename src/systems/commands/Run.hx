@@ -45,9 +45,6 @@ class Run extends System {
 	}
 
 	function run(message:String, response:Message) {
-		// #if block
-		// return;
-		// #end
 		if (this.haxe_version == null) {
 			var process = './haxe/haxe';
 			if (!FileSystem.exists(process)) {

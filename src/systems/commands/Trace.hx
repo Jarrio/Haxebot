@@ -5,7 +5,6 @@ import vm2.NodeVM;
 import sys.FileSystem;
 import js.node.Fs;
 import util.Random;
-import discord_js.Message;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import js.node.ChildProcess.spawn;

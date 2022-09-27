@@ -28,6 +28,7 @@ class Showcase extends CommandBase {
 
 	override function update(_:Float) {
 		super.update(_);
+
 		if (this.channel == null && !checking) {
 			checking = true;
 			Main.client.channels.fetch(this.channel_id).then(function(channel) {

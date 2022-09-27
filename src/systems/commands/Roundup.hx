@@ -64,9 +64,7 @@ class Roundup extends CommandBase {
 				]);
 			}
 		}
-		#if block
-		return;
-		#end
+
 		if (this.channel == null && this.checking_channel == false) {
 			this.checking_channel = true;
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {

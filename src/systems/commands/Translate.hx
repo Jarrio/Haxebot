@@ -1,6 +1,5 @@
 package systems.commands;
 
-import discord_js.MessageEmbed;
 import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
