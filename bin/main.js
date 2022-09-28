@@ -8833,8 +8833,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						interaction.reply("That isn't your quote!").then(null,$bind(_gthis,_gthis.err));
 						return;
 					}
-					if(description == null || description.length < 20) {
-						interaction.reply("A description must have at least 20 characters");
+					if(description == null || description.length < 14) {
+						interaction.reply("A description must have at least 14 characters");
 						return;
 					}
 					firebase_web_firestore_Firestore.updateDoc(doc.ref,{ description : description}).then(function(_) {

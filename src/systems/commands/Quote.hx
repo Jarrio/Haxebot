@@ -121,8 +121,8 @@ class Quote extends CommandDbBase {
 								return;
 							}
 
-							if (description == null || description.length < 20) {
-								interaction.reply("A description must have at least 20 characters");
+							if (description == null || description.length < 14) {
+								interaction.reply("A description must have at least 14 characters");
 								return;
 							}
 
@@ -138,7 +138,7 @@ class Quote extends CommandDbBase {
 								interaction.reply("Cannot delete this quote").then(null, err);
 								return;
 							}
-							
+
 							if (res.docs.length > 1) {
 								interaction.reply("An odd situation occured. <@151104106973495296>");
 								trace(name);
