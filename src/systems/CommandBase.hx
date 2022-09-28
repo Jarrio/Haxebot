@@ -21,7 +21,7 @@ abstract class CommandBase extends System {
 
 	abstract function run(command:Command, interaction:BaseCommandInteraction):Void;
 
-	var name(get, never):String;
+	public var name(get, never):String;
 
 	abstract function get_name():String;
 

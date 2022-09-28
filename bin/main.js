@@ -649,22 +649,24 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(2);
-	var this11 = new Array(2);
+	var this1 = new Array(18);
+	var this11 = new Array(18);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
-	var this1 = new Array(4);
+	var this1 = new Array(6);
 	var vec1 = this1;
-	vec1[2] = new ecs_Components(4);
-	vec1[1] = new ecs_Components(4);
-	vec1[3] = new ecs_Components(4);
-	vec1[0] = new ecs_Components(4);
+	vec1[2] = new ecs_Components(6);
+	vec1[1] = new ecs_Components(6);
+	vec1[4] = new ecs_Components(6);
+	vec1[3] = new ecs_Components(6);
+	vec1[5] = new ecs_Components(6);
+	vec1[0] = new ecs_Components(6);
 	var components = new ecs_core_ComponentManager(entities,vec1);
 	var this1 = [0];
 	var this2 = this1;
 	var this1 = new Array(0);
 	var resources = new ecs_core_ResourceManager(this2,this1);
-	var this1 = new Array(2);
+	var this1 = new Array(5);
 	var vec1 = this1;
 	var this1 = [0];
 	var this2 = this1;
@@ -694,6 +696,48 @@ Main.start = function() {
 	var this2 = this1;
 	var resBits = this2;
 	vec1[1] = new ecs_Family(1,cmpBits,resBits,1000);
+	var this1 = [0];
+	var this2 = this1;
+	var _g = this2.length;
+	while(_g < 1) {
+		var i = _g++;
+		this2[i] = 0;
+	}
+	var cmpBits = this2;
+	bits_Bits.set(cmpBits,4);
+	bits_Bits.set(cmpBits,1);
+	var this1 = [0];
+	var this2 = this1;
+	var resBits = this2;
+	vec1[2] = new ecs_Family(2,cmpBits,resBits,1000);
+	var this1 = [0];
+	var this2 = this1;
+	var _g = this2.length;
+	while(_g < 1) {
+		var i = _g++;
+		this2[i] = 0;
+	}
+	var cmpBits = this2;
+	bits_Bits.set(cmpBits,5);
+	bits_Bits.set(cmpBits,3);
+	var this1 = [0];
+	var this2 = this1;
+	var resBits = this2;
+	vec1[3] = new ecs_Family(3,cmpBits,resBits,1000);
+	var this1 = [0];
+	var this2 = this1;
+	var _g = this2.length;
+	while(_g < 1) {
+		var i = _g++;
+		this2[i] = 0;
+	}
+	var cmpBits = this2;
+	bits_Bits.set(cmpBits,3);
+	bits_Bits.set(cmpBits,4);
+	var this1 = [0];
+	var this2 = this1;
+	var resBits = this2;
+	vec1[4] = new ecs_Family(4,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
 	var phase = vec[0];
@@ -701,9 +745,73 @@ Main.start = function() {
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new systems_commands_Hi(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
+	s.onEnabled();
+	var s = new systems_commands_ScamPrevention(u);
+	phase.systems[2] = s;
+	phase.enabledSystems[2] = true;
+	s.onEnabled();
+	var s = new systems_commands_Showcase(u);
+	phase.systems[3] = s;
+	phase.enabledSystems[3] = true;
+	s.onEnabled();
+	var s = new systems_commands_Roundup(u);
+	phase.systems[4] = s;
+	phase.enabledSystems[4] = true;
+	s.onEnabled();
+	var s = new systems_commands_Run(u);
+	phase.systems[5] = s;
+	phase.enabledSystems[5] = true;
+	s.onEnabled();
+	var s = new systems_commands_Haxelib(u);
+	phase.systems[6] = s;
+	phase.enabledSystems[6] = true;
+	s.onEnabled();
+	var s = new systems_commands_Trace(u);
+	phase.systems[7] = s;
+	phase.enabledSystems[7] = true;
+	s.onEnabled();
+	var s = new systems_commands_React(u);
+	phase.systems[8] = s;
+	phase.enabledSystems[8] = true;
+	s.onEnabled();
+	var s = new systems_commands_Notify(u);
+	phase.systems[9] = s;
+	phase.enabledSystems[9] = true;
+	s.onEnabled();
+	var s = new systems_commands_Helpdescription(u);
+	phase.systems[10] = s;
+	phase.enabledSystems[10] = true;
+	s.onEnabled();
+	var s = new systems_commands_Rtfm(u);
+	phase.systems[11] = s;
+	phase.enabledSystems[11] = true;
+	s.onEnabled();
+	var s = new systems_commands_Poll(u);
+	phase.systems[12] = s;
+	phase.enabledSystems[12] = true;
+	s.onEnabled();
+	var s = new systems_commands_Boop(u);
+	phase.systems[13] = s;
+	phase.enabledSystems[13] = true;
+	s.onEnabled();
+	var s = new systems_commands_Archive(u);
+	phase.systems[14] = s;
+	phase.enabledSystems[14] = true;
+	s.onEnabled();
+	var s = new systems_commands_Help(u);
+	phase.systems[15] = s;
+	phase.enabledSystems[15] = true;
+	s.onEnabled();
+	var s = new systems_commands_Translate(u);
+	phase.systems[16] = s;
+	phase.enabledSystems[16] = true;
+	s.onEnabled();
+	var s = new systems_commands_Hi(u);
+	phase.systems[17] = s;
+	phase.enabledSystems[17] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -712,27 +820,12 @@ Main.start = function() {
 		u.families.tryActivate(idx);
 	}
 	Main.universe = u;
-	var _g = 0;
-	var _g1 = Main.universe.phases;
-	while(_g < _g1.length) {
-		var sys = _g1[_g];
-		++_g;
-		haxe_Log.trace(sys.name,{ fileName : "src/Main.hx", lineNumber : 82, className : "Main", methodName : "start"});
-	}
-	haxe_Log.trace("DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG",{ fileName : "src/Main.hx", lineNumber : 86, className : "Main", methodName : "start"});
-	var disabled = ["scamprevention","showcase","roundup","run","haxelib","trace"];
-	var _g = 0;
-	while(_g < disabled.length) {
-		var system = disabled[_g];
-		++_g;
-		haxe_Log.trace("DEBUG - " + system + " is disabled",{ fileName : "src/Main.hx", lineNumber : 89, className : "Main", methodName : "start"});
-	}
 	Main.client = new discord_$js_Client({ intents : [1,512,4096,2,1024]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 104, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 90, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
@@ -743,7 +836,16 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("" + Std.string(item.name) + " registered",{ fileName : "src/Main.hx", lineNumber : 113, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 99, className : "Main", methodName : "start"});
+			}
+			var commands = Main.parseCommands();
+			var _g = 0;
+			while(_g < commands.length) {
+				var c = commands[_g];
+				++_g;
+				if(c.name == "quote") {
+					break;
+				}
 			}
 		},Main.err);
 	});
@@ -755,8 +857,17 @@ Main.start = function() {
 		if(channel.type == "DM") {
 			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
 				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"helppls");
 				Main.universe.components.set(_ecsTmpEntity,1,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -775,11 +886,24 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 			}
 			if(channel.id == "162664383082790912") {
 				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"showcase_message");
 				Main.universe.components.set(_ecsTmpEntity,1,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -787,8 +911,17 @@ Main.start = function() {
 			}
 			if(StringTools.startsWith(message.content,"!react")) {
 				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"react");
 				Main.universe.components.set(_ecsTmpEntity,1,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -798,8 +931,17 @@ Main.start = function() {
 		if(channel.type == "GUILD_PUBLIC_THREAD" && channel.parentId == "1019922106370232360") {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
 				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"showcase");
 				Main.universe.components.set(_ecsTmpEntity,1,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -807,33 +949,68 @@ Main.start = function() {
 			}
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
+		Main.universe.components.set(_ecsTmpEntity,4,"scam_prevention");
 		Main.universe.components.set(_ecsTmpEntity,1,message);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(2);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(4);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(0);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 173, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 174, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 149, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 150, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
 			if(interaction.customId == "showcase_agree") {
 				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"showcase_agree");
 				Main.universe.components.set(_ecsTmpEntity,3,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
 			if(interaction.customId == "showcase_disagree") {
 				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"showcase_disagree");
 				Main.universe.components.set(_ecsTmpEntity,3,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -849,6 +1026,14 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,3,interaction);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 		var ecsTmpFamily = Main.universe.families.get(1);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -935,29 +1120,29 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 280, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 256, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 285, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 261, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 268, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.config.username,Main.config.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 301, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 277, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 304, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 280, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -2220,6 +2405,17 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 };
 components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quote,components_CommandOptions.Showcase];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Showcase];
+var components_ShowcaseModalSubmit = function(title,description) {
+	this.title_or_link = title;
+	this.description = description;
+};
+$hxClasses["components.ShowcaseModalSubmit"] = components_ShowcaseModalSubmit;
+components_ShowcaseModalSubmit.__name__ = "components.ShowcaseModalSubmit";
+components_ShowcaseModalSubmit.prototype = {
+	title_or_link: null
+	,description: null
+	,__class__: components_ShowcaseModalSubmit
+};
 var discord_$builder_APIBaseComponent = function() { };
 $hxClasses["discord_builder.APIBaseComponent"] = discord_$builder_APIBaseComponent;
 discord_$builder_APIBaseComponent.__name__ = "discord_builder.APIBaseComponent";
@@ -2248,6 +2444,15 @@ discord_$builder_APIActionRowComponent.prototype = $extend(discord_$builder_APIB
 		return this;
 	}
 	,__class__: discord_$builder_APIActionRowComponent
+});
+var discord_$builder_APIButtonComponentBase = function() {
+	this.type = 2;
+};
+$hxClasses["discord_builder.APIButtonComponentBase"] = discord_$builder_APIButtonComponentBase;
+discord_$builder_APIButtonComponentBase.__name__ = "discord_builder.APIButtonComponentBase";
+discord_$builder_APIButtonComponentBase.__super__ = discord_$builder_APIBaseComponent;
+discord_$builder_APIButtonComponentBase.prototype = $extend(discord_$builder_APIBaseComponent.prototype,{
+	__class__: discord_$builder_APIButtonComponentBase
 });
 var discord_$builder_APITextInputComponent = function() {
 	this.type = 4;
@@ -2303,6 +2508,48 @@ discord_$builder_APITextInputComponent.prototype = $extend(discord_$builder_APIB
 });
 var discord_$builder_JSONEncodable = require("@discordjs/builders").JSONEncodable;
 var discord_$builder_ActionRowBuilder = require("@discordjs/builders").ActionRowBuilder;
+var discord_$builder_ButtonBuilder = function() {
+	discord_$builder_APIButtonComponentBase.call(this);
+};
+$hxClasses["discord_builder.ButtonBuilder"] = discord_$builder_ButtonBuilder;
+discord_$builder_ButtonBuilder.__name__ = "discord_builder.ButtonBuilder";
+discord_$builder_ButtonBuilder.__super__ = discord_$builder_APIButtonComponentBase;
+discord_$builder_ButtonBuilder.prototype = $extend(discord_$builder_APIButtonComponentBase.prototype,{
+	label: null
+	,custom_id: null
+	,style: null
+	,emoji: null
+	,url: null
+	,disabled: null
+	,setDisabled: function(disabled) {
+		if(disabled == null) {
+			disabled = true;
+		}
+		this.disabled = disabled;
+		return this;
+	}
+	,setCustomId: function(custom_id) {
+		this.custom_id = custom_id;
+		return this;
+	}
+	,setEmoji: function(emoji) {
+		this.emoji = emoji;
+		return this;
+	}
+	,setLabel: function(label) {
+		this.label = label;
+		return this;
+	}
+	,setStyle: function(style) {
+		this.style = style;
+		return this;
+	}
+	,setUrl: function(url) {
+		this.url = url;
+		return this;
+	}
+	,__class__: discord_$builder_ButtonBuilder
+});
 var discord_$builder_ModalBuildera = require("@discordjs/builders").ModalBuilder;
 var discord_$builder_ModalBuilder = function() {
 	this.components = [];
@@ -2990,6 +3237,7 @@ ecs_ds_Unit._new = function() {
 	var this1 = null;
 	return this1;
 };
+var externs_Fetch = require("node-fetch");
 var firebase_web_app_FirebaseApp = require("firebase/app");
 var firebase_web_auth_Auth = require("firebase/auth");
 var firebase_web_firestore_Query = require("firebase/firestore");
@@ -7404,6 +7652,62 @@ safety_NullPointerException.__super__ = safety_SafetyException;
 safety_NullPointerException.prototype = $extend(safety_SafetyException.prototype,{
 	__class__: safety_NullPointerException
 });
+var shared_QuestionType = {};
+shared_QuestionType.fromString = function(i) {
+	switch(i) {
+	case "1":
+		return "General";
+	case "2":
+		return "Error Message";
+	case "3":
+		return "Unexpected Behaviour";
+	default:
+		return "General";
+	}
+};
+var shared_TStoreContent = {};
+shared_TStoreContent.__properties__ = {get_is_validated:"get_is_validated",get_validate_timestamp:"get_validate_timestamp",get_is_valid:"get_is_valid",get_solution_attempt:"get_solution_attempt"};
+shared_TStoreContent._new = function(value) {
+	return value;
+};
+shared_TStoreContent.getQuestion = function(this1,state) {
+	var _g = 0;
+	var _g1 = this1.session.questions;
+	while(_g < _g1.length) {
+		var item = _g1[_g];
+		++_g;
+		if(item.state == state) {
+			return item;
+		}
+	}
+	return null;
+};
+shared_TStoreContent.get_solution_attempt = function(this1) {
+	var count = 0;
+	if(this1.solution != null && this1.solution.attempt != null) {
+		count = this1.solution.attempt;
+	}
+	return count;
+};
+shared_TStoreContent.get_is_valid = function(this1) {
+	if(this1.valid == null || this1.valid == false) {
+		return false;
+	}
+	return true;
+};
+shared_TStoreContent.get_validate_timestamp = function(this1) {
+	if(this1.validated_timestamp == null) {
+		return null;
+	}
+	return this1.validated_timestamp.toDate();
+};
+shared_TStoreContent.get_is_validated = function(this1) {
+	if(this1.valid != null && this1.validated_by != null && this1.validated_by.length > 0) {
+		return this1.validated_timestamp != null;
+	} else {
+		return false;
+	}
+};
 var sys_FileSystem = function() { };
 $hxClasses["sys.FileSystem"] = sys_FileSystem;
 sys_FileSystem.__name__ = "sys.FileSystem";
@@ -7759,6 +8063,503 @@ systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
 	,__class__: systems_CommandDbBase
 	,__properties__: {get_name:"get_name",get_db:"get_db"}
 });
+var systems_commands_Api = function(_universe) {
+	this.packages = new haxe_ds_StringMap();
+	this.api = new haxe_ds_StringMap();
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Api"] = systems_commands_Api;
+systems_commands_Api.__name__ = "systems.commands.Api";
+systems_commands_Api.__super__ = systems_CommandBase;
+systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
+	api: null
+	,packages: null
+	,onEnabled: function() {
+		var this1 = this.api;
+		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 26, className : "systems.commands.Api", methodName : "onEnabled"});
+		this1.h["haxe"] = value;
+		var this1 = this.api;
+		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 27, className : "systems.commands.Api", methodName : "onEnabled"});
+		this1.h["flixel"] = value;
+		var this1 = this.api;
+		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 28, className : "systems.commands.Api", methodName : "onEnabled"});
+		this1.h["heaps"] = value;
+		var h = this.api.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var h1 = _g1_value.h;
+			var _g2_keys = Object.keys(h1);
+			var _g2_length = _g2_keys.length;
+			var _g2_current = 0;
+			while(_g2_current < _g2_length) {
+				var key1 = _g2_keys[_g2_current++];
+				this.packages.h[key1] = key;
+			}
+		}
+		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 36, className : "systems.commands.Api", methodName : "onEnabled"});
+	}
+	,run: function(command,interaction) {
+		if(command.content == null) {
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 12) {
+			var _g1 = _g.channel;
+			if(interaction.isAutocomplete()) {
+				this.search(_g1,interaction);
+				return;
+			}
+			if(Object.prototype.hasOwnProperty.call(this.packages.h,_g1)) {
+				var type = this.packages.h[_g1];
+				var data = this.api.h[type].h[_g1];
+				var embed = new discord_$js_MessageEmbed();
+				embed.setTitle(data.name);
+				embed.setURL(data.link);
+				embed.setDescription("**Description:**\n" + data.description);
+				interaction.reply({ embeds : [embed]});
+				return;
+			}
+			interaction.reply("New api command isnt complete yet so there may still be things not working");
+			return;
+		}
+	}
+	,search: function(string,interaction) {
+		var results = [];
+		var h = this.packages.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			if(results.length >= 10) {
+				break;
+			}
+			if(key.toLowerCase().indexOf(string.toLowerCase()) != -1) {
+				results.push({ name : key, value : key});
+			}
+		}
+		interaction.respond(results).then(null,function(err) {
+			haxe_Log.trace(err,{ fileName : "src/systems/commands/Api.hx", lineNumber : 110, className : "systems.commands.Api", methodName : "search"});
+		});
+	}
+	,get_name: function() {
+		return "api";
+	}
+	,__class__: systems_commands_Api
+});
+var systems_commands_Archive = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Archive"] = systems_commands_Archive;
+systems_commands_Archive.__name__ = "systems.commands.Archive";
+systems_commands_Archive.__super__ = systems_CommandBase;
+systems_commands_Archive.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		var _gthis = this;
+		if(command.content._hx_index == 1) {
+			var role = "1019915584546291712";
+			interaction.member.fetch(true).then(function(member) {
+				var found = false;
+				var jsIterator = member.roles.cache.entries();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
+					var key = v[0];
+					if(key == role) {
+						found = true;
+						break;
+					}
+				}
+				if(found) {
+					interaction.member.roles.remove(role).then(function(success) {
+						interaction.reply("Archives are hidden");
+					},$bind(_gthis,_gthis.err));
+				} else {
+					interaction.member.roles.add(role).then(function(success) {
+						interaction.reply("Archives are shown");
+					},$bind(_gthis,_gthis.err));
+				}
+			},$bind(this,this.err));
+		}
+	}
+	,get_name: function() {
+		return "archive";
+	}
+	,__class__: systems_commands_Archive
+});
+var systems_commands_Boop = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Boop"] = systems_commands_Boop;
+systems_commands_Boop.__name__ = "systems.commands.Boop";
+systems_commands_Boop.__super__ = systems_CommandBase;
+systems_commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 6) {
+			interaction.reply("*boop* <@" + _g.user.id + ">");
+		}
+	}
+	,get_name: function() {
+		return "boop";
+	}
+	,__class__: systems_commands_Boop
+});
+var systems_commands_Haxelib = function(_universe) {
+	this.message_history = new haxe_ds_StringMap();
+	this.super_mod_id = "198916468312637440";
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Haxelib"] = systems_commands_Haxelib;
+systems_commands_Haxelib.__name__ = "systems.commands.Haxelib";
+systems_commands_Haxelib.__super__ = systems_CommandBase;
+systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
+	last_interaction: null
+	,super_mod_id: null
+	,message_history: null
+	,run: function(command,interaction) {
+		var _gthis = this;
+		var h = this.message_history.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var time = new Date().getTime();
+			if(time - _g1_value.timestamp > 5000) {
+				var _this = this.message_history;
+				if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+					delete(_this.h[key]);
+				}
+			}
+		}
+		var role_status = Util_hasRole(this.super_mod_id,interaction);
+		var _g = command.content;
+		if(_g._hx_index == 16) {
+			var _g1 = _g.command;
+			var route = _g1;
+			if(_g1.indexOf(" ") != -1) {
+				route = _g1.split(" ")[0];
+			}
+			if(route != "list" && route != "info" && route != "search") {
+				if(!role_status) {
+					interaction.reply("Invalid Permissions.").then(null,$bind(this,this.err));
+					return;
+				}
+			}
+			var channel = interaction.channel;
+			var commands = [];
+			var _g = 0;
+			var _g2 = _g1.split(" ");
+			while(_g < _g2.length) {
+				var c = _g2[_g];
+				++_g;
+				commands.push(c);
+			}
+			var $process = "./haxe/haxelib";
+			if(!sys_FileSystem.exists("./haxe/haxelib")) {
+				$process = "haxelib";
+			}
+			var ls = js_node_ChildProcess.spawn($process,commands);
+			var output = "";
+			ls.stdout.on("data",function(data) {
+				if(data.indexOf("KB") != -1 || data.indexOf("%") != -1) {
+					return;
+				}
+				output += data;
+			});
+			ls.stdout.once("close",function(data) {
+				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
+				if(output.length > 4000) {
+					output = HxOverrides.substr(output,0,4000) + "...";
+				}
+				embed.setDescription(output);
+				return interaction.reply({ embeds : [embed]}).then(null,$bind(_gthis,_gthis.err));
+			});
+			ls.stderr.on("data",function(data) {
+				var embed = new discord_$js_MessageEmbed();
+				embed.type = "article";
+				embed.addField("Haxelib Error",data);
+				return channel.send(embed);
+			});
+		}
+	}
+	,addHistory: function(command,embed) {
+		if(Object.prototype.hasOwnProperty.call(this.message_history.h,command)) {
+			return false;
+		}
+		this.message_history.h[command] = embed;
+		return true;
+	}
+	,get_name: function() {
+		return "haxelib";
+	}
+	,__class__: systems_commands_Haxelib
+});
+var systems_commands_Help = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Help"] = systems_commands_Help;
+systems_commands_Help.__name__ = "systems.commands.Help";
+systems_commands_Help.__super__ = systems_CommandBase;
+systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
+	data: null
+	,onEnabled: function() {
+		this.data = Util_loadFile("help",{ fileName : "src/systems/commands/Help.hx", lineNumber : 10, className : "systems.commands.Help", methodName : "onEnabled"});
+	}
+	,run: function(command,interaction) {
+		if(this.data == null || this.data.length == 0) {
+			haxe_Log.trace("no help content configured",{ fileName : "src/systems/commands/Help.hx", lineNumber : 15, className : "systems.commands.Help", methodName : "run"});
+			return;
+		}
+		if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,interaction.user.id)) {
+			var _g = 0;
+			var _g1 = this.data;
+			while(_g < _g1.length) {
+				var content = _g1[_g];
+				++_g;
+				if(content.type != "helppls_dm") {
+					continue;
+				}
+				interaction.reply({ content : content.content.toString()}).then(null,$bind(this,this.err));
+				break;
+			}
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 15) {
+			var _g1 = _g.category;
+			var msg = "";
+			var _this = this.data;
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g1_value = _this[_g_current];
+				var _g1_key = _g_current++;
+				if(_g1 == null) {
+					if(!_g1_value.show_help) {
+						continue;
+					}
+					if(_g1_value.type == "run") {
+						msg += "- `!" + _g1_value.type + "`: " + _g1_value.content.toString();
+					} else {
+						msg += "- `/" + _g1_value.type + "`: " + _g1_value.content.toString();
+					}
+					if(_g1_key != this.data.length - 1) {
+						msg += "\n";
+					}
+				} else if(_g1_value.type == _g1) {
+					msg = "/`" + _g1_value.type + "`: " + _g1_value.content.toString();
+					break;
+				}
+			}
+			if(msg.length == 0 || msg == "" || msg == null) {
+				msg = "Nothing found, sorry :(";
+			}
+			interaction.reply(msg).then(null,$bind(this,this.err));
+		}
+	}
+	,get_name: function() {
+		return "help";
+	}
+	,__class__: systems_commands_Help
+});
+var systems_commands_HelpType = {};
+systems_commands_HelpType.fromString = function(value) {
+	switch(value.toLowerCase()) {
+	case "helppls_dm":
+		return "helppls_dm";
+	case "notify":
+		return "notify";
+	case "rtfm":
+		return "rtfm";
+	case "run":
+		return "run";
+	default:
+		return "Invalid help option.";
+	}
+};
+var systems_commands_Helpdescription = function(_universe) {
+	this.check_verified_interval = 86400000;
+	this.check_threads_interval = 1800000;
+	this.review_thread = "";
+	this.validate_timout = 86400000;
+	systems_CommandDbBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Helpdescription"] = systems_commands_Helpdescription;
+systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
+systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
+systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
+	validate_timout: null
+	,review_thread: null
+	,check_threads_interval: null
+	,check_verified_interval: null
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 11) {
+			if(!interaction.channel.isThread()) {
+				interaction.reply("This command is only available in a thread.").then(null,$bind(this,this.err));
+				return;
+			}
+			this.findThread(interaction,_g.description);
+		}
+	}
+	,findThread: function(interaction,description) {
+		var _gthis = this;
+		var topic = this.getTopicFromChannel(interaction.channel.parentId);
+		if(topic == null) {
+			interaction.reply("This channel is not a valid topic. Did you run the command from a valid thread?").then(null,$bind(this,this.err));
+			return;
+		}
+		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2","haxe","threads"),firebase_web_firestore_Firestore.where("thread_id","==",interaction.channelId));
+		var embed = new discord_$js_MessageEmbed();
+		embed.setDescription(description);
+		firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
+			if(docs.empty) {
+				embed.setTitle("Error Occured");
+				haxe_Log.trace(interaction,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 49, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				haxe_Log.trace(description,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 50, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				haxe_Log.trace(topic,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 51, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				interaction.reply({ content : "*Boop <@151104106973495296>*", embeds : [embed]});
+				return;
+			}
+			var ref = docs.docs[0].ref;
+			var data = docs.docs[0].data();
+			if(interaction.user.id != data.solution.user.id) {
+				interaction.reply({ content : "Sorry, another user is working on summarising the solution!"});
+				return;
+			}
+			data.solved = true;
+			data.solution.description = description;
+			firebase_web_firestore_Firestore.setDoc(ref,data).then(function(succ) {
+				interaction.reply({ content : "Thanks! <@" + interaction.user.id + ">", embeds : [embed]}).then(function(succ) {
+					_gthis.validateThread(ref,data);
+					var command = Main.getCommand(_gthis.get_name());
+					if(command != null) {
+						util_DiscordUtil.setCommandPermission(command,[{ id : interaction.user.id, type : "USER", permission : false}]);
+					}
+				},$bind(_gthis,_gthis.err));
+			},$bind(_gthis,_gthis.err));
+		},$bind(this,this.err));
+	}
+	,validateThread: function(ref,thread) {
+		var _gthis = this;
+		if(Util_dateWithinTimeout(new Date(),shared_TStoreContent.get_validate_timestamp(thread),this.validate_timout)) {
+			return;
+		}
+		util_DiscordUtil.getChannel(this.review_thread,function(channel) {
+			if(channel == null) {
+				return;
+			}
+			var embed = _gthis.createThreadEmbed(thread);
+			var topic = thread.topic;
+			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
+			if(thread.solution != null && thread.solution.description == null) {
+				solution_summary = "";
+			}
+			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
+			embed.setDescription(description);
+			channel.send({ embeds : [embed], content : "Should this thread be indexed?"}).then(function(message) {
+				firebase_web_firestore_Firestore.updateDoc(ref,"validate_timestamp",new Date());
+				util_DiscordUtil.reactionTracker(message,function(collector,collected,user) {
+					if(user.bot) {
+						return;
+					}
+					var valid = null;
+					if(collected.emoji.name == "✅") {
+						valid = true;
+					}
+					if(collected.emoji.name == "❎") {
+						valid = false;
+					}
+					if(valid == null) {
+						return;
+					}
+					var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + topic);
+					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
+						return transaction.get(doc).then(function(doc) {
+							if(!doc.exists()) {
+								return { id : -1, threads : 0};
+							}
+							var data = doc.data();
+							data.id += 1;
+							data.threads += 1;
+							transaction.update(doc.ref,data);
+							return data;
+						});
+					}).then(function(value) {
+						if(value.id == -1) {
+							return;
+						}
+						firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
+							collector.stop("Reviewed validation.");
+						},$bind(_gthis,_gthis.err));
+					},$bind(_gthis,_gthis.err));
+				});
+			});
+		});
+	}
+	,createThreadEmbed: function(remote) {
+		var embed = new discord_$js_MessageEmbed();
+		var content = "";
+		var session = remote.session;
+		var title = shared_TStoreContent.getQuestion(remote,"title");
+		embed.setTitle("__" + title.answer + "__");
+		embed.setURL(remote.source_url);
+		embed.setAuthor({ name : remote.author.name, iconURL : remote.author.icon_url});
+		var _g = 0;
+		var _g1 = session.questions;
+		while(_g < _g1.length) {
+			var value = _g1[_g];
+			++_g;
+			var answer = value.answer;
+			var output = "**" + value.question + "**";
+			switch(value.state) {
+			case "provide_code":
+				answer = "```hx\n" + answer + "\n```";
+				break;
+			case "question_type":
+				answer = "" + shared_QuestionType.fromString(answer);
+				break;
+			case "title":
+				continue;
+			default:
+			}
+			content += "\n" + output + "\n" + answer;
+		}
+		embed.setDescription(content);
+		return embed;
+	}
+	,getTopicFromChannel: function(channel) {
+		switch(channel) {
+		case "162395145352904705":
+			return "haxe";
+		case "165234904815239168":
+			return "flixel";
+		case "459827960006967325":
+			return "tools";
+		case "501408700142059520":
+			return "heaps";
+		case "565569107701923852":
+			return "haxeui";
+		case "769686284318146561":
+			return "openfl";
+		case "853414608747364352":
+			return "ceramic";
+		default:
+			return null;
+		}
+	}
+	,get_name: function() {
+		return "helpdescription";
+	}
+	,__class__: systems_commands_Helpdescription
+});
 var systems_commands_Hi = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
@@ -7798,6 +8599,151 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 		return "hi";
 	}
 	,__class__: systems_commands_Hi
+});
+var systems_commands_Notify = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Notify"] = systems_commands_Notify;
+systems_commands_Notify.__name__ = "systems.commands.Notify";
+systems_commands_Notify.__super__ = systems_CommandBase;
+systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
+	getRole: function(channel) {
+		switch(channel) {
+		case "165234904815239168":case "flixel":
+			return "761714697468248125";
+		case "565569107701923852":case "haxeui":
+			return "761714853403820052";
+		case "853414608747364352":case "ceramic":
+			return "914171888748609546";
+		case "286485321925918721":case "announcements":
+			return "761714325227700225";
+		case "561254298449739776":case "dvorak":
+			return "903006951896666153";
+		case "501408700142059520":case "heaps":
+			return "761714775902126080";
+		case "501447516852715525":case "kha":
+			return "761714809179209818";
+		default:
+			return "err";
+		}
+	}
+	,run: function(command,interaction) {
+		var _gthis = this;
+		var _g = command.content;
+		if(_g._hx_index == 13) {
+			var channel = _g.channel;
+			var role = this.getRole(channel);
+			if(role == "err") {
+				haxe_Log.trace(channel,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 34, className : "systems.commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 35, className : "systems.commands.Notify", methodName : "run"});
+				interaction.reply("Invalid channel");
+				return;
+			}
+			interaction.member.fetch(true).then(function(member) {
+				var found = false;
+				var jsIterator = member.roles.cache.entries();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
+					var key = v[0];
+					if(key == role) {
+						found = true;
+						break;
+					}
+				}
+				if(found) {
+					interaction.member.roles.remove(role).then(function(success) {
+						interaction.reply("Unsubscribed from <#" + channel + "> updates");
+					},$bind(_gthis,_gthis.err));
+				} else {
+					interaction.member.roles.add(role).then(function(success) {
+						interaction.reply("Subscribed to <#" + channel + "> updates");
+					},$bind(_gthis,_gthis.err));
+				}
+			},$bind(this,this.err));
+		}
+	}
+	,get_name: function() {
+		return "notify";
+	}
+	,__class__: systems_commands_Notify
+});
+var systems_commands_Poll = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+	this.dm_messages = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+};
+$hxClasses["systems.commands.Poll"] = systems_commands_Poll;
+systems_commands_Poll.__name__ = "systems.commands.Poll";
+systems_commands_Poll.__super__ = systems_CommandBase;
+systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		var _gthis = this;
+		var _g = command.content;
+		if(_g._hx_index == 7) {
+			var question = _g.question;
+			var time = _g.time;
+			if(time > 4320) {
+				interaction.reply("A poll can't (currently) last longer than 3 days.");
+				return;
+			}
+			var embed = new discord_$js_MessageEmbed();
+			embed.setTitle("Poll");
+			embed.setDescription(question + "\n___");
+			embed.setFooter({ text : "Poll will run for " + time + " minutes."});
+			interaction.reply({ embeds : [embed]}).then(function(_) {
+				return interaction.fetchReply().then(function(message) {
+					var filter = function(reaction,user) {
+						if(reaction.emoji.name == "✅") {
+							return true;
+						}
+						if(reaction.emoji.name == "❎") {
+							return true;
+						}
+						reaction.remove();
+						return false;
+					};
+					message.react("✅").then(null,null).then(function(_) {
+						message.react("❎").then(null,null).then(function(_) {
+							var collector = message.createReactionCollector({ filter : filter, time : time * 60000});
+							collector.on("end",function(collected,reason) {
+								var check = 0.;
+								var cross = 0.;
+								if(collected.has("✅")) {
+									check = collected.get("✅").count - 1;
+								}
+								if(collected.has("❎")) {
+									cross = collected.get("❎").count - 1;
+								}
+								var embed = new discord_$js_MessageEmbed();
+								var description = "" + question + "\n\n";
+								description += "✅ Yes: " + (check == null ? "null" : "" + check) + "\n";
+								description += "❎ No: " + (cross == null ? "null" : "" + cross);
+								embed.setDescription(description);
+								var date = DateTools.format(new Date(message.createdTimestamp),"%d-%m-%Y %H:%M:%S");
+								embed.setFooter({ text : "Poll results | Started " + date});
+								message.reply({ content : "<@" + interaction.member.id + ">", embeds : [embed]});
+							});
+						},$bind(_gthis,_gthis.err));
+					},$bind(_gthis,_gthis.err));
+				},$bind(_gthis,_gthis.err));
+			},$bind(this,this.err));
+		}
+	}
+	,createEmbed: function(content) {
+		var embed = new discord_$js_MessageEmbed();
+		embed.setDescription(content);
+		return embed;
+	}
+	,get_name: function() {
+		return "poll";
+	}
+	,dm_messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_Poll
 });
 var systems_commands_Quote = function(_universe) {
 	systems_CommandDbBase.call(this,_universe);
@@ -7853,17 +8799,17 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						return;
 					}
 					if(res.docs.length > 1) {
-						interaction.reply("An error occured, consult notbilly");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 142, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 143, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(description,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 144, className : "systems.commands.Quote", methodName : "run"});
+						interaction.reply("An odd situation occured. <@151104106973495296>");
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 144, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 145, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(description,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 146, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
 					},$bind(_gthis,_gthis.err));
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 151, className : "systems.commands.Quote", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 153, className : "systems.commands.Quote", methodName : "run"});
 				});
 				break;
 			case "edit":
@@ -7894,10 +8840,10 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					firebase_web_firestore_Firestore.updateDoc(doc.ref,{ description : description}).then(function(_) {
 						interaction.reply("Quote updated!");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 130, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 131, className : "systems.commands.Quote", methodName : "run"});
 					});
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 131, className : "systems.commands.Quote", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 132, className : "systems.commands.Quote", methodName : "run"});
 				});
 				break;
 			case "get":
@@ -7927,14 +8873,14 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					interaction.reply("A name can only contain 3-16 characters. Including `_-(space)`. Name's are case insensitive.");
 					return;
 				}
-				if(description == null || description.length < 20) {
-					interaction.reply("A description must have at least 20 characters");
+				if(description == null || description.length < 14) {
+					interaction.reply("A description must have at least 14 characters");
 					return;
 				}
-				var query1 = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
+				var query1 = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("name","==",this.nameArray(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
 				firebase_web_firestore_Firestore.getDocs(query1).then(function(res) {
 					if(res.docs.length == 1) {
-						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with this name").then(null,$bind(_gthis,_gthis.err));
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name + "__").then(null,$bind(_gthis,_gthis.err));
 						return;
 					}
 					var data = { id : -1, name : _gthis.nameArray(name), description : description, author : interaction.user.id, username : interaction.user.username, timestamp : new Date()};
@@ -8013,6 +8959,241 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return "quote";
 	}
 	,__class__: systems_commands_Quote
+});
+var systems_commands_React = function(_universe) {
+	this.set_permission = false;
+	systems_CommandBase.call(this,_universe);
+	this.messages = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+};
+$hxClasses["systems.commands.React"] = systems_commands_React;
+systems_commands_React.__name__ = "systems.commands.React";
+systems_commands_React.__super__ = systems_CommandBase;
+systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
+	set_permission: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
+			if(forward != "react" || message[0].author.id != "151104106973495296") {
+				continue;
+			}
+			var split = [message[0].content.split(" ")];
+			var channel = StringTools.replace(StringTools.replace(split[0][1],"<#",""),">","");
+			message[0].client.channels.fetch(channel).then((function(split,message) {
+				return function(channel) {
+					return channel.messages.fetch(split[0][2]).then((function(split,message) {
+						return function(react_message) {
+							react_message.react(split[0][3]);
+							message[0].delete();
+						};
+					})(split,message));
+				};
+			})(split,message));
+			this.universe.deleteEntity(entity);
+		}
+	}
+	,get_name: function() {
+		return "react";
+	}
+	,run: function(command,interaction) {
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_React
+});
+var systems_commands_Roundup = function(_universe) {
+	this.set_permissions = false;
+	this.announcement_channel = "286485321925918721";
+	this.news_role = "761714325227700225";
+	this.super_mod_id = "198916468312637440";
+	this.checking_channel = false;
+	this.channel = null;
+	this.active = true;
+	this.last_checked = -1;
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Roundup"] = systems_commands_Roundup;
+systems_commands_Roundup.__name__ = "systems.commands.Roundup";
+systems_commands_Roundup.__super__ = systems_CommandBase;
+systems_commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
+	last_checked: null
+	,active: null
+	,channel: null
+	,checking_channel: null
+	,super_mod_id: null
+	,news_role: null
+	,announcement_channel: null
+	,getHaxeIoPage: function() {
+		var _gthis = this;
+		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.config.last_roundup_posted + ".md");
+		var embed = new discord_$js_MessageEmbed();
+		data.onError = function(error) {
+			haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 24, className : "systems.commands.Roundup", methodName : "getHaxeIoPage"});
+		};
+		data.onData = function(body) {
+			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
+			if(regex.match(body)) {
+				embed.setTitle("Haxe Roundup #" + Main.config.last_roundup_posted);
+				embed.setURL("https://haxe.io/roundups/" + Main.config.last_roundup_posted + "/");
+				var desc_split = StringTools.trim(regex.matched(1)).split("\n");
+				var desc = "\n**News And Articles**";
+				var _g = 0;
+				while(_g < desc_split.length) {
+					var item = desc_split[_g];
+					++_g;
+					if(desc.length + StringTools.trim(item).length + 3 + 22 >= 2048) {
+						continue;
+					}
+					desc += "\n" + StringTools.trim(item);
+				}
+				desc += "\n...";
+				embed.setDescription(desc);
+				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
+					var fh = Main.config;
+					var postfix = fh.last_roundup_posted;
+					var value = fh.last_roundup_posted + 1;
+					Main.config.last_roundup_posted = value;
+					js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+					return postfix;
+				});
+			}
+		};
+		data.request();
+	}
+	,set_permissions: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		var tmp;
+		if(!this.set_permissions && Main.commands_active) {
+			var this1 = Main.commands;
+			var key = this.get_name();
+			tmp = Object.prototype.hasOwnProperty.call(this1.h,key);
+		} else {
+			tmp = false;
+		}
+		if(tmp) {
+			this.set_permissions = true;
+			var command = Main.getCommand(this.get_name());
+			if(command != null) {
+				util_DiscordUtil.setCommandPermission(command,[{ id : "661960123035418629", type : "USER", permission : true}]);
+			}
+		}
+		if(this.channel == null && this.checking_channel == false) {
+			this.checking_channel = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking_channel = false;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 74, className : "systems.commands.Roundup", methodName : "update"});
+			});
+		}
+		if(Main.config.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
+			return;
+		}
+		this.last_checked = new Date().getTime();
+		this.getHaxeIoPage();
+	}
+	,run: function(command,interaction) {
+		var _gthis = this;
+		if(!Util_hasRole(this.super_mod_id,interaction)) {
+			interaction.reply("Invalid permissions").then(null,null);
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 8) {
+			var _g1 = _g.number;
+			if(this.active) {
+				this.active = false;
+				this.last_checked = -1;
+				interaction.reply("Disabled haxe roundup monitoring");
+				return;
+			}
+			if(_g1 <= 600) {
+				interaction.reply("Please enter a more recent roundup issue.");
+				return;
+			}
+			this.active = true;
+			var value = _g1 | 0;
+			Main.config.last_roundup_posted = value;
+			js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+			interaction.reply("Will start watching haxe roundups from **#" + _g1 + "**.");
+			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.channel = channel;
+			},function(error) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Roundup.hx", lineNumber : 113, className : "systems.commands.Roundup", methodName : "run"});
+			});
+		}
+	}
+	,get_roundup: function() {
+		return Main.config.last_roundup_posted;
+	}
+	,set_roundup: function(value) {
+		Main.config.last_roundup_posted = value;
+		js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+		return value;
+	}
+	,get_name: function() {
+		return "roundup";
+	}
+	,__class__: systems_commands_Roundup
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{set_roundup:"set_roundup",get_roundup:"get_roundup"})
+});
+var systems_commands_Rtfm = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Rtfm"] = systems_commands_Rtfm;
+systems_commands_Rtfm.__name__ = "systems.commands.Rtfm";
+systems_commands_Rtfm.__super__ = systems_CommandBase;
+systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
+	data: null
+	,onEnabled: function() {
+		this.data = Util_loadFile("rtfm",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 9, className : "systems.commands.Rtfm", methodName : "onEnabled"});
+	}
+	,run: function(command,interaction) {
+		if(this.data == null) {
+			haxe_Log.trace("failed to read rtfm data",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 14, className : "systems.commands.Rtfm", methodName : "run"});
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 9) {
+			var _g1 = _g.channel;
+			var compare = _g1;
+			if(_g1 == null) {
+				compare = interaction.channel.name;
+			}
+			var _g = 0;
+			var _g1 = this.data;
+			while(_g < _g1.length) {
+				var item = _g1[_g];
+				++_g;
+				var _g2 = 0;
+				var _g3 = item.keys;
+				while(_g2 < _g3.length) {
+					var val = _g3[_g2];
+					++_g2;
+					if(val == compare) {
+						interaction.reply(item.content);
+						return;
+					}
+				}
+			}
+			interaction.reply("No information available.");
+		}
+	}
+	,get_name: function() {
+		return "rtfm";
+	}
+	,__class__: systems_commands_Rtfm
 });
 var systems_commands_Run = function(_universe) {
 	this.timeout = 5000;
@@ -8464,6 +9645,942 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,__class__: systems_commands_Run
 	,__properties__: {get_base_path:"get_base_path"}
 });
+var systems_commands_ScamPrevention = function(_universe) {
+	this.last_message_interval = 10000;
+	this.phishing_urls = [];
+	this.trigger_messages = new haxe_ds_StringMap();
+	this.user_list = new haxe_ds_StringMap();
+	this.sequential_tags = new haxe_ds_StringMap();
+	this.time_since = new haxe_ds_StringMap();
+	systems_CommandBase.call(this,_universe);
+	this.messages = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+};
+$hxClasses["systems.commands.ScamPrevention"] = systems_commands_ScamPrevention;
+systems_commands_ScamPrevention.__name__ = "systems.commands.ScamPrevention";
+systems_commands_ScamPrevention.__super__ = systems_CommandBase;
+systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
+	time_since: null
+	,sequential_tags: null
+	,user_list: null
+	,trigger_messages: null
+	,phishing_urls: null
+	,phishing_update_time: null
+	,last_message_interval: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
+			if(forward != "scam_prevention") {
+				continue;
+			}
+			if(Util_withinTime(message.createdTimestamp,this.last_message_interval)) {
+				var user = message.author.id;
+				var this1 = this.time_since;
+				var value = new Date().getTime();
+				this1.h[user] = value;
+				this.addMessage(message.author.id,message);
+			}
+			this.universe.deleteEntity(entity);
+		}
+		var _gthis = this;
+		if(!(new Date().getTime() - this.phishing_update_time < 21600000)) {
+			this.phishing_update_time = new Date().getTime();
+			var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
+			links.onData = function(data) {
+				try {
+					_gthis.phishing_urls = JSON.parse(data);
+				} catch( _g ) {
+					var _g1 = haxe_Exception.caught(_g);
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					var tmp = new Date().getTime();
+					_gthis.phishing_update_time = tmp - 18000000;
+				}
+			};
+			links.request();
+		}
+		var h = this.trigger_messages.h;
+		var messages_keys = Object.keys(h);
+		var messages_length = messages_keys.length;
+		var messages_current = 0;
+		while(messages_current < messages_length) {
+			var messages = h[messages_keys[messages_current++]];
+			if(this.checkPhishingLinks(messages)) {
+				this.banUser(messages);
+				continue;
+			}
+			if(messages.length < 3) {
+				continue;
+			}
+			var review = false;
+			if(this.checkTags(messages)) {
+				review = true;
+			}
+			if(this.checkEquality(messages)) {
+				review = true;
+			}
+			if(!review) {
+				continue;
+			}
+			this.reviewMessage(messages);
+			var id = messages[0].author.id;
+			var _this = this.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this1 = this.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this1.h,id)) {
+				delete(_this1.h[id]);
+			}
+			var _this2 = this.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this2.h,id)) {
+				delete(_this2.h[id]);
+			}
+		}
+		var h = this.time_since.h;
+		var _g1_keys = Object.keys(h);
+		var _g1_length = _g1_keys.length;
+		var _g1_current = 0;
+		while(_g1_current < _g1_length) {
+			var key = _g1_keys[_g1_current++];
+			var _g2_value = h[key];
+			if(new Date().getTime() - _g2_value > this.last_message_interval) {
+				var _this = this.time_since;
+				if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+					delete(_this.h[key]);
+				}
+				var _this1 = this.user_list;
+				if(Object.prototype.hasOwnProperty.call(_this1.h,key)) {
+					delete(_this1.h[key]);
+				}
+				var _this2 = this.trigger_messages;
+				if(Object.prototype.hasOwnProperty.call(_this2.h,key)) {
+					delete(_this2.h[key]);
+				}
+			}
+		}
+	}
+	,reviewMessage: function(messages) {
+		var _gthis = this;
+		var message = messages[0];
+		var embed = this.reformatMessage(null,message);
+		if(embed == null || embed.description.length == 0) {
+			return;
+		}
+		this.timeoutUser(message,function(_) {
+			message.reply({ content : "<@&198916468312637440> Please review this message by: <@" + message.author.id + ">", embeds : [embed]}).then(function(_) {
+				var _g = 0;
+				while(_g < messages.length) {
+					var message = messages[_g];
+					++_g;
+					message.delete().then(null,$bind(_gthis,_gthis.err));
+				}
+			},$bind(_gthis,_gthis.err));
+		});
+	}
+	,resetChecks: function(id) {
+		var _this = this.time_since;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.user_list;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.trigger_messages;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+	}
+	,getPhishingLinks: function() {
+		var _gthis = this;
+		if(new Date().getTime() - this.phishing_update_time < 21600000) {
+			return;
+		}
+		this.phishing_update_time = new Date().getTime();
+		var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
+		links.onData = function(data) {
+			try {
+				_gthis.phishing_urls = JSON.parse(data);
+			} catch( _g ) {
+				var _g1 = haxe_Exception.caught(_g);
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				var tmp = new Date().getTime();
+				_gthis.phishing_update_time = tmp - 18000000;
+			}
+		};
+		links.request();
+	}
+	,timeoutUser: function(message,callback) {
+		var _gthis = this;
+		message.guild.members.fetch(message.author.id).then(function(guild_member) {
+			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
+			guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then(callback,$bind(_gthis,_gthis.err));
+			var id = message.author.id;
+			var _this = _gthis.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+		},$bind(this,this.err));
+	}
+	,banUser: function(messages,callback) {
+		var _gthis = this;
+		var message = messages[0];
+		message.guild.members.fetch(message.author.id).then(function(guild_member) {
+			var _g = 0;
+			while(_g < messages.length) {
+				var message1 = messages[_g];
+				++_g;
+				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
+			}
+			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,$bind(_gthis,_gthis.err));
+			var id = message.author.id;
+			var _this = _gthis.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,$bind(_gthis,_gthis.err));
+		},$bind(this,this.err));
+	}
+	,logMessage: function(id,embed,action) {
+		embed.description += "\n\n Action: **__" + action + "__**";
+		Main.client.channels.fetch("952952631079362650").then(function(channel) {
+			channel.send({ content : "<@" + id + ">", embeds : [embed]});
+		},$bind(this,this.err));
+	}
+	,checkPhishingLinks: function(messages) {
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			var _g1 = 0;
+			var _g2 = this.phishing_urls;
+			while(_g1 < _g2.length) {
+				var link = _g2[_g1];
+				++_g1;
+				if(message.content.indexOf(link) != -1) {
+					var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
+					if(regex.match(message.content)) {
+						var url = new URL(regex.matched(1));
+						var arr = [new EReg("(.*)?.?(discordapp.com)","gu"),new EReg("(.*)?.?(twitch.tv)","gu")];
+						var whitelisted = false;
+						var _g3 = 0;
+						while(_g3 < arr.length) {
+							var url_host_regex = arr[_g3];
+							++_g3;
+							if(url_host_regex.match(url.hostname)) {
+								whitelisted = true;
+							}
+						}
+						if(whitelisted) {
+							return false;
+						}
+						if(url.hostname.length == 0 || url.hostname == null) {
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 170, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							return false;
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	,checkTags: function(messages) {
+		var tag_count = 0;
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+				if(tag_count >= 3) {
+					break;
+				}
+				++tag_count;
+			}
+		}
+		if(tag_count >= 3) {
+			return true;
+		}
+		return false;
+	}
+	,checkEquality: function(messages) {
+		var equality_count = 0;
+		var channel_count = 0;
+		var compare = messages[0];
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			var content = message.content;
+			if(compare.content == content) {
+				++equality_count;
+			}
+			if(compare.channel.id != message.channel.id) {
+				++channel_count;
+			}
+		}
+		if(equality_count == messages.length && equality_count >= 3 && channel_count >= 4) {
+			return true;
+		}
+		return false;
+	}
+	,reformatMessage: function(title,message,format) {
+		if(format == null) {
+			format = true;
+		}
+		var embed = new discord_$js_MessageEmbed();
+		var content = message.content;
+		if(title != null) {
+			embed.setTitle(title);
+		}
+		if(format) {
+			var link_regex = new EReg("(https?://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\\d*)/?([a-z_/0-9\\-#.]*)\\??([a-z_/0-9\\-#=&]*)","ig");
+			if(link_regex.match(content)) {
+				content = content.replace(link_regex.r,"[Link Removed]");
+			}
+		}
+		var rand = Math.random();
+		var avatar = rand >= 0 && rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true&rf=1" : rand >= 0.33 && rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";
+		embed.setAuthor({ name : "" + message.author.tag, iconURL : avatar});
+		embed.setDescription(content);
+		return embed;
+	}
+	,updateTime: function(user) {
+		var this1 = this.time_since;
+		var value = new Date().getTime();
+		this1.h[user] = value;
+	}
+	,run: function(command,interaction) {
+	}
+	,get_timestamp: function() {
+		return new Date().getTime();
+	}
+	,get_name: function() {
+		return "scamprevention";
+	}
+	,addMessage: function(id,message) {
+		var messages = this.trigger_messages.h[id];
+		if(messages == null) {
+			messages = [];
+		}
+		messages.push(message);
+		this.trigger_messages.h[id] = messages;
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_ScamPrevention
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_timestamp:"get_timestamp"})
+});
+var systems_commands_Showcase = function(_) {
+	this.checking = false;
+	this.channel_id = "162664383082790912";
+	systems_CommandBase.call(this,_);
+	this.modal = this.universe.families.get(3);
+	this.messages = this.universe.families.get(2);
+	this.interactions = this.universe.families.get(4);
+	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(5);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.webhook = new discord_$js_WebhookClient({ url : Main.config.showcase_hook});
+};
+$hxClasses["systems.commands.Showcase"] = systems_commands_Showcase;
+systems_commands_Showcase.__name__ = "systems.commands.Showcase";
+systems_commands_Showcase.__super__ = systems_CommandBase;
+systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
+	channel: null
+	,channel_id: null
+	,webhook: null
+	,checking: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		if(this.channel == null && !this.checking) {
+			this.checking = true;
+			Main.client.channels.fetch(this.channel_id).then(function(channel) {
+				_gthis.channel = channel;
+				_gthis.checking = false;
+				haxe_Log.trace("loaded showcase channel",{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 37, className : "systems.commands.Showcase", methodName : "update"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 38, className : "systems.commands.Showcase", methodName : "update"});
+			});
+		}
+		var _this = this.modal;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var modal = this.table57fe33dae47d23e66b521963cf6643b9.get(entity);
+			var command = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
+			this.channel.send("" + modal.title_or_link + " \n " + modal.description).then((function(command) {
+				return function(_) {
+					command[0].reply("Your post was submitted to the showcase channel!");
+				};
+			})(command));
+			this.universe.deleteEntity(entity);
+		}
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g1_idx = _set.size() - 1;
+		while(_active && _g1_idx >= 0) {
+			var entity = _set.getDense(_g1_idx--);
+			var command1 = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
+			if(command1 == "showcase_message") {
+				var regex = new EReg("https?://(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&/=]*)","ig");
+				if(!regex.match(message[0].content) && message[0].attachments.size == 0) {
+					var content = "```\n" + message[0].content + "\n```";
+					content += "\n Your message was removed due to not having any attachments or links. Please chat within threads only.";
+					message[0].author.send(content).then((function(message) {
+						return function(succ) {
+							message[0].delete();
+						};
+					})(message),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 57, className : "systems.commands.Showcase", methodName : "update"});
+						};
+					})());
+				}
+				this.universe.deleteEntity(entity);
+				return;
+			}
+			if(command1 != "showcase" && !this.channel.isThread()) {
+				return;
+			}
+			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
+			if(thread[0].ownerId != message[0].author.id) {
+				return;
+			}
+			var arr = [];
+			var content1 = StringTools.trim(message[0].content.substring(10));
+			var jsIterator = message[0].attachments.values();
+			var _g1_lastStep = jsIterator.next();
+			while(!_g1_lastStep.done) {
+				var v = _g1_lastStep.value;
+				_g1_lastStep = jsIterator.next();
+				arr.push(v);
+			}
+			this.webhook.send({ content : content1, username : message[0].author.username, avatarURL : message[0].author.avatarURL(), files : arr}).then((function(thread,message) {
+				return function(_) {
+					_gthis.webhook.send({ content : "***Continue the conversation at - <#" + thread[0].id + ">***", username : message[0].author.username, avatarURL : message[0].author.avatarURL()});
+				};
+			})(thread,message),(function() {
+				return function(err) {
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Showcase.hx", lineNumber : 91, className : "systems.commands.Showcase", methodName : "update"});
+				};
+			})());
+			this.universe.deleteEntity(entity);
+		}
+		var _this = this.interactions;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g2_idx = _set.size() - 1;
+		while(_active && _g2_idx >= 0) {
+			var entity = _set.getDense(_g2_idx--);
+			var interaction = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
+			var command1 = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			if(command1 == "showcase_agree") {
+				interaction[0].member.roles.add("1021517470080700468").then((function(interaction) {
+					return function(success) {
+						interaction[0].reply({ content : "Thanks! You can now post in <#162664383082790912>", ephemeral : true});
+					};
+				})(interaction),$bind(this,this.err));
+			}
+			if(command1 == "showcase_disagree") {
+				interaction[0].reply({ content : "Keep on lurking :)", ephemeral : true});
+			}
+			this.universe.deleteEntity(entity);
+		}
+	}
+	,run: function(command,interaction) {
+		var agree_btn = new discord_$builder_ButtonBuilder().setCustomId("showcase_agree").setLabel("Agree").setStyle(1);
+		var disagree_btn = new discord_$builder_ButtonBuilder().setCustomId("showcase_disagree").setLabel("Disagree").setStyle(2);
+		var row = new discord_$builder_APIActionRowComponent().addComponents(agree_btn,disagree_btn);
+		interaction.reply({ content : "If your post does not contain either an __**attachment**__ or a __**link**__, the post will be removed. Any comments on any of the works posted in the <#162664383082790912> channel should be made within threads. \n\n**Guidelines**\n1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here", components : [row], ephemeral : true});
+	}
+	,get_name: function() {
+		return "showcase";
+	}
+	,modal: null
+	,messages: null
+	,interactions: null
+	,table57fe33dae47d23e66b521963cf6643b9: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_Showcase
+});
+var systems_commands_Trace = function(_universe) {
+	this.haxe_version = null;
+	this.timeout = 5000;
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Trace"] = systems_commands_Trace;
+systems_commands_Trace.__name__ = "systems.commands.Trace";
+systems_commands_Trace.__super__ = systems_CommandBase;
+systems_commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
+	timeout: null
+	,haxe_version: null
+	,last_cleared: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		if(this.haxe_version == null) {
+			var $process = "./haxe/haxe";
+			if(!sys_FileSystem.exists("./haxe/haxe")) {
+				$process = "haxe";
+			}
+			var ls = js_node_ChildProcess.spawn($process,["--version"]);
+			ls.stdout.once("data",function(data) {
+				_gthis.haxe_version = data.toString().substring(0,5);
+				ls.kill();
+			});
+		}
+		var now = new Date().getTime();
+		if(!(now - this.last_cleared < 604800000)) {
+			this.last_cleared = now;
+			var before = null;
+			try {
+				var path = (haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".")) + "/haxebot";
+				var folders = js_node_Fs.readdirSync(path);
+				var _g = 0;
+				while(_g < folders.length) {
+					var folder = folders[_g];
+					++_g;
+					before = HxOverrides.strDate(folder).getTime();
+					if(now - before < 604800000) {
+						continue;
+					}
+					var path1 = "" + path + "/" + folder;
+					if(sys_FileSystem.exists(path1)) {
+						var _g1 = 0;
+						var _g11 = js_node_Fs.readdirSync(path1);
+						while(_g1 < _g11.length) {
+							var file = _g11[_g1];
+							++_g1;
+							var curPath = path1 + "/" + file;
+							if(sys_FileSystem.isDirectory(curPath)) {
+								if(sys_FileSystem.exists(curPath)) {
+									var _g2 = 0;
+									var _g12 = js_node_Fs.readdirSync(curPath);
+									while(_g2 < _g12.length) {
+										var file1 = _g12[_g2];
+										++_g2;
+										var curPath1 = curPath + "/" + file1;
+										if(sys_FileSystem.isDirectory(curPath1)) {
+											sys_FileSystem.deleteDirectory(curPath1);
+										} else {
+											js_node_Fs.unlinkSync(curPath1);
+										}
+									}
+									js_node_Fs.rmdirSync(curPath);
+								}
+							} else {
+								js_node_Fs.unlinkSync(curPath);
+							}
+						}
+						js_node_Fs.rmdirSync(path1);
+					}
+				}
+			} catch( _g ) {
+				var _g1 = haxe_Exception.caught(_g);
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 56, className : "systems.commands.Trace", methodName : "cleanDirectory"});
+			}
+		}
+	}
+	,cleanDirectory: function() {
+		var now = new Date().getTime();
+		if(now - this.last_cleared < 604800000) {
+			return;
+		}
+		this.last_cleared = now;
+		var before = null;
+		try {
+			var path = (haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".")) + "/haxebot";
+			var folders = js_node_Fs.readdirSync(path);
+			var _g = 0;
+			while(_g < folders.length) {
+				var folder = folders[_g];
+				++_g;
+				before = HxOverrides.strDate(folder).getTime();
+				if(now - before < 604800000) {
+					continue;
+				}
+				var path1 = "" + path + "/" + folder;
+				if(sys_FileSystem.exists(path1)) {
+					var _g1 = 0;
+					var _g11 = js_node_Fs.readdirSync(path1);
+					while(_g1 < _g11.length) {
+						var file = _g11[_g1];
+						++_g1;
+						var curPath = path1 + "/" + file;
+						if(sys_FileSystem.isDirectory(curPath)) {
+							if(sys_FileSystem.exists(curPath)) {
+								var _g2 = 0;
+								var _g12 = js_node_Fs.readdirSync(curPath);
+								while(_g2 < _g12.length) {
+									var file1 = _g12[_g2];
+									++_g2;
+									var curPath1 = curPath + "/" + file1;
+									if(sys_FileSystem.isDirectory(curPath1)) {
+										sys_FileSystem.deleteDirectory(curPath1);
+									} else {
+										js_node_Fs.unlinkSync(curPath1);
+									}
+								}
+								js_node_Fs.rmdirSync(curPath);
+							}
+						} else {
+							js_node_Fs.unlinkSync(curPath);
+						}
+					}
+					js_node_Fs.rmdirSync(path1);
+				}
+			}
+		} catch( _g ) {
+			var _g1 = haxe_Exception.caught(_g);
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 56, className : "systems.commands.Trace", methodName : "cleanDirectory"});
+		}
+	}
+	,parseError: function(error,code) {
+		var embed = new discord_$js_MessageEmbed();
+		embed.setTitle("Compilation Error");
+		var regex = new EReg("(Main|Test).hx:([0-9]+): characters ([0-9]+)-([0-9]+) : (.*)","gm");
+		if(regex.match(error)) {
+			var line = Std.parseInt(regex.matched(2));
+			var start_char = Std.parseInt(regex.matched(3));
+			var end_char = Std.parseInt(regex.matched(4));
+			var str = "";
+			var new_code = "";
+			var _this = code.split("\n");
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g1_value = _this[_g_current];
+				var _g1_key = _g_current++;
+				if(_g1_key != line - 1) {
+					new_code += _g1_value + "\n";
+					continue;
+				}
+				var _g = 0;
+				var _g1 = _g1_value.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var pos = i + 1;
+					var char = _g1_value.charAt(i);
+					if(pos < start_char) {
+						str += char;
+					} else if(pos == start_char) {
+						str += "->" + char;
+					} else if(pos == end_char) {
+						str += "" + char + "<-";
+					}
+				}
+				new_code += str + "\n";
+			}
+			embed.setDescription("```hx\n" + new_code + "```");
+			embed.addField("Error",error);
+			return embed;
+		}
+		return null;
+	}
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 5) {
+			var _g1 = _g.code;
+			if(!this.isSafe(_g1,interaction)) {
+				interaction.reply("That code is not safe.");
+			}
+			this.runCode(_g1,interaction);
+		}
+	}
+	,runCode: function(code,interaction) {
+		var _gthis = this;
+		var filename = "T" + new Date().getTime() + Math.floor(Math.random() * 100000);
+		var final_code = this.insertLoopBreak("class " + filename + " {\n\tstatic function main() {\n\t\ttrace(" + code + ");\n\t}\n}");
+		var mention = "<@" + interaction.user.id + ">";
+		js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",final_code + ("\n//User:" + interaction.user.tag + " id: " + interaction.user.id + "| time: " + Std.string(new Date())),function(error) {
+			if(error != null) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 117, className : "systems.commands.Trace", methodName : "runCode"});
+			}
+			var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
+			var $process = "./haxe/haxe";
+			if(!sys_FileSystem.exists("./haxe/haxe")) {
+				$process = "haxe";
+			}
+			var ls = js_node_ChildProcess.spawn($process,commands,{ timeout : _gthis.timeout});
+			ls.stderr.once("data",function(data) {
+				haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 137, className : "systems.commands.Trace", methodName : "runCode"});
+				var compile_output = _gthis.cleanOutput(data,filename,"Main");
+				var embed = _gthis.parseError(compile_output,final_code);
+				if(embed == null) {
+					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
+				} else {
+					embed.description = _gthis.cleanOutput(embed.description,filename,"Main");
+					interaction.reply({ embeds : [embed]});
+				}
+				ls.kill("SIGTERM");
+			});
+			ls.once("close",function(data) {
+				var response = "";
+				var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
+				if(!sys_FileSystem.exists(js_file)) {
+					haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Trace.hx", lineNumber : 156, className : "systems.commands.Trace", methodName : "runCode"});
+					return;
+				}
+				var obj = null;
+				var vm = new vm2_NodeVM({ sandbox : obj, console : "redirect", timeout : _gthis.timeout});
+				vm.on("console.log",function(data,info) {
+					var regex = new EReg("T[0-9]*..hx:[0-9]*.: (.*)","gm");
+					if(regex.match(data)) {
+						data = regex.matched(1);
+					}
+					if(info != null) {
+						response += "" + info + "\n";
+						return response;
+					} else {
+						response += "" + data + "\n";
+						return response;
+					}
+				});
+				try {
+					vm.run(js_node_Fs.readFileSync(js_file,{ encoding : "utf8"}));
+					var x = response.split("\n");
+					var truncated = false;
+					if(x.length > 24) {
+						truncated = true;
+						response = "";
+						var _g = 0;
+						var _g1 = x.slice(x.length - 23);
+						while(_g < _g1.length) {
+							var line = _g1[_g];
+							++_g;
+							response += line + "\n";
+						}
+					}
+					var embed = new discord_$js_MessageEmbed();
+					embed.type = "article";
+					var code_output = "";
+					var split = response.split("\n");
+					var _g_current = 0;
+					while(_g_current < split.length) {
+						var _g1_value = split[_g_current];
+						var _g1_key = _g_current++;
+						if(_g1_key >= split.length - 1) {
+							break;
+						}
+						code_output += "" + (_g1_key + 1) + ". " + _g1_value + " \n";
+					}
+					if(truncated) {
+						code_output += "\n//Output has been trimmed.";
+					}
+					var desc = "**Code:**\n```hx\n" + code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
+					embed.setDescription(desc);
+					var author = { name : "@" + interaction.user.tag, iconURL : interaction.user.displayAvatarURL()};
+					embed.setAuthor(author);
+					var date = new Date(interaction.createdTimestamp);
+					var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
+					embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
+					if(response.length > 0 && data == 0) {
+						interaction.reply({ embeds : [embed]}).then(function(succ) {
+							haxe_Log.trace("" + interaction.user.tag + "(" + interaction.user.id + ") at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 224, className : "systems.commands.Trace", methodName : "runCode"});
+						},function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 226, className : "systems.commands.Trace", methodName : "runCode"});
+						});
+						ls.kill();
+						return;
+					}
+				} catch( _g ) {
+					var _g1 = haxe_Exception.caught(_g);
+					var compile_output = _gthis.cleanOutput(_g1.get_message(),filename,"Main");
+					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 234, className : "systems.commands.Trace", methodName : "runCode"});
+				}
+			});
+		});
+	}
+	,get_base_path: function() {
+		var path = haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".");
+		if(!sys_FileSystem.exists(path + "/haxebot")) {
+			sys_FileSystem.createDirectory(path + "/haxebot");
+		}
+		path += "/haxebot";
+		var date = DateTools.format(new Date(),"%F");
+		path += "/" + date;
+		if(!sys_FileSystem.exists(path)) {
+			sys_FileSystem.createDirectory(path);
+		}
+		if(!sys_FileSystem.exists(path + "/hx")) {
+			sys_FileSystem.createDirectory(path + "/hx");
+		}
+		if(!sys_FileSystem.exists(path + "/bin")) {
+			sys_FileSystem.createDirectory(path + "/bin");
+		}
+		return path;
+	}
+	,cleanOutput: function(data,filename,class_entry) {
+		data = data.toString();
+		new RegExp("(\\[(.*|vm)\\].*)$","igmu".split("u").join(""));
+		data = StringTools.replace(StringTools.replace(data,filename,class_entry),"\x1B","");
+		data = StringTools.replace(data,this.get_base_path(),"");
+		data = StringTools.replace(data,"/hx/","");
+		data = StringTools.replace(data,"/bin/","");
+		return data;
+	}
+	,insertLoopBreak: function(code) {
+		var varname = "";
+		var regex = new EReg("(while\\s*\\(.*\\)\\s*\\{|while\\s*\\(.*?\\))","gmui");
+		var copy = code;
+		var matched = [];
+		while(regex.match(code)) {
+			matched.push(regex.matched(1));
+			code = regex.matchedRight();
+		}
+		var _g = 0;
+		while(_g < matched.length) {
+			var match = matched[_g];
+			++_g;
+			varname = "___" + util_Random.string(6);
+			var start = "final " + varname + " = Date.now().getTime();";
+			var condition = "if (Date.now().getTime() - " + varname + " > " + this.timeout + ") { break; }";
+			copy = StringTools.replace(copy,match,start + "\n" + match + "\n" + condition);
+		}
+		return copy;
+	}
+	,isSafe: function(code,response) {
+		var check_http = new EReg("haxe.http|haxe.Http","gmu");
+		if(check_http.match(code)) {
+			return false;
+		}
+		if(!Main.config.macros) {
+			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
+				response.reply({ content : "Currently no build macros allowed"});
+				return false;
+			}
+		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
+			return false;
+		}
+		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
+	}
+	,get_name: function() {
+		return "trace";
+	}
+	,__class__: systems_commands_Trace
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_base_path:"get_base_path"})
+});
+var systems_commands_Translate = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Translate"] = systems_commands_Translate;
+systems_commands_Translate.__name__ = "systems.commands.Translate";
+systems_commands_Translate.__super__ = systems_CommandBase;
+systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
+	usage: null
+	,onEnabled: function() {
+		this.getCount();
+	}
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 10) {
+			var _g1 = _g.message;
+			if(this.usage == null) {
+				interaction.reply("An error occured");
+				return;
+			}
+			if(this.usage.character_count + _g1.length > this.usage.character_limit) {
+				interaction.reply("API has reached its limit unfortunately. Please wait till next month.");
+				return;
+			}
+			this.getTranslation(interaction,_g.from,_g.to,_g1);
+		}
+	}
+	,getCount: function() {
+		var _gthis = this;
+		externs_Fetch("https://api-free.deepl.com" + "/v2/usage",{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
+			return resp.json().then(function(body) {
+				_gthis.usage = body;
+				haxe_Log.trace("Character count: " + _gthis.usage.character_count + "/" + _gthis.usage.character_limit,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 36, className : "systems.commands.Translate", methodName : "getCount"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 37, className : "systems.commands.Translate", methodName : "getCount"});
+			});
+		});
+	}
+	,getTranslation: function(interaction,from,to,message) {
+		var _gthis = this;
+		if(from == null) {
+			from = "";
+		}
+		externs_Fetch("https://api-free.deepl.com" + ("/v2/translate?source_lang=" + from + "&target_lang=" + to + "&text=" + message),{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
+			return resp.json().then(function(body) {
+				var content = "";
+				var _g = 0;
+				var _g1 = body.translations;
+				while(_g < _g1.length) {
+					var item = _g1[_g];
+					++_g;
+					content += item.text + "\n";
+				}
+				interaction.reply(content).then(function(_) {
+					_gthis.getCount();
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 52, className : "systems.commands.Translate", methodName : "getTranslation"});
+				});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 53, className : "systems.commands.Translate", methodName : "getTranslation"});
+			});
+		});
+	}
+	,getLanguages: function() {
+		externs_Fetch("https://api-free.deepl.com" + "/v2/languages",{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
+			return resp.json().then(function(body) {
+				var str = "[";
+				var _g = 0;
+				while(_g < body.length) {
+					var item = body[_g];
+					++_g;
+					str += "{\r\n\t\t\t\t\t\t\"name\": \"" + item.name + "\",\r\n\t\t\t\t\t\t\"value\": \"" + item.language + "\"\r\n\t\t\t\t\t},";
+				}
+				str += "]";
+				haxe_Log.trace(str,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 68, className : "systems.commands.Translate", methodName : "getLanguages"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 69, className : "systems.commands.Translate", methodName : "getLanguages"});
+			});
+		});
+	}
+	,request: function(endpoint) {
+		return externs_Fetch("https://api-free.deepl.com" + endpoint,{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}});
+	}
+	,get_name: function() {
+		return "translate";
+	}
+	,__class__: systems_commands_Translate
+});
 var util_DiscordUtil = function() { };
 $hxClasses["util.DiscordUtil"] = util_DiscordUtil;
 util_DiscordUtil.__name__ = "util.DiscordUtil";
@@ -8628,7 +10745,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;
@@ -8642,8 +10759,21 @@ haxe_io_FPHelper.i64tmp = new haxe__$Int64__$_$_$Int64(0,0);
 haxe_io_FPHelper.LN2 = 0.6931471805599453;
 haxe_io_FPHelper.helper = new DataView(new ArrayBuffer(8));
 haxe_io_UInt8Array.BYTES_PER_ELEMENT = 1;
+shared_QuestionType.general = "General";
+shared_QuestionType.error_message = "Error Message";
+shared_QuestionType.unexpected_behaviour = "Unexpected Behaviour";
 sys_io_File.copyBufLen = 65536;
 sys_io_File.copyBuf = js_node_buffer_Buffer.alloc(65536);
+systems_commands_Api._haxe = "https://api.haxe.org/";
+systems_commands_Api.openfl = "https://api.openfl.org/";
+systems_commands_Api.flixel = "https://api.haxeflixel.com/";
+systems_commands_Api.heaps = "https://heaps.io/api/";
+systems_commands_Api.lime = "https://api.lime.software/";
+systems_commands_HelpType.run = "run";
+systems_commands_HelpType.rtfm = "rtfm";
+systems_commands_HelpType.notify = "notify";
+systems_commands_HelpType.helppls = "helppls";
+systems_commands_HelpType.helppls_dm = "helppls_dm";
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 

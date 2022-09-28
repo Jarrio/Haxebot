@@ -1,3 +1,4 @@
+import systems.CommandBase;
 import discord_js.PermissionFlags;
 import firebase.web.auth.Auth;
 import haxe.Rest;
@@ -45,11 +46,7 @@ class Main {
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
 	private static var active_systems:Map<String, Bool> = [];
-	#if block
-	public static final guild_id:String = "416069724158427137";
-	#else
 	public static final guild_id:String = "162395145352904705";
-	#end
 
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
@@ -65,30 +62,19 @@ class Main {
 					name: 'main',
 					systems: [
 						#if update
-						Helppls, Ban, Helpdescription,
+						Helppls Ban, Helpdescription,
 						#end
-						#if !block
-						Api, ScamPrevention, Showcase, Roundup, Run, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help, Translate,
+						#if block
+						
 						#else
 						Quote,
+						Api, ScamPrevention, Showcase, Roundup, Run, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
+						Translate, Hi
 						#end
-						Hi
 					]
 				}
 			]
 		});
-		
-		// for (sys in universe.phases) {
-		// 	trace(sys.);
-		// }
-
-		#if block
-		trace('DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG');
-		var disabled = ['scamprevention', 'showcase', 'roundup', 'run', 'haxelib', 'trace'];
-		for (system in disabled) {
-			trace('DEBUG - $system is disabled');
-		}
-		#end
 
 		client = new Client({
 			intents: [
@@ -110,27 +96,17 @@ class Main {
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
 				for (item in foo) {
-					trace('${item.name} registered');
+					trace('DEBUG - ${item.name} is REGISTERED');
+				}
+				var commands = parseCommands();
+				var quote = null;
+				for (c in commands) {
+					if (c.name == 'quote') {
+						quote = c;
+						break;
+					}
 				}
 			}, err);
-
-			var count = 0;
-			// function createCommand() {
-			// 	Timers.setTimeout(function() {
-			// 		Main.client.application.commands.create(cast get_commands[count]).then(function(command) {
-			// 			saveCommand(command);
-
-			// 			if (count + 1 != get_commands.length) {
-			// 				createCommand();
-			// 			} else {
-			// 				trace('Commands activated!');
-			// 				commands_active = true;
-			// 			}
-			// 			count++;
-			// 		}, err);
-			// 	}, 250);
-			// }
-			// createCommand();
 		});
 
 		client.on('messageCreate', (message:Message) -> {

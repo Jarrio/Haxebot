@@ -59,15 +59,16 @@ class Quote extends CommandDbBase {
 							return;
 						}
 
-						if (description == null || description.length < 20) {
-							interaction.reply("A description must have at least 20 characters");
+						if (description == null || description.length < 14) {
+							interaction.reply("A description must have at least 14 characters");
 							return;
 						}
-						var query:Query<TQuoteData> = Firestore.query(col, where(column, EQUAL_TO, isName(name) ? this.nameArray(name) : name.parseInt()),
+
+						var query:Query<TQuoteData> = Firestore.query(col, where('name', EQUAL_TO, this.nameArray(name)),
 							where('author', EQUAL_TO, interaction.user.id));
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 1) {
-								interaction.reply('You already have a quote(#${res.docs[0].data().id}) with this name').then(null, err);
+								interaction.reply('You already have a quote(#${res.docs[0].data().id}) with the name __${name}__').then(null, err);
 								return;
 							}
 
@@ -137,8 +138,9 @@ class Quote extends CommandDbBase {
 								interaction.reply("Cannot delete this quote").then(null, err);
 								return;
 							}
+							
 							if (res.docs.length > 1) {
-								interaction.reply("An error occured, consult notbilly");
+								interaction.reply("An odd situation occured. <@151104106973495296>");
 								trace(name);
 								trace(interaction.user.id);
 								trace(description);
