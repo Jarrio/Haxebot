@@ -1,3 +1,5 @@
+import discord_js.PermissionFlags;
+import firebase.web.auth.Auth;
 import haxe.Rest;
 import discord_api_types.Routes;
 import discordjs.rest.REST;
@@ -33,6 +35,8 @@ import js.lib.Promise;
 
 class Main {
 	public static var app:FirebaseApp;
+	public static var logged_in:Bool = false;
+	public static var auth:firebase.web.auth.User;
 	public static var client:Client;
 	public static var commands:Map<String, ApplicationCommand> = [];
 	public static var commands_active:Bool = false;
@@ -40,7 +44,7 @@ class Main {
 	public static var config:TConfig;
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
-
+	private static var active_systems:Map<String, Bool> = [];
 	#if block
 	public static final guild_id:String = "416069724158427137";
 	#else
@@ -60,34 +64,30 @@ class Main {
 				{
 					name: 'main',
 					systems: [
-						Hi,
-						Archive,
-						Help,
-						Ban,
-						Haxelib,
-						Translate,
-						Showcase,
 						#if update
 						Helppls, Ban, Helpdescription,
 						#end
-						React,
-						Notify,
-						Helpdescription,
-						Rtfm,
-						Roundup,
-						Run,
-						Api,
-						Poll,
-						Boop,
-						ScamPrevention,
-						Trace
+						#if !block
+						Api, ScamPrevention, Showcase, Roundup, Run, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help, Translate,
+						#else
+						Quote,
+						#end
+						Hi
 					]
 				}
 			]
 		});
+		
+		// for (sys in universe.phases) {
+		// 	trace(sys.);
+		// }
 
 		#if block
 		trace('DEBUG BLOCK ACTIVE, CHANGE PROFILE FOR PRODUCTION DEBUG');
+		var disabled = ['scamprevention', 'showcase', 'roundup', 'run', 'haxelib', 'trace'];
+		for (system in disabled) {
+			trace('DEBUG - $system is disabled');
+		}
 		#end
 
 		client = new Client({
@@ -105,7 +105,6 @@ class Main {
 			Main.client = cast clients[0];
 			connected = true;
 
-			var get_commands = parseCommands();
 			var rest = new REST({version: '9'}).setToken(Main.config.discord_token);
 			var res = token(rest);
 			res.then(function(foo:Array<Dynamic>) {
@@ -167,8 +166,6 @@ class Main {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
 				}
 			}
-
-			
 			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 		});
 
@@ -300,7 +297,12 @@ class Main {
 		}
 
 		Main.app = FirebaseApp.initializeApp(Main.config.firebase);
-
+		Auth.signInWithEmailAndPassword(Auth.getAuth(), Main.config.username, Main.config.password).then(function(res) {
+			trace('logged in');
+			Main.auth = res.user;
+			Main.logged_in = true;
+		}, (err) -> trace(err));
+		
 		start();
 	}
 
@@ -312,13 +314,9 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
-			#if block
-			if (command.name != "scamprevention") {
-				continue;
-			}
-			#end
-			var permission = command.is_public == null ? true : command.is_public;
-			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultPermission(permission);
+			var permission = command.is_public == null ? PermissionFlags.SEND_MESSAGES : PermissionFlags.ADMINISTRATOR;
+			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
+			
 			if (command.params != null) {
 				for (param in command.params) {
 					var autocomplete = false;
@@ -342,10 +340,6 @@ class Main {
 									choices.push({name: option.name, value: option.value});
 								}
 								cmd.addChoices(...Rest.of(choices));
-							}
-							if (param.name == 'api') {
-								trace('here');
-								trace(autocomplete);
 							}
 
 							main_command.addStringOption(cmd);
@@ -402,6 +396,8 @@ typedef TConfig = {
 	var client_id:String;
 	var server_id:String;
 	var discord_token:String;
+	var username:String;
+	var password:String;
 	var deepl_key:String;
 	var last_roundup_posted:Int;
 	var commands:Array<TCommands>;

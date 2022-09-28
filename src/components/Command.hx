@@ -25,6 +25,7 @@ enum CommandOptions {
 	Notify(channel:String);
 	Code(code:String);
 	Help(category:String);
-	Haxelib(command:String);
+	Haxelib(command:String);	
+	Quote(type:String, name:String, description:Null<String>);	
 	Showcase;
 }
