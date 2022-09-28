@@ -704,8 +704,8 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
+	bits_Bits.set(cmpBits,3);
 	bits_Bits.set(cmpBits,4);
-	bits_Bits.set(cmpBits,1);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -718,8 +718,8 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
-	bits_Bits.set(cmpBits,5);
-	bits_Bits.set(cmpBits,3);
+	bits_Bits.set(cmpBits,4);
+	bits_Bits.set(cmpBits,1);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -732,8 +732,8 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
+	bits_Bits.set(cmpBits,5);
 	bits_Bits.set(cmpBits,3);
-	bits_Bits.set(cmpBits,4);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -864,7 +864,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(4);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -886,7 +886,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(2);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -900,7 +900,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(4);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -918,7 +918,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(4);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -938,7 +938,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(4);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -956,7 +956,7 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(4);
+		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -980,7 +980,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(4);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -988,7 +988,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(3);
+				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1002,7 +1002,7 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(4);
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1010,10 +1010,61 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			return;
+		}
+		if(interaction.isModalSubmit()) {
+			switch(interaction.customId) {
+			case "quote_edit":
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"quote_edit");
+				Main.universe.components.set(_ecsTmpEntity,3,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				break;
+			case "quote_set":
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,"quote_set");
+				Main.universe.components.set(_ecsTmpEntity,3,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				break;
+			default:
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 172, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1029,7 +1080,7 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(3);
+		var ecsTmpFamily = Main.universe.families.get(2);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1120,29 +1171,29 @@ Main.getCommand = function(name) {
 	return null;
 };
 Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 256, className : "Main", methodName : "err"});
+	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 268, className : "Main", methodName : "err"});
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 261, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 273, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 268, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 280, className : "Main", methodName : "main"});
 	}
 	if(Main.config == null || Main.config.discord_token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.config.username,Main.config.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 277, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 289, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 280, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "main"});
 	});
 	Main.start();
 };
@@ -2400,7 +2451,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Code: ($_=function(code) { return {_hx_index:14,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
 	,Help: ($_=function(category) { return {_hx_index:15,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
 	,Haxelib: ($_=function(command) { return {_hx_index:16,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
-	,Quote: ($_=function(type,name,description) { return {_hx_index:17,type:type,name:name,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["type","name","description"],$_)
+	,Quote: ($_=function(type,name) { return {_hx_index:17,type:type,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["type","name"],$_)
 	,Showcase: {_hx_name:"Showcase",_hx_index:18,__enum__:"components.CommandOptions",toString:$estr}
 };
 components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quote,components_CommandOptions.Showcase];
@@ -8671,7 +8722,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 });
 var systems_commands_Poll = function(_universe) {
 	systems_CommandBase.call(this,_universe);
-	this.dm_messages = this.universe.families.get(2);
+	this.dm_messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -8746,21 +8797,94 @@ systems_commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: systems_commands_Poll
 });
 var systems_commands_Quote = function(_universe) {
+	this.cache = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
+	this.modal = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 };
 $hxClasses["systems.commands.Quote"] = systems_commands_Quote;
 systems_commands_Quote.__name__ = "systems.commands.Quote";
 systems_commands_Quote.__super__ = systems_CommandDbBase;
 systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
-	run: function(command,interaction) {
+	cache: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandDbBase.prototype.update.call(this,_);
+		var _this = this.modal;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var interaction = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			switch(forward) {
+			case "quote_edit":
+				var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+				var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("id","==",this.cache.h[interaction[0].user.id]));
+				firebase_web_firestore_Firestore.getDocs(query).then((function(interaction) {
+					return function(resp) {
+						if(resp.docs.length != 1) {
+							interaction[0].reply("Something went wrong");
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 64, className : "systems.commands.Quote", methodName : "update"});
+							return;
+						}
+						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
+							return function(_) {
+								interaction[0].reply("Quote updated!");
+								var key = interaction[0].user.id;
+								var _this = _gthis.cache;
+								if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+									delete(_this.h[key]);
+								}
+							};
+						})(interaction),$bind(_gthis,_gthis.err));
+					};
+				})(interaction),$bind(this,this.err));
+				break;
+			case "quote_set":
+				var name = [interaction[0].fields.getTextInputValue("name")];
+				var description = [interaction[0].fields.getTextInputValue("description")];
+				var data = [{ id : -1, name : this.nameArray(name[0]), description : description[0], author : interaction[0].user.id, username : interaction[0].user.username, timestamp : new Date()}];
+				var doc = [firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes")];
+				firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),(function(doc) {
+					return function(transaction) {
+						return transaction.get(doc[0]).then((function() {
+							return function(doc) {
+								if(!doc.exists()) {
+									return { id : -1};
+								}
+								var data = doc.data();
+								data.id += 1;
+								transaction.update(doc.ref,data);
+								return data;
+							};
+						})());
+					};
+				})(doc)).then((function(data,description,name,interaction) {
+					return function(value) {
+						data[0].id = value.id;
+						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries"),data[0]).then((function(data,description,name,interaction) {
+							return function(_) {
+								interaction[0].reply("*Quote #" + data[0].id + " added!*\nname: " + name[0] + "\n" + description[0] + "\n\nby: <@" + data[0].author + ">");
+							};
+						})(data,description,name,interaction),$bind(_gthis,_gthis.err));
+					};
+				})(data,description,name,interaction),$bind(this,this.err));
+				break;
+			default:
+			}
+			this.universe.deleteEntity(entity);
+		}
+	}
+	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 17) {
 			var _g1 = _g.type;
 			var name = _g.name;
-			var description = _g.description;
 			var column = "id";
-			if(this.isName(name) && _g1 != "set") {
+			if(this.isName(name)) {
 				if(name.length < 3) {
 					if(interaction.isAutocomplete()) {
 						interaction.respond([]);
@@ -8774,8 +8898,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
 			var condition = this.isName(name) ? "array-contains" : "==";
-			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? name : Std.parseInt(name)));
-			if(interaction.isAutocomplete()) {
+			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
+			if(interaction.isAutocomplete() && _g1 != "get") {
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					var results = [];
 					var _g = 0;
@@ -8792,24 +8916,22 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 			switch(_g1) {
 			case "delete":
-				var query1 = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? name : Std.parseInt(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
-				firebase_web_firestore_Firestore.getDocs(query1).then(function(res) {
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Cannot delete this quote").then(null,$bind(_gthis,_gthis.err));
 						return;
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 144, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 145, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(description,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 146, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 199, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 200, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
 					},$bind(_gthis,_gthis.err));
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 153, className : "systems.commands.Quote", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 207, className : "systems.commands.Quote", methodName : "run"});
 				});
 				break;
 			case "edit":
@@ -8825,7 +8947,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						var d = _g1[_g];
 						++_g;
 						if(interaction.user.id == d.data().author) {
-							doc = d;
+							doc = d.data();
 							break;
 						}
 					}
@@ -8833,6 +8955,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						interaction.reply("That isn't your quote!").then(null,$bind(_gthis,_gthis.err));
 						return;
 					}
+<<<<<<< HEAD
 					if(description == null || description.length < 14) {
 						interaction.reply("A description must have at least 14 characters");
 						return;
@@ -8845,8 +8968,33 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},function(err) {
 					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 132, className : "systems.commands.Quote", methodName : "run"});
 				});
+=======
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("" + _gthis.nameString(doc.name) + ":").setStyle(2).setValue(doc.description).setMinLength(10).setMaxLength(2000);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_b);
+					_gthis.cache.h[interaction.user.id] = doc.id;
+					interaction.showModal(modal);
+				},$bind(this,this.err));
+>>>>>>> quote
 				break;
 			case "get":
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? name : Std.parseInt(name)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+						}
+						interaction.respond(results).then(null,$bind(_gthis,_gthis.err));
+					}).then(null,$bind(this,this.err));
+					return;
+				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Could not find any quotes with that identifier");
@@ -8869,41 +9017,37 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,$bind(this,this.err));
 				break;
 			case "set":
-				if(name.length < 3 || name.length > 16) {
-					interaction.reply("A name can only contain 3-16 characters. Including `_-(space)`. Name's are case insensitive.");
-					return;
-				}
-				if(description == null || description.length < 14) {
-					interaction.reply("A description must have at least 14 characters");
-					return;
-				}
-				var query1 = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("name","==",this.nameArray(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
-				firebase_web_firestore_Firestore.getDocs(query1).then(function(res) {
-					if(res.docs.length == 1) {
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length >= 1) {
 						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name + "__").then(null,$bind(_gthis,_gthis.err));
 						return;
 					}
-					var data = { id : -1, name : _gthis.nameArray(name), description : description, author : interaction.user.id, username : interaction.user.username, timestamp : new Date()};
-					var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes");
-					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
-						return transaction.get(doc).then(function(doc) {
-							if(!doc.exists()) {
-								return { id : -1};
-							}
-							var data = doc.data();
-							data.id += 1;
-							transaction.update(doc.ref,data);
-							return data;
-						});
-					}).then(function(value) {
-						data.id = value.id;
-						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries"),data).then(function(_) {
-							interaction.reply("*Quote #" + data.id + " added!*\nname: " + name + "\n" + description + "\n\nby: <@" + data.author + ">");
-						},$bind(_gthis,_gthis.err));
-					},$bind(_gthis,_gthis.err));
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name.toLowerCase()).setMinLength(3).setMaxLength(12);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
+					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_a,action_b);
+					interaction.showModal(modal);
 				},$bind(this,this.err));
 				break;
 			default:
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? name : Std.parseInt(name)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+						}
+						interaction.respond(results).then(null,$bind(_gthis,_gthis.err));
+					}).then(null,$bind(this,this.err));
+					return;
+				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Could not find any quotes with that identifier");
@@ -8958,12 +9102,14 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 	,get_name: function() {
 		return "quote";
 	}
+	,modal: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,__class__: systems_commands_Quote
 });
 var systems_commands_React = function(_universe) {
 	this.set_permission = false;
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -9653,7 +9799,7 @@ var systems_commands_ScamPrevention = function(_universe) {
 	this.sequential_tags = new haxe_ds_StringMap();
 	this.time_since = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -10002,9 +10148,9 @@ var systems_commands_Showcase = function(_) {
 	this.checking = false;
 	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
-	this.modal = this.universe.families.get(3);
-	this.messages = this.universe.families.get(2);
-	this.interactions = this.universe.families.get(4);
+	this.modal = this.universe.families.get(4);
+	this.messages = this.universe.families.get(3);
+	this.interactions = this.universe.families.get(2);
 	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(5);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
