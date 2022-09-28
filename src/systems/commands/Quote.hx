@@ -37,6 +37,11 @@ class Quote extends CommandDbBase {
 						timestamp: Date.now()
 					}
 
+					if (!this.isValidName(name)) {
+						interaction.reply({content: '*Names can only contain `_-` and/or spaces.*\nname: $name\n$description', ephemeral: true});
+						return;
+					}
+
 					var doc = doc(db, 'discord/quotes');
 
 					Firestore.runTransaction(this.db, function(transaction) {
@@ -121,6 +126,11 @@ class Quote extends CommandDbBase {
 
 				switch (type) {
 					case set:
+						if (!this.isValidName(name)) {
+							interaction.reply({content: '*Names can only contain `_-` and/or spaces.*',	ephemeral: true});
+							return;
+						}
+
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length >= 1) {
 								interaction.reply('You already have a quote(#${res.docs[0].data().id}) with the name __${name}__').then(null, err);
@@ -279,7 +289,7 @@ class Quote extends CommandDbBase {
 	}
 
 	function isValidName(input:String) {
-		var check_letters = ~/^[A-Za-z0-9_-]{3,16}/i;
+		var check_letters = ~/^[A-Za-z0-9_-]{3,16}$/i;
 		return check_letters.match(input);
 	}
 

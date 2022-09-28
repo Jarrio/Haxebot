@@ -8826,7 +8826,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 64, className : "systems.commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 69, className : "systems.commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -8846,6 +8846,10 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				var name = [interaction[0].fields.getTextInputValue("name")];
 				var description = [interaction[0].fields.getTextInputValue("description")];
 				var data = [{ id : -1, name : this.nameArray(name[0]), description : description[0], author : interaction[0].user.id, username : interaction[0].user.username, timestamp : new Date()}];
+				if(!this.isValidName(name[0])) {
+					interaction[0].reply({ content : "*Names can only contain `_-` and/or spaces.*\nname: " + name[0] + "\n" + description[0], ephemeral : true});
+					return;
+				}
 				var doc = [firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes")];
 				firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),(function(doc) {
 					return function(transaction) {
@@ -8925,15 +8929,15 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 202, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 203, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 212, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 213, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
 					},$bind(_gthis,_gthis.err));
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 210, className : "systems.commands.Quote", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 220, className : "systems.commands.Quote", methodName : "run"});
 				});
 				break;
 			case "edit":
@@ -9004,6 +9008,10 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,$bind(this,this.err));
 				break;
 			case "set":
+				if(!this.isValidName(name)) {
+					interaction.reply({ content : "*Names can only contain `_-` and/or spaces.*", ephemeral : true});
+					return;
+				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length >= 1) {
 						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name + "__").then(null,$bind(_gthis,_gthis.err));
@@ -9083,7 +9091,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return check_letters.match(input);
 	}
 	,isValidName: function(input) {
-		var check_letters = new EReg("^[A-Za-z0-9_-]{3,16}","i");
+		var check_letters = new EReg("^[A-Za-z0-9_-]{3,16}$","i");
 		return check_letters.match(input);
 	}
 	,get_name: function() {
