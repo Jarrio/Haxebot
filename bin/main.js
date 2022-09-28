@@ -8874,7 +8874,9 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				break;
 			default:
 			}
-			this.universe.deleteEntity(entity);
+			if(forward == "quote_set" || forward == "quote_edit") {
+				this.universe.deleteEntity(entity);
+			}
 		}
 	}
 	,run: function(command,interaction) {
@@ -8923,15 +8925,15 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 199, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 200, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 202, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 203, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
 					},$bind(_gthis,_gthis.err));
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 207, className : "systems.commands.Quote", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 210, className : "systems.commands.Quote", methodName : "run"});
 				});
 				break;
 			case "edit":
@@ -8955,20 +8957,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						interaction.reply("That isn't your quote!").then(null,$bind(_gthis,_gthis.err));
 						return;
 					}
-<<<<<<< HEAD
-					if(description == null || description.length < 14) {
-						interaction.reply("A description must have at least 14 characters");
-						return;
-					}
-					firebase_web_firestore_Firestore.updateDoc(doc.ref,{ description : description}).then(function(_) {
-						interaction.reply("Quote updated!");
-					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 131, className : "systems.commands.Quote", methodName : "run"});
-					});
-				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 132, className : "systems.commands.Quote", methodName : "run"});
-				});
-=======
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
 					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("" + _gthis.nameString(doc.name) + ":").setStyle(2).setValue(doc.description).setMinLength(10).setMaxLength(2000);
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
@@ -8976,7 +8964,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					_gthis.cache.h[interaction.user.id] = doc.id;
 					interaction.showModal(modal);
 				},$bind(this,this.err));
->>>>>>> quote
 				break;
 			case "get":
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? name : Std.parseInt(name)));

@@ -73,7 +73,10 @@ class Quote extends CommandDbBase {
 				default:
 			}
 
-			this.universe.deleteEntity(entity);
+			if (forward == quote_set || forward == quote_edit) {
+				this.universe.deleteEntity(entity);
+			}
+
 		});
 	}
 
