@@ -65,7 +65,7 @@ class Main {
 						Helppls Ban, Helpdescription,
 						#end
 						#if block
-						
+						Quote,
 						#else
 						Quote,
 						Api, ScamPrevention, Showcase, Roundup, Run, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
@@ -114,7 +114,7 @@ class Main {
 				return;
 			}
 			var channel = (message.channel : TextChannel);
-			
+
 			if (channel.type == DM) {
 				if (dm_help_tracking.exists(message.author.id)) {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
@@ -159,9 +159,21 @@ class Main {
 				if (interaction.customId == 'showcase_disagree') {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
 				}
-				
 				return;
 			}
+
+			if (interaction.isModalSubmit()) {
+				switch (interaction.customId) {
+					case 'quote_set':
+						universe.setComponents(universe.createEntity(), CommandForward.quote_set, interaction);
+					case 'quote_edit':
+						universe.setComponents(universe.createEntity(), CommandForward.quote_edit, interaction);
+					default:
+						trace(interaction.customId + ' - unhandled model');
+				}
+				return;
+			}
+
 			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
@@ -278,7 +290,7 @@ class Main {
 			Main.auth = res.user;
 			Main.logged_in = true;
 		}, (err) -> trace(err));
-		
+
 		start();
 	}
 
@@ -292,7 +304,7 @@ class Main {
 		for (command in command_defs) {
 			var permission = command.is_public == null ? PermissionFlags.SEND_MESSAGES : PermissionFlags.ADMINISTRATOR;
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
-			
+
 			if (command.params != null) {
 				for (param in command.params) {
 					var autocomplete = false;
@@ -422,4 +434,6 @@ enum abstract CommandForward(String) {
 	var showcase_agree;
 	var showcase_disagree;
 	var showcase_message;
+	var quote_set;
+	var quote_edit;
 }
