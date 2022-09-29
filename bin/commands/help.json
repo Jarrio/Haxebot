@@ -40,21 +40,29 @@
 	{
 		"show_help": false,
 		"type": "helppls_dm",
-		"content": ["If you would like to cancel your request or skip a question type `cancel` or `skip`. \n\nIf you are having issues or have found a bug please post all the information you can to the <#921583403520892939> channel."]
+		"content": [
+			"If you would like to cancel your request or skip a question type `cancel` or `skip`. \n\nIf you are having issues or have found a bug please post all the information you can to the <#921583403520892939> channel."
+		]
 	},
 	{
 		"show_help": true,
 		"type": "guide",
-		"content": ["There are ways to request help that will get you the help you need faster. Check out the following guide: \n <https://github.com/runkanrenchu/syntax-guide/blob/master/HOW%20TO%20ASK.md>"]
+		"content": [
+			"There are ways to request help that will get you the help you need faster. Check out the following guide: \n <https://github.com/runkanrenchu/syntax-guide/blob/master/HOW%20TO%20ASK.md>"
+		]
 	},
 	{
 		"show_help": true,
 		"type": "showcase",
-		"content": ["The command to gain access to posting into the <#162664383082790912> channel!"]
+		"content": [
+			"The command to gain access to posting into the <#162664383082790912> channel!"
+		]
 	},
 	{
 		"show_help": true,
 		"type": "quote",
-		"content": ["A command to save content, save things that are useful to yourself or others. The first parameter of the command just explains what you want to do. \nThe second parameter is the identifier you select quotes by, however you may also you the generated id.\n- Quote names are unique users, can contain: _- and spaces\n- Names are case insensitive"]
+		"content": [
+			"A command to save content, save things that are useful to yourself or others. The first parameter is what you want to do with a quote. \nThe second is the identifier you select quotes by, however you may also you the generated id.\n\n- Quote names are unique users, can contain: _- and spaces\n- Names are case insensitive"
+		]
 	}
 ]
