@@ -218,13 +218,16 @@ class Quote extends CommandDbBase {
 						}, (err) -> trace(err));
 
 					case get | _:
-						var condition = isName(name) ? WhereFilterOp.ARRAY_CONTAINS : WhereFilterOp.EQUAL_TO;
+						var condition = isName(name) ? WhereFilterOp.ARRAY_CONTAINS_ANY : WhereFilterOp.EQUAL_TO;
 						query = Firestore.query(col, where(column, condition, (isName(name) ? this.nameArray(name) : name.parseInt())));
 
 						if (interaction.isAutocomplete()) {
+							if (name.length < 3 && column == 'name') {
+								interaction.respond([]);
+								return;
+							}
 							Firestore.getDocs(query).then(function(res) {
 								var results = [];
-								
 								for (d in res.docs) {
 									var data = d.data();
 									results.push({
@@ -237,7 +240,6 @@ class Quote extends CommandDbBase {
 							return;
 						}
 
-						query = Firestore.query(col, where(column, EQUAL_TO, (isName(name) ? this.nameArray(name) : name.parseInt())));
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
 								interaction.reply('Could not find any quotes with that identifier');

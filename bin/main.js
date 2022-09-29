@@ -8969,9 +8969,13 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},$bind(this,this.err));
 				break;
 			case "get":
-				var condition = this.isName(name) ? "array-contains" : "==";
+				var condition = this.isName(name) ? "array-contains-any" : "==";
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				if(interaction.isAutocomplete()) {
+					if(name.length < 3 && column == "name") {
+						interaction.respond([]);
+						return;
+					}
 					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 						var results = [];
 						var _g = 0;
@@ -8986,7 +8990,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}).then(null,$bind(this,this.err));
 					return;
 				}
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Could not find any quotes with that identifier");
@@ -9028,9 +9031,13 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},$bind(this,this.err));
 				break;
 			default:
-				var condition = this.isName(name) ? "array-contains" : "==";
+				var condition = this.isName(name) ? "array-contains-any" : "==";
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				if(interaction.isAutocomplete()) {
+					if(name.length < 3 && column == "name") {
+						interaction.respond([]);
+						return;
+					}
 					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 						var results = [];
 						var _g = 0;
@@ -9045,7 +9052,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}).then(null,$bind(this,this.err));
 					return;
 				}
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Could not find any quotes with that identifier");
