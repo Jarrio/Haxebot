@@ -224,7 +224,6 @@ class Quote extends CommandDbBase {
 						if (interaction.isAutocomplete()) {
 							Firestore.getDocs(query).then(function(res) {
 								var results = [];
-								trace(condition);
 								
 								for (d in res.docs) {
 									var data = d.data();
@@ -238,6 +237,7 @@ class Quote extends CommandDbBase {
 							return;
 						}
 
+						query = Firestore.query(col, where(column, EQUAL_TO, (isName(name) ? this.nameArray(name) : name.parseInt())));
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
 								interaction.reply('Could not find any quotes with that identifier');
