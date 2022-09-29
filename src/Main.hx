@@ -46,11 +46,21 @@ class Main {
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
 	private static var active_systems:Map<String, Bool> = [];
+	#if block
+	public static final guild_id:String = "416069724158427137";
+	#else
 	public static final guild_id:String = "162395145352904705";
+	#end
+
 
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
-		var get = rest.put(Routes.applicationGuildCommands(Main.config.client_id, Main.guild_id), {body: commands});
+		#if block
+		var client_id = Main.config.lclient_id;
+		#else
+		var client_id = Main.config.client_id;
+		#end
+		var get = rest.put(Routes.applicationGuildCommands(client_id, Main.guild_id), {body: commands});
 		return get;
 	}
 
@@ -65,9 +75,9 @@ class Main {
 						Helppls Ban, Helpdescription,
 						#end
 						#if block
-						Quote,
+						Poll,
 						#else
-						Quote,
+						Quote, Poll,
 						Api, ScamPrevention, Showcase, Roundup, Run, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
 						Translate, Hi
 						#end
@@ -85,27 +95,31 @@ class Main {
 				IntentFlags.GUILD_MESSAGE_REACTIONS
 			]
 		});
+		#if block
+		var discord_token = Main.config.ldiscord_token;
+		#else
+		var discord_token = Main.config.discord_token;
+		#end
 
 		client.once('ready', (clients) -> {
 			trace('Ready!');
 			Main.client = cast clients[0];
 			connected = true;
 
-			var rest = new REST({version: '9'}).setToken(Main.config.discord_token);
+			
+
+
+			var rest = new REST({version: '9'}).setToken(discord_token);
 			var res = token(rest);
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
 				for (item in foo) {
 					trace('DEBUG - ${item.name} is REGISTERED');
 				}
-				var commands = parseCommands();
-				var quote = null;
-				for (c in commands) {
-					if (c.name == 'quote') {
-						quote = c;
-						break;
-					}
-				}
+
+				#if block
+				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
+				#end
 			}, err);
 		});
 
@@ -181,7 +195,7 @@ class Main {
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
 
-		client.login(config.discord_token);
+		client.login(discord_token);
 
 		new Timer(500).run = function() {
 			if (!connected || !commands_active) {
@@ -279,8 +293,14 @@ class Main {
 		} catch (e) {
 			trace(e.message);
 		}
-
-		if (config == null || config.discord_token == 'TOKEN_HERE') {
+		
+		var token = '';
+		#if block
+		token = config.ldiscord_token;
+		#else
+		token = config.discord_token;
+		#end
+		if (config == null || token == 'TOKEN_HERE') {
 			throw('Enter your discord auth token.');
 		}
 
@@ -381,9 +401,15 @@ typedef TConfig = {
 	var showcase_hook:String;
 	var firebase:FirebaseOptions;
 	var macros:Bool;
-	var client_id:String;
+	
 	var server_id:String;
+	#if !block
+	var client_id:String;
 	var discord_token:String;
+	#else
+	var lclient_id:String;
+	var ldiscord_token:String;
+	#end
 	var username:String;
 	var password:String;
 	var deepl_key:String;
