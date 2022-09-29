@@ -9091,7 +9091,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return check_letters.match(input);
 	}
 	,isValidName: function(input) {
-		var check_letters = new EReg("^[A-Za-z0-9_- ]{3,16}$","i");
+		var check_letters = new EReg("^[A-Za-z0-9 _-]{3,16}$","i");
 		return check_letters.match(input);
 	}
 	,get_name: function() {
