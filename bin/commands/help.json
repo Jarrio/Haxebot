@@ -30,7 +30,7 @@
 		"content": "Hey, did you read the rules? We can't help with project/game specific issues. Please check out the appropriate discord server - https://discord.gg/RZAcgZJnG8"
 	},
 	{
-		"show_help": true,
+		"show_help": false,
 		"type": "helppls",
 		"content": [
 			"This is a question and answer process that helps users get aid, whilst also providing extra help to the helpers. \n",
@@ -46,5 +46,15 @@
 		"show_help": true,
 		"type": "guide",
 		"content": ["There are ways to request help that will get you the help you need faster. Check out the following guide: \n <https://github.com/runkanrenchu/syntax-guide/blob/master/HOW%20TO%20ASK.md>"]
+	},
+	{
+		"show_help": true,
+		"type": "showcase",
+		"content": ["The command to gain access to posting into the <#162664383082790912> channel!"]
+	},
+	{
+		"show_help": true,
+		"type": "quote",
+		"content": ["A command to save content, save things that are useful to yourself or others. The first parameter of the command just explains what you want to do. \nThe second parameter is the identifier you select quotes by, however you may also you the generated id.\n- Quote names are unique users, can contain: _- and spaces\n- Names are case insensitive"]
 	}
 ]
