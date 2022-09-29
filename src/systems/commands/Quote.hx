@@ -105,7 +105,7 @@ class Quote extends CommandDbBase {
 				}
 
 				var col = collection(db, 'discord/quotes/entries');
-				var condition = isName(name) ? WhereFilterOp.ARRAY_CONTAINS : WhereFilterOp.EQUAL_TO;
+				
 				var query:Query<TQuoteData> = Firestore.query(col, where(column, EQUAL_TO, isName(name) ? this.nameArray(name) : name.parseInt()),
 					where('author', EQUAL_TO, interaction.user.id));
 
@@ -218,11 +218,14 @@ class Quote extends CommandDbBase {
 						}, (err) -> trace(err));
 
 					case get | _:
-						query = Firestore.query(col, where(column, condition, (isName(name) ? name : name.parseInt())));
+						var condition = isName(name) ? WhereFilterOp.ARRAY_CONTAINS : WhereFilterOp.EQUAL_TO;
+						query = Firestore.query(col, where(column, condition, (isName(name) ? this.nameArray(name) : name.parseInt())));
 
 						if (interaction.isAutocomplete()) {
 							Firestore.getDocs(query).then(function(res) {
 								var results = [];
+								trace(condition);
+								
 								for (d in res.docs) {
 									var data = d.data();
 									results.push({

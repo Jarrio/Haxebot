@@ -8903,7 +8903,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 			}
 			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
-			var condition = this.isName(name) ? "array-contains" : "==";
 			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
 			if(interaction.isAutocomplete() && _g1 != "get") {
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -8970,10 +8969,12 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},$bind(this,this.err));
 				break;
 			case "get":
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? name : Std.parseInt(name)));
+				var condition = this.isName(name) ? "array-contains" : "==";
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				if(interaction.isAutocomplete()) {
 					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 						var results = [];
+						haxe_Log.trace(condition,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 227, className : "systems.commands.Quote", methodName : "run"});
 						var _g = 0;
 						var _g1 = res.docs;
 						while(_g < _g1.length) {
@@ -9027,10 +9028,12 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},$bind(this,this.err));
 				break;
 			default:
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? name : Std.parseInt(name)));
+				var condition1 = this.isName(name) ? "array-contains" : "==";
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition1,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				if(interaction.isAutocomplete()) {
 					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 						var results = [];
+						haxe_Log.trace(condition1,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 227, className : "systems.commands.Quote", methodName : "run"});
 						var _g = 0;
 						var _g1 = res.docs;
 						while(_g < _g1.length) {
