@@ -20,6 +20,7 @@ enum abstract QuoteCommand(String) to String {
 class Quote extends CommandDbBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
 	var cache:Map<String, Int> = [];
+
 	override function update(_:Float) {
 		super.update(_);
 		iterate(modal, entity -> {
@@ -81,7 +82,6 @@ class Quote extends CommandDbBase {
 			if (forward == quote_set || forward == quote_edit) {
 				this.universe.deleteEntity(entity);
 			}
-
 		});
 	}
 
@@ -127,7 +127,7 @@ class Quote extends CommandDbBase {
 				switch (type) {
 					case set:
 						if (!this.isValidName(name)) {
-							interaction.reply({content: '*Names can only contain `_-` and/or spaces.*',	ephemeral: true});
+							interaction.reply({content: '*Names can only contain `_-` and/or spaces.*', ephemeral: true});
 							return;
 						}
 
@@ -136,7 +136,7 @@ class Quote extends CommandDbBase {
 								interaction.reply('You already have a quote(#${res.docs[0].data().id}) with the name __${name}__').then(null, err);
 								return;
 							}
-							
+
 							var modal = new ModalBuilder().setCustomId('quote_set').setTitle('Creating a quote');
 
 							var title_input = new APITextInputComponent().setCustomId('name')
@@ -158,8 +158,6 @@ class Quote extends CommandDbBase {
 
 							interaction.showModal(modal);
 							return;
-
-
 						}, err);
 
 					case edit:
@@ -235,7 +233,7 @@ class Quote extends CommandDbBase {
 								interaction.respond(results).then(null, err);
 							}).then(null, err);
 							return;
-						}	
+						}
 
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
@@ -289,7 +287,7 @@ class Quote extends CommandDbBase {
 	}
 
 	function isValidName(input:String) {
-		var check_letters = ~/^[A-Za-z0-9_-]{3,16}$/i;
+		var check_letters = ~/^[A-Za-z0-9_- ]{3,16}$/i;
 		return check_letters.match(input);
 	}
 
