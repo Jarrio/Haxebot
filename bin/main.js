@@ -828,7 +828,7 @@ Main.start = function() {
 		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 90, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
-		var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.config.discord_token);
+		var rest = new discordjs_rest_REST({ version : "10"}).setToken(Main.config.discord_token);
 		var res = Main.token(rest);
 		res.then(function(foo) {
 			Main.commands_active = true;

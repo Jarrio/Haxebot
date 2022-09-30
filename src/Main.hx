@@ -91,7 +91,7 @@ class Main {
 			Main.client = cast clients[0];
 			connected = true;
 
-			var rest = new REST({version: '9'}).setToken(Main.config.discord_token);
+			var rest = new REST({version: '10'}).setToken(Main.config.discord_token);
 			var res = token(rest);
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
