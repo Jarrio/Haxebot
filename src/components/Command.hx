@@ -1,5 +1,6 @@
 package components;
 
+import systems.commands.Poll.PollTime;
 import discord_js.User;
 
 typedef Command = {
@@ -16,7 +17,8 @@ enum CommandOptions {
 	Helppls(topic:String);
 	Trace(code:String);
 	Boop(user:User);
-	Poll(question:String, time:Int);
+	Poll(question:String, length:String, a:Null<String>, b:Null<String>, c:Null<String>, d:Null<String>, e:Null<String>, f:Null<String>, g:Null<String>,
+		votes:Null<Int>);
 	Roundup(number:Float);
 	Rtfm(channel:String);
 	Translate(to:String, message:String, from:String);
@@ -29,3 +31,4 @@ enum CommandOptions {
 	Quote(type:String, name:String);	
 	Showcase;
 }
+
