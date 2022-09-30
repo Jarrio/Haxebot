@@ -302,7 +302,15 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
-			var permission = command.is_public == null ? PermissionFlags.SEND_MESSAGES : PermissionFlags.ADMINISTRATOR;
+			var permission:Int = PermissionFlags.ADMINISTRATOR;
+			if (command.is_public != null) {
+				if (command.is_public) {
+					permission = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
+				} else {
+					permission = PermissionFlags.ADMINISTRATOR;
+				}
+			}
+
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
 
 			if (command.params != null) {

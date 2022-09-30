@@ -1207,7 +1207,14 @@ Main.parseCommands = function() {
 	while(_g < command_defs.length) {
 		var command = command_defs[_g];
 		++_g;
-		var permission = command.is_public == null ? 2048 : 8;
+		var permission = 8;
+		if(command.is_public != null) {
+			if(command.is_public) {
+				permission = 3072;
+			} else {
+				permission = 8;
+			}
+		}
 		var main_command = new discord_$builder_SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
 		if(command.params != null) {
 			var _g1 = 0;
