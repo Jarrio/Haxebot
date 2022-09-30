@@ -1207,11 +1207,9 @@ Main.parseCommands = function() {
 	while(_g < command_defs.length) {
 		var command = command_defs[_g];
 		++_g;
-		var permission = 8;
+		var permission = 3072;
 		if(command.is_public != null) {
-			if(command.is_public) {
-				permission = 3072;
-			} else {
+			if(!command.is_public) {
 				permission = 8;
 			}
 		}

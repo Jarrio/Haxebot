@@ -302,11 +302,9 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
-			var permission:Int = PermissionFlags.ADMINISTRATOR;
+			var permission:Int = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
 			if (command.is_public != null) {
-				if (command.is_public) {
-					permission = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
-				} else {
+				if (!command.is_public) {
 					permission = PermissionFlags.ADMINISTRATOR;
 				}
 			}
