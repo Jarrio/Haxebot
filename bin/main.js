@@ -733,7 +733,7 @@ Main.start = function() {
 		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 105, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
-		var rest = new discordjs_rest_REST({ version : "9"}).setToken(discord_token);
+		var rest = new discordjs_rest_REST({ version : "10"}).setToken(Main.config.discord_token);
 		var res = Main.token(rest);
 		res.then(function(foo) {
 			Main.commands_active = true;
@@ -1046,7 +1046,12 @@ Main.parseCommands = function() {
 	while(_g < command_defs.length) {
 		var command = command_defs[_g];
 		++_g;
-		var permission = command.is_public == null ? 2048 : 8;
+		var permission = 3072;
+		if(command.is_public != null) {
+			if(!command.is_public) {
+				permission = 8;
+			}
+		}
 		var main_command = new discord_$builder_SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
 		if(command.params != null) {
 			var _g1 = 0;

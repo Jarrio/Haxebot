@@ -106,10 +106,7 @@ class Main {
 			Main.client = cast clients[0];
 			connected = true;
 
-			
-
-
-			var rest = new REST({version: '9'}).setToken(discord_token);
+			var rest = new REST({version: '10'}).setToken(Main.config.discord_token);
 			var res = token(rest);
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
@@ -322,7 +319,13 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_defs) {
-			var permission = command.is_public == null ? PermissionFlags.SEND_MESSAGES : PermissionFlags.ADMINISTRATOR;
+			var permission:Int = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
+			if (command.is_public != null) {
+				if (!command.is_public) {
+					permission = PermissionFlags.ADMINISTRATOR;
+				}
+			}
+
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
 
 			if (command.params != null) {
