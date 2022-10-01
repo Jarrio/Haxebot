@@ -1,3 +1,4 @@
+import haxe.PosInfos;
 import systems.CommandBase;
 import discord_js.PermissionFlags;
 import firebase.web.auth.Auth;
@@ -72,15 +73,14 @@ class Main {
 					name: 'main',
 					systems: [
 						#if update
-						Helppls Ban, Helpdescription,
+						Helppls Ban, Helpdescription,Showcase,Roundup,
 						#end
-						#if block
-						Poll,
-						#else
+						#if aoblock
+						Poll,ScamPrevention, Run
+						#end
 						Quote, Poll,
-						Api, ScamPrevention, Showcase, Roundup, Run, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
+						Api, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
 						Translate, Hi
-						#end
 					]
 				}
 			]
@@ -106,7 +106,7 @@ class Main {
 			Main.client = cast clients[0];
 			connected = true;
 
-			var rest = new REST({version: '10'}).setToken(Main.config.discord_token);
+			var rest = new REST({version: '9'}).setToken(discord_token);
 			var res = token(rest);
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
@@ -275,10 +275,6 @@ class Main {
 		return null;
 	}
 
-	static function err(err) {
-		trace(err);
-	}
-
 	static function saveCommand(command:ApplicationCommand) {
 		Main.commands.set(command.name, command);
 		trace('registered ${command.name}');
@@ -306,7 +302,7 @@ class Main {
 			trace('logged in');
 			Main.auth = res.user;
 			Main.logged_in = true;
-		}, (err) -> trace(err));
+		}, err);
 
 		start();
 	}

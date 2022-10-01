@@ -1,5 +1,6 @@
 package util;
 
+import haxe.PosInfos;
 import discord_js.ReactionCollector;
 import discord_js.TextChannel;
 import discord_js.User;
@@ -20,11 +21,11 @@ class DiscordUtil {
 				succ();
 			}
 			trace('Updated permissions for ' + command.name);
-		}, function(err) {
+		}, function(err, ?pos:PosInfos) {
 			if (fail != null) {
 				fail(err);
 			}
-			trace(err);
+			Util.err(err);
 			trace('Failed to update permissions for ' + command.name);
 		});
 	}
@@ -55,9 +56,5 @@ class DiscordUtil {
 
 	public static function getChannel(channel_id:String, callback:(channel:TextChannel)->Void) {
 		Main.client.channels.fetch(channel_id).then(callback, err);
-	}
-
-	static inline function err(err:Dynamic) {
-		trace(err);
 	}
 }

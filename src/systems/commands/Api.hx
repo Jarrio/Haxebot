@@ -107,7 +107,7 @@ class Api extends CommandBase {
 			}
 		}
 
-		interaction.respond(results).then(null, (err) -> trace(err));
+		interaction.respond(results).then(null, err);
 	}
 
 	function get_name():String {

@@ -1,5 +1,6 @@
 package systems;
 
+import haxe.PosInfos;
 import firebase.web.firestore.DocumentReference;
 import firebase.web.app.FirebaseApp;
 import firebase.web.firestore.Firestore;
@@ -25,7 +26,7 @@ abstract class CommandDbBase extends System {
 		});
 	}
 
-	public inline function addDoc<T>(path:String, data:T, success:(doc:DocumentReference<T>) -> Void, failure:(error:Dynamic) -> Void) {
+	public inline function addDoc<T>(path:String, data:T, success:(doc:DocumentReference<T>) -> Void, failure:(error:Dynamic, ?pos:PosInfos) -> Void) {
 		Firestore.addDoc(collection(this.db, path), data).then(success, failure);
 	}
 
@@ -38,8 +39,4 @@ abstract class CommandDbBase extends System {
 	var name(get, never):String;
 
 	abstract function get_name():String;
-
-	inline function err(err) {
-		trace(err);
-	}
 }

@@ -34,7 +34,7 @@ class Translate extends CommandBase {
 			resp.json().then(function(body:TUsage) {
 				this.usage = body;
 				trace('Character count: ${this.usage.character_count}/${this.usage.character_limit}');
-			}, (err) -> trace(err));
+			}, err);
 		});
 	}
 
@@ -49,8 +49,8 @@ class Translate extends CommandBase {
 				for (item in body.translations) {
 					content += item.text + '\n';
 				}
-				interaction.reply(content).then((_) -> this.getCount(), (err) -> trace(err));
-			}, (err) -> trace(err));
+				interaction.reply(content).then((_) -> this.getCount(), err);
+			}, err);
 		});
 	}
 
@@ -66,7 +66,7 @@ class Translate extends CommandBase {
 				}
 				str += ']';
 				trace(str);
-			}, (err) -> trace(err));
+			}, err);
 		});
 	}
 

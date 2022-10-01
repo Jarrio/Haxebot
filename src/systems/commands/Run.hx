@@ -439,12 +439,8 @@ class Run extends System {
 						if (response.length > 0 && data == 0) {
 							message.reply({embeds: [embed]}).then((succ) -> {
 								trace('${message.author.tag} at $format_date with file id: ${filename}');
-								message.delete().then(null, function(err) {
-									trace(err);
-								});
-							}, function(err) {
-								trace(err);
-							});
+								message.delete().then(null, err);
+							}, err);
 							ls.kill();
 							return;
 						}

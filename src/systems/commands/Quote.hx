@@ -215,7 +215,7 @@ class Quote extends CommandDbBase {
 							Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 								interaction.reply("Quote deleted!");
 							}, err);
-						}, (err) -> trace(err));
+						}, err);
 
 					case get | _:
 						var condition = isName(name) ? WhereFilterOp.ARRAY_CONTAINS_ANY : WhereFilterOp.EQUAL_TO;

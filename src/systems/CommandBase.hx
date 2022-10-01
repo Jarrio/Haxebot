@@ -1,5 +1,6 @@
 package systems;
 
+import haxe.PosInfos;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import ecs.System;
@@ -25,8 +26,6 @@ abstract class CommandBase extends System {
 
 	abstract function get_name():String;
 
-	inline function err(err) {
-		trace(err);
-	}
+
 }
 

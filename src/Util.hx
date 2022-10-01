@@ -1,3 +1,4 @@
+import haxe.Log;
 import firebase.web.firestore.Timestamp;
 import discord_builder.BaseCommandInteraction;
 import discord_js.Message;
@@ -40,4 +41,8 @@ function fbDateWithinTimeout(a:Timestamp, b:Timestamp, timeout:Float) {
 	}
 
 	return a.toDate().getTime() - b.toDate().getTime() < timeout;
+}
+
+inline function err(err:Dynamic, ?pos:PosInfos) {
+	trace(err, pos);
 }
