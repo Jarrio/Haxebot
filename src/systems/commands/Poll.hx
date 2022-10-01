@@ -67,7 +67,7 @@ class Poll extends CommandDbBase {
 
 				var embed = new MessageEmbed();
 				
-				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${v}** vote per user.');
+				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${v}** vote(s) per user.');
 				embed.setFooter({text: 'Poll will run for ${length}.'});
 
 				var settings = new Map();

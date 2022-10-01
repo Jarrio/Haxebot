@@ -651,8 +651,8 @@ Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
 	var this1 = new Array(15);
-	var this11 = new Array(15);
-	vec[0] = new ecs_Phase(true,"main",this1,this11);
+	var this2 = new Array(15);
+	vec[0] = new ecs_Phase(true,"main",this1,this2);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
 	var vec1 = this1;
@@ -1123,7 +1123,7 @@ Main.saveCommand = function(command) {
 };
 Main.main = function() {
 	try {
-		Main.config = new haxe_format_JsonParser(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"})).doParse();
+		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
 		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "main"});
@@ -1230,6 +1230,7 @@ Reflect.field = function(o,field) {
 	try {
 		return o[field];
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -1984,6 +1985,7 @@ Type.enumEq = function(a,b) {
 			}
 		}
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 	return true;
@@ -2016,7 +2018,7 @@ Type.allEnums = function(e) {
 function Util_loadFile(filename,pos) {
 	var data = null;
 	try {
-		data = new haxe_format_JsonParser(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"})).doParse();
+		data = JSON.parse(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
 		haxe_Log.trace(_g1,{ fileName : "src/Util.hx", lineNumber : 14, className : "_Util.Util_Fields_", methodName : "loadFile"});
@@ -4406,15 +4408,6 @@ haxe_Int64Helper.fromFloat = function(f) {
 	}
 	return result;
 };
-var haxe_Json = function() { };
-$hxClasses["haxe.Json"] = haxe_Json;
-haxe_Json.__name__ = "haxe.Json";
-haxe_Json.parse = function(text) {
-	return new haxe_format_JsonParser(text).doParse();
-};
-haxe_Json.stringify = function(value,replacer,space) {
-	return haxe_format_JsonPrinter.print(value,replacer,space);
-};
 var haxe_Log = function() { };
 $hxClasses["haxe.Log"] = haxe_Log;
 haxe_Log.__name__ = "haxe.Log";
@@ -4617,321 +4610,6 @@ haxe_Rest.prepend = function(this1,item) {
 haxe_Rest.toString = function(this1) {
 	return "[" + this1.toString() + "]";
 };
-var haxe_Serializer = function() {
-	this.buf = new StringBuf();
-	this.cache = [];
-	this.useCache = haxe_Serializer.USE_CACHE;
-	this.useEnumIndex = haxe_Serializer.USE_ENUM_INDEX;
-	this.shash = new haxe_ds_StringMap();
-	this.scount = 0;
-};
-$hxClasses["haxe.Serializer"] = haxe_Serializer;
-haxe_Serializer.__name__ = "haxe.Serializer";
-haxe_Serializer.run = function(v) {
-	var s = new haxe_Serializer();
-	s.serialize(v);
-	return s.toString();
-};
-haxe_Serializer.prototype = {
-	buf: null
-	,cache: null
-	,shash: null
-	,scount: null
-	,useCache: null
-	,useEnumIndex: null
-	,toString: function() {
-		return this.buf.b;
-	}
-	,serializeString: function(s) {
-		var x = this.shash.h[s];
-		if(x != null) {
-			this.buf.b += "R";
-			this.buf.b += x == null ? "null" : "" + x;
-			return;
-		}
-		this.shash.h[s] = this.scount++;
-		this.buf.b += "y";
-		s = encodeURIComponent(s);
-		this.buf.b += Std.string(s.length);
-		this.buf.b += ":";
-		this.buf.b += s == null ? "null" : "" + s;
-	}
-	,serializeRef: function(v) {
-		var vt = typeof(v);
-		var _g = 0;
-		var _g1 = this.cache.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var ci = this.cache[i];
-			if(typeof(ci) == vt && ci == v) {
-				this.buf.b += "r";
-				this.buf.b += i == null ? "null" : "" + i;
-				return true;
-			}
-		}
-		this.cache.push(v);
-		return false;
-	}
-	,serializeFields: function(v) {
-		var _g = 0;
-		var _g1 = Reflect.fields(v);
-		while(_g < _g1.length) {
-			var f = _g1[_g];
-			++_g;
-			this.serializeString(f);
-			this.serialize(Reflect.field(v,f));
-		}
-		this.buf.b += "g";
-	}
-	,serialize: function(v) {
-		var _g = Type.typeof(v);
-		switch(_g._hx_index) {
-		case 0:
-			this.buf.b += "n";
-			break;
-		case 1:
-			var v1 = v;
-			if(v1 == 0) {
-				this.buf.b += "z";
-				return;
-			}
-			this.buf.b += "i";
-			this.buf.b += v1 == null ? "null" : "" + v1;
-			break;
-		case 2:
-			var v1 = v;
-			if(isNaN(v1)) {
-				this.buf.b += "k";
-			} else if(!isFinite(v1)) {
-				this.buf.b += v1 < 0 ? "m" : "p";
-			} else {
-				this.buf.b += "d";
-				this.buf.b += v1 == null ? "null" : "" + v1;
-			}
-			break;
-		case 3:
-			this.buf.b += v ? "t" : "f";
-			break;
-		case 4:
-			if(js_Boot.__instanceof(v,Class)) {
-				var className = v.__name__;
-				this.buf.b += "A";
-				this.serializeString(className);
-			} else if(js_Boot.__instanceof(v,Enum)) {
-				this.buf.b += "B";
-				this.serializeString(v.__ename__);
-			} else {
-				if(this.useCache && this.serializeRef(v)) {
-					return;
-				}
-				this.buf.b += "o";
-				this.serializeFields(v);
-			}
-			break;
-		case 5:
-			throw haxe_Exception.thrown("Cannot serialize function");
-		case 6:
-			var c = _g.c;
-			if(c == String) {
-				this.serializeString(v);
-				return;
-			}
-			if(this.useCache && this.serializeRef(v)) {
-				return;
-			}
-			switch(c) {
-			case Array:
-				var ucount = 0;
-				this.buf.b += "a";
-				var l = v["length"];
-				var _g1 = 0;
-				var _g2 = l;
-				while(_g1 < _g2) {
-					var i = _g1++;
-					if(v[i] == null) {
-						++ucount;
-					} else {
-						if(ucount > 0) {
-							if(ucount == 1) {
-								this.buf.b += "n";
-							} else {
-								this.buf.b += "u";
-								this.buf.b += ucount == null ? "null" : "" + ucount;
-							}
-							ucount = 0;
-						}
-						this.serialize(v[i]);
-					}
-				}
-				if(ucount > 0) {
-					if(ucount == 1) {
-						this.buf.b += "n";
-					} else {
-						this.buf.b += "u";
-						this.buf.b += ucount == null ? "null" : "" + ucount;
-					}
-				}
-				this.buf.b += "h";
-				break;
-			case Date:
-				var d = v;
-				this.buf.b += "v";
-				this.buf.b += Std.string(d.getTime());
-				break;
-			case haxe_ds_IntMap:
-				this.buf.b += "q";
-				var v1 = v;
-				var k = v1.keys();
-				while(k.hasNext()) {
-					var k1 = k.next();
-					this.buf.b += ":";
-					this.buf.b += k1 == null ? "null" : "" + k1;
-					this.serialize(v1.h[k1]);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_ds_List:
-				this.buf.b += "l";
-				var v1 = v;
-				var _g_head = v1.h;
-				while(_g_head != null) {
-					var val = _g_head.item;
-					_g_head = _g_head.next;
-					var i = val;
-					this.serialize(i);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_ds_ObjectMap:
-				this.buf.b += "M";
-				var v1 = v;
-				var k = v1.keys();
-				while(k.hasNext()) {
-					var k1 = k.next();
-					var id = Reflect.field(k1,"__id__");
-					Reflect.deleteField(k1,"__id__");
-					this.serialize(k1);
-					k1["__id__"] = id;
-					this.serialize(v1.h[k1.__id__]);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_ds_StringMap:
-				this.buf.b += "b";
-				var v1 = v;
-				var h = v1.h;
-				var _g_keys = Object.keys(h);
-				var _g_length = _g_keys.length;
-				var _g_current = 0;
-				while(_g_current < _g_length) {
-					var k = _g_keys[_g_current++];
-					this.serializeString(k);
-					this.serialize(v1.h[k]);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_io_Bytes:
-				var v1 = v;
-				this.buf.b += "s";
-				this.buf.b += Std.string(Math.ceil(v1.length * 8 / 6));
-				this.buf.b += ":";
-				var i = 0;
-				var max = v1.length - 2;
-				var b64 = haxe_Serializer.BASE64_CODES;
-				if(b64 == null) {
-					var this1 = new Array(haxe_Serializer.BASE64.length);
-					b64 = this1;
-					var _g1 = 0;
-					var _g2 = haxe_Serializer.BASE64.length;
-					while(_g1 < _g2) {
-						var i1 = _g1++;
-						b64[i1] = HxOverrides.cca(haxe_Serializer.BASE64,i1);
-					}
-					haxe_Serializer.BASE64_CODES = b64;
-				}
-				while(i < max) {
-					var b1 = v1.b[i++];
-					var b2 = v1.b[i++];
-					var b3 = v1.b[i++];
-					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
-					this.buf.b += String.fromCodePoint(b64[(b1 << 4 | b2 >> 4) & 63]);
-					this.buf.b += String.fromCodePoint(b64[(b2 << 2 | b3 >> 6) & 63]);
-					this.buf.b += String.fromCodePoint(b64[b3 & 63]);
-				}
-				if(i == max) {
-					var b1 = v1.b[i++];
-					var b2 = v1.b[i++];
-					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
-					this.buf.b += String.fromCodePoint(b64[(b1 << 4 | b2 >> 4) & 63]);
-					this.buf.b += String.fromCodePoint(b64[b2 << 2 & 63]);
-				} else if(i == max + 1) {
-					var b1 = v1.b[i++];
-					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
-					this.buf.b += String.fromCodePoint(b64[b1 << 4 & 63]);
-				}
-				break;
-			default:
-				if(this.useCache) {
-					this.cache.pop();
-				}
-				if(v.hxSerialize != null) {
-					this.buf.b += "C";
-					this.serializeString(c.__name__);
-					if(this.useCache) {
-						this.cache.push(v);
-					}
-					v.hxSerialize(this);
-					this.buf.b += "g";
-				} else {
-					this.buf.b += "c";
-					this.serializeString(c.__name__);
-					if(this.useCache) {
-						this.cache.push(v);
-					}
-					this.serializeFields(v);
-				}
-			}
-			break;
-		case 7:
-			var e = _g.e;
-			if(this.useCache) {
-				if(this.serializeRef(v)) {
-					return;
-				}
-				this.cache.pop();
-			}
-			this.buf.b += Std.string(this.useEnumIndex ? "j" : "w");
-			this.serializeString(e.__ename__);
-			if(this.useEnumIndex) {
-				this.buf.b += ":";
-				this.buf.b += Std.string(v._hx_index);
-			} else {
-				var e = v;
-				this.serializeString($hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name);
-			}
-			this.buf.b += ":";
-			var params = Type.enumParameters(v);
-			this.buf.b += Std.string(params.length);
-			var _g = 0;
-			while(_g < params.length) {
-				var p = params[_g];
-				++_g;
-				this.serialize(p);
-			}
-			if(this.useCache) {
-				this.cache.push(v);
-			}
-			break;
-		default:
-			throw haxe_Exception.thrown("Cannot serialize " + Std.string(v));
-		}
-	}
-	,serializeException: function(e) {
-		this.buf.b += "x";
-		this.serialize(e);
-	}
-	,__class__: haxe_Serializer
-};
 var haxe_Timer = function(time_ms) {
 	var me = this;
 	this.id = setInterval(function() {
@@ -5030,6 +4708,7 @@ haxe_ds_BalancedTree.prototype = {
 			this.root = this.removeLoop(key,this.root);
 			return true;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(typeof(haxe_Exception.caught(_g).unwrap()) == "string") {
 				return false;
 			} else {
@@ -5958,588 +5637,6 @@ haxe_exceptions_NotImplementedException.__super__ = haxe_exceptions_PosException
 haxe_exceptions_NotImplementedException.prototype = $extend(haxe_exceptions_PosException.prototype,{
 	__class__: haxe_exceptions_NotImplementedException
 });
-var haxe_format_JsonParser = function(str) {
-	this.str = str;
-	this.pos = 0;
-};
-$hxClasses["haxe.format.JsonParser"] = haxe_format_JsonParser;
-haxe_format_JsonParser.__name__ = "haxe.format.JsonParser";
-haxe_format_JsonParser.parse = function(str) {
-	return new haxe_format_JsonParser(str).doParse();
-};
-haxe_format_JsonParser.prototype = {
-	str: null
-	,pos: null
-	,doParse: function() {
-		var result = this.parseRec();
-		var c;
-		while(true) {
-			c = this.str.charCodeAt(this.pos++);
-			if(!(c == c)) {
-				break;
-			}
-			switch(c) {
-			case 9:case 10:case 13:case 32:
-				break;
-			default:
-				this.invalidChar();
-			}
-		}
-		return result;
-	}
-	,parseRec: function() {
-		while(true) {
-			var c = this.str.charCodeAt(this.pos++);
-			switch(c) {
-			case 9:case 10:case 13:case 32:
-				break;
-			case 34:
-				return this.parseString();
-			case 45:case 48:case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
-				var c1 = c;
-				var start = this.pos - 1;
-				var minus = c == 45;
-				var digit = !minus;
-				var zero = c == 48;
-				var point = false;
-				var e = false;
-				var pm = false;
-				var end = false;
-				while(true) {
-					c1 = this.str.charCodeAt(this.pos++);
-					switch(c1) {
-					case 43:case 45:
-						if(!e || pm) {
-							this.invalidNumber(start);
-						}
-						digit = false;
-						pm = true;
-						break;
-					case 46:
-						if(minus || point || e) {
-							this.invalidNumber(start);
-						}
-						digit = false;
-						point = true;
-						break;
-					case 48:
-						if(zero && !point) {
-							this.invalidNumber(start);
-						}
-						if(minus) {
-							minus = false;
-							zero = true;
-						}
-						digit = true;
-						break;
-					case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
-						if(zero && !point) {
-							this.invalidNumber(start);
-						}
-						if(minus) {
-							minus = false;
-						}
-						digit = true;
-						zero = false;
-						break;
-					case 69:case 101:
-						if(minus || zero || e) {
-							this.invalidNumber(start);
-						}
-						digit = false;
-						e = true;
-						break;
-					default:
-						if(!digit) {
-							this.invalidNumber(start);
-						}
-						this.pos--;
-						end = true;
-					}
-					if(end) {
-						break;
-					}
-				}
-				var f = parseFloat(HxOverrides.substr(this.str,start,this.pos - start));
-				if(point) {
-					return f;
-				} else {
-					var i = f | 0;
-					if(i == f) {
-						return i;
-					} else {
-						return f;
-					}
-				}
-				break;
-			case 91:
-				var arr = [];
-				var comma = null;
-				while(true) {
-					var c2 = this.str.charCodeAt(this.pos++);
-					switch(c2) {
-					case 9:case 10:case 13:case 32:
-						break;
-					case 44:
-						if(comma) {
-							comma = false;
-						} else {
-							this.invalidChar();
-						}
-						break;
-					case 93:
-						if(comma == false) {
-							this.invalidChar();
-						}
-						return arr;
-					default:
-						if(comma) {
-							this.invalidChar();
-						}
-						this.pos--;
-						arr.push(this.parseRec());
-						comma = true;
-					}
-				}
-				break;
-			case 102:
-				var save = this.pos;
-				if(this.str.charCodeAt(this.pos++) != 97 || this.str.charCodeAt(this.pos++) != 108 || this.str.charCodeAt(this.pos++) != 115 || this.str.charCodeAt(this.pos++) != 101) {
-					this.pos = save;
-					this.invalidChar();
-				}
-				return false;
-			case 110:
-				var save1 = this.pos;
-				if(this.str.charCodeAt(this.pos++) != 117 || this.str.charCodeAt(this.pos++) != 108 || this.str.charCodeAt(this.pos++) != 108) {
-					this.pos = save1;
-					this.invalidChar();
-				}
-				return null;
-			case 116:
-				var save2 = this.pos;
-				if(this.str.charCodeAt(this.pos++) != 114 || this.str.charCodeAt(this.pos++) != 117 || this.str.charCodeAt(this.pos++) != 101) {
-					this.pos = save2;
-					this.invalidChar();
-				}
-				return true;
-			case 123:
-				var obj = { };
-				var field = null;
-				var comma1 = null;
-				while(true) {
-					var c3 = this.str.charCodeAt(this.pos++);
-					switch(c3) {
-					case 9:case 10:case 13:case 32:
-						break;
-					case 34:
-						if(field != null || comma1) {
-							this.invalidChar();
-						}
-						field = this.parseString();
-						break;
-					case 44:
-						if(comma1) {
-							comma1 = false;
-						} else {
-							this.invalidChar();
-						}
-						break;
-					case 58:
-						if(field == null) {
-							this.invalidChar();
-						}
-						obj[field] = this.parseRec();
-						field = null;
-						comma1 = true;
-						break;
-					case 125:
-						if(field != null || comma1 == false) {
-							this.invalidChar();
-						}
-						return obj;
-					default:
-						this.invalidChar();
-					}
-				}
-				break;
-			default:
-				this.invalidChar();
-			}
-		}
-	}
-	,parseString: function() {
-		var start = this.pos;
-		var buf = null;
-		var prev = -1;
-		while(true) {
-			var c = this.str.charCodeAt(this.pos++);
-			if(c == 34) {
-				break;
-			}
-			if(c == 92) {
-				if(buf == null) {
-					buf = new StringBuf();
-				}
-				var s = this.str;
-				var len = this.pos - start - 1;
-				buf.b += len == null ? HxOverrides.substr(s,start,null) : HxOverrides.substr(s,start,len);
-				c = this.str.charCodeAt(this.pos++);
-				if(c != 117 && prev != -1) {
-					buf.b += String.fromCodePoint(65533);
-					prev = -1;
-				}
-				switch(c) {
-				case 34:case 47:case 92:
-					buf.b += String.fromCodePoint(c);
-					break;
-				case 98:
-					buf.b += String.fromCodePoint(8);
-					break;
-				case 102:
-					buf.b += String.fromCodePoint(12);
-					break;
-				case 110:
-					buf.b += String.fromCodePoint(10);
-					break;
-				case 114:
-					buf.b += String.fromCodePoint(13);
-					break;
-				case 116:
-					buf.b += String.fromCodePoint(9);
-					break;
-				case 117:
-					var uc = Std.parseInt("0x" + HxOverrides.substr(this.str,this.pos,4));
-					this.pos += 4;
-					if(prev != -1) {
-						if(uc < 56320 || uc > 57343) {
-							buf.b += String.fromCodePoint(65533);
-							prev = -1;
-						} else {
-							buf.b += String.fromCodePoint(((prev - 55296 << 10) + (uc - 56320) + 65536));
-							prev = -1;
-						}
-					} else if(uc >= 55296 && uc <= 56319) {
-						prev = uc;
-					} else {
-						buf.b += String.fromCodePoint(uc);
-					}
-					break;
-				default:
-					throw haxe_Exception.thrown("Invalid escape sequence \\" + String.fromCodePoint(c) + " at position " + (this.pos - 1));
-				}
-				start = this.pos;
-			} else if(c != c) {
-				throw haxe_Exception.thrown("Unclosed string");
-			}
-		}
-		if(prev != -1) {
-			buf.b += String.fromCodePoint(65533);
-			prev = -1;
-		}
-		if(buf == null) {
-			return HxOverrides.substr(this.str,start,this.pos - start - 1);
-		} else {
-			var s = this.str;
-			var len = this.pos - start - 1;
-			buf.b += len == null ? HxOverrides.substr(s,start,null) : HxOverrides.substr(s,start,len);
-			return buf.b;
-		}
-	}
-	,parseNumber: function(c) {
-		var start = this.pos - 1;
-		var minus = c == 45;
-		var digit = !minus;
-		var zero = c == 48;
-		var point = false;
-		var e = false;
-		var pm = false;
-		var end = false;
-		while(true) {
-			c = this.str.charCodeAt(this.pos++);
-			switch(c) {
-			case 43:case 45:
-				if(!e || pm) {
-					this.invalidNumber(start);
-				}
-				digit = false;
-				pm = true;
-				break;
-			case 46:
-				if(minus || point || e) {
-					this.invalidNumber(start);
-				}
-				digit = false;
-				point = true;
-				break;
-			case 48:
-				if(zero && !point) {
-					this.invalidNumber(start);
-				}
-				if(minus) {
-					minus = false;
-					zero = true;
-				}
-				digit = true;
-				break;
-			case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
-				if(zero && !point) {
-					this.invalidNumber(start);
-				}
-				if(minus) {
-					minus = false;
-				}
-				digit = true;
-				zero = false;
-				break;
-			case 69:case 101:
-				if(minus || zero || e) {
-					this.invalidNumber(start);
-				}
-				digit = false;
-				e = true;
-				break;
-			default:
-				if(!digit) {
-					this.invalidNumber(start);
-				}
-				this.pos--;
-				end = true;
-			}
-			if(end) {
-				break;
-			}
-		}
-		var f = parseFloat(HxOverrides.substr(this.str,start,this.pos - start));
-		if(point) {
-			return f;
-		} else {
-			var i = f | 0;
-			if(i == f) {
-				return i;
-			} else {
-				return f;
-			}
-		}
-	}
-	,nextChar: function() {
-		return this.str.charCodeAt(this.pos++);
-	}
-	,invalidChar: function() {
-		this.pos--;
-		throw haxe_Exception.thrown("Invalid char " + this.str.charCodeAt(this.pos) + " at position " + this.pos);
-	}
-	,invalidNumber: function(start) {
-		throw haxe_Exception.thrown("Invalid number at position " + start + ": " + HxOverrides.substr(this.str,start,this.pos - start));
-	}
-	,__class__: haxe_format_JsonParser
-};
-var haxe_format_JsonPrinter = function(replacer,space) {
-	this.replacer = replacer;
-	this.indent = space;
-	this.pretty = space != null;
-	this.nind = 0;
-	this.buf = new StringBuf();
-};
-$hxClasses["haxe.format.JsonPrinter"] = haxe_format_JsonPrinter;
-haxe_format_JsonPrinter.__name__ = "haxe.format.JsonPrinter";
-haxe_format_JsonPrinter.print = function(o,replacer,space) {
-	var printer = new haxe_format_JsonPrinter(replacer,space);
-	printer.write("",o);
-	return printer.buf.b;
-};
-haxe_format_JsonPrinter.prototype = {
-	buf: null
-	,replacer: null
-	,indent: null
-	,pretty: null
-	,nind: null
-	,ipad: function() {
-		if(this.pretty) {
-			this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
-		}
-	}
-	,newl: function() {
-		if(this.pretty) {
-			this.buf.b += String.fromCodePoint(10);
-		}
-	}
-	,write: function(k,v) {
-		if(this.replacer != null) {
-			v = this.replacer(k,v);
-		}
-		var _g = Type.typeof(v);
-		switch(_g._hx_index) {
-		case 0:
-			this.buf.b += "null";
-			break;
-		case 1:
-			this.buf.b += Std.string(v);
-			break;
-		case 2:
-			var v1 = isFinite(v) ? Std.string(v) : "null";
-			this.buf.b += Std.string(v1);
-			break;
-		case 3:
-			this.buf.b += Std.string(v);
-			break;
-		case 4:
-			this.fieldsString(v,Reflect.fields(v));
-			break;
-		case 5:
-			this.buf.b += "\"<fun>\"";
-			break;
-		case 6:
-			var c = _g.c;
-			if(c == String) {
-				this.quote(v);
-			} else if(c == Array) {
-				var v1 = v;
-				this.buf.b += String.fromCodePoint(91);
-				var len = v1.length;
-				var last = len - 1;
-				var _g = 0;
-				var _g1 = len;
-				while(_g < _g1) {
-					var i = _g++;
-					if(i > 0) {
-						this.buf.b += String.fromCodePoint(44);
-					} else {
-						this.nind++;
-					}
-					if(this.pretty) {
-						this.buf.b += String.fromCodePoint(10);
-					}
-					if(this.pretty) {
-						this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
-					}
-					this.write(i,v1[i]);
-					if(i == last) {
-						this.nind--;
-						if(this.pretty) {
-							this.buf.b += String.fromCodePoint(10);
-						}
-						if(this.pretty) {
-							this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
-						}
-					}
-				}
-				this.buf.b += String.fromCodePoint(93);
-			} else if(c == haxe_ds_StringMap) {
-				var v1 = v;
-				var o = { };
-				var h = v1.h;
-				var _g_keys = Object.keys(h);
-				var _g_length = _g_keys.length;
-				var _g_current = 0;
-				while(_g_current < _g_length) {
-					var k = _g_keys[_g_current++];
-					o[k] = v1.h[k];
-				}
-				var v1 = o;
-				this.fieldsString(v1,Reflect.fields(v1));
-			} else if(c == Date) {
-				var v1 = v;
-				this.quote(HxOverrides.dateStr(v1));
-			} else {
-				this.classString(v);
-			}
-			break;
-		case 7:
-			var i = v._hx_index;
-			this.buf.b += Std.string(i);
-			break;
-		case 8:
-			this.buf.b += "\"???\"";
-			break;
-		}
-	}
-	,classString: function(v) {
-		this.fieldsString(v,Type.getInstanceFields(js_Boot.getClass(v)));
-	}
-	,objString: function(v) {
-		this.fieldsString(v,Reflect.fields(v));
-	}
-	,fieldsString: function(v,fields) {
-		this.buf.b += String.fromCodePoint(123);
-		var len = fields.length;
-		var last = len - 1;
-		var first = true;
-		var _g = 0;
-		var _g1 = len;
-		while(_g < _g1) {
-			var i = _g++;
-			var f = fields[i];
-			var value = Reflect.field(v,f);
-			if(Reflect.isFunction(value)) {
-				continue;
-			}
-			if(first) {
-				this.nind++;
-				first = false;
-			} else {
-				this.buf.b += String.fromCodePoint(44);
-			}
-			if(this.pretty) {
-				this.buf.b += String.fromCodePoint(10);
-			}
-			if(this.pretty) {
-				this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
-			}
-			this.quote(f);
-			this.buf.b += String.fromCodePoint(58);
-			if(this.pretty) {
-				this.buf.b += String.fromCodePoint(32);
-			}
-			this.write(f,value);
-			if(i == last) {
-				this.nind--;
-				if(this.pretty) {
-					this.buf.b += String.fromCodePoint(10);
-				}
-				if(this.pretty) {
-					this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
-				}
-			}
-		}
-		this.buf.b += String.fromCodePoint(125);
-	}
-	,quote: function(s) {
-		this.buf.b += String.fromCodePoint(34);
-		var i = 0;
-		var length = s.length;
-		while(i < length) {
-			var c = s.charCodeAt(i++);
-			switch(c) {
-			case 8:
-				this.buf.b += "\\b";
-				break;
-			case 9:
-				this.buf.b += "\\t";
-				break;
-			case 10:
-				this.buf.b += "\\n";
-				break;
-			case 12:
-				this.buf.b += "\\f";
-				break;
-			case 13:
-				this.buf.b += "\\r";
-				break;
-			case 34:
-				this.buf.b += "\\\"";
-				break;
-			case 92:
-				this.buf.b += "\\\\";
-				break;
-			default:
-				this.buf.b += String.fromCodePoint(c);
-			}
-		}
-		this.buf.b += String.fromCodePoint(34);
-	}
-	,__class__: haxe_format_JsonPrinter
-};
 var haxe_http_HttpBase = function(url) {
 	this.url = url;
 	this.headers = [];
@@ -8182,6 +7279,7 @@ js_Boot.__string_rec = function(o,s) {
 		try {
 			tostr = o.toString;
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			return "???";
 		}
 		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
@@ -8318,62 +7416,6 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
-var js_Browser = function() { };
-$hxClasses["js.Browser"] = js_Browser;
-js_Browser.__name__ = "js.Browser";
-js_Browser.__properties__ = {get_supported:"get_supported",get_self:"get_self"};
-js_Browser.get_self = function() {
-	return $global;
-};
-js_Browser.get_supported = function() {
-	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
-		return typeof(window.location.protocol) == "string";
-	} else {
-		return false;
-	}
-};
-js_Browser.getLocalStorage = function() {
-	try {
-		var s = window.localStorage;
-		s.getItem("");
-		if(s.length == 0) {
-			var key = "_hx_" + Math.random();
-			s.setItem(key,key);
-			s.removeItem(key);
-		}
-		return s;
-	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
-		return null;
-	}
-};
-js_Browser.getSessionStorage = function() {
-	try {
-		var s = window.sessionStorage;
-		s.getItem("");
-		if(s.length == 0) {
-			var key = "_hx_" + Math.random();
-			s.setItem(key,key);
-			s.removeItem(key);
-		}
-		return s;
-	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
-		return null;
-	}
-};
-js_Browser.createXMLHttpRequest = function() {
-	if(typeof XMLHttpRequest != "undefined") {
-		return new XMLHttpRequest();
-	}
-	if(typeof ActiveXObject != "undefined") {
-		return new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
-};
-js_Browser.alert = function(v) {
-	window.alert(Std.string(v));
-};
 var js_Lib = function() { };
 $hxClasses["js.Lib"] = js_Lib;
 js_Lib.__name__ = "js.Lib";
@@ -8397,20 +7439,6 @@ js_Lib.getOriginalException = function() {
 };
 js_Lib.getNextHaxeUID = function() {
 	return $global.$haxeUID++;
-};
-var js_html__$CanvasElement_CanvasUtil = function() { };
-$hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
-js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
-js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
-	var ctx = canvas.getContext("webgl",attribs);
-	if(ctx != null) {
-		return ctx;
-	}
-	var ctx = canvas.getContext("experimental-webgl",attribs);
-	if(ctx != null) {
-		return ctx;
-	}
-	return null;
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
 $hxClasses["js.lib._ArrayBuffer.ArrayBufferCompat"] = js_lib__$ArrayBuffer_ArrayBufferCompat;
@@ -9617,7 +8645,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			var _g4 = _g.votes;
 			var question = _g.question;
 			var time = systems_commands_PollTime.fromString(_g1);
-			haxe_Log.trace(time,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 37, className : "systems.commands.Poll", methodName : "run"});
+			haxe_Log.trace(time,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 35, className : "systems.commands.Poll", methodName : "run"});
 			if(_g2 == null && _g3 == null) {
 				interaction.reply("You must have at least 2 answers");
 				return;
@@ -9646,7 +8674,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 				body += "" + char + " - " + _g1_value + "\n";
 			}
 			var embed = new discord_$js_MessageEmbed();
-			embed.setDescription("**Question**\n" + question + "\n\n**Options**\n" + body + "\n**Settings**\n**" + _g4 + "** vote per user.");
+			embed.setDescription("**Question**\n" + question + "\n\n**Options**\n" + body + "\n**Settings**\n**" + _g4 + "** vote(s) per user.");
 			embed.setFooter({ text : "Poll will run for " + _g1 + "."});
 			var settings = new haxe_ds_IntMap();
 			settings.h[0] = votes;
@@ -9660,7 +8688,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						var key = _g_keys[_g_current++];
 						message.react(key);
 					}
-					var data = { id : -1, active : true, results : haxe_format_JsonPrinter.print(results,null,null), answers : haxe_format_JsonPrinter.print(answers,null,null), question : question, duration : time, settings : haxe_format_JsonPrinter.print(settings,null,null), timestamp : firebase_web_firestore_Timestamp.now(), author : interaction.user.id, message_id : message.id};
+					var data = { id : -1, active : true, results : JSON.stringify(results), answers : JSON.stringify(answers), question : question, duration : time, settings : JSON.stringify(settings), timestamp : firebase_web_firestore_Timestamp.now(), author : interaction.user.id, message_id : message.id};
 					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
 						return transaction.get(firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls")).then(function(doc) {
 							if(!doc.exists()) {
@@ -9833,13 +8861,13 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 var systems_commands_PollData = {};
 systems_commands_PollData.__properties__ = {get_settings:"get_settings",get_results:"get_results",get_answers:"get_answers"};
 systems_commands_PollData.get_answers = function(this1) {
-	return new haxe_format_JsonParser(this1.answers).doParse();
+	return JSON.parse(this1.answers);
 };
 systems_commands_PollData.get_results = function(this1) {
-	return new haxe_format_JsonParser(this1.results).doParse();
+	return JSON.parse(this1.results);
 };
 systems_commands_PollData.get_settings = function(this1) {
-	return new haxe_format_JsonParser(this1.settings).doParse();
+	return JSON.parse(this1.settings);
 };
 var systems_commands_PollTime = {};
 systems_commands_PollTime._new = function(value) {
@@ -11333,10 +10361,6 @@ ecs_ds_Unit.unit = ecs_ds_Unit._new();
 haxe_Int32._mul = Math.imul != null ? Math.imul : function(a,b) {
 	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
 };
-haxe_Serializer.USE_CACHE = false;
-haxe_Serializer.USE_ENUM_INDEX = false;
-haxe_Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-haxe_Serializer.BASE64_CODES = null;
 haxe_io_FPHelper.i64tmp = new haxe__$Int64__$_$_$Int64(0,0);
 haxe_io_FPHelper.LN2 = 0.6931471805599453;
 haxe_io_FPHelper.helper = new DataView(new ArrayBuffer(8));
