@@ -650,8 +650,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(1);
-	var this11 = new Array(1);
+	var this1 = new Array(15);
+	var this11 = new Array(15);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -666,7 +666,7 @@ Main.start = function() {
 	var this2 = this1;
 	var this1 = new Array(0);
 	var resources = new ecs_core_ResourceManager(this2,this1);
-	var this1 = new Array(3);
+	var this1 = new Array(4);
 	var vec1 = this1;
 	var this1 = [0];
 	var this2 = this1;
@@ -710,12 +710,82 @@ Main.start = function() {
 	var this2 = this1;
 	var resBits = this2;
 	vec1[2] = new ecs_Family(2,cmpBits,resBits,1000);
+	var this1 = [0];
+	var this2 = this1;
+	var _g = this2.length;
+	while(_g < 1) {
+		var i = _g++;
+		this2[i] = 0;
+	}
+	var cmpBits = this2;
+	bits_Bits.set(cmpBits,3);
+	bits_Bits.set(cmpBits,4);
+	var this1 = [0];
+	var this2 = this1;
+	var resBits = this2;
+	vec1[3] = new ecs_Family(3,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
 	var phase = vec[0];
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Quote(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
+	s.onEnabled();
+	var s = new systems_commands_Poll(u);
+	phase.systems[1] = s;
+	phase.enabledSystems[1] = true;
+	s.onEnabled();
+	var s = new systems_commands_Api(u);
+	phase.systems[2] = s;
+	phase.enabledSystems[2] = true;
+	s.onEnabled();
+	var s = new systems_commands_Haxelib(u);
+	phase.systems[3] = s;
+	phase.enabledSystems[3] = true;
+	s.onEnabled();
+	var s = new systems_commands_Trace(u);
+	phase.systems[4] = s;
+	phase.enabledSystems[4] = true;
+	s.onEnabled();
+	var s = new systems_commands_React(u);
+	phase.systems[5] = s;
+	phase.enabledSystems[5] = true;
+	s.onEnabled();
+	var s = new systems_commands_Notify(u);
+	phase.systems[6] = s;
+	phase.enabledSystems[6] = true;
+	s.onEnabled();
+	var s = new systems_commands_Helpdescription(u);
+	phase.systems[7] = s;
+	phase.enabledSystems[7] = true;
+	s.onEnabled();
+	var s = new systems_commands_Rtfm(u);
+	phase.systems[8] = s;
+	phase.enabledSystems[8] = true;
+	s.onEnabled();
+	var s = new systems_commands_Poll(u);
+	phase.systems[9] = s;
+	phase.enabledSystems[9] = true;
+	s.onEnabled();
+	var s = new systems_commands_Boop(u);
+	phase.systems[10] = s;
+	phase.enabledSystems[10] = true;
+	s.onEnabled();
+	var s = new systems_commands_Archive(u);
+	phase.systems[11] = s;
+	phase.enabledSystems[11] = true;
+	s.onEnabled();
+	var s = new systems_commands_Help(u);
+	phase.systems[12] = s;
+	phase.enabledSystems[12] = true;
+	s.onEnabled();
+	var s = new systems_commands_Translate(u);
+	phase.systems[13] = s;
+	phase.enabledSystems[13] = true;
+	s.onEnabled();
+	var s = new systems_commands_Hi(u);
+	phase.systems[14] = s;
+	phase.enabledSystems[14] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -733,7 +803,7 @@ Main.start = function() {
 		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 105, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
-		var rest = new discordjs_rest_REST({ version : "10"}).setToken(Main.config.discord_token);
+		var rest = new discordjs_rest_REST({ version : "9"}).setToken(discord_token);
 		var res = Main.token(rest);
 		res.then(function(foo) {
 			Main.commands_active = true;
@@ -741,10 +811,10 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 117, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 114, className : "Main", methodName : "start"});
 			}
-			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 121, className : "Main", methodName : "start"});
-		},Main.err);
+			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 118, className : "Main", methodName : "start"});
+		},Util_err);
 	});
 	Main.client.on("messageCreate",function(message) {
 		if(message.author.bot) {
@@ -758,6 +828,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,1,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -793,6 +867,10 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -804,6 +882,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,1,message);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -823,6 +905,10 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -837,14 +923,18 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(0);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 164, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 160, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 161, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -854,6 +944,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,3,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -868,6 +962,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,3,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -889,6 +987,10 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(1);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -903,13 +1005,17 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(1);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 186, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 183, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -922,6 +1028,10 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,3,interaction);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 		var ecsTmpFamily = Main.universe.families.get(1);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1007,19 +1117,16 @@ Main.getCommand = function(name) {
 	}
 	return null;
 };
-Main.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 282, className : "Main", methodName : "err"});
-};
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 280, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
-		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
+		Main.config = new haxe_format_JsonParser(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"})).doParse();
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 294, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "main"});
 	}
 	var token = "";
 	token = Main.config.ldiscord_token;
@@ -1028,12 +1135,10 @@ Main.main = function() {
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.config.username,Main.config.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 309, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 302, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
-	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 312, className : "Main", methodName : "main"});
-	});
+	},Util_err);
 	Main.start();
 };
 Main.parseCommands = function() {
@@ -1911,11 +2016,11 @@ Type.allEnums = function(e) {
 function Util_loadFile(filename,pos) {
 	var data = null;
 	try {
-		data = JSON.parse(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"}));
+		data = new haxe_format_JsonParser(js_node_Fs.readFileSync("./commands/" + filename + ".json",{ encoding : "utf8"})).doParse();
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1,{ fileName : "src/Util.hx", lineNumber : 13, className : "_Util.Util_Fields_", methodName : "loadFile"});
-		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 14, className : "_Util.Util_Fields_", methodName : "loadFile", customParams : [pos]});
+		haxe_Log.trace(_g1,{ fileName : "src/Util.hx", lineNumber : 14, className : "_Util.Util_Fields_", methodName : "loadFile"});
+		haxe_Log.trace("Failed to load file or parse json",{ fileName : "src/Util.hx", lineNumber : 15, className : "_Util.Util_Fields_", methodName : "loadFile", customParams : [pos]});
 	}
 	return data;
 }
@@ -1947,6 +2052,9 @@ function Util_fbDateWithinTimeout(a,b,timeout) {
 		return false;
 	}
 	return a.toDate().getTime() - b.toDate().getTime() < timeout;
+}
+function Util_err(err,pos) {
+	haxe_Log.trace(err,{ fileName : "src/Util.hx", lineNumber : 47, className : "_Util.Util_Fields_", methodName : "err", customParams : [pos]});
 }
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
@@ -3070,6 +3178,7 @@ ecs_ds_Unit._new = function() {
 	var this1 = null;
 	return this1;
 };
+var externs_Fetch = require("node-fetch");
 var firebase_web_app_FirebaseApp = require("firebase/app");
 var firebase_web_auth_Auth = require("firebase/auth");
 var firebase_web_firestore_Query = require("firebase/firestore");
@@ -4297,6 +4406,15 @@ haxe_Int64Helper.fromFloat = function(f) {
 	}
 	return result;
 };
+var haxe_Json = function() { };
+$hxClasses["haxe.Json"] = haxe_Json;
+haxe_Json.__name__ = "haxe.Json";
+haxe_Json.parse = function(text) {
+	return new haxe_format_JsonParser(text).doParse();
+};
+haxe_Json.stringify = function(value,replacer,space) {
+	return haxe_format_JsonPrinter.print(value,replacer,space);
+};
 var haxe_Log = function() { };
 $hxClasses["haxe.Log"] = haxe_Log;
 haxe_Log.__name__ = "haxe.Log";
@@ -4498,6 +4616,321 @@ haxe_Rest.prepend = function(this1,item) {
 };
 haxe_Rest.toString = function(this1) {
 	return "[" + this1.toString() + "]";
+};
+var haxe_Serializer = function() {
+	this.buf = new StringBuf();
+	this.cache = [];
+	this.useCache = haxe_Serializer.USE_CACHE;
+	this.useEnumIndex = haxe_Serializer.USE_ENUM_INDEX;
+	this.shash = new haxe_ds_StringMap();
+	this.scount = 0;
+};
+$hxClasses["haxe.Serializer"] = haxe_Serializer;
+haxe_Serializer.__name__ = "haxe.Serializer";
+haxe_Serializer.run = function(v) {
+	var s = new haxe_Serializer();
+	s.serialize(v);
+	return s.toString();
+};
+haxe_Serializer.prototype = {
+	buf: null
+	,cache: null
+	,shash: null
+	,scount: null
+	,useCache: null
+	,useEnumIndex: null
+	,toString: function() {
+		return this.buf.b;
+	}
+	,serializeString: function(s) {
+		var x = this.shash.h[s];
+		if(x != null) {
+			this.buf.b += "R";
+			this.buf.b += x == null ? "null" : "" + x;
+			return;
+		}
+		this.shash.h[s] = this.scount++;
+		this.buf.b += "y";
+		s = encodeURIComponent(s);
+		this.buf.b += Std.string(s.length);
+		this.buf.b += ":";
+		this.buf.b += s == null ? "null" : "" + s;
+	}
+	,serializeRef: function(v) {
+		var vt = typeof(v);
+		var _g = 0;
+		var _g1 = this.cache.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var ci = this.cache[i];
+			if(typeof(ci) == vt && ci == v) {
+				this.buf.b += "r";
+				this.buf.b += i == null ? "null" : "" + i;
+				return true;
+			}
+		}
+		this.cache.push(v);
+		return false;
+	}
+	,serializeFields: function(v) {
+		var _g = 0;
+		var _g1 = Reflect.fields(v);
+		while(_g < _g1.length) {
+			var f = _g1[_g];
+			++_g;
+			this.serializeString(f);
+			this.serialize(Reflect.field(v,f));
+		}
+		this.buf.b += "g";
+	}
+	,serialize: function(v) {
+		var _g = Type.typeof(v);
+		switch(_g._hx_index) {
+		case 0:
+			this.buf.b += "n";
+			break;
+		case 1:
+			var v1 = v;
+			if(v1 == 0) {
+				this.buf.b += "z";
+				return;
+			}
+			this.buf.b += "i";
+			this.buf.b += v1 == null ? "null" : "" + v1;
+			break;
+		case 2:
+			var v1 = v;
+			if(isNaN(v1)) {
+				this.buf.b += "k";
+			} else if(!isFinite(v1)) {
+				this.buf.b += v1 < 0 ? "m" : "p";
+			} else {
+				this.buf.b += "d";
+				this.buf.b += v1 == null ? "null" : "" + v1;
+			}
+			break;
+		case 3:
+			this.buf.b += v ? "t" : "f";
+			break;
+		case 4:
+			if(js_Boot.__instanceof(v,Class)) {
+				var className = v.__name__;
+				this.buf.b += "A";
+				this.serializeString(className);
+			} else if(js_Boot.__instanceof(v,Enum)) {
+				this.buf.b += "B";
+				this.serializeString(v.__ename__);
+			} else {
+				if(this.useCache && this.serializeRef(v)) {
+					return;
+				}
+				this.buf.b += "o";
+				this.serializeFields(v);
+			}
+			break;
+		case 5:
+			throw haxe_Exception.thrown("Cannot serialize function");
+		case 6:
+			var c = _g.c;
+			if(c == String) {
+				this.serializeString(v);
+				return;
+			}
+			if(this.useCache && this.serializeRef(v)) {
+				return;
+			}
+			switch(c) {
+			case Array:
+				var ucount = 0;
+				this.buf.b += "a";
+				var l = v["length"];
+				var _g1 = 0;
+				var _g2 = l;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					if(v[i] == null) {
+						++ucount;
+					} else {
+						if(ucount > 0) {
+							if(ucount == 1) {
+								this.buf.b += "n";
+							} else {
+								this.buf.b += "u";
+								this.buf.b += ucount == null ? "null" : "" + ucount;
+							}
+							ucount = 0;
+						}
+						this.serialize(v[i]);
+					}
+				}
+				if(ucount > 0) {
+					if(ucount == 1) {
+						this.buf.b += "n";
+					} else {
+						this.buf.b += "u";
+						this.buf.b += ucount == null ? "null" : "" + ucount;
+					}
+				}
+				this.buf.b += "h";
+				break;
+			case Date:
+				var d = v;
+				this.buf.b += "v";
+				this.buf.b += Std.string(d.getTime());
+				break;
+			case haxe_ds_IntMap:
+				this.buf.b += "q";
+				var v1 = v;
+				var k = v1.keys();
+				while(k.hasNext()) {
+					var k1 = k.next();
+					this.buf.b += ":";
+					this.buf.b += k1 == null ? "null" : "" + k1;
+					this.serialize(v1.h[k1]);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_ds_List:
+				this.buf.b += "l";
+				var v1 = v;
+				var _g_head = v1.h;
+				while(_g_head != null) {
+					var val = _g_head.item;
+					_g_head = _g_head.next;
+					var i = val;
+					this.serialize(i);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_ds_ObjectMap:
+				this.buf.b += "M";
+				var v1 = v;
+				var k = v1.keys();
+				while(k.hasNext()) {
+					var k1 = k.next();
+					var id = Reflect.field(k1,"__id__");
+					Reflect.deleteField(k1,"__id__");
+					this.serialize(k1);
+					k1["__id__"] = id;
+					this.serialize(v1.h[k1.__id__]);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_ds_StringMap:
+				this.buf.b += "b";
+				var v1 = v;
+				var h = v1.h;
+				var _g_keys = Object.keys(h);
+				var _g_length = _g_keys.length;
+				var _g_current = 0;
+				while(_g_current < _g_length) {
+					var k = _g_keys[_g_current++];
+					this.serializeString(k);
+					this.serialize(v1.h[k]);
+				}
+				this.buf.b += "h";
+				break;
+			case haxe_io_Bytes:
+				var v1 = v;
+				this.buf.b += "s";
+				this.buf.b += Std.string(Math.ceil(v1.length * 8 / 6));
+				this.buf.b += ":";
+				var i = 0;
+				var max = v1.length - 2;
+				var b64 = haxe_Serializer.BASE64_CODES;
+				if(b64 == null) {
+					var this1 = new Array(haxe_Serializer.BASE64.length);
+					b64 = this1;
+					var _g1 = 0;
+					var _g2 = haxe_Serializer.BASE64.length;
+					while(_g1 < _g2) {
+						var i1 = _g1++;
+						b64[i1] = HxOverrides.cca(haxe_Serializer.BASE64,i1);
+					}
+					haxe_Serializer.BASE64_CODES = b64;
+				}
+				while(i < max) {
+					var b1 = v1.b[i++];
+					var b2 = v1.b[i++];
+					var b3 = v1.b[i++];
+					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
+					this.buf.b += String.fromCodePoint(b64[(b1 << 4 | b2 >> 4) & 63]);
+					this.buf.b += String.fromCodePoint(b64[(b2 << 2 | b3 >> 6) & 63]);
+					this.buf.b += String.fromCodePoint(b64[b3 & 63]);
+				}
+				if(i == max) {
+					var b1 = v1.b[i++];
+					var b2 = v1.b[i++];
+					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
+					this.buf.b += String.fromCodePoint(b64[(b1 << 4 | b2 >> 4) & 63]);
+					this.buf.b += String.fromCodePoint(b64[b2 << 2 & 63]);
+				} else if(i == max + 1) {
+					var b1 = v1.b[i++];
+					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
+					this.buf.b += String.fromCodePoint(b64[b1 << 4 & 63]);
+				}
+				break;
+			default:
+				if(this.useCache) {
+					this.cache.pop();
+				}
+				if(v.hxSerialize != null) {
+					this.buf.b += "C";
+					this.serializeString(c.__name__);
+					if(this.useCache) {
+						this.cache.push(v);
+					}
+					v.hxSerialize(this);
+					this.buf.b += "g";
+				} else {
+					this.buf.b += "c";
+					this.serializeString(c.__name__);
+					if(this.useCache) {
+						this.cache.push(v);
+					}
+					this.serializeFields(v);
+				}
+			}
+			break;
+		case 7:
+			var e = _g.e;
+			if(this.useCache) {
+				if(this.serializeRef(v)) {
+					return;
+				}
+				this.cache.pop();
+			}
+			this.buf.b += Std.string(this.useEnumIndex ? "j" : "w");
+			this.serializeString(e.__ename__);
+			if(this.useEnumIndex) {
+				this.buf.b += ":";
+				this.buf.b += Std.string(v._hx_index);
+			} else {
+				var e = v;
+				this.serializeString($hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name);
+			}
+			this.buf.b += ":";
+			var params = Type.enumParameters(v);
+			this.buf.b += Std.string(params.length);
+			var _g = 0;
+			while(_g < params.length) {
+				var p = params[_g];
+				++_g;
+				this.serialize(p);
+			}
+			if(this.useCache) {
+				this.cache.push(v);
+			}
+			break;
+		default:
+			throw haxe_Exception.thrown("Cannot serialize " + Std.string(v));
+		}
+	}
+	,serializeException: function(e) {
+		this.buf.b += "x";
+		this.serialize(e);
+	}
+	,__class__: haxe_Serializer
 };
 var haxe_Timer = function(time_ms) {
 	var me = this;
@@ -5525,6 +5958,588 @@ haxe_exceptions_NotImplementedException.__super__ = haxe_exceptions_PosException
 haxe_exceptions_NotImplementedException.prototype = $extend(haxe_exceptions_PosException.prototype,{
 	__class__: haxe_exceptions_NotImplementedException
 });
+var haxe_format_JsonParser = function(str) {
+	this.str = str;
+	this.pos = 0;
+};
+$hxClasses["haxe.format.JsonParser"] = haxe_format_JsonParser;
+haxe_format_JsonParser.__name__ = "haxe.format.JsonParser";
+haxe_format_JsonParser.parse = function(str) {
+	return new haxe_format_JsonParser(str).doParse();
+};
+haxe_format_JsonParser.prototype = {
+	str: null
+	,pos: null
+	,doParse: function() {
+		var result = this.parseRec();
+		var c;
+		while(true) {
+			c = this.str.charCodeAt(this.pos++);
+			if(!(c == c)) {
+				break;
+			}
+			switch(c) {
+			case 9:case 10:case 13:case 32:
+				break;
+			default:
+				this.invalidChar();
+			}
+		}
+		return result;
+	}
+	,parseRec: function() {
+		while(true) {
+			var c = this.str.charCodeAt(this.pos++);
+			switch(c) {
+			case 9:case 10:case 13:case 32:
+				break;
+			case 34:
+				return this.parseString();
+			case 45:case 48:case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
+				var c1 = c;
+				var start = this.pos - 1;
+				var minus = c == 45;
+				var digit = !minus;
+				var zero = c == 48;
+				var point = false;
+				var e = false;
+				var pm = false;
+				var end = false;
+				while(true) {
+					c1 = this.str.charCodeAt(this.pos++);
+					switch(c1) {
+					case 43:case 45:
+						if(!e || pm) {
+							this.invalidNumber(start);
+						}
+						digit = false;
+						pm = true;
+						break;
+					case 46:
+						if(minus || point || e) {
+							this.invalidNumber(start);
+						}
+						digit = false;
+						point = true;
+						break;
+					case 48:
+						if(zero && !point) {
+							this.invalidNumber(start);
+						}
+						if(minus) {
+							minus = false;
+							zero = true;
+						}
+						digit = true;
+						break;
+					case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
+						if(zero && !point) {
+							this.invalidNumber(start);
+						}
+						if(minus) {
+							minus = false;
+						}
+						digit = true;
+						zero = false;
+						break;
+					case 69:case 101:
+						if(minus || zero || e) {
+							this.invalidNumber(start);
+						}
+						digit = false;
+						e = true;
+						break;
+					default:
+						if(!digit) {
+							this.invalidNumber(start);
+						}
+						this.pos--;
+						end = true;
+					}
+					if(end) {
+						break;
+					}
+				}
+				var f = parseFloat(HxOverrides.substr(this.str,start,this.pos - start));
+				if(point) {
+					return f;
+				} else {
+					var i = f | 0;
+					if(i == f) {
+						return i;
+					} else {
+						return f;
+					}
+				}
+				break;
+			case 91:
+				var arr = [];
+				var comma = null;
+				while(true) {
+					var c2 = this.str.charCodeAt(this.pos++);
+					switch(c2) {
+					case 9:case 10:case 13:case 32:
+						break;
+					case 44:
+						if(comma) {
+							comma = false;
+						} else {
+							this.invalidChar();
+						}
+						break;
+					case 93:
+						if(comma == false) {
+							this.invalidChar();
+						}
+						return arr;
+					default:
+						if(comma) {
+							this.invalidChar();
+						}
+						this.pos--;
+						arr.push(this.parseRec());
+						comma = true;
+					}
+				}
+				break;
+			case 102:
+				var save = this.pos;
+				if(this.str.charCodeAt(this.pos++) != 97 || this.str.charCodeAt(this.pos++) != 108 || this.str.charCodeAt(this.pos++) != 115 || this.str.charCodeAt(this.pos++) != 101) {
+					this.pos = save;
+					this.invalidChar();
+				}
+				return false;
+			case 110:
+				var save1 = this.pos;
+				if(this.str.charCodeAt(this.pos++) != 117 || this.str.charCodeAt(this.pos++) != 108 || this.str.charCodeAt(this.pos++) != 108) {
+					this.pos = save1;
+					this.invalidChar();
+				}
+				return null;
+			case 116:
+				var save2 = this.pos;
+				if(this.str.charCodeAt(this.pos++) != 114 || this.str.charCodeAt(this.pos++) != 117 || this.str.charCodeAt(this.pos++) != 101) {
+					this.pos = save2;
+					this.invalidChar();
+				}
+				return true;
+			case 123:
+				var obj = { };
+				var field = null;
+				var comma1 = null;
+				while(true) {
+					var c3 = this.str.charCodeAt(this.pos++);
+					switch(c3) {
+					case 9:case 10:case 13:case 32:
+						break;
+					case 34:
+						if(field != null || comma1) {
+							this.invalidChar();
+						}
+						field = this.parseString();
+						break;
+					case 44:
+						if(comma1) {
+							comma1 = false;
+						} else {
+							this.invalidChar();
+						}
+						break;
+					case 58:
+						if(field == null) {
+							this.invalidChar();
+						}
+						obj[field] = this.parseRec();
+						field = null;
+						comma1 = true;
+						break;
+					case 125:
+						if(field != null || comma1 == false) {
+							this.invalidChar();
+						}
+						return obj;
+					default:
+						this.invalidChar();
+					}
+				}
+				break;
+			default:
+				this.invalidChar();
+			}
+		}
+	}
+	,parseString: function() {
+		var start = this.pos;
+		var buf = null;
+		var prev = -1;
+		while(true) {
+			var c = this.str.charCodeAt(this.pos++);
+			if(c == 34) {
+				break;
+			}
+			if(c == 92) {
+				if(buf == null) {
+					buf = new StringBuf();
+				}
+				var s = this.str;
+				var len = this.pos - start - 1;
+				buf.b += len == null ? HxOverrides.substr(s,start,null) : HxOverrides.substr(s,start,len);
+				c = this.str.charCodeAt(this.pos++);
+				if(c != 117 && prev != -1) {
+					buf.b += String.fromCodePoint(65533);
+					prev = -1;
+				}
+				switch(c) {
+				case 34:case 47:case 92:
+					buf.b += String.fromCodePoint(c);
+					break;
+				case 98:
+					buf.b += String.fromCodePoint(8);
+					break;
+				case 102:
+					buf.b += String.fromCodePoint(12);
+					break;
+				case 110:
+					buf.b += String.fromCodePoint(10);
+					break;
+				case 114:
+					buf.b += String.fromCodePoint(13);
+					break;
+				case 116:
+					buf.b += String.fromCodePoint(9);
+					break;
+				case 117:
+					var uc = Std.parseInt("0x" + HxOverrides.substr(this.str,this.pos,4));
+					this.pos += 4;
+					if(prev != -1) {
+						if(uc < 56320 || uc > 57343) {
+							buf.b += String.fromCodePoint(65533);
+							prev = -1;
+						} else {
+							buf.b += String.fromCodePoint(((prev - 55296 << 10) + (uc - 56320) + 65536));
+							prev = -1;
+						}
+					} else if(uc >= 55296 && uc <= 56319) {
+						prev = uc;
+					} else {
+						buf.b += String.fromCodePoint(uc);
+					}
+					break;
+				default:
+					throw haxe_Exception.thrown("Invalid escape sequence \\" + String.fromCodePoint(c) + " at position " + (this.pos - 1));
+				}
+				start = this.pos;
+			} else if(c != c) {
+				throw haxe_Exception.thrown("Unclosed string");
+			}
+		}
+		if(prev != -1) {
+			buf.b += String.fromCodePoint(65533);
+			prev = -1;
+		}
+		if(buf == null) {
+			return HxOverrides.substr(this.str,start,this.pos - start - 1);
+		} else {
+			var s = this.str;
+			var len = this.pos - start - 1;
+			buf.b += len == null ? HxOverrides.substr(s,start,null) : HxOverrides.substr(s,start,len);
+			return buf.b;
+		}
+	}
+	,parseNumber: function(c) {
+		var start = this.pos - 1;
+		var minus = c == 45;
+		var digit = !minus;
+		var zero = c == 48;
+		var point = false;
+		var e = false;
+		var pm = false;
+		var end = false;
+		while(true) {
+			c = this.str.charCodeAt(this.pos++);
+			switch(c) {
+			case 43:case 45:
+				if(!e || pm) {
+					this.invalidNumber(start);
+				}
+				digit = false;
+				pm = true;
+				break;
+			case 46:
+				if(minus || point || e) {
+					this.invalidNumber(start);
+				}
+				digit = false;
+				point = true;
+				break;
+			case 48:
+				if(zero && !point) {
+					this.invalidNumber(start);
+				}
+				if(minus) {
+					minus = false;
+					zero = true;
+				}
+				digit = true;
+				break;
+			case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:
+				if(zero && !point) {
+					this.invalidNumber(start);
+				}
+				if(minus) {
+					minus = false;
+				}
+				digit = true;
+				zero = false;
+				break;
+			case 69:case 101:
+				if(minus || zero || e) {
+					this.invalidNumber(start);
+				}
+				digit = false;
+				e = true;
+				break;
+			default:
+				if(!digit) {
+					this.invalidNumber(start);
+				}
+				this.pos--;
+				end = true;
+			}
+			if(end) {
+				break;
+			}
+		}
+		var f = parseFloat(HxOverrides.substr(this.str,start,this.pos - start));
+		if(point) {
+			return f;
+		} else {
+			var i = f | 0;
+			if(i == f) {
+				return i;
+			} else {
+				return f;
+			}
+		}
+	}
+	,nextChar: function() {
+		return this.str.charCodeAt(this.pos++);
+	}
+	,invalidChar: function() {
+		this.pos--;
+		throw haxe_Exception.thrown("Invalid char " + this.str.charCodeAt(this.pos) + " at position " + this.pos);
+	}
+	,invalidNumber: function(start) {
+		throw haxe_Exception.thrown("Invalid number at position " + start + ": " + HxOverrides.substr(this.str,start,this.pos - start));
+	}
+	,__class__: haxe_format_JsonParser
+};
+var haxe_format_JsonPrinter = function(replacer,space) {
+	this.replacer = replacer;
+	this.indent = space;
+	this.pretty = space != null;
+	this.nind = 0;
+	this.buf = new StringBuf();
+};
+$hxClasses["haxe.format.JsonPrinter"] = haxe_format_JsonPrinter;
+haxe_format_JsonPrinter.__name__ = "haxe.format.JsonPrinter";
+haxe_format_JsonPrinter.print = function(o,replacer,space) {
+	var printer = new haxe_format_JsonPrinter(replacer,space);
+	printer.write("",o);
+	return printer.buf.b;
+};
+haxe_format_JsonPrinter.prototype = {
+	buf: null
+	,replacer: null
+	,indent: null
+	,pretty: null
+	,nind: null
+	,ipad: function() {
+		if(this.pretty) {
+			this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
+		}
+	}
+	,newl: function() {
+		if(this.pretty) {
+			this.buf.b += String.fromCodePoint(10);
+		}
+	}
+	,write: function(k,v) {
+		if(this.replacer != null) {
+			v = this.replacer(k,v);
+		}
+		var _g = Type.typeof(v);
+		switch(_g._hx_index) {
+		case 0:
+			this.buf.b += "null";
+			break;
+		case 1:
+			this.buf.b += Std.string(v);
+			break;
+		case 2:
+			var v1 = isFinite(v) ? Std.string(v) : "null";
+			this.buf.b += Std.string(v1);
+			break;
+		case 3:
+			this.buf.b += Std.string(v);
+			break;
+		case 4:
+			this.fieldsString(v,Reflect.fields(v));
+			break;
+		case 5:
+			this.buf.b += "\"<fun>\"";
+			break;
+		case 6:
+			var c = _g.c;
+			if(c == String) {
+				this.quote(v);
+			} else if(c == Array) {
+				var v1 = v;
+				this.buf.b += String.fromCodePoint(91);
+				var len = v1.length;
+				var last = len - 1;
+				var _g = 0;
+				var _g1 = len;
+				while(_g < _g1) {
+					var i = _g++;
+					if(i > 0) {
+						this.buf.b += String.fromCodePoint(44);
+					} else {
+						this.nind++;
+					}
+					if(this.pretty) {
+						this.buf.b += String.fromCodePoint(10);
+					}
+					if(this.pretty) {
+						this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
+					}
+					this.write(i,v1[i]);
+					if(i == last) {
+						this.nind--;
+						if(this.pretty) {
+							this.buf.b += String.fromCodePoint(10);
+						}
+						if(this.pretty) {
+							this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
+						}
+					}
+				}
+				this.buf.b += String.fromCodePoint(93);
+			} else if(c == haxe_ds_StringMap) {
+				var v1 = v;
+				var o = { };
+				var h = v1.h;
+				var _g_keys = Object.keys(h);
+				var _g_length = _g_keys.length;
+				var _g_current = 0;
+				while(_g_current < _g_length) {
+					var k = _g_keys[_g_current++];
+					o[k] = v1.h[k];
+				}
+				var v1 = o;
+				this.fieldsString(v1,Reflect.fields(v1));
+			} else if(c == Date) {
+				var v1 = v;
+				this.quote(HxOverrides.dateStr(v1));
+			} else {
+				this.classString(v);
+			}
+			break;
+		case 7:
+			var i = v._hx_index;
+			this.buf.b += Std.string(i);
+			break;
+		case 8:
+			this.buf.b += "\"???\"";
+			break;
+		}
+	}
+	,classString: function(v) {
+		this.fieldsString(v,Type.getInstanceFields(js_Boot.getClass(v)));
+	}
+	,objString: function(v) {
+		this.fieldsString(v,Reflect.fields(v));
+	}
+	,fieldsString: function(v,fields) {
+		this.buf.b += String.fromCodePoint(123);
+		var len = fields.length;
+		var last = len - 1;
+		var first = true;
+		var _g = 0;
+		var _g1 = len;
+		while(_g < _g1) {
+			var i = _g++;
+			var f = fields[i];
+			var value = Reflect.field(v,f);
+			if(Reflect.isFunction(value)) {
+				continue;
+			}
+			if(first) {
+				this.nind++;
+				first = false;
+			} else {
+				this.buf.b += String.fromCodePoint(44);
+			}
+			if(this.pretty) {
+				this.buf.b += String.fromCodePoint(10);
+			}
+			if(this.pretty) {
+				this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
+			}
+			this.quote(f);
+			this.buf.b += String.fromCodePoint(58);
+			if(this.pretty) {
+				this.buf.b += String.fromCodePoint(32);
+			}
+			this.write(f,value);
+			if(i == last) {
+				this.nind--;
+				if(this.pretty) {
+					this.buf.b += String.fromCodePoint(10);
+				}
+				if(this.pretty) {
+					this.buf.b += Std.string(StringTools.lpad("",this.indent,this.nind * this.indent.length));
+				}
+			}
+		}
+		this.buf.b += String.fromCodePoint(125);
+	}
+	,quote: function(s) {
+		this.buf.b += String.fromCodePoint(34);
+		var i = 0;
+		var length = s.length;
+		while(i < length) {
+			var c = s.charCodeAt(i++);
+			switch(c) {
+			case 8:
+				this.buf.b += "\\b";
+				break;
+			case 9:
+				this.buf.b += "\\t";
+				break;
+			case 10:
+				this.buf.b += "\\n";
+				break;
+			case 12:
+				this.buf.b += "\\f";
+				break;
+			case 13:
+				this.buf.b += "\\r";
+				break;
+			case 34:
+				this.buf.b += "\\\"";
+				break;
+			case 92:
+				this.buf.b += "\\\\";
+				break;
+			default:
+				this.buf.b += String.fromCodePoint(c);
+			}
+		}
+		this.buf.b += String.fromCodePoint(34);
+	}
+	,__class__: haxe_format_JsonPrinter
+};
 var haxe_http_HttpBase = function(url) {
 	this.url = url;
 	this.headers = [];
@@ -6248,6 +7263,7 @@ haxe_io_Input.prototype = {
 				--k;
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -6275,6 +7291,7 @@ haxe_io_Input.prototype = {
 				total.addBytes(buf,0,len);
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -6333,6 +7350,7 @@ haxe_io_Input.prototype = {
 				s = HxOverrides.substr(s,0,-1);
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(((_g1) instanceof haxe_io_Eof)) {
 				var e = _g1;
@@ -6567,6 +7585,7 @@ haxe_io_Output.prototype = {
 				}
 			}
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -7299,6 +8318,62 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
+var js_Browser = function() { };
+$hxClasses["js.Browser"] = js_Browser;
+js_Browser.__name__ = "js.Browser";
+js_Browser.__properties__ = {get_supported:"get_supported",get_self:"get_self"};
+js_Browser.get_self = function() {
+	return $global;
+};
+js_Browser.get_supported = function() {
+	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
+		return typeof(window.location.protocol) == "string";
+	} else {
+		return false;
+	}
+};
+js_Browser.getLocalStorage = function() {
+	try {
+		var s = window.localStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		return null;
+	}
+};
+js_Browser.getSessionStorage = function() {
+	try {
+		var s = window.sessionStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		return null;
+	}
+};
+js_Browser.createXMLHttpRequest = function() {
+	if(typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	if(typeof ActiveXObject != "undefined") {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
+};
+js_Browser.alert = function(v) {
+	window.alert(Std.string(v));
+};
 var js_Lib = function() { };
 $hxClasses["js.Lib"] = js_Lib;
 js_Lib.__name__ = "js.Lib";
@@ -7322,6 +8397,20 @@ js_Lib.getOriginalException = function() {
 };
 js_Lib.getNextHaxeUID = function() {
 	return $global.$haxeUID++;
+};
+var js_html__$CanvasElement_CanvasUtil = function() { };
+$hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
+js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
+js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
+	var ctx = canvas.getContext("webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	var ctx = canvas.getContext("experimental-webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	return null;
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
 $hxClasses["js.lib._ArrayBuffer.ArrayBufferCompat"] = js_lib__$ArrayBuffer_ArrayBufferCompat;
@@ -7484,6 +8573,62 @@ safety_NullPointerException.__super__ = safety_SafetyException;
 safety_NullPointerException.prototype = $extend(safety_SafetyException.prototype,{
 	__class__: safety_NullPointerException
 });
+var shared_QuestionType = {};
+shared_QuestionType.fromString = function(i) {
+	switch(i) {
+	case "1":
+		return "General";
+	case "2":
+		return "Error Message";
+	case "3":
+		return "Unexpected Behaviour";
+	default:
+		return "General";
+	}
+};
+var shared_TStoreContent = {};
+shared_TStoreContent.__properties__ = {get_is_validated:"get_is_validated",get_validate_timestamp:"get_validate_timestamp",get_is_valid:"get_is_valid",get_solution_attempt:"get_solution_attempt"};
+shared_TStoreContent._new = function(value) {
+	return value;
+};
+shared_TStoreContent.getQuestion = function(this1,state) {
+	var _g = 0;
+	var _g1 = this1.session.questions;
+	while(_g < _g1.length) {
+		var item = _g1[_g];
+		++_g;
+		if(item.state == state) {
+			return item;
+		}
+	}
+	return null;
+};
+shared_TStoreContent.get_solution_attempt = function(this1) {
+	var count = 0;
+	if(this1.solution != null && this1.solution.attempt != null) {
+		count = this1.solution.attempt;
+	}
+	return count;
+};
+shared_TStoreContent.get_is_valid = function(this1) {
+	if(this1.valid == null || this1.valid == false) {
+		return false;
+	}
+	return true;
+};
+shared_TStoreContent.get_validate_timestamp = function(this1) {
+	if(this1.validated_timestamp == null) {
+		return null;
+	}
+	return this1.validated_timestamp.toDate();
+};
+shared_TStoreContent.get_is_validated = function(this1) {
+	if(this1.valid != null && this1.validated_by != null && this1.validated_by.length > 0) {
+		return this1.validated_timestamp != null;
+	} else {
+		return false;
+	}
+};
 var sys_FileSystem = function() { };
 $hxClasses["sys.FileSystem"] = sys_FileSystem;
 sys_FileSystem.__name__ = "sys.FileSystem";
@@ -7492,6 +8637,7 @@ sys_FileSystem.exists = function(path) {
 		js_node_Fs.accessSync(path);
 		return true;
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -7505,6 +8651,7 @@ sys_FileSystem.fullPath = function(relPath) {
 	try {
 		return js_node_Fs.realpathSync(relPath);
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -7518,6 +8665,7 @@ sys_FileSystem.isDirectory = function(path) {
 	try {
 		return js_node_Fs.statSync(path).isDirectory();
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -7525,6 +8673,7 @@ sys_FileSystem.createDirectory = function(path) {
 	try {
 		js_node_Fs.mkdirSync(path);
 	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
 		var _g1 = haxe_Exception.caught(_g).unwrap();
 		if(_g1.code == "ENOENT") {
 			sys_FileSystem.createDirectory(js_node_Path.dirname(path));
@@ -7644,6 +8793,7 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,0,1,this.pos);
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -7665,6 +8815,7 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,pos,len,this.pos);
 		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -7785,9 +8936,6 @@ systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 	}
 	,run: null
 	,get_name: null
-	,err: function(err) {
-		haxe_Log.trace(err,{ fileName : "src/systems/CommandBase.hx", lineNumber : 29, className : "systems.CommandBase", methodName : "err"});
-	}
 	,commands: null
 	,table5d38588a6ddd880f90fc8234bccb893f: null
 	,tablefa61f37a15ee60bbc1601eb42174bd3d: null
@@ -7830,14 +8978,612 @@ systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
 	}
 	,run: null
 	,get_name: null
-	,err: function(err) {
-		haxe_Log.trace(err,{ fileName : "src/systems/CommandDbBase.hx", lineNumber : 43, className : "systems.CommandDbBase", methodName : "err"});
-	}
 	,commands: null
 	,table5d38588a6ddd880f90fc8234bccb893f: null
 	,tablefa61f37a15ee60bbc1601eb42174bd3d: null
 	,__class__: systems_CommandDbBase
 	,__properties__: {get_name:"get_name",get_db:"get_db"}
+});
+var systems_commands_Api = function(_universe) {
+	this.packages = new haxe_ds_StringMap();
+	this.api = new haxe_ds_StringMap();
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Api"] = systems_commands_Api;
+systems_commands_Api.__name__ = "systems.commands.Api";
+systems_commands_Api.__super__ = systems_CommandBase;
+systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
+	api: null
+	,packages: null
+	,onEnabled: function() {
+		var this1 = this.api;
+		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 26, className : "systems.commands.Api", methodName : "onEnabled"});
+		this1.h["haxe"] = value;
+		var this1 = this.api;
+		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 27, className : "systems.commands.Api", methodName : "onEnabled"});
+		this1.h["flixel"] = value;
+		var this1 = this.api;
+		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 28, className : "systems.commands.Api", methodName : "onEnabled"});
+		this1.h["heaps"] = value;
+		var h = this.api.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var h1 = _g1_value.h;
+			var _g2_keys = Object.keys(h1);
+			var _g2_length = _g2_keys.length;
+			var _g2_current = 0;
+			while(_g2_current < _g2_length) {
+				var key1 = _g2_keys[_g2_current++];
+				this.packages.h[key1] = key;
+			}
+		}
+		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 36, className : "systems.commands.Api", methodName : "onEnabled"});
+	}
+	,run: function(command,interaction) {
+		if(command.content == null) {
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 12) {
+			var _g1 = _g.channel;
+			if(interaction.isAutocomplete()) {
+				this.search(_g1,interaction);
+				return;
+			}
+			if(Object.prototype.hasOwnProperty.call(this.packages.h,_g1)) {
+				var type = this.packages.h[_g1];
+				var data = this.api.h[type].h[_g1];
+				var embed = new discord_$js_MessageEmbed();
+				embed.setTitle(data.name);
+				embed.setURL(data.link);
+				embed.setDescription("**Description:**\n" + data.description);
+				interaction.reply({ embeds : [embed]});
+				return;
+			}
+			interaction.reply("New api command isnt complete yet so there may still be things not working");
+			return;
+		}
+	}
+	,search: function(string,interaction) {
+		var results = [];
+		var h = this.packages.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			if(results.length >= 10) {
+				break;
+			}
+			if(key.toLowerCase().indexOf(string.toLowerCase()) != -1) {
+				results.push({ name : key, value : key});
+			}
+		}
+		interaction.respond(results).then(null,Util_err);
+	}
+	,get_name: function() {
+		return "api";
+	}
+	,__class__: systems_commands_Api
+});
+var systems_commands_Archive = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Archive"] = systems_commands_Archive;
+systems_commands_Archive.__name__ = "systems.commands.Archive";
+systems_commands_Archive.__super__ = systems_CommandBase;
+systems_commands_Archive.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		if(command.content._hx_index == 1) {
+			var role = "1019915584546291712";
+			interaction.member.fetch(true).then(function(member) {
+				var found = false;
+				var jsIterator = member.roles.cache.entries();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
+					var key = v[0];
+					if(key == role) {
+						found = true;
+						break;
+					}
+				}
+				if(found) {
+					interaction.member.roles.remove(role).then(function(success) {
+						interaction.reply("Archives are hidden");
+					},Util_err);
+				} else {
+					interaction.member.roles.add(role).then(function(success) {
+						interaction.reply("Archives are shown");
+					},Util_err);
+				}
+			},Util_err);
+		}
+	}
+	,get_name: function() {
+		return "archive";
+	}
+	,__class__: systems_commands_Archive
+});
+var systems_commands_Boop = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Boop"] = systems_commands_Boop;
+systems_commands_Boop.__name__ = "systems.commands.Boop";
+systems_commands_Boop.__super__ = systems_CommandBase;
+systems_commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 6) {
+			interaction.reply("*boop* <@" + _g.user.id + ">");
+		}
+	}
+	,get_name: function() {
+		return "boop";
+	}
+	,__class__: systems_commands_Boop
+});
+var systems_commands_Haxelib = function(_universe) {
+	this.message_history = new haxe_ds_StringMap();
+	this.super_mod_id = "198916468312637440";
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Haxelib"] = systems_commands_Haxelib;
+systems_commands_Haxelib.__name__ = "systems.commands.Haxelib";
+systems_commands_Haxelib.__super__ = systems_CommandBase;
+systems_commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
+	last_interaction: null
+	,super_mod_id: null
+	,message_history: null
+	,run: function(command,interaction) {
+		var h = this.message_history.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var time = new Date().getTime();
+			if(time - _g1_value.timestamp > 5000) {
+				var _this = this.message_history;
+				if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+					delete(_this.h[key]);
+				}
+			}
+		}
+		var role_status = Util_hasRole(this.super_mod_id,interaction);
+		var _g = command.content;
+		if(_g._hx_index == 16) {
+			var _g1 = _g.command;
+			var route = _g1;
+			if(_g1.indexOf(" ") != -1) {
+				route = _g1.split(" ")[0];
+			}
+			if(route != "list" && route != "info" && route != "search") {
+				if(!role_status) {
+					interaction.reply("Invalid Permissions.").then(null,Util_err);
+					return;
+				}
+			}
+			var channel = interaction.channel;
+			var commands = [];
+			var _g = 0;
+			var _g2 = _g1.split(" ");
+			while(_g < _g2.length) {
+				var c = _g2[_g];
+				++_g;
+				commands.push(c);
+			}
+			var $process = "./haxe/haxelib";
+			if(!sys_FileSystem.exists("./haxe/haxelib")) {
+				$process = "haxelib";
+			}
+			var ls = js_node_ChildProcess.spawn($process,commands);
+			var output = "";
+			ls.stdout.on("data",function(data) {
+				if(data.indexOf("KB") != -1 || data.indexOf("%") != -1) {
+					return;
+				}
+				output += data;
+			});
+			ls.stdout.once("close",function(data) {
+				var embed = new discord_$js_MessageEmbed().setTitle("Haxelib");
+				if(output.length > 4000) {
+					output = HxOverrides.substr(output,0,4000) + "...";
+				}
+				embed.setDescription(output);
+				return interaction.reply({ embeds : [embed]}).then(null,Util_err);
+			});
+			ls.stderr.on("data",function(data) {
+				var embed = new discord_$js_MessageEmbed();
+				embed.type = "article";
+				embed.addField("Haxelib Error",data);
+				return channel.send(embed);
+			});
+		}
+	}
+	,addHistory: function(command,embed) {
+		if(Object.prototype.hasOwnProperty.call(this.message_history.h,command)) {
+			return false;
+		}
+		this.message_history.h[command] = embed;
+		return true;
+	}
+	,get_name: function() {
+		return "haxelib";
+	}
+	,__class__: systems_commands_Haxelib
+});
+var systems_commands_Help = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Help"] = systems_commands_Help;
+systems_commands_Help.__name__ = "systems.commands.Help";
+systems_commands_Help.__super__ = systems_CommandBase;
+systems_commands_Help.prototype = $extend(systems_CommandBase.prototype,{
+	data: null
+	,onEnabled: function() {
+		this.data = Util_loadFile("help",{ fileName : "src/systems/commands/Help.hx", lineNumber : 10, className : "systems.commands.Help", methodName : "onEnabled"});
+	}
+	,run: function(command,interaction) {
+		if(this.data == null || this.data.length == 0) {
+			haxe_Log.trace("no help content configured",{ fileName : "src/systems/commands/Help.hx", lineNumber : 15, className : "systems.commands.Help", methodName : "run"});
+			return;
+		}
+		if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,interaction.user.id)) {
+			var _g = 0;
+			var _g1 = this.data;
+			while(_g < _g1.length) {
+				var content = _g1[_g];
+				++_g;
+				if(content.type != "helppls_dm") {
+					continue;
+				}
+				interaction.reply({ content : content.content.toString()}).then(null,Util_err);
+				break;
+			}
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 15) {
+			var _g1 = _g.category;
+			var msg = "";
+			var _this = this.data;
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g1_value = _this[_g_current];
+				var _g1_key = _g_current++;
+				if(_g1 == null) {
+					if(!_g1_value.show_help) {
+						continue;
+					}
+					if(_g1_value.type == "run") {
+						msg += "- `!" + _g1_value.type + "`: " + _g1_value.content.toString();
+					} else {
+						msg += "- `/" + _g1_value.type + "`: " + _g1_value.content.toString();
+					}
+					if(_g1_key != this.data.length - 1) {
+						msg += "\n";
+					}
+				} else if(_g1_value.type == _g1) {
+					msg = "/`" + _g1_value.type + "`: " + _g1_value.content.toString();
+					break;
+				}
+			}
+			if(msg.length == 0 || msg == "" || msg == null) {
+				msg = "Nothing found, sorry :(";
+			}
+			interaction.reply(msg).then(null,Util_err);
+		}
+	}
+	,get_name: function() {
+		return "help";
+	}
+	,__class__: systems_commands_Help
+});
+var systems_commands_HelpType = {};
+systems_commands_HelpType.fromString = function(value) {
+	switch(value.toLowerCase()) {
+	case "helppls_dm":
+		return "helppls_dm";
+	case "notify":
+		return "notify";
+	case "rtfm":
+		return "rtfm";
+	case "run":
+		return "run";
+	default:
+		return "Invalid help option.";
+	}
+};
+var systems_commands_Helpdescription = function(_universe) {
+	this.review_thread = "946834684741050398";
+	this.check_verified_interval = 60000;
+	this.check_threads_interval = 1800000;
+	this.validate_timout = 86400000;
+	systems_CommandDbBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Helpdescription"] = systems_commands_Helpdescription;
+systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
+systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
+systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
+	validate_timout: null
+	,check_threads_interval: null
+	,check_verified_interval: null
+	,review_thread: null
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 11) {
+			if(!interaction.channel.isThread()) {
+				interaction.reply("This command is only available in a thread.").then(null,Util_err);
+				return;
+			}
+			this.findThread(interaction,_g.description);
+		}
+	}
+	,findThread: function(interaction,description) {
+		var _gthis = this;
+		var topic = this.getTopicFromChannel(interaction.channel.parentId);
+		if(topic == null) {
+			interaction.reply("This channel is not a valid topic. Did you run the command from a valid thread?").then(null,Util_err);
+			return;
+		}
+		var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2","haxe","threads"),firebase_web_firestore_Firestore.where("thread_id","==",interaction.channelId));
+		var embed = new discord_$js_MessageEmbed();
+		embed.setDescription(description);
+		firebase_web_firestore_Firestore.getDocs(q).then(function(docs) {
+			if(docs.empty) {
+				embed.setTitle("Error Occured");
+				haxe_Log.trace(interaction,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 49, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				haxe_Log.trace(description,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 50, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				haxe_Log.trace(topic,{ fileName : "src/systems/commands/Helpdescription.hx", lineNumber : 51, className : "systems.commands.Helpdescription", methodName : "findThread"});
+				interaction.reply({ content : "*Boop <@151104106973495296>*", embeds : [embed]});
+				return;
+			}
+			var ref = docs.docs[0].ref;
+			var data = docs.docs[0].data();
+			if(interaction.user.id != data.solution.user.id) {
+				interaction.reply({ content : "Sorry, another user is working on summarising the solution!"});
+				return;
+			}
+			data.solved = true;
+			data.solution.description = description;
+			firebase_web_firestore_Firestore.setDoc(ref,data).then(function(succ) {
+				interaction.reply({ content : "Thanks! <@" + interaction.user.id + ">", embeds : [embed]}).then(function(succ) {
+					_gthis.validateThread(ref,data);
+					var command = Main.getCommand(_gthis.get_name());
+					if(command != null) {
+						util_DiscordUtil.setCommandPermission(command,[{ id : interaction.user.id, type : "USER", permission : false}]);
+					}
+				},Util_err);
+			},Util_err);
+		},Util_err);
+	}
+	,validateThread: function(ref,thread) {
+		var _gthis = this;
+		if(Util_dateWithinTimeout(new Date(),shared_TStoreContent.get_validate_timestamp(thread),this.validate_timout)) {
+			return;
+		}
+		util_DiscordUtil.getChannel(this.review_thread,function(channel) {
+			if(channel == null) {
+				return;
+			}
+			var embed = _gthis.createThreadEmbed(thread);
+			var topic = thread.topic;
+			var solution_summary = "**Solution Summary**:\n" + thread.solution.description;
+			if(thread.solution != null && thread.solution.description == null) {
+				solution_summary = "";
+			}
+			var description = "**Topic**\n" + topic + " " + embed.description + "\n" + solution_summary;
+			embed.setDescription(description);
+			channel.send({ embeds : [embed], content : "Should this thread be indexed?"}).then(function(message) {
+				firebase_web_firestore_Firestore.updateDoc(ref,"validate_timestamp",new Date());
+				util_DiscordUtil.reactionTracker(message,function(collector,collected,user) {
+					if(user.bot) {
+						return;
+					}
+					var valid = null;
+					if(collected.emoji.name == "✅") {
+						valid = true;
+					}
+					if(collected.emoji.name == "❎") {
+						valid = false;
+					}
+					if(valid == null) {
+						return;
+					}
+					var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"test2/" + topic);
+					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
+						return transaction.get(doc).then(function(doc) {
+							if(!doc.exists()) {
+								return { id : -1, threads : 0};
+							}
+							var data = doc.data();
+							data.id += 1;
+							data.threads += 1;
+							transaction.update(doc.ref,data);
+							return data;
+						});
+					}).then(function(value) {
+						if(value.id == -1) {
+							return;
+						}
+						firebase_web_firestore_Firestore.updateDoc(ref,"valid",valid,"validated_by",user.id,"validated_timestamp",firebase_web_firestore_Timestamp.now()).then(function(_) {
+							collector.stop("Reviewed validation.");
+						},Util_err);
+					},Util_err);
+				});
+			});
+		});
+	}
+	,createThreadEmbed: function(remote) {
+		var embed = new discord_$js_MessageEmbed();
+		var content = "";
+		var session = remote.session;
+		var title = shared_TStoreContent.getQuestion(remote,"title");
+		embed.setTitle("__" + title.answer + "__");
+		embed.setURL(remote.source_url);
+		embed.setAuthor({ name : remote.author.name, iconURL : remote.author.icon_url});
+		var _g = 0;
+		var _g1 = session.questions;
+		while(_g < _g1.length) {
+			var value = _g1[_g];
+			++_g;
+			var answer = value.answer;
+			var output = "**" + value.question + "**";
+			switch(value.state) {
+			case "provide_code":
+				answer = "```hx\n" + answer + "\n```";
+				break;
+			case "question_type":
+				answer = "" + shared_QuestionType.fromString(answer);
+				break;
+			case "title":
+				continue;
+			default:
+			}
+			content += "\n" + output + "\n" + answer;
+		}
+		embed.setDescription(content);
+		return embed;
+	}
+	,getTopicFromChannel: function(channel) {
+		switch(channel) {
+		case "162395145352904705":
+			return "haxe";
+		case "165234904815239168":
+			return "flixel";
+		case "459827960006967325":
+			return "tools";
+		case "501408700142059520":
+			return "heaps";
+		case "565569107701923852":
+			return "haxeui";
+		case "769686284318146561":
+			return "openfl";
+		case "853414608747364352":
+			return "ceramic";
+		default:
+			return "haxe";
+		}
+	}
+	,get_name: function() {
+		return "helpdescription";
+	}
+	,__class__: systems_commands_Helpdescription
+});
+var systems_commands_Hi = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Hi"] = systems_commands_Hi;
+systems_commands_Hi.__name__ = "systems.commands.Hi";
+systems_commands_Hi.__super__ = systems_CommandBase;
+systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
+	run: function(command,interaction) {
+		var message = "Hey there";
+		if(Math.random() < 0.35) {
+			switch(interaction.user.id) {
+			case "215582414544699393":
+				message = "Hello Bulby! ReAD ArCH NeWS! :face_with_hand_over_mouth:";
+				break;
+			case "231872730478280705":
+				message = "Hey logo, how jammy are you feeling today? :jam:";
+				break;
+			case "415825875146375168":
+				message = "Hey semmi, got any cool music tonight? \\o/";
+				break;
+			case "726161533540761662":
+				message = "Hi muffin, having a good day? :)";
+				break;
+			case "781745960829059072":
+				message = "Hi FS, don't make me go sleep :(";
+				break;
+			case "817154767733653524":
+				message = "Hello " + interaction.user.tag + ", always a pleasure :)";
+				break;
+			default:
+				message = "Hey you, what's up?";
+			}
+		}
+		interaction.reply({ content : message}).then(null,Util_err);
+	}
+	,get_name: function() {
+		return "hi";
+	}
+	,__class__: systems_commands_Hi
+});
+var systems_commands_Notify = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Notify"] = systems_commands_Notify;
+systems_commands_Notify.__name__ = "systems.commands.Notify";
+systems_commands_Notify.__super__ = systems_CommandBase;
+systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
+	getRole: function(channel) {
+		switch(channel) {
+		case "165234904815239168":case "flixel":
+			return "761714697468248125";
+		case "565569107701923852":case "haxeui":
+			return "761714853403820052";
+		case "853414608747364352":case "ceramic":
+			return "914171888748609546";
+		case "286485321925918721":case "announcements":
+			return "761714325227700225";
+		case "561254298449739776":case "dvorak":
+			return "903006951896666153";
+		case "501408700142059520":case "heaps":
+			return "761714775902126080";
+		case "501447516852715525":case "kha":
+			return "761714809179209818";
+		default:
+			return "err";
+		}
+	}
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 13) {
+			var channel = _g.channel;
+			var role = this.getRole(channel);
+			if(role == "err") {
+				haxe_Log.trace(channel,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 34, className : "systems.commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 35, className : "systems.commands.Notify", methodName : "run"});
+				interaction.reply("Invalid channel");
+				return;
+			}
+			interaction.member.fetch(true).then(function(member) {
+				var found = false;
+				var jsIterator = member.roles.cache.entries();
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = jsIterator.next();
+					var key = v[0];
+					if(key == role) {
+						found = true;
+						break;
+					}
+				}
+				if(found) {
+					interaction.member.roles.remove(role).then(function(success) {
+						interaction.reply("Unsubscribed from <#" + channel + "> updates");
+					},Util_err);
+				} else {
+					interaction.member.roles.add(role).then(function(success) {
+						interaction.reply("Subscribed to <#" + channel + "> updates");
+					},Util_err);
+				}
+			},Util_err);
+		}
+	}
+	,get_name: function() {
+		return "notify";
+	}
+	,__class__: systems_commands_Notify
 });
 var systems_commands_Poll = function(_universe) {
 	this.checked = false;
@@ -7852,25 +9598,13 @@ systems_commands_Poll.__super__ = systems_CommandDbBase;
 systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	checked: null
 	,update: function(_) {
-		var _gthis = this;
 		systems_CommandDbBase.prototype.update.call(this,_);
 		if(!this.checked && Main.connected) {
 			this.checked = true;
 			Main.client.channels.fetch("286485321925918721").then(function(res) {
 				res.messages.fetch("1022567873786413096").then(function(res) {
-					var jsIterator = res.reactions.cache.entries();
-					var _g_lastStep = jsIterator.next();
-					while(!_g_lastStep.done) {
-						var v = _g_lastStep.value;
-						_g_lastStep = jsIterator.next();
-						var k = v[0];
-						var r = v[1];
-						haxe_Log.trace(k,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 26, className : "systems.commands.Poll", methodName : "update"});
-						haxe_Log.trace(r.emoji.identifier,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 27, className : "systems.commands.Poll", methodName : "update"});
-						haxe_Log.trace(r.count,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 28, className : "systems.commands.Poll", methodName : "update"});
-					}
-				},$bind(_gthis,_gthis.err));
-			},$bind(this,this.err));
+				},Util_err);
+			},Util_err);
 		}
 	}
 	,run: function(command,interaction) {
@@ -7883,15 +9617,15 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			var _g4 = _g.votes;
 			var question = _g.question;
 			var time = systems_commands_PollTime.fromString(_g1);
-			haxe_Log.trace(time,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 39, className : "systems.commands.Poll", methodName : "run"});
+			haxe_Log.trace(time,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 37, className : "systems.commands.Poll", methodName : "run"});
 			if(_g2 == null && _g3 == null) {
 				interaction.reply("You must have at least 2 answers");
 				return;
 			}
 			var body = "";
 			var collection = [_g2,_g3,_g.c,_g.d,_g.e,_g.f,_g.g];
-			var answers = new Map();
-			var results = new Map();
+			var answers = new haxe_ds_StringMap();
+			var results = new haxe_ds_StringMap();
 			var votes = 1;
 			if(_g4 != null) {
 				votes = _g4;
@@ -7900,63 +9634,33 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 			}
 			var _g_current = 0;
-			var _g_array = collection;
-			while(_g_current < _g_array.length) {
-				var _g1_value = _g_array[_g_current];
+			while(_g_current < collection.length) {
+				var _g1_value = collection[_g_current];
 				var _g1_key = _g_current++;
 				if(_g1_value == null) {
 					continue;
 				}
-				var char;
-				switch(_g1_key) {
-				case 0:
-					char = "🇦";
-					break;
-				case 1:
-					char = "🇧";
-					break;
-				case 2:
-					char = "🇨";
-					break;
-				case 3:
-					char = "🇩";
-					break;
-				case 4:
-					char = "🇪";
-					break;
-				case 5:
-					char = "🇫";
-					break;
-				case 6:
-					char = "🇬";
-					break;
-				default:
-					char = "";
-				}
-				results.set(char,0);
-				answers.set(char,_g1_value);
+				var char = this.chars(_g1_key);
+				results.h[char] = 0;
+				answers.h[char] = _g1_value;
 				body += "" + char + " - " + _g1_value + "\n";
 			}
 			var embed = new discord_$js_MessageEmbed();
-			embed.setTitle("Poll");
-			embed.setDescription("**Question**\n" + question + "\n\n**Options**\n" + body);
+			embed.setDescription("**Question**\n" + question + "\n\n**Options**\n" + body + "\n**Settings**\n**" + _g4 + "** vote per user.");
 			embed.setFooter({ text : "Poll will run for " + _g1 + "."});
-			var settings = new Map();
-			settings.set(0,votes);
-			haxe_Log.trace(JSON.stringify(answers),{ fileName : "src/systems/commands/Poll.hx", lineNumber : 89, className : "systems.commands.Poll", methodName : "run"});
+			var settings = new haxe_ds_IntMap();
+			settings.h[0] = votes;
 			interaction.reply({ embeds : [embed]}).then(function(_) {
-				interaction.fetchReply().then(function(message) {
-					var jsIterator = answers.entries();
-					var _g_lastStep = jsIterator.next();
-					while(!_g_lastStep.done) {
-						var v = _g_lastStep.value;
-						_g_lastStep = jsIterator.next();
-						var k = v[0];
-						var v1 = v[1];
-						haxe_Log.trace(k,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 94, className : "systems.commands.Poll", methodName : "run"});
-						haxe_Log.trace(v1,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 95, className : "systems.commands.Poll", methodName : "run"});
+				return interaction.fetchReply().then(function(message) {
+					var h = answers.h;
+					var _g_keys = Object.keys(h);
+					var _g_length = _g_keys.length;
+					var _g_current = 0;
+					while(_g_current < _g_length) {
+						var key = _g_keys[_g_current++];
+						message.react(key);
 					}
-					var data = { id : -1, active : true, results : JSON.stringify(results), answers : JSON.stringify(answers), question : question, duration : time, settings : JSON.stringify(settings), timestamp : firebase_web_firestore_Timestamp.now(), author : interaction.user.id, message_id : message.id};
+					var data = { id : -1, active : true, results : haxe_format_JsonPrinter.print(results,null,null), answers : haxe_format_JsonPrinter.print(answers,null,null), question : question, duration : time, settings : haxe_format_JsonPrinter.print(settings,null,null), timestamp : firebase_web_firestore_Timestamp.now(), author : interaction.user.id, message_id : message.id};
 					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
 						return transaction.get(firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls")).then(function(doc) {
 							if(!doc.exists()) {
@@ -7969,73 +9673,65 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						});
 					}).then(function(value) {
 						data.id = value.id;
-						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"),data).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 123, className : "systems.commands.Poll", methodName : "run"});
-						});
-					},$bind(_gthis,_gthis.err));
-				}).then(null,$bind(_gthis,_gthis.err));
-				return interaction.fetchReply().then(function(message) {
-					var completed = 1;
-					var ans_count = 1;
-					var _g_current = 0;
-					var _g_array = collection;
-					while(_g_current < _g_array.length) {
-						var _g1_value = _g_array[_g_current];
-						var _g1_key = _g_current++;
-						if(_g1_value == null) {
-							continue;
-						}
-						ans_count += 1;
-						var emoji;
-						switch(_g1_key) {
-						case 0:
-							emoji = "🇦";
-							break;
-						case 1:
-							emoji = "🇧";
-							break;
-						case 2:
-							emoji = "🇨";
-							break;
-						case 3:
-							emoji = "🇩";
-							break;
-						case 4:
-							emoji = "🇪";
-							break;
-						case 5:
-							emoji = "🇫";
-							break;
-						case 6:
-							emoji = "🇬";
-							break;
-						default:
-							emoji = "";
-						}
-						message.react(emoji).then(function(_) {
-							completed += 1;
-							if(completed == ans_count) {
-								haxe_Log.trace("finished?",{ fileName : "src/systems/commands/Poll.hx", lineNumber : 152, className : "systems.commands.Poll", methodName : "run"});
-							}
-						});
-					}
-				},$bind(_gthis,_gthis.err));
-			},$bind(this,this.err));
+						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"),data).then(function(_) {
+							_gthis.addCollector(message,data);
+						},Util_err);
+					},Util_err);
+				}).then(null,Util_err);
+			},Util_err);
 		}
 	}
 	,addCollector: function(message,data) {
+		var message1 = message;
+		var vvotes = systems_commands_PollData.get_settings(data).h[0];
 		var filter = function(reaction,user) {
+			var votes = 0;
+			var jsIterator = message1.reactions.cache.values();
+			var _g_lastStep = jsIterator.next();
+			while(!_g_lastStep.done) {
+				var v = _g_lastStep.value;
+				_g_lastStep = jsIterator.next();
+				var jsIterator1 = v.users.cache.values();
+				var _g_lastStep1 = jsIterator1.next();
+				while(!_g_lastStep1.done) {
+					var v1 = _g_lastStep1.value;
+					_g_lastStep1 = jsIterator1.next();
+					if(v1.id == user.id && !v1.bot) {
+						++votes;
+					}
+				}
+			}
+			if(votes > vvotes) {
+				if(!user.bot) {
+					reaction.users.remove(user);
+				}
+			}
 			if(reaction.emoji.name == "🇦") {
-				haxe_Log.trace("continues to work",{ fileName : "src/systems/commands/Poll.hx", lineNumber : 167, className : "systems.commands.Poll", methodName : "addCollector"});
 				return true;
 			}
-			if(reaction.emoji.name == "❎") {
+			if(reaction.emoji.name == "🇧") {
 				return true;
 			}
-			reaction.remove();
+			if(reaction.emoji.name == "🇨") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇩") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇪") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇫") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇬") {
+				return true;
+			}
 			return false;
 		};
 		var collector = message.createReactionCollector({ filter : filter, time : data.duration});
+		collector.on("collect",function(reaction,user) {
+		});
 		collector.on("end",function(collected,reason) {
 			var check = 0.;
 			var cross = 0.;
@@ -8060,6 +9756,75 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	,get_name: function() {
 		return "poll";
 	}
+	,filter: function(message,data) {
+		var vvotes = systems_commands_PollData.get_settings(data).h[0];
+		var filter = function(reaction,user) {
+			var votes = 0;
+			var jsIterator = message.reactions.cache.values();
+			var _g_lastStep = jsIterator.next();
+			while(!_g_lastStep.done) {
+				var v = _g_lastStep.value;
+				_g_lastStep = jsIterator.next();
+				var jsIterator1 = v.users.cache.values();
+				var _g_lastStep1 = jsIterator1.next();
+				while(!_g_lastStep1.done) {
+					var v1 = _g_lastStep1.value;
+					_g_lastStep1 = jsIterator1.next();
+					if(v1.id == user.id && !v1.bot) {
+						++votes;
+					}
+				}
+			}
+			if(votes > vvotes) {
+				if(!user.bot) {
+					reaction.users.remove(user);
+				}
+			}
+			if(reaction.emoji.name == "🇦") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇧") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇨") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇩") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇪") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇫") {
+				return true;
+			}
+			if(reaction.emoji.name == "🇬") {
+				return true;
+			}
+			return false;
+		};
+		return filter;
+	}
+	,chars: function(char) {
+		switch(char) {
+		case 0:
+			return "🇦";
+		case 1:
+			return "🇧";
+		case 2:
+			return "🇨";
+		case 3:
+			return "🇩";
+		case 4:
+			return "🇪";
+		case 5:
+			return "🇫";
+		case 6:
+			return "🇬";
+		default:
+			return "";
+		}
+	}
 	,dm_messages: null
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
@@ -8068,13 +9833,13 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 var systems_commands_PollData = {};
 systems_commands_PollData.__properties__ = {get_settings:"get_settings",get_results:"get_results",get_answers:"get_answers"};
 systems_commands_PollData.get_answers = function(this1) {
-	return JSON.parse(this1.answers);
+	return new haxe_format_JsonParser(this1.answers).doParse();
 };
 systems_commands_PollData.get_results = function(this1) {
-	return JSON.parse(this1.results);
+	return new haxe_format_JsonParser(this1.results).doParse();
 };
 systems_commands_PollData.get_settings = function(this1) {
-	return JSON.parse(this1.settings);
+	return new haxe_format_JsonParser(this1.settings).doParse();
 };
 var systems_commands_PollTime = {};
 systems_commands_PollTime._new = function(value) {
@@ -8108,6 +9873,415 @@ systems_commands_PollTime.fromString = function(input) {
 		return 3600000;
 	}
 };
+var systems_commands_Quote = function(_universe) {
+	this.cache = new haxe_ds_StringMap();
+	systems_CommandDbBase.call(this,_universe);
+	this.modal = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+};
+$hxClasses["systems.commands.Quote"] = systems_commands_Quote;
+systems_commands_Quote.__name__ = "systems.commands.Quote";
+systems_commands_Quote.__super__ = systems_CommandDbBase;
+systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
+	cache: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandDbBase.prototype.update.call(this,_);
+		var _this = this.modal;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var interaction = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			switch(forward) {
+			case "quote_edit":
+				var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+				var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("id","==",this.cache.h[interaction[0].user.id]));
+				firebase_web_firestore_Firestore.getDocs(query).then((function(interaction) {
+					return function(resp) {
+						if(resp.docs.length != 1) {
+							interaction[0].reply("Something went wrong");
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 70, className : "systems.commands.Quote", methodName : "update"});
+							return;
+						}
+						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
+							return function(_) {
+								interaction[0].reply("Quote updated!");
+								var key = interaction[0].user.id;
+								var _this = _gthis.cache;
+								if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+									delete(_this.h[key]);
+								}
+							};
+						})(interaction),Util_err);
+					};
+				})(interaction),Util_err);
+				break;
+			case "quote_set":
+				var name = [interaction[0].fields.getTextInputValue("name")];
+				var description = [interaction[0].fields.getTextInputValue("description")];
+				var data = [{ id : -1, name : this.nameArray(name[0]), description : description[0], author : interaction[0].user.id, username : interaction[0].user.username, timestamp : new Date()}];
+				if(!this.isValidName(name[0])) {
+					interaction[0].reply({ content : "*Names can only contain `_-` and/or spaces.*\nname: " + name[0] + "\n" + description[0], ephemeral : true});
+					return;
+				}
+				var doc = [firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes")];
+				firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),(function(doc) {
+					return function(transaction) {
+						return transaction.get(doc[0]).then((function() {
+							return function(doc) {
+								if(!doc.exists()) {
+									return { id : -1};
+								}
+								var data = doc.data();
+								data.id += 1;
+								transaction.update(doc.ref,data);
+								return data;
+							};
+						})());
+					};
+				})(doc)).then((function(data,description,name,interaction) {
+					return function(value) {
+						data[0].id = value.id;
+						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries"),data[0]).then((function(data,description,name,interaction) {
+							return function(_) {
+								interaction[0].reply("*Quote #" + data[0].id + " added!*\nname: " + name[0] + "\n" + description[0] + "\n\nby: <@" + data[0].author + ">");
+							};
+						})(data,description,name,interaction),Util_err);
+					};
+				})(data,description,name,interaction),Util_err);
+				break;
+			default:
+			}
+			if(forward == "quote_set" || forward == "quote_edit") {
+				this.universe.deleteEntity(entity);
+			}
+		}
+	}
+	,run: function(command,interaction) {
+		var _gthis = this;
+		var _g = command.content;
+		if(_g._hx_index == 17) {
+			var _g1 = _g.type;
+			var name = _g.name;
+			var column = "id";
+			if(this.isName(name)) {
+				if(name.length < 3) {
+					if(interaction.isAutocomplete()) {
+						interaction.respond([]);
+					}
+					return;
+				}
+				if(this.isValidName(name)) {
+					column = "name";
+					name = name.toLowerCase();
+				}
+			}
+			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
+			if(interaction.isAutocomplete() && _g1 != "get") {
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					var results = [];
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						var data = d.data();
+						results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+					}
+					interaction.respond(results).then(null,Util_err);
+				}).then(null,Util_err);
+				return;
+			}
+			switch(_g1) {
+			case "delete":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						return;
+					}
+					if(res.docs.length > 1) {
+						interaction.reply("An odd situation occured. <@151104106973495296>");
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 210, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 211, className : "systems.commands.Quote", methodName : "run"});
+						return;
+					}
+					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
+						interaction.reply("Quote deleted!");
+					},Util_err);
+				},Util_err);
+				break;
+			case "edit":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find quote");
+						return;
+					}
+					var doc = null;
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						if(interaction.user.id == d.data().author) {
+							doc = d.data();
+							break;
+						}
+					}
+					if(doc == null) {
+						interaction.reply("That isn't your quote!").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("" + _gthis.nameString(doc.name) + ":").setStyle(2).setValue(doc.description).setMinLength(10).setMaxLength(2000);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_b);
+					_gthis.cache.h[interaction.user.id] = doc.id;
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			case "get":
+				var condition = this.isName(name) ? "array-contains-any" : "==";
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
+				if(interaction.isAutocomplete()) {
+					if(name.length < 3 && column == "name") {
+						interaction.respond([]);
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + _gthis.nameString(data.name) + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+				break;
+			case "set":
+				if(!this.isValidName(name)) {
+					interaction.reply({ content : "*Names can only contain `_-` and/or spaces.*", ephemeral : true});
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length >= 1) {
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name + "__").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name.toLowerCase()).setMinLength(3).setMaxLength(12);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
+					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_a,action_b);
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			default:
+				var condition = this.isName(name) ? "array-contains-any" : "==";
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
+				if(interaction.isAutocomplete()) {
+					if(name.length < 3 && column == "name") {
+						interaction.respond([]);
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + _gthis.nameString(data.name) + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+			}
+		}
+	}
+	,nameArray: function(original) {
+		var arr = original.toLowerCase().split(" ");
+		var _g_current = 0;
+		while(_g_current < arr.length) {
+			var _g1_value = arr[_g_current];
+			var _g1_key = _g_current++;
+			arr[_g1_key] = StringTools.trim(_g1_value);
+		}
+		return arr;
+	}
+	,nameString: function(arr) {
+		var text = arr[0];
+		var _g = 1;
+		var _g1 = arr.length;
+		while(_g < _g1) {
+			var i = _g++;
+			text += " " + arr[i];
+		}
+		return StringTools.trim(text);
+	}
+	,isName: function(input) {
+		var check_letters = new EReg("([a-z])","i");
+		return check_letters.match(input);
+	}
+	,isValidName: function(input) {
+		var check_letters = new EReg("^[A-Za-z0-9 _-]{3,16}$","i");
+		return check_letters.match(input);
+	}
+	,get_name: function() {
+		return "quote";
+	}
+	,modal: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,__class__: systems_commands_Quote
+});
+var systems_commands_React = function(_universe) {
+	this.set_permission = false;
+	systems_CommandBase.call(this,_universe);
+	this.messages = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+};
+$hxClasses["systems.commands.React"] = systems_commands_React;
+systems_commands_React.__name__ = "systems.commands.React";
+systems_commands_React.__super__ = systems_CommandBase;
+systems_commands_React.prototype = $extend(systems_CommandBase.prototype,{
+	set_permission: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
+			if(forward != "react" || message[0].author.id != "151104106973495296") {
+				continue;
+			}
+			var split = [message[0].content.split(" ")];
+			var channel = StringTools.replace(StringTools.replace(split[0][1],"<#",""),">","");
+			message[0].client.channels.fetch(channel).then((function(split,message) {
+				return function(channel) {
+					return channel.messages.fetch(split[0][2]).then((function(split,message) {
+						return function(react_message) {
+							react_message.react(split[0][3]);
+							message[0].delete();
+						};
+					})(split,message));
+				};
+			})(split,message));
+			this.universe.deleteEntity(entity);
+		}
+	}
+	,get_name: function() {
+		return "react";
+	}
+	,run: function(command,interaction) {
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_React
+});
+var systems_commands_Rtfm = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Rtfm"] = systems_commands_Rtfm;
+systems_commands_Rtfm.__name__ = "systems.commands.Rtfm";
+systems_commands_Rtfm.__super__ = systems_CommandBase;
+systems_commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
+	data: null
+	,onEnabled: function() {
+		this.data = Util_loadFile("rtfm",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 9, className : "systems.commands.Rtfm", methodName : "onEnabled"});
+	}
+	,run: function(command,interaction) {
+		if(this.data == null) {
+			haxe_Log.trace("failed to read rtfm data",{ fileName : "src/systems/commands/Rtfm.hx", lineNumber : 14, className : "systems.commands.Rtfm", methodName : "run"});
+			return;
+		}
+		var _g = command.content;
+		if(_g._hx_index == 9) {
+			var _g1 = _g.channel;
+			var compare = _g1;
+			if(_g1 == null) {
+				compare = interaction.channel.name;
+			}
+			var _g = 0;
+			var _g1 = this.data;
+			while(_g < _g1.length) {
+				var item = _g1[_g];
+				++_g;
+				var _g2 = 0;
+				var _g3 = item.keys;
+				while(_g2 < _g3.length) {
+					var val = _g3[_g2];
+					++_g2;
+					if(val == compare) {
+						interaction.reply(item.content);
+						return;
+					}
+				}
+			}
+			interaction.reply("No information available.");
+		}
+	}
+	,get_name: function() {
+		return "rtfm";
+	}
+	,__class__: systems_commands_Rtfm
+});
 var systems_commands_Run = function(_universe) {
 	this.timeout = 5000;
 	this.checked = false;
@@ -8505,12 +10679,8 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
 								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Run.hx", lineNumber : 441, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-								return message.delete().then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/systems/commands/Run.hx", lineNumber : 443, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-								});
-							},function(err) {
-								haxe_Log.trace(err,{ fileName : "src/systems/commands/Run.hx", lineNumber : 446, className : "systems.commands.Run", methodName : "runCodeOnThread"});
-							});
+								return message.delete().then(null,Util_err);
+							},Util_err);
 							ls.kill();
 							return;
 						}
@@ -8518,7 +10688,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 						var _g1 = haxe_Exception.caught(_g);
 						var compile_output = _gthis.cleanOutput(_g1.get_message(),filename,class_entry);
 						message.reply({ content : mention + ("```\n" + compile_output + "```")});
-						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 454, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 450, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
@@ -8526,7 +10696,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 461, className : "systems.commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Run.hx", lineNumber : 457, className : "systems.commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -8558,6 +10728,440 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,__class__: systems_commands_Run
 	,__properties__: {get_base_path:"get_base_path"}
 });
+var systems_commands_Trace = function(_universe) {
+	this.haxe_version = null;
+	this.timeout = 5000;
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Trace"] = systems_commands_Trace;
+systems_commands_Trace.__name__ = "systems.commands.Trace";
+systems_commands_Trace.__super__ = systems_CommandBase;
+systems_commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
+	timeout: null
+	,haxe_version: null
+	,last_cleared: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		if(this.haxe_version == null) {
+			var $process = "./haxe/haxe";
+			if(!sys_FileSystem.exists("./haxe/haxe")) {
+				$process = "haxe";
+			}
+			var ls = js_node_ChildProcess.spawn($process,["--version"]);
+			ls.stdout.once("data",function(data) {
+				_gthis.haxe_version = data.toString().substring(0,5);
+				ls.kill();
+			});
+		}
+		var now = new Date().getTime();
+		if(!(now - this.last_cleared < 604800000)) {
+			this.last_cleared = now;
+			var before = null;
+			try {
+				var path = (haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".")) + "/haxebot";
+				var folders = js_node_Fs.readdirSync(path);
+				var _g = 0;
+				while(_g < folders.length) {
+					var folder = folders[_g];
+					++_g;
+					before = HxOverrides.strDate(folder).getTime();
+					if(now - before < 604800000) {
+						continue;
+					}
+					var path1 = "" + path + "/" + folder;
+					if(sys_FileSystem.exists(path1)) {
+						var _g1 = 0;
+						var _g2 = js_node_Fs.readdirSync(path1);
+						while(_g1 < _g2.length) {
+							var file = _g2[_g1];
+							++_g1;
+							var curPath = path1 + "/" + file;
+							if(sys_FileSystem.isDirectory(curPath)) {
+								if(sys_FileSystem.exists(curPath)) {
+									var _g3 = 0;
+									var _g4 = js_node_Fs.readdirSync(curPath);
+									while(_g3 < _g4.length) {
+										var file1 = _g4[_g3];
+										++_g3;
+										var curPath1 = curPath + "/" + file1;
+										if(sys_FileSystem.isDirectory(curPath1)) {
+											sys_FileSystem.deleteDirectory(curPath1);
+										} else {
+											js_node_Fs.unlinkSync(curPath1);
+										}
+									}
+									js_node_Fs.rmdirSync(curPath);
+								}
+							} else {
+								js_node_Fs.unlinkSync(curPath);
+							}
+						}
+						js_node_Fs.rmdirSync(path1);
+					}
+				}
+			} catch( _g ) {
+				var _g1 = haxe_Exception.caught(_g);
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 56, className : "systems.commands.Trace", methodName : "cleanDirectory"});
+			}
+		}
+	}
+	,cleanDirectory: function() {
+		var now = new Date().getTime();
+		if(now - this.last_cleared < 604800000) {
+			return;
+		}
+		this.last_cleared = now;
+		var before = null;
+		try {
+			var path = (haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".")) + "/haxebot";
+			var folders = js_node_Fs.readdirSync(path);
+			var _g = 0;
+			while(_g < folders.length) {
+				var folder = folders[_g];
+				++_g;
+				before = HxOverrides.strDate(folder).getTime();
+				if(now - before < 604800000) {
+					continue;
+				}
+				var path1 = "" + path + "/" + folder;
+				if(sys_FileSystem.exists(path1)) {
+					var _g1 = 0;
+					var _g2 = js_node_Fs.readdirSync(path1);
+					while(_g1 < _g2.length) {
+						var file = _g2[_g1];
+						++_g1;
+						var curPath = path1 + "/" + file;
+						if(sys_FileSystem.isDirectory(curPath)) {
+							if(sys_FileSystem.exists(curPath)) {
+								var _g3 = 0;
+								var _g4 = js_node_Fs.readdirSync(curPath);
+								while(_g3 < _g4.length) {
+									var file1 = _g4[_g3];
+									++_g3;
+									var curPath1 = curPath + "/" + file1;
+									if(sys_FileSystem.isDirectory(curPath1)) {
+										sys_FileSystem.deleteDirectory(curPath1);
+									} else {
+										js_node_Fs.unlinkSync(curPath1);
+									}
+								}
+								js_node_Fs.rmdirSync(curPath);
+							}
+						} else {
+							js_node_Fs.unlinkSync(curPath);
+						}
+					}
+					js_node_Fs.rmdirSync(path1);
+				}
+			}
+		} catch( _g ) {
+			var _g1 = haxe_Exception.caught(_g);
+			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 56, className : "systems.commands.Trace", methodName : "cleanDirectory"});
+		}
+	}
+	,parseError: function(error,code) {
+		var embed = new discord_$js_MessageEmbed();
+		embed.setTitle("Compilation Error");
+		var regex = new EReg("(Main|Test).hx:([0-9]+): characters ([0-9]+)-([0-9]+) : (.*)","gm");
+		if(regex.match(error)) {
+			var line = Std.parseInt(regex.matched(2));
+			var start_char = Std.parseInt(regex.matched(3));
+			var end_char = Std.parseInt(regex.matched(4));
+			var str = "";
+			var new_code = "";
+			var _this = code.split("\n");
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g1_value = _this[_g_current];
+				var _g1_key = _g_current++;
+				if(_g1_key != line - 1) {
+					new_code += _g1_value + "\n";
+					continue;
+				}
+				var _g = 0;
+				var _g1 = _g1_value.length;
+				while(_g < _g1) {
+					var i = _g++;
+					var pos = i + 1;
+					var char = _g1_value.charAt(i);
+					if(pos < start_char) {
+						str += char;
+					} else if(pos == start_char) {
+						str += "->" + char;
+					} else if(pos == end_char) {
+						str += "" + char + "<-";
+					}
+				}
+				new_code += str + "\n";
+			}
+			embed.setDescription("```hx\n" + new_code + "```");
+			embed.addField("Error",error);
+			return embed;
+		}
+		return null;
+	}
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 5) {
+			var _g1 = _g.code;
+			if(!this.isSafe(_g1,interaction)) {
+				interaction.reply("That code is not safe.");
+			}
+			this.runCode(_g1,interaction);
+		}
+	}
+	,runCode: function(code,interaction) {
+		var _gthis = this;
+		var filename = "T" + new Date().getTime() + Math.floor(Math.random() * 100000);
+		var final_code = this.insertLoopBreak("class " + filename + " {\n\tstatic function main() {\n\t\ttrace(" + code + ");\n\t}\n}");
+		var mention = "<@" + interaction.user.id + ">";
+		js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",final_code + ("\n//User:" + interaction.user.tag + " id: " + interaction.user.id + "| time: " + Std.string(new Date())),function(error) {
+			if(error != null) {
+				haxe_Log.trace(error,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 117, className : "systems.commands.Trace", methodName : "runCode"});
+			}
+			var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
+			var $process = "./haxe/haxe";
+			if(!sys_FileSystem.exists("./haxe/haxe")) {
+				$process = "haxe";
+			}
+			var ls = js_node_ChildProcess.spawn($process,commands,{ timeout : _gthis.timeout});
+			ls.stderr.once("data",function(data) {
+				haxe_Log.trace("error: " + data,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 137, className : "systems.commands.Trace", methodName : "runCode"});
+				var compile_output = _gthis.cleanOutput(data,filename,"Main");
+				var embed = _gthis.parseError(compile_output,final_code);
+				if(embed == null) {
+					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
+				} else {
+					embed.description = _gthis.cleanOutput(embed.description,filename,"Main");
+					interaction.reply({ embeds : [embed]});
+				}
+				ls.kill("SIGTERM");
+			});
+			ls.once("close",function(data) {
+				var response = "";
+				var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
+				if(!sys_FileSystem.exists(js_file)) {
+					haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/systems/commands/Trace.hx", lineNumber : 156, className : "systems.commands.Trace", methodName : "runCode"});
+					return;
+				}
+				var obj = null;
+				var vm = new vm2_NodeVM({ sandbox : obj, console : "redirect", timeout : _gthis.timeout});
+				vm.on("console.log",function(data,info) {
+					var regex = new EReg("T[0-9]*..hx:[0-9]*.: (.*)","gm");
+					if(regex.match(data)) {
+						data = regex.matched(1);
+					}
+					if(info != null) {
+						response += "" + info + "\n";
+						return response;
+					} else {
+						response += "" + data + "\n";
+						return response;
+					}
+				});
+				try {
+					vm.run(js_node_Fs.readFileSync(js_file,{ encoding : "utf8"}));
+					var x = response.split("\n");
+					var truncated = false;
+					if(x.length > 24) {
+						truncated = true;
+						response = "";
+						var _g = 0;
+						var _g1 = x.slice(x.length - 23);
+						while(_g < _g1.length) {
+							var line = _g1[_g];
+							++_g;
+							response += line + "\n";
+						}
+					}
+					var embed = new discord_$js_MessageEmbed();
+					embed.type = "article";
+					var code_output = "";
+					var split = response.split("\n");
+					var _g_current = 0;
+					while(_g_current < split.length) {
+						var _g1_value = split[_g_current];
+						var _g1_key = _g_current++;
+						if(_g1_key >= split.length - 1) {
+							break;
+						}
+						code_output += "" + (_g1_key + 1) + ". " + _g1_value + " \n";
+					}
+					if(truncated) {
+						code_output += "\n//Output has been trimmed.";
+					}
+					var desc = "**Code:**\n```hx\n" + code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
+					embed.setDescription(desc);
+					var author = { name : "@" + interaction.user.tag, iconURL : interaction.user.displayAvatarURL()};
+					embed.setAuthor(author);
+					var date = new Date(interaction.createdTimestamp);
+					var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
+					embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
+					if(response.length > 0 && data == 0) {
+						interaction.reply({ embeds : [embed]}).then(function(succ) {
+							haxe_Log.trace("" + interaction.user.tag + "(" + interaction.user.id + ") at " + format_date + " with file id: " + filename,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 224, className : "systems.commands.Trace", methodName : "runCode"});
+						},Util_err);
+						ls.kill();
+						return;
+					}
+				} catch( _g ) {
+					var _g1 = haxe_Exception.caught(_g);
+					var compile_output = _gthis.cleanOutput(_g1.get_message(),filename,"Main");
+					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Trace.hx", lineNumber : 232, className : "systems.commands.Trace", methodName : "runCode"});
+				}
+			});
+		});
+	}
+	,get_base_path: function() {
+		var path = haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".");
+		if(!sys_FileSystem.exists(path + "/haxebot")) {
+			sys_FileSystem.createDirectory(path + "/haxebot");
+		}
+		path += "/haxebot";
+		var date = DateTools.format(new Date(),"%F");
+		path += "/" + date;
+		if(!sys_FileSystem.exists(path)) {
+			sys_FileSystem.createDirectory(path);
+		}
+		if(!sys_FileSystem.exists(path + "/hx")) {
+			sys_FileSystem.createDirectory(path + "/hx");
+		}
+		if(!sys_FileSystem.exists(path + "/bin")) {
+			sys_FileSystem.createDirectory(path + "/bin");
+		}
+		return path;
+	}
+	,cleanOutput: function(data,filename,class_entry) {
+		data = data.toString();
+		new RegExp("(\\[(.*|vm)\\].*)$","igmu".split("u").join(""));
+		data = StringTools.replace(StringTools.replace(data,filename,class_entry),"\x1B","");
+		data = StringTools.replace(data,this.get_base_path(),"");
+		data = StringTools.replace(data,"/hx/","");
+		data = StringTools.replace(data,"/bin/","");
+		return data;
+	}
+	,insertLoopBreak: function(code) {
+		var varname = "";
+		var regex = new EReg("(while\\s*\\(.*\\)\\s*\\{|while\\s*\\(.*?\\))","gmui");
+		var copy = code;
+		var matched = [];
+		while(regex.match(code)) {
+			matched.push(regex.matched(1));
+			code = regex.matchedRight();
+		}
+		var _g = 0;
+		while(_g < matched.length) {
+			var match = matched[_g];
+			++_g;
+			varname = "___" + util_Random.string(6);
+			var start = "final " + varname + " = Date.now().getTime();";
+			var condition = "if (Date.now().getTime() - " + varname + " > " + this.timeout + ") { break; }";
+			copy = StringTools.replace(copy,match,start + "\n" + match + "\n" + condition);
+		}
+		return copy;
+	}
+	,isSafe: function(code,response) {
+		var check_http = new EReg("haxe.http|haxe.Http","gmu");
+		if(check_http.match(code)) {
+			return false;
+		}
+		if(!Main.config.macros) {
+			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
+				response.reply({ content : "Currently no build macros allowed"});
+				return false;
+			}
+		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
+			return false;
+		}
+		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
+	}
+	,get_name: function() {
+		return "trace";
+	}
+	,__class__: systems_commands_Trace
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_base_path:"get_base_path"})
+});
+var systems_commands_Translate = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Translate"] = systems_commands_Translate;
+systems_commands_Translate.__name__ = "systems.commands.Translate";
+systems_commands_Translate.__super__ = systems_CommandBase;
+systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
+	usage: null
+	,onEnabled: function() {
+		this.getCount();
+	}
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 10) {
+			var _g1 = _g.message;
+			if(this.usage == null) {
+				interaction.reply("An error occured");
+				return;
+			}
+			if(this.usage.character_count + _g1.length > this.usage.character_limit) {
+				interaction.reply("API has reached its limit unfortunately. Please wait till next month.");
+				return;
+			}
+			this.getTranslation(interaction,_g.from,_g.to,_g1);
+		}
+	}
+	,getCount: function() {
+		var _gthis = this;
+		externs_Fetch("https://api-free.deepl.com" + "/v2/usage",{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
+			return resp.json().then(function(body) {
+				_gthis.usage = body;
+				haxe_Log.trace("Character count: " + _gthis.usage.character_count + "/" + _gthis.usage.character_limit,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 36, className : "systems.commands.Translate", methodName : "getCount"});
+			},Util_err);
+		});
+	}
+	,getTranslation: function(interaction,from,to,message) {
+		var _gthis = this;
+		if(from == null) {
+			from = "";
+		}
+		externs_Fetch("https://api-free.deepl.com" + ("/v2/translate?source_lang=" + from + "&target_lang=" + to + "&text=" + message),{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
+			return resp.json().then(function(body) {
+				var content = "";
+				var _g = 0;
+				var _g1 = body.translations;
+				while(_g < _g1.length) {
+					var item = _g1[_g];
+					++_g;
+					content += item.text + "\n";
+				}
+				interaction.reply(content).then(function(_) {
+					_gthis.getCount();
+				},Util_err);
+			},Util_err);
+		});
+	}
+	,getLanguages: function() {
+		externs_Fetch("https://api-free.deepl.com" + "/v2/languages",{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}}).then(function(resp) {
+			return resp.json().then(function(body) {
+				var str = "[";
+				var _g = 0;
+				while(_g < body.length) {
+					var item = body[_g];
+					++_g;
+					str += "{\r\n\t\t\t\t\t\t\"name\": \"" + item.name + "\",\r\n\t\t\t\t\t\t\"value\": \"" + item.language + "\"\r\n\t\t\t\t\t},";
+				}
+				str += "]";
+				haxe_Log.trace(str,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 68, className : "systems.commands.Translate", methodName : "getLanguages"});
+			},Util_err);
+		});
+	}
+	,request: function(endpoint) {
+		return externs_Fetch("https://api-free.deepl.com" + endpoint,{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.config.deepl_key}});
+	}
+	,get_name: function() {
+		return "translate";
+	}
+	,__class__: systems_commands_Translate
+});
 var util_DiscordUtil = function() { };
 $hxClasses["util.DiscordUtil"] = util_DiscordUtil;
 util_DiscordUtil.__name__ = "util.DiscordUtil";
@@ -8566,13 +11170,13 @@ util_DiscordUtil.setCommandPermission = function(command,permissions,succ,fail) 
 		if(succ != null) {
 			succ();
 		}
-		haxe_Log.trace("Updated permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 22, className : "util.DiscordUtil", methodName : "setCommandPermission"});
-	},function(err) {
+		haxe_Log.trace("Updated permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 23, className : "util.DiscordUtil", methodName : "setCommandPermission"});
+	},function(err,pos) {
 		if(fail != null) {
 			fail(err);
 		}
-		haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 27, className : "util.DiscordUtil", methodName : "setCommandPermission"});
-		haxe_Log.trace("Failed to update permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 28, className : "util.DiscordUtil", methodName : "setCommandPermission"});
+		haxe_Log.trace(err,{ fileName : "src/Util.hx", lineNumber : 47, className : "_Util.Util_Fields_", methodName : "err", customParams : [{ fileName : "src/util/DiscordUtil.hx", lineNumber : 28, className : "util.DiscordUtil", methodName : "setCommandPermission"}]});
+		haxe_Log.trace("Failed to update permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 29, className : "util.DiscordUtil", methodName : "setCommandPermission"});
 	});
 };
 util_DiscordUtil.reactionTracker = function(message,track,time) {
@@ -8592,8 +11196,8 @@ util_DiscordUtil.reactionTracker = function(message,track,time) {
 	if(time == -1) {
 		time = 172800000;
 	}
-	message.react("✅").then(null,util_DiscordUtil.err).then(function(_) {
-		message.react("❎").then(null,util_DiscordUtil.err).then(function(_) {
+	message.react("✅").then(null,Util_err).then(function(_) {
+		message.react("❎").then(null,Util_err).then(function(_) {
 			var collector = message.createReactionCollector({ filter : filter, time : time});
 			var _g = track;
 			var collector1 = collector;
@@ -8604,10 +11208,7 @@ util_DiscordUtil.reactionTracker = function(message,track,time) {
 	});
 };
 util_DiscordUtil.getChannel = function(channel_id,callback) {
-	Main.client.channels.fetch(channel_id).then(callback,util_DiscordUtil.err);
-};
-util_DiscordUtil.err = function(err) {
-	haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 61, className : "util.DiscordUtil", methodName : "err"});
+	Main.client.channels.fetch(channel_id).then(callback,Util_err);
 };
 var util_Random = function() { };
 $hxClasses["util.Random"] = util_Random;
@@ -8732,12 +11333,29 @@ ecs_ds_Unit.unit = ecs_ds_Unit._new();
 haxe_Int32._mul = Math.imul != null ? Math.imul : function(a,b) {
 	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
 };
+haxe_Serializer.USE_CACHE = false;
+haxe_Serializer.USE_ENUM_INDEX = false;
+haxe_Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
+haxe_Serializer.BASE64_CODES = null;
 haxe_io_FPHelper.i64tmp = new haxe__$Int64__$_$_$Int64(0,0);
 haxe_io_FPHelper.LN2 = 0.6931471805599453;
 haxe_io_FPHelper.helper = new DataView(new ArrayBuffer(8));
 haxe_io_UInt8Array.BYTES_PER_ELEMENT = 1;
+shared_QuestionType.general = "General";
+shared_QuestionType.error_message = "Error Message";
+shared_QuestionType.unexpected_behaviour = "Unexpected Behaviour";
 sys_io_File.copyBufLen = 65536;
 sys_io_File.copyBuf = js_node_buffer_Buffer.alloc(65536);
+systems_commands_Api._haxe = "https://api.haxe.org/";
+systems_commands_Api.openfl = "https://api.openfl.org/";
+systems_commands_Api.flixel = "https://api.haxeflixel.com/";
+systems_commands_Api.heaps = "https://heaps.io/api/";
+systems_commands_Api.lime = "https://api.lime.software/";
+systems_commands_HelpType.run = "run";
+systems_commands_HelpType.rtfm = "rtfm";
+systems_commands_HelpType.notify = "notify";
+systems_commands_HelpType.helppls = "helppls";
+systems_commands_HelpType.helppls_dm = "helppls_dm";
 systems_commands_PollTime.fifteen = 900000;
 systems_commands_PollTime.thirty = 1800000;
 systems_commands_PollTime.one_hour = 3600000;

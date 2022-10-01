@@ -10,7 +10,7 @@ import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
-import js.lib.Map;
+
 
 class Poll extends CommandDbBase {
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
@@ -22,11 +22,7 @@ class Poll extends CommandDbBase {
 			checked = true;
 			Main.client.channels.fetch('286485321925918721').then(function(res) {
 				res.messages.fetch('1022567873786413096').then(function(res) {
-					for (k => r in res.asType0.reactions.cache) {
-						trace(k);
-						trace(r.emoji.identifier);
-						trace(r.count);
-					}
+
 				}, err);
 			}, err);
 		}
@@ -42,7 +38,6 @@ class Poll extends CommandDbBase {
 					interaction.reply("You must have at least 2 answers");
 					return;
 				}
-
 
 				var body = '';
 				var collection = [a, b, c, d, e, f, g];
@@ -62,17 +57,8 @@ class Poll extends CommandDbBase {
 						continue;
 					}
 
-					var char = switch (i) {
-						case 0: '🇦';
-						case 1: '🇧';
-						case 2: '🇨';
-						case 3: '🇩';
-						case 4: '🇪';
-						case 5: '🇫';
-						case 6: '🇬';
-						default: '';
-					}
-
+					var char = chars(i);
+					
 					results.set(char, 0);
 					answers.set(char, ans);
 					
@@ -80,19 +66,17 @@ class Poll extends CommandDbBase {
 				}
 
 				var embed = new MessageEmbed();
-				embed.setTitle('Poll');
-				embed.setDescription('**Question**\n$question\n\n**Options**\n$body');
+				
+				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${v}** vote per user.');
 				embed.setFooter({text: 'Poll will run for ${length}.'});
 
 				var settings = new Map();
 				settings.set(PollSetting.votes, votes);
-						trace(Json.stringify(answers));
+
 				interaction.reply({embeds: [embed]}).then((_) -> {
 					interaction.fetchReply().then(function(message) {
-
-						for (k=> v in answers) {
-							trace(k);
-							trace(v);
+						for (k => _ in answers) {
+							message.react(k);
 						}
 
 						var data:TPollData = {
@@ -120,62 +104,26 @@ class Poll extends CommandDbBase {
 							});
 						}).then(function(value) {
 							data.id = value.id;
-							Firestore.addDoc(Firestore.collection(this.db, 'discord/polls/entries'), data).then(null, (err) -> trace(err));
+							Firestore.addDoc(Firestore.collection(this.db, 'discord/polls/entries'), data).then(function(_) {
+								this.addCollector(message, data);
+							}, err);
 						}, err);
 					}).then(null, err);
-
-
-					interaction.fetchReply().then(function(message) {
-
-
-						var completed = 1;
-						var ans_count = 1;
-						for (i => ans in collection) {
-							if (ans == null) {
-								continue;
-							}
-							ans_count++;
-							var emoji = switch (i) {
-								case 0: '🇦';
-								case 1: '🇧';
-								case 2: '🇨';
-								case 3: '🇩';
-								case 4: '🇪';
-								case 5: '🇫';
-								case 6: '🇬';
-								default: '';
-							}
-
-							message.react(emoji).then(function(_) {
-								completed++;
-								if (completed == ans_count) {
-									trace('finished?');
-								}
-							});
-						}
-
-
-					}, err);
 				}, err);
 			default:
 		}
 	}
 
-	function addCollector(message:Message, data:TPollData) {
-		var filter = (reaction:MessageReaction, user:User) -> {
-			if (reaction.emoji.name == "🇦") {
-				trace("continues to work");
-				return true;
-			}
+	function addCollector(message:Message, data:PollData) {
 
-			if (reaction.emoji.name == "❎") {
-				return true;
-			}
-			reaction.remove();
-			return false;
-		}
-
+		
+		var filter = this.filter(message, data);
 		var collector = message.createReactionCollector({filter: filter, time: data.duration});
+
+		collector.on('collect', (reaction:MessageReaction, user:User) -> {
+			
+		});
+
 		collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {
 			var check = 0.;
 			var cross = 0.;
@@ -208,6 +156,70 @@ class Poll extends CommandDbBase {
 	function get_name():String {
 		return 'poll';
 	}
+
+	inline function filter(message:Message, data:PollData){
+		var vvotes = data.settings.get(PollSetting.votes);
+		var filter = (reaction:MessageReaction, user:User) -> {
+			var votes = 0;
+			for (reac in message.reactions.cache) {
+				for (u in reac.users.cache) {
+					if (u.id == user.id && !u.bot) {
+						votes++;
+					}
+				}
+			}
+
+			if (votes > vvotes) {
+				if (!user.bot) {
+					reaction.users.remove(user);
+				}
+			}
+
+			if (reaction.emoji.name == "🇦") {
+				return true;
+			}
+
+			if (reaction.emoji.name == "🇧") {
+				return true;
+			}
+
+			if (reaction.emoji.name == "🇨") {
+				return true;
+			}
+
+			if (reaction.emoji.name == "🇩") {
+				return true;
+			}
+
+			if (reaction.emoji.name == "🇪") {
+				return true;
+			}
+
+			if (reaction.emoji.name == "🇫") {
+				return true;
+			}
+
+			if (reaction.emoji.name == "🇬") {
+				return true;
+			}
+
+			return false;
+		}
+		return filter;
+	}
+
+	function chars(char:Int) {
+		return switch (char) {
+			case 0: '🇦';
+			case 1: '🇧';
+			case 2: '🇨';
+			case 3: '🇩';
+			case 4: '🇪';
+			case 5: '🇫';
+			case 6: '🇬';
+			default: '';
+		}
+	}
 }
 
 typedef TPoll = {
@@ -236,7 +248,7 @@ typedef TPollData = {
 }
 
 @:forward
-abstract PollData(TPollData) {
+abstract PollData(TPollData) from TPollData {
 	public var answers(get, never):Map<String, Int>;
 	function get_answers() {
 		return Json.parse(this.answers);
