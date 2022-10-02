@@ -12,19 +12,32 @@ import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 
-
 class Poll extends CommandDbBase {
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
 	var checked = false;
 
 	override function update(_:Float) {
 		super.update(_);
+
 		if (!checked && Main.connected) {
 			checked = true;
-			Main.client.channels.fetch('286485321925918721').then(function(res) {
-				res.messages.fetch('1022567873786413096').then(function(res) {
 
-				}, err);
+			var query:Query<PollData> = Firestore.query(collection(this.db, 'discord/polls/entries'), where('active', EQUAL_TO, true));
+			Firestore.getDocs(query).then(function(res) {
+				for (doc in res.docs) {
+					var data = doc.data();
+					var time_left = (data.timestamp.toMillis() + data.duration) - Date.now().getTime();
+					if (time_left < 0) {
+						time_left = 30000;
+					}
+
+					Main.client.channels.fetch(data.channel).then(function(succ) {
+						succ.messages.fetch(data.message_id).then(function(message) {
+							trace('Resyncing ${data.id}');
+							this.addCollector(message, data, time_left);
+						}, err);
+					}, err);
+				}
 			}, err);
 		}
 	}
@@ -33,7 +46,7 @@ class Poll extends CommandDbBase {
 		switch (command.content) {
 			case Poll(question, length, a, b, c, d, e, f, g, v):
 				var time = PollTime.fromString(length);
-	
+
 				if (a == null && b == null) {
 					interaction.reply("You must have at least 2 answers");
 					return;
@@ -62,15 +75,15 @@ class Poll extends CommandDbBase {
 					}
 
 					var char = chars(i);
-					
+
 					results.set(char, 0);
 					answers.set(char, ans);
-					
+
 					body += '$char - $ans\n';
 				}
 
 				var embed = new MessageEmbed();
-				
+
 				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${votes}** $vtxt per user.');
 				embed.setFooter({text: 'Poll will run for ${length}.'});
 
@@ -93,7 +106,8 @@ class Poll extends CommandDbBase {
 							settings: settings.stringify(),
 							timestamp: Timestamp.now(),
 							author: interaction.user.id,
-							message_id: message.id
+							message_id: message.id,
+							channel: message.channel.asType0.id
 						}
 
 						Firestore.runTransaction(this.db, function(transaction) {
@@ -118,24 +132,27 @@ class Poll extends CommandDbBase {
 		}
 	}
 
-	function addCollector(message:Message, data:PollData) {
+	function addCollector(message:Message, data:PollData, ?time_left:Float) {
 		var filter = this.filter(message, data);
+		var time:Float = data.duration;
+		if (time_left != null) {
+			time = time_left;
+		}
+
 		var collector = message.createReactionCollector({filter: filter, time: data.duration});
 
-		collector.on('collect', (reaction:MessageReaction, user:User) -> {
-			
-		});
+		collector.on('collect', (reaction:MessageReaction, user:User) -> {});
 
 		collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {
 			var embed = new MessageEmbed();
 			var body = '**Question**\n${data.question}\n\n**Options**\n';
-			
+
 			var options = data.answers;
 
 			for (k => ans in options) {
 				body += '$k - $ans\n';
 			}
-			
+
 			body += '\n**Results**\n';
 			var sort = message.reactions.cache.sort(function(a, b, _, _) {
 				return b.count - a.count;
@@ -144,20 +161,29 @@ class Poll extends CommandDbBase {
 			for (k => v in sort) {
 				var col = sort.get(k);
 				var count = 0;
-				
+
 				if (col != null) {
 					count = v.count;
 				}
-				
+
 				body += '$k - **${count - 1}** \n';
 			}
 
 			body += '\n*Poll ran for ${data.duration}*';
-			
+
 			body += '\n*Posted: <t:${Math.round(message.createdTimestamp / 1000)}:R>*';
 			embed.setDescription(body);
-			
-			message.reply({content: '<@${data.author}>', embeds: [embed]});
+
+			message.reply({content: '<@${data.author}>', embeds: [embed]}).then(function(_) {
+				var query = Firestore.query(collection(this.db, 'discord/polls/entries'), where('id', EQUAL_TO, data.id));
+				Firestore.getDocs(query).then(function(res) {
+					if (res.docs.length == 0) {
+						return;
+					}
+					Firestore.updateDoc(res.docs[0].ref, 'active', false);
+				});
+				// Firestore.
+			});
 		});
 	}
 
@@ -165,7 +191,7 @@ class Poll extends CommandDbBase {
 		return 'poll';
 	}
 
-	function filter(message:Message, data:PollData){
+	function filter(message:Message, data:PollData) {
 		var reactions = data.answers;
 		var rcount = 0;
 		for (_ in reactions) {
@@ -252,6 +278,7 @@ enum abstract PollTypes(String) {
 typedef TPollData = {
 	var id:Int;
 	var active:Bool;
+	var channel:String;
 	var message_id:String;
 	var author:String;
 	var question:String;
@@ -265,16 +292,19 @@ typedef TPollData = {
 @:forward
 abstract PollData(TPollData) from TPollData {
 	public var answers(get, never):Map<String, Int>;
+
 	function get_answers() {
 		return Json.parse(this.answers);
 	}
 
 	public var results(get, never):Map<String, Int>;
+
 	function get_results() {
 		return Json.parse(this.results);
 	}
 
 	public var settings(get, never):Map<PollSetting, Int>;
+
 	function get_settings() {
 		return Json.parse(this.settings);
 	}
@@ -317,7 +347,6 @@ enum abstract PollTime(Float) to Float {
 			default: PollTime.one_hour;
 		}
 	}
-
 
 	@:keep
 	@:to function toString() {

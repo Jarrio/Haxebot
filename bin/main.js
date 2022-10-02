@@ -7,6 +7,10 @@ function $extend(from, fields) {
 	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
 	return proto;
 }
+var _$Date_Date_$Impl_$ = function() { };
+$hxClasses["_Date.Date_Impl_"] = _$Date_Date_$Impl_$;
+_$Date_Date_$Impl_$.__name__ = "_Date.Date_Impl_";
+_$Date_Date_$Impl_$.now = null;
 var DateTools = function() { };
 $hxClasses["DateTools"] = DateTools;
 DateTools.__name__ = "DateTools";
@@ -650,8 +654,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(15);
-	var this11 = new Array(15);
+	var this1 = new Array(14);
+	var this11 = new Array(14);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -731,61 +735,57 @@ Main.start = function() {
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_Haxelib(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new systems_commands_Haxelib(u);
+	var s = new systems_commands_Trace(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Trace(u);
+	var s = new systems_commands_React(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_React(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Archive(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Archive(u);
+	var s = new systems_commands_Help(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_Help(u);
+	var s = new systems_commands_Translate(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new systems_commands_Translate(u);
+	var s = new systems_commands_Hi(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
-	s.onEnabled();
-	var s = new systems_commands_Hi(u);
-	phase.systems[14] = s;
-	phase.enabledSystems[14] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -808,11 +808,7 @@ Main.start = function() {
 		res.then(function(foo) {
 			Main.commands_active = true;
 			var _g = 0;
-			while(_g < foo.length) {
-				var item = foo[_g];
-				++_g;
-				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 114, className : "Main", methodName : "start"});
-			}
+			while(_g < foo.length) ++_g;
 			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 118, className : "Main", methodName : "start"});
 		},Util_err);
 	});
@@ -8692,12 +8688,33 @@ systems_commands_Poll.__super__ = systems_CommandDbBase;
 systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	checked: null
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandDbBase.prototype.update.call(this,_);
 		if(!this.checked && Main.connected) {
 			this.checked = true;
-			Main.client.channels.fetch("286485321925918721").then(function(res) {
-				res.messages.fetch("1022567873786413096").then(function(res) {
-				},Util_err);
+			var query = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"),firebase_web_firestore_Firestore.where("active","==",true));
+			firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+				var _g = 0;
+				var _g1 = res.docs;
+				while(_g < _g1.length) {
+					var doc = _g1[_g];
+					++_g;
+					var data = [doc.data()];
+					var time_left = [data[0].timestamp.toMillis() + data[0].duration - new Date().getTime()];
+					if(time_left[0] < 0) {
+						time_left[0] = 30000;
+					}
+					Main.client.channels.fetch(data[0].channel).then((function(time_left,data) {
+						return function(succ) {
+							succ.messages.fetch(data[0].message_id).then((function(time_left,data) {
+								return function(message) {
+									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 36, className : "systems.commands.Poll", methodName : "update"});
+									_gthis.addCollector(message,data[0],time_left[0]);
+								};
+							})(time_left,data),Util_err);
+						};
+					})(time_left,data),Util_err);
+				}
 			},Util_err);
 		}
 	}
@@ -8757,7 +8774,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						var key = _g_keys[_g_current++];
 						message.react(key);
 					}
-					var data = { id : -1, active : true, results : JSON.stringify(results), answers : JSON.stringify(answers), question : question, duration : time, settings : JSON.stringify(settings), timestamp : firebase_web_firestore_Timestamp.now(), author : interaction.user.id, message_id : message.id};
+					var data = { id : -1, active : true, results : JSON.stringify(results), answers : JSON.stringify(answers), question : question, duration : time, settings : JSON.stringify(settings), timestamp : firebase_web_firestore_Timestamp.now(), author : interaction.user.id, message_id : message.id, channel : message.channel.id};
 					firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
 						return transaction.get(firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls")).then(function(doc) {
 							if(!doc.exists()) {
@@ -8778,7 +8795,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			},Util_err);
 		}
 	}
-	,addCollector: function(message,data) {
+	,addCollector: function(message,data,time_left) {
 		var filter = this.filter(message,data);
 		var collector = message.createReactionCollector({ filter : filter, time : data.duration});
 		collector.on("collect",function(reaction,user) {
@@ -8817,7 +8834,15 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			body += "\n*Poll ran for " + (data.duration == null ? "null" : systems_commands_PollTime.toString(data.duration)) + "*";
 			body += "\n*Posted: <t:" + Math.round(message.createdTimestamp / 1000) + ":R>*";
 			embed.setDescription(body);
-			message.reply({ content : "<@" + data.author + ">", embeds : [embed]});
+			message.reply({ content : "<@" + data.author + ">", embeds : [embed]}).then(function(_) {
+				var query = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"),firebase_web_firestore_Firestore.where("id","==",data.id));
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						return;
+					}
+					firebase_web_firestore_Firestore.updateDoc(res.docs[0].ref,"active",false);
+				});
+			});
 		});
 	}
 	,get_name: function() {
