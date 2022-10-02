@@ -111,7 +111,7 @@ class Main {
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
 				for (item in foo) {
-					//trace('DEBUG - ${item.name} is REGISTERED');
+					trace('DEBUG - ${item.name} is REGISTERED');
 				}
 
 				#if block
