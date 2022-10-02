@@ -127,7 +127,6 @@ class Poll extends CommandDbBase {
 		});
 
 		collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {
-			Browser.console.dir(message.reactions.cache);
 			var embed = new MessageEmbed();
 			var body = '**Question**\n${data.question}\n\n**Options**\n';
 			
@@ -138,13 +137,16 @@ class Poll extends CommandDbBase {
 			}
 			
 			body += '\n**Results**\n';
+			var sort = message.reactions.cache.sort(function(a, b, _, _) {
+				return b.count - a.count;
+			});
 
-			for (k => _ in options) {
-				var col = message.reactions.cache.get(k);
+			for (k => v in sort) {
+				var col = sort.get(k);
 				var count = 0;
 				
 				if (col != null) {
-					count = col.count;
+					count = v.count;
 				}
 				
 				body += '$k - **${count - 1}** \n';
@@ -154,7 +156,6 @@ class Poll extends CommandDbBase {
 			
 			body += '\n*Posted: <t:${Math.round(message.createdTimestamp / 1000)}:R>*';
 			embed.setDescription(body);
-
 			
 			message.reply({content: '<@${data.author}>', embeds: [embed]});
 		});

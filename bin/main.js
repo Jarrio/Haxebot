@@ -8784,36 +8784,33 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 		collector.on("collect",function(reaction,user) {
 		});
 		collector.on("end",function(collected,reason) {
-			$global.console.dir(message.reactions.cache);
 			var embed = new discord_$js_MessageEmbed();
 			var body = "**Question**\n" + data.question + "\n\n**Options**\n";
 			var options = systems_commands_PollData.get_answers(data);
 			var h = options.h;
-			var _g_h = h;
 			var _g_keys = Object.keys(h);
 			var _g_length = _g_keys.length;
 			var _g_current = 0;
 			while(_g_current < _g_length) {
 				var key = _g_keys[_g_current++];
-				var _g1_key = key;
-				var _g1_value = _g_h[key];
-				var k = _g1_key;
-				var ans = _g1_value;
-				body += "" + k + " - " + ans + "\n";
+				var _g1_value = h[key];
+				body += "" + key + " - " + _g1_value + "\n";
 			}
 			body += "\n**Results**\n";
-			var h = options.h;
-			var _g_keys = Object.keys(h);
-			var _g_length = _g_keys.length;
-			var _g_current = 0;
-			while(_g_current < _g_length) {
-				var key = _g_keys[_g_current++];
-				var _g1_key = key;
-				var k = _g1_key;
-				var col = message.reactions.cache.get(k);
+			var sort = message.reactions.cache.sort(function(a,b,_,_1) {
+				return b.count - a.count;
+			});
+			var jsIterator = sort.entries();
+			var _g_lastStep = jsIterator.next();
+			while(!_g_lastStep.done) {
+				var v = _g_lastStep.value;
+				_g_lastStep = jsIterator.next();
+				var k = v[0];
+				var v1 = v[1];
+				var col = sort.get(k);
 				var count = 0;
 				if(col != null) {
-					count = col.count;
+					count = v1.count;
 				}
 				body += "" + k + " - **" + (count - 1) + "** \n";
 			}

@@ -108,7 +108,7 @@ package discord_js;
 		The sort is not necessarily stable in Node 10 or older.
 		The default sort order is according to string Unicode code points.
 	**/
-	function sort(?compareFunction:(firstValue:V, secondValue:V, firstKey:K, secondKey:K) -> Float):Collection<K, V>;
+	public function sort(?compareFunction:(firstValue:V, secondValue:V, firstKey:K, secondKey:K) -> Float):Collection<K, V>;
 	/**
 		The sorted method sorts the items of a collection and returns it.
 		The sort is not necessarily stable in Node 10 or older.
