@@ -22,10 +22,20 @@ class Poll extends CommandDbBase {
 		if (!checked && Main.connected) {
 			checked = true;
 
-			var query:Query<PollData> = Firestore.query(collection(this.db, 'discord/polls/entries'), where('active', EQUAL_TO, true));
+			var query:Query<PollData> = Firestore.query(collection(this.db, 'discord/polls/entries'));
 			Firestore.getDocs(query).then(function(res) {
 				for (doc in res.docs) {
 					var data = doc.data();
+					if (!data.active) {
+						var four_weeks = data.timestamp.toMillis() + (PollTime.two_weeks : Float) * 2;
+						if (Date.now().getTime() - four_weeks < 0) {
+							continue;
+						}
+
+						Firestore.deleteDoc(doc.ref).then(null, err);
+						continue;
+					}
+
 					var time_left = (data.timestamp.toMillis() + data.duration) - Date.now().getTime();
 					if (time_left < 0) {
 						time_left = 30000;

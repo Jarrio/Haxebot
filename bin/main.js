@@ -8692,7 +8692,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 		systems_CommandDbBase.prototype.update.call(this,_);
 		if(!this.checked && Main.connected) {
 			this.checked = true;
-			var query = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"),firebase_web_firestore_Firestore.where("active","==",true));
+			var query = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"));
 			firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 				var _g = 0;
 				var _g1 = res.docs;
@@ -8700,6 +8700,14 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 					var doc = _g1[_g];
 					++_g;
 					var data = [doc.data()];
+					if(!data[0].active) {
+						var four_weeks = data[0].timestamp.toMillis() + 1210000000 * 2;
+						if(new Date().getTime() - four_weeks < 0) {
+							continue;
+						}
+						firebase_web_firestore_Firestore.deleteDoc(doc.ref).then(null,Util_err);
+						continue;
+					}
 					var time_left = [data[0].timestamp.toMillis() + data[0].duration - new Date().getTime()];
 					if(time_left[0] < 0) {
 						time_left[0] = 30000;
@@ -8708,7 +8716,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						return function(succ) {
 							succ.messages.fetch(data[0].message_id).then((function(time_left,data) {
 								return function(message) {
-									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 36, className : "systems.commands.Poll", methodName : "update"});
+									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 46, className : "systems.commands.Poll", methodName : "update"});
 									_gthis.addCollector(message,data[0],time_left[0]);
 								};
 							})(time_left,data),Util_err);
