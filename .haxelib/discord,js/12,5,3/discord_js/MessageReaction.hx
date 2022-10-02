@@ -4,7 +4,7 @@ package discord_js;
 	function new(client:Client, data:Dynamic, message:Message);
 	private var _emoji : ts.AnyOf2<GuildEmoji, ReactionEmoji>;
 	public final client : Client;
-	public var count : Null<Float>;
+	public var count : Null<Int>;
 	public final emoji : ReactionEmoji;
 	public var me : Bool;
 	public var message : Message;

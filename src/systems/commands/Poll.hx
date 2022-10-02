@@ -1,5 +1,6 @@
 package systems.commands;
 
+import js.Browser;
 import haxe.Json;
 import firebase.web.firestore.Timestamp;
 import discord_js.Collection;
@@ -32,8 +33,7 @@ class Poll extends CommandDbBase {
 		switch (command.content) {
 			case Poll(question, length, a, b, c, d, e, f, g, v):
 				var time = PollTime.fromString(length);
-				trace(time);
-
+	
 				if (a == null && b == null) {
 					interaction.reply("You must have at least 2 answers");
 					return;
@@ -44,6 +44,10 @@ class Poll extends CommandDbBase {
 				var answers = new Map();
 				var results = new Map();
 				var votes = 1;
+				var vtxt = 'vote';
+				if (v == 0 || v > 1) {
+					vtxt += 's';
+				}
 
 				if (v != null) {
 					votes = v;
@@ -67,7 +71,7 @@ class Poll extends CommandDbBase {
 
 				var embed = new MessageEmbed();
 				
-				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${v}** vote(s) per user.');
+				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${votes}** $vtxt per user.');
 				embed.setFooter({text: 'Poll will run for ${length}.'});
 
 				var settings = new Map();
@@ -115,8 +119,6 @@ class Poll extends CommandDbBase {
 	}
 
 	function addCollector(message:Message, data:PollData) {
-
-		
 		var filter = this.filter(message, data);
 		var collector = message.createReactionCollector({filter: filter, time: data.duration});
 
@@ -125,39 +127,50 @@ class Poll extends CommandDbBase {
 		});
 
 		collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {
-			var check = 0.;
-			var cross = 0.;
-
-			if (collected.has('✅')) {
-				check = collected.get('✅').count - 1;
-			}
-
-			if (collected.has('❎')) {
-				cross = collected.get('❎').count - 1;
-			}
-
+			Browser.console.dir(message.reactions.cache);
 			var embed = new MessageEmbed();
-			var description = '${data.question}\n\n';
-			description += '✅ Yes: ' + check.string() + '\n';
-			description += '❎ No: ' + cross.string();
+			var body = '**Question**\n${data.question}\n\n**Options**\n';
+			
+			var options = data.answers;
 
-			embed.setDescription(description);
+			for (k => ans in options) {
+				body += '$k - $ans\n';
+			}
+			
+			body += '\n**Results**\n';
 
-			var date = DateTools.format(Date.fromTime(message.createdTimestamp), '%d-%m-%Y %H:%M:%S');
-			embed.setFooter({text: 'Poll results | Started $date'});
+			for (k => _ in options) {
+				var col = message.reactions.cache.get(k);
+				var count = 0;
+				
+				if (col != null) {
+					count = col.count;
+				}
+				
+				body += '$k - **${count - 1}** \n';
+			}
+
+			body += '\n*Poll ran for ${data.duration}*';
+			
+			body += '\n*Posted: <t:${Math.round(message.createdTimestamp / 1000)}:R>*';
+			embed.setDescription(body);
+
+			
 			message.reply({content: '<@${data.author}>', embeds: [embed]});
 		});
-	}
-
-	function validEmojis() {
-		
 	}
 
 	function get_name():String {
 		return 'poll';
 	}
 
-	inline function filter(message:Message, data:PollData){
+	function filter(message:Message, data:PollData){
+		var reactions = data.answers;
+		var rcount = 0;
+		for (_ in reactions) {
+			rcount++;
+		}
+
 		var vvotes = data.settings.get(PollSetting.votes);
 		var filter = (reaction:MessageReaction, user:User) -> {
 			var votes = 0;
@@ -175,36 +188,37 @@ class Poll extends CommandDbBase {
 				}
 			}
 
-			if (reaction.emoji.name == "🇦") {
+			if (reaction.emoji.name == "🇦" && rcount >= 1) {
 				return true;
 			}
 
-			if (reaction.emoji.name == "🇧") {
+			if (reaction.emoji.name == "🇧" && rcount >= 2) {
 				return true;
 			}
 
-			if (reaction.emoji.name == "🇨") {
+			if (reaction.emoji.name == "🇨" && rcount >= 3) {
 				return true;
 			}
 
-			if (reaction.emoji.name == "🇩") {
+			if (reaction.emoji.name == "🇩" && rcount >= 4) {
 				return true;
 			}
 
-			if (reaction.emoji.name == "🇪") {
+			if (reaction.emoji.name == "🇪" && rcount >= 5) {
 				return true;
 			}
 
-			if (reaction.emoji.name == "🇫") {
+			if (reaction.emoji.name == "🇫" && rcount >= 6) {
 				return true;
 			}
 
-			if (reaction.emoji.name == "🇬") {
+			if (reaction.emoji.name == "🇬" && rcount >= 7) {
 				return true;
 			}
 
 			return false;
 		}
+
 		return filter;
 	}
 
@@ -240,7 +254,7 @@ typedef TPollData = {
 	var message_id:String;
 	var author:String;
 	var question:String;
-	var duration:Float;
+	var duration:PollTime;
 	var timestamp:Timestamp;
 	var settings:String;
 	var answers:String;
@@ -300,6 +314,25 @@ enum abstract PollTime(Float) to Float {
 			case "1w": PollTime.one_week;
 			case "2w": PollTime.two_weeks;
 			default: PollTime.one_hour;
+		}
+	}
+
+
+	@:keep
+	@:to function toString() {
+		return switch (this) {
+			case fifteen: "15mins";
+			case thirty: "30mins";
+			case one_hour: "1 hour";
+			case four_hours: "4 hours";
+			case eight_hours: "8 hours";
+			case twelve_hours: "12 hours";
+			case one_day: "1 day";
+			case three_days: "3 days";
+			case five_days: "5 days";
+			case one_week: "1 week";
+			case two_weeks: "2 weeks";
+			default: '1 hour';
 		}
 	}
 }

@@ -651,8 +651,8 @@ Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
 	var this1 = new Array(15);
-	var this2 = new Array(15);
-	vec[0] = new ecs_Phase(true,"main",this1,this2);
+	var this11 = new Array(15);
+	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
 	var vec1 = this1;
@@ -1230,7 +1230,6 @@ Reflect.field = function(o,field) {
 	try {
 		return o[field];
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -1985,7 +1984,6 @@ Type.enumEq = function(a,b) {
 			}
 		}
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 	return true;
@@ -4708,7 +4706,6 @@ haxe_ds_BalancedTree.prototype = {
 			this.root = this.removeLoop(key,this.root);
 			return true;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(typeof(haxe_Exception.caught(_g).unwrap()) == "string") {
 				return false;
 			} else {
@@ -7279,7 +7276,6 @@ js_Boot.__string_rec = function(o,s) {
 		try {
 			tostr = o.toString;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			return "???";
 		}
 		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
@@ -7416,6 +7412,62 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
+var js_Browser = function() { };
+$hxClasses["js.Browser"] = js_Browser;
+js_Browser.__name__ = "js.Browser";
+js_Browser.__properties__ = {get_supported:"get_supported",get_self:"get_self"};
+js_Browser.get_self = function() {
+	return $global;
+};
+js_Browser.get_supported = function() {
+	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
+		return typeof(window.location.protocol) == "string";
+	} else {
+		return false;
+	}
+};
+js_Browser.getLocalStorage = function() {
+	try {
+		var s = window.localStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		return null;
+	}
+};
+js_Browser.getSessionStorage = function() {
+	try {
+		var s = window.sessionStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		return null;
+	}
+};
+js_Browser.createXMLHttpRequest = function() {
+	if(typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	if(typeof ActiveXObject != "undefined") {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
+};
+js_Browser.alert = function(v) {
+	window.alert(Std.string(v));
+};
 var js_Lib = function() { };
 $hxClasses["js.Lib"] = js_Lib;
 js_Lib.__name__ = "js.Lib";
@@ -7439,6 +7491,20 @@ js_Lib.getOriginalException = function() {
 };
 js_Lib.getNextHaxeUID = function() {
 	return $global.$haxeUID++;
+};
+var js_html__$CanvasElement_CanvasUtil = function() { };
+$hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
+js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
+js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
+	var ctx = canvas.getContext("webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	var ctx = canvas.getContext("experimental-webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	return null;
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
 $hxClasses["js.lib._ArrayBuffer.ArrayBufferCompat"] = js_lib__$ArrayBuffer_ArrayBufferCompat;
@@ -8645,7 +8711,6 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			var _g4 = _g.votes;
 			var question = _g.question;
 			var time = systems_commands_PollTime.fromString(_g1);
-			haxe_Log.trace(time,{ fileName : "src/systems/commands/Poll.hx", lineNumber : 35, className : "systems.commands.Poll", methodName : "run"});
 			if(_g2 == null && _g3 == null) {
 				interaction.reply("You must have at least 2 answers");
 				return;
@@ -8655,6 +8720,10 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			var answers = new haxe_ds_StringMap();
 			var results = new haxe_ds_StringMap();
 			var votes = 1;
+			var vtxt = "vote";
+			if(_g4 == 0 || _g4 > 1) {
+				vtxt = "vote" + "s";
+			}
 			if(_g4 != null) {
 				votes = _g4;
 				if(_g4 > 7) {
@@ -8674,7 +8743,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 				body += "" + char + " - " + _g1_value + "\n";
 			}
 			var embed = new discord_$js_MessageEmbed();
-			embed.setDescription("**Question**\n" + question + "\n\n**Options**\n" + body + "\n**Settings**\n**" + _g4 + "** vote(s) per user.");
+			embed.setDescription("**Question**\n" + question + "\n\n**Options**\n" + body + "\n**Settings**\n**" + votes + "** " + vtxt + " per user.");
 			embed.setFooter({ text : "Poll will run for " + _g1 + "."});
 			var settings = new haxe_ds_IntMap();
 			settings.h[0] = votes;
@@ -8710,81 +8779,64 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 	}
 	,addCollector: function(message,data) {
-		var message1 = message;
-		var vvotes = systems_commands_PollData.get_settings(data).h[0];
-		var filter = function(reaction,user) {
-			var votes = 0;
-			var jsIterator = message1.reactions.cache.values();
-			var _g_lastStep = jsIterator.next();
-			while(!_g_lastStep.done) {
-				var v = _g_lastStep.value;
-				_g_lastStep = jsIterator.next();
-				var jsIterator1 = v.users.cache.values();
-				var _g_lastStep1 = jsIterator1.next();
-				while(!_g_lastStep1.done) {
-					var v1 = _g_lastStep1.value;
-					_g_lastStep1 = jsIterator1.next();
-					if(v1.id == user.id && !v1.bot) {
-						++votes;
-					}
-				}
-			}
-			if(votes > vvotes) {
-				if(!user.bot) {
-					reaction.users.remove(user);
-				}
-			}
-			if(reaction.emoji.name == "🇦") {
-				return true;
-			}
-			if(reaction.emoji.name == "🇧") {
-				return true;
-			}
-			if(reaction.emoji.name == "🇨") {
-				return true;
-			}
-			if(reaction.emoji.name == "🇩") {
-				return true;
-			}
-			if(reaction.emoji.name == "🇪") {
-				return true;
-			}
-			if(reaction.emoji.name == "🇫") {
-				return true;
-			}
-			if(reaction.emoji.name == "🇬") {
-				return true;
-			}
-			return false;
-		};
+		var filter = this.filter(message,data);
 		var collector = message.createReactionCollector({ filter : filter, time : data.duration});
 		collector.on("collect",function(reaction,user) {
 		});
 		collector.on("end",function(collected,reason) {
-			var check = 0.;
-			var cross = 0.;
-			if(collected.has("✅")) {
-				check = collected.get("✅").count - 1;
-			}
-			if(collected.has("❎")) {
-				cross = collected.get("❎").count - 1;
-			}
+			$global.console.dir(message.reactions.cache);
 			var embed = new discord_$js_MessageEmbed();
-			var description = "" + data.question + "\n\n";
-			description += "✅ Yes: " + (check == null ? "null" : "" + check) + "\n";
-			description += "❎ No: " + (cross == null ? "null" : "" + cross);
-			embed.setDescription(description);
-			var date = DateTools.format(new Date(message.createdTimestamp),"%d-%m-%Y %H:%M:%S");
-			embed.setFooter({ text : "Poll results | Started " + date});
+			var body = "**Question**\n" + data.question + "\n\n**Options**\n";
+			var options = systems_commands_PollData.get_answers(data);
+			var h = options.h;
+			var _g_h = h;
+			var _g_keys = Object.keys(h);
+			var _g_length = _g_keys.length;
+			var _g_current = 0;
+			while(_g_current < _g_length) {
+				var key = _g_keys[_g_current++];
+				var _g1_key = key;
+				var _g1_value = _g_h[key];
+				var k = _g1_key;
+				var ans = _g1_value;
+				body += "" + k + " - " + ans + "\n";
+			}
+			body += "\n**Results**\n";
+			var h = options.h;
+			var _g_keys = Object.keys(h);
+			var _g_length = _g_keys.length;
+			var _g_current = 0;
+			while(_g_current < _g_length) {
+				var key = _g_keys[_g_current++];
+				var _g1_key = key;
+				var k = _g1_key;
+				var col = message.reactions.cache.get(k);
+				var count = 0;
+				if(col != null) {
+					count = col.count;
+				}
+				body += "" + k + " - **" + (count - 1) + "** \n";
+			}
+			body += "\n*Poll ran for " + (data.duration == null ? "null" : systems_commands_PollTime.toString(data.duration)) + "*";
+			body += "\n*Posted: <t:" + Math.round(message.createdTimestamp / 1000) + ":R>*";
+			embed.setDescription(body);
 			message.reply({ content : "<@" + data.author + ">", embeds : [embed]});
 		});
-	}
-	,validEmojis: function() {
 	}
 	,get_name: function() {
 		return "poll";
 	}
 	,filter: function(message,data) {
+		var reactions = systems_commands_PollData.get_answers(data);
+		var rcount = 0;
+		var h = reactions.h;
+		var __keys = Object.keys(h);
+		var __length = __keys.length;
+		var __current = 0;
+		while(__current < __length) {
+			++__current;
+			rcount += 1;
+		}
 		var vvotes = systems_commands_PollData.get_settings(data).h[0];
 		var filter = function(reaction,user) {
 			var votes = 0;
@@ -8808,25 +8860,25 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 					reaction.users.remove(user);
 				}
 			}
-			if(reaction.emoji.name == "🇦") {
+			if(reaction.emoji.name == "🇦" && rcount >= 1) {
 				return true;
 			}
-			if(reaction.emoji.name == "🇧") {
+			if(reaction.emoji.name == "🇧" && rcount >= 2) {
 				return true;
 			}
-			if(reaction.emoji.name == "🇨") {
+			if(reaction.emoji.name == "🇨" && rcount >= 3) {
 				return true;
 			}
-			if(reaction.emoji.name == "🇩") {
+			if(reaction.emoji.name == "🇩" && rcount >= 4) {
 				return true;
 			}
-			if(reaction.emoji.name == "🇪") {
+			if(reaction.emoji.name == "🇪" && rcount >= 5) {
 				return true;
 			}
-			if(reaction.emoji.name == "🇫") {
+			if(reaction.emoji.name == "🇫" && rcount >= 6) {
 				return true;
 			}
-			if(reaction.emoji.name == "🇬") {
+			if(reaction.emoji.name == "🇬" && rcount >= 7) {
 				return true;
 			}
 			return false;
@@ -8899,6 +8951,34 @@ systems_commands_PollTime.fromString = function(input) {
 		return 28800000;
 	default:
 		return 3600000;
+	}
+};
+systems_commands_PollTime.toString = function(this1) {
+	switch(this1) {
+	case 900000:
+		return "15mins";
+	case 1800000:
+		return "30mins";
+	case 3600000:
+		return "1 hour";
+	case 14400000:
+		return "4 hours";
+	case 28800000:
+		return "8 hours";
+	case 43200000:
+		return "12 hours";
+	case 86400000:
+		return "1 day";
+	case 259200000:
+		return "3 days";
+	case 432000000:
+		return "5 days";
+	case 604800000:
+		return "1 week";
+	case 1210000000:
+		return "2 weeks";
+	default:
+		return "1 hour";
 	}
 };
 var systems_commands_Quote = function(_universe) {
