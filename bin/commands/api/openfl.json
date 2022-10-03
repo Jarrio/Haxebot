@@ -1,0 +1,1838 @@
+{
+	"h": {
+		".Lib": {
+			"name": "Lib",
+			"path": ".Lib",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/Lib.html"
+		},
+		".Memory": {
+			"name": "Memory",
+			"path": ".Memory",
+			"description": "Adobe Flash Player supports an accelerated method of reading and\nwriting to the ByteArray object, known as \"domain memory\"",
+			"type": "class",
+			"link": "https://api.openfl.org/Memory.html"
+		},
+		".Vector": {
+			"name": "Vector",
+			"path": ".Vector",
+			"description": "The Vector class lets you access and manipulate a vector — an array whose elements\nall have the same data type. The data type of a Vector's elements is known as the\nVector's base type. The base type can be any class, including built in classes and\ncustom classes. The base type is specified when declaring a Vector variable as well\nas when creating an instance by calling the class constructor.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/Vector.html"
+		},
+		"openfl.desktop.Clipboard": {
+			"name": "Clipboard",
+			"path": "openfl.desktop.Clipboard",
+			"description": "The Clipboard class provides a container for transferring data and objects\nthrough the clipboard. The operating system clipboard can be accessed\nthrough the static generalClipboard property.\nA Clipboard object can contain the same information in more than one\nformat. By supplying information in multiple formats, you increase the\nchances that another application will be able to use that information. Add\ndata to a Clipboard object with the setData() or setDataHandler()\nmethod.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/desktop/Clipboard.html"
+		},
+		"openfl.desktop.NativeProcess": {
+			"name": "NativeProcess",
+			"path": "openfl.desktop.NativeProcess",
+			"description": "The NativeProcess class provides command line integration and general\nlaunching capabilities. The NativeProcess class lets an AIR application\nexecute native processes on the host operating system. The AIR applcation\ncan monitor the standard input (stdin) and standard output (stdout) stream\nof the process as well as the process's standard error (stderr) stream.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/desktop/NativeProcess.html"
+		},
+		"openfl.desktop.NativeProcessStartupInfo": {
+			"name": "NativeProcessStartupInfo",
+			"path": "openfl.desktop.NativeProcessStartupInfo",
+			"description": "This class provides the basic information used to start a process on the\nhost operating system. It is constructed and passed to the start() method\nof a NativeProcess object.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/desktop/NativeProcessStartupInfo.html"
+		},
+		"openfl.desktop.ClipboardFormats": {
+			"name": "ClipboardFormats",
+			"path": "openfl.desktop.ClipboardFormats",
+			"description": "The ClipboardFormats class defines constants for the names of the standard\ndata formats used with the Clipboard class. Flash Player 10 only supports\nTEXT_FORMAT, RICH_TEXT_FORMAT, and HTML_FORMAT.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/desktop/ClipboardFormats.html"
+		},
+		"openfl.desktop.ClipboardTransferMode": {
+			"name": "ClipboardTransferMode",
+			"path": "openfl.desktop.ClipboardTransferMode",
+			"description": "The ClipboardTransferMode class defines constants for the modes used as\nvalues of the transferMode parameter of the Clipboard.getData()\nmethod.\nThe transfer mode provides a hint about whether to return a reference or a\ncopy when accessing an object contained on a clipboard.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/desktop/ClipboardTransferMode.html"
+		},
+		"openfl.display.AVM1Movie": {
+			"name": "AVM1Movie",
+			"path": "openfl.display.AVM1Movie",
+			"description": "AVM1Movie is a simple class that represents AVM1 movie clips, which use\nActionScript 1.0 or 2.0. (AVM1 is the ActionScript virtual machine used\nto run ActionScript 1.0 and 2.0. AVM2 is the ActionScript virtual machine\nused to run ActionScript 3.0.) When a Flash Player 8, or older, SWF file\nis loaded by a Loader object, an AVM1Movie object is created. The AVM1Movie\nobject can use methods and properties inherited from the DisplayObject\nclass (such as x, y, width, and so on). However, no interoperability\n(such as calling methods or using parameters) between the AVM1Movie object\nand AVM2 objects is allowed.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/AVM1Movie.html"
+		},
+		"openfl.display.Application": {
+			"name": "Application",
+			"path": "openfl.display.Application",
+			"description": "The Application class is a Lime Application instance that uses\nOpenFL Window by default when a new window is created.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Application.html"
+		},
+		"openfl.display.Bitmap": {
+			"name": "Bitmap",
+			"path": "openfl.display.Bitmap",
+			"description": "The Bitmap class represents display objects that represent bitmap images.\nThese can be images that you load with the openfl.Assets or\nopenfl.display.Loader classes, or they can be images that you\ncreate with the Bitmap() constructor.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Bitmap.html"
+		},
+		"openfl.display.BitmapData": {
+			"name": "BitmapData",
+			"path": "openfl.display.BitmapData",
+			"description": "The BitmapData class lets you work with the data (pixels) of a Bitmap\nobject. You can use the methods of the BitmapData class to create\narbitrarily sized transparent or opaque bitmap images and manipulate them\nin various ways at runtime. You can also access the BitmapData for a bitmap\nimage that you load with the openfl.Assets or\nopenfl.display.Loader classes.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/BitmapData.html"
+		},
+		"openfl.display.CairoRenderer": {
+			"name": "CairoRenderer",
+			"path": "openfl.display.CairoRenderer",
+			"description": "BETA**",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/CairoRenderer.html"
+		},
+		"openfl.display.CanvasRenderer": {
+			"name": "CanvasRenderer",
+			"path": "openfl.display.CanvasRenderer",
+			"description": "BETA**",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/CanvasRenderer.html"
+		},
+		"openfl.display.DOMElement": {
+			"name": "DOMElement",
+			"path": "openfl.display.DOMElement",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/DOMElement.html"
+		},
+		"openfl.display.DOMRenderer": {
+			"name": "DOMRenderer",
+			"path": "openfl.display.DOMRenderer",
+			"description": "BETA**",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/DOMRenderer.html"
+		},
+		"openfl.display.DisplayObject": {
+			"name": "DisplayObject",
+			"path": "openfl.display.DisplayObject",
+			"description": "The DisplayObject class is the base class for all objects that can be\nplaced on the display list. The display list manages all objects displayed\nin openfl. Use the DisplayObjectContainer class to arrange the\ndisplay objects in the display list. DisplayObjectContainer objects can\nhave child display objects, while other display objects, such as Shape and\nTextField objects, are \"leaf\" nodes that have only parents and siblings, no\nchildren.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/DisplayObject.html"
+		},
+		"openfl.display.DisplayObjectContainer": {
+			"name": "DisplayObjectContainer",
+			"path": "openfl.display.DisplayObjectContainer",
+			"description": "The DisplayObjectContainer class is the base class for all objects that can\nserve as display object containers on the display list. The display list\nmanages all objects displayed in the Flash runtimes. Use the\nDisplayObjectContainer class to arrange the display objects in the display\nlist. Each DisplayObjectContainer object has its own child list for\norganizing the z-order of the objects. The z-order is the front-to-back\norder that determines which object is drawn in front, which is behind, and\nso on.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/DisplayObjectContainer.html"
+		},
+		"openfl.display.DisplayObjectRenderer": {
+			"name": "DisplayObjectRenderer",
+			"path": "openfl.display.DisplayObjectRenderer",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/DisplayObjectRenderer.html"
+		},
+		"openfl.display.DisplayObjectShader": {
+			"name": "DisplayObjectShader",
+			"path": "openfl.display.DisplayObjectShader",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/DisplayObjectShader.html"
+		},
+		"openfl.display.FPS": {
+			"name": "FPS",
+			"path": "openfl.display.FPS",
+			"description": "The FPS class provides an easy-to-use monitor to display\nthe current frame rate of an OpenFL project",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/FPS.html"
+		},
+		"openfl.display.FrameLabel": {
+			"name": "FrameLabel",
+			"path": "openfl.display.FrameLabel",
+			"description": "The FrameLabel object contains properties that specify a frame number and\nthe corresponding label name. The Scene class includes a labels\nproperty, which is an array of FrameLabel objects for the scene.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/FrameLabel.html"
+		},
+		"openfl.display.FrameScript": {
+			"name": "FrameScript",
+			"path": "openfl.display.FrameScript",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/FrameScript.html"
+		},
+		"openfl.display.Graphics": {
+			"name": "Graphics",
+			"path": "openfl.display.Graphics",
+			"description": "The Graphics class contains a set of methods that you can use to create a\nvector shape. Display objects that support drawing include Sprite and Shape\nobjects. Each of these classes includes a graphics property\nthat is a Graphics object. The following are among those helper functions\nprovided for ease of use: drawRect(),\ndrawRoundRect(), drawCircle(), and\ndrawEllipse().",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Graphics.html"
+		},
+		"openfl.display.GraphicsBitmapFill": {
+			"name": "GraphicsBitmapFill",
+			"path": "openfl.display.GraphicsBitmapFill",
+			"description": "Defines a bitmap fill. The bitmap can be smoothed, repeated or tiled to\nfill the area; or manipulated using a transformation matrix.\nUse a GraphicsBitmapFill object with the Graphics.drawGraphicsData()\nmethod. Drawing a GraphicsBitmapFill object is the equivalent of calling\nthe Graphics.beginBitmapFill() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsBitmapFill.html"
+		},
+		"openfl.display.GraphicsEndFill": {
+			"name": "GraphicsEndFill",
+			"path": "openfl.display.GraphicsEndFill",
+			"description": "Indicates the end of a graphics fill. Use a GraphicsEndFill object with the\nGraphics.drawGraphicsData() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsEndFill.html"
+		},
+		"openfl.display.GraphicsGradientFill": {
+			"name": "GraphicsGradientFill",
+			"path": "openfl.display.GraphicsGradientFill",
+			"description": "Defines a gradient fill.\nUse a GraphicsGradientFill object with the Graphics.drawGraphicsData()\nmethod. Drawing a GraphicsGradientFill object is the equivalent of calling\nthe Graphics.beginGradientFill() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsGradientFill.html"
+		},
+		"openfl.display.GraphicsPath": {
+			"name": "GraphicsPath",
+			"path": "openfl.display.GraphicsPath",
+			"description": "A collection of drawing commands and the coordinate parameters for those\ncommands.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsPath.html"
+		},
+		"openfl.display.GraphicsQuadPath": {
+			"name": "GraphicsQuadPath",
+			"path": "openfl.display.GraphicsQuadPath",
+			"description": "Defines a set of quadrilaterals. This is similar to using GraphicsPath drawRect\nrepeatedly, but each rectangle can use a transform value to rotate, scale or skew\nthe result.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsQuadPath.html"
+		},
+		"openfl.display.GraphicsShader": {
+			"name": "GraphicsShader",
+			"path": "openfl.display.GraphicsShader",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsShader.html"
+		},
+		"openfl.display.GraphicsShaderFill": {
+			"name": "GraphicsShaderFill",
+			"path": "openfl.display.GraphicsShaderFill",
+			"description": "Defines a shader fill.\nUse a GraphicsShaderFill object with the Graphics.drawGraphicsData()\nmethod. Drawing a GraphicsShaderFill object is the equivalent of calling\nthe Graphics.beginShaderFill() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsShaderFill.html"
+		},
+		"openfl.display.GraphicsSolidFill": {
+			"name": "GraphicsSolidFill",
+			"path": "openfl.display.GraphicsSolidFill",
+			"description": "Defines a solid fill.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsSolidFill.html"
+		},
+		"openfl.display.GraphicsStroke": {
+			"name": "GraphicsStroke",
+			"path": "openfl.display.GraphicsStroke",
+			"description": "Defines a line style or stroke.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsStroke.html"
+		},
+		"openfl.display.GraphicsTrianglePath": {
+			"name": "GraphicsTrianglePath",
+			"path": "openfl.display.GraphicsTrianglePath",
+			"description": "Defines an ordered set of triangles that can be rendered using either\n(u,v) fill coordinates or a normal fill. Each triangle in the path is\nrepresented by three sets of (x, y) coordinates, each of which is one\npoint of the triangle.\nThe triangle vertices do not contain z coordinates and do not necessarily\nrepresent 3D faces. However a triangle path can be used to support the\nrendering of 3D geometry in a 2D space.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/GraphicsTrianglePath.html"
+		},
+		"openfl.display.IBitmapDrawable": {
+			"name": "IBitmapDrawable",
+			"path": "openfl.display.IBitmapDrawable",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/IBitmapDrawable.html"
+		},
+		"openfl.display.IGraphicsData": {
+			"name": "IGraphicsData",
+			"path": "openfl.display.IGraphicsData",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/IGraphicsData.html"
+		},
+		"openfl.display.IGraphicsFill": {
+			"name": "IGraphicsFill",
+			"path": "openfl.display.IGraphicsFill",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/IGraphicsFill.html"
+		},
+		"openfl.display.IGraphicsPath": {
+			"name": "IGraphicsPath",
+			"path": "openfl.display.IGraphicsPath",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/IGraphicsPath.html"
+		},
+		"openfl.display.IGraphicsStroke": {
+			"name": "IGraphicsStroke",
+			"path": "openfl.display.IGraphicsStroke",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/IGraphicsStroke.html"
+		},
+		"openfl.display.ITileContainer": {
+			"name": "ITileContainer",
+			"path": "openfl.display.ITileContainer",
+			"description": "ITileContainer is an interface implemented by compatible tile container\nobjects, including the Tilemap and TileContainer classes.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/ITileContainer.html"
+		},
+		"openfl.display.InteractiveObject": {
+			"name": "InteractiveObject",
+			"path": "openfl.display.InteractiveObject",
+			"description": "The InteractiveObject class is the abstract base class for all display\nobjects with which the user can interact, using the mouse, keyboard, or\nother user input device.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/InteractiveObject.html"
+		},
+		"openfl.display.JPEGEncoderOptions": {
+			"name": "JPEGEncoderOptions",
+			"path": "openfl.display.JPEGEncoderOptions",
+			"description": "The JPEGEncoderOptions class defines a compression algorithm for the\nopenfl.display.BitmapData.encode() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/JPEGEncoderOptions.html"
+		},
+		"openfl.display.Loader": {
+			"name": "Loader",
+			"path": "openfl.display.Loader",
+			"description": "The Loader class is used to load SWF files or image (JPG, PNG, or GIF)\nfiles. Use the load() method to initiate loading. The loaded\ndisplay object is added as a child of the Loader object.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Loader.html"
+		},
+		"openfl.display.LoaderInfo": {
+			"name": "LoaderInfo",
+			"path": "openfl.display.LoaderInfo",
+			"description": "The LoaderInfo class provides information about a loaded SWF file or a\nloaded image file(JPEG, GIF, or PNG). LoaderInfo objects are available for\nany display object. The information provided includes load progress, the\nURLs of the loader and loaded content, the number of bytes total for the\nmedia, and the nominal height and width of the media.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/LoaderInfo.html"
+		},
+		"openfl.display.MovieClip": {
+			"name": "MovieClip",
+			"path": "openfl.display.MovieClip",
+			"description": "The MovieClip class inherits from the following classes: Sprite,\nDisplayObjectContainer, InteractiveObject, DisplayObject, and\nEventDispatcher.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/MovieClip.html"
+		},
+		"openfl.display.OpenGLRenderer": {
+			"name": "OpenGLRenderer",
+			"path": "openfl.display.OpenGLRenderer",
+			"description": "BETA**",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/OpenGLRenderer.html"
+		},
+		"openfl.display.PNGEncoderOptions": {
+			"name": "PNGEncoderOptions",
+			"path": "openfl.display.PNGEncoderOptions",
+			"description": "The PNGEncoderOptions class defines a compression algorithm for the\nopenfl.display.BitmapData.encode() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/PNGEncoderOptions.html"
+		},
+		"openfl.display.Preloader": {
+			"name": "Preloader",
+			"path": "openfl.display.Preloader",
+			"description": "The Preloader class is a Lime Preloader instance that uses an OpenFL\ndisplay object to display loading progress.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Preloader.html"
+		},
+		"openfl.display.Scene": {
+			"name": "Scene",
+			"path": "openfl.display.Scene",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Scene.html"
+		},
+		"openfl.display.Shader": {
+			"name": "Shader",
+			"path": "openfl.display.Shader",
+			"description": "// TODO: Document GLSL Shaders\nA Shader instance represents a Pixel Bender shader kernel in ActionScript.\nTo use a shader in your application, you create a Shader instance for it.\nYou then use that Shader instance in the appropriate way according to the\neffect you want to create. For example, to use the shader as a filter, you\nassign the Shader instance to the shader property of a ShaderFilter\nobject.\nA shader defines a function that executes on all the pixels in an image,\none pixel at a time. The result of each call to the function is the output\ncolor at that pixel coordinate in the image. A shader can specify one or\nmore input images, which are images whose content can be used in\ndetermining the output of the function. A shader can also specify one or\nmore parameters, which are input values that can be used in calculating\nthe function output. In a single shader execution, the input and parameter\nvalues are constant. The only thing that varies is the coordinate of the\npixel whose color is the function result. Shader function calls for\nmultiple output pixel coordinates execute in parallel to improve shader\nexecution performance.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Shader.html"
+		},
+		"openfl.display.ShaderJob": {
+			"name": "ShaderJob",
+			"path": "openfl.display.ShaderJob",
+			"description": "// TODO: Document GLSL Shaders\nA ShaderJob instance is used to execute a shader operation in stand-alone\nmode. The shader operation executes and returns its result data. It is up\nto the developer to determine how to use the result.\nThere are two primary reasons for using a shader in stand-alone mode:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/ShaderJob.html"
+		},
+		"openfl.display.ShaderParameter": {
+			"name": "ShaderParameter",
+			"path": "openfl.display.ShaderParameter",
+			"description": "TODO: Document GLSL Shaders",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/ShaderParameter.html"
+		},
+		"openfl.display.Shape": {
+			"name": "Shape",
+			"path": "openfl.display.Shape",
+			"description": "This class is used to create lightweight shapes using the ActionScript\ndrawing application program interface(API). The Shape class includes a\ngraphics property, which lets you access methods from the\nGraphics class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Shape.html"
+		},
+		"openfl.display.SimpleButton": {
+			"name": "SimpleButton",
+			"path": "openfl.display.SimpleButton",
+			"description": "The SimpleButton class lets you control all instances of button symbols in\na SWF file.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/SimpleButton.html"
+		},
+		"openfl.display.Sprite": {
+			"name": "Sprite",
+			"path": "openfl.display.Sprite",
+			"description": "The Sprite class is a basic display list building block: a display list\nnode that can display graphics and can also contain children.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Sprite.html"
+		},
+		"openfl.display.Stage": {
+			"name": "Stage",
+			"path": "openfl.display.Stage",
+			"description": "The Stage class represents the main drawing area.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Stage.html"
+		},
+		"openfl.display.Stage3D": {
+			"name": "Stage3D",
+			"path": "openfl.display.Stage3D",
+			"description": "The Stage class represents the main drawing area.\nFor SWF content running in the browser (in Flash® Player), the\nStage represents the entire area where Flash content is shown. For content\nrunning in AIR on desktop operating systems, each NativeWindow object has\na corresponding Stage object.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Stage3D.html"
+		},
+		"openfl.display.Tile": {
+			"name": "Tile",
+			"path": "openfl.display.Tile",
+			"description": "The Tile class is the base class for all objects that can be contained in a\nITileContainer object. Use the Tilemap or TileContainer class to arrange the tile\nobjects in the tile list. Tilemap or TileContainer objects can contain tile'\nobjects, while other the Tile class is a \"leaf\" node that have only parents and\nsiblings, no children.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Tile.html"
+		},
+		"openfl.display.TileContainer": {
+			"name": "TileContainer",
+			"path": "openfl.display.TileContainer",
+			"description": "The TileContainer type is a special kind of Tile that can hold\nother tiles within it.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/TileContainer.html"
+		},
+		"openfl.display.Tilemap": {
+			"name": "Tilemap",
+			"path": "openfl.display.Tilemap",
+			"description": "The Tilemap class represents a \"quad batch\", or series of objects that are\nrendered from the same bitmap. The Tilemap class is designed to encourage\nthe use of a single Tileset reference for best performance, but it is possible\nto use unique Tileset references for each Tile or TileContainer within a\nTilemap.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Tilemap.html"
+		},
+		"openfl.display.Tileset": {
+			"name": "Tileset",
+			"path": "openfl.display.Tileset",
+			"description": "The Tileset class lets you specify logical rectangles within a larger\nBitmapData object, to be rendered using a Tilemap instance.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Tileset.html"
+		},
+		"openfl.display.Timeline": {
+			"name": "Timeline",
+			"path": "openfl.display.Timeline",
+			"description": "Provides support for MovieClip animations (or a single frame Sprite) when\nthis class is overridden.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Timeline.html"
+		},
+		"openfl.display.Window": {
+			"name": "Window",
+			"path": "openfl.display.Window",
+			"description": "The Window class is a Lime Window instance that automatically\ninitializes an OpenFL stage for the current window.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display/Window.html"
+		},
+		"openfl.display.BitmapDataChannel": {
+			"name": "BitmapDataChannel",
+			"path": "openfl.display.BitmapDataChannel",
+			"description": "The BitmapDataChannel class is an enumeration of constant values that\nindicate which channel to use: red, blue, green, or alpha transparency.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/BitmapDataChannel.html"
+		},
+		"openfl.display.BlendMode": {
+			"name": "BlendMode",
+			"path": "openfl.display.BlendMode",
+			"description": "A class that provides constant values for visual blend mode effects. These\nconstants are used in the following:",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/BlendMode.html"
+		},
+		"openfl.display.CapsStyle": {
+			"name": "CapsStyle",
+			"path": "openfl.display.CapsStyle",
+			"description": "The CapsStyle class is an enumeration of constant values that specify the\ncaps style to use in drawing lines. The constants are provided for use as\nvalues in the caps parameter of the\nopenfl.display.Graphics.lineStyle() method. You can specify the\nfollowing three types of caps:",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/CapsStyle.html"
+		},
+		"openfl.display.ChildAccess": {
+			"name": "ChildAccess",
+			"path": "openfl.display.ChildAccess",
+			"description": "The ChildAccess abstract simplifies access to nested DisplayObjects. Although\nperformance may be somewhat slower than using direct references, this is especially\nuseful when setting up a UI or performing non-intensive tasks.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/ChildAccess.html"
+		},
+		"openfl.display.GradientType": {
+			"name": "GradientType",
+			"path": "openfl.display.GradientType",
+			"description": "The GradientType class provides values for the type parameter\nin the beginGradientFill() and\nlineGradientStyle() methods of the openfl.display.Graphics\nclass.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/GradientType.html"
+		},
+		"openfl.display.GraphicsPathCommand": {
+			"name": "GraphicsPathCommand",
+			"path": "openfl.display.GraphicsPathCommand",
+			"description": "Defines the values to use for specifying path-drawing commands.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/GraphicsPathCommand.html"
+		},
+		"openfl.display.GraphicsPathWinding": {
+			"name": "GraphicsPathWinding",
+			"path": "openfl.display.GraphicsPathWinding",
+			"description": "The GraphicsPathWinding class provides values for the\nopenfl.display.GraphicsPath.winding property and the\nopenfl.display.Graphics.drawPath() method to determine the\ndirection to draw a path. A clockwise path is positively wound, and a\ncounter-clockwise path is negatively wound:",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/GraphicsPathWinding.html"
+		},
+		"openfl.display.InterpolationMethod": {
+			"name": "InterpolationMethod",
+			"path": "openfl.display.InterpolationMethod",
+			"description": "The InterpolationMethod class provides values for the\ninterpolationMethod parameter in the\nGraphics.beginGradientFill() and\nGraphics.lineGradientStyle() methods. This parameter\ndetermines the RGB space to use when rendering the gradient.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/InterpolationMethod.html"
+		},
+		"openfl.display.JointStyle": {
+			"name": "JointStyle",
+			"path": "openfl.display.JointStyle",
+			"description": "The JointStyle class is an enumeration of constant values that specify the\njoint style to use in drawing lines. These constants are provided for use\nas values in the joints parameter of the\nopenfl.display.Graphics.lineStyle() method. The method supports\nthree types of joints: miter, round, and bevel, as the following example\nshows:",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/JointStyle.html"
+		},
+		"openfl.display.LineScaleMode": {
+			"name": "LineScaleMode",
+			"path": "openfl.display.LineScaleMode",
+			"description": "The LineScaleMode class provides values for the scaleMode\nparameter in the Graphics.lineStyle() method.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/LineScaleMode.html"
+		},
+		"openfl.display.PixelSnapping": {
+			"name": "PixelSnapping",
+			"path": "openfl.display.PixelSnapping",
+			"description": "The PixelSnapping class is an enumeration of constant values for setting\nthe pixel snapping options by using the pixelSnapping property\nof a Bitmap object.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/PixelSnapping.html"
+		},
+		"openfl.display.ShaderData": {
+			"name": "ShaderData",
+			"path": "openfl.display.ShaderData",
+			"description": "// TODO: Document GLSL Shaders\nA ShaderData object contains properties representing any parameters and\ninputs for a shader kernel, as well as properties containing any metadata\nspecified for the shader.\nThese properties are added to the ShaderData object when it is created.\nThe properties' names match the names specified in the shader's source\ncode. The data type of each property varies according to what aspect of\nthe shader the property represents. The properties that represent shader\nparameters are ShaderParameter instances, the properties that represent\ninput images are ShaderInput instances, and the properties that represent\nshader metadata are instances of the ActionScript class corresponding to\ntheir data type (for example, a String instance for textual metadata and a\nuint for uint metadata).",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/ShaderData.html"
+		},
+		"openfl.display.ShaderParameterType": {
+			"name": "ShaderParameterType",
+			"path": "openfl.display.ShaderParameterType",
+			"description": "This class defines the constants that represent the possible values for\nthe ShaderParameter class's type property. Each constant represents one\nof the data types available in Flash Player for parameters in the Pixel\nBender shader language.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/ShaderParameterType.html"
+		},
+		"openfl.display.ShaderPrecision": {
+			"name": "ShaderPrecision",
+			"path": "openfl.display.ShaderPrecision",
+			"description": "This class defines the constants that represent the possible values for\nthe Shader class's precisionHint property. Each constant represents one\nof the precision modes for executing shader operations.\nThe precision mode selection affects the following shader operations.\nThese operations are faster on an Intel processor with the SSE instruction\nset:",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/ShaderPrecision.html"
+		},
+		"openfl.display.SpreadMethod": {
+			"name": "SpreadMethod",
+			"path": "openfl.display.SpreadMethod",
+			"description": "The SpreadMethod class provides values for the spreadMethod\nparameter in the beginGradientFill() and\nlineGradientStyle() methods of the Graphics class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/SpreadMethod.html"
+		},
+		"openfl.display.StageAlign": {
+			"name": "StageAlign",
+			"path": "openfl.display.StageAlign",
+			"description": "The StageAlign class provides constant values to use for the\nStage.align property.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/StageAlign.html"
+		},
+		"openfl.display.StageDisplayState": {
+			"name": "StageDisplayState",
+			"path": "openfl.display.StageDisplayState",
+			"description": "The StageDisplayState class provides values for the\nStage.displayState property.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/StageDisplayState.html"
+		},
+		"openfl.display.StageQuality": {
+			"name": "StageQuality",
+			"path": "openfl.display.StageQuality",
+			"description": "The StageQuality class provides values for the Stage.quality\nproperty.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/StageQuality.html"
+		},
+		"openfl.display.StageScaleMode": {
+			"name": "StageScaleMode",
+			"path": "openfl.display.StageScaleMode",
+			"description": "The StageScaleMode class provides values for the\nStage.scaleMode property.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/StageScaleMode.html"
+		},
+		"openfl.display.TriangleCulling": {
+			"name": "TriangleCulling",
+			"path": "openfl.display.TriangleCulling",
+			"description": "Defines codes for culling algorithms that determine which triangles not to\nrender when drawing triangle paths.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display/TriangleCulling.html"
+		},
+		"openfl.display3D.Context3D": {
+			"name": "Context3D",
+			"path": "openfl.display3D.Context3D",
+			"description": "The Context3D class provides a context for rendering geometrically defined graphics.\nA rendering context includes a drawing surface and its associated resources and\nstate. When possible, the rendering context uses the hardware graphics processing\nunit (GPU). Otherwise, the rendering context uses software. (If rendering through\nContext3D is not supported on a platform, the stage3Ds property of the Stage object\ncontains an empty list.)",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/Context3D.html"
+		},
+		"openfl.display3D.IndexBuffer3D": {
+			"name": "IndexBuffer3D",
+			"path": "openfl.display3D.IndexBuffer3D",
+			"description": "IndexBuffer3D is used to represent lists of vertex indices comprising graphic elements\nretained by the graphics subsystem.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/IndexBuffer3D.html"
+		},
+		"openfl.display3D.Program3D": {
+			"name": "Program3D",
+			"path": "openfl.display3D.Program3D",
+			"description": "The Program3D class represents a pair of rendering programs (also called \"shaders\")\nuploaded to the rendering context.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/Program3D.html"
+		},
+		"openfl.display3D.VertexBuffer3D": {
+			"name": "VertexBuffer3D",
+			"path": "openfl.display3D.VertexBuffer3D",
+			"description": "The VertexBuffer3D class represents a set of vertex data uploaded to a rendering context.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/VertexBuffer3D.html"
+		},
+		"openfl.display3D.Context3DBlendFactor": {
+			"name": "Context3DBlendFactor",
+			"path": "openfl.display3D.Context3DBlendFactor",
+			"description": "Defines the values to use for specifying the source and destination blend factors.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DBlendFactor.html"
+		},
+		"openfl.display3D.Context3DBufferUsage": {
+			"name": "Context3DBufferUsage",
+			"path": "openfl.display3D.Context3DBufferUsage",
+			"description": "Defines the values to use for specifying the buffer usage type.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DBufferUsage.html"
+		},
+		"openfl.display3D.Context3DClearMask": {
+			"name": "Context3DClearMask",
+			"path": "openfl.display3D.Context3DClearMask",
+			"description": "Defines the values to use for specifying Context3D clear masks.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DClearMask.html"
+		},
+		"openfl.display3D.Context3DCompareMode": {
+			"name": "Context3DCompareMode",
+			"path": "openfl.display3D.Context3DCompareMode",
+			"description": "Defines the values to use for specifying 3D buffer comparisons in the\nsetDepthTest() and setStencilAction() methods of a Context3D instance.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DCompareMode.html"
+		},
+		"openfl.display3D.Context3DMipFilter": {
+			"name": "Context3DMipFilter",
+			"path": "openfl.display3D.Context3DMipFilter",
+			"description": "Defines the values to use for sampler mipmap filter mode",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DMipFilter.html"
+		},
+		"openfl.display3D.Context3DProfile": {
+			"name": "Context3DProfile",
+			"path": "openfl.display3D.Context3DProfile",
+			"description": "Defines the values to use for specifying the Context3D profile.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DProfile.html"
+		},
+		"openfl.display3D.Context3DProgramFormat": {
+			"name": "Context3DProgramFormat",
+			"path": "openfl.display3D.Context3DProgramFormat",
+			"description": "Defines the values to use for specifying a Program3D source format.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DProgramFormat.html"
+		},
+		"openfl.display3D.Context3DProgramType": {
+			"name": "Context3DProgramType",
+			"path": "openfl.display3D.Context3DProgramType",
+			"description": "Defines the values to use for specifying whether a shader program is a fragment\nor a vertex program.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DProgramType.html"
+		},
+		"openfl.display3D.Context3DRenderMode": {
+			"name": "Context3DRenderMode",
+			"path": "openfl.display3D.Context3DRenderMode",
+			"description": "Defines the values to use for specifying the Context3D render mode.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DRenderMode.html"
+		},
+		"openfl.display3D.Context3DStencilAction": {
+			"name": "Context3DStencilAction",
+			"path": "openfl.display3D.Context3DStencilAction",
+			"description": "Defines the values to use for specifying stencil actions.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DStencilAction.html"
+		},
+		"openfl.display3D.Context3DTextureFilter": {
+			"name": "Context3DTextureFilter",
+			"path": "openfl.display3D.Context3DTextureFilter",
+			"description": "Defines the values to use for sampler filter mode.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DTextureFilter.html"
+		},
+		"openfl.display3D.Context3DTextureFormat": {
+			"name": "Context3DTextureFormat",
+			"path": "openfl.display3D.Context3DTextureFormat",
+			"description": "Defines the values to use for specifying a texture format.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DTextureFormat.html"
+		},
+		"openfl.display3D.Context3DTriangleFace": {
+			"name": "Context3DTriangleFace",
+			"path": "openfl.display3D.Context3DTriangleFace",
+			"description": "Constants to specify the orientation of a triangle relative to the view point.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DTriangleFace.html"
+		},
+		"openfl.display3D.Context3DVertexBufferFormat": {
+			"name": "Context3DVertexBufferFormat",
+			"path": "openfl.display3D.Context3DVertexBufferFormat",
+			"description": "Defines the values to use for specifying vertex buffers.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DVertexBufferFormat.html"
+		},
+		"openfl.display3D.Context3DWrapMode": {
+			"name": "Context3DWrapMode",
+			"path": "openfl.display3D.Context3DWrapMode",
+			"description": "Defines the values to use for sampler wrap mode",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/display3D/Context3DWrapMode.html"
+		},
+		"openfl.errors.ArgumentError": {
+			"name": "ArgumentError",
+			"path": "openfl.errors.ArgumentError",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/ArgumentError.html"
+		},
+		"openfl.errors.EOFError": {
+			"name": "EOFError",
+			"path": "openfl.errors.EOFError",
+			"description": "An EOFError exception is thrown when you attempt to read past the end of\nthe available data. For example, an EOFError is thrown when one of the read\nmethods in the IDataInput interface is called and there is insufficient\ndata to satisfy the read request.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/EOFError.html"
+		},
+		"openfl.errors.Error": {
+			"name": "Error",
+			"path": "openfl.errors.Error",
+			"description": "The Error class contains information about an error that occurred in a script. In\ndeveloping ActionScript 3.0 applications, when you run your compiled code in the\ndebugger version of a Flash runtime, a dialog box displays exceptions of type Error,\nor of a subclass, to help you troubleshoot the code. You create an Error object by\nusing the Error constructor function. Typically, you throw a new Error object from\nwithin a try code block that is caught by a catch code block.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/Error.html"
+		},
+		"openfl.errors.IOError": {
+			"name": "IOError",
+			"path": "openfl.errors.IOError",
+			"description": "The IOError exception is thrown when some type of input or output failure\noccurs. For example, an IOError exception is thrown if a read/write\noperation is attempted on a socket that has not connected or that has\nbecome disconnected.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/IOError.html"
+		},
+		"openfl.errors.IllegalOperationError": {
+			"name": "IllegalOperationError",
+			"path": "openfl.errors.IllegalOperationError",
+			"description": "The IllegalOperationError exception is thrown when a method is not\nimplemented or the implementation doesn't cover the current usage.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/IllegalOperationError.html"
+		},
+		"openfl.errors.RangeError": {
+			"name": "RangeError",
+			"path": "openfl.errors.RangeError",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/RangeError.html"
+		},
+		"openfl.errors.SecurityError": {
+			"name": "SecurityError",
+			"path": "openfl.errors.SecurityError",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/SecurityError.html"
+		},
+		"openfl.errors.TypeError": {
+			"name": "TypeError",
+			"path": "openfl.errors.TypeError",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/errors/TypeError.html"
+		},
+		"openfl.events.AccelerometerEvent": {
+			"name": "AccelerometerEvent",
+			"path": "openfl.events.AccelerometerEvent",
+			"description": "The Accelerometer class dispatches AccelerometerEvent objects when\nacceleration updates are obtained from the Accelerometer sensor installed\non the device.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/AccelerometerEvent.html"
+		},
+		"openfl.events.ActivityEvent": {
+			"name": "ActivityEvent",
+			"path": "openfl.events.ActivityEvent",
+			"description": "A Camera or Microphone object dispatches an ActivityEvent object whenever\na camera or microphone reports that it has become active or inactive.\nThere is only one type of activity event: ActivityEvent.ACTIVITY.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/ActivityEvent.html"
+		},
+		"openfl.events.AsyncErrorEvent": {
+			"name": "AsyncErrorEvent",
+			"path": "openfl.events.AsyncErrorEvent",
+			"description": "An object dispatches an AsyncErrorEvent when an exception is thrown from\nnative asynchronous code, which could be from, for example,\nLocalConnection, NetConnection, SharedObject, or NetStream. There is only\none type of asynchronous error event: AsyncErrorEvent.ASYNC_ERROR.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/AsyncErrorEvent.html"
+		},
+		"openfl.events.DataEvent": {
+			"name": "DataEvent",
+			"path": "openfl.events.DataEvent",
+			"description": "An object dispatches a DataEvent object when raw data has completed\nloading. There are two types of data event:\n DataEvent.DATA: dispatched for data sent or received.\n DataEvent.UPLOAD_COMPLETE_DATA: dispatched when data is sent and the\nserver has responded.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/DataEvent.html"
+		},
+		"openfl.events.DatagramSocketDataEvent": {
+			"name": "DatagramSocketDataEvent",
+			"path": "openfl.events.DatagramSocketDataEvent",
+			"description": "A DatagramSocketDataEvent object is dispatched when Datagram socket has received data.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/DatagramSocketDataEvent.html"
+		},
+		"openfl.events.ErrorEvent": {
+			"name": "ErrorEvent",
+			"path": "openfl.events.ErrorEvent",
+			"description": "An object dispatches an ErrorEvent object when an error causes an\nasynchronous operation to fail.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/ErrorEvent.html"
+		},
+		"openfl.events.Event": {
+			"name": "Event",
+			"path": "openfl.events.Event",
+			"description": "The Event class is used as the base class for the creation of Event\nobjects, which are passed as parameters to event listeners when an event\noccurs.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/Event.html"
+		},
+		"openfl.events.EventDispatcher": {
+			"name": "EventDispatcher",
+			"path": "openfl.events.EventDispatcher",
+			"description": "The EventDispatcher class is the base class for all classes that dispatch\nevents. The EventDispatcher class implements the IEventDispatcher interface\nand is the base class for the DisplayObject class. The EventDispatcher\nclass allows any object on the display list to be an event target and as\nsuch, to use the methods of the IEventDispatcher interface.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/EventDispatcher.html"
+		},
+		"openfl.events.FileListEvent": {
+			"name": "FileListEvent",
+			"path": "openfl.events.FileListEvent",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/FileListEvent.html"
+		},
+		"openfl.events.FocusEvent": {
+			"name": "FocusEvent",
+			"path": "openfl.events.FocusEvent",
+			"description": "An object dispatches a FocusEvent object when the user changes the focus\nfrom one object in the display list to another. There are four types of\nfocus events:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/FocusEvent.html"
+		},
+		"openfl.events.FullScreenEvent": {
+			"name": "FullScreenEvent",
+			"path": "openfl.events.FullScreenEvent",
+			"description": "The Stage object dispatches a FullScreenEvent object whenever the Stage\nenters or leaves full-screen display mode. There is only one type of\nfullScreen event: FullScreenEvent.FULL_SCREEN.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/FullScreenEvent.html"
+		},
+		"openfl.events.GameInputEvent": {
+			"name": "GameInputEvent",
+			"path": "openfl.events.GameInputEvent",
+			"description": "The GameInputEvent class represents an event that is dispatched when a game input device has either been added or removed from the application platform. A game input device also dispatches events when it is turned on or off.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/GameInputEvent.html"
+		},
+		"openfl.events.HTTPStatusEvent": {
+			"name": "HTTPStatusEvent",
+			"path": "openfl.events.HTTPStatusEvent",
+			"description": "The application dispatches HTTPStatusEvent objects when a network request\nreturns an HTTP status code.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/HTTPStatusEvent.html"
+		},
+		"openfl.events.IEventDispatcher": {
+			"name": "IEventDispatcher",
+			"path": "openfl.events.IEventDispatcher",
+			"description": "The IEventDispatcher interface defines methods for adding or removing event listeners,\nchecks whether specific types of event listeners are registered, and dispatches events.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/IEventDispatcher.html"
+		},
+		"openfl.events.IOErrorEvent": {
+			"name": "IOErrorEvent",
+			"path": "openfl.events.IOErrorEvent",
+			"description": "An IOErrorEvent object is dispatched when an error causes input or output\noperations to fail.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/IOErrorEvent.html"
+		},
+		"openfl.events.KeyboardEvent": {
+			"name": "KeyboardEvent",
+			"path": "openfl.events.KeyboardEvent",
+			"description": "A KeyboardEvent object id dispatched in response to user input through a\nkeyboard. There are two types of keyboard events:\nKeyboardEvent.KEY_DOWN and KeyboardEvent.KEY_UP",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/KeyboardEvent.html"
+		},
+		"openfl.events.MouseEvent": {
+			"name": "MouseEvent",
+			"path": "openfl.events.MouseEvent",
+			"description": "A MouseEvent object is dispatched into the event flow whenever mouse events\noccur. A mouse event is usually generated by a user input device, such as a\nmouse or a trackball, that uses a pointer.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/MouseEvent.html"
+		},
+		"openfl.events.NativeProcessExitEvent": {
+			"name": "NativeProcessExitEvent",
+			"path": "openfl.events.NativeProcessExitEvent",
+			"description": "This event is dispatched by the NativeProcess object when the process exits.\nIt is possible that this event will never be dispatched. For example, if the\nchild process outlives the OpenFL application that created it, the event\nwill not dispatch.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/NativeProcessExitEvent.html"
+		},
+		"openfl.events.NetStatusEvent": {
+			"name": "NetStatusEvent",
+			"path": "openfl.events.NetStatusEvent",
+			"description": "A NetConnection, NetStream, or SharedObject object dispatches\nNetStatusEvent objects when a it reports its status. There is only one\ntype of status event: NetStatusEvent.NET_STATUS.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/NetStatusEvent.html"
+		},
+		"openfl.events.OutputProgressEvent": {
+			"name": "OutputProgressEvent",
+			"path": "openfl.events.OutputProgressEvent",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/OutputProgressEvent.html"
+		},
+		"openfl.events.ProgressEvent": {
+			"name": "ProgressEvent",
+			"path": "openfl.events.ProgressEvent",
+			"description": "A ProgressEvent object is dispatched when a load operation has begun or a\nsocket has received data. These events are usually generated when SWF\nfiles, images or data are loaded into an application. There are two types\nof progress events: ProgressEvent.PROGRESS and\nProgressEvent.SOCKET_DATA. Additionally, in AIR ProgressEvent\nobjects are dispatched when a data is sent to or from a child process using\nthe NativeProcess class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/ProgressEvent.html"
+		},
+		"openfl.events.RenderEvent": {
+			"name": "RenderEvent",
+			"path": "openfl.events.RenderEvent",
+			"description": "BETA**",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/RenderEvent.html"
+		},
+		"openfl.events.SampleDataEvent": {
+			"name": "SampleDataEvent",
+			"path": "openfl.events.SampleDataEvent",
+			"description": "Dispatched when a Sound object requests new audio data or when a\nMicrophone object has new audio data to provide.\nThis event has two uses:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/SampleDataEvent.html"
+		},
+		"openfl.events.SecurityErrorEvent": {
+			"name": "SecurityErrorEvent",
+			"path": "openfl.events.SecurityErrorEvent",
+			"description": "An object dispatches a SecurityErrorEvent object to report the occurrence\nof a security error. Security errors reported through this class are\ngenerally from asynchronous operations, such as loading data, in which\nsecurity violations may not manifest immediately. Your event listener can\naccess the object's text property to determine what operation\nwas attempted and any URLs that were involved. If there are no event\nlisteners, the debugger version of Flash Player or the AIR Debug Launcher\n(ADL) application automatically displays an error message that contains the\ncontents of the text property. There is one type of security\nerror event: SecurityErrorEvent.SECURITY_ERROR.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/SecurityErrorEvent.html"
+		},
+		"openfl.events.ServerSocketConnectEvent": {
+			"name": "ServerSocketConnectEvent",
+			"path": "openfl.events.ServerSocketConnectEvent",
+			"description": "A ServerSocket object dispatches a ServerSocketConnectEvent object when a client attempts to\nconnect to the server socket.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/ServerSocketConnectEvent.html"
+		},
+		"openfl.events.TextEvent": {
+			"name": "TextEvent",
+			"path": "openfl.events.TextEvent",
+			"description": "An object dispatches a TextEvent object when a user enters text in a text\nfield or clicks a hyperlink in an HTML-enabled text field. There are two\ntypes of text events: TextEvent.LINK and\nTextEvent.TEXT_INPUT.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/TextEvent.html"
+		},
+		"openfl.events.TimerEvent": {
+			"name": "TimerEvent",
+			"path": "openfl.events.TimerEvent",
+			"description": "A Timer object dispatches a TimerEvent objects whenever the Timer object\nreaches the interval specified by the Timer.delay property.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/TimerEvent.html"
+		},
+		"openfl.events.TouchEvent": {
+			"name": "TouchEvent",
+			"path": "openfl.events.TouchEvent",
+			"description": "The TouchEvent class lets you handle events on devices that detect user\ncontact with the device(such as a finger on a touch screen). When a user\ninteracts with a device such as a mobile phone or tablet with a touch\nscreen, the user typically touches the screen with his or her fingers or a\npointing device. You can develop applications that respond to basic touch\nevents(such as a single finger tap) with the TouchEvent class. Create\nevent listeners using the event types defined in this class. For user\ninteraction with multiple points of contact(such as several fingers moving\nacross a touch screen at the same time) use the related GestureEvent,\nPressAndTapGestureEvent, and TransformGestureEvent classes. And, use the\nproperties and methods of these classes to construct event handlers that\nrespond to the user touching the device.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/TouchEvent.html"
+		},
+		"openfl.events.UncaughtErrorEvent": {
+			"name": "UncaughtErrorEvent",
+			"path": "openfl.events.UncaughtErrorEvent",
+			"description": "An UncaughtErrorEvent object is dispatched by an instance of the\nUncaughtErrorEvents class when an uncaught error occurs. An uncaught error\nhappens when an error is thrown outside of any try..catch blocks or when\nan ErrorEvent object is dispatched with no registered listeners. The\nuncaught error event functionality is often described as a \"global error\nhandler.\"\nThe UncaughtErrorEvents object that dispatches the event is associated\nwith either a LoaderInfo object or a Loader object. Use the following\nproperties to access an UncaughtErrorEvents instance:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/UncaughtErrorEvent.html"
+		},
+		"openfl.events.UncaughtErrorEvents": {
+			"name": "UncaughtErrorEvents",
+			"path": "openfl.events.UncaughtErrorEvents",
+			"description": "The UncaughtErrorEvents class provides a way to receive uncaught error\nevents. An instance of this class dispatches an uncaughtError event when\na runtime error occurs and the error isn't detected and handled in your\ncode.\nUse the following properties to access an UncaughtErrorEvents instance:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/UncaughtErrorEvents.html"
+		},
+		"openfl.events.VideoTextureEvent": {
+			"name": "VideoTextureEvent",
+			"path": "openfl.events.VideoTextureEvent",
+			"description": "Almost exactly StageVideoEvent.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/events/VideoTextureEvent.html"
+		},
+		"openfl.events.EventPhase": {
+			"name": "EventPhase",
+			"path": "openfl.events.EventPhase",
+			"description": "The EventPhase class provides values for the eventPhase\nproperty of the Event class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/events/EventPhase.html"
+		},
+		"openfl.events.EventType": {
+			"name": "EventType",
+			"path": "openfl.events.EventType",
+			"description": "The EventType abstract type provides type safety when\nmatching dispatch events with the correct type of listener",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/events/EventType.html"
+		},
+		"openfl.external.ExternalInterface": {
+			"name": "ExternalInterface",
+			"path": "openfl.external.ExternalInterface",
+			"description": "The ExternalInterface class is an application programming interface that\nenables straightforward communication between ActionScript and the SWF\ncontainer� for example, an HTML page with JavaScript or a desktop\napplication that uses Flash Player to display a SWF file.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/external/ExternalInterface.html"
+		},
+		"openfl.filesystem.File": {
+			"name": "File",
+			"path": "openfl.filesystem.File",
+			"description": "A File object represents a path to a file or directory. This can be an existing file\nor directory, or it can be one that does not yet exist; for instance, it can represent\nthe path to a file or directory that you plan to create.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filesystem/File.html"
+		},
+		"openfl.filesystem.FileStream": {
+			"name": "FileStream",
+			"path": "openfl.filesystem.FileStream",
+			"description": "A FileStream object is used to read and write files. Files can be opened synchronously \nby calling the open() method or asynchronously by calling the openAsync() method.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filesystem/FileStream.html"
+		},
+		"openfl.filesystem.FileMode": {
+			"name": "FileMode",
+			"path": "openfl.filesystem.FileMode",
+			"description": "",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/filesystem/FileMode.html"
+		},
+		"openfl.filters.BitmapFilter": {
+			"name": "BitmapFilter",
+			"path": "openfl.filters.BitmapFilter",
+			"description": "The BitmapFilter class is the base class for all image filter effects.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/BitmapFilter.html"
+		},
+		"openfl.filters.BitmapFilterShader": {
+			"name": "BitmapFilterShader",
+			"path": "openfl.filters.BitmapFilterShader",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/BitmapFilterShader.html"
+		},
+		"openfl.filters.BlurFilter": {
+			"name": "BlurFilter",
+			"path": "openfl.filters.BlurFilter",
+			"description": "The BlurFilter class lets you apply a blur visual effect to display\nobjects. A blur effect softens the details of an image. You can produce\nblurs that range from a softly unfocused look to a Gaussian blur, a hazy\nappearance like viewing an image through semi-opaque glass. When the\nquality property of this filter is set to low, the result is a\nsoftly unfocused look. When the quality property is set to\nhigh, it approximates a Gaussian blur filter. You can apply the filter to\nany display object(that is, objects that inherit from the DisplayObject\nclass), such as MovieClip, SimpleButton, TextField, and Video objects, as\nwell as to BitmapData objects.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/BlurFilter.html"
+		},
+		"openfl.filters.ColorMatrixFilter": {
+			"name": "ColorMatrixFilter",
+			"path": "openfl.filters.ColorMatrixFilter",
+			"description": "The ColorMatrixFilter class lets you apply a 4 x 5 matrix transformation\non the RGBA color and alpha values of every pixel in the input image to\nproduce a result with a new set of RGBA color and alpha values. It allows\nsaturation changes, hue rotation, luminance to alpha, and various other\neffects. You can apply the filter to any display object (that is, objects\nthat inherit from the DisplayObject class), such as MovieClip,\nSimpleButton, TextField, and Video objects, as well as to BitmapData\nobjects.\nNote: For RGBA values, the most significant byte represents the red\nchannel value, followed by green, blue, and then alpha.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/ColorMatrixFilter.html"
+		},
+		"openfl.filters.ConvolutionFilter": {
+			"name": "ConvolutionFilter",
+			"path": "openfl.filters.ConvolutionFilter",
+			"description": "The ConvolutionFilter class applies a matrix convolution filter effect. A\nconvolution combines pixels in the input image with neighboring pixels to\nproduce an image. A wide variety of image effects can be achieved through\nconvolutions, including blurring, edge detection, sharpening, embossing,\nand beveling. You can apply the filter to any display object (that is,\nobjects that inherit from the DisplayObject class), such as MovieClip,\nSimpleButton, TextField, and Video objects, as well as to BitmapData\nobjects.\nTo create a convolution filter, use the syntax new ConvolutionFilter().\nThe use of filters depends on the object to which you apply the filter:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/ConvolutionFilter.html"
+		},
+		"openfl.filters.DropShadowFilter": {
+			"name": "DropShadowFilter",
+			"path": "openfl.filters.DropShadowFilter",
+			"description": "The DropShadowFilter class lets you add a drop shadow to display objects.\nThe shadow algorithm is based on the same box filter that the blur filter\nuses. You have several options for the style of the drop shadow, including\ninner or outer shadow and knockout mode. You can apply the filter to any\ndisplay object(that is, objects that inherit from the DisplayObject\nclass), such as MovieClip, SimpleButton, TextField, and Video objects, as\nwell as to BitmapData objects.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/DropShadowFilter.html"
+		},
+		"openfl.filters.GlowFilter": {
+			"name": "GlowFilter",
+			"path": "openfl.filters.GlowFilter",
+			"description": "The GlowFilter class lets you apply a glow effect to display objects. You\nhave several options for the style of the glow, including inner or outer\nglow and knockout mode. The glow filter is similar to the drop shadow\nfilter with the distance and angle properties of\nthe drop shadow filter set to 0. You can apply the filter to any display\nobject(that is, objects that inherit from the DisplayObject class), such\nas MovieClip, SimpleButton, TextField, and Video objects, as well as to\nBitmapData objects.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/GlowFilter.html"
+		},
+		"openfl.filters.ShaderFilter": {
+			"name": "ShaderFilter",
+			"path": "openfl.filters.ShaderFilter",
+			"description": "The ShaderFilter class applies a filter by executing a shader on the\nobject being filtered. The filtered object is used as an input to the\nshader, and the shader output becomes the filter result.\nTo create a new filter, use the constructor new ShaderFilter(). The use\nof filters depends on the object to which you apply the filter:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/filters/ShaderFilter.html"
+		},
+		"openfl.filters.BitmapFilterQuality": {
+			"name": "BitmapFilterQuality",
+			"path": "openfl.filters.BitmapFilterQuality",
+			"description": "The BitmapFilterQuality class contains values to set the rendering quality\nof a BitmapFilter object.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/filters/BitmapFilterQuality.html"
+		},
+		"openfl.filters.BitmapFilterType": {
+			"name": "BitmapFilterType",
+			"path": "openfl.filters.BitmapFilterType",
+			"description": "The BitmapFilterType class contains values to set the type of a\nBitmapFilter.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/filters/BitmapFilterType.html"
+		},
+		"openfl.geom.ColorTransform": {
+			"name": "ColorTransform",
+			"path": "openfl.geom.ColorTransform",
+			"description": "The ColorTransform class lets you adjust the color values in a display\nobject. The color adjustment or color transformation can be applied\nto all four channels: red, green, blue, and alpha transparency.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/ColorTransform.html"
+		},
+		"openfl.geom.Matrix": {
+			"name": "Matrix",
+			"path": "openfl.geom.Matrix",
+			"description": "The Matrix class represents a transformation matrix that determines how to\nmap points from one coordinate space to another. You can perform various\ngraphical transformations on a display object by setting the properties of\na Matrix object, applying that Matrix object to the matrix property of a\nTransform object, and then applying that Transform object as the\ntransform property of the display object. These transformation functions\ninclude translation (x and y repositioning), rotation, scaling, and\nskewing.\nTogether these types of transformations are known as affine\ntransformations. Affine transformations preserve the straightness of\nlines while transforming, so that parallel lines stay parallel.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Matrix.html"
+		},
+		"openfl.geom.Matrix3D": {
+			"name": "Matrix3D",
+			"path": "openfl.geom.Matrix3D",
+			"description": "The Matrix3D class represents a transformation matrix that determines the position and\norientation of a three-dimensional (3D) display object. The matrix can perform\ntransformation functions including translation (repositioning along the x, y, and z\naxes), rotation, and scaling (resizing). The Matrix3D class can also perform\nperspective projection, which maps points from the 3D coordinate space to a\ntwo-dimensional (2D) view.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Matrix3D.html"
+		},
+		"openfl.geom.PerspectiveProjection": {
+			"name": "PerspectiveProjection",
+			"path": "openfl.geom.PerspectiveProjection",
+			"description": "The PerspectiveProjection class provides an easy way to assign or modify the perspective\ntransformations of a display object and all of its children. For more complex or custom\nperspective transformations, use the Matrix3D class. While the PerspectiveProjection class\nprovides basic three-dimensional presentation properties, the Matrix3D class provides more\ndetailed control over the three-dimensional presentation of display objects.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/PerspectiveProjection.html"
+		},
+		"openfl.geom.Point": {
+			"name": "Point",
+			"path": "openfl.geom.Point",
+			"description": "The Point object represents a location in a two-dimensional coordinate\nsystem, where x represents the horizontal axis and y\nrepresents the vertical axis.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Point.html"
+		},
+		"openfl.geom.Rectangle": {
+			"name": "Rectangle",
+			"path": "openfl.geom.Rectangle",
+			"description": "A Rectangle object is an area defined by its position, as indicated by its\ntop-left corner point(x, y) and by its width and its height.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Rectangle.html"
+		},
+		"openfl.geom.Transform": {
+			"name": "Transform",
+			"path": "openfl.geom.Transform",
+			"description": "The Transform class provides access to color adjustment properties and two-\nor three-dimensional transformation objects that can be applied to a\ndisplay object. During the transformation, the color or the orientation and\nposition of a display object is adjusted(offset) from the current values\nor coordinates to new values or coordinates. The Transform class also\ncollects data about color and two-dimensional matrix transformations that\nare applied to a display object and all of its parent objects. You can\naccess these combined transformations through the\nconcatenatedColorTransform and concatenatedMatrix\nproperties.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Transform.html"
+		},
+		"openfl.geom.Utils3D": {
+			"name": "Utils3D",
+			"path": "openfl.geom.Utils3D",
+			"description": "The Utils3D class contains static methods that simplify the implementation of\ncertain three-dimensional matrix operations.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Utils3D.html"
+		},
+		"openfl.geom.Vector3D": {
+			"name": "Vector3D",
+			"path": "openfl.geom.Vector3D",
+			"description": "The Vector3D class represents a point or a location in the three-dimensional space using\nthe Cartesian coordinates x, y, and z. As in a two-dimensional space, the x property\nrepresents the horizontal axis and the y property represents the vertical axis. In\nthree-dimensional space, the z property represents depth. The value of the x property increases as the object moves to the right. The value of the y property\nincreases as the object moves down. The z property increases as the object moves\nfarther from the point of view. Using perspective projection and scaling, the object is\nseen to be bigger when near and smaller when farther away from the screen. As in a\nright-handed three-dimensional coordinate system, the positive z-axis points away from\nthe viewer and the value of the z property increases as the object moves away from the\nviewer's eye. The origin point (0,0,0) of the global space is the upper-left corner of\nthe stage.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/geom/Vector3D.html"
+		},
+		"openfl.geom.Orientation3D": {
+			"name": "Orientation3D",
+			"path": "openfl.geom.Orientation3D",
+			"description": "The Orientation3D class is an enumeration of constant\nvalues for representing the orientation style of a Matrix3D object.\nThe three types of orientation are Euler angles, axis angle, and quaternion.\nThe decompose and recompose methods of the Matrix3D object take one of these\nenumerated types to identify the rotational components of the Matrix.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/geom/Orientation3D.html"
+		},
+		"openfl.globalization.DateTimeFormatter": {
+			"name": "DateTimeFormatter",
+			"path": "openfl.globalization.DateTimeFormatter",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/globalization/DateTimeFormatter.html"
+		},
+		"openfl.globalization.LocaleID": {
+			"name": "LocaleID",
+			"path": "openfl.globalization.LocaleID",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/globalization/LocaleID.html"
+		},
+		"openfl.globalization.DateTimeNameContext": {
+			"name": "DateTimeNameContext",
+			"path": "openfl.globalization.DateTimeNameContext",
+			"description": "",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/globalization/DateTimeNameContext.html"
+		},
+		"openfl.globalization.DateTimeNameStyle": {
+			"name": "DateTimeNameStyle",
+			"path": "openfl.globalization.DateTimeNameStyle",
+			"description": "",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/globalization/DateTimeNameStyle.html"
+		},
+		"openfl.globalization.DateTimeStyle": {
+			"name": "DateTimeStyle",
+			"path": "openfl.globalization.DateTimeStyle",
+			"description": "",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/globalization/DateTimeStyle.html"
+		},
+		"openfl.globalization.LastOperationStatus": {
+			"name": "LastOperationStatus",
+			"path": "openfl.globalization.LastOperationStatus",
+			"description": "",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/globalization/LastOperationStatus.html"
+		},
+		"openfl.media.ID3Info": {
+			"name": "ID3Info",
+			"path": "openfl.media.ID3Info",
+			"description": "The ID3Info class contains properties that reflect ID3 metadata. You can get\nadditional metadata for MP3 files by accessing the id3 property of the Sound\nclass; for example, mySound.id3.TIME. For more information, see the entry for\nSound.id3 and the ID3 tag definitions at http://www.id3.org.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/ID3Info.html"
+		},
+		"openfl.media.Sound": {
+			"name": "Sound",
+			"path": "openfl.media.Sound",
+			"description": "The Sound class lets you work with sound in an application. The Sound class\nlets you create a Sound object, load and play an external MP3 file into\nthat object, close the sound stream, and access data about the sound, such\nas information about the number of bytes in the stream and ID3 metadata.\nMore detailed control of the sound is performed through the sound source\n-  the SoundChannel or Microphone object for the sound  -  and through the\nproperties in the SoundTransform class that control the output of the sound\nto the computer's speakers.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/Sound.html"
+		},
+		"openfl.media.SoundChannel": {
+			"name": "SoundChannel",
+			"path": "openfl.media.SoundChannel",
+			"description": "The SoundChannel class controls a sound in an application. Every sound is\nassigned to a sound channel, and the application can have multiple sound\nchannels that are mixed together. The SoundChannel class contains a\nstop() method, properties for monitoring the amplitude\n(volume) of the channel, and a property for assigning a SoundTransform\nobject to the channel.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/SoundChannel.html"
+		},
+		"openfl.media.SoundLoaderContext": {
+			"name": "SoundLoaderContext",
+			"path": "openfl.media.SoundLoaderContext",
+			"description": "The SoundLoaderContext class provides security checks for files that load\nsound. SoundLoaderContext objects are passed as an argument to the\nconstructor and the load() method of the Sound class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/SoundLoaderContext.html"
+		},
+		"openfl.media.SoundMixer": {
+			"name": "SoundMixer",
+			"path": "openfl.media.SoundMixer",
+			"description": "The SoundMixer class contains static properties and methods for global\nsound control in the application. The SoundMixer class controls embedded\nand streaming sounds in the application. it does not control dynamically\ncreated sounds (that is, sounds generated in response to a Sound object\ndispatching a sampleData event).",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/SoundMixer.html"
+		},
+		"openfl.media.SoundTransform": {
+			"name": "SoundTransform",
+			"path": "openfl.media.SoundTransform",
+			"description": "The SoundTransform class contains properties for volume and panning.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/SoundTransform.html"
+		},
+		"openfl.media.Video": {
+			"name": "Video",
+			"path": "openfl.media.Video",
+			"description": "The Video class displays live or recorded video in an application without\nembedding the video in your SWF file. This class creates a Video object\nthat plays either of the following kinds of video: recorded video files\nstored on a server or locally, or live video captured by the user. A Video\nobject is a display object on the application's display list and\nrepresents the visual space in which the video runs in a user interface.\nWhen used with Flash Media Server, the Video object allows you to send\nlive video captured by a user to the server and then broadcast it from the\nserver to other users. Using these features, you can develop media\napplications such as a simple video player, a video player with multipoint\npublishing from one server to another, or a video sharing application for\na user community.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/media/Video.html"
+		},
+		"openfl.net.DatagramSocket": {
+			"name": "DatagramSocket",
+			"path": "openfl.net.DatagramSocket",
+			"description": "The DatagramSocket class enables code to send and receive Universal Datagram Protocol (UDP) packets.\n*\nThis feature is supported on all desktop operating systems, on iOS, and on Android. You can test for support at run time\nusing the DatagramSocket.isSupported property.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/DatagramSocket.html"
+		},
+		"openfl.net.FileFilter": {
+			"name": "FileFilter",
+			"path": "openfl.net.FileFilter",
+			"description": "The FileFilter class is used to indicate what files on the user's system\nare shown in the file-browsing dialog box that is displayed when the\nFileReference.browse() method, the FileReferenceList.browse() method\nis called or a browse method of a File, FileReference, or\nFileReferenceList object is called. FileFilter instances are passed as a\nvalue for the optional typeFilter parameter to the method. If you use a\nFileFilter instance, extensions and file types that aren't specified in\nthe FileFilter instance are filtered out; that is, they are not available\nto the user for selection. If no FileFilter object is passed to the\nmethod, all files are shown in the dialog box.\nYou can use FileFilter instances in one of two ways:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/FileFilter.html"
+		},
+		"openfl.net.FileReference": {
+			"name": "FileReference",
+			"path": "openfl.net.FileReference",
+			"description": "The FileReference class provides a means to upload and download files\nbetween a user's computer and a server. An operating-system dialog box\nprompts the user to select a file to upload or a location for download.\nEach FileReference object refers to a single file on the user's disk and\nhas properties that contain information about the file's size, type, name,\ncreation date, modification date, and creator type (Macintosh only).\nNote: In Adobe AIR, the File class, which extends the FileReference\nclass, provides more capabilities and has less security restrictions than\nthe FileReference class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/FileReference.html"
+		},
+		"openfl.net.FileReferenceList": {
+			"name": "FileReferenceList",
+			"path": "openfl.net.FileReferenceList",
+			"description": "The FileReferenceList class provides a means to let users select one or\nmore files for uploading. A FileReferenceList object represents a group of\none or more local files on the user's disk as an array of FileReference\nobjects. For detailed information and important considerations about\nFileReference objects and the FileReference class, which you use with\nFileReferenceList, see the FileReference class.\nTo work with the FileReferenceList class:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/FileReferenceList.html"
+		},
+		"openfl.net.IDynamicPropertyOutput": {
+			"name": "IDynamicPropertyOutput",
+			"path": "openfl.net.IDynamicPropertyOutput",
+			"description": "This interface controls the serialization of dynamic properties of dynamic\nobjects. You use this interface with the IDynamicPropertyWriter interface\nand the ObjectEncoding.dynamicPropertyWriter property.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/IDynamicPropertyOutput.html"
+		},
+		"openfl.net.IDynamicPropertyWriter": {
+			"name": "IDynamicPropertyWriter",
+			"path": "openfl.net.IDynamicPropertyWriter",
+			"description": "This interface is used with the IDynamicPropertyOutput interface to\ncontrol the serialization of dynamic properties of dynamic objects. To use\nthis interface, assign an object that implements the\nIDynamicPropertyWriter interface to the\nObjectEncoding.dynamicPropertyWriter property.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/IDynamicPropertyWriter.html"
+		},
+		"openfl.net.NetConnection": {
+			"name": "NetConnection",
+			"path": "openfl.net.NetConnection",
+			"description": "The NetConnection class creates a two-way connection between a client and\na server. The client can be a Flash Player or AIR application. The server\ncan be a web server, Flash Media Server, an application server running\nFlash Remoting, or the &lt;a\nhref=\"http://labs.adobe.com/technologies/stratus/\" scope=\"external\">Adobe\nStratus service. Call NetConnection.connect() to establish the\nconnection. Use the NetStream class to send streams of media and data over\nthe connection.\nFor security information about loading content and data into Flash Player\nand AIR, see the following:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/NetConnection.html"
+		},
+		"openfl.net.NetStream": {
+			"name": "NetStream",
+			"path": "openfl.net.NetStream",
+			"description": "The NetStream class opens a one-way streaming channel over a\nNetConnection.\nUse the NetStream class to do the following:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/NetStream.html"
+		},
+		"openfl.net.Responder": {
+			"name": "Responder",
+			"path": "openfl.net.Responder",
+			"description": "The Responder class provides an object that is used in\nNetConnection.call() to handle return values from the server related to\nthe success or failure of specific operations. When working with\nNetConnection.call(), you may encounter a network operation fault specific\nto the current operation or a fault related to the current connection\nstatus. Operation errors target the Responder object instead of the\nNetConnection object for easier error handling.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/Responder.html"
+		},
+		"openfl.net.ServerSocket": {
+			"name": "ServerSocket",
+			"path": "openfl.net.ServerSocket",
+			"description": "The ServerSocket class allows code to act as a server for Transport Control Protocol (TCP)\nconnections.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/ServerSocket.html"
+		},
+		"openfl.net.SharedObject": {
+			"name": "SharedObject",
+			"path": "openfl.net.SharedObject",
+			"description": "The SharedObject class is used to read and store limited amounts of data on\na user's computer or on a server. Shared objects offer real-time data\nsharing between multiple client SWF files and objects that are persistent\non the local computer or remote server. Local shared objects are similar to\nbrowser cookies and remote shared objects are similar to real-time data\ntransfer devices. To use remote shared objects, you need Adobe Flash Media\nServer.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/SharedObject.html"
+		},
+		"openfl.net.Socket": {
+			"name": "Socket",
+			"path": "openfl.net.Socket",
+			"description": "The Socket class enables code to establish Transport Control Protocol\n(TCP) socket connections for sending and receiving binary data.\nThe Socket class is useful for working with servers that use binary\nprotocols.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/Socket.html"
+		},
+		"openfl.net.URLLoader": {
+			"name": "URLLoader",
+			"path": "openfl.net.URLLoader",
+			"description": "The URLLoader class downloads data from a URL as text, binary data, or\nURL-encoded variables. It is useful for downloading text files, XML, or\nother information to be used in a dynamic, data-driven application.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/URLLoader.html"
+		},
+		"openfl.net.URLRequest": {
+			"name": "URLRequest",
+			"path": "openfl.net.URLRequest",
+			"description": "The URLRequest class captures all of the information in a single HTTP\nrequest. URLRequest objects are passed to the load() methods\nof the Loader, URLStream, and URLLoader classes, and to other loading\noperations, to initiate URL downloads. They are also passed to the\nupload() and download() methods of the\nFileReference class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/URLRequest.html"
+		},
+		"openfl.net.URLRequestDefaults": {
+			"name": "URLRequestDefaults",
+			"path": "openfl.net.URLRequestDefaults",
+			"description": "The URLRequestDefaults class includes static properties that you can set to define\ndefault values for the properties of the URLRequest class. It also includes a static\nmethod, URLRequestDefaults.setLoginCredentialsForHost(), which lets you define\ndefault authentication credentials for requests. The URLRequest class defines the\ninformation to use in an HTTP request.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/URLRequestDefaults.html"
+		},
+		"openfl.net.URLRequestHeader": {
+			"name": "URLRequestHeader",
+			"path": "openfl.net.URLRequestHeader",
+			"description": "A URLRequestHeader object encapsulates a single HTTP request header and\nconsists of a name/value pair. URLRequestHeader objects are used in the\nrequestHeaders property of the URLRequest class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/URLRequestHeader.html"
+		},
+		"openfl.net.URLStream": {
+			"name": "URLStream",
+			"path": "openfl.net.URLStream",
+			"description": "The URLStream class provides low-level access to downloading URLs. Data is\nmade available to application code immediately as it is downloaded,\ninstead of waiting until the entire file is complete as with URLLoader.\nThe URLStream class also lets you close a stream before it finishes\ndownloading. The contents of the downloaded file are made available as raw\nbinary data.\nThe read operations in URLStream are nonblocking. This means that you must\nuse the bytesAvailable property to determine whether sufficient data is\navailable before reading it. An EOFError exception is thrown if\ninsufficient data is available.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/URLStream.html"
+		},
+		"openfl.net.XMLSocket": {
+			"name": "XMLSocket",
+			"path": "openfl.net.XMLSocket",
+			"description": "The XMLSocket class implements client sockets that let the Flash Player or\nAIR application communicate with a server computer identified by an IP\naddress or domain name. The XMLSocket class is useful for client-server\napplications that require low latency, such as real-time chat systems. A\ntraditional HTTP-based chat solution frequently polls the server and\ndownloads new messages using an HTTP request. In contrast, an XMLSocket\nchat solution maintains an open connection to the server, which lets the\nserver immediately send incoming messages without a request from the\nclient. To use the XMLSocket class, the server computer must run a daemon\nthat understands the protocol used by the XMLSocket class. The protocol is\ndescribed in the following list:\n XML messages are sent over a full-duplex TCP/IP stream socket\nconnection.\n Each XML message is a complete XML document, terminated by a zero (0)\nbyte.\n* An unlimited number of XML messages can be sent and received over a\nsingle XMLSocket connection.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/net/XMLSocket.html"
+		},
+		"openfl.net.ObjectEncoding": {
+			"name": "ObjectEncoding",
+			"path": "openfl.net.ObjectEncoding",
+			"description": "The ObjectEncoding class is used in defining serialization settings in\nclasses that serialize objects (such as FileStream, NetStream,\nNetConnection, SharedObject, and ByteArray).",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/net/ObjectEncoding.html"
+		},
+		"openfl.net.SharedObjectFlushStatus": {
+			"name": "SharedObjectFlushStatus",
+			"path": "openfl.net.SharedObjectFlushStatus",
+			"description": "The SharedObjectFlushStatus class provides values for the code returned\nfrom a call to the SharedObject.flush() method.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/net/SharedObjectFlushStatus.html"
+		},
+		"openfl.net.URLLoaderDataFormat": {
+			"name": "URLLoaderDataFormat",
+			"path": "openfl.net.URLLoaderDataFormat",
+			"description": "The URLLoaderDataFormat class provides values that specify how downloaded\ndata is received.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/net/URLLoaderDataFormat.html"
+		},
+		"openfl.net.URLRequestMethod": {
+			"name": "URLRequestMethod",
+			"path": "openfl.net.URLRequestMethod",
+			"description": "The URLRequestMethod class provides values that specify whether the\nURLRequest object should use the POST method or the\nGET method when sending data to a server.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/net/URLRequestMethod.html"
+		},
+		"openfl.net.URLVariables": {
+			"name": "URLVariables",
+			"path": "openfl.net.URLVariables",
+			"description": "The URLVariables class allows you to transfer variables between an\napplication and a server. Use URLVariables objects with methods of the\nURLLoader class, with the data property of the URLRequest\nclass, and with openfl.net package functions.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/net/URLVariables.html"
+		},
+		"openfl.printing.PrintJob": {
+			"name": "PrintJob",
+			"path": "openfl.printing.PrintJob",
+			"description": "The PrintJob class lets you create content and print it to one or more\npages. This class lets you render content that is visible, dynamic or\noffscreen to the user, prompt users with a single Print dialog box, and\nprint an unscaled document with proportions that map to the proportions of\nthe content. This capability is especially useful for rendering and\nprinting dynamic content, such as database content and dynamic text.\nMobile Browser Support: This class is not supported in mobile\nbrowsers.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/printing/PrintJob.html"
+		},
+		"openfl.printing.PrintJobOptions": {
+			"name": "PrintJobOptions",
+			"path": "openfl.printing.PrintJobOptions",
+			"description": "The PrintJobOptions class contains properties to use with the options\nparameter of the PrintJob.addPage() method. For more information about\naddPage(), see the PrintJob class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/printing/PrintJobOptions.html"
+		},
+		"openfl.printing.PrintJobOrientation": {
+			"name": "PrintJobOrientation",
+			"path": "openfl.printing.PrintJobOrientation",
+			"description": "This class provides values that are used by the PrintJob.orientation\nproperty for the image position of a printed page.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/printing/PrintJobOrientation.html"
+		},
+		"openfl.profiler.Telemetry": {
+			"name": "Telemetry",
+			"path": "openfl.profiler.Telemetry",
+			"description": "The Telemetry class lets an application profile ActionScript code and register handlers\nfor commands",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/profiler/Telemetry.html"
+		},
+		"openfl.sensors.Accelerometer": {
+			"name": "Accelerometer",
+			"path": "openfl.sensors.Accelerometer",
+			"description": "The Accelerometer class dispatches events based on activity detected by the\ndevice's motion sensor. This data represents the device's location or\nmovement along a 3-dimensional axis. When the device moves, the sensor\ndetects this movement and returns acceleration data. The Accelerometer\nclass provides methods to query whether or not accelerometer is supported,\nand also to set the rate at which acceleration events are dispatched.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/sensors/Accelerometer.html"
+		},
+		"openfl.system.ApplicationDomain": {
+			"name": "ApplicationDomain",
+			"path": "openfl.system.ApplicationDomain",
+			"description": "The ApplicationDomain class is a container for discrete groups of class\ndefinitions. Application domains are used to partition classes that are in\nthe same security domain. They allow multiple definitions of the same\nclass to exist and allow children to reuse parent definitions.\nApplication domains are used when an external SWF file is loaded through\nthe Loader class. All ActionScript 3.0 definitions in the loaded SWF file\nare stored in the application domain, which is specified by the\napplicationDomain property of the LoaderContext object that you pass as\na context parameter of the Loader object's load() or loadBytes()\nmethod. The LoaderInfo object also contains an applicationDomain\nproperty, which is read-only.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/system/ApplicationDomain.html"
+		},
+		"openfl.system.Capabilities": {
+			"name": "Capabilities",
+			"path": "openfl.system.Capabilities",
+			"description": "The Capabilities class provides properties that describe the system and\nruntime that are hosting the application. For example, a mobile phone's\nscreen might be 100 square pixels, black and white, whereas a PC screen\nmight be 1000 square pixels, color. By using the Capabilities class to\ndetermine what capabilities the client has, you can provide appropriate\ncontent to as many users as possible. When you know the device's\ncapabilities, you can tell the server to send the appropriate SWF files or\ntell the SWF file to alter its presentation.\nHowever, some capabilities of Adobe AIR are not listed as properties in\nthe Capabilities class. They are properties of other classes:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/system/Capabilities.html"
+		},
+		"openfl.system.LoaderContext": {
+			"name": "LoaderContext",
+			"path": "openfl.system.LoaderContext",
+			"description": "The LoaderContext class provides options for loading SWF files and other\nmedia by using the Loader class. The LoaderContext class is used as the\ncontext parameter in the load() and loadBytes() methods of the\nLoader class.\nWhen loading SWF files with the Loader.load() method, you have two\ndecisions to make: into which security domain the loaded SWF file should\nbe placed, and into which application domain within that security domain?\nFor more details on these choices, see the applicationDomain and\nsecurityDomain properties.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/system/LoaderContext.html"
+		},
+		"openfl.system.Security": {
+			"name": "Security",
+			"path": "openfl.system.Security",
+			"description": "The Security class lets you specify how content in different domains can\ncommunicate with each other.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/system/Security.html"
+		},
+		"openfl.system.SecurityDomain": {
+			"name": "SecurityDomain",
+			"path": "openfl.system.SecurityDomain",
+			"description": "The SecurityDomain class represents the current security \"sandbox,\" also\nknown as a security domain. By passing an instance of this class to\nLoader.load(), you can request that loaded media be placed in a\nparticular sandbox.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/system/SecurityDomain.html"
+		},
+		"openfl.system.System": {
+			"name": "System",
+			"path": "openfl.system.System",
+			"description": "The System class contains properties related to local settings and\noperations. Among these are settings for camers and microphones, operations\nwith shared objects and the use of the Clipboard.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/system/System.html"
+		},
+		"openfl.system.TouchscreenType": {
+			"name": "TouchscreenType",
+			"path": "openfl.system.TouchscreenType",
+			"description": "The TouchscreenType class is an enumeration class that provides values for\nthe different types of touch screens.\nUse the values defined by the TouchscreenType class with the\nCapabilities.touchscreenType property.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/system/TouchscreenType.html"
+		},
+		"openfl.text.Font": {
+			"name": "Font",
+			"path": "openfl.text.Font",
+			"description": "The Font class is used to manage embedded fonts in SWF files. Embedded\nfonts are represented as a subclass of the Font class. The Font class is\ncurrently useful only to find out information about embedded fonts; you\ncannot alter a font by using this class. You cannot use the Font class to\nload external fonts, or to create an instance of a Font object by itself.\nUse the Font class as an abstract base class.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/text/Font.html"
+		},
+		"openfl.text.StaticText": {
+			"name": "StaticText",
+			"path": "openfl.text.StaticText",
+			"description": "This class represents StaticText objects on the display list. You cannot\ncreate a StaticText object using ActionScript. Only the authoring tool can\ncreate a StaticText object. An attempt to create a new StaticText object\ngenerates an ArgumentError.\nTo create a reference to an existing static text field in ActionScript\n3.0, you can iterate over the items in the display list. For example, the\nfollowing snippet checks to see if the display list contains a static text\nfield and assigns the field to a variable:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/text/StaticText.html"
+		},
+		"openfl.text.StyleSheet": {
+			"name": "StyleSheet",
+			"path": "openfl.text.StyleSheet",
+			"description": "The StyleSheet class lets you create a StyleSheet object that contains text formatting rules\nfor font size, color, and other styles. You can then apply styles defined by a style sheet to\na TextField object that contains HTML- or XML-formatted text. The text in the TextField object\nis automatically formatted according to the tag styles defined by the StyleSheet object. You\ncan use text styles to define new formatting tags, redefine built-in HTML tags, or create style\nclasses that you can apply to certain HTML tags.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/text/StyleSheet.html"
+		},
+		"openfl.text.TextFormat": {
+			"name": "TextFormat",
+			"path": "openfl.text.TextFormat",
+			"description": "The TextFormat class represents character formatting information. Use the\nTextFormat class to create specific text formatting for text fields. You\ncan apply text formatting to both static and dynamic text fields. The\nproperties of the TextFormat class apply to device and embedded fonts.\nHowever, for embedded fonts, bold and italic text actually require\nspecific fonts. If you want to display bold or italic text with an\nembedded font, you need to embed the bold and italic variations of that\nfont.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/text/TextFormat.html"
+		},
+		"openfl.text.TextLineMetrics": {
+			"name": "TextLineMetrics",
+			"path": "openfl.text.TextLineMetrics",
+			"description": "The TextLineMetrics class contains information about the text position and\nmeasurements of a line of text within a text field. All measurements are\nin pixels. Objects of this class are returned by the\nopenfl.text.TextField.getLineMetrics() method.\nFor measurements related to the text field containing the line of text\n(for example, the \"Text Field height\" measurement in the diagram), see\nopenfl.text.TextField.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/text/TextLineMetrics.html"
+		},
+		"openfl.text.AntiAliasType": {
+			"name": "AntiAliasType",
+			"path": "openfl.text.AntiAliasType",
+			"description": "The AntiAliasType class provides values for anti-aliasing in the\nopenfl.text.TextField class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/AntiAliasType.html"
+		},
+		"openfl.text.FontStyle": {
+			"name": "FontStyle",
+			"path": "openfl.text.FontStyle",
+			"description": "The FontStyle class provides values for the TextRenderer class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/FontStyle.html"
+		},
+		"openfl.text.FontType": {
+			"name": "FontType",
+			"path": "openfl.text.FontType",
+			"description": "The FontType class contains the enumerated constants\n\"embedded\" and \"device\" for the\nfontType property of the Font class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/FontType.html"
+		},
+		"openfl.text.GridFitType": {
+			"name": "GridFitType",
+			"path": "openfl.text.GridFitType",
+			"description": "The GridFitType class defines values for grid fitting in the TextField\nclass.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/GridFitType.html"
+		},
+		"openfl.text.TextFieldAutoSize": {
+			"name": "TextFieldAutoSize",
+			"path": "openfl.text.TextFieldAutoSize",
+			"description": "The TextFieldAutoSize class is an enumeration of constant values used in\nsetting the autoSize property of the TextField class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/TextFieldAutoSize.html"
+		},
+		"openfl.text.TextFieldType": {
+			"name": "TextFieldType",
+			"path": "openfl.text.TextFieldType",
+			"description": "The TextFieldType class is an enumeration of constant values used in\nsetting the type property of the TextField class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/TextFieldType.html"
+		},
+		"openfl.text.TextFormatAlign": {
+			"name": "TextFormatAlign",
+			"path": "openfl.text.TextFormatAlign",
+			"description": "The TextFormatAlign class provides values for text alignment in the\nTextFormat class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/text/TextFormatAlign.html"
+		},
+		"openfl.ui.GameInput": {
+			"name": "GameInput",
+			"path": "openfl.ui.GameInput",
+			"description": "The GameInput class is the entry point into the GameInput API. You can use this API to\nmanage the communications between an application and game input devices (for example:\njoysticks, gamepads, and wands).",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/ui/GameInput.html"
+		},
+		"openfl.ui.GameInputControl": {
+			"name": "GameInputControl",
+			"path": "openfl.ui.GameInputControl",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/ui/GameInputControl.html"
+		},
+		"openfl.ui.GameInputDevice": {
+			"name": "GameInputDevice",
+			"path": "openfl.ui.GameInputDevice",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/ui/GameInputDevice.html"
+		},
+		"openfl.ui.Keyboard": {
+			"name": "Keyboard",
+			"path": "openfl.ui.Keyboard",
+			"description": "The Keyboard class is used to build an interface that can be controlled by\na user with a standard keyboard. You can use the methods and properties of\nthe Keyboard class without using a constructor. The properties of the\nKeyboard class are constants representing the keys that are most commonly\nused to control games.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/ui/Keyboard.html"
+		},
+		"openfl.ui.Multitouch": {
+			"name": "Multitouch",
+			"path": "openfl.ui.Multitouch",
+			"description": "The Multitouch class manages and provides information about the current\nenvironment's support for handling contact from user input devices,\nincluding contact that has two or more touch points(such as a user's\nfingers on a touch screen). When a user interacts with a device such as a\nmobile phone or tablet with a touch screen, the user typically touches the\nscreen with his or her fingers or a pointing device. While there is a broad\nrange of pointing devices, such as a mouse or a stylus, many of these\ndevices only have a single point of contact with an application. For\npointing devices with a single point of contact, user interaction events\ncan be handled as a mouse event, or using a basic set of touch events\n(called \"touch point\" events). However, for pointing devices that have\nseveral points of contact and perform complex movement, such as the human\nhand, Flash runtimes support an additional set of event handling API called\ngesture events. The API for handling user interaction with these gesture\nevents includes the following classes:",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/ui/Multitouch.html"
+		},
+		"openfl.ui.KeyLocation": {
+			"name": "KeyLocation",
+			"path": "openfl.ui.KeyLocation",
+			"description": "The KeyLocation class contains constants that indicate the location of a\nkey pressed on the keyboard or keyboard-like input device.\nThe KeyLocation constants are used in the KeyboardEvent.keyLocation\nproperty.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/ui/KeyLocation.html"
+		},
+		"openfl.ui.MouseCursor": {
+			"name": "MouseCursor",
+			"path": "openfl.ui.MouseCursor",
+			"description": "The MouseCursor class is an enumeration of constant values used in setting\nthe cursor property of the Mouse class.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/ui/MouseCursor.html"
+		},
+		"openfl.ui.MultitouchInputMode": {
+			"name": "MultitouchInputMode",
+			"path": "openfl.ui.MultitouchInputMode",
+			"description": "The MultitouchInputMode class provides values for the\ninputMode property in the openfl.ui.Multitouch class. These\nvalues set the type of touch events the Flash runtime dispatches when the\nuser interacts with a touch-enabled device.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/ui/MultitouchInputMode.html"
+		},
+		"openfl.utils.AGALMiniAssembler": {
+			"name": "AGALMiniAssembler",
+			"path": "openfl.utils.AGALMiniAssembler",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/AGALMiniAssembler.html"
+		},
+		"openfl.utils.AssetCache": {
+			"name": "AssetCache",
+			"path": "openfl.utils.AssetCache",
+			"description": "The AssetCache class is the default cache implementation used\nby openfl.utils.Assets, objects will be cached for the lifetime\nof the application unless removed explicitly, or using Assets\nunloadLibrary",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/AssetCache.html"
+		},
+		"openfl.utils.AssetLibrary": {
+			"name": "AssetLibrary",
+			"path": "openfl.utils.AssetLibrary",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/AssetLibrary.html"
+		},
+		"openfl.utils.AssetManifest": {
+			"name": "AssetManifest",
+			"path": "openfl.utils.AssetManifest",
+			"description": "",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/AssetManifest.html"
+		},
+		"openfl.utils.Assets": {
+			"name": "Assets",
+			"path": "openfl.utils.Assets",
+			"description": "The Assets class provides a cross-platform interface to access\nembedded images, fonts, sounds and other resource files.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/Assets.html"
+		},
+		"openfl.utils.IAssetCache": {
+			"name": "IAssetCache",
+			"path": "openfl.utils.IAssetCache",
+			"description": "The IAssetCache interface provides methods for caching\nresources loaded from openfl.utils.Assets to improve\nperformance.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/IAssetCache.html"
+		},
+		"openfl.utils.IDataInput": {
+			"name": "IDataInput",
+			"path": "openfl.utils.IDataInput",
+			"description": "The IDataInput interface provides a set of methods for reading binary data. This\ninterface is the I/O counterpart to the IDataOutput interface, which writes binary data.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/IDataInput.html"
+		},
+		"openfl.utils.IDataOutput": {
+			"name": "IDataOutput",
+			"path": "openfl.utils.IDataOutput",
+			"description": "The IDataOutput interface provides a set of methods for writing binary data. This\ninterface is the I/O counterpart to the IDataInput interface, which reads binary data. The IDataOutput interface is implemented by the FileStream, Socket and ByteArray\nclasses.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/IDataOutput.html"
+		},
+		"openfl.utils.IExternalizable": {
+			"name": "IExternalizable",
+			"path": "openfl.utils.IExternalizable",
+			"description": "The IExternalizable interface provides control over serialization of a class as it is\nencoded into a data stream. The writeExternal() and readExternal() methods of the\nIExternalizable interface are implemented by a class to allow customization of the\ncontents and format of the data stream (but not the classname or type) for an object\nand its supertypes. Each individual class must serialize and reconstruct the state of\nits instances. These methods must be symmetrical with the supertype to save its state.\nThese methods supercede the native Action Message Format (AMF) serialization behavior.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/IExternalizable.html"
+		},
+		"openfl.utils.Namespace": {
+			"name": "Namespace",
+			"path": "openfl.utils.Namespace",
+			"description": "The Namespace class contains methods and properties for defining and working\nwith namespaces. There are three scenarios for using namespaces:\n- Namespaces of XML objects Namespaces associate a namespace prefix with a\nUniform Resource Identifier (URI) that identifies the namespace. The prefix\nis a string used to reference the namespace within an XML object. If the\nprefix is undefined, when the XML is converted to a string, a prefix is\nautomatically generated.\n- Namespace to differentiate methods Namespaces can differentiate methods\nwith the same name to perform different tasks. If two methods have the same\nname but separate namespaces, they can perform different tasks.\n- Namespaces for access control Namespaces can be used to control access to\na group of properties and methods in a class. If you place the properties\nand methods into a private namespace, they are inaccessible to any code that\ndoes not have access to that namespace. You can grant access to the group of\nproperties and methods by passing the namespace to other classes, methods or\nfunctions.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/Namespace.html"
+		},
+		"openfl.utils.QName": {
+			"name": "QName",
+			"path": "openfl.utils.QName",
+			"description": "QName objects represent qualified names of XML elements and attributes. Each\nQName object has a local name and a namespace Uniform Resource Identifier\n(URI). When the value of the namespace URI is null, the QName object\nmatches any namespace. Use the QName constructor to create a new QName\nobject that is either a copy of another QName object or a new QName object\nwith a uri from a Namespace object and a localName from a QName\nobject.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/QName.html"
+		},
+		"openfl.utils.Timer": {
+			"name": "Timer",
+			"path": "openfl.utils.Timer",
+			"description": "The Timer class is the interface to timers, which let you run code on a\nspecified time sequence. Use the start() method to start a\ntimer. Add an event listener for the timer event to set up\ncode to be run on the timer interval.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/utils/Timer.html"
+		},
+		"openfl.utils.AssetType": {
+			"name": "AssetType",
+			"path": "openfl.utils.AssetType",
+			"description": "The AssetType enum lists the core set of available\nasset types from the OpenFL command-line tools.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/utils/AssetType.html"
+		},
+		"openfl.utils.ByteArray": {
+			"name": "ByteArray",
+			"path": "openfl.utils.ByteArray",
+			"description": "The ByteArray class provides methods and properties to optimize reading,\nwriting, and working with binary data.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/utils/ByteArray.html"
+		},
+		"openfl.utils.CompressionAlgorithm": {
+			"name": "CompressionAlgorithm",
+			"path": "openfl.utils.CompressionAlgorithm",
+			"description": "The CompressionAlgorithm class defines string constants for the names of\ncompress and uncompress options. These constants are used as values of the\nalgorithm parameter of the ByteArray.compress() and\nByteArray.uncompress() methods.",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/utils/CompressionAlgorithm.html"
+		},
+		"openfl.utils.Dictionary": {
+			"name": "Dictionary",
+			"path": "openfl.utils.Dictionary",
+			"description": "The Dictionary class lets you create a dynamic collection of properties,\nwhich uses strict equality (===) for key comparison. When an object is\nused as a key, the object's identity is used to look up the object, and\nnot the value returned from calling toString() on it.\nThe following statements show the relationship between a Dictionary object\nand a key object:",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/utils/Dictionary.html"
+		},
+		"openfl.utils.Endian": {
+			"name": "Endian",
+			"path": "openfl.utils.Endian",
+			"description": "The Endian class contains values that denote the byte order used to\nrepresent multibyte numbers. The byte order is either bigEndian (most\nsignificant byte first) or littleEndian (least significant byte first).",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/utils/Endian.html"
+		},
+		"openfl.utils.Object": {
+			"name": "Object",
+			"path": "openfl.utils.Object",
+			"description": "",
+			"type": "abstract",
+			"link": "https://api.openfl.org/openfl/utils/Object.html"
+		},
+		"openfl.utils.AssetBundle": {
+			"name": "AssetBundle",
+			"path": "openfl.utils.AssetBundle",
+			"description": "",
+			"type": "type",
+			"link": "https://api.openfl.org/openfl/utils/AssetBundle.html"
+		},
+		"openfl.utils.Function": {
+			"name": "Function",
+			"path": "openfl.utils.Function",
+			"description": "",
+			"type": "type",
+			"link": "https://api.openfl.org/openfl/utils/Function.html"
+		},
+		"openfl.utils.Future": {
+			"name": "Future",
+			"path": "openfl.utils.Future",
+			"description": "",
+			"type": "type",
+			"link": "https://api.openfl.org/openfl/utils/Future.html"
+		},
+		"openfl.utils.ObjectPool": {
+			"name": "ObjectPool",
+			"path": "openfl.utils.ObjectPool",
+			"description": "",
+			"type": "type",
+			"link": "https://api.openfl.org/openfl/utils/ObjectPool.html"
+		},
+		"openfl.display3D.textures.CubeTexture": {
+			"name": "CubeTexture",
+			"path": "openfl.display3D.textures.CubeTexture",
+			"description": "The CubeTexture class represents a cube texture uploaded to a rendering context.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/textures/CubeTexture.html"
+		},
+		"openfl.display3D.textures.RectangleTexture": {
+			"name": "RectangleTexture",
+			"path": "openfl.display3D.textures.RectangleTexture",
+			"description": "The Rectangle Texture class represents a 2-dimensional texture uploaded to a rendering\ncontext.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/textures/RectangleTexture.html"
+		},
+		"openfl.display3D.textures.Texture": {
+			"name": "Texture",
+			"path": "openfl.display3D.textures.Texture",
+			"description": "The Texture class represents a 2-dimensional texture uploaded to a rendering context.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/textures/Texture.html"
+		},
+		"openfl.display3D.textures.TextureBase": {
+			"name": "TextureBase",
+			"path": "openfl.display3D.textures.TextureBase",
+			"description": "The TextureBase class is the base class for Context3D texture objects.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/textures/TextureBase.html"
+		},
+		"openfl.display3D.textures.VideoTexture": {
+			"name": "VideoTexture",
+			"path": "openfl.display3D.textures.VideoTexture",
+			"description": "Prior to Flash Player 21, the use of video in Stage3D required the use of the Video\nobject (which is not hardware accelerated), copying of video frame to a BitmapData\nobject, and loading of the data onto the GPU which is CPU intensive. Thus, Video\ntexture object was introduced. It allows hardware decoded video to be used in Stage 3D\ncontent.",
+			"type": "class",
+			"link": "https://api.openfl.org/openfl/display3D/textures/VideoTexture.html"
+		}
+	}
+}

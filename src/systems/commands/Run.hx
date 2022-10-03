@@ -27,7 +27,7 @@ class Run extends System {
 		if (!Main.connected) {
 			return;
 		}
-
+		#if !block
 		if (this.channel == null && !checked) {
 			checked = true;
 			Main.client.channels.fetch('663246792426782730').then(channel -> {
@@ -35,6 +35,7 @@ class Run extends System {
 			});
 			return;
 		}
+		#end
 
 		iterate(code_messages, entity -> {
 			if (message.startsWith('!run')) {

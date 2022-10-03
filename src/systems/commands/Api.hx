@@ -26,6 +26,8 @@ class Api extends CommandBase {
 		this.api.set('haxe', loadFile('api/haxe'));
 		this.api.set('flixel', loadFile('api/flixel'));
 		this.api.set('heaps', loadFile('api/heaps'));
+		this.api.set('ceramic', loadFile('api/ceramic'));
+		this.api.set('openfl', loadFile('api/openfl'));
 		
 		for (type => index in api) {
 			for (k => v in index) {

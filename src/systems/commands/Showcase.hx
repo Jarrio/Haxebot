@@ -23,6 +23,7 @@ class Showcase extends CommandBase {
 
 	public function new(_) {
 		super(_);
+
 		this.webhook = new WebhookClient({url: Main.config.showcase_hook});
 	}
 
@@ -66,7 +67,7 @@ class Showcase extends CommandBase {
 			}
 
 			var thread = cast(message.channel.asType0, ThreadChannel);
-			if (thread.id != "1024905470621798410") { //TODO: (LD thread id) better solution 
+			if (thread.id != "1024905470621798410") { // TODO: (LD thread id) better solution
 				if (thread.ownerId != message.author.id) {
 					return;
 				}
