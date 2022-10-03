@@ -252,7 +252,8 @@ class Poll extends CommandDbBase {
 			if (reaction.emoji.name == "🇬" && rcount >= 7) {
 				return true;
 			}
-
+			
+			reaction.remove();
 			return false;
 		}
 

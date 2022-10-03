@@ -8910,6 +8910,7 @@ systems_commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(reaction.emoji.name == "🇬" && rcount >= 7) {
 				return true;
 			}
+			reaction.remove();
 			return false;
 		};
 		return filter;
