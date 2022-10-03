@@ -35,7 +35,7 @@ class Showcase extends CommandBase {
 				this.channel = channel;
 				checking = false;
 				trace('loaded showcase channel');
-			}, (err) -> trace(err));
+			}, err);
 		}
 
 		iterate(modal, entity -> {
@@ -54,7 +54,7 @@ class Showcase extends CommandBase {
 					content += '\n Your message was removed due to not having any attachments or links. Please chat within threads only.';
 					message.author.send(content).then(function(succ) {
 						message.delete();
-					}, (err) -> trace(err));
+					}, err);
 				}
 
 				this.universe.deleteEntity(entity);
@@ -88,7 +88,7 @@ class Showcase extends CommandBase {
 					username: message.author.username,
 					avatarURL: message.author.avatarURL()
 				});
-			}, (err) -> trace(err));
+			}, err);
 
 			this.universe.deleteEntity(entity);
 		});

@@ -1,6 +1,5 @@
 package systems.commands;
 
-import js.Browser;
 import haxe.Json;
 import firebase.web.firestore.Timestamp;
 import discord_js.Collection;
@@ -192,7 +191,6 @@ class Poll extends CommandDbBase {
 					}
 					Firestore.updateDoc(res.docs[0].ref, 'active', false);
 				});
-				// Firestore.
 			});
 		});
 	}
