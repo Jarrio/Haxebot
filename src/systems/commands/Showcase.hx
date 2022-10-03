@@ -66,8 +66,10 @@ class Showcase extends CommandBase {
 			}
 
 			var thread = cast(message.channel.asType0, ThreadChannel);
-			if (thread.ownerId != message.author.id) {
-				return;
+			if (channel.id != "1024905470621798410") { //TODO: better solution
+				if (thread.ownerId != message.author.id) {
+					return;
+				}
 			}
 
 			var arr = [];
@@ -78,8 +80,8 @@ class Showcase extends CommandBase {
 			}
 
 			this.webhook.send({
-				content: content, 
-				username: message.author.username, 
+				content: content,
+				username: message.author.username,
 				avatarURL: message.author.avatarURL(),
 				files: arr
 			}).then(function(_) {
