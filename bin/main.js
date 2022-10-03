@@ -9106,7 +9106,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			var name = _g.name;
 			var column = "id";
 			if(this.isName(name)) {
-				if(name.length < 3) {
+				if(name.length < 2) {
 					if(interaction.isAutocomplete()) {
 						interaction.respond([]);
 					}
@@ -9185,7 +9185,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				var condition = this.isName(name) ? "array-contains-any" : "==";
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				if(interaction.isAutocomplete()) {
-					if(name.length < 3 && column == "name") {
+					if(name.length < 2 && column == "name") {
 						interaction.respond([]);
 						return;
 					}
@@ -9247,7 +9247,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				var condition = this.isName(name) ? "array-contains-any" : "==";
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
 				if(interaction.isAutocomplete()) {
-					if(name.length < 3 && column == "name") {
+					if(name.length < 2 && column == "name") {
 						interaction.respond([]);
 						return;
 					}

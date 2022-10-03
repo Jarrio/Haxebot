@@ -91,7 +91,7 @@ class Quote extends CommandDbBase {
 				var column = 'id';
 
 				if (this.isName(name)) {
-					if (name.length < 3) {
+					if (name.length < 2) {
 						if (interaction.isAutocomplete()) {
 							interaction.respond([]);
 						}
@@ -222,7 +222,7 @@ class Quote extends CommandDbBase {
 						query = Firestore.query(col, where(column, condition, (isName(name) ? this.nameArray(name) : name.parseInt())));
 
 						if (interaction.isAutocomplete()) {
-							if (name.length < 3 && column == 'name') {
+							if (name.length < 2 && column == 'name') {
 								interaction.respond([]);
 								return;
 							}
