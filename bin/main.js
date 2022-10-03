@@ -9041,7 +9041,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 70, className : "systems.commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 72, className : "systems.commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -9083,6 +9083,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				})(doc)).then((function(data,description,name,interaction) {
 					return function(value) {
 						data[0].id = value.id;
+						data[0].name.splice(0,0,"" + data[0].id);
 						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries"),data[0]).then((function(data,description,name,interaction) {
 							return function(_) {
 								interaction[0].reply("*Quote #" + data[0].id + " added!*\nname: " + name[0] + "\n" + description[0] + "\n\nby: <@" + data[0].author + ">");
@@ -9105,7 +9106,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			var _g1 = _g.type;
 			var name = _g.name;
 			var column = "id";
-			if(this.isName(name)) {
+			if(this.isName(name) && _g1 != "get") {
 				if(name.length < 2) {
 					if(interaction.isAutocomplete()) {
 						interaction.respond([]);
@@ -9128,7 +9129,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						var d = _g1[_g];
 						++_g;
 						var data = d.data();
-						results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+						var name = _gthis.nameString(data.name);
+						if(name.length > 25) {
+							name = HxOverrides.substr(name,0,25) + "...";
+						}
+						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 					}
 					interaction.respond(results).then(null,Util_err);
 				}).then(null,Util_err);
@@ -9143,8 +9148,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 210, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 211, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 211, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 212, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
@@ -9182,13 +9187,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},Util_err);
 				break;
 			case "get":
-				var condition = this.isName(name) ? "array-contains-any" : "==";
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("name","array-contains-any",this.nameArray(name)));
 				if(interaction.isAutocomplete()) {
-					if(name.length < 2 && column == "name") {
-						interaction.respond([]);
-						return;
-					}
 					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 						var results = [];
 						var _g = 0;
@@ -9197,7 +9197,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var d = _g1[_g];
 							++_g;
 							var data = d.data();
-							results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+							var name = _gthis.nameString(data.name);
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
 						interaction.respond(results).then(null,Util_err);
 					}).then(null,Util_err);
@@ -9244,13 +9248,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},Util_err);
 				break;
 			default:
-				var condition = this.isName(name) ? "array-contains-any" : "==";
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,condition,this.isName(name) ? this.nameArray(name) : Std.parseInt(name)));
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("name","array-contains-any",this.nameArray(name)));
 				if(interaction.isAutocomplete()) {
-					if(name.length < 2 && column == "name") {
-						interaction.respond([]);
-						return;
-					}
 					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 						var results = [];
 						var _g = 0;
@@ -9259,7 +9258,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var d = _g1[_g];
 							++_g;
 							var data = d.data();
-							results.push({ name : "" + data.username + " - " + HxOverrides.substr(data.description,0,25) + "...", value : "" + data.id});
+							var name = _gthis.nameString(data.name);
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
 						interaction.respond(results).then(null,Util_err);
 					}).then(null,Util_err);
@@ -9288,6 +9291,13 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 		}
 	}
+	,acResponse: function(data) {
+		var name = this.nameString(data.name);
+		if(name.length > 25) {
+			name = HxOverrides.substr(name,0,25) + "...";
+		}
+		return "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username);
+	}
 	,nameArray: function(original) {
 		var arr = original.toLowerCase().split(" ");
 		var _g_current = 0;
@@ -9299,8 +9309,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return arr;
 	}
 	,nameString: function(arr) {
-		var text = arr[0];
-		var _g = 1;
+		var text = arr[1];
+		var _g = 2;
 		var _g1 = arr.length;
 		while(_g < _g1) {
 			var i = _g++;

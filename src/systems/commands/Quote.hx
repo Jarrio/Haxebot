@@ -57,6 +57,8 @@ class Quote extends CommandDbBase {
 						});
 					}).then(function(value) {
 						data.id = value.id;
+						data.name.insert(0, '${data.id}');
+
 						this.addDoc('discord/quotes/entries', data, function(_) {
 							interaction.reply('*Quote #${data.id} added!*\nname: $name\n$description\n\nby: <@${data.author}>');
 						}, err);
@@ -89,8 +91,7 @@ class Quote extends CommandDbBase {
 		switch (command.content) {
 			case Quote(type, name):
 				var column = 'id';
-
-				if (this.isName(name)) {
+				if (this.isName(name) && type != get) {
 					if (name.length < 2) {
 						if (interaction.isAutocomplete()) {
 							interaction.respond([]);
@@ -115,7 +116,7 @@ class Quote extends CommandDbBase {
 						for (d in res.docs) {
 							var data = d.data();
 							results.push({
-								name: '${data.username} - ' + data.description.substr(0, 25) + '...',
+								name: this.acResponse(data),
 								value: '${data.id}'
 							});
 						}
@@ -218,20 +219,15 @@ class Quote extends CommandDbBase {
 						}, err);
 
 					case get | _:
-						var condition = isName(name) ? WhereFilterOp.ARRAY_CONTAINS_ANY : WhereFilterOp.EQUAL_TO;
-						query = Firestore.query(col, where(column, condition, (isName(name) ? this.nameArray(name) : name.parseInt())));
+						query = Firestore.query(col, where('name', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 
 						if (interaction.isAutocomplete()) {
-							if (name.length < 2 && column == 'name') {
-								interaction.respond([]);
-								return;
-							}
 							Firestore.getDocs(query).then(function(res) {
 								var results = [];
 								for (d in res.docs) {
 									var data = d.data();
 									results.push({
-										name: '${data.username} - ' + data.description.substr(0, 25) + '...',
+										name: this.acResponse(data),
 										value: '${data.id}'
 									});
 								}
@@ -245,6 +241,7 @@ class Quote extends CommandDbBase {
 								interaction.reply('Could not find any quotes with that identifier');
 								return;
 							}
+
 							var data = res.docs[0].data();
 							var embed = new MessageEmbed();
 							var user = interaction.client.users.cache.get(data.author);
@@ -270,6 +267,14 @@ class Quote extends CommandDbBase {
 		}
 	}
 
+	inline function acResponse(data:TQuoteData) {
+		var name = this.nameString(data.name);
+		if (name.length > 25) {
+			name = name.substr(0, 25) + '...';
+		}
+		return '$name - ' + data.description.substr(0, 25) + '... by ${data.username}';
+	}
+
 	function nameArray(original:String) {
 		var arr = original.toLowerCase().split(" ");
 		for (k => v in arr) {
@@ -279,8 +284,8 @@ class Quote extends CommandDbBase {
 	}
 
 	function nameString(arr:Array<String>) {
-		var text = arr[0];
-		for (i in 1...arr.length) {
+		var text = arr[1];
+		for (i in 2...arr.length) {
 			text += ' ' + arr[i];
 		}
 		return text.trim();
