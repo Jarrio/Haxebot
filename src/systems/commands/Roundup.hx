@@ -70,9 +70,7 @@ class Roundup extends CommandBase {
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				this.channel = cast channel;
 				this.checking_channel = false;
-			}, function(error) {
-				trace(error);
-			});
+			}, err);
 		}
 
 		if (this.roundup == -1 || this.channel == null || Date.now().getTime() - last_checked <= 86400000) {
@@ -109,9 +107,7 @@ class Roundup extends CommandBase {
 				interaction.reply('Will start watching haxe roundups from **#$number**.');
 				interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 					this.channel = cast channel;
-				}, function(error) {
-					trace(error);
-				});
+				}, err);
 			default:
 		}
 	}

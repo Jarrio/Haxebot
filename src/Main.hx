@@ -73,13 +73,14 @@ class Main {
 					name: 'main',
 					systems: [
 						#if update
-						Helppls Ban, Helpdescription,Roundup,
+						Helppls Ban, Helpdescription,
 						#end
 						Quote, 
 						ScamPrevention, Api, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
 						Translate,
 						Hi,
 						Run,
+						Roundup,
 						Showcase
 					]
 				}
