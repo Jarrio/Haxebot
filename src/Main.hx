@@ -76,10 +76,10 @@ class Main {
 						Helppls Ban, Helpdescription,Showcase,Roundup,
 						#end
 						#if aoblock
-						Poll,ScamPrevention, Run
+						Poll, Run
 						#end
 						Quote, 
-						Api, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
+						ScamPrevention, Api, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
 						Translate, Hi
 					]
 				}

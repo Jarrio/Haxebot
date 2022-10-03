@@ -650,8 +650,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(14);
-	var this11 = new Array(14);
+	var this1 = new Array(15);
+	var this11 = new Array(15);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(5);
@@ -731,57 +731,61 @@ Main.start = function() {
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_ScamPrevention(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new systems_commands_Haxelib(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new systems_commands_Trace(u);
+	var s = new systems_commands_Haxelib(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_React(u);
+	var s = new systems_commands_Trace(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_React(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Archive(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Help(u);
+	var s = new systems_commands_Archive(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_Translate(u);
+	var s = new systems_commands_Help(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new systems_commands_Hi(u);
+	var s = new systems_commands_Translate(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
+	s.onEnabled();
+	var s = new systems_commands_Hi(u);
+	phase.systems[14] = s;
+	phase.enabledSystems[14] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -9875,6 +9879,358 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
 	,__class__: systems_commands_Run
 	,__properties__: {get_base_path:"get_base_path"}
+});
+var systems_commands_ScamPrevention = function(_universe) {
+	this.last_message_interval = 10000;
+	this.phishing_urls = [];
+	this.trigger_messages = new haxe_ds_StringMap();
+	this.user_list = new haxe_ds_StringMap();
+	this.sequential_tags = new haxe_ds_StringMap();
+	this.time_since = new haxe_ds_StringMap();
+	systems_CommandBase.call(this,_universe);
+	this.messages = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+};
+$hxClasses["systems.commands.ScamPrevention"] = systems_commands_ScamPrevention;
+systems_commands_ScamPrevention.__name__ = "systems.commands.ScamPrevention";
+systems_commands_ScamPrevention.__super__ = systems_CommandBase;
+systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
+	time_since: null
+	,sequential_tags: null
+	,user_list: null
+	,trigger_messages: null
+	,phishing_urls: null
+	,phishing_update_time: null
+	,last_message_interval: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
+			if(forward != "scam_prevention") {
+				continue;
+			}
+			if(Util_withinTime(message.createdTimestamp,this.last_message_interval)) {
+				var user = message.author.id;
+				var this1 = this.time_since;
+				var value = new Date().getTime();
+				this1.h[user] = value;
+				this.addMessage(message.author.id,message);
+			}
+			this.universe.deleteEntity(entity);
+		}
+		var _gthis = this;
+		if(!(new Date().getTime() - this.phishing_update_time < 21600000)) {
+			this.phishing_update_time = new Date().getTime();
+			var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
+			links.onData = function(data) {
+				try {
+					_gthis.phishing_urls = JSON.parse(data);
+				} catch( _g ) {
+					var _g1 = haxe_Exception.caught(_g);
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					var tmp = new Date().getTime();
+					_gthis.phishing_update_time = tmp - 18000000;
+				}
+			};
+			links.request();
+		}
+		var h = this.trigger_messages.h;
+		var messages_keys = Object.keys(h);
+		var messages_length = messages_keys.length;
+		var messages_current = 0;
+		while(messages_current < messages_length) {
+			var messages = h[messages_keys[messages_current++]];
+			if(this.checkPhishingLinks(messages)) {
+				this.banUser(messages);
+				continue;
+			}
+			if(messages.length < 3) {
+				continue;
+			}
+			var review = false;
+			if(this.checkTags(messages)) {
+				review = true;
+			}
+			if(this.checkEquality(messages)) {
+				review = true;
+			}
+			if(!review) {
+				continue;
+			}
+			this.reviewMessage(messages);
+			var id = messages[0].author.id;
+			var _this = this.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this1 = this.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this1.h,id)) {
+				delete(_this1.h[id]);
+			}
+			var _this2 = this.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this2.h,id)) {
+				delete(_this2.h[id]);
+			}
+		}
+		var h = this.time_since.h;
+		var _g1_keys = Object.keys(h);
+		var _g1_length = _g1_keys.length;
+		var _g1_current = 0;
+		while(_g1_current < _g1_length) {
+			var key = _g1_keys[_g1_current++];
+			var _g2_value = h[key];
+			if(new Date().getTime() - _g2_value > this.last_message_interval) {
+				var _this = this.time_since;
+				if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
+					delete(_this.h[key]);
+				}
+				var _this1 = this.user_list;
+				if(Object.prototype.hasOwnProperty.call(_this1.h,key)) {
+					delete(_this1.h[key]);
+				}
+				var _this2 = this.trigger_messages;
+				if(Object.prototype.hasOwnProperty.call(_this2.h,key)) {
+					delete(_this2.h[key]);
+				}
+			}
+		}
+	}
+	,reviewMessage: function(messages) {
+		var message = messages[0];
+		var embed = this.reformatMessage(null,message);
+		if(embed == null || embed.description.length == 0) {
+			return;
+		}
+		this.timeoutUser(message,function(_) {
+			message.reply({ content : "<@&198916468312637440> Please review this message by: <@" + message.author.id + ">", embeds : [embed]}).then(function(_) {
+				var _g = 0;
+				while(_g < messages.length) {
+					var message = messages[_g];
+					++_g;
+					message.delete().then(null,Util_err);
+				}
+			},Util_err);
+		});
+	}
+	,resetChecks: function(id) {
+		var _this = this.time_since;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.user_list;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+		var _this = this.trigger_messages;
+		if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+			delete(_this.h[id]);
+		}
+	}
+	,getPhishingLinks: function() {
+		var _gthis = this;
+		if(new Date().getTime() - this.phishing_update_time < 21600000) {
+			return;
+		}
+		this.phishing_update_time = new Date().getTime();
+		var links = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json");
+		links.onData = function(data) {
+			try {
+				_gthis.phishing_urls = JSON.parse(data);
+			} catch( _g ) {
+				var _g1 = haxe_Exception.caught(_g);
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				var tmp = new Date().getTime();
+				_gthis.phishing_update_time = tmp - 18000000;
+			}
+		};
+		links.request();
+	}
+	,timeoutUser: function(message,callback) {
+		var _gthis = this;
+		message.guild.members.fetch(message.author.id).then(function(guild_member) {
+			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
+			guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then(callback,Util_err);
+			var id = message.author.id;
+			var _this = _gthis.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+		},Util_err);
+	}
+	,banUser: function(messages,callback) {
+		var _gthis = this;
+		var message = messages[0];
+		message.guild.members.fetch(message.author.id).then(function(guild_member) {
+			var _g = 0;
+			while(_g < messages.length) {
+				var message1 = messages[_g];
+				++_g;
+				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
+			}
+			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,Util_err);
+			var id = message.author.id;
+			var _this = _gthis.time_since;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.user_list;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			var _this = _gthis.trigger_messages;
+			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
+				delete(_this.h[id]);
+			}
+			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,Util_err);
+		},Util_err);
+	}
+	,logMessage: function(id,embed,action) {
+		embed.description += "\n\n Action: **__" + action + "__**";
+		Main.client.channels.fetch("952952631079362650").then(function(channel) {
+			channel.send({ content : "<@" + id + ">", embeds : [embed]});
+		},Util_err);
+	}
+	,checkPhishingLinks: function(messages) {
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			var _g1 = 0;
+			var _g2 = this.phishing_urls;
+			while(_g1 < _g2.length) {
+				var link = _g2[_g1];
+				++_g1;
+				if(message.content.indexOf(link) != -1) {
+					var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
+					if(regex.match(message.content)) {
+						var url = new URL(regex.matched(1));
+						var arr = [new EReg("(.*)?.?(discordapp.com)","gu"),new EReg("(.*)?.?(twitch.tv)","gu")];
+						var whitelisted = false;
+						var _g3 = 0;
+						while(_g3 < arr.length) {
+							var url_host_regex = arr[_g3];
+							++_g3;
+							if(url_host_regex.match(url.hostname)) {
+								whitelisted = true;
+							}
+						}
+						if(whitelisted) {
+							return false;
+						}
+						if(url.hostname.length == 0 || url.hostname == null) {
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 170, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							return false;
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	,checkTags: function(messages) {
+		var tag_count = 0;
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			if(StringTools.startsWith(message.content,"@everyone") || StringTools.startsWith(message.content,"@here")) {
+				if(tag_count >= 3) {
+					break;
+				}
+				++tag_count;
+			}
+		}
+		if(tag_count >= 3) {
+			return true;
+		}
+		return false;
+	}
+	,checkEquality: function(messages) {
+		var equality_count = 0;
+		var channel_count = 0;
+		var compare = messages[0];
+		var _g = 0;
+		while(_g < messages.length) {
+			var message = messages[_g];
+			++_g;
+			var content = message.content;
+			if(compare.content == content) {
+				++equality_count;
+			}
+			if(compare.channel.id != message.channel.id) {
+				++channel_count;
+			}
+		}
+		if(equality_count == messages.length && equality_count >= 3 && channel_count >= 4) {
+			return true;
+		}
+		return false;
+	}
+	,reformatMessage: function(title,message,format) {
+		if(format == null) {
+			format = true;
+		}
+		var embed = new discord_$js_MessageEmbed();
+		var content = message.content;
+		if(title != null) {
+			embed.setTitle(title);
+		}
+		if(format) {
+			var link_regex = new EReg("(https?://(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9])(:?\\d*)/?([a-z_/0-9\\-#.]*)\\??([a-z_/0-9\\-#=&]*)","ig");
+			if(link_regex.match(content)) {
+				content = content.replace(link_regex.r,"[Link Removed]");
+			}
+		}
+		var rand = Math.random();
+		var avatar = rand >= 0 && rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true&rf=1" : rand >= 0.33 && rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";
+		embed.setAuthor({ name : "" + message.author.tag, iconURL : avatar});
+		embed.setDescription(content);
+		return embed;
+	}
+	,updateTime: function(user) {
+		var this1 = this.time_since;
+		var value = new Date().getTime();
+		this1.h[user] = value;
+	}
+	,run: function(command,interaction) {
+	}
+	,get_timestamp: function() {
+		return new Date().getTime();
+	}
+	,get_name: function() {
+		return "scamprevention";
+	}
+	,addMessage: function(id,message) {
+		var messages = this.trigger_messages.h[id];
+		if(messages == null) {
+			messages = [];
+		}
+		messages.push(message);
+		this.trigger_messages.h[id] = messages;
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: systems_commands_ScamPrevention
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_timestamp:"get_timestamp"})
 });
 var systems_commands_Trace = function(_universe) {
 	this.haxe_version = null;
