@@ -292,7 +292,7 @@ class Quote extends CommandDbBase {
 	}
 
 	function isValidName(input:String) {
-		var check_letters = ~/^[A-Za-z0-9 _-]{3,16}$/i;
+		var check_letters = ~/^[A-Za-z0-9 _-]{2,16}$/i;
 		return check_letters.match(input);
 	}
 
