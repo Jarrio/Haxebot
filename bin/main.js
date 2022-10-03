@@ -10477,7 +10477,7 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
-			if(this.channel.id != "1024905470621798410") {
+			if(thread[0].id != "1024905470621798410") {
 				if(thread[0].ownerId != message[0].author.id) {
 					return;
 				}
