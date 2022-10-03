@@ -75,12 +75,9 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,Showcase,Roundup,
 						#end
-						#if aoblock
-						Poll, Run
-						#end
 						Quote, 
 						ScamPrevention, Api, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
-						Translate, Hi
+						Translate, Hi, Run
 					]
 				}
 			]
