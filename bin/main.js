@@ -8767,30 +8767,43 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				cls = this.api.h[type].h[_g1];
 			}
 			if(interaction.isAutocomplete()) {
-				if(!Object.prototype.hasOwnProperty.call(this.packages.h,_g1)) {
-					this.search(_g1,interaction);
+				var focused = null;
+				var _g = 0;
+				var _g3 = interaction.options._hoistedOptions;
+				while(_g < _g3.length) {
+					var item = _g3[_g];
+					++_g;
+					if(item.focused) {
+						focused = item;
+						break;
+					}
 				}
-				if(Object.prototype.hasOwnProperty.call(this.packages.h,_g1) && _g2 != null && _g2.length > 0) {
+				switch(focused.name) {
+				case "field":
 					var ac = [];
 					var h = this.cache.fields.h;
-					var _g_keys = Object.keys(h);
-					var _g_length = _g_keys.length;
-					var _g_current = 0;
-					while(_g_current < _g_length) {
-						var key = _g_keys[_g_current++];
-						var _g1_value = h[key];
+					var _g2_keys = Object.keys(h);
+					var _g2_length = _g2_keys.length;
+					var _g2_current = 0;
+					while(_g2_current < _g2_length) {
+						var key = _g2_keys[_g2_current++];
+						var _g3_value = h[key];
 						var path = _g1 + "." + _g2;
 						if(key == path) {
-							ac.push({ name : HxOverrides.substr(_g1_value.code,0,40) + "...", value : _g1_value.id});
+							ac.push({ name : HxOverrides.substr(_g3_value.code,0,40) + "...", value : _g3_value.id});
 							interaction.respond(ac);
 							return;
 						}
 						if(key.indexOf(_g2) != -1) {
-							ac.push({ name : HxOverrides.substr(_g1_value.code,0,40) + "...", value : _g1_value.id});
+							ac.push({ name : HxOverrides.substr(_g3_value.code,0,40) + "...", value : _g3_value.id});
 						}
 					}
 					this.getFieldPage(cls,_g2,interaction);
-					return;
+					break;
+				case "package":
+					this.search(_g1,interaction);
+					break;
+				default:
 				}
 				return;
 			}

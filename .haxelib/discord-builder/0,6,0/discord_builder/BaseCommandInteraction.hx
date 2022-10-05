@@ -44,6 +44,7 @@ extern class BaseCommandInteraction extends Interaction {
 }
 
 typedef CommandInteractions = {
+	var _hoistedOptions:Array<{name:String, type:String, value:String, focused:Bool}>;
 	function getMentionable(id:String):Dynamic;
 	function getRole(id:String):Dynamic;
 	function getChannel(id:String):Dynamic;

@@ -127,33 +127,40 @@ class Api extends CommandBase {
 				}
 
 				if (interaction.isAutocomplete()) {
-					if (!this.packages.exists(path)) {
-						this.search(path, interaction);
-					}
-
-					if (this.packages.exists(path) && field != null && field.length > 0) {
-						var ac = [];
-						for (key => value in this.cache.fields) {
-							var path = path + '.' + field;
-							if (key == path) {
-								ac.push({
-									name: value.code.substr(0, 40) + '...',
-									value: value.id
-								});
-
-								interaction.respond(ac);
-								return;
-							}
-
-							if (key.contains(field)) {
-								ac.push({
-									name: value.code.substr(0, 40) + '...',
-									value: value.id
-								});
-							}
+					var focused = null;
+					for (item in interaction.options._hoistedOptions) {
+						if (item.focused) {
+							focused = item;
+							break;
 						}
-						this.getFieldPage(cls, field, interaction);
-						return;
+					}
+					
+					switch(focused.name) {
+						case 'package':
+							this.search(path, interaction);
+						case 'field':
+							var ac = [];
+							for (key => value in this.cache.fields) {
+								var path = path + '.' + field;
+								if (key == path) {
+									ac.push({
+										name: value.code.substr(0, 40) + '...',
+										value: value.id
+									});
+
+									interaction.respond(ac);
+									return;
+								}
+
+								if (key.contains(field)) {
+									ac.push({
+										name: value.code.substr(0, 40) + '...',
+										value: value.id
+									});
+								}
+							}
+							this.getFieldPage(cls, field, interaction);
+						default:
 					}
 					return;
 				}
