@@ -126,7 +126,7 @@ class Api extends CommandBase {
 							var path = path + '.' + field;
 							if (key == path) {
 								ac.push({
-									name: value.code,
+									name: value.code.substr(0, 40) + '...',
 									value: value.id
 								});
 
@@ -136,7 +136,7 @@ class Api extends CommandBase {
 
 							if (key.contains(field)) {
 								ac.push({
-									name: value.code,
+									name: value.code.substr(0, 40) + '...',
 									value: value.id
 								});
 							}
@@ -166,7 +166,11 @@ class Api extends CommandBase {
 					field_desc = f.doc;
 				}
 
-				var desc = '$cls_desc```hx\n${f.code}\n```${f.doc}';
+				var desc = '$cls_desc';
+
+				if (f != null) {
+					desc += '```hx\n${f.code}\n```${f.doc}';
+				}
 
 				if (cls_desc == '' && field_desc == '') {
 					desc = '*No description found*';
@@ -267,13 +271,15 @@ class Api extends CommandBase {
 			for (r in results) {
 				this.cache.set(cls.path, r);
 				ac.push({
-					name: r.code,
+					name: r.code.substr(0, 40) + '...',
 					value: r.id
 				});
 			}
 
 			this.saveCache();
+			
 			interaction.respond(ac);
+			
 		}
 		http.request();
 	}

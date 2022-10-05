@@ -8776,12 +8776,12 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 						var _g1_value = h[key];
 						var path = _g1 + "." + _g2;
 						if(key == path) {
-							ac.push({ name : _g1_value.code, value : _g1_value.id});
+							ac.push({ name : HxOverrides.substr(_g1_value.code,0,40) + "...", value : _g1_value.id});
 							interaction.respond(ac);
 							return;
 						}
 						if(key.indexOf(_g2) != -1) {
-							ac.push({ name : _g1_value.code, value : _g1_value.id});
+							ac.push({ name : HxOverrides.substr(_g1_value.code,0,40) + "...", value : _g1_value.id});
 						}
 					}
 					this.getFieldPage(cls,_g2,interaction);
@@ -8805,7 +8805,10 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				link += "#" + f.id;
 				field_desc = f.doc;
 			}
-			var desc = "" + cls_desc + "```hx\n" + f.code + "\n```" + f.doc;
+			var desc = "" + cls_desc;
+			if(f != null) {
+				desc += "```hx\n" + f.code + "\n```" + f.doc;
+			}
 			if(cls_desc == "" && field_desc == "") {
 				desc = "*No description found*";
 			}
@@ -8903,7 +8906,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				var r = results[_g];
 				++_g;
 				systems_commands_FieldCache.set(_gthis.cache,cls.path,r);
-				ac.push({ name : r.code, value : r.id});
+				ac.push({ name : HxOverrides.substr(r.code,0,40) + "...", value : r.id});
 			}
 			js_node_Fs.writeFileSync("./commands/api/cache/0.json",JSON.stringify(_gthis.cache));
 			_gthis.save_time = new Date().getTime();
