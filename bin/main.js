@@ -8968,7 +8968,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				++_g6;
 				result += "" + l + " ";
 			}
-			result += "| " + identifier + ":" + type;
+			result += "" + identifier + ":" + type;
 			if(value != null) {
 				result += " = " + value;
 			}

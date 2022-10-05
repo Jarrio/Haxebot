@@ -334,7 +334,7 @@ class Api extends CommandBase {
 				result += '$l ';
 			}
 
-			result += '| $identifier:$type';
+			result += '$identifier:$type';
 			if (value != null) {
 				result += ' = $value';
 			}
