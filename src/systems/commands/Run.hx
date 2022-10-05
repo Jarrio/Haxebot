@@ -211,31 +211,38 @@ class Run extends System {
 		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
-	function insertLoopBreak(code:String) {
-		var varname = '';
+	function insertLoopBreak(name:String, code:String) {
+		var varname = '___' + Random.string(6);
 
-		var regex = ~/(while\s*\(.*\)\s*\{|while\s*\(.*?\))/gmui;
+		var regex = ~/((while|for)\s*\(.*\)\s*\{|(while|for)\s*\(.*?\))|(function.*?\(.*?\)\s*{)/gmui;
 		var copy = code;
+		copy = copy.replace('class $name {', 'class $name {\nstatic final $varname = Date.now().getTime();');
 		var matched = [];
 
 		while (regex.match(code)) {
-			matched.push(regex.matched(1));
+			if (regex.matched(1) != null) {
+				matched.push(regex.matched(1));
+			}
+
+			if (regex.matched(4) != null) {
+				matched.push(regex.matched(4));
+			}
+
 			code = regex.matchedRight();
 		}
 
 		for (match in matched) {
-			varname = '___' + Random.string(6);
-			var start = 'final $varname = Date.now().getTime();';
-			var condition = 'if (Date.now().getTime() - $varname > ${this.timeout}) { break; }';
-			copy = copy.replace(match, start + '\n' + match + '\n' + condition);
+			var condition = 'if (Date.now().getTime() - $name.${varname} > ${this.timeout}) { throw "Code took too long to execute.";}';
+			copy = copy.replace(match, '\n' + match + '\n' + condition);
 		}
+
 		return copy;
 	}
 
 	function parseError(error:String, code:String) {
 		var embed = new MessageEmbed();
 		embed.setTitle('Compilation Error');
-		
+
 		var regex = ~/(Main|Test).hx:([0-9]+): characters ([0-9]+)-([0-9]+) : (.*)/gm;
 		if (regex.match(error)) {
 			var line = regex.matched(2).parseInt();
@@ -243,8 +250,8 @@ class Run extends System {
 			var end_char = regex.matched(4).parseInt();
 			var str = '';
 			var new_code = '';
+			
 			for (key => value in code.split('\n')) {
-				
 				if (key != (line - 1)) {
 					new_code += value + '\n';
 					continue;
@@ -267,7 +274,7 @@ class Run extends System {
 			embed.addField('Error', error);
 			return embed;
 		}
-	
+
 		return null;
 	}
 
@@ -314,7 +321,7 @@ class Run extends System {
 			}
 
 			code_content = format + '\n' + code_content;
-			code_content = this.insertLoopBreak(code_content);
+			code_content = this.insertLoopBreak(filename, code_content);
 
 			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${message.author.tag} | time: ${Date.now()}', (error) -> {
 				if (error != null) {
@@ -344,7 +351,7 @@ class Run extends System {
 
 				ls.stderr.once('data', (data) -> {
 					trace('error: ' + data);
-					
+
 					var compile_output = this.cleanOutput(data, filename, class_entry);
 					var embed = this.parseError(compile_output, code_content);
 					if (embed == null) {
@@ -353,7 +360,7 @@ class Run extends System {
 						embed.description = this.cleanOutput(embed.description, filename, class_entry);
 						message.reply({embeds: [embed]});
 					}
-					
+
 					ls.kill('SIGTERM');
 					return;
 				});
