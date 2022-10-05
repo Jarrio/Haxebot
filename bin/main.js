@@ -8765,7 +8765,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				if(!Object.prototype.hasOwnProperty.call(this.packages.h,_g1)) {
 					this.search(_g1,interaction);
 				}
-				if(Object.prototype.hasOwnProperty.call(this.packages.h,_g1) && _g2 != null && _g2.length > 2) {
+				if(Object.prototype.hasOwnProperty.call(this.packages.h,_g1) && _g2 != null && _g2.length > 0) {
 					var ac = [];
 					var h = this.cache.fields.h;
 					var _g_keys = Object.keys(h);

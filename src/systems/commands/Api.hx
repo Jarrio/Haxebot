@@ -120,7 +120,7 @@ class Api extends CommandBase {
 						this.search(path, interaction);
 					}
 
-					if (this.packages.exists(path) && field != null && field.length > 2) {
+					if (this.packages.exists(path) && field != null && field.length > 0) {
 						var ac = [];
 						for (key => value in this.cache.fields) {
 							var path = path + '.' + field;
