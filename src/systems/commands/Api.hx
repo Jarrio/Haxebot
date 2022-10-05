@@ -433,13 +433,6 @@ class Api extends CommandBase {
 		interaction.respond(results).then(null, err);
 	}
 
-	inline function matchPercent(input:String, compare:String) {
-		var al = input.length;
-		var bl = compare.length;
-		var value = ((bl - al) / bl) * 100;
-		return 100 - value;
-	}
-
 	function get_name():String {
 		return 'api';
 	}

@@ -9048,12 +9048,6 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		interaction.respond(results).then(null,Util_err);
 	}
-	,matchPercent: function(input,compare) {
-		var al = input.length;
-		var bl = compare.length;
-		var value = (bl - al) / bl * 100;
-		return 100 - value;
-	}
 	,get_name: function() {
 		return "api";
 	}
