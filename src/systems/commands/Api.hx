@@ -1,5 +1,6 @@
 package systems.commands;
 
+import externs.FuzzySort;
 import sys.io.File;
 import haxe.crypto.Base64;
 import js.Browser;
@@ -60,9 +61,15 @@ abstract FieldCache(TFieldCache) from TFieldCache {
 	}
 }
 
+typedef TAutoComplete = {
+	var name:String;
+	var value:String;
+}
+
 class Api extends CommandBase {
 	var api:Map<String, Map<String, Data>> = [];
 	var packages:Map<String, String> = [];
+	var npackages:Array<TAutoComplete> = [];
 	var cache:FieldCache;
 	var save_time:Float;
 	var save_frequency:Float = 3600000;
@@ -82,6 +89,10 @@ class Api extends CommandBase {
 		for (type => index in api) {
 			for (k => v in index) {
 				packages.set(k, type);
+				this.npackages.push({
+					name: k,
+					value: v.path
+				});
 			}
 		}
 
@@ -414,32 +425,9 @@ class Api extends CommandBase {
 
 	function search(string:String, interaction:BaseCommandInteraction) {
 		var results = [];
-
-		if (this.packages.exists(string)) {
-			var t = this.packages.get(string);
-			var api = this.api.get(t).get(string);
-
-			results.push({
-				name: api.name,
-				value: api.path
-			});
-			interaction.respond(results).then(null, err);
-			return;
-		}
-
-		for (key => _ in this.packages) {
-			if (results.length >= 10) {
-				break;
-			}
-
-			if (key.toLowerCase().contains(string.toLowerCase())) {
-				if (this.matchPercent(string, key) > 45) {
-					results.push({
-						name: key,
-						value: key
-					});
-				}
-			}
+		var algo = FuzzySort.go(string, this.npackages, {key: 'name', limit: 10, threshold: -10000});
+		for (a in algo) {
+			results.push(a.obj);
 		}
 
 		interaction.respond(results).then(null, err);

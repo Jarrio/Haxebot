@@ -3288,6 +3288,7 @@ ecs_ds_Unit._new = function() {
 	return this1;
 };
 var externs_Fetch = require("node-fetch");
+var externs_FuzzySort = require("fuzzysort");
 var firebase_web_app_FirebaseApp = require("firebase/app");
 var firebase_web_auth_Auth = require("firebase/auth");
 var firebase_web_firestore_Query = require("firebase/firestore");
@@ -8685,6 +8686,7 @@ systems_commands_FieldCache.get = function(this1,pkg,id) {
 };
 var systems_commands_Api = function(_universe) {
 	this.save_frequency = 3600000;
+	this.npackages = [];
 	this.packages = new haxe_ds_StringMap();
 	this.api = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
@@ -8695,26 +8697,27 @@ systems_commands_Api.__super__ = systems_CommandBase;
 systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	api: null
 	,packages: null
+	,npackages: null
 	,cache: null
 	,save_time: null
 	,save_frequency: null
 	,onEnabled: function() {
 		var this1 = this.api;
-		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 71, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 78, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["haxe"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 72, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 79, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["flixel"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 73, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 80, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["heaps"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/ceramic",{ fileName : "src/systems/commands/Api.hx", lineNumber : 74, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/ceramic",{ fileName : "src/systems/commands/Api.hx", lineNumber : 81, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["ceramic"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/openfl",{ fileName : "src/systems/commands/Api.hx", lineNumber : 75, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/openfl",{ fileName : "src/systems/commands/Api.hx", lineNumber : 82, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["openfl"] = value;
-		this.cache = Util_loadFile("api/cache/0",{ fileName : "src/systems/commands/Api.hx", lineNumber : 76, className : "systems.commands.Api", methodName : "onEnabled"});
+		this.cache = Util_loadFile("api/cache/0",{ fileName : "src/systems/commands/Api.hx", lineNumber : 83, className : "systems.commands.Api", methodName : "onEnabled"});
 		if(this.cache == null) {
 			this.cache = systems_commands_FieldCache._new();
 		}
@@ -8731,10 +8734,12 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			var _g2_current = 0;
 			while(_g2_current < _g2_length) {
 				var key1 = _g2_keys[_g2_current++];
+				var _g3_value = h1[key1];
 				this.packages.h[key1] = key;
+				this.npackages.push({ name : key1, value : _g3_value.path});
 			}
 		}
-		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 88, className : "systems.commands.Api", methodName : "onEnabled"});
+		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 99, className : "systems.commands.Api", methodName : "onEnabled"});
 	}
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
@@ -9034,30 +9039,12 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,search: function(string,interaction) {
 		var results = [];
-		if(Object.prototype.hasOwnProperty.call(this.packages.h,string)) {
-			var t = this.packages.h[string];
-			var api = this.api.h[t].h[string];
-			results.push({ name : api.name, value : api.path});
-			interaction.respond(results).then(null,Util_err);
-			return;
-		}
-		var h = this.packages.h;
-		var _g_keys = Object.keys(h);
-		var _g_length = _g_keys.length;
-		var _g_current = 0;
-		while(_g_current < _g_length) {
-			var key = _g_keys[_g_current++];
-			if(results.length >= 10) {
-				break;
-			}
-			if(key.toLowerCase().indexOf(string.toLowerCase()) != -1) {
-				var al = string.length;
-				var bl = key.length;
-				var value = (bl - al) / bl * 100;
-				if(100 - value > 45) {
-					results.push({ name : key, value : key});
-				}
-			}
+		var algo = externs_FuzzySort.go(string,this.npackages,{ key : "name", limit : 10, threshold : -10000});
+		var _g = 0;
+		while(_g < algo.length) {
+			var a = algo[_g];
+			++_g;
+			results.push(a.obj);
 		}
 		interaction.respond(results).then(null,Util_err);
 	}

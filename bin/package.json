@@ -8,6 +8,7 @@
     "discord-api-types": "0.20.2",
     "discord.js": "^13.10.3",
     "firebase": "^9.6.2",
+    "fuzzysort": "^2.0.1",
     "node-fetch": "^2.6.7",
     "node-html-parser": "^5.1.0",
     "vm2": "^3.9.5"
