@@ -23,7 +23,7 @@ enum CommandOptions {
 	Rtfm(channel:String);
 	Translate(to:String, message:String, from:String);
 	Helpdescription(description:String);
-	Api(channel:String);
+	Api(content:String, field:String);
 	Notify(channel:String);
 	Code(code:String);
 	Help(category:String);
