@@ -1,5 +1,6 @@
 package systems.commands;
 
+import sys.io.File;
 import haxe.crypto.Base64;
 import js.Browser;
 import haxe.Serializer;
@@ -16,16 +17,55 @@ typedef Data = {
 	var description:String;
 }
 
-typedef TParsedField = {
+typedef TField = {
 	var id:String;
 	var code:String;
 	var doc:String;
 }
 
+typedef TFieldCache = {
+	var size:Int;
+	var fields:Map<String, TField>;
+}
+
+@:forward
+abstract FieldCache(TFieldCache) from TFieldCache {
+	public function new() {
+		this = {
+			size: 0,
+			fields: []
+		}
+	}
+
+	public function exists(pkg:String, key:String) {
+		var path = pkg + '.' + key;
+		return this.fields.exists(path);
+	}
+
+	public function set(pkg:String, value:TField) {
+		var path = pkg + '.' + value.id;
+		if (!this.fields.exists(path)) {
+			this.size++;
+		}
+
+		this.fields.set(path, value);
+	}
+
+	public function get(pkg:String, id:String) {
+		var path = pkg + '.' + id;
+		if (!this.fields.exists(path)) {
+			return null;
+		}
+		return this.fields.get(path);
+	}
+}
+
 class Api extends CommandBase {
 	var api:Map<String, Map<String, Data>> = [];
 	var packages:Map<String, String> = [];
-	var results_cache:Map<String, TParsedField> = [];
+	var cache:FieldCache;
+	var save_time:Float;
+	var save_frequency:Float = 3600000;
 
 	override function onEnabled() {
 		this.api.set('haxe', loadFile('api/haxe'));
@@ -33,6 +73,11 @@ class Api extends CommandBase {
 		this.api.set('heaps', loadFile('api/heaps'));
 		this.api.set('ceramic', loadFile('api/ceramic'));
 		this.api.set('openfl', loadFile('api/openfl'));
+		this.cache = loadFile('api/cache/0');
+
+		if (this.cache == null) {
+			this.cache = new FieldCache();
+		}
 
 		for (type => index in api) {
 			for (k => v in index) {
@@ -41,6 +86,19 @@ class Api extends CommandBase {
 		}
 
 		trace('loaded');
+	}
+
+	override function update(_) {
+		super.update(_);
+		var time = Date.now().getTime();
+		if (time - this.save_time > this.save_frequency) {
+			this.saveCache();
+		}
+	}
+
+	inline function saveCache() {
+		File.saveContent('./commands/api/cache/0.json', this.cache.stringify());
+		this.save_time = Date.now().getTime();
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -63,13 +121,33 @@ class Api extends CommandBase {
 					}
 
 					if (this.packages.exists(path) && field != null && field.length > 2) {
+						var ac = [];
+						for (key => value in this.cache.fields) {
+							var path = path + '.' + field;
+							if (key == path) {
+								ac.push({
+									name: value.code,
+									value: value.id
+								});
+
+								interaction.respond(ac);
+								return;
+							}
+
+							if (key.contains(field)) {
+								ac.push({
+									name: value.code,
+									value: value.id
+								});
+							}
+						}
 						this.getFieldPage(cls, field, interaction);
 						return;
 					}
 					return;
 				}
-				
-				var f = this.results_cache.get(field);
+
+				var f = this.cache.get(path, field);
 				var embed = new MessageEmbed();
 				var title = '';
 				var link = '';
@@ -82,7 +160,7 @@ class Api extends CommandBase {
 					cls_desc = cls.description;
 				}
 
-				if (this.results_cache.exists(field)) {
+				if (this.cache.exists(path, field)) {
 					title += '#' + f.id;
 					link += '#' + f.id;
 					field_desc = f.doc;
@@ -104,8 +182,11 @@ class Api extends CommandBase {
 		}
 	}
 
-	function getFieldPage(cls:Data, find:String, interaction:BaseCommandInteraction) {
+	function getFieldPage(cls:Data, find:String, interaction:BaseCommandInteraction, ?ac:Array<{name:String, value:String}>) {
 		var http = new Http(cls.link);
+		if (ac == null) {
+			ac = [];
+		}
 
 		var headers = [
 			'static_vars' => '<h3 class="section">Static variables</h3>',
@@ -182,15 +263,16 @@ class Api extends CommandBase {
 					break;
 				}
 			}
-			var ac = [];
+
 			for (r in results) {
-				this.results_cache.set(r.id, r);
+				this.cache.set(cls.path, r);
 				ac.push({
-					name: r.id,
+					name: r.code,
 					value: r.id
 				});
 			}
 
+			this.saveCache();
 			interaction.respond(ac);
 		}
 		http.request();
@@ -305,15 +387,10 @@ class Api extends CommandBase {
 
 				doc += '$line ';
 			}
-			doc.trim();
 
 			var result = '';
 			for (l in labels) {
 				result += '$l ';
-			}
-
-			if (labels.length > 0) {
-				result += '| ';
 			}
 
 			result += '$identifier$parameters';
@@ -332,20 +409,41 @@ class Api extends CommandBase {
 	function search(string:String, interaction:BaseCommandInteraction) {
 		var results = [];
 
+		if (this.packages.exists(string)) {
+			var t = this.packages.get(string);
+			var api = this.api.get(t).get(string);
+
+			results.push({
+				name: api.name,
+				value: api.path
+			});
+			interaction.respond(results).then(null, err);
+			return;
+		}
+
 		for (key => _ in this.packages) {
 			if (results.length >= 10) {
 				break;
 			}
 
 			if (key.toLowerCase().contains(string.toLowerCase())) {
-				results.push({
-					name: key,
-					value: key
-				});
+				if (this.matchPercent(string, key) > 45) {
+					results.push({
+						name: key,
+						value: key
+					});
+				}
 			}
 		}
 
 		interaction.respond(results).then(null, err);
+	}
+
+	inline function matchPercent(input:String, compare:String) {
+		var al = input.length;
+		var bl = compare.length;
+		var value = ((bl - al) / bl) * 100;
+		return 100 - value;
 	}
 
 	function get_name():String {

@@ -1,271 +1,5 @@
 {
 	"h": {
-		".Array": {
-			"name": "Array",
-			"path": ".Array",
-			"description": "",
-			"type": "class",
-			"link": "https://api.haxe.org/Array.html"
-		},
-		".ArrayAccess": {
-			"name": "ArrayAccess",
-			"path": ".ArrayAccess",
-			"description": "ArrayAccess is used to indicate a class that can be accessed using brackets.\nThe type parameter represents the type of the elements stored.",
-			"type": "class",
-			"link": "https://api.haxe.org/ArrayAccess.html"
-		},
-		".Date": {
-			"name": "Date",
-			"path": ".Date",
-			"description": "The Date class provides a basic structure for date and time related\ninformation. Date instances can be created by",
-			"type": "class",
-			"link": "https://api.haxe.org/Date.html"
-		},
-		".DateTools": {
-			"name": "DateTools",
-			"path": ".DateTools",
-			"description": "The DateTools class contains some extra functionalities for handling Date\ninstances and timestamps.",
-			"type": "class",
-			"link": "https://api.haxe.org/DateTools.html"
-		},
-		".EReg": {
-			"name": "EReg",
-			"path": ".EReg",
-			"description": "The EReg class represents regular expressions.",
-			"type": "class",
-			"link": "https://api.haxe.org/EReg.html"
-		},
-		".IntIterator": {
-			"name": "IntIterator",
-			"path": ".IntIterator",
-			"description": "IntIterator is used for implementing interval iterations.",
-			"type": "class",
-			"link": "https://api.haxe.org/IntIterator.html"
-		},
-		".Lambda": {
-			"name": "Lambda",
-			"path": ".Lambda",
-			"description": "The Lambda class is a collection of methods to support functional\nprogramming. It is ideally used with using Lambda and then acts as an\nextension to Iterable types.",
-			"type": "class",
-			"link": "https://api.haxe.org/Lambda.html"
-		},
-		".Math": {
-			"name": "Math",
-			"path": ".Math",
-			"description": "This class defines mathematical functions and constants.",
-			"type": "class",
-			"link": "https://api.haxe.org/Math.html"
-		},
-		".Reflect": {
-			"name": "Reflect",
-			"path": ".Reflect",
-			"description": "The Reflect API is a way to manipulate values dynamically through an\nabstract interface in an untyped manner. Use with care.",
-			"type": "class",
-			"link": "https://api.haxe.org/Reflect.html"
-		},
-		".Std": {
-			"name": "Std",
-			"path": ".Std",
-			"description": "The Std class provides standard methods for manipulating basic types.",
-			"type": "class",
-			"link": "https://api.haxe.org/Std.html"
-		},
-		".String": {
-			"name": "String",
-			"path": ".String",
-			"description": "The basic String class.",
-			"type": "class",
-			"link": "https://api.haxe.org/String.html"
-		},
-		".StringBuf": {
-			"name": "StringBuf",
-			"path": ".StringBuf",
-			"description": "A String buffer is an efficient way to build a big string by appending small\nelements together.",
-			"type": "class",
-			"link": "https://api.haxe.org/StringBuf.html"
-		},
-		".StringTools": {
-			"name": "StringTools",
-			"path": ".StringTools",
-			"description": "This class provides advanced methods on Strings. It is ideally used with\nusing StringTools and then acts as an extension\nto the String class.",
-			"type": "class",
-			"link": "https://api.haxe.org/StringTools.html"
-		},
-		".Sys": {
-			"name": "Sys",
-			"path": ".Sys",
-			"description": "This class provides access to various base functions of system platforms.\nLook in the sys package for more system APIs.",
-			"type": "class",
-			"link": "https://api.haxe.org/Sys.html"
-		},
-		".SysError": {
-			"name": "SysError",
-			"path": ".SysError",
-			"description": "",
-			"type": "class",
-			"link": "https://api.haxe.org/SysError.html"
-		},
-		".Type": {
-			"name": "Type",
-			"path": ".Type",
-			"description": "The Haxe Reflection API allows retrieval of type information at runtime.",
-			"type": "class",
-			"link": "https://api.haxe.org/Type.html"
-		},
-		".Xml": {
-			"name": "Xml",
-			"path": ".Xml",
-			"description": "Cross-platform Xml API.",
-			"type": "class",
-			"link": "https://api.haxe.org/Xml.html"
-		},
-		".Any": {
-			"name": "Any",
-			"path": ".Any",
-			"description": "Any is a type that is compatible with any other in both ways.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Any.html"
-		},
-		".Bool": {
-			"name": "Bool",
-			"path": ".Bool",
-			"description": "The standard Boolean type, which can either be true or false.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Bool.html"
-		},
-		".Class": {
-			"name": "Class",
-			"path": ".Class",
-			"description": "An abstract type that represents a Class.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Class.html"
-		},
-		".Dynamic": {
-			"name": "Dynamic",
-			"path": ".Dynamic",
-			"description": "Dynamic is a special type which is compatible with all other types.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Dynamic.html"
-		},
-		".Enum": {
-			"name": "Enum",
-			"path": ".Enum",
-			"description": "An abstract type that represents an Enum type.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Enum.html"
-		},
-		".EnumValue": {
-			"name": "EnumValue",
-			"path": ".EnumValue",
-			"description": "An abstract type that represents any enum value.\nSee Type for the Haxe Reflection API.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/EnumValue.html"
-		},
-		".Float": {
-			"name": "Float",
-			"path": ".Float",
-			"description": "The standard Float type, this is a double-precision IEEE 64bit float.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Float.html"
-		},
-		".Int": {
-			"name": "Int",
-			"path": ".Int",
-			"description": "The standard Int type. Its precision depends on the platform.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Int.html"
-		},
-		".Null": {
-			"name": "Null",
-			"path": ".Null",
-			"description": "Null&lt;T&gt; is a wrapper that can be used to make the basic types Int,\nFloat and Bool nullable on static targets.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Null.html"
-		},
-		".Single": {
-			"name": "Single",
-			"path": ".Single",
-			"description": "Single-precision IEEE 32bit float (4-byte).",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Single.html"
-		},
-		".UInt": {
-			"name": "UInt",
-			"path": ".UInt",
-			"description": "The unsigned Int type is only defined for Flash and C#.\nSimulate it for other platforms.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/UInt.html"
-		},
-		".UnicodeString": {
-			"name": "UnicodeString",
-			"path": ".UnicodeString",
-			"description": "This abstract provides consistent cross-target unicode support.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/UnicodeString.html"
-		},
-		".Void": {
-			"name": "Void",
-			"path": ".Void",
-			"description": "The standard Void type. Only null values can be of the type Void.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/Void.html"
-		},
-		".XmlType": {
-			"name": "XmlType",
-			"path": ".XmlType",
-			"description": "Xml node types.",
-			"type": "abstract",
-			"link": "https://api.haxe.org/XmlType.html"
-		},
-		".ValueType": {
-			"name": "ValueType",
-			"path": ".ValueType",
-			"description": "The different possible runtime types of a value.",
-			"type": "enum",
-			"link": "https://api.haxe.org/ValueType.html"
-		},
-		".Iterable": {
-			"name": "Iterable",
-			"path": ".Iterable",
-			"description": "An Iterable is a data structure which has an iterator() method.\nSee Lambda for generic functions on iterable structures.",
-			"type": "type",
-			"link": "https://api.haxe.org/Iterable.html"
-		},
-		".Iterator": {
-			"name": "Iterator",
-			"path": ".Iterator",
-			"description": "An Iterator is a structure that permits iteration over elements of type T.",
-			"type": "type",
-			"link": "https://api.haxe.org/Iterator.html"
-		},
-		".KeyValueIterable": {
-			"name": "KeyValueIterable",
-			"path": ".KeyValueIterable",
-			"description": "A KeyValueIterable is a data structure which has a keyValueIterator()\nmethod to iterate over key-value-pairs.",
-			"type": "type",
-			"link": "https://api.haxe.org/KeyValueIterable.html"
-		},
-		".KeyValueIterator": {
-			"name": "KeyValueIterator",
-			"path": ".KeyValueIterator",
-			"description": "A KeyValueIterator is an Iterator that has a key and a value.",
-			"type": "type",
-			"link": "https://api.haxe.org/KeyValueIterator.html"
-		},
-		".List": {
-			"name": "List",
-			"path": ".List",
-			"description": "",
-			"type": "type",
-			"link": "https://api.haxe.org/List.html"
-		},
-		".Map": {
-			"name": "Map",
-			"path": ".Map",
-			"description": "",
-			"type": "type",
-			"link": "https://api.haxe.org/Map.html"
-		},
 		"cpp.ArrayBase": {
 			"name": "ArrayBase",
 			"path": "cpp.ArrayBase",
@@ -28237,6 +27971,272 @@
 			"description": "",
 			"type": "enum",
 			"link": "https://api.haxe.org/cs/system/security/cryptography/x509certificates/X509KeyStorageFlags.html"
+		},
+		"Array": {
+			"name": "Array",
+			"path": "Array",
+			"description": "",
+			"type": "class",
+			"link": "https://api.haxe.org/Array.html"
+		},
+		"ArrayAccess": {
+			"name": "ArrayAccess",
+			"path": "ArrayAccess",
+			"description": "ArrayAccess is used to indicate a class that can be accessed using brackets.\nThe type parameter represents the type of the elements stored.",
+			"type": "class",
+			"link": "https://api.haxe.org/ArrayAccess.html"
+		},
+		"Date": {
+			"name": "Date",
+			"path": "Date",
+			"description": "The Date class provides a basic structure for date and time related\ninformation. Date instances can be created by",
+			"type": "class",
+			"link": "https://api.haxe.org/Date.html"
+		},
+		"DateTools": {
+			"name": "DateTools",
+			"path": "DateTools",
+			"description": "The DateTools class contains some extra functionalities for handling Date\ninstances and timestamps.",
+			"type": "class",
+			"link": "https://api.haxe.org/DateTools.html"
+		},
+		"EReg": {
+			"name": "EReg",
+			"path": "EReg",
+			"description": "The EReg class represents regular expressions.",
+			"type": "class",
+			"link": "https://api.haxe.org/EReg.html"
+		},
+		"IntIterator": {
+			"name": "IntIterator",
+			"path": "IntIterator",
+			"description": "IntIterator is used for implementing interval iterations.",
+			"type": "class",
+			"link": "https://api.haxe.org/IntIterator.html"
+		},
+		"Lambda": {
+			"name": "Lambda",
+			"path": "Lambda",
+			"description": "The Lambda class is a collection of methods to support functional\nprogramming. It is ideally used with using Lambda and then acts as an\nextension to Iterable types.",
+			"type": "class",
+			"link": "https://api.haxe.org/Lambda.html"
+		},
+		"Math": {
+			"name": "Math",
+			"path": "Math",
+			"description": "This class defines mathematical functions and constants.",
+			"type": "class",
+			"link": "https://api.haxe.org/Math.html"
+		},
+		"Reflect": {
+			"name": "Reflect",
+			"path": "Reflect",
+			"description": "The Reflect API is a way to manipulate values dynamically through an\nabstract interface in an untyped manner. Use with care.",
+			"type": "class",
+			"link": "https://api.haxe.org/Reflect.html"
+		},
+		"Std": {
+			"name": "Std",
+			"path": "Std",
+			"description": "The Std class provides standard methods for manipulating basic types.",
+			"type": "class",
+			"link": "https://api.haxe.org/Std.html"
+		},
+		"String": {
+			"name": "String",
+			"path": "String",
+			"description": "The basic String class.",
+			"type": "class",
+			"link": "https://api.haxe.org/String.html"
+		},
+		"StringBuf": {
+			"name": "StringBuf",
+			"path": "StringBuf",
+			"description": "A String buffer is an efficient way to build a big string by appending small\nelements together.",
+			"type": "class",
+			"link": "https://api.haxe.org/StringBuf.html"
+		},
+		"StringTools": {
+			"name": "StringTools",
+			"path": "StringTools",
+			"description": "This class provides advanced methods on Strings. It is ideally used with\nusing StringTools and then acts as an extension\nto the String class.",
+			"type": "class",
+			"link": "https://api.haxe.org/StringTools.html"
+		},
+		"Sys": {
+			"name": "Sys",
+			"path": "Sys",
+			"description": "This class provides access to various base functions of system platforms.\nLook in the sys package for more system APIs.",
+			"type": "class",
+			"link": "https://api.haxe.org/Sys.html"
+		},
+		"SysError": {
+			"name": "SysError",
+			"path": "SysError",
+			"description": "",
+			"type": "class",
+			"link": "https://api.haxe.org/SysError.html"
+		},
+		"Type": {
+			"name": "Type",
+			"path": "Type",
+			"description": "The Haxe Reflection API allows retrieval of type information at runtime.",
+			"type": "class",
+			"link": "https://api.haxe.org/Type.html"
+		},
+		"Xml": {
+			"name": "Xml",
+			"path": "Xml",
+			"description": "Cross-platform Xml API.",
+			"type": "class",
+			"link": "https://api.haxe.org/Xml.html"
+		},
+		"Any": {
+			"name": "Any",
+			"path": "Any",
+			"description": "Any is a type that is compatible with any other in both ways.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Any.html"
+		},
+		"Bool": {
+			"name": "Bool",
+			"path": "Bool",
+			"description": "The standard Boolean type, which can either be true or false.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Bool.html"
+		},
+		"Class": {
+			"name": "Class",
+			"path": "Class",
+			"description": "An abstract type that represents a Class.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Class.html"
+		},
+		"Dynamic": {
+			"name": "Dynamic",
+			"path": "Dynamic",
+			"description": "Dynamic is a special type which is compatible with all other types.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Dynamic.html"
+		},
+		"Enum": {
+			"name": "Enum",
+			"path": "Enum",
+			"description": "An abstract type that represents an Enum type.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Enum.html"
+		},
+		"EnumValue": {
+			"name": "EnumValue",
+			"path": "EnumValue",
+			"description": "An abstract type that represents any enum value.\nSee Type for the Haxe Reflection API.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/EnumValue.html"
+		},
+		"Float": {
+			"name": "Float",
+			"path": "Float",
+			"description": "The standard Float type, this is a double-precision IEEE 64bit float.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Float.html"
+		},
+		"Int": {
+			"name": "Int",
+			"path": "Int",
+			"description": "The standard Int type. Its precision depends on the platform.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Int.html"
+		},
+		"Null": {
+			"name": "Null",
+			"path": "Null",
+			"description": "Null&lt;T&gt; is a wrapper that can be used to make the basic types Int,\nFloat and Bool nullable on static targets.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Null.html"
+		},
+		"Single": {
+			"name": "Single",
+			"path": "Single",
+			"description": "Single-precision IEEE 32bit float (4-byte).",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Single.html"
+		},
+		"UInt": {
+			"name": "UInt",
+			"path": "UInt",
+			"description": "The unsigned Int type is only defined for Flash and C#.\nSimulate it for other platforms.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/UInt.html"
+		},
+		"UnicodeString": {
+			"name": "UnicodeString",
+			"path": "UnicodeString",
+			"description": "This abstract provides consistent cross-target unicode support.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/UnicodeString.html"
+		},
+		"Void": {
+			"name": "Void",
+			"path": "Void",
+			"description": "The standard Void type. Only null values can be of the type Void.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/Void.html"
+		},
+		"XmlType": {
+			"name": "XmlType",
+			"path": "XmlType",
+			"description": "Xml node types.",
+			"type": "abstract",
+			"link": "https://api.haxe.org/XmlType.html"
+		},
+		"ValueType": {
+			"name": "ValueType",
+			"path": "ValueType",
+			"description": "The different possible runtime types of a value.",
+			"type": "enum",
+			"link": "https://api.haxe.org/ValueType.html"
+		},
+		"Iterable": {
+			"name": "Iterable",
+			"path": "Iterable",
+			"description": "An Iterable is a data structure which has an iterator() method.\nSee Lambda for generic functions on iterable structures.",
+			"type": "type",
+			"link": "https://api.haxe.org/Iterable.html"
+		},
+		"Iterator": {
+			"name": "Iterator",
+			"path": "Iterator",
+			"description": "An Iterator is a structure that permits iteration over elements of type T.",
+			"type": "type",
+			"link": "https://api.haxe.org/Iterator.html"
+		},
+		"KeyValueIterable": {
+			"name": "KeyValueIterable",
+			"path": "KeyValueIterable",
+			"description": "A KeyValueIterable is a data structure which has a keyValueIterator()\nmethod to iterate over key-value-pairs.",
+			"type": "type",
+			"link": "https://api.haxe.org/KeyValueIterable.html"
+		},
+		"KeyValueIterator": {
+			"name": "KeyValueIterator",
+			"path": "KeyValueIterator",
+			"description": "A KeyValueIterator is an Iterator that has a key and a value.",
+			"type": "type",
+			"link": "https://api.haxe.org/KeyValueIterator.html"
+		},
+		"List": {
+			"name": "List",
+			"path": "List",
+			"description": "",
+			"type": "type",
+			"link": "https://api.haxe.org/List.html"
+		},
+		"Map": {
+			"name": "Map",
+			"path": "Map",
+			"description": "",
+			"type": "type",
+			"link": "https://api.haxe.org/Map.html"
 		}
 	}
 }
