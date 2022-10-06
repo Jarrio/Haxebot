@@ -8394,8 +8394,15 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				var r = results[_g];
 				++_g;
 				systems_commands_FieldCache.set(_gthis.cache,cls.path,r);
-				ac.push({ name : r.id, value : r.id});
+				var name = "var " + r.id;
+				if(r.code.indexOf("(") != -1) {
+					name = "fun " + r.id;
+				}
+				ac.push({ name : name, value : r.id});
 			}
+			ac.sort(function(a,b) {
+				return a.name.length - b.name.length;
+			});
 			js_node_Fs.writeFileSync("./commands/api/cache/0.json",JSON.stringify(_gthis.cache));
 			_gthis.save_time = new Date().getTime();
 			interaction.respond(ac);
@@ -8555,7 +8562,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			while(_g < algo.length) {
 				var a = algo[_g];
 				++_g;
-				results.push({ name : a.obj.name, value : a.obj.path});
+				results.push({ name : a.obj.path, value : a.obj.path});
 			}
 		}
 		interaction.respond(results).then(null,Util_err);

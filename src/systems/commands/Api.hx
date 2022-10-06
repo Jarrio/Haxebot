@@ -288,12 +288,17 @@ class Api extends CommandBase {
 
 			for (r in results) {
 				this.cache.set(cls.path, r);
+				var name = 'var ${r.id}';
+				if (r.code.contains('(')) {
+					name = 'fun ${r.id}';
+				}
+
 				ac.push({
-					name: r.id,
+					name: name,
 					value: r.id
 				});
 			}
-
+			ac.sort((a, b) -> a.name.length - b.name.length);
 			this.saveCache();
 			interaction.respond(ac);
 		}
@@ -454,7 +459,7 @@ class Api extends CommandBase {
 			var algo = FuzzySort.go(string, narrow, {key: 'path', limit: 10, threshold: -10000});
 			for (a in algo) {
 				results.push({
-					name: a.obj.name,
+					name: a.obj.path,
 					value: a.obj.path
 				});
 			}
