@@ -190,7 +190,6 @@ class Api extends CommandBase {
 				embed.setTitle(title);
 				embed.setURL(link);
 				embed.setDescription(desc);
-
 				interaction.reply({embeds: [embed]});
 				return;
 			default:
