@@ -65,6 +65,7 @@ typedef TAutoComplete = {
 
 class Api extends CommandBase {
 	var api:Map<String, Map<String, Data>> = [];
+	var sapi:Map<String, Array<Data>> = [];
 	var packages:Map<String, String> = [];
 	var npackages:Array<TAutoComplete> = [];
 	var cache:FieldCache;
@@ -84,13 +85,16 @@ class Api extends CommandBase {
 		}
 
 		for (type => index in api) {
+			var arr = [];
 			for (k => v in index) {
 				packages.set(k, type);
+				arr.push(v);
 				this.npackages.push({
 					name: k,
 					value: v.path
 				});
 			}
+			this.sapi.set(type, arr);
 		}
 
 		trace('loaded');
@@ -141,19 +145,11 @@ class Api extends CommandBase {
 								var path = path + '.' + field;
 								if (key == path) {
 									ac.push({
-										name: value.code.substr(0, 40) + '...',
+										name: value.id,
 										value: value.id
 									});
-
 									interaction.respond(ac);
 									return;
-								}
-
-								if (key.contains(field)) {
-									ac.push({
-										name: value.code.substr(0, 40) + '...',
-										value: value.id
-									});
 								}
 							}
 							this.getFieldPage(cls, field, interaction);
@@ -277,11 +273,11 @@ class Api extends CommandBase {
 
 				response = response.concat(arr);
 				var algo = FuzzySort.go(find, response, {key: 'id', limit: 10, threshold: -10000});
-				
+
 				for (a in algo) {
 					results.push(a.obj);
 				}
-				
+
 				a = b;
 				b = null;
 
@@ -431,9 +427,37 @@ class Api extends CommandBase {
 
 	function search(string:String, interaction:BaseCommandInteraction) {
 		var results = [];
-		var algo = FuzzySort.go(string, this.npackages, {key: 'name', limit: 10, threshold: -10000});
-		for (a in algo) {
-			results.push(a.obj);
+		var narrow = new Array<Data>();
+		var keywords = [
+			"flixel" => ['flx', 'flixel'], 
+			"heaps" => ['h2d', 'hxd', 'hxsl', 'h3d'],
+			"ceramic" => ['ceramic', 'clay', 'spine'],
+			"openfl" => ['openfl'],
+			"haxe" => ['haxe']
+		];
+
+		for (k => v in keywords) {
+			for (i in v) {
+				if (string.contains(i)) {
+					narrow = this.sapi.get(k);
+					break;
+				}
+			}
+		}
+
+		if (narrow.length == 0) {
+			var algo = FuzzySort.go(string, this.npackages, {key: 'name', limit: 10, threshold: -10000});
+			for (a in algo) {
+				results.push(a.obj);
+			}
+		} else {
+			var algo = FuzzySort.go(string, narrow, {key: 'path', limit: 10, threshold: -10000});
+			for (a in algo) {
+				results.push({
+					name: a.obj.name,
+					value: a.obj.path
+				});
+			}
 		}
 
 		interaction.respond(results).then(null, err);

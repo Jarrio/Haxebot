@@ -8149,6 +8149,7 @@ var systems_commands_Api = function(_universe) {
 	this.save_frequency = 3600000;
 	this.npackages = [];
 	this.packages = new haxe_ds_StringMap();
+	this.sapi = new haxe_ds_StringMap();
 	this.api = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
 };
@@ -8157,6 +8158,7 @@ systems_commands_Api.__name__ = "systems.commands.Api";
 systems_commands_Api.__super__ = systems_CommandBase;
 systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	api: null
+	,sapi: null
 	,packages: null
 	,npackages: null
 	,cache: null
@@ -8164,21 +8166,21 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	,save_frequency: null
 	,onEnabled: function() {
 		var this1 = this.api;
-		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 75, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 76, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["haxe"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 76, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 77, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["flixel"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 77, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 78, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["heaps"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/ceramic",{ fileName : "src/systems/commands/Api.hx", lineNumber : 78, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/ceramic",{ fileName : "src/systems/commands/Api.hx", lineNumber : 79, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["ceramic"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/openfl",{ fileName : "src/systems/commands/Api.hx", lineNumber : 79, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/openfl",{ fileName : "src/systems/commands/Api.hx", lineNumber : 80, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["openfl"] = value;
-		this.cache = Util_loadFile("api/cache/0",{ fileName : "src/systems/commands/Api.hx", lineNumber : 80, className : "systems.commands.Api", methodName : "onEnabled"});
+		this.cache = Util_loadFile("api/cache/0",{ fileName : "src/systems/commands/Api.hx", lineNumber : 81, className : "systems.commands.Api", methodName : "onEnabled"});
 		if(this.cache == null) {
 			this.cache = systems_commands_FieldCache._new();
 		}
@@ -8189,6 +8191,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 		while(_g_current < _g_length) {
 			var key = _g_keys[_g_current++];
 			var _g1_value = h[key];
+			var arr = [];
 			var h1 = _g1_value.h;
 			var _g2_keys = Object.keys(h1);
 			var _g2_length = _g2_keys.length;
@@ -8197,10 +8200,12 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				var key1 = _g2_keys[_g2_current++];
 				var _g3_value = h1[key1];
 				this.packages.h[key1] = key;
+				arr.push(_g3_value);
 				this.npackages.push({ name : key1, value : _g3_value.path});
 			}
+			this.sapi.h[key] = arr;
 		}
-		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 96, className : "systems.commands.Api", methodName : "onEnabled"});
+		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 100, className : "systems.commands.Api", methodName : "onEnabled"});
 	}
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
@@ -8251,12 +8256,10 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 						var _g3_value = h[key];
 						var path = _g1 + "." + _g2;
 						if(key == path) {
-							ac.push({ name : HxOverrides.substr(_g3_value.code,0,40) + "...", value : _g3_value.id});
+							ac.push({ name : _g3_value.id, value : _g3_value.id});
+							haxe_Log.trace("here",{ fileName : "src/systems/commands/Api.hx", lineNumber : 151, className : "systems.commands.Api", methodName : "run"});
 							interaction.respond(ac);
 							return;
-						}
-						if(key.indexOf(_g2) != -1) {
-							ac.push({ name : HxOverrides.substr(_g3_value.code,0,40) + "...", value : _g3_value.id});
 						}
 					}
 					this.getFieldPage(cls,_g2,interaction);
@@ -8517,12 +8520,45 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,search: function(string,interaction) {
 		var results = [];
-		var algo = externs_FuzzySort.go(string,this.npackages,{ key : "name", limit : 10, threshold : -10000});
-		var _g = 0;
-		while(_g < algo.length) {
-			var a = algo[_g];
-			++_g;
-			results.push(a.obj);
+		var narrow = [];
+		var keywords_h = Object.create(null);
+		keywords_h["flixel"] = ["flx","flixel"];
+		keywords_h["heaps"] = ["h2d","hxd","hxsl","h3d"];
+		keywords_h["ceramic"] = ["ceramic","clay","spine"];
+		keywords_h["openfl"] = ["openfl"];
+		keywords_h["haxe"] = ["haxe"];
+		var _g1_keys = Object.keys(keywords_h);
+		var _g1_length = _g1_keys.length;
+		var _g1_current = 0;
+		while(_g1_current < _g1_length) {
+			var key = _g1_keys[_g1_current++];
+			var _g2_value = keywords_h[key];
+			var _g = 0;
+			while(_g < _g2_value.length) {
+				var i = _g2_value[_g];
+				++_g;
+				if(string.indexOf(i) != -1) {
+					narrow = this.sapi.h[key];
+					break;
+				}
+			}
+		}
+		if(narrow.length == 0) {
+			var algo = externs_FuzzySort.go(string,this.npackages,{ key : "name", limit : 10, threshold : -10000});
+			var _g = 0;
+			while(_g < algo.length) {
+				var a = algo[_g];
+				++_g;
+				results.push(a.obj);
+			}
+		} else {
+			var algo = externs_FuzzySort.go(string,narrow,{ key : "path", limit : 10, threshold : -10000});
+			var _g = 0;
+			while(_g < algo.length) {
+				var a = algo[_g];
+				++_g;
+				results.push({ name : a.obj.name, value : a.obj.path});
+			}
 		}
 		interaction.respond(results).then(null,Util_err);
 	}
