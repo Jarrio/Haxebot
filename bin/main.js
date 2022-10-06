@@ -8295,7 +8295,6 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			embed.setTitle(title);
 			embed.setURL(link);
 			embed.setDescription(desc);
-			haxe_Log.trace("hey",{ fileName : "src/systems/commands/Api.hx", lineNumber : 193, className : "systems.commands.Api", methodName : "run"});
 			interaction.reply({ embeds : [embed]});
 			return;
 		}
