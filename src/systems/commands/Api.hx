@@ -2,9 +2,6 @@ package systems.commands;
 
 import externs.FuzzySort;
 import sys.io.File;
-import haxe.crypto.Base64;
-import js.Browser;
-import haxe.Serializer;
 import haxe.Http;
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
@@ -134,8 +131,8 @@ class Api extends CommandBase {
 							break;
 						}
 					}
-					
-					switch(focused.name) {
+
+					switch (focused.name) {
 						case 'package':
 							this.search(path, interaction);
 						case 'field':
@@ -238,6 +235,7 @@ class Api extends CommandBase {
 			var a = header_arr[0];
 			var b = null;
 			var last = 0;
+			var response = [];
 			var results = [];
 
 			while (true) {
@@ -277,7 +275,13 @@ class Api extends CommandBase {
 					default: [];
 				}
 
-				results = results.concat(arr);
+				response = response.concat(arr);
+				var algo = FuzzySort.go(find, response, {key: 'id', limit: 10, threshold: -10000});
+				
+				for (a in algo) {
+					results.push(a.obj);
+				}
+				
 				a = b;
 				b = null;
 
@@ -289,15 +293,13 @@ class Api extends CommandBase {
 			for (r in results) {
 				this.cache.set(cls.path, r);
 				ac.push({
-					name: r.code.substr(0, 40) + '...',
+					name: r.id,
 					value: r.id
 				});
 			}
 
 			this.saveCache();
-			
 			interaction.respond(ac);
-			
 		}
 		http.request();
 	}
@@ -357,14 +359,13 @@ class Api extends CommandBase {
 				result += ' = $value';
 			}
 
-			if (identifier.toLowerCase().startsWith(find.toLowerCase())) {
-				arr.push({
-					id: identifier,
-					code: result,
-					doc: doc
-				});
-			}
+			arr.push({
+				id: identifier,
+				code: result,
+				doc: doc
+			});
 		}
+
 		return arr;
 	}
 
@@ -419,13 +420,11 @@ class Api extends CommandBase {
 
 			result += '$identifier$parameters';
 
-			if (identifier.toLowerCase().startsWith(find.toLowerCase())) {
-				arr.push({
-					id: identifier,
-					code: result,
-					doc: doc
-				});
-			}
+			arr.push({
+				id: identifier,
+				code: result,
+				doc: doc
+			});
 		}
 		return arr;
 	}

@@ -643,7 +643,7 @@ Main.config = null;
 Main.universe = null;
 Main.token = function(rest) {
 	var commands = Main.parseCommands();
-	var client_id = Main.config.client_id;
+	var client_id = Main.config.lclient_id;
 	var get = rest.put(Routes.applicationGuildCommands(client_id,Main.guild_id),{ body : commands});
 	return get;
 };
@@ -822,7 +822,7 @@ Main.start = function() {
 	}
 	Main.universe = u;
 	Main.client = new discord_$js_Client({ intents : [1,512,4096,2,1024]});
-	var discord_token = Main.config.discord_token;
+	var discord_token = Main.config.ldiscord_token;
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
@@ -840,6 +840,7 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
 			}
+			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("messageCreate",function(message) {
@@ -1175,7 +1176,7 @@ Main.main = function() {
 		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 288, className : "Main", methodName : "main"});
 	}
 	var token = "";
-	token = Main.config.discord_token;
+	token = Main.config.ldiscord_token;
 	if(Main.config == null || token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
@@ -4718,321 +4719,6 @@ haxe_Rest.prepend = function(this1,item) {
 haxe_Rest.toString = function(this1) {
 	return "[" + this1.toString() + "]";
 };
-var haxe_Serializer = function() {
-	this.buf = new StringBuf();
-	this.cache = [];
-	this.useCache = haxe_Serializer.USE_CACHE;
-	this.useEnumIndex = haxe_Serializer.USE_ENUM_INDEX;
-	this.shash = new haxe_ds_StringMap();
-	this.scount = 0;
-};
-$hxClasses["haxe.Serializer"] = haxe_Serializer;
-haxe_Serializer.__name__ = "haxe.Serializer";
-haxe_Serializer.run = function(v) {
-	var s = new haxe_Serializer();
-	s.serialize(v);
-	return s.toString();
-};
-haxe_Serializer.prototype = {
-	buf: null
-	,cache: null
-	,shash: null
-	,scount: null
-	,useCache: null
-	,useEnumIndex: null
-	,toString: function() {
-		return this.buf.b;
-	}
-	,serializeString: function(s) {
-		var x = this.shash.h[s];
-		if(x != null) {
-			this.buf.b += "R";
-			this.buf.b += x == null ? "null" : "" + x;
-			return;
-		}
-		this.shash.h[s] = this.scount++;
-		this.buf.b += "y";
-		s = encodeURIComponent(s);
-		this.buf.b += Std.string(s.length);
-		this.buf.b += ":";
-		this.buf.b += s == null ? "null" : "" + s;
-	}
-	,serializeRef: function(v) {
-		var vt = typeof(v);
-		var _g = 0;
-		var _g1 = this.cache.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var ci = this.cache[i];
-			if(typeof(ci) == vt && ci == v) {
-				this.buf.b += "r";
-				this.buf.b += i == null ? "null" : "" + i;
-				return true;
-			}
-		}
-		this.cache.push(v);
-		return false;
-	}
-	,serializeFields: function(v) {
-		var _g = 0;
-		var _g1 = Reflect.fields(v);
-		while(_g < _g1.length) {
-			var f = _g1[_g];
-			++_g;
-			this.serializeString(f);
-			this.serialize(Reflect.field(v,f));
-		}
-		this.buf.b += "g";
-	}
-	,serialize: function(v) {
-		var _g = Type.typeof(v);
-		switch(_g._hx_index) {
-		case 0:
-			this.buf.b += "n";
-			break;
-		case 1:
-			var v1 = v;
-			if(v1 == 0) {
-				this.buf.b += "z";
-				return;
-			}
-			this.buf.b += "i";
-			this.buf.b += v1 == null ? "null" : "" + v1;
-			break;
-		case 2:
-			var v1 = v;
-			if(isNaN(v1)) {
-				this.buf.b += "k";
-			} else if(!isFinite(v1)) {
-				this.buf.b += v1 < 0 ? "m" : "p";
-			} else {
-				this.buf.b += "d";
-				this.buf.b += v1 == null ? "null" : "" + v1;
-			}
-			break;
-		case 3:
-			this.buf.b += v ? "t" : "f";
-			break;
-		case 4:
-			if(js_Boot.__instanceof(v,Class)) {
-				var className = v.__name__;
-				this.buf.b += "A";
-				this.serializeString(className);
-			} else if(js_Boot.__instanceof(v,Enum)) {
-				this.buf.b += "B";
-				this.serializeString(v.__ename__);
-			} else {
-				if(this.useCache && this.serializeRef(v)) {
-					return;
-				}
-				this.buf.b += "o";
-				this.serializeFields(v);
-			}
-			break;
-		case 5:
-			throw haxe_Exception.thrown("Cannot serialize function");
-		case 6:
-			var c = _g.c;
-			if(c == String) {
-				this.serializeString(v);
-				return;
-			}
-			if(this.useCache && this.serializeRef(v)) {
-				return;
-			}
-			switch(c) {
-			case Array:
-				var ucount = 0;
-				this.buf.b += "a";
-				var l = v["length"];
-				var _g1 = 0;
-				var _g2 = l;
-				while(_g1 < _g2) {
-					var i = _g1++;
-					if(v[i] == null) {
-						++ucount;
-					} else {
-						if(ucount > 0) {
-							if(ucount == 1) {
-								this.buf.b += "n";
-							} else {
-								this.buf.b += "u";
-								this.buf.b += ucount == null ? "null" : "" + ucount;
-							}
-							ucount = 0;
-						}
-						this.serialize(v[i]);
-					}
-				}
-				if(ucount > 0) {
-					if(ucount == 1) {
-						this.buf.b += "n";
-					} else {
-						this.buf.b += "u";
-						this.buf.b += ucount == null ? "null" : "" + ucount;
-					}
-				}
-				this.buf.b += "h";
-				break;
-			case Date:
-				var d = v;
-				this.buf.b += "v";
-				this.buf.b += Std.string(d.getTime());
-				break;
-			case haxe_ds_IntMap:
-				this.buf.b += "q";
-				var v1 = v;
-				var k = v1.keys();
-				while(k.hasNext()) {
-					var k1 = k.next();
-					this.buf.b += ":";
-					this.buf.b += k1 == null ? "null" : "" + k1;
-					this.serialize(v1.h[k1]);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_ds_List:
-				this.buf.b += "l";
-				var v1 = v;
-				var _g_head = v1.h;
-				while(_g_head != null) {
-					var val = _g_head.item;
-					_g_head = _g_head.next;
-					var i = val;
-					this.serialize(i);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_ds_ObjectMap:
-				this.buf.b += "M";
-				var v1 = v;
-				var k = v1.keys();
-				while(k.hasNext()) {
-					var k1 = k.next();
-					var id = Reflect.field(k1,"__id__");
-					Reflect.deleteField(k1,"__id__");
-					this.serialize(k1);
-					k1["__id__"] = id;
-					this.serialize(v1.h[k1.__id__]);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_ds_StringMap:
-				this.buf.b += "b";
-				var v1 = v;
-				var h = v1.h;
-				var _g_keys = Object.keys(h);
-				var _g_length = _g_keys.length;
-				var _g_current = 0;
-				while(_g_current < _g_length) {
-					var k = _g_keys[_g_current++];
-					this.serializeString(k);
-					this.serialize(v1.h[k]);
-				}
-				this.buf.b += "h";
-				break;
-			case haxe_io_Bytes:
-				var v1 = v;
-				this.buf.b += "s";
-				this.buf.b += Std.string(Math.ceil(v1.length * 8 / 6));
-				this.buf.b += ":";
-				var i = 0;
-				var max = v1.length - 2;
-				var b64 = haxe_Serializer.BASE64_CODES;
-				if(b64 == null) {
-					var this1 = new Array(haxe_Serializer.BASE64.length);
-					b64 = this1;
-					var _g1 = 0;
-					var _g2 = haxe_Serializer.BASE64.length;
-					while(_g1 < _g2) {
-						var i1 = _g1++;
-						b64[i1] = HxOverrides.cca(haxe_Serializer.BASE64,i1);
-					}
-					haxe_Serializer.BASE64_CODES = b64;
-				}
-				while(i < max) {
-					var b1 = v1.b[i++];
-					var b2 = v1.b[i++];
-					var b3 = v1.b[i++];
-					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
-					this.buf.b += String.fromCodePoint(b64[(b1 << 4 | b2 >> 4) & 63]);
-					this.buf.b += String.fromCodePoint(b64[(b2 << 2 | b3 >> 6) & 63]);
-					this.buf.b += String.fromCodePoint(b64[b3 & 63]);
-				}
-				if(i == max) {
-					var b1 = v1.b[i++];
-					var b2 = v1.b[i++];
-					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
-					this.buf.b += String.fromCodePoint(b64[(b1 << 4 | b2 >> 4) & 63]);
-					this.buf.b += String.fromCodePoint(b64[b2 << 2 & 63]);
-				} else if(i == max + 1) {
-					var b1 = v1.b[i++];
-					this.buf.b += String.fromCodePoint(b64[b1 >> 2]);
-					this.buf.b += String.fromCodePoint(b64[b1 << 4 & 63]);
-				}
-				break;
-			default:
-				if(this.useCache) {
-					this.cache.pop();
-				}
-				if(v.hxSerialize != null) {
-					this.buf.b += "C";
-					this.serializeString(c.__name__);
-					if(this.useCache) {
-						this.cache.push(v);
-					}
-					v.hxSerialize(this);
-					this.buf.b += "g";
-				} else {
-					this.buf.b += "c";
-					this.serializeString(c.__name__);
-					if(this.useCache) {
-						this.cache.push(v);
-					}
-					this.serializeFields(v);
-				}
-			}
-			break;
-		case 7:
-			var e = _g.e;
-			if(this.useCache) {
-				if(this.serializeRef(v)) {
-					return;
-				}
-				this.cache.pop();
-			}
-			this.buf.b += Std.string(this.useEnumIndex ? "j" : "w");
-			this.serializeString(e.__ename__);
-			if(this.useEnumIndex) {
-				this.buf.b += ":";
-				this.buf.b += Std.string(v._hx_index);
-			} else {
-				var e = v;
-				this.serializeString($hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name);
-			}
-			this.buf.b += ":";
-			var params = Type.enumParameters(v);
-			this.buf.b += Std.string(params.length);
-			var _g = 0;
-			while(_g < params.length) {
-				var p = params[_g];
-				++_g;
-				this.serialize(p);
-			}
-			if(this.useCache) {
-				this.cache.push(v);
-			}
-			break;
-		default:
-			throw haxe_Exception.thrown("Cannot serialize " + Std.string(v));
-		}
-	}
-	,serializeException: function(e) {
-		this.buf.b += "x";
-		this.serialize(e);
-	}
-	,__class__: haxe_Serializer
-};
 var haxe_Timer = function(time_ms) {
 	var me = this;
 	this.id = setInterval(function() {
@@ -5090,426 +4776,6 @@ haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
 	}
 	,__class__: haxe_ValueException
 });
-var haxe_io_Bytes = function(data) {
-	this.length = data.byteLength;
-	this.b = new Uint8Array(data);
-	this.b.bufferValue = data;
-	data.hxBytes = this;
-	data.bytes = this.b;
-};
-$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
-haxe_io_Bytes.__name__ = "haxe.io.Bytes";
-haxe_io_Bytes.alloc = function(length) {
-	return new haxe_io_Bytes(new ArrayBuffer(length));
-};
-haxe_io_Bytes.ofString = function(s,encoding) {
-	if(encoding == haxe_io_Encoding.RawNative) {
-		var buf = new Uint8Array(s.length << 1);
-		var _g = 0;
-		var _g1 = s.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = s.charCodeAt(i);
-			buf[i << 1] = c & 255;
-			buf[i << 1 | 1] = c >> 8;
-		}
-		return new haxe_io_Bytes(buf.buffer);
-	}
-	var a = [];
-	var i = 0;
-	while(i < s.length) {
-		var c = s.charCodeAt(i++);
-		if(55296 <= c && c <= 56319) {
-			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
-		}
-		if(c <= 127) {
-			a.push(c);
-		} else if(c <= 2047) {
-			a.push(192 | c >> 6);
-			a.push(128 | c & 63);
-		} else if(c <= 65535) {
-			a.push(224 | c >> 12);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		} else {
-			a.push(240 | c >> 18);
-			a.push(128 | c >> 12 & 63);
-			a.push(128 | c >> 6 & 63);
-			a.push(128 | c & 63);
-		}
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.ofData = function(b) {
-	var hb = b.hxBytes;
-	if(hb != null) {
-		return hb;
-	}
-	return new haxe_io_Bytes(b);
-};
-haxe_io_Bytes.ofHex = function(s) {
-	if((s.length & 1) != 0) {
-		throw haxe_Exception.thrown("Not a hex string (odd number of digits)");
-	}
-	var a = [];
-	var i = 0;
-	var len = s.length >> 1;
-	while(i < len) {
-		var high = s.charCodeAt(i * 2);
-		var low = s.charCodeAt(i * 2 + 1);
-		high = (high & 15) + ((high & 64) >> 6) * 9;
-		low = (low & 15) + ((low & 64) >> 6) * 9;
-		a.push((high << 4 | low) & 255);
-		++i;
-	}
-	return new haxe_io_Bytes(new Uint8Array(a).buffer);
-};
-haxe_io_Bytes.fastGet = function(b,pos) {
-	return b.bytes[pos];
-};
-haxe_io_Bytes.prototype = {
-	length: null
-	,b: null
-	,data: null
-	,get: function(pos) {
-		return this.b[pos];
-	}
-	,set: function(pos,v) {
-		this.b[pos] = v;
-	}
-	,blit: function(pos,src,srcpos,len) {
-		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		if(srcpos == 0 && len == src.b.byteLength) {
-			this.b.set(src.b,pos);
-		} else {
-			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
-		}
-	}
-	,fill: function(pos,len,value) {
-		var _g = 0;
-		while(_g < len) {
-			++_g;
-			this.b[pos++] = value;
-		}
-	}
-	,sub: function(pos,len) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
-	}
-	,compare: function(other) {
-		var b1 = this.b;
-		var b2 = other.b;
-		var len = this.length < other.length ? this.length : other.length;
-		var _g = 0;
-		var _g1 = len;
-		while(_g < _g1) {
-			var i = _g++;
-			if(b1[i] != b2[i]) {
-				return b1[i] - b2[i];
-			}
-		}
-		return this.length - other.length;
-	}
-	,initData: function() {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-	}
-	,getDouble: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat64(pos,true);
-	}
-	,getFloat: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getFloat32(pos,true);
-	}
-	,setDouble: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setFloat64(pos,v,true);
-	}
-	,setFloat: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setFloat32(pos,v,true);
-	}
-	,getUInt16: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getUint16(pos,true);
-	}
-	,setUInt16: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setUint16(pos,v,true);
-	}
-	,getInt32: function(pos) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		return this.data.getInt32(pos,true);
-	}
-	,setInt32: function(pos,v) {
-		if(this.data == null) {
-			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
-		}
-		this.data.setInt32(pos,v,true);
-	}
-	,getInt64: function(pos) {
-		return new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
-	}
-	,setInt64: function(pos,v) {
-		this.setInt32(pos,v.low);
-		this.setInt32(pos + 4,v.high);
-	}
-	,getString: function(pos,len,encoding) {
-		if(pos < 0 || len < 0 || pos + len > this.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		if(encoding == null) {
-			encoding = haxe_io_Encoding.UTF8;
-		}
-		var s = "";
-		var b = this.b;
-		var i = pos;
-		var max = pos + len;
-		switch(encoding._hx_index) {
-		case 0:
-			while(i < max) {
-				var c = b[i++];
-				if(c < 128) {
-					if(c == 0) {
-						break;
-					}
-					s += String.fromCodePoint(c);
-				} else if(c < 224) {
-					var code = (c & 63) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(code);
-				} else if(c < 240) {
-					var c2 = b[i++];
-					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(code1);
-				} else {
-					var c21 = b[i++];
-					var c3 = b[i++];
-					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
-					s += String.fromCodePoint(u);
-				}
-			}
-			break;
-		case 1:
-			while(i < max) {
-				var c = b[i++] | b[i++] << 8;
-				s += String.fromCodePoint(c);
-			}
-			break;
-		}
-		return s;
-	}
-	,readString: function(pos,len) {
-		return this.getString(pos,len);
-	}
-	,toString: function() {
-		return this.getString(0,this.length);
-	}
-	,toHex: function() {
-		var s_b = "";
-		var chars = [];
-		var str = "0123456789abcdef";
-		var _g = 0;
-		var _g1 = str.length;
-		while(_g < _g1) {
-			var i = _g++;
-			chars.push(HxOverrides.cca(str,i));
-		}
-		var _g = 0;
-		var _g1 = this.length;
-		while(_g < _g1) {
-			var i = _g++;
-			var c = this.b[i];
-			s_b += String.fromCodePoint(chars[c >> 4]);
-			s_b += String.fromCodePoint(chars[c & 15]);
-		}
-		return s_b;
-	}
-	,getData: function() {
-		return this.b.bufferValue;
-	}
-	,__class__: haxe_io_Bytes
-};
-var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:"haxe.io.Encoding",__constructs__:null
-	,UTF8: {_hx_name:"UTF8",_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
-	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
-};
-haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
-haxe_io_Encoding.__empty_constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
-var haxe_crypto_Base64 = function() { };
-$hxClasses["haxe.crypto.Base64"] = haxe_crypto_Base64;
-haxe_crypto_Base64.__name__ = "haxe.crypto.Base64";
-haxe_crypto_Base64.encode = function(bytes,complement) {
-	if(complement == null) {
-		complement = true;
-	}
-	var str = new haxe_crypto_BaseCode(haxe_crypto_Base64.BYTES).encodeBytes(bytes).toString();
-	if(complement) {
-		switch(bytes.length % 3) {
-		case 1:
-			str += "==";
-			break;
-		case 2:
-			str += "=";
-			break;
-		default:
-		}
-	}
-	return str;
-};
-haxe_crypto_Base64.decode = function(str,complement) {
-	if(complement == null) {
-		complement = true;
-	}
-	if(complement) {
-		while(HxOverrides.cca(str,str.length - 1) == 61) str = HxOverrides.substr(str,0,-1);
-	}
-	return new haxe_crypto_BaseCode(haxe_crypto_Base64.BYTES).decodeBytes(haxe_io_Bytes.ofString(str));
-};
-haxe_crypto_Base64.urlEncode = function(bytes,complement) {
-	if(complement == null) {
-		complement = false;
-	}
-	var str = new haxe_crypto_BaseCode(haxe_crypto_Base64.URL_BYTES).encodeBytes(bytes).toString();
-	if(complement) {
-		switch(bytes.length % 3) {
-		case 1:
-			str += "==";
-			break;
-		case 2:
-			str += "=";
-			break;
-		default:
-		}
-	}
-	return str;
-};
-haxe_crypto_Base64.urlDecode = function(str,complement) {
-	if(complement == null) {
-		complement = false;
-	}
-	if(complement) {
-		while(HxOverrides.cca(str,str.length - 1) == 61) str = HxOverrides.substr(str,0,-1);
-	}
-	return new haxe_crypto_BaseCode(haxe_crypto_Base64.URL_BYTES).decodeBytes(haxe_io_Bytes.ofString(str));
-};
-var haxe_crypto_BaseCode = function(base) {
-	var len = base.length;
-	var nbits = 1;
-	while(len > 1 << nbits) ++nbits;
-	if(nbits > 8 || len != 1 << nbits) {
-		throw haxe_Exception.thrown("BaseCode : base length must be a power of two.");
-	}
-	this.base = base;
-	this.nbits = nbits;
-};
-$hxClasses["haxe.crypto.BaseCode"] = haxe_crypto_BaseCode;
-haxe_crypto_BaseCode.__name__ = "haxe.crypto.BaseCode";
-haxe_crypto_BaseCode.encode = function(s,base) {
-	var b = new haxe_crypto_BaseCode(haxe_io_Bytes.ofString(base));
-	return b.encodeString(s);
-};
-haxe_crypto_BaseCode.decode = function(s,base) {
-	var b = new haxe_crypto_BaseCode(haxe_io_Bytes.ofString(base));
-	return b.decodeString(s);
-};
-haxe_crypto_BaseCode.prototype = {
-	base: null
-	,nbits: null
-	,tbl: null
-	,encodeBytes: function(b) {
-		var nbits = this.nbits;
-		var base = this.base;
-		var size = b.length * 8 / nbits | 0;
-		var out = new haxe_io_Bytes(new ArrayBuffer(size + (b.length * 8 % nbits == 0 ? 0 : 1)));
-		var buf = 0;
-		var curbits = 0;
-		var mask = (1 << nbits) - 1;
-		var pin = 0;
-		var pout = 0;
-		while(pout < size) {
-			while(curbits < nbits) {
-				curbits += 8;
-				buf <<= 8;
-				buf |= b.b[pin++];
-			}
-			curbits -= nbits;
-			out.b[pout++] = base.b[buf >> curbits & mask];
-		}
-		if(curbits > 0) {
-			out.b[pout++] = base.b[buf << nbits - curbits & mask];
-		}
-		return out;
-	}
-	,initTable: function() {
-		var tbl = [];
-		var _g = 0;
-		while(_g < 256) {
-			var i = _g++;
-			tbl[i] = -1;
-		}
-		var _g = 0;
-		var _g1 = this.base.length;
-		while(_g < _g1) {
-			var i = _g++;
-			tbl[this.base.b[i]] = i;
-		}
-		this.tbl = tbl;
-	}
-	,decodeBytes: function(b) {
-		var nbits = this.nbits;
-		if(this.tbl == null) {
-			this.initTable();
-		}
-		var tbl = this.tbl;
-		var size = b.length * nbits >> 3;
-		var out = new haxe_io_Bytes(new ArrayBuffer(size));
-		var buf = 0;
-		var curbits = 0;
-		var pin = 0;
-		var pout = 0;
-		while(pout < size) {
-			while(curbits < 8) {
-				curbits += nbits;
-				buf <<= nbits;
-				var i = tbl[b.b[pin++]];
-				if(i == -1) {
-					throw haxe_Exception.thrown("BaseCode : invalid encoded char");
-				}
-				buf |= i;
-			}
-			curbits -= 8;
-			out.b[pout++] = buf >> curbits & 255;
-		}
-		return out;
-	}
-	,encodeString: function(s) {
-		return this.encodeBytes(haxe_io_Bytes.ofString(s)).toString();
-	}
-	,decodeString: function(s) {
-		return this.decodeBytes(haxe_io_Bytes.ofString(s)).toString();
-	}
-	,__class__: haxe_crypto_BaseCode
-};
 var haxe_ds_BalancedTree = function() {
 };
 $hxClasses["haxe.ds.BalancedTree"] = haxe_ds_BalancedTree;
@@ -6685,6 +5951,265 @@ haxe_io_ArrayBufferView.getData = function(this1) {
 haxe_io_ArrayBufferView.fromData = function(a) {
 	return a;
 };
+var haxe_io_Bytes = function(data) {
+	this.length = data.byteLength;
+	this.b = new Uint8Array(data);
+	this.b.bufferValue = data;
+	data.hxBytes = this;
+	data.bytes = this.b;
+};
+$hxClasses["haxe.io.Bytes"] = haxe_io_Bytes;
+haxe_io_Bytes.__name__ = "haxe.io.Bytes";
+haxe_io_Bytes.alloc = function(length) {
+	return new haxe_io_Bytes(new ArrayBuffer(length));
+};
+haxe_io_Bytes.ofString = function(s,encoding) {
+	if(encoding == haxe_io_Encoding.RawNative) {
+		var buf = new Uint8Array(s.length << 1);
+		var _g = 0;
+		var _g1 = s.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = s.charCodeAt(i);
+			buf[i << 1] = c & 255;
+			buf[i << 1 | 1] = c >> 8;
+		}
+		return new haxe_io_Bytes(buf.buffer);
+	}
+	var a = [];
+	var i = 0;
+	while(i < s.length) {
+		var c = s.charCodeAt(i++);
+		if(55296 <= c && c <= 56319) {
+			c = c - 55232 << 10 | s.charCodeAt(i++) & 1023;
+		}
+		if(c <= 127) {
+			a.push(c);
+		} else if(c <= 2047) {
+			a.push(192 | c >> 6);
+			a.push(128 | c & 63);
+		} else if(c <= 65535) {
+			a.push(224 | c >> 12);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		} else {
+			a.push(240 | c >> 18);
+			a.push(128 | c >> 12 & 63);
+			a.push(128 | c >> 6 & 63);
+			a.push(128 | c & 63);
+		}
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.ofData = function(b) {
+	var hb = b.hxBytes;
+	if(hb != null) {
+		return hb;
+	}
+	return new haxe_io_Bytes(b);
+};
+haxe_io_Bytes.ofHex = function(s) {
+	if((s.length & 1) != 0) {
+		throw haxe_Exception.thrown("Not a hex string (odd number of digits)");
+	}
+	var a = [];
+	var i = 0;
+	var len = s.length >> 1;
+	while(i < len) {
+		var high = s.charCodeAt(i * 2);
+		var low = s.charCodeAt(i * 2 + 1);
+		high = (high & 15) + ((high & 64) >> 6) * 9;
+		low = (low & 15) + ((low & 64) >> 6) * 9;
+		a.push((high << 4 | low) & 255);
+		++i;
+	}
+	return new haxe_io_Bytes(new Uint8Array(a).buffer);
+};
+haxe_io_Bytes.fastGet = function(b,pos) {
+	return b.bytes[pos];
+};
+haxe_io_Bytes.prototype = {
+	length: null
+	,b: null
+	,data: null
+	,get: function(pos) {
+		return this.b[pos];
+	}
+	,set: function(pos,v) {
+		this.b[pos] = v;
+	}
+	,blit: function(pos,src,srcpos,len) {
+		if(pos < 0 || srcpos < 0 || len < 0 || pos + len > this.length || srcpos + len > src.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		if(srcpos == 0 && len == src.b.byteLength) {
+			this.b.set(src.b,pos);
+		} else {
+			this.b.set(src.b.subarray(srcpos,srcpos + len),pos);
+		}
+	}
+	,fill: function(pos,len,value) {
+		var _g = 0;
+		while(_g < len) {
+			++_g;
+			this.b[pos++] = value;
+		}
+	}
+	,sub: function(pos,len) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		return new haxe_io_Bytes(this.b.buffer.slice(pos + this.b.byteOffset,pos + this.b.byteOffset + len));
+	}
+	,compare: function(other) {
+		var b1 = this.b;
+		var b2 = other.b;
+		var len = this.length < other.length ? this.length : other.length;
+		var _g = 0;
+		var _g1 = len;
+		while(_g < _g1) {
+			var i = _g++;
+			if(b1[i] != b2[i]) {
+				return b1[i] - b2[i];
+			}
+		}
+		return this.length - other.length;
+	}
+	,initData: function() {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+	}
+	,getDouble: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat64(pos,true);
+	}
+	,getFloat: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getFloat32(pos,true);
+	}
+	,setDouble: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setFloat64(pos,v,true);
+	}
+	,setFloat: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setFloat32(pos,v,true);
+	}
+	,getUInt16: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getUint16(pos,true);
+	}
+	,setUInt16: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setUint16(pos,v,true);
+	}
+	,getInt32: function(pos) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		return this.data.getInt32(pos,true);
+	}
+	,setInt32: function(pos,v) {
+		if(this.data == null) {
+			this.data = new DataView(this.b.buffer,this.b.byteOffset,this.b.byteLength);
+		}
+		this.data.setInt32(pos,v,true);
+	}
+	,getInt64: function(pos) {
+		return new haxe__$Int64__$_$_$Int64(this.getInt32(pos + 4),this.getInt32(pos));
+	}
+	,setInt64: function(pos,v) {
+		this.setInt32(pos,v.low);
+		this.setInt32(pos + 4,v.high);
+	}
+	,getString: function(pos,len,encoding) {
+		if(pos < 0 || len < 0 || pos + len > this.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		if(encoding == null) {
+			encoding = haxe_io_Encoding.UTF8;
+		}
+		var s = "";
+		var b = this.b;
+		var i = pos;
+		var max = pos + len;
+		switch(encoding._hx_index) {
+		case 0:
+			while(i < max) {
+				var c = b[i++];
+				if(c < 128) {
+					if(c == 0) {
+						break;
+					}
+					s += String.fromCodePoint(c);
+				} else if(c < 224) {
+					var code = (c & 63) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code);
+				} else if(c < 240) {
+					var c2 = b[i++];
+					var code1 = (c & 31) << 12 | (c2 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(code1);
+				} else {
+					var c21 = b[i++];
+					var c3 = b[i++];
+					var u = (c & 15) << 18 | (c21 & 127) << 12 | (c3 & 127) << 6 | b[i++] & 127;
+					s += String.fromCodePoint(u);
+				}
+			}
+			break;
+		case 1:
+			while(i < max) {
+				var c = b[i++] | b[i++] << 8;
+				s += String.fromCodePoint(c);
+			}
+			break;
+		}
+		return s;
+	}
+	,readString: function(pos,len) {
+		return this.getString(pos,len);
+	}
+	,toString: function() {
+		return this.getString(0,this.length);
+	}
+	,toHex: function() {
+		var s_b = "";
+		var chars = [];
+		var str = "0123456789abcdef";
+		var _g = 0;
+		var _g1 = str.length;
+		while(_g < _g1) {
+			var i = _g++;
+			chars.push(HxOverrides.cca(str,i));
+		}
+		var _g = 0;
+		var _g1 = this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var c = this.b[i];
+			s_b += String.fromCodePoint(chars[c >> 4]);
+			s_b += String.fromCodePoint(chars[c & 15]);
+		}
+		return s_b;
+	}
+	,getData: function() {
+		return this.b.bufferValue;
+	}
+	,__class__: haxe_io_Bytes
+};
 var haxe_io_BytesBuffer = function() {
 	this.pos = 0;
 	this.size = 0;
@@ -6788,6 +6313,12 @@ haxe_io_BytesBuffer.prototype = {
 	,__class__: haxe_io_BytesBuffer
 	,__properties__: {get_length:"get_length"}
 };
+var haxe_io_Encoding = $hxEnums["haxe.io.Encoding"] = { __ename__:"haxe.io.Encoding",__constructs__:null
+	,UTF8: {_hx_name:"UTF8",_hx_index:0,__enum__:"haxe.io.Encoding",toString:$estr}
+	,RawNative: {_hx_name:"RawNative",_hx_index:1,__enum__:"haxe.io.Encoding",toString:$estr}
+};
+haxe_io_Encoding.__constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
+haxe_io_Encoding.__empty_constructs__ = [haxe_io_Encoding.UTF8,haxe_io_Encoding.RawNative];
 var haxe_io_Eof = function() {
 };
 $hxClasses["haxe.io.Eof"] = haxe_io_Eof;
@@ -7992,62 +7523,6 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
-var js_Browser = function() { };
-$hxClasses["js.Browser"] = js_Browser;
-js_Browser.__name__ = "js.Browser";
-js_Browser.__properties__ = {get_supported:"get_supported",get_self:"get_self"};
-js_Browser.get_self = function() {
-	return $global;
-};
-js_Browser.get_supported = function() {
-	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
-		return typeof(window.location.protocol) == "string";
-	} else {
-		return false;
-	}
-};
-js_Browser.getLocalStorage = function() {
-	try {
-		var s = window.localStorage;
-		s.getItem("");
-		if(s.length == 0) {
-			var key = "_hx_" + Math.random();
-			s.setItem(key,key);
-			s.removeItem(key);
-		}
-		return s;
-	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
-		return null;
-	}
-};
-js_Browser.getSessionStorage = function() {
-	try {
-		var s = window.sessionStorage;
-		s.getItem("");
-		if(s.length == 0) {
-			var key = "_hx_" + Math.random();
-			s.setItem(key,key);
-			s.removeItem(key);
-		}
-		return s;
-	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
-		return null;
-	}
-};
-js_Browser.createXMLHttpRequest = function() {
-	if(typeof XMLHttpRequest != "undefined") {
-		return new XMLHttpRequest();
-	}
-	if(typeof ActiveXObject != "undefined") {
-		return new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
-};
-js_Browser.alert = function(v) {
-	window.alert(Std.string(v));
-};
 var js_Lib = function() { };
 $hxClasses["js.Lib"] = js_Lib;
 js_Lib.__name__ = "js.Lib";
@@ -8071,20 +7546,6 @@ js_Lib.getOriginalException = function() {
 };
 js_Lib.getNextHaxeUID = function() {
 	return $global.$haxeUID++;
-};
-var js_html__$CanvasElement_CanvasUtil = function() { };
-$hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
-js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
-js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
-	var ctx = canvas.getContext("webgl",attribs);
-	if(ctx != null) {
-		return ctx;
-	}
-	var ctx = canvas.getContext("experimental-webgl",attribs);
-	if(ctx != null) {
-		return ctx;
-	}
-	return null;
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
 $hxClasses["js.lib._ArrayBuffer.ArrayBufferCompat"] = js_lib__$ArrayBuffer_ArrayBufferCompat;
@@ -8703,21 +8164,21 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	,save_frequency: null
 	,onEnabled: function() {
 		var this1 = this.api;
-		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 78, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/haxe",{ fileName : "src/systems/commands/Api.hx", lineNumber : 75, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["haxe"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 79, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/flixel",{ fileName : "src/systems/commands/Api.hx", lineNumber : 76, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["flixel"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 80, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/heaps",{ fileName : "src/systems/commands/Api.hx", lineNumber : 77, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["heaps"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/ceramic",{ fileName : "src/systems/commands/Api.hx", lineNumber : 81, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/ceramic",{ fileName : "src/systems/commands/Api.hx", lineNumber : 78, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["ceramic"] = value;
 		var this1 = this.api;
-		var value = Util_loadFile("api/openfl",{ fileName : "src/systems/commands/Api.hx", lineNumber : 82, className : "systems.commands.Api", methodName : "onEnabled"});
+		var value = Util_loadFile("api/openfl",{ fileName : "src/systems/commands/Api.hx", lineNumber : 79, className : "systems.commands.Api", methodName : "onEnabled"});
 		this1.h["openfl"] = value;
-		this.cache = Util_loadFile("api/cache/0",{ fileName : "src/systems/commands/Api.hx", lineNumber : 83, className : "systems.commands.Api", methodName : "onEnabled"});
+		this.cache = Util_loadFile("api/cache/0",{ fileName : "src/systems/commands/Api.hx", lineNumber : 80, className : "systems.commands.Api", methodName : "onEnabled"});
 		if(this.cache == null) {
 			this.cache = systems_commands_FieldCache._new();
 		}
@@ -8739,7 +8200,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				this.npackages.push({ name : key1, value : _g3_value.path});
 			}
 		}
-		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 99, className : "systems.commands.Api", methodName : "onEnabled"});
+		haxe_Log.trace("loaded",{ fileName : "src/systems/commands/Api.hx", lineNumber : 96, className : "systems.commands.Api", methodName : "onEnabled"});
 	}
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
@@ -8866,6 +8327,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			var a = header_arr[0];
 			var b = null;
 			var last = 0;
+			var response = [];
 			var results = [];
 			while(true) {
 				var _g1_current = 0;
@@ -8912,7 +8374,14 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				default:
 					arr = [];
 				}
-				results = results.concat(arr);
+				response = response.concat(arr);
+				var algo = externs_FuzzySort.go(find,response,{ key : "id", limit : 10, threshold : -10000});
+				var _g = 0;
+				while(_g < algo.length) {
+					var a1 = algo[_g];
+					++_g;
+					results.push(a1.obj);
+				}
 				a = b;
 				b = null;
 				if(a == "last") {
@@ -8924,7 +8393,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				var r = results[_g];
 				++_g;
 				systems_commands_FieldCache.set(_gthis.cache,cls.path,r);
-				ac.push({ name : HxOverrides.substr(r.code,0,40) + "...", value : r.id});
+				ac.push({ name : r.id, value : r.id});
 			}
 			js_node_Fs.writeFileSync("./commands/api/cache/0.json",JSON.stringify(_gthis.cache));
 			_gthis.save_time = new Date().getTime();
@@ -8990,9 +8459,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			if(value != null) {
 				result += " = " + value;
 			}
-			if(StringTools.startsWith(identifier.toLowerCase(),find.toLowerCase())) {
-				arr.push({ id : identifier, code : result, doc : doc});
-			}
+			arr.push({ id : identifier, code : result, doc : doc});
 		}
 		return arr;
 	}
@@ -9044,9 +8511,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				result += "" + l + " ";
 			}
 			result += "" + identifier + parameters;
-			if(StringTools.startsWith(identifier.toLowerCase(),find.toLowerCase())) {
-				arr.push({ id : identifier, code : result, doc : doc});
-			}
+			arr.push({ id : identifier, code : result, doc : doc});
 		}
 		return arr;
 	}
@@ -9298,9 +8763,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.check_verified_interval = 86400000;
+	this.review_thread = "946834684741050398";
+	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
-	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -9309,9 +8774,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
-	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
+	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 11) {
@@ -9465,7 +8930,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return null;
+			return "haxe";
 		}
 	}
 	,get_name: function() {
@@ -10492,15 +9957,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
-		var _gthis = this;
 		if(!Main.connected) {
-			return;
-		}
-		if(this.channel == null && !this.checked) {
-			this.checked = true;
-			Main.client.channels.fetch("663246792426782730").then(function(channel) {
-				return _gthis.channel = channel;
-			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -11999,7 +11456,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "162395145352904705";
+Main.guild_id = "416069724158427137";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;
@@ -12009,14 +11466,6 @@ ecs_ds_Unit.unit = ecs_ds_Unit._new();
 haxe_Int32._mul = Math.imul != null ? Math.imul : function(a,b) {
 	return a * (b & 65535) + (a * (b >>> 16) << 16 | 0) | 0;
 };
-haxe_Serializer.USE_CACHE = false;
-haxe_Serializer.USE_ENUM_INDEX = false;
-haxe_Serializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
-haxe_Serializer.BASE64_CODES = null;
-haxe_crypto_Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-haxe_crypto_Base64.BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.CHARS);
-haxe_crypto_Base64.URL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
-haxe_crypto_Base64.URL_BYTES = haxe_io_Bytes.ofString(haxe_crypto_Base64.URL_CHARS);
 haxe_io_FPHelper.i64tmp = new haxe__$Int64__$_$_$Int64(0,0);
 haxe_io_FPHelper.LN2 = 0.6931471805599453;
 haxe_io_FPHelper.helper = new DataView(new ArrayBuffer(8));
