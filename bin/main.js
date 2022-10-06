@@ -8276,7 +8276,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			var cls_desc = "";
 			var field_desc = "";
 			if(Object.prototype.hasOwnProperty.call(this.packages.h,_g1)) {
-				title = cls.name;
+				title = cls.path;
 				link = cls.link;
 				cls_desc = cls.description;
 			}

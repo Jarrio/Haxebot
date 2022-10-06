@@ -166,7 +166,7 @@ class Api extends CommandBase {
 				var field_desc = '';
 
 				if (this.packages.exists(path)) {
-					title = cls.name;
+					title = cls.path;
 					link = cls.link;
 					cls_desc = cls.description;
 				}
