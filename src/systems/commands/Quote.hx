@@ -88,7 +88,12 @@ class Quote extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Quote(type, name):
+			case Quote(name, t):
+				var type:String = QuoteCommand.get;
+				if (t != null) {
+					type = t;
+				}
+
 				var column = 'id';
 				if (this.isName(name) && type != get) {
 					if (name.length < 2) {
@@ -105,7 +110,7 @@ class Quote extends CommandDbBase {
 				}
 
 				var col = collection(db, 'discord/quotes/entries');
-				
+
 				var query:Query<TQuoteData> = Firestore.query(col, where(column, EQUAL_TO, isName(name) ? this.nameArray(name) : name.parseInt()),
 					where('author', EQUAL_TO, interaction.user.id));
 

@@ -1,9 +1,7 @@
 package systems.commands;
 
-import sys.io.File;
 import js.html.URL;
 import discord_js.MessageEmbed;
-import discord_js.TextChannel;
 import haxe.Json;
 import haxe.Http;
 import discord_js.User;

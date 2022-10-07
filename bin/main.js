@@ -2450,7 +2450,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Code: ($_=function(code) { return {_hx_index:14,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
 	,Help: ($_=function(category) { return {_hx_index:15,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
 	,Haxelib: ($_=function(command) { return {_hx_index:16,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
-	,Quote: ($_=function(type,name) { return {_hx_index:17,type:type,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["type","name"],$_)
+	,Quote: ($_=function(name,type) { return {_hx_index:17,name:name,type:type,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["name","type"],$_)
 	,Showcase: {_hx_name:"Showcase",_hx_index:18,__enum__:"components.CommandOptions",toString:$estr}
 };
 components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quote,components_CommandOptions.Showcase];
@@ -9518,8 +9518,12 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		if(_g._hx_index == 17) {
 			var _g1 = _g.type;
 			var name = _g.name;
+			var type = "get";
+			if(_g1 != null) {
+				type = _g1;
+			}
 			var column = "id";
-			if(this.isName(name) && _g1 != "get") {
+			if(this.isName(name) && type != "get") {
 				if(name.length < 2) {
 					if(interaction.isAutocomplete()) {
 						interaction.respond([]);
@@ -9533,7 +9537,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
 			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name) ? this.nameArray(name) : Std.parseInt(name)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
-			if(interaction.isAutocomplete() && _g1 != "get") {
+			if(interaction.isAutocomplete() && type != "get") {
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					var results = [];
 					var _g = 0;
@@ -9552,7 +9556,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,Util_err);
 				return;
 			}
-			switch(_g1) {
+			switch(type) {
 			case "delete":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
@@ -9561,8 +9565,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 210, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 211, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 215, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 216, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
@@ -10481,8 +10485,8 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 109, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -10593,8 +10597,8 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 111, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 112, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 109, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 110, className : "systems.commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -10682,7 +10686,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 170, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 168, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 						return true;
