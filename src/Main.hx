@@ -75,6 +75,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						Twitter,
 						Quote, 
 						ScamPrevention, Api, Haxelib, Trace, React, Notify, Helpdescription, Rtfm, Poll, Boop, Archive, Help,
 						Translate,
@@ -409,6 +410,7 @@ typedef TConfig = {
 	#else
 	var lclient_id:String;
 	var ldiscord_token:String;
+	var twitter_token:String;
 	#end
 	var username:String;
 	var password:String;
