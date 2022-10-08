@@ -643,7 +643,7 @@ Main.config = null;
 Main.universe = null;
 Main.token = function(rest) {
 	var commands = Main.parseCommands();
-	var client_id = Main.config.client_id;
+	var client_id = Main.config.lclient_id;
 	var get = rest.put(Routes.applicationGuildCommands(client_id,Main.guild_id),{ body : commands});
 	return get;
 };
@@ -822,7 +822,7 @@ Main.start = function() {
 	}
 	Main.universe = u;
 	Main.client = new discord_$js_Client({ intents : [1,512,4096,2,1024]});
-	var discord_token = Main.config.discord_token;
+	var discord_token = Main.config.ldiscord_token;
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
@@ -840,6 +840,7 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
 			}
+			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("messageCreate",function(message) {
@@ -1175,7 +1176,7 @@ Main.main = function() {
 		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 288, className : "Main", methodName : "main"});
 	}
 	var token = "";
-	token = Main.config.discord_token;
+	token = Main.config.ldiscord_token;
 	if(Main.config == null || token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
@@ -8260,7 +8261,15 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						}
 					}
-					this.getFieldPage(cls,_g2,interaction);
+					try {
+						this.getFieldPage(cls,_g2,interaction);
+					} catch( _g ) {
+						var _g3 = haxe_Exception.caught(_g);
+						haxe_Log.trace(_g3,{ fileName : "src/systems/commands/Api.hx", lineNumber : 158, className : "systems.commands.Api", methodName : "run"});
+						haxe_Log.trace(cls,{ fileName : "src/systems/commands/Api.hx", lineNumber : 159, className : "systems.commands.Api", methodName : "run"});
+						haxe_Log.trace(_g2,{ fileName : "src/systems/commands/Api.hx", lineNumber : 160, className : "systems.commands.Api", methodName : "run"});
+						haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Api.hx", lineNumber : 161, className : "systems.commands.Api", methodName : "run"});
+					}
 					break;
 				case "package":
 					this.search(_g1,interaction);
@@ -8301,6 +8310,9 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,getFieldPage: function(cls,find,interaction,ac) {
 		var _gthis = this;
+		if(cls == null) {
+			return;
+		}
 		var http = new haxe_http_HttpNodeJs(cls.link);
 		if(ac == null) {
 			ac = [];
@@ -8804,9 +8816,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.check_verified_interval = 86400000;
+	this.review_thread = "946834684741050398";
+	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
-	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -8815,9 +8827,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
-	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
+	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 11) {
@@ -8971,7 +8983,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return null;
+			return "haxe";
 		}
 	}
 	,get_name: function() {
@@ -10002,15 +10014,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
-		var _gthis = this;
 		if(!Main.connected) {
-			return;
-		}
-		if(this.channel == null && !this.checked) {
-			this.checked = true;
-			Main.client.channels.fetch("663246792426782730").then(function(channel) {
-				return _gthis.channel = channel;
-			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -11509,7 +11513,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "162395145352904705";
+Main.guild_id = "416069724158427137";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;

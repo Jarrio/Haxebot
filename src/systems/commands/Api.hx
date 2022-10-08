@@ -152,7 +152,14 @@ class Api extends CommandBase {
 									return;
 								}
 							}
-							this.getFieldPage(cls, field, interaction);
+							try {
+								this.getFieldPage(cls, field, interaction);
+							} catch (e) {
+								trace(e);
+								trace(cls);
+								trace(field);
+								trace(path);
+							}
 						default:
 					}
 					return;
@@ -197,6 +204,10 @@ class Api extends CommandBase {
 	}
 
 	function getFieldPage(cls:Data, find:String, interaction:BaseCommandInteraction, ?ac:Array<{name:String, value:String}>) {
+		if (cls == null) {
+			return;
+		}
+
 		var http = new Http(cls.link);
 		if (ac == null) {
 			ac = [];
