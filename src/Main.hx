@@ -410,8 +410,8 @@ typedef TConfig = {
 	#else
 	var lclient_id:String;
 	var ldiscord_token:String;
-	var twitter_token:String;
 	#end
+	var twitter_token:String;
 	var username:String;
 	var password:String;
 	var deepl_key:String;

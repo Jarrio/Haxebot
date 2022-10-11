@@ -11432,16 +11432,19 @@ systems_commands__$Twitter_Response.getUser = function(this1,tweet) {
 	return null;
 };
 systems_commands__$Twitter_Response.createLinks = function(this1) {
-	var urls = [];
+	var urls = new haxe_ds_StringMap();
 	var _g = 0;
 	var _g1 = systems_commands__$Twitter_Response.get_tweets(this1);
 	while(_g < _g1.length) {
 		var tweet = _g1[_g];
 		++_g;
 		var user = systems_commands__$Twitter_Response.getUser(this1,tweet);
-		urls.push("https://twitter.com/" + user.username + "/status/" + tweet.id);
+		urls.h[tweet.id] = "https://twitter.com/" + user.username + "/status/" + tweet.id;
 	}
 	return urls;
+};
+systems_commands__$Twitter_Response.createLink = function(user,id) {
+	return "https://twitter.com/" + user + "/status/" + id;
 };
 systems_commands__$Twitter_Response.get_tweets = function(this1) {
 	return this1.data;
@@ -11450,6 +11453,12 @@ systems_commands__$Twitter_Response.get_users = function(this1) {
 	return this1.includes.users;
 };
 var systems_commands_Twitter = function(_universe) {
+	this.checking = false;
+	this.arr = [];
+	var this1 = new Array(6);
+	this.vector = this1;
+	this.channel_id = "1028078544867311727";
+	this.ping_rate = 3600000;
 	this.tweets = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
 };
@@ -11458,13 +11467,114 @@ systems_commands_Twitter.__name__ = "systems.commands.Twitter";
 systems_commands_Twitter.__super__ = systems_CommandBase;
 systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 	tweets: null
+	,ping_rate: null
+	,channel: null
+	,channel_id: null
+	,vector: null
 	,onEnabled: function() {
-		var url = "https://api.twitter.com/2/tweets/search/recent?query=" + "%23haxe OR %23haxeflixel OR %23openfl OR %23kha OR %23heaps OR %23ceramic OR %23haxeui -is:retweet" + "&expansions=author_id&user.fields=name&sort_order=recency";
-		externs_Fetch(url,{ headers : { Authorization : "Bearer " + Main.config.twitter_token}, method : "GET"}).then(function(succ) {
-			succ.json().then(function(json) {
-				haxe_Log.trace(systems_commands__$Twitter_Response.createLinks(json),{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 66, className : "systems.commands.Twitter", methodName : "onEnabled"});
+		this.vector[0] = false;
+		this.vector[1] = false;
+		this.vector[2] = false;
+		this.vector[3] = false;
+		this.vector[4] = false;
+		this.vector[5] = false;
+	}
+	,arr: null
+	,checking: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		if(!Main.connected) {
+			return;
+		}
+		if(!this.checking && this.channel != null) {
+			this.checking = true;
+			var queries = ["#haxe","#haxeflixel","#openfl","#yeswekha","#haxe #heaps","#haxeui"];
+			var _g_current = 0;
+			var _g_array = queries;
+			while(_g_current < _g_array.length) {
+				var _g1_value = _g_array[_g_current];
+				var _g1_key = _g_current++;
+				var k = [_g1_key];
+				var query = [_g1_value];
+				query[0] += " -is:retweet";
+				var url = "https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&query=" + encodeURIComponent(query[0]);
+				externs_Fetch(url,{ headers : { Authorization : "Bearer " + Main.config.twitter_token}, method : "GET"}).then((function(query,k) {
+					return function(succ) {
+						succ.json().then((function(query,k) {
+							return function(json) {
+								haxe_Log.trace("" + query[0] + " - " + json.meta.result_count,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 105, className : "systems.commands.Twitter", methodName : "update"});
+								if(json.meta.result_count > 0) {
+									var h = systems_commands__$Twitter_Response.createLinks(json).h;
+									var tweet_h = h;
+									var tweet_keys = Object.keys(h);
+									var tweet_length = tweet_keys.length;
+									var tweet_current = 0;
+									while(tweet_current < tweet_length) {
+										var tweet = tweet_h[tweet_keys[tweet_current++]];
+										_gthis.arr.push(tweet);
+									}
+								}
+								_gthis.vector[k[0]] = true;
+							};
+						})(query,k),Util_err);
+					};
+				})(query,k),Util_err);
+			}
+		}
+		var post = true;
+		var i = 0;
+		var _g = 0;
+		var _g1 = this.vector;
+		while(_g < _g1.length) {
+			var v = _g1[_g];
+			++_g;
+			if(!v) {
+				post = false;
+				break;
+			}
+			++i;
+		}
+		if(post && this.arr.length != 0) {
+			post = false;
+			var i = 0;
+			var t = new haxe_Timer(250);
+			t.run = function() {
+				if(i >= _gthis.arr.length) {
+					haxe_Log.trace("stop",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 136, className : "systems.commands.Twitter", methodName : "update"});
+					_gthis.vector[0] = false;
+					_gthis.vector[1] = false;
+					_gthis.vector[2] = false;
+					_gthis.vector[3] = false;
+					_gthis.vector[4] = false;
+					_gthis.vector[5] = false;
+					t.stop();
+					_gthis.arr = [];
+					return;
+				}
+				if(_gthis.arr[i] == null) {
+					return;
+				}
+				_gthis.channel.send({ content : _gthis.arr[i]});
+				i += 1;
+			};
+		}
+		if(!this.checking && this.channel == null) {
+			this.checking = true;
+			Main.client.channels.fetch(this.channel_id).then(function(succ) {
+				_gthis.channel = succ;
+				_gthis.checking = false;
+				haxe_Log.trace("found channel",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 161, className : "systems.commands.Twitter", methodName : "update"});
 			},Util_err);
-		},Util_err);
+		}
+	}
+	,createEmbed: function(tweet,user) {
+		var embed = new discord_$js_MessageEmbed();
+		embed.setTitle("@" + user.username);
+		embed.setURL("https://twitter.com/" + user.username + "/status/" + tweet.id);
+		embed.setDescription(tweet.text);
+		embed.setFooter({ text : tweet.created_at, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless"});
+		return embed;
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
