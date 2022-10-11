@@ -172,10 +172,6 @@ class Quote extends CommandDbBase {
 						}, err);
 
 					case edit:
-						Browser.console.dir(interaction);
-						trace(name);
-						trace(column);
-
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
 								interaction.reply('Could not find quote');
@@ -222,8 +218,6 @@ class Quote extends CommandDbBase {
 
 							if (res.docs.length > 1) {
 								interaction.reply("An odd situation occured. <@151104106973495296>");
-								trace(name);
-								trace(interaction.user.id);
 								return;
 							}
 

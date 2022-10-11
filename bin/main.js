@@ -9597,11 +9597,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 17) {
+			var _g1 = _g.type;
 			var name = _g.name;
-			var t = _g.type;
 			var type = "get";
-			if(t != null) {
-				type = t;
+			if(_g1 != null) {
+				type = _g1;
 			}
 			var column = "id";
 			if(this.isName(name) && type != "get") {
@@ -9646,8 +9646,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 225, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 226, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
@@ -9656,15 +9654,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},Util_err);
 				break;
 			case "edit":
-				$global.console.dir(interaction);
-				haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 176, className : "systems.commands.Quote", methodName : "run"});
-				haxe_Log.trace(column,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 177, className : "systems.commands.Quote", methodName : "run"});
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Could not find quote");
 						return;
 					}
-					var ref = null;
 					var doc = null;
 					var _g = 0;
 					var _g1 = res.docs;
@@ -9672,7 +9666,6 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						var d = _g1[_g];
 						++_g;
 						if(interaction.user.id == d.data().author) {
-							ref = d.ref;
 							doc = d.data();
 							break;
 						}
