@@ -9746,7 +9746,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
-					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name.toLowerCase()).setMinLength(3).setMaxLength(12);
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name.toLowerCase()).setMinLength(3).setMaxLength(16);
 					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
 					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
