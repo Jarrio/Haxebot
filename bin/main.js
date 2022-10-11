@@ -643,7 +643,7 @@ Main.config = null;
 Main.universe = null;
 Main.token = function(rest) {
 	var commands = Main.parseCommands();
-	var client_id = Main.config.client_id;
+	var client_id = Main.config.lclient_id;
 	var get = rest.put(Routes.applicationGuildCommands(client_id,Main.guild_id),{ body : commands});
 	return get;
 };
@@ -822,7 +822,7 @@ Main.start = function() {
 	}
 	Main.universe = u;
 	Main.client = new discord_$js_Client({ intents : [1,512,4096,2,1024]});
-	var discord_token = Main.config.discord_token;
+	var discord_token = Main.config.ldiscord_token;
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
@@ -840,6 +840,7 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
 			}
+			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("messageCreate",function(message) {
@@ -1175,7 +1176,7 @@ Main.main = function() {
 		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 288, className : "Main", methodName : "main"});
 	}
 	var token = "";
-	token = Main.config.discord_token;
+	token = Main.config.ldiscord_token;
 	if(Main.config == null || token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
@@ -7522,6 +7523,62 @@ js_Boot.__isNativeObj = function(o) {
 js_Boot.__resolveNativeClass = function(name) {
 	return $global[name];
 };
+var js_Browser = function() { };
+$hxClasses["js.Browser"] = js_Browser;
+js_Browser.__name__ = "js.Browser";
+js_Browser.__properties__ = {get_supported:"get_supported",get_self:"get_self"};
+js_Browser.get_self = function() {
+	return $global;
+};
+js_Browser.get_supported = function() {
+	if(typeof(window) != "undefined" && typeof(window.location) != "undefined") {
+		return typeof(window.location.protocol) == "string";
+	} else {
+		return false;
+	}
+};
+js_Browser.getLocalStorage = function() {
+	try {
+		var s = window.localStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		return null;
+	}
+};
+js_Browser.getSessionStorage = function() {
+	try {
+		var s = window.sessionStorage;
+		s.getItem("");
+		if(s.length == 0) {
+			var key = "_hx_" + Math.random();
+			s.setItem(key,key);
+			s.removeItem(key);
+		}
+		return s;
+	} catch( _g ) {
+		haxe_NativeStackTrace.lastError = _g;
+		return null;
+	}
+};
+js_Browser.createXMLHttpRequest = function() {
+	if(typeof XMLHttpRequest != "undefined") {
+		return new XMLHttpRequest();
+	}
+	if(typeof ActiveXObject != "undefined") {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	throw haxe_Exception.thrown("Unable to create XMLHttpRequest object.");
+};
+js_Browser.alert = function(v) {
+	window.alert(Std.string(v));
+};
 var js_Lib = function() { };
 $hxClasses["js.Lib"] = js_Lib;
 js_Lib.__name__ = "js.Lib";
@@ -7545,6 +7602,20 @@ js_Lib.getOriginalException = function() {
 };
 js_Lib.getNextHaxeUID = function() {
 	return $global.$haxeUID++;
+};
+var js_html__$CanvasElement_CanvasUtil = function() { };
+$hxClasses["js.html._CanvasElement.CanvasUtil"] = js_html__$CanvasElement_CanvasUtil;
+js_html__$CanvasElement_CanvasUtil.__name__ = "js.html._CanvasElement.CanvasUtil";
+js_html__$CanvasElement_CanvasUtil.getContextWebGL = function(canvas,attribs) {
+	var ctx = canvas.getContext("webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	var ctx = canvas.getContext("experimental-webgl",attribs);
+	if(ctx != null) {
+		return ctx;
+	}
+	return null;
 };
 var js_lib__$ArrayBuffer_ArrayBufferCompat = function() { };
 $hxClasses["js.lib._ArrayBuffer.ArrayBufferCompat"] = js_lib__$ArrayBuffer_ArrayBufferCompat;
@@ -8815,9 +8886,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.check_verified_interval = 86400000;
+	this.review_thread = "946834684741050398";
+	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
-	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -8826,9 +8897,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
-	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
+	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 11) {
@@ -8982,7 +9053,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return null;
+			return "haxe";
 		}
 	}
 	,get_name: function() {
@@ -9465,7 +9536,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 71, className : "systems.commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 72, className : "systems.commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -9527,11 +9598,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 17) {
-			var _g1 = _g.type;
 			var name = _g.name;
+			var t = _g.type;
 			var type = "get";
-			if(_g1 != null) {
-				type = _g1;
+			if(t != null) {
+				type = t;
 			}
 			var column = "id";
 			if(this.isName(name) && type != "get") {
@@ -9576,8 +9647,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					if(res.docs.length > 1) {
 						interaction.reply("An odd situation occured. <@151104106973495296>");
-						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 215, className : "systems.commands.Quote", methodName : "run"});
-						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 216, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 224, className : "systems.commands.Quote", methodName : "run"});
+						haxe_Log.trace(interaction.user.id,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 225, className : "systems.commands.Quote", methodName : "run"});
 						return;
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
@@ -9586,11 +9657,15 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				},Util_err);
 				break;
 			case "edit":
+				$global.console.dir(interaction);
+				haxe_Log.trace(name,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 175, className : "systems.commands.Quote", methodName : "run"});
+				haxe_Log.trace(column,{ fileName : "src/systems/commands/Quote.hx", lineNumber : 176, className : "systems.commands.Quote", methodName : "run"});
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
 						interaction.reply("Could not find quote");
 						return;
 					}
+					var ref = null;
 					var doc = null;
 					var _g = 0;
 					var _g1 = res.docs;
@@ -9598,6 +9673,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						var d = _g1[_g];
 						++_g;
 						if(interaction.user.id == d.data().author) {
+							ref = d.ref;
 							doc = d.data();
 							break;
 						}
@@ -9658,7 +9734,11 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				break;
 			case "set":
 				if(!this.isValidName(name)) {
-					interaction.reply({ content : "*Names can only contain `_-` and/or spaces.*", ephemeral : true});
+					var error_msg = "name can only be 3-16 characters long";
+					if(name.length < 16) {
+						error_msg = "*Names can only contain `_-` and/or spaces.*";
+					}
+					interaction.reply({ content : error_msg, ephemeral : true});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -10013,15 +10093,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
-		var _gthis = this;
 		if(!Main.connected) {
-			return;
-		}
-		if(this.channel == null && !this.checked) {
-			this.checked = true;
-			Main.client.channels.fetch("663246792426782730").then(function(channel) {
-				return _gthis.channel = channel;
-			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -11520,7 +11592,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "162395145352904705";
+Main.guild_id = "416069724158427137";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;

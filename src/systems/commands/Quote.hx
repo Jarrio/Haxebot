@@ -1,5 +1,6 @@
 package systems.commands;
 
+import js.Browser;
 import discord_builder.APIActionRowComponent;
 import discord_builder.APITextInputComponent;
 import discord_builder.ModalBuilder;
@@ -132,7 +133,11 @@ class Quote extends CommandDbBase {
 				switch (type) {
 					case set:
 						if (!this.isValidName(name)) {
-							interaction.reply({content: '*Names can only contain `_-` and/or spaces.*', ephemeral: true});
+							var error_msg = 'name can only be 3-16 characters long';
+							if (name.length < 16) {
+								error_msg = '*Names can only contain `_-` and/or spaces.*';
+							}
+							interaction.reply({content: error_msg, ephemeral: true});
 							return;
 						}
 
@@ -166,6 +171,10 @@ class Quote extends CommandDbBase {
 						}, err);
 
 					case edit:
+						Browser.console.dir(interaction);
+						trace(name);
+						trace(column);
+
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
 								interaction.reply('Could not find quote');
