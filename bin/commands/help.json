@@ -62,7 +62,7 @@
 		"show_help": true,
 		"type": "quote",
 		"content": [
-			"A command to save content, save things that are useful to yourself or others. The first parameter is what you want to do with a quote. \nThe second is the identifier you select quotes by, however you may also you the generated id.\n\n- Quote names are unique users, can contain: _- and spaces\n- Names are case insensitive"
+			"A command to save content, save things that are useful to yourself or others. The first parameter is the identifier you select quotes by, however you may also you the generated id.\n The second is what you want to do with a quote. \n\n- Quote names are unique users, can contain: _- and spaces\n- Names are case insensitive"
 		]
 	}
 ]
