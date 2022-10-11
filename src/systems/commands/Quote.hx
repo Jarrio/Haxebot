@@ -29,9 +29,10 @@ class Quote extends CommandDbBase {
 					var name = interaction.fields.getTextInputValue('name');
 					var description = interaction.fields.getTextInputValue('description');
 
-					var data = {
+					var data:TQuoteData = {
 						id: -1,
-						name: this.nameArray(name),
+						name: name,
+						tags: this.nameArray(name),
 						description: description,
 						author: interaction.user.id,
 						username: interaction.user.username,
@@ -57,7 +58,7 @@ class Quote extends CommandDbBase {
 						});
 					}).then(function(value) {
 						data.id = value.id;
-						data.name.insert(0, '${data.id}');
+						data.tags.insert(0, '${data.id}');
 
 						this.addDoc('discord/quotes/entries', data, function(_) {
 							interaction.reply('*Quote #${data.id} added!*\nname: $name\n$description\n\nby: <@${data.author}>');
@@ -112,7 +113,7 @@ class Quote extends CommandDbBase {
 
 				var col = collection(db, 'discord/quotes/entries');
 
-				var query:Query<TQuoteData> = Firestore.query(col, where(column, EQUAL_TO, isName(name) ? this.nameArray(name) : name.parseInt()),
+				var query:Query<TQuoteData> = Firestore.query(col, where(column, EQUAL_TO, isName(name) ? name : name.parseInt()),
 					where('author', EQUAL_TO, interaction.user.id));
 
 				if (interaction.isAutocomplete() && type != get) {
@@ -200,7 +201,7 @@ class Quote extends CommandDbBase {
 							var modal = new ModalBuilder().setCustomId('quote_edit').setTitle('Editting quote #${doc.id}');
 
 							var desc_input = new APITextInputComponent().setCustomId('description')
-								.setLabel('${this.nameString(doc.name)}:')
+								.setLabel('${doc.name}:')
 								.setStyle(Paragraph)
 								.setValue(doc.description)
 								.setMinLength(10)
@@ -232,7 +233,7 @@ class Quote extends CommandDbBase {
 						}, err);
 
 					case get | _:
-						query = Firestore.query(col, where('name', ARRAY_CONTAINS_ANY, this.nameArray(name)));
+						query = Firestore.query(col, where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 
 						if (interaction.isAutocomplete()) {
 							Firestore.getDocs(query).then(function(res) {
@@ -269,7 +270,7 @@ class Quote extends CommandDbBase {
 								content = user.username;
 							}
 
-							embed.setDescription('***${this.nameString(data.name)}***\n${data.description}');
+							embed.setDescription('***${data.name}***\n${data.description}');
 							embed.setFooter({text: '$content | $date |\t#${data.id}', iconURL: icon});
 
 							interaction.reply({embeds: [embed]}).then(null, err);
@@ -281,7 +282,7 @@ class Quote extends CommandDbBase {
 	}
 
 	inline function acResponse(data:TQuoteData) {
-		var name = this.nameString(data.name);
+		var name = data.name;
 		if (name.length > 25) {
 			name = name.substr(0, 25) + '...';
 		}
@@ -321,7 +322,8 @@ class Quote extends CommandDbBase {
 
 typedef TQuoteData = {
 	@:optional var id:Int;
-	@:optional var name:Array<String>;
+	@:optional var tags:Array<String>;
+	@:optional var name:String;
 	@:optional var description:String;
 	@:optional var author:String;
 	@:optional var username:String;
