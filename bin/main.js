@@ -11514,7 +11514,7 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 		checker.run = function() {
 			if(Main.connected && !_gthis.checking && _gthis.channel != null) {
 				_gthis.checking = true;
-				var queries = ["#haxe","#haxeflixel","#haxe #openfl","#yeswekha","#haxe #heaps","#haxeui"];
+				var queries = ["#haxe","#haxeflixel","#haxe #openfl","#yeswekha","#haxe #heaps","#haxeui","#heapsio"];
 				var _g_current = 0;
 				var _g_array = queries;
 				while(_g_current < _g_array.length) {

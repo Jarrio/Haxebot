@@ -89,7 +89,7 @@ class Twitter extends CommandBase {
 				this.checking = true;
 
 
-				var queries = ['#haxe', '#haxeflixel', '#haxe #openfl', '#yeswekha', '#haxe #heaps', '#haxeui'];
+				var queries = ['#haxe', '#haxeflixel', '#haxe #openfl', '#yeswekha', '#haxe #heaps', '#haxeui', '#heapsio'];
 				for (k => query in queries) {
 					var url = 'https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25';
 
