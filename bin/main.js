@@ -650,8 +650,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(1);
 	var vec = this1;
-	var this1 = new Array(18);
-	var this11 = new Array(18);
+	var this1 = new Array(19);
+	var this11 = new Array(19);
 	vec[0] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(6);
@@ -742,77 +742,81 @@ Main.start = function() {
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
 	var phase = vec[0];
-	var s = new systems_commands_Quote(u);
+	var s = new systems_commands_Twitter(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new systems_commands_ScamPrevention(u);
+	var s = new systems_commands_Quote(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_ScamPrevention(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new systems_commands_Haxelib(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Trace(u);
+	var s = new systems_commands_Haxelib(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_React(u);
+	var s = new systems_commands_Trace(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_React(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Archive(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_Help(u);
+	var s = new systems_commands_Archive(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new systems_commands_Translate(u);
+	var s = new systems_commands_Help(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new systems_commands_Hi(u);
+	var s = new systems_commands_Translate(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new systems_commands_Run(u);
+	var s = new systems_commands_Hi(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new systems_commands_Roundup(u);
+	var s = new systems_commands_Run(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new systems_commands_Showcase(u);
+	var s = new systems_commands_Roundup(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
+	s.onEnabled();
+	var s = new systems_commands_Showcase(u);
+	phase.systems[18] = s;
+	phase.enabledSystems[18] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -827,7 +831,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 106, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 107, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discordjs_rest_REST({ version : "9"}).setToken(discord_token);
@@ -838,7 +842,7 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 116, className : "Main", methodName : "start"});
 			}
 		},Util_err);
 	});
@@ -959,8 +963,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 161, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 162, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 162, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1057,7 +1061,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 184, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 185, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1165,14 +1169,14 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 281, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 282, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 288, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 289, className : "Main", methodName : "main"});
 	}
 	var token = "";
 	token = Main.config.discord_token;
@@ -1181,7 +1185,7 @@ Main.main = function() {
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.config.username,Main.config.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 303, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 304, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -10772,6 +10776,9 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 							haxe_Log.trace(regex.matched(1),{ fileName : "src/systems/commands/ScamPrevention.hx", lineNumber : 168, className : "systems.commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
+						if(link != url.hostname) {
+							return false;
+						}
 						return true;
 					}
 				}
@@ -11430,6 +11437,207 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 		return "translate";
 	}
 	,__class__: systems_commands_Translate
+});
+var systems_commands__$Twitter_Response = {};
+systems_commands__$Twitter_Response.__properties__ = {get_users:"get_users",get_tweets:"get_tweets"};
+systems_commands__$Twitter_Response.getUser = function(this1,tweet) {
+	if(systems_commands__$Twitter_Response.get_users(this1) != null) {
+		var _g = 0;
+		var _g1 = systems_commands__$Twitter_Response.get_users(this1);
+		while(_g < _g1.length) {
+			var user = _g1[_g];
+			++_g;
+			if(tweet.author_id == user.id) {
+				return user;
+			}
+		}
+	}
+	return null;
+};
+systems_commands__$Twitter_Response.createLinks = function(this1) {
+	var urls = new haxe_ds_StringMap();
+	var _g = 0;
+	var _g1 = systems_commands__$Twitter_Response.get_tweets(this1);
+	while(_g < _g1.length) {
+		var tweet = _g1[_g];
+		++_g;
+		var user = systems_commands__$Twitter_Response.getUser(this1,tweet);
+		urls.h[tweet.id] = "https://twitter.com/" + user.username + "/status/" + tweet.id;
+	}
+	return urls;
+};
+systems_commands__$Twitter_Response.createLink = function(user,id) {
+	return "https://twitter.com/" + user + "/status/" + id;
+};
+systems_commands__$Twitter_Response.get_tweets = function(this1) {
+	return this1.data;
+};
+systems_commands__$Twitter_Response.get_users = function(this1) {
+	return this1.includes.users;
+};
+var systems_commands_Twitter = function(_universe) {
+	this.timer = new haxe_Timer(500);
+	this.should_send = true;
+	this.checking = false;
+	this.sent_links = 0;
+	this.twitter_links = [];
+	var this1 = new Array(6);
+	this.async_check = this1;
+	this.channel_id = "1028078544867311727";
+	this.ping_rate = 900000;
+	this.tweets = new haxe_ds_StringMap();
+	systems_CommandBase.call(this,_universe);
+};
+$hxClasses["systems.commands.Twitter"] = systems_commands_Twitter;
+systems_commands_Twitter.__name__ = "systems.commands.Twitter";
+systems_commands_Twitter.__super__ = systems_CommandBase;
+systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
+	tweets: null
+	,ping_rate: null
+	,channel: null
+	,channel_id: null
+	,async_check: null
+	,twitter_links: null
+	,sent_links: null
+	,checking: null
+	,should_send: null
+	,timer: null
+	,onEnabled: function() {
+		var _gthis = this;
+		this.async_check[0] = false;
+		this.async_check[1] = false;
+		this.async_check[2] = false;
+		this.async_check[3] = false;
+		this.async_check[4] = false;
+		this.async_check[5] = false;
+		var checker = new haxe_Timer(this.ping_rate | 0);
+		checker.run = function() {
+			if(Main.connected && !_gthis.checking && _gthis.channel != null) {
+				_gthis.checking = true;
+				var queries = ["#haxe","#haxeflixel","#haxe #openfl","#yeswekha","#haxe #heaps","#haxeui"];
+				var _g_current = 0;
+				var _g_array = queries;
+				while(_g_current < _g_array.length) {
+					var _g1_value = _g_array[_g_current];
+					var _g1_key = _g_current++;
+					var k = [_g1_key];
+					var query = _g1_value;
+					var url = "https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25";
+					if(Main.config.twitter_since_id != "") {
+						url += "&since_id=" + Main.config.twitter_since_id;
+					}
+					query += " -is:retweet";
+					url += "&query=" + encodeURIComponent(query);
+					externs_Fetch(url,{ headers : { Authorization : "Bearer " + Main.config.twitter_token}, method : "GET"}).then((function(k) {
+						return function(succ) {
+							succ.json().then((function(k) {
+								return function(json) {
+									try {
+										if(json.meta.result_count > 0) {
+											var h = systems_commands__$Twitter_Response.createLinks(json).h;
+											var tweet_h = h;
+											var tweet_keys = Object.keys(h);
+											var tweet_length = tweet_keys.length;
+											var tweet_current = 0;
+											while(tweet_current < tweet_length) {
+												var tweet = tweet_h[tweet_keys[tweet_current++]];
+												_gthis.twitter_links.push(tweet);
+											}
+											_gthis.async_check[k[0]] = true;
+											_gthis.checking = true;
+										}
+										haxe_Log.trace("" + queries[k[0]] + " - " + _gthis.twitter_links.length,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 118, className : "systems.commands.Twitter", methodName : "onEnabled"});
+									} catch( _g ) {
+										var e = haxe_Exception.caught(_g);
+										haxe_Log.trace(e,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 120, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(json,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 121, className : "systems.commands.Twitter", methodName : "onEnabled"});
+									}
+								};
+							})(k),Util_err);
+						};
+					})(k),Util_err);
+				}
+			}
+		};
+	}
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		if(!Main.connected) {
+			return;
+		}
+		var check = true;
+		var _g = 0;
+		var _g1 = this.async_check;
+		while(_g < _g1.length) {
+			var v = _g1[_g];
+			++_g;
+			if(!v) {
+				check = false;
+				break;
+			}
+		}
+		if(check) {
+			this.should_send = true;
+		}
+		if(this.should_send && this.twitter_links.length > 0) {
+			this.should_send = false;
+			this.async_check[0] = false;
+			this.async_check[1] = false;
+			this.async_check[2] = false;
+			this.async_check[3] = false;
+			this.async_check[4] = false;
+			this.async_check[5] = false;
+			this.twitter_links.sort(function(a,b) {
+				var split_a = a.split("/");
+				var split_b = b.split("/");
+				var x = Std.parseInt(split_a[split_a.length - 1]);
+				var y = Std.parseInt(split_b[split_b.length - 1]);
+				if(x > y) {
+					return 1;
+				}
+				if(x < y) {
+					return -1;
+				}
+				return 0;
+			});
+			this.timer.run = function() {
+				_gthis.channel.send({ content : _gthis.twitter_links[_gthis.sent_links]});
+				_gthis.sent_links++;
+				if(_gthis.sent_links >= _gthis.twitter_links.length) {
+					_gthis.timer.stop();
+					var split = _gthis.twitter_links[0].split("/");
+					var value = split[split.length - 1];
+					Main.config.twitter_since_id = value;
+					js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+					_gthis.twitter_links = [];
+				}
+			};
+		}
+		if(!this.checking && this.channel == null) {
+			this.checking = true;
+			Main.client.channels.fetch(this.channel_id).then(function(succ) {
+				_gthis.channel = succ;
+				_gthis.checking = false;
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 191, className : "systems.commands.Twitter", methodName : "update"});
+			},Util_err);
+		}
+	}
+	,run: function(command,interaction) {
+	}
+	,get_since_id: function() {
+		return Main.config.twitter_since_id;
+	}
+	,set_since_id: function(value) {
+		Main.config.twitter_since_id = value;
+		js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+		return value;
+	}
+	,get_name: function() {
+		return "twitter";
+	}
+	,__class__: systems_commands_Twitter
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{set_since_id:"set_since_id",get_since_id:"get_since_id"})
 });
 var util_DiscordUtil = function() { };
 $hxClasses["util.DiscordUtil"] = util_DiscordUtil;

@@ -169,6 +169,10 @@ class ScamPrevention extends CommandBase {
 							return false;
 						}
 
+						if (link != url.hostname) {
+							return false;
+						}
+
 						return true;
 					}
 				}
