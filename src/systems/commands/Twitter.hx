@@ -1,11 +1,11 @@
 package systems.commands;
 
+import sys.io.File;
 import haxe.Timer;
 import haxe.ds.Vector;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
 import systems.commands.Poll.PollTime;
-import js.Browser;
 import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
@@ -65,22 +65,67 @@ private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes
 
 class Twitter extends CommandBase {
 	var tweets:Map<String, TTweet> = [];
-	var ping_rate:PollTime = PollTime.one_hour;
+	var ping_rate:PollTime = PollTime.fifteen;
 	var channel:TextChannel;
 	var channel_id:String = '1028078544867311727';
-	var vector = new Vector<Bool>(6);
+	var async_check = new Vector<Bool>(6);
+	var twitter_links = [];
+	var sent_links = 0;
+	var checking = false;
+	var should_send = true;
+	var timer = new Timer(500);
 
 	override function onEnabled() {
-		vector[0] = false;
-		vector[1] = false;
-		vector[2] = false;
-		vector[3] = false;
-		vector[4] = false;
-		vector[5] = false;
-	}
+		this.async_check[0] = false;
+		this.async_check[1] = false;
+		this.async_check[2] = false;
+		this.async_check[3] = false;
+		this.async_check[4] = false;
+		this.async_check[5] = false;
 
-	var arr = [];
-	var checking = false;
+		var checker = new Timer((this.ping_rate:Float).int());
+		checker.run = () -> {
+			if (Main.connected && !this.checking && this.channel != null) {
+				this.checking = true;
+
+
+				var queries = ['#haxe', '#haxeflixel', '#haxe #openfl', '#yeswekha', '#haxe #heaps', '#haxeui'];
+				for (k => query in queries) {
+					var url = 'https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25';
+
+					if (this.since_id != "") {
+						url += '&since_id=${this.since_id}';
+					}
+					query += ' -is:retweet';
+					url += '&query=${query.urlEncode()}';
+
+					Fetch.fetch(url, {
+						headers: {
+							Authorization: 'Bearer ${Main.config.twitter_token}'
+						},
+						method: GET,
+					}).then(function(succ) {
+						succ.json().then(function(json:Response) {
+							try {
+								if (json.meta.result_count > 0) {
+									for (tweet in json.createLinks()) {
+										twitter_links.push(tweet);
+									}
+									
+									async_check[k] = true;
+									this.checking = true;
+								}
+								trace('${queries[k]} - ${twitter_links.length}');
+							} catch (e) {
+								trace(e);
+								trace(json);
+							}
+						}, err);
+					}, err);
+				}
+			}
+		}
+	}
 
 	override function update(_:Float) {
 		super.update(_);
@@ -88,68 +133,53 @@ class Twitter extends CommandBase {
 			return;
 		}
 
-		if (!this.checking && this.channel != null) {
-			checking = true;
-			var queries = ['#haxe', '#haxeflixel', '#openfl', '#yeswekha', '#haxe #heaps', '#haxeui'];
-			for (k => query in queries) {
-				query += ' -is:retweet';
-				var url = 'https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&query=${query.urlEncode()}';
-				
-				Fetch.fetch(url, {
-					headers: {
-						Authorization: 'Bearer ${Main.config.twitter_token}'
-					},
-					method: GET,
-				}).then(function(succ) {
-					succ.json().then(function(json:Response) {
-						trace('$query - ' + json.meta.result_count);
-						if (json.meta.result_count > 0) {
-							for (tweet in json.createLinks()) {
-								arr.push(tweet);
-							}
-						}
-
-						vector[k] = true;
-					}, err);
-				}, err);
-			}
-
-			var query = ' OR %23haxeflixel OR %23openfl OR %23kha OR %23heaps OR %23ceramic OR %23haxeui -is:retweet';
-		}
-
-		var post = true;
-		var i = 0;
-		for (v in vector) {
+		var check = true;
+		for (v in async_check) {
 			if (!v) {
-				post = false;
+				check = false;
 				break;
 			}
-			i++;
 		}
 
-		if (post && arr.length != 0) {
-			post = false;
-			var i = 0;
-			var t = new Timer(250);
-			t.run = () -> {
-				if (i >= arr.length) {
-					trace('stop');
-					vector[0] = false;
-					vector[1] = false;
-					vector[2] = false;
-					vector[3] = false;
-					vector[4] = false;
-					vector[5] = false;
-					t.stop();
-					arr = [];
-					return;
+		if (check) {
+			this.should_send = true;
+		}
+
+		if (this.should_send && this.twitter_links.length > 0) {
+			this.should_send = false;
+			this.async_check[0] = false;
+			this.async_check[1] = false;
+			this.async_check[2] = false;
+			this.async_check[3] = false;
+			this.async_check[4] = false;
+			this.async_check[5] = false;
+
+			this.twitter_links.sort((a, b) -> {
+				var split_a = a.split('/');
+				var split_b = b.split('/');
+				var x = Std.parseInt(split_a[split_a.length - 1]);
+				var y = Std.parseInt(split_b[split_b.length - 1]);
+
+				if (x > y) {
+					return 1;
 				}
 
-				if (this.arr[i] == null) {
-					return;
+				if (x < y) {
+					return -1;
 				}
-				this.channel.send({content: this.arr[i]});
-				i++;
+
+				return 0;
+			});
+			
+			timer.run = () -> {
+				this.channel.send({content: this.twitter_links[sent_links]});
+				sent_links++;
+				if (sent_links >= this.twitter_links.length) {
+					timer.stop();
+					var split = this.twitter_links[0].split('/');
+					this.since_id = split[split.length - 1];
+					this.twitter_links = [];
+				}
 			}
 		}
 
@@ -158,27 +188,24 @@ class Twitter extends CommandBase {
 			Main.client.channels.fetch(channel_id).then(function(succ) {
 				this.channel = succ;
 				checking = false;
-				trace('found channel');
+				trace('Found twitter thread');
 			}, err);
 		}
 	}
 
-	function createEmbed(tweet:TTweet, user:TTweetUser) {
-		var embed = new MessageEmbed();
-		embed.setTitle('@' + user.username);
-		embed.setURL(Response.createLink(user.username, tweet.id));
-		embed.setDescription(tweet.text);
-		embed.setFooter({text: tweet.created_at, iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless'});
+	function run(command:Command, interaction:BaseCommandInteraction) {}
 
-		return embed;
+	var since_id(get, set):String;
+
+	inline function get_since_id() {
+		return Main.config.twitter_since_id;
 	}
 
-	function run(command:Command, interaction:BaseCommandInteraction) {
-		switch (command.content) {
-			case Boop(user):
-				interaction.reply('*boop* <@${user.id}>');
-			default:
-		}
+	inline function set_since_id(value:String) {
+		Main.config.twitter_since_id = value;
+		File.saveContent('config.json', Json.stringify(Main.config));
+
+		return value;
 	}
 
 	function get_name():String {

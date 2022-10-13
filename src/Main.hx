@@ -412,6 +412,7 @@ typedef TConfig = {
 	var ldiscord_token:String;
 	#end
 	var twitter_token:String;
+	var twitter_since_id:String;
 	var username:String;
 	var password:String;
 	var deepl_key:String;
