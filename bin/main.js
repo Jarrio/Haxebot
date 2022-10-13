@@ -11483,7 +11483,7 @@ var systems_commands_Twitter = function(_universe) {
 	this.twitter_links = [];
 	var this1 = new Array(6);
 	this.async_check = this1;
-	this.channel_id = "1028078544867311727";
+	this.channel_id = "1030188275341729882";
 	this.ping_rate = 900000;
 	this.tweets = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);

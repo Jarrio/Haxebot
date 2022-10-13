@@ -67,7 +67,7 @@ class Twitter extends CommandBase {
 	var tweets:Map<String, TTweet> = [];
 	var ping_rate:PollTime = PollTime.fifteen;
 	var channel:TextChannel;
-	var channel_id:String = '1028078544867311727';
+	var channel_id:String = '1030188275341729882';
 	var async_check = new Vector<Bool>(6);
 	var twitter_links = [];
 	var sent_links = 0;
