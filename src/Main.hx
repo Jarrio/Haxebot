@@ -31,7 +31,6 @@ import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
 import systems.commands.*;
-import systems.commands.mod.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
 

@@ -84,6 +84,7 @@ class Twitter extends CommandBase {
 		this.async_check[5] = false;
 
 		var checker = new Timer((this.ping_rate:Float).int());
+		//var checker = new Timer(5000);
 		checker.run = () -> {
 			if (Main.connected && !this.checking && this.channel != null) {
 				this.checking = true;
@@ -113,10 +114,12 @@ class Twitter extends CommandBase {
 									}
 									
 									async_check[k] = true;
-									this.checking = true;
+									this.checking = false;
 								}
 								trace('${queries[k]} - ${twitter_links.length}');
 							} catch (e) {
+								trace(this.since_id);
+								trace(url);
 								trace(e);
 								trace(json);
 							}

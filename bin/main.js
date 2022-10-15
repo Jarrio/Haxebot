@@ -831,7 +831,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 107, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 106, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discordjs_rest_REST({ version : "9"}).setToken(discord_token);
@@ -842,7 +842,7 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 116, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
 			}
 		},Util_err);
 	});
@@ -963,8 +963,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 162, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 161, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 162, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1061,7 +1061,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 185, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 184, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1169,14 +1169,14 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 282, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 281, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 289, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 288, className : "Main", methodName : "main"});
 	}
 	var token = "";
 	token = Main.config.discord_token;
@@ -1185,7 +1185,7 @@ Main.main = function() {
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.config.username,Main.config.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 304, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 303, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -11522,15 +11522,15 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 					var _g1_key = _g_current++;
 					var k = [_g1_key];
 					var query = _g1_value;
-					var url = "https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25";
+					var url = ["https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25"];
 					if(Main.config.twitter_since_id != "") {
-						url += "&since_id=" + Main.config.twitter_since_id;
+						url[0] += "&since_id=" + Main.config.twitter_since_id;
 					}
 					query += " -is:retweet";
-					url += "&query=" + encodeURIComponent(query);
-					externs_Fetch(url,{ headers : { Authorization : "Bearer " + Main.config.twitter_token}, method : "GET"}).then((function(k) {
+					url[0] += "&query=" + encodeURIComponent(query);
+					externs_Fetch(url[0],{ headers : { Authorization : "Bearer " + Main.config.twitter_token}, method : "GET"}).then((function(url,k) {
 						return function(succ) {
-							succ.json().then((function(k) {
+							succ.json().then((function(url,k) {
 								return function(json) {
 									try {
 										if(json.meta.result_count > 0) {
@@ -11544,18 +11544,20 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 												_gthis.twitter_links.push(tweet);
 											}
 											_gthis.async_check[k[0]] = true;
-											_gthis.checking = true;
+											_gthis.checking = false;
 										}
-										haxe_Log.trace("" + queries[k[0]] + " - " + _gthis.twitter_links.length,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 118, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace("" + queries[k[0]] + " - " + _gthis.twitter_links.length,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 119, className : "systems.commands.Twitter", methodName : "onEnabled"});
 									} catch( _g ) {
 										var e = haxe_Exception.caught(_g);
-										haxe_Log.trace(e,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 120, className : "systems.commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(json,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 121, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(Main.config.twitter_since_id,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 121, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(url[0],{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 122, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(e,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 123, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(json,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 124, className : "systems.commands.Twitter", methodName : "onEnabled"});
 									}
 								};
-							})(k),Util_err);
+							})(url,k),Util_err);
 						};
-					})(k),Util_err);
+					})(url,k),Util_err);
 				}
 			}
 		};
@@ -11619,7 +11621,7 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 191, className : "systems.commands.Twitter", methodName : "update"});
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 194, className : "systems.commands.Twitter", methodName : "update"});
 			},Util_err);
 		}
 	}

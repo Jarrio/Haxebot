@@ -4,6 +4,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 
 class Hi extends CommandBase {
+	
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		var message = 'Hey there';
 		if (Math.random() < 0.35) {
