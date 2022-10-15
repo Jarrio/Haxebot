@@ -321,6 +321,7 @@ class Run extends System {
 			}
 
 			code_content = format + '\n' + code_content;
+			var pre_loop = code_content;
 			code_content = this.insertLoopBreak(filename, code_content);
 
 			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${message.author.tag} | time: ${Date.now()}', (error) -> {
@@ -353,7 +354,7 @@ class Run extends System {
 					trace('error: ' + data);
 
 					var compile_output = this.cleanOutput(data, filename, class_entry);
-					var embed = this.parseError(compile_output, code_content);
+					var embed = this.parseError(compile_output, pre_loop);	
 					if (embed == null) {
 						message.reply({content: mention + '```\n${compile_output}```'});
 					} else {
