@@ -11491,10 +11491,7 @@ systems_commands__$Twitter_Response.get_users = function(this1) {
 	return this1.includes.users;
 };
 var systems_commands_Twitter = function(_universe) {
-	this.timer = new haxe_Timer(500);
-	this.should_send = true;
 	this.checking = false;
-	this.sent_links = 0;
 	this.twitter_links = [];
 	var this1 = new Array(6);
 	this.async_check = this1;
@@ -11513,10 +11510,7 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 	,channel_id: null
 	,async_check: null
 	,twitter_links: null
-	,sent_links: null
 	,checking: null
-	,should_send: null
-	,timer: null
 	,onEnabled: function() {
 		var _gthis = this;
 		this.async_check[0] = false;
@@ -11558,17 +11552,16 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 												var tweet = tweet_h[tweet_keys[tweet_current++]];
 												_gthis.twitter_links.push(tweet);
 											}
-											_gthis.async_check[k[0]] = true;
-											_gthis.checking = false;
 										}
-										haxe_Log.trace("" + queries[k[0]] + " - " + _gthis.twitter_links.length,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 119, className : "systems.commands.Twitter", methodName : "onEnabled"});
 									} catch( _g ) {
 										var e = haxe_Exception.caught(_g);
-										haxe_Log.trace(Main.config.twitter_since_id,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 121, className : "systems.commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(url[0],{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 122, className : "systems.commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(e,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 123, className : "systems.commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(json,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 124, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(Main.config.twitter_since_id,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 126, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(url[0],{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 127, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(e,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 128, className : "systems.commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(json,{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 129, className : "systems.commands.Twitter", methodName : "onEnabled"});
 									}
+									_gthis.async_check[k[0]] = true;
+									_gthis.checking = false;
 								};
 							})(url,k),Util_err);
 						};
@@ -11594,17 +11587,7 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 				break;
 			}
 		}
-		if(check) {
-			this.should_send = true;
-		}
-		if(this.should_send && this.twitter_links.length > 0) {
-			this.should_send = false;
-			this.async_check[0] = false;
-			this.async_check[1] = false;
-			this.async_check[2] = false;
-			this.async_check[3] = false;
-			this.async_check[4] = false;
-			this.async_check[5] = false;
+		if(check && this.twitter_links.length > 0) {
 			this.twitter_links.sort(function(a,b) {
 				var split_a = a.split("/");
 				var split_b = b.split("/");
@@ -11618,25 +11601,39 @@ systems_commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				return 0;
 			});
-			this.timer.run = function() {
-				_gthis.channel.send({ content : _gthis.twitter_links[_gthis.sent_links]});
-				_gthis.sent_links++;
-				if(_gthis.sent_links >= _gthis.twitter_links.length) {
-					_gthis.timer.stop();
-					var split = _gthis.twitter_links[0].split("/");
-					var value = split[split.length - 1];
-					Main.config.twitter_since_id = value;
-					js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
-					_gthis.twitter_links = [];
-				}
-			};
+			var _g = 0;
+			var _g1 = this.twitter_links;
+			while(_g < _g1.length) {
+				var link = _g1[_g];
+				++_g;
+				this.channel.send({ content : link}).then(null,Util_err);
+			}
+			this.async_check[0] = false;
+			this.async_check[1] = false;
+			this.async_check[2] = false;
+			this.async_check[3] = false;
+			this.async_check[4] = false;
+			this.async_check[5] = false;
+			var split = this.twitter_links[this.twitter_links.length - 1].split("/");
+			var value = split[split.length - 1];
+			Main.config.twitter_since_id = value;
+			js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.config));
+			this.twitter_links = [];
+		}
+		if(check && this.twitter_links.length == 0) {
+			this.async_check[0] = false;
+			this.async_check[1] = false;
+			this.async_check[2] = false;
+			this.async_check[3] = false;
+			this.async_check[4] = false;
+			this.async_check[5] = false;
 		}
 		if(!this.checking && this.channel == null) {
 			this.checking = true;
 			Main.client.channels.fetch(this.channel_id).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 194, className : "systems.commands.Twitter", methodName : "update"});
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/systems/commands/Twitter.hx", lineNumber : 202, className : "systems.commands.Twitter", methodName : "update"});
 			},Util_err);
 		}
 	}

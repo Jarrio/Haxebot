@@ -4,7 +4,6 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 
 class Hi extends CommandBase {
-	
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		var message = 'Hey there';
 		if (Math.random() < 0.35) {
@@ -24,4 +23,6 @@ class Hi extends CommandBase {
 	function get_name():String {
 		return 'hi';
 	}
+
+	public function loadRotatedGraphic(Graphic:Int, Rotations:Int = 16, Frame:Int = -1, AntiAliasing:Bool = false, AutoBuffer:Bool = false, ?Key:String) {}
 }

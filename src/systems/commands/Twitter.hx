@@ -67,13 +67,14 @@ class Twitter extends CommandBase {
 	var tweets:Map<String, TTweet> = [];
 	var ping_rate:PollTime = PollTime.fifteen;
 	var channel:TextChannel;
+	#if block
+	var channel_id:String = '1028078544867311727';
+	#else
 	var channel_id:String = '1030188275341729882';
+	#end
 	var async_check = new Vector<Bool>(6);
 	var twitter_links = [];
-	var sent_links = 0;
 	var checking = false;
-	var should_send = true;
-	var timer = new Timer(500);
 
 	override function onEnabled() {
 		this.async_check[0] = false;
@@ -84,13 +85,20 @@ class Twitter extends CommandBase {
 		this.async_check[5] = false;
 
 		var checker = new Timer((this.ping_rate:Float).int());
-		//var checker = new Timer(5000);
 		checker.run = () -> {
 			if (Main.connected && !this.checking && this.channel != null) {
 				this.checking = true;
 
+				var queries = [
+					'#haxe',
+					'#haxeflixel',
+					'#haxe #openfl',
+					'#yeswekha',
+					'#haxe #heaps',
+					'#haxeui',
+					'#heapsio'
+				];
 
-				var queries = ['#haxe', '#haxeflixel', '#haxe #openfl', '#yeswekha', '#haxe #heaps', '#haxeui', '#heapsio'];
 				for (k => query in queries) {
 					var url = 'https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25';
 
@@ -112,17 +120,16 @@ class Twitter extends CommandBase {
 									for (tweet in json.createLinks()) {
 										twitter_links.push(tweet);
 									}
-									
-									async_check[k] = true;
-									this.checking = false;
 								}
-								trace('${queries[k]} - ${twitter_links.length}');
+								//trace('${queries[k]} - ${twitter_links.length}');
 							} catch (e) {
 								trace(this.since_id);
 								trace(url);
 								trace(e);
 								trace(json);
 							}
+							async_check[k] = true;
+							this.checking = false;
 						}, err);
 					}, err);
 				}
@@ -144,19 +151,7 @@ class Twitter extends CommandBase {
 			}
 		}
 
-		if (check) {
-			this.should_send = true;
-		}
-
-		if (this.should_send && this.twitter_links.length > 0) {
-			this.should_send = false;
-			this.async_check[0] = false;
-			this.async_check[1] = false;
-			this.async_check[2] = false;
-			this.async_check[3] = false;
-			this.async_check[4] = false;
-			this.async_check[5] = false;
-
+		if (check && this.twitter_links.length > 0) {
 			this.twitter_links.sort((a, b) -> {
 				var split_a = a.split('/');
 				var split_b = b.split('/');
@@ -173,17 +168,30 @@ class Twitter extends CommandBase {
 
 				return 0;
 			});
-			
-			timer.run = () -> {
-				this.channel.send({content: this.twitter_links[sent_links]});
-				sent_links++;
-				if (sent_links >= this.twitter_links.length) {
-					timer.stop();
-					var split = this.twitter_links[0].split('/');
-					this.since_id = split[split.length - 1];
-					this.twitter_links = [];
-				}
+
+			for (link in this.twitter_links) {
+				this.channel.send({content: link}).then(null, err);
 			}
+
+			this.async_check[0] = false;
+			this.async_check[1] = false;
+			this.async_check[2] = false;
+			this.async_check[3] = false;
+			this.async_check[4] = false;
+			this.async_check[5] = false;
+
+			var split = this.twitter_links[twitter_links.length - 1].split('/');
+			this.since_id = split[split.length - 1];
+			this.twitter_links = [];
+		}
+
+		if (check && this.twitter_links.length == 0) {
+			this.async_check[0] = false;
+			this.async_check[1] = false;
+			this.async_check[2] = false;
+			this.async_check[3] = false;
+			this.async_check[4] = false;
+			this.async_check[5] = false;
 		}
 
 		if (!checking && this.channel == null) {
