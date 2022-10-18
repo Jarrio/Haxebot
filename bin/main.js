@@ -643,7 +643,7 @@ Main.config = null;
 Main.universe = null;
 Main.token = function(rest) {
 	var commands = Main.parseCommands();
-	var client_id = Main.config.client_id;
+	var client_id = Main.config.lclient_id;
 	var get = rest.put(Routes.applicationGuildCommands(client_id,Main.guild_id),{ body : commands});
 	return get;
 };
@@ -826,7 +826,7 @@ Main.start = function() {
 	}
 	Main.universe = u;
 	Main.client = new discord_$js_Client({ intents : [1,512,4096,2,1024]});
-	var discord_token = Main.config.discord_token;
+	var discord_token = Main.config.ldiscord_token;
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
@@ -844,6 +844,7 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 115, className : "Main", methodName : "start"});
 			}
+			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 119, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("messageCreate",function(message) {
@@ -1179,7 +1180,7 @@ Main.main = function() {
 		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 288, className : "Main", methodName : "main"});
 	}
 	var token = "";
-	token = Main.config.discord_token;
+	token = Main.config.ldiscord_token;
 	if(Main.config == null || token == "TOKEN_HERE") {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
@@ -8400,8 +8401,8 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 		var header_arr = ["static_vars","static_methods","constructor","variables","methods","last"];
 		http.onData = function(res) {
 			header_arr.sort(function(a,b) {
-				var index_a = res.indexOf(a);
-				var index_b = res.indexOf(b);
+				var index_a = res.indexOf(headers_h[a]);
+				var index_b = res.indexOf(headers_h[b]);
 				if(index_a > index_b) {
 					return 1;
 				}
@@ -8410,7 +8411,7 @@ systems_commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				return 0;
 			});
-			var a = header_arr[0];
+			var a = null;
 			var b = null;
 			var last = 0;
 			var response = [];
@@ -8889,9 +8890,9 @@ systems_commands_HelpType.fromString = function(value) {
 	}
 };
 var systems_commands_Helpdescription = function(_universe) {
-	this.check_verified_interval = 86400000;
+	this.review_thread = "946834684741050398";
+	this.check_verified_interval = 60000;
 	this.check_threads_interval = 1800000;
-	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -8900,9 +8901,9 @@ systems_commands_Helpdescription.__name__ = "systems.commands.Helpdescription";
 systems_commands_Helpdescription.__super__ = systems_CommandDbBase;
 systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
-	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
+	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 11) {
@@ -9056,7 +9057,7 @@ systems_commands_Helpdescription.prototype = $extend(systems_CommandDbBase.proto
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return null;
+			return "haxe";
 		}
 	}
 	,get_name: function() {
@@ -9524,6 +9525,7 @@ systems_commands_PollTime.toString = function(this1) {
 	}
 };
 var systems_commands_Quote = function(_universe) {
+	this.max_name_length = 20;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
 	this.modal = this.universe.families.get(3);
@@ -9534,6 +9536,7 @@ systems_commands_Quote.__name__ = "systems.commands.Quote";
 systems_commands_Quote.__super__ = systems_CommandDbBase;
 systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 	cache: null
+	,max_name_length: null
 	,update: function(_) {
 		var _gthis = this;
 		systems_CommandDbBase.prototype.update.call(this,_);
@@ -9553,7 +9556,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 73, className : "systems.commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/systems/commands/Quote.hx", lineNumber : 74, className : "systems.commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -9744,8 +9747,8 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				break;
 			case "set":
 				if(!this.isValidName(name)) {
-					var error_msg = "name can only be 3-16 characters long";
-					if(name.length < 16) {
+					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
+					if(name.length < this.max_name_length) {
 						error_msg = "*Names can only contain `_-` and/or spaces.*";
 					}
 					interaction.reply({ content : error_msg, ephemeral : true});
@@ -9757,7 +9760,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
-					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name.toLowerCase()).setMinLength(3).setMaxLength(16);
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name.toLowerCase()).setMinLength(3).setMaxLength(20);
 					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
 					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
@@ -9841,7 +9844,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return check_letters.match(input);
 	}
 	,isValidName: function(input) {
-		var check_letters = new EReg("^[A-Za-z0-9 :_-]{2,16}$","i");
+		var check_letters = new EReg("^[A-Za-z0-9 :_-]{2,20}$","i");
 		return check_letters.match(input);
 	}
 	,get_name: function() {
@@ -10103,15 +10106,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
-		var _gthis = this;
 		if(!Main.connected) {
-			return;
-		}
-		if(this.channel == null && !this.checked) {
-			this.checked = true;
-			Main.client.channels.fetch("663246792426782730").then(function(channel) {
-				return _gthis.channel = channel;
-			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -11495,7 +11490,7 @@ var systems_commands_Twitter = function(_universe) {
 	this.twitter_links = [];
 	var this1 = new Array(6);
 	this.async_check = this1;
-	this.channel_id = "1030188275341729882";
+	this.channel_id = "1028078544867311727";
 	this.ping_rate = 900000;
 	this.tweets = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
@@ -11814,7 +11809,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "162395145352904705";
+Main.guild_id = "416069724158427137";
 haxe_SysTools.winMetaCharacters = [32,40,41,37,33,94,34,60,62,38,124,10,13,44,59];
 StringTools.winMetaCharacters = haxe_SysTools.winMetaCharacters;
 StringTools.MIN_SURROGATE_CODE_POINT = 65536;

@@ -226,8 +226,8 @@ class Api extends CommandBase {
 
 		http.onData = (res) -> {
 			header_arr.sort(function(a, b) {
-				var index_a = res.indexOf(a);
-				var index_b = res.indexOf(b);
+				var index_a = res.indexOf(headers.get(a));
+				var index_b = res.indexOf(headers.get(b));
 				if (index_a > index_b) {
 					return 1;
 				}
@@ -238,12 +238,14 @@ class Api extends CommandBase {
 				return 0;
 			});
 
-			var a = header_arr[0];
+			var a = null;
 			var b = null;
 			var last = 0;
 			var response = [];
 			var results = [];
-
+			
+			//trace(header_arr);
+			
 			while (true) {
 				for (k => v in header_arr) {
 					if (a != null && b != null) {
