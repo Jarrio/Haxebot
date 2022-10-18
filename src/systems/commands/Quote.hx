@@ -20,6 +20,7 @@ enum abstract QuoteCommand(String) to String {
 class Quote extends CommandDbBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
 	var cache:Map<String, Int> = [];
+	final max_name_length = 20;
 
 	override function update(_:Float) {
 		super.update(_);
@@ -40,7 +41,7 @@ class Quote extends CommandDbBase {
 					}
 
 					if (!this.isValidName(name)) {
-						interaction.reply({content: '*Names can only contain `_-` and/or spaces.*\nname: $name\n$description', ephemeral: true});
+						interaction.reply({content: '*Names can only contain `_-:` and/or spaces.*\nname: $name\n$description', ephemeral: true});
 						return;
 					}
 
@@ -134,8 +135,8 @@ class Quote extends CommandDbBase {
 				switch (type) {
 					case set:
 						if (!this.isValidName(name)) {
-							var error_msg = 'name can only be 3-16 characters long';
-							if (name.length < 16) {
+							var error_msg = 'name can only be 3-$max_name_length characters long';
+							if (name.length < this.max_name_length) {
 								error_msg = '*Names can only contain `_-` and/or spaces.*';
 							}
 							interaction.reply({content: error_msg, ephemeral: true});
@@ -155,7 +156,7 @@ class Quote extends CommandDbBase {
 								.setStyle(Short)
 								.setValue(name.toLowerCase())
 								.setMinLength(3)
-								.setMaxLength(16);
+								.setMaxLength(20);
 
 							var desc_input = new APITextInputComponent().setCustomId('description')
 								.setLabel('description')
@@ -305,7 +306,7 @@ class Quote extends CommandDbBase {
 	}
 
 	function isValidName(input:String) {
-		var check_letters = ~/^[A-Za-z0-9 _-]{2,16}$/i;
+		var check_letters = ~/^[A-Za-z0-9 :_-]{2,20}$/i;
 		return check_letters.match(input);
 	}
 

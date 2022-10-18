@@ -9574,7 +9574,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				var description = [interaction[0].fields.getTextInputValue("description")];
 				var data = [{ id : -1, name : name[0], tags : this.nameArray(name[0]), description : description[0], author : interaction[0].user.id, username : interaction[0].user.username, timestamp : new Date()}];
 				if(!this.isValidName(name[0])) {
-					interaction[0].reply({ content : "*Names can only contain `_-` and/or spaces.*\nname: " + name[0] + "\n" + description[0], ephemeral : true});
+					interaction[0].reply({ content : "*Names can only contain `_-:` and/or spaces.*\nname: " + name[0] + "\n" + description[0], ephemeral : true});
 					return;
 				}
 				var doc = [firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes")];
@@ -9841,7 +9841,7 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return check_letters.match(input);
 	}
 	,isValidName: function(input) {
-		var check_letters = new EReg("^[A-Za-z0-9 _-]{2,16}$","i");
+		var check_letters = new EReg("^[A-Za-z0-9 :_-]{2,16}$","i");
 		return check_letters.match(input);
 	}
 	,get_name: function() {
