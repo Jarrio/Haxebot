@@ -79,16 +79,20 @@ class Showcase extends CommandBase {
 			for (a in message.attachments) {
 				arr.push(a);
 			}
+			var name = message.author.username;
+			if (message.member.nickname != null && message.member.nickname.length > 0) {
+				name = message.member.nickname;
+			}
 
 			this.webhook.send({
 				content: content,
-				username: message.author.username,
+				username: name,
 				avatarURL: message.author.avatarURL(),
 				files: arr
 			}).then(function(_) {
 				this.webhook.send({
 					content: '***Continue the conversation at - <#${thread.id}>***',
-					username: message.author.username,
+					username: name,
 					avatarURL: message.author.avatarURL()
 				});
 			}, err);

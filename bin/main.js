@@ -10976,11 +10976,15 @@ systems_commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 				_g1_lastStep = jsIterator.next();
 				arr.push(v);
 			}
-			this.webhook.send({ content : content1, username : message[0].author.username, avatarURL : message[0].author.avatarURL(), files : arr}).then((function(thread,message) {
+			var name = [message[0].author.username];
+			if(message[0].member.nickname != null && message[0].member.nickname.length > 0) {
+				name[0] = message[0].member.nickname;
+			}
+			this.webhook.send({ content : content1, username : name[0], avatarURL : message[0].author.avatarURL(), files : arr}).then((function(name,thread,message) {
 				return function(_) {
-					_gthis.webhook.send({ content : "***Continue the conversation at - <#" + thread[0].id + ">***", username : message[0].author.username, avatarURL : message[0].author.avatarURL()});
+					_gthis.webhook.send({ content : "***Continue the conversation at - <#" + thread[0].id + ">***", username : name[0], avatarURL : message[0].author.avatarURL()});
 				};
-			})(thread,message),Util_err);
+			})(name,thread,message),Util_err);
 			this.universe.deleteEntity(entity);
 		}
 		var _this = this.interactions;
