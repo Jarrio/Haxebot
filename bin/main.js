@@ -10286,7 +10286,7 @@ systems_commands_Run.prototype = $extend(ecs_System.prototype,{
 		var varname = "___" + util_Random.string(6);
 		var regex = new EReg("((while|for)\\s*\\(.*\\)\\s*\\{|(while|for)\\s*\\(.*?\\))|(function.*?\\(.*?\\)\\s*{)","gmui");
 		var copy = code;
-		copy = StringTools.replace(copy,"class " + name + " {","class " + name + " {\nstatic final " + varname + " = Date.now().getTime();");
+		copy = StringTools.replace(copy,"class " + name + " {","class " + name + " {\nstatic public final " + varname + " = Date.now().getTime();");
 		var matched = [];
 		while(regex.match(code)) {
 			if(regex.matched(1) != null) {

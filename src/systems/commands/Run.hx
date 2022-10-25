@@ -216,7 +216,7 @@ class Run extends System {
 
 		var regex = ~/((while|for)\s*\(.*\)\s*\{|(while|for)\s*\(.*?\))|(function.*?\(.*?\)\s*{)/gmui;
 		var copy = code;
-		copy = copy.replace('class $name {', 'class $name {\nstatic final $varname = Date.now().getTime();');
+		copy = copy.replace('class $name {', 'class $name {\nstatic public final $varname = Date.now().getTime();');
 		var matched = [];
 
 		while (regex.match(code)) {
