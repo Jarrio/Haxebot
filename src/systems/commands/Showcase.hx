@@ -1,5 +1,6 @@
 package systems.commands;
 
+import haxe.PosInfos;
 import discord_js.WebhookClient;
 import discord_builder.ButtonBuilder;
 import discord_js.ThreadChannel;
@@ -13,7 +14,11 @@ import discord_js.Message;
 
 class Showcase extends CommandBase {
 	var channel:TextChannel;
+	#if block
+	final channel_id = '597067735771381771';
+	#else
 	final channel_id = '162664383082790912';
+	#end
 
 	var webhook:WebhookClient;
 	var checking = false;
@@ -66,36 +71,54 @@ class Showcase extends CommandBase {
 				return;
 			}
 
+
+			#if !block
 			var thread = cast(message.channel.asType0, ThreadChannel);
 			if (thread.id != "1024905470621798410") { // TODO: (LD thread id) better solution
 				if (thread.ownerId != message.author.id) {
 					return;
 				}
 			}
+			#else
+			var thread = cast(message.channel.asType0, TextChannel);
+			#end
 
 			var arr = [];
 
 			var content = message.content.substring(10).trim();
 			for (a in message.attachments) {
 				arr.push(a);
+				trace(a);
 			}
 			var name = message.author.username;
 			if (message.member.nickname != null && message.member.nickname.length > 0) {
 				name = message.member.nickname;
 			}
+			var cont = () -> this.webhook.send({
+				content: '***Continue the conversation at - <#${thread.id}>***',
+				username: name,
+				avatarURL: message.author.avatarURL()
+			});
 
+			//trace(message.attachments);
 			this.webhook.send({
 				content: content,
 				username: name,
 				avatarURL: message.author.avatarURL(),
 				files: arr
 			}).then(function(_) {
-				this.webhook.send({
-					content: '***Continue the conversation at - <#${thread.id}>***',
-					username: name,
-					avatarURL: message.author.avatarURL()
-				});
-			}, err);
+				cont();
+			}, function (err:{message:String}, ?posInfo:PosInfos) {
+				if (err!.message.contains("Request entity too large")) {
+					this.webhook.send({
+						content: content + '\n' + arr[0].url,
+						username: name,
+						avatarURL: message.author.avatarURL()
+					}).then(function(_) {
+						cont();
+					});
+				}
+			});
 
 			this.universe.deleteEntity(entity);
 		});

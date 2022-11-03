@@ -1,3 +1,4 @@
+import js.Browser;
 import haxe.Log;
 import firebase.web.firestore.Timestamp;
 import discord_builder.BaseCommandInteraction;
@@ -44,5 +45,6 @@ function fbDateWithinTimeout(a:Timestamp, b:Timestamp, timeout:Float) {
 }
 
 inline function err(err:Dynamic, ?pos:PosInfos) {
-	trace(err, pos);
+	Browser.console.dir(err);
+	trace(err.message, pos);
 }
