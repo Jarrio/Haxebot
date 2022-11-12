@@ -210,13 +210,16 @@ class Run extends System {
 		}
 		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
-
+	var varname = '';
 	function insertLoopBreak(name:String, code:String) {
-		var varname = '___' + Random.string(6);
+		varname = '___' + Random.string(6);
 
 		var regex = ~/((while|for)\s*\(.*\)\s*\{|(while|for)\s*\(.*?\))|(function.*?\(.*?\)\s*{)/gmui;
 		var copy = code;
+		
+
 		copy = copy.replace('class $name {', 'class $name {\nstatic public final $varname = Date.now().getTime();');
+		copy = copy.replace('class $name{', 'class $name {\nstatic public final $varname = Date.now().getTime();');
 		var matched = [];
 
 		while (regex.match(code)) {
@@ -227,15 +230,16 @@ class Run extends System {
 			if (regex.matched(4) != null) {
 				matched.push(regex.matched(4));
 			}
-
 			code = regex.matchedRight();
 		}
-
+		var throw_fun = 'public static function __time_fun() {if (Date.now().getTime() - $name.${varname} > ${this.timeout}) { throw "Code took too long to execute.";}}';
+		var condition = '$name.__time_fun();';
 		for (match in matched) {
-			var condition = 'if (Date.now().getTime() - $name.${varname} > ${this.timeout}) { throw "Code took too long to execute.";}';
 			copy = copy.replace(match, '\n' + match + '\n' + condition);
 		}
 
+		copy = copy.replace('class $name {', 'class $name {\n\t$throw_fun\n\t');
+		copy = copy.replace('class $name{', 'class $name {\n\t$throw_fun\n\t');
 		return copy;
 	}
 
@@ -303,6 +307,7 @@ class Run extends System {
 			var check_class = ~/(^class\s(Test|Main)(\n|\s|\S))/mg;
 			var code_content = "";
 			var class_entry = "Main";
+
 			if (check_class.match(get_paths.code)) {
 				var parsed = check_class.matched(0);
 				var replaced = "";
@@ -316,6 +321,7 @@ class Run extends System {
 				if (other_instances.match(code_content)) {
 					code_content = other_instances.replace(code_content, filename);
 				}
+				code_content = code_content.replace(parsed, parsed);
 			} else {
 				code_content = 'class $filename {\n\tstatic function main() {\n\t\t${get_paths.code}\n\t}\n}';
 			}
@@ -351,8 +357,6 @@ class Run extends System {
 				// });
 
 				ls.stderr.once('data', (data) -> {
-					trace('error: ' + data);
-
 					var compile_output = this.cleanOutput(data, filename, class_entry);
 					var embed = this.parseError(compile_output, pre_loop);	
 					if (embed == null) {
