@@ -43,15 +43,22 @@ class Translate extends CommandBase {
 			from = '';
 		}
 
-		this.request('/v2/translate?source_lang=$from&target_lang=$to&text=$message').then((resp) -> {
-			resp.json().then(function(body:{translations:Array<TTranslated>}) {
-				var content = '';
-				for (item in body.translations) {
-					content += item.text + '\n';
-				}
-				interaction.reply(content).then((_) -> this.getCount(), err);
-			}, err);
-		});
+		try {
+			this.request('/v2/translate?source_lang=$from&target_lang=$to&text=$message').then((resp) -> {
+				resp.json().then(function(body:{translations:Array<TTranslated>}) {
+					var content = '';
+					for (item in body.translations) {
+						content += item.text + '\n';
+					}
+					interaction.reply(content).then((_) -> this.getCount(), err);
+				}, err);
+			});
+		} catch (e) {
+			trace('Deepl error');
+			trace(e.details);
+			trace(e.message);
+			trace(e);
+		}
 	}
 
 	function getLanguages() {
