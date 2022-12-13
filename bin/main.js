@@ -11350,6 +11350,7 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 			haxe_Log.trace($bind(_g1,_g1.details),{ fileName : "src/systems/commands/Translate.hx", lineNumber : 58, className : "systems.commands.Translate", methodName : "getTranslation"});
 			haxe_Log.trace(_g1.get_message(),{ fileName : "src/systems/commands/Translate.hx", lineNumber : 59, className : "systems.commands.Translate", methodName : "getTranslation"});
 			haxe_Log.trace(_g1,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 60, className : "systems.commands.Translate", methodName : "getTranslation"});
+			interaction.reply("Deepl error?").then(null,Util_err);
 		}
 	}
 	,getLanguages: function() {
@@ -11363,7 +11364,7 @@ systems_commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 					str += "{\r\n\t\t\t\t\t\t\"name\": \"" + item.name + "\",\r\n\t\t\t\t\t\t\"value\": \"" + item.language + "\"\r\n\t\t\t\t\t},";
 				}
 				str += "]";
-				haxe_Log.trace(str,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 75, className : "systems.commands.Translate", methodName : "getLanguages"});
+				haxe_Log.trace(str,{ fileName : "src/systems/commands/Translate.hx", lineNumber : 76, className : "systems.commands.Translate", methodName : "getLanguages"});
 			},Util_err);
 		});
 	}

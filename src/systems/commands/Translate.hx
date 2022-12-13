@@ -58,6 +58,7 @@ class Translate extends CommandBase {
 			trace(e.details);
 			trace(e.message);
 			trace(e);
+			interaction.reply('Deepl error?').then(null, err);
 		}
 	}
 
