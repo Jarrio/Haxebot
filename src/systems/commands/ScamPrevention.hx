@@ -76,7 +76,7 @@ class ScamPrevention extends CommandBase {
 
 	function reviewMessage(messages:Array<Message>) {
 		var message = messages[0];
-		var embed = this.reformatMessage(null, message);
+		var embed = this.reformatMessage('SPAM ALERT - Timed out', message);
 		if (embed == null || embed.description.length == 0) {
 			return;
 		}
@@ -117,7 +117,7 @@ class ScamPrevention extends CommandBase {
 	function timeoutUser(message:Message, ?callback:(_:Dynamic) -> Void) {
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), TIMEOUT);
-			guild_member.timeout(1000 * 60 * 60 * 12, 'You are spamming something that doesn\t need to be spammed. Wait for review.').then(callback, err);
+			guild_member.timeout(1000 * 60 * 60 * 12, 'Stop spamming, a mod will review this at their convenience.').then(callback, err);
 			this.resetChecks(message.author.id);
 		}, err);
 	}

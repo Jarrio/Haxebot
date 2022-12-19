@@ -10552,7 +10552,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 	}
 	,reviewMessage: function(messages) {
 		var message = messages[0];
-		var embed = this.reformatMessage(null,message);
+		var embed = this.reformatMessage("SPAM ALERT - Timed out",message);
 		if(embed == null || embed.description.length == 0) {
 			return;
 		}
@@ -10605,7 +10605,7 @@ systems_commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototyp
 		var _gthis = this;
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
-			guild_member.timeout(43200000,"You are spamming something that doesn\t need to be spammed. Wait for review.").then(callback,Util_err);
+			guild_member.timeout(43200000,"Stop spamming, a mod will review this at their convenience.").then(callback,Util_err);
 			var id = message.author.id;
 			var _this = _gthis.time_since;
 			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
