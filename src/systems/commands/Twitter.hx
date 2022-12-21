@@ -110,7 +110,7 @@ class Twitter extends CommandBase {
 
 					Fetch.fetch(url, {
 						headers: {
-							Authorization: 'Bearer ${Main.config.twitter_token}'
+							Authorization: 'Bearer ${Main.keys.twitter_token}'
 						},
 						method: GET,
 					}).then(function(succ) {
@@ -209,12 +209,12 @@ class Twitter extends CommandBase {
 	var since_id(get, set):String;
 
 	inline function get_since_id() {
-		return Main.config.twitter_since_id;
+		return Main.state.twitter_since_id;
 	}
 
 	inline function set_since_id(value:String) {
-		Main.config.twitter_since_id = value;
-		File.saveContent('config.json', Json.stringify(Main.config));
+		Main.state.twitter_since_id = value;
+		File.saveContent('config.json', Json.stringify(Main.state));
 
 		return value;
 	}

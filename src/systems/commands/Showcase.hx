@@ -29,7 +29,7 @@ class Showcase extends CommandBase {
 	public function new(_) {
 		super(_);
 
-		this.webhook = new WebhookClient({url: Main.config.showcase_hook});
+		this.webhook = new WebhookClient({url: Main.keys.showcase_hook});
 	}
 
 	override function update(_:Float) {

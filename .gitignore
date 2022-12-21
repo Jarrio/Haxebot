@@ -6,3 +6,4 @@
 /.haxelib/promhx
 /bin/haxebot
 .ecs_invalidation
+/bin/config/keys.json

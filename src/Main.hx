@@ -41,10 +41,12 @@ class Main {
 	public static var logged_in:Bool = false;
 	public static var auth:firebase.web.auth.User;
 	public static var client:Client;
-	public static var commands:Map<String, ApplicationCommand> = [];
+	public static var registered_commands:Map<String, ApplicationCommand> = [];
 	public static var commands_active:Bool = false;
 	public static var connected:Bool = false;
-	public static var config:TConfig;
+	public static var keys:TKeys;
+	public static var state:TState;
+	public static var command_file:Array<TCommands>;
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
 	private static var active_systems:Map<String, Bool> = [];
@@ -54,14 +56,20 @@ class Main {
 	public static final guild_id:String = "162395145352904705";
 	#end
 
+	public static var discord(get, never):TDiscordConfig;
+	static function get_discord() {
+		var config = null;
+		#if block
+		config = Main.keys.discord_test;
+		#else
+		config = Main.keys.discord_live;
+		#end
+		return config;
+	}
+
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
-		#if block
-		var client_id = Main.config.lclient_id;
-		#else
-		var client_id = Main.config.client_id;
-		#end
-		var get = rest.put(Routes.applicationGuildCommands(client_id, Main.guild_id), {body: commands});
+		var get = rest.put(Routes.applicationGuildCommands(discord.client_id, Main.guild_id), {body: commands});
 		return get;
 	}
 
@@ -72,9 +80,8 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [
-						
-					],
+					systems: [],
+
 				},
 				{
 					name: 'main',
@@ -117,18 +124,13 @@ class Main {
 				IntentFlags.GUILD_MESSAGE_REACTIONS
 			]
 		});
-		#if block
-		var discord_token = Main.config.ldiscord_token;
-		#else
-		var discord_token = Main.config.discord_token;
-		#end
 
 		client.once('ready', (clients) -> {
 			trace('Ready!');
 			Main.client = cast clients[0];
 			connected = true;
 
-			var rest = new REST({version: '9'}).setToken(discord_token);
+			var rest = new REST({version: '9'}).setToken(discord.token);
 			var res = token(rest);
 			res.then(function(foo:Array<Dynamic>) {
 				commands_active = true;
@@ -218,7 +220,7 @@ class Main {
 
 		universe.setComponents(universe.createEntity(), command, interaction);
 	});
-	client.login(discord_token);
+	client.login(discord.token);
 	new Timer(500).run = function() {
 		if (!connected || !commands_active) {
 			return;
@@ -240,7 +242,7 @@ class Main {
 
 	var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
 
-	for (value in config.commands) {
+	for (value in command_file) {
 		if (value.name != command.name) {
 			continue;
 		}
@@ -287,10 +289,10 @@ class Main {
 }
 
 public static function getCommand(name:String) {
-	if (Main.commands == null) {
+	if (Main.registered_commands == null) {
 		return null;
 	}
-	for (command in Main.commands) {
+	for (command in Main.registered_commands) {
 		if (name == command.name) {
 			return command;
 		}
@@ -299,29 +301,25 @@ public static function getCommand(name:String) {
 }
 
 static function saveCommand(command:ApplicationCommand) {
-	Main.commands.set(command.name, command);
+	Main.registered_commands.set(command.name, command);
 	trace('registered ${command.name}');
 }
 
 static function main() {
 	try {
-		config = Json.parse(File.getContent('./config.json'));
+		keys = Json.parse(File.getContent('./config/keys.json'));
+		command_file = Json.parse(File.getContent('./config/commands.json'));
+		state = Json.parse(File.getContent('./config/state.json'));
 	} catch (e) {
 		trace(e.message);
 	}
 
-	var token = '';
-	#if block
-	token = config.ldiscord_token;
-	#else
-	token = config.discord_token;
-	#end
-	if (config == null || token == 'TOKEN_HERE') {
+	if (keys == null || discord.token == null) {
 		throw('Enter your discord auth token.');
 	}
 
-	Main.app = FirebaseApp.initializeApp(Main.config.firebase);
-	Auth.signInWithEmailAndPassword(Auth.getAuth(), Main.config.username, Main.config.password).then(function(res) {
+	Main.app = FirebaseApp.initializeApp(keys.firebase);
+	Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password).then(function(res) {
 		trace('logged in');
 		Main.auth = res.user;
 		Main.logged_in = true;
@@ -331,13 +329,12 @@ static function main() {
 }
 
 static function parseCommands() {
-	var command_defs = config.commands;
-	if (command_defs == null || command_defs.length == 0) {
+	if (command_file == null || command_file.length == 0) {
 		throw 'No commands configured in the config.json file.';
 	}
 
 	var commands = new Array<AnySlashCommand>();
-	for (command in command_defs) {
+	for (command in command_file) {
 		var permission:Int = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
 		if (command.is_public != null) {
 			if (!command.is_public) {
@@ -402,41 +399,35 @@ static function parseCommands() {
 	return commands;
 }
 
-public static var name(get, never):String;
-
-private static function get_name() {
-	if (config == null || config.project_name == null) {
-		return 'bot';
-	}
-	return config.project_name;
-}
 } typedef THelpPls = {
 	var user:User;
 	var content:String;
 	var message:Message;
 }
 
-typedef TConfig = {
-	var project_name:String;
-	var showcase_hook:String;
-	var firebase:FirebaseOptions;
-	var macros:Bool;
-
-	var server_id:String;
-	#if !block
-	var client_id:String;
-	var discord_token:String;
-	#else
-	var lclient_id:String;
-	var ldiscord_token:String;
-	#end
-	var twitter_token:String;
-	var twitter_since_id:String;
+typedef TKeys = {
 	var username:String;
 	var password:String;
+	var firebase:FirebaseOptions;
 	var deepl_key:String;
+	var discord_live:TDiscordConfig;
+	var discord_test:TDiscordConfig;
+	var twitter_token:String;
+	var showcase_hook:String;
+}
+
+typedef TDiscordConfig = {
+	var token:String;
+	var secret:String;
+	var server_id:String;
+	var client_id:String;
+}
+
+typedef TState = {
+	var macros:Bool;
+	var project_name:String;
+	var twitter_since_id:String;
 	var last_roundup_posted:Int;
-	var commands:Array<TCommands>;
 }
 
 typedef Foo = ApplicationCommandData;

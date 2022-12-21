@@ -1,0 +1,611 @@
+[
+	{
+		"name": "poll",
+		"description": "Create a poll",
+		"params": [
+			{
+				"name": "question",
+				"type": "string",
+				"description": "The question to ask in the poll",
+				"required": true
+			},
+			{
+				"name": "time",
+				"type": "string",
+				"description": "The length of time a poll can last. No higher than 4320 minutes (3 days)",
+				"required": true,
+				"choices": [
+					{
+						"name": "15 mins",
+						"value": "15m"
+					},
+					{
+						"name": "30 mins",
+						"value": "30m"
+					},
+					{
+						"name": "1 hour",
+						"value": "1hr"
+					},
+					{
+						"name": "4 hours",
+						"value": "4hr"
+					},
+					{
+						"name": "8 hours",
+						"value": "8hr"
+					},
+					{
+						"name": "12 hours",
+						"value": "12hr"
+					},
+					{
+						"name": "1 day",
+						"value": "1d"
+					},
+					{
+						"name": "3 days",
+						"value": "3d"
+					},
+					{
+						"name": "5 days",
+						"value": "5d"
+					},
+					{
+						"name": "1 week",
+						"value": "1w"
+					},
+					{
+						"name": "2 weeks",
+						"value": "2w"
+					}
+				]
+			},
+			{
+				"name": "a",
+				"type": "string",
+				"description": "answer a",
+				"required": true
+			},
+			{
+				"name": "b",
+				"type": "string",
+				"description": "answer b",
+				"required": true
+			},
+			{
+				"name": "c",
+				"type": "string",
+				"description": "answer c",
+				"required": false
+			},
+			{
+				"name": "d",
+				"type": "string",
+				"description": "answer d",
+				"required": false
+			},
+			{
+				"name": "e",
+				"type": "string",
+				"description": "answer e",
+				"required": false
+			},
+			{
+				"name": "f",
+				"type": "string",
+				"description": "answer f",
+				"required": false
+			},
+			{
+				"name": "g",
+				"type": "string",
+				"description": "answer g",
+				"required": false
+			},
+			{
+				"name": "votes",
+				"type": "number",
+				"required": false,
+				"description": "The number of times a person can vote. Default is 1. Max is 7."
+			}
+		]
+	},
+	{
+		"name": "hi",
+		"description": "Say hi to the bot"
+	},
+	{
+		"name": "archive",
+		"description": "Show or hide the channel archives. These are channels which are no longer active."
+	},
+	{
+		"name": "ban",
+		"description": "[Mod] Ban user",
+		"is_public": false,
+		"params": [
+			{
+				"name": "user",
+				"type": "user",
+				"description": "User to ban",
+				"required": true
+			},
+			{
+				"name": "reason",
+				"type": "string",
+				"description": "Default: Scam bot",
+				"required": false
+			},
+			{
+				"name": "time",
+				"type": "string",
+				"description": "Default: 24 hours",
+				"required": false,
+				"choices": [
+					{
+						"name": "Don't delete any messages",
+						"value": "0"
+					},
+					{
+						"name": "Last 24 hours",
+						"value": "1"
+					},
+					{
+						"name": "Last 7 days",
+						"value": "7"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "translate",
+		"description": "Language translation",
+		"params": [
+			{
+				"name": "to",
+				"type": "string",
+				"description": "Ending language",
+				"required": true,
+				"choices": [
+					{
+						"name": "Bulgarian",
+						"value": "BG"
+					},
+					{
+						"name": "Czech",
+						"value": "CS"
+					},
+					{
+						"name": "Danish",
+						"value": "DA"
+					},
+					{
+						"name": "German",
+						"value": "DE"
+					},
+					{
+						"name": "Greek",
+						"value": "EL"
+					},
+					{
+						"name": "English",
+						"value": "EN"
+					},
+					{
+						"name": "Spanish",
+						"value": "ES"
+					},
+					{
+						"name": "Estonian",
+						"value": "ET"
+					},
+					{
+						"name": "Finnish",
+						"value": "FI"
+					},
+					{
+						"name": "French",
+						"value": "FR"
+					},
+					{
+						"name": "Hungarian",
+						"value": "HU"
+					},
+					{
+						"name": "Indonesian",
+						"value": "ID"
+					},
+					{
+						"name": "Italian",
+						"value": "IT"
+					},
+					{
+						"name": "Japanese",
+						"value": "JA"
+					},
+					{
+						"name": "Latvian",
+						"value": "LV"
+					},
+					{
+						"name": "Dutch",
+						"value": "NL"
+					},
+					{
+						"name": "Polish",
+						"value": "PL"
+					},
+					{
+						"name": "Portuguese",
+						"value": "PT"
+					},
+					{
+						"name": "Russian",
+						"value": "RU"
+					},
+					{
+						"name": "Slovenian",
+						"value": "SL"
+					},
+					{
+						"name": "Swedish",
+						"value": "SV"
+					},
+					{
+						"name": "Turkish",
+						"value": "TR"
+					},
+					{
+						"name": "Ukrainian",
+						"value": "UK"
+					},
+					{
+						"name": "Chinese",
+						"value": "ZH"
+					}
+				]
+			},
+			{
+				"name": "message",
+				"description": "text to translate",
+				"type": "string",
+				"required": true
+			},
+			{
+				"name": "from",
+				"type": "string",
+				"description": "Starting language",
+				"required": false,
+				"choices": [
+					{
+						"name": "Bulgarian",
+						"value": "BG"
+					},
+					{
+						"name": "Czech",
+						"value": "CS"
+					},
+					{
+						"name": "Danish",
+						"value": "DA"
+					},
+					{
+						"name": "German",
+						"value": "DE"
+					},
+					{
+						"name": "Greek",
+						"value": "EL"
+					},
+					{
+						"name": "English",
+						"value": "EN"
+					},
+					{
+						"name": "Spanish",
+						"value": "ES"
+					},
+					{
+						"name": "Estonian",
+						"value": "ET"
+					},
+					{
+						"name": "Finnish",
+						"value": "FI"
+					},
+					{
+						"name": "French",
+						"value": "FR"
+					},
+					{
+						"name": "Hungarian",
+						"value": "HU"
+					},
+					{
+						"name": "Indonesian",
+						"value": "ID"
+					},
+					{
+						"name": "Italian",
+						"value": "IT"
+					},
+					{
+						"name": "Japanese",
+						"value": "JA"
+					},
+					{
+						"name": "Latvian",
+						"value": "LV"
+					},
+					{
+						"name": "Dutch",
+						"value": "NL"
+					},
+					{
+						"name": "Polish",
+						"value": "PL"
+					},
+					{
+						"name": "Portuguese",
+						"value": "PT"
+					},
+					{
+						"name": "Russian",
+						"value": "RU"
+					},
+					{
+						"name": "Slovenian",
+						"value": "SL"
+					},
+					{
+						"name": "Swedish",
+						"value": "SV"
+					},
+					{
+						"name": "Turkish",
+						"value": "TR"
+					},
+					{
+						"name": "Ukrainian",
+						"value": "UK"
+					},
+					{
+						"name": "Chinese",
+						"value": "ZH"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "helppls",
+		"description": "Help question and answer",
+		"is_public": false,
+		"params": [
+			{
+				"name": "topic",
+				"type": "string",
+				"description": "The topic that you need help on",
+				"required": true,
+				"choices": [
+					{
+						"name": "haxe",
+						"value": "haxe"
+					},
+					{
+						"name": "haxeui",
+						"value": "haxeui"
+					},
+					{
+						"name": "tools",
+						"value": "tools"
+					},
+					{
+						"name": "flixel",
+						"value": "flixel"
+					},
+					{
+						"name": "heaps",
+						"value": "heaps"
+					},
+					{
+						"name": "ceramic",
+						"value": "ceramic"
+					},
+					{
+						"name": "openfl",
+						"value": "openfl"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "boop",
+		"description": "Boops a user",
+		"params": [
+			{
+				"name": "user",
+				"type": "user",
+				"description": "user to boop",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "trace",
+		"description": "Runs your input/expression through haxe's trace function",
+		"params": [
+			{
+				"name": "expression",
+				"type": "string",
+				"description": "code/expression to run",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "help",
+		"description": "Haxebot commands list",
+		"params": [
+			{
+				"name": "category",
+				"type": "string",
+				"description": "help topic",
+				"required": false
+			}
+		]
+	},
+	{
+		"name": "haxelib",
+		"description": "Haxebot commands list",
+		"params": [
+			{
+				"name": "command",
+				"type": "string",
+				"description": "The parameters to pass to the haxelib command",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "helpdescription",
+		"description": "Provide a description to a helppls question",
+		"is_public": false,
+		"params": [
+			{
+				"name": "description",
+				"type": "string",
+				"description": "A brief description of the solution found",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "notify",
+		"description": "Subscribe to topic specific updates",
+		"params": [
+			{
+				"name": "channel",
+				"type": "string",
+				"description": "Channel/topic to receive targetted notifications for",
+				"required": true,
+				"choices": [
+					{
+						"name": "announcements",
+						"value": "announcements"
+					},
+					{
+						"name": "events",
+						"value": "events"
+					},
+					{
+						"name": "haxeui",
+						"value": "haxeui"
+					},
+					{
+						"name": "ceramic",
+						"value": "ceramic"
+					},
+					{
+						"name": "flixel",
+						"value": "flixel"
+					},
+					{
+						"name": "heaps",
+						"value": "heaps"
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "rtfm",
+		"description": "Short paragraphs introducing frameworks",
+		"params": [
+			{
+				"name": "channel",
+				"type": "string",
+				"description": "Topic to get info for",
+				"required": false
+			}
+		]
+	},
+	{
+		"name": "roundup",
+		"description": "[Mod] Configure auto-roundup posting",
+		"is_public": false,
+		"params": [
+			{
+				"name": "issue",
+				"type": "number",
+				"description": "Topic to get info for",
+				"required": true
+			}
+		]
+	},
+	{
+		"name": "api",
+		"description": "Grab documentation from supported API's",
+		"params": [
+			{
+				"name": "package",
+				"type": "string",
+				"description": "Path to the class",
+				"required": true,
+				"autocomplete": true
+			},
+			{
+				"name": "field",
+				"type": "string",
+				"description": "Path to a field of the selected class",
+				"required": false,
+				"autocomplete": true
+			}
+		]
+	},
+	{
+		"name": "showcase",
+		"is_public": true,
+		"description": "Gain access to posting in the #showcase channel"
+	},
+	{
+		"name": "quote",
+		"is_public": true,
+		"description": "Get or create a quote that can be recalled at anytime by using either the id or the name",
+		"params": [
+			{
+				"name": "name",
+				"type": "string",
+				"description": "A string identifier",
+				"required": true,
+				"autocomplete": true
+			},
+			{
+				"name": "type",
+				"type": "string",
+				"description": "[default=get] What do you want to do?",
+				"required": false,
+				"choices": [
+					{
+						"name": "Edit",
+						"value": "edit"
+					},
+					{
+						"name": "Set",
+						"value": "set"
+					},
+					{
+						"name": "Delete",
+						"value": "delete"
+					},
+					{
+						"name": "Get",
+						"value": "get"
+					}
+				]
+			}
+		]
+	}
+]

@@ -82,7 +82,7 @@ class Translate extends CommandBase {
 		return Fetch.fetch('https://api-free.deepl.com$endpoint', {
 			method: HttpMethod.GET,
 			headers: {
-				'Authorization': 'DeepL-Auth-Key ' + Main.config.deepl_key
+				'Authorization': 'DeepL-Auth-Key ' + Main.keys.deepl_key
 			}
 		});
 	}

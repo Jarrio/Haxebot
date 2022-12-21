@@ -198,7 +198,7 @@ class Run extends System {
 			return false;
 		}
 
-		if (!Main.config.macros) {
+		if (!Main.state.macros) {
 			if (~/@:.*[bB]uild/igmu.match(code)) {
 				response.reply({content: "Currently no build macros allowed"});
 				return false;

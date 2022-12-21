@@ -51,7 +51,7 @@ class Roundup extends CommandBase {
 
 	override function update(_) {
 		super.update(_);
-		if (!this.set_permissions && Main.commands_active && Main.commands.exists(this.name)) {
+		if (!this.set_permissions && Main.commands_active && Main.registered_commands.exists(this.name)) {
 			this.set_permissions = true;
 			var command = Main.getCommand(this.name);
 			if (command != null) {
@@ -113,12 +113,12 @@ class Roundup extends CommandBase {
 	}
 
 	inline function get_roundup() {
-		return Main.config.last_roundup_posted;
+		return Main.state.last_roundup_posted;
 	}
 
 	inline function set_roundup(value:Int) {
-		Main.config.last_roundup_posted = value;
-		File.saveContent('config.json', Json.stringify(Main.config));
+		Main.state.last_roundup_posted = value;
+		File.saveContent('./config/state.json', Json.stringify(Main.state));
 
 		return value;
 	}
