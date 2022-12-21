@@ -7,7 +7,7 @@ class Notify extends CommandBase {
 	function getRole(channel:String) {
 		return switch (channel) {
 			// #events
-			case 'events': '738508312382799874';
+			case 'events': #if block '738508312382799874' #else '1054432874473996408' #end;
 			// #announcements
 			case 'announcements': '761714325227700225';
 			// #flixel
@@ -29,8 +29,6 @@ class Notify extends CommandBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Notify(channel):
-				
-				
 				var role = this.getRole(channel);
 				if (role == 'err') {
 					trace(channel);

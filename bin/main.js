@@ -9121,7 +9121,7 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "dvorak":
 			return "903006951896666153";
 		case "events":
-			return "738508312382799874";
+			return "1054432874473996408";
 		case "flixel":
 			return "761714697468248125";
 		case "haxeui":
@@ -9140,8 +9140,8 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
-				haxe_Log.trace(channel,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 36, className : "systems.commands.Notify", methodName : "run"});
-				haxe_Log.trace(interaction.command,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 37, className : "systems.commands.Notify", methodName : "run"});
+				haxe_Log.trace(channel,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 34, className : "systems.commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/systems/commands/Notify.hx", lineNumber : 35, className : "systems.commands.Notify", methodName : "run"});
 				interaction.reply("Invalid channel");
 				return;
 			}
