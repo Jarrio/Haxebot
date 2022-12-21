@@ -649,26 +649,30 @@ Main.token = function(rest) {
 	return get;
 };
 Main.start = function() {
-	var this1 = new Array(1);
+	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(19);
-	var this2 = new Array(19);
-	vec[0] = new ecs_Phase(true,"main",this1,this2);
+	var this1 = new Array(0);
+	var this2 = new Array(0);
+	vec[0] = new ecs_Phase(false,"testing",this1,this2);
+	var this1 = new Array(20);
+	var this2 = new Array(20);
+	vec[1] = new ecs_Phase(true,"main",this1,this2);
 	var entities = new ecs_core_EntityManager(1000);
-	var this1 = new Array(6);
+	var this1 = new Array(7);
 	var vec1 = this1;
-	vec1[2] = new ecs_Components(6);
-	vec1[1] = new ecs_Components(6);
-	vec1[4] = new ecs_Components(6);
-	vec1[3] = new ecs_Components(6);
-	vec1[5] = new ecs_Components(6);
-	vec1[0] = new ecs_Components(6);
+	vec1[0] = new ecs_Components(7);
+	vec1[5] = new ecs_Components(7);
+	vec1[3] = new ecs_Components(7);
+	vec1[2] = new ecs_Components(7);
+	vec1[1] = new ecs_Components(7);
+	vec1[6] = new ecs_Components(7);
+	vec1[4] = new ecs_Components(7);
 	var components = new ecs_core_ComponentManager(entities,vec1);
 	var this1 = [0];
 	var this2 = this1;
 	var this1 = new Array(0);
 	var resources = new ecs_core_ResourceManager(this2,this1);
-	var this1 = new Array(5);
+	var this1 = new Array(6);
 	var vec1 = this1;
 	var this1 = [0];
 	var this2 = this1;
@@ -678,8 +682,8 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
-	bits_Bits.set(cmpBits,0);
 	bits_Bits.set(cmpBits,1);
+	bits_Bits.set(cmpBits,0);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -692,8 +696,8 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
-	bits_Bits.set(cmpBits,3);
 	bits_Bits.set(cmpBits,2);
+	bits_Bits.set(cmpBits,3);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -707,7 +711,7 @@ Main.start = function() {
 	}
 	var cmpBits = this2;
 	bits_Bits.set(cmpBits,4);
-	bits_Bits.set(cmpBits,1);
+	bits_Bits.set(cmpBits,5);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -720,8 +724,8 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
-	bits_Bits.set(cmpBits,3);
-	bits_Bits.set(cmpBits,4);
+	bits_Bits.set(cmpBits,2);
+	bits_Bits.set(cmpBits,5);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
@@ -734,90 +738,108 @@ Main.start = function() {
 		this2[i] = 0;
 	}
 	var cmpBits = this2;
-	bits_Bits.set(cmpBits,5);
-	bits_Bits.set(cmpBits,3);
+	bits_Bits.set(cmpBits,1);
+	bits_Bits.set(cmpBits,2);
 	var this1 = [0];
 	var this2 = this1;
 	var resBits = this2;
 	vec1[4] = new ecs_Family(4,cmpBits,resBits,1000);
+	var this1 = [0];
+	var this2 = this1;
+	var _g = this2.length;
+	while(_g < 1) {
+		var i = _g++;
+		this2[i] = 0;
+	}
+	var cmpBits = this2;
+	bits_Bits.set(cmpBits,6);
+	bits_Bits.set(cmpBits,1);
+	var this1 = [0];
+	var this2 = this1;
+	var resBits = this2;
+	vec1[5] = new ecs_Family(5,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
-	var phase = vec[0];
-	var s = new systems_commands_Twitter(u);
+	var phase = vec[1];
+	var s = new systems_commands_AutoRole(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new systems_commands_Quote(u);
+	var s = new systems_commands_Twitter(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new systems_commands_ScamPrevention(u);
+	var s = new systems_commands_Quote(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new systems_commands_Api(u);
+	var s = new systems_commands_ScamPrevention(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new systems_commands_Haxelib(u);
+	var s = new systems_commands_Api(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new systems_commands_Trace(u);
+	var s = new systems_commands_Haxelib(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new systems_commands_React(u);
+	var s = new systems_commands_Trace(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new systems_commands_Notify(u);
+	var s = new systems_commands_React(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new systems_commands_Helpdescription(u);
+	var s = new systems_commands_Notify(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new systems_commands_Rtfm(u);
+	var s = new systems_commands_Helpdescription(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new systems_commands_Poll(u);
+	var s = new systems_commands_Rtfm(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new systems_commands_Boop(u);
+	var s = new systems_commands_Poll(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new systems_commands_Archive(u);
+	var s = new systems_commands_Boop(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new systems_commands_Help(u);
+	var s = new systems_commands_Archive(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new systems_commands_Translate(u);
+	var s = new systems_commands_Help(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new systems_commands_Hi(u);
+	var s = new systems_commands_Translate(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new systems_commands_Run(u);
+	var s = new systems_commands_Hi(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new systems_commands_Roundup(u);
+	var s = new systems_commands_Run(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new systems_commands_Showcase(u);
+	var s = new systems_commands_Roundup(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
+	s.onEnabled();
+	var s = new systems_commands_Showcase(u);
+	phase.systems[19] = s;
+	phase.enabledSystems[19] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -832,7 +854,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 116, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 125, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discordjs_rest_REST({ version : "9"}).setToken(discord_token);
@@ -843,237 +865,15 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 125, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 134, className : "Main", methodName : "start"});
 			}
 		},Util_err);
 	});
-	Main.client.on("messageCreate",function(message) {
-		if(message.author.bot) {
-			return;
-		}
-		var channel = message.channel;
-		if(channel.type == "DM") {
-			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"helppls");
-				Main.universe.components.set(_ecsTmpEntity,1,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-			return;
-		}
-		if(channel.type == "GUILD_TEXT") {
-			if(StringTools.startsWith(message.content,"!run")) {
-				var code = message.toString();
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,0,code);
-				Main.universe.components.set(_ecsTmpEntity,1,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-			if(channel.id == "162664383082790912") {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"showcase_message");
-				Main.universe.components.set(_ecsTmpEntity,1,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-			if(StringTools.startsWith(message.content,"!react")) {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"react");
-				Main.universe.components.set(_ecsTmpEntity,1,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-		}
-		if(channel.type == "GUILD_PUBLIC_THREAD" && channel.parentId == "1019922106370232360") {
-			if(StringTools.startsWith(message.content,"[showcase]")) {
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 167, className : "Main", methodName : "start"});
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"showcase");
-				Main.universe.components.set(_ecsTmpEntity,1,message);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-		}
+	Main.client.on("guildMemberAdd",function(member) {
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 144, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,4,"scam_prevention");
-		Main.universe.components.set(_ecsTmpEntity,1,message);
-		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(3);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(0);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-	});
-	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 174, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 175, className : "Main", methodName : "start"});
-	});
-	Main.client.on("interactionCreate",function(interaction) {
-		if(interaction.isButton()) {
-			if(interaction.customId == "showcase_agree") {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"showcase_agree");
-				Main.universe.components.set(_ecsTmpEntity,3,interaction);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(4);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-			if(interaction.customId == "showcase_disagree") {
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"showcase_disagree");
-				Main.universe.components.set(_ecsTmpEntity,3,interaction);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(4);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-			}
-			return;
-		}
-		if(interaction.isModalSubmit()) {
-			switch(interaction.customId) {
-			case "quote_edit":
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"quote_edit");
-				Main.universe.components.set(_ecsTmpEntity,3,interaction);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(4);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				break;
-			case "quote_set":
-				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,4,"quote_set");
-				Main.universe.components.set(_ecsTmpEntity,3,interaction);
-				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(1);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(4);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				break;
-			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 194, className : "Main", methodName : "start"});
-			}
-			return;
-		}
-		if(!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
-			return;
-		}
-		var command = Main.createCommand(interaction);
-		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,2,command);
-		Main.universe.components.set(_ecsTmpEntity,3,interaction);
+		Main.universe.components.set(_ecsTmpEntity,2,"add_event_role");
+		Main.universe.components.set(_ecsTmpEntity,3,member);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 		var ecsTmpFamily = Main.universe.families.get(1);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
@@ -1084,6 +884,283 @@ Main.start = function() {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(4);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+	});
+	Main.client.on("messageCreate",function(message) {
+		if(message.author.bot) {
+			return;
+		}
+		var channel = message.channel;
+		if(channel.type == "DM") {
+			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"helppls");
+				Main.universe.components.set(_ecsTmpEntity,5,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			return;
+		}
+		if(channel.type == "GUILD_TEXT") {
+			if(StringTools.startsWith(message.content,"!run")) {
+				var code = message.toString();
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,4,code);
+				Main.universe.components.set(_ecsTmpEntity,5,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			if(channel.id == "162664383082790912") {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"showcase_message");
+				Main.universe.components.set(_ecsTmpEntity,5,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			if(StringTools.startsWith(message.content,"!react")) {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"react");
+				Main.universe.components.set(_ecsTmpEntity,5,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+		}
+		if(channel.type == "GUILD_PUBLIC_THREAD" && channel.parentId == "1019922106370232360") {
+			if(StringTools.startsWith(message.content,"[showcase]")) {
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"showcase");
+				Main.universe.components.set(_ecsTmpEntity,5,message);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+		}
+		var _ecsTmpEntity = Main.universe.createEntity();
+		Main.universe.components.set(_ecsTmpEntity,2,"scam_prevention");
+		Main.universe.components.set(_ecsTmpEntity,5,message);
+		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(1);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(4);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(2);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+	});
+	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 188, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 189, className : "Main", methodName : "start"});
+	});
+	Main.client.on("interactionCreate",function(interaction) {
+		if(interaction.isButton()) {
+			if(interaction.customId == "showcase_agree") {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"showcase_agree");
+				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(5);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			if(interaction.customId == "showcase_disagree") {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"showcase_disagree");
+				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(5);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			return;
+		}
+		if(interaction.isModalSubmit()) {
+			switch(interaction.customId) {
+			case "quote_edit":
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"quote_edit");
+				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(5);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				break;
+			case "quote_set":
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,2,"quote_set");
+				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(5);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				break;
+			default:
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 208, className : "Main", methodName : "start"});
+			}
+			return;
+		}
+		if(!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
+			return;
+		}
+		var command = Main.createCommand(interaction);
+		var _ecsTmpEntity = Main.universe.createEntity();
+		Main.universe.components.set(_ecsTmpEntity,0,command);
+		Main.universe.components.set(_ecsTmpEntity,1,interaction);
+		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(0);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(4);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1171,14 +1248,14 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 301, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.config = JSON.parse(js_node_Fs.readFileSync("./config.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 294, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 308, className : "Main", methodName : "main"});
 	}
 	var token = "";
 	token = Main.config.discord_token;
@@ -1187,7 +1264,7 @@ Main.main = function() {
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.config.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.config.username,Main.config.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 309, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 323, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -8001,9 +8078,9 @@ sys_io_FileSeek.__constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.Seek
 sys_io_FileSeek.__empty_constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.SeekCur,sys_io_FileSeek.SeekEnd];
 var systems_CommandBase = function(_universe) {
 	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(1);
-	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(3);
-	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(2);
+	this.commands = this.universe.families.get(0);
+	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(1);
+	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(0);
 };
 $hxClasses["systems.CommandBase"] = systems_CommandBase;
 systems_CommandBase.__name__ = "systems.CommandBase";
@@ -8037,9 +8114,9 @@ systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 });
 var systems_CommandDbBase = function(_universe) {
 	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(1);
-	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(3);
-	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(2);
+	this.commands = this.universe.families.get(0);
+	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(1);
+	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(0);
 };
 $hxClasses["systems.CommandDbBase"] = systems_CommandDbBase;
 systems_CommandDbBase.__name__ = "systems.CommandDbBase";
@@ -8583,6 +8660,42 @@ systems_commands_Archive.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,__class__: systems_commands_Archive
 });
+var systems_commands_AutoRole = function(_universe) {
+	this.event_role_id = "1054432874473996408";
+	systems_CommandBase.call(this,_universe);
+	this.users = this.universe.families.get(1);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(3);
+};
+$hxClasses["systems.commands.AutoRole"] = systems_commands_AutoRole;
+systems_commands_AutoRole.__name__ = "systems.commands.AutoRole";
+systems_commands_AutoRole.__super__ = systems_CommandBase;
+systems_commands_AutoRole.prototype = $extend(systems_CommandBase.prototype,{
+	event_role_id: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.users;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var member = this.tablec254489e95ef23a8f91062a1947780b9.get(entity);
+			member.roles.add(this.event_role_id).then(null,Util_err);
+			this.universe.deleteEntity(entity);
+		}
+	}
+	,run: function(command,interaction) {
+	}
+	,get_name: function() {
+		return "autorole";
+	}
+	,users: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tablec254489e95ef23a8f91062a1947780b9: null
+	,__class__: systems_commands_AutoRole
+});
 var systems_commands_Boop = function(_universe) {
 	systems_CommandBase.call(this,_universe);
 };
@@ -8988,20 +9101,6 @@ systems_commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	,get_name: function() {
 		return "hi";
 	}
-	,loadRotatedGraphic: function(Graphic,Rotations,Frame,AntiAliasing,AutoBuffer,Key) {
-		if(AutoBuffer == null) {
-			AutoBuffer = false;
-		}
-		if(AntiAliasing == null) {
-			AntiAliasing = false;
-		}
-		if(Frame == null) {
-			Frame = -1;
-		}
-		if(Rotations == null) {
-			Rotations = 16;
-		}
-	}
 	,__class__: systems_commands_Hi
 });
 var systems_commands_Notify = function(_universe) {
@@ -9075,9 +9174,9 @@ systems_commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 var systems_commands_Poll = function(_universe) {
 	this.checked = false;
 	systems_CommandDbBase.call(this,_universe);
-	this.dm_messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.dm_messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(5);
 };
 $hxClasses["systems.commands.Poll"] = systems_commands_Poll;
 systems_commands_Poll.__name__ = "systems.commands.Poll";
@@ -9413,8 +9512,8 @@ var systems_commands_Quote = function(_universe) {
 	this.max_name_length = 20;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
-	this.modal = this.universe.families.get(3);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.modal = this.universe.families.get(4);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
 };
 $hxClasses["systems.commands.Quote"] = systems_commands_Quote;
 systems_commands_Quote.__name__ = "systems.commands.Quote";
@@ -9742,9 +9841,9 @@ systems_commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 var systems_commands_React = function(_universe) {
 	this.set_permission = false;
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(5);
 };
 $hxClasses["systems.commands.React"] = systems_commands_React;
 systems_commands_React.__name__ = "systems.commands.React";
@@ -9977,9 +10076,9 @@ var systems_commands_Run = function(_universe) {
 	this.code_requests = new haxe_ds_StringMap();
 	this.haxe_version = null;
 	ecs_System.call(this,_universe);
-	this.code_messages = this.universe.families.get(0);
-	this.table25aaa7d3f4989532034d5f61746d0948 = this.universe.components.getTable(0);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.code_messages = this.universe.families.get(2);
+	this.table25aaa7d3f4989532034d5f61746d0948 = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(5);
 };
 $hxClasses["systems.commands.Run"] = systems_commands_Run;
 systems_commands_Run.__name__ = "systems.commands.Run";
@@ -10435,9 +10534,9 @@ var systems_commands_ScamPrevention = function(_universe) {
 	this.sequential_tags = new haxe_ds_StringMap();
 	this.time_since = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(5);
 };
 $hxClasses["systems.commands.ScamPrevention"] = systems_commands_ScamPrevention;
 systems_commands_ScamPrevention.__name__ = "systems.commands.ScamPrevention";
@@ -10786,12 +10885,12 @@ var systems_commands_Showcase = function(_) {
 	this.checking = false;
 	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
-	this.modal = this.universe.families.get(4);
-	this.messages = this.universe.families.get(2);
-	this.interactions = this.universe.families.get(3);
-	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(5);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	this.modal = this.universe.families.get(5);
+	this.messages = this.universe.families.get(3);
+	this.interactions = this.universe.families.get(4);
+	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(6);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(5);
 	this.webhook = new discord_$js_WebhookClient({ url : Main.config.showcase_hook});
 };
 $hxClasses["systems.commands.Showcase"] = systems_commands_Showcase;

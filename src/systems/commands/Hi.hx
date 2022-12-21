@@ -23,6 +23,4 @@ class Hi extends CommandBase {
 	function get_name():String {
 		return 'hi';
 	}
-
-	public function loadRotatedGraphic(Graphic:Int, Rotations:Int = 16, Frame:Int = -1, AntiAliasing:Bool = false, AutoBuffer:Bool = false, ?Key:String) {}
 }

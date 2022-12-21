@@ -1,3 +1,4 @@
+import discord_js.GuildMember;
 import haxe.PosInfos;
 import systems.CommandBase;
 import discord_js.PermissionFlags;
@@ -33,6 +34,7 @@ import haxe.Timer;
 import systems.commands.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
+import systems.commands.AutoRole;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -68,11 +70,18 @@ class Main {
 			entities: 1000,
 			phases: [
 				{
+					name: 'testing',
+					enabled: #if block true #else false #end,
+					systems: [],
+				},
+				{
 					name: 'main',
+					enabled: #if block false #else true #end,
 					systems: [
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						AutoRole,
 						Twitter,
 						Quote,
 						ScamPrevention,
@@ -129,6 +138,11 @@ class Main {
 				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
 				#end
 			}, err);
+		});
+
+		client.on('guildMemberAdd', (member:GuildMember) -> {
+			trace('member ${member.user.tag}');
+			universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
 		});
 
 		client.on('messageCreate', (message:Message) -> {
@@ -468,4 +482,5 @@ enum abstract CommandForward(String) {
 	var showcase_message;
 	var quote_set;
 	var quote_edit;
+	var add_event_role;
 }
