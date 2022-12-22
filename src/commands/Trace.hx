@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import discord_js.MessageEmbed;
 import vm2.NodeVM;
@@ -8,11 +8,13 @@ import util.Random;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import js.node.ChildProcess.spawn;
+import systems.CommandBase;
 
 class Trace extends CommandBase {
 	var timeout = 5000;
 	var haxe_version:String = null;
 	var last_cleared:Float;
+
 	override function update(_:Float) {
 		super.update(_);
 		if (this.haxe_version == null) {
@@ -37,9 +39,9 @@ class Trace extends CommandBase {
 		}
 
 		this.last_cleared = now;
-		
+
 		var before = null;
-		
+
 		try {
 			var path = FileSystem.absolutePath('.') + '/haxebot';
 			var folders = FileSystem.readDirectory(path);
@@ -135,7 +137,7 @@ class Trace extends CommandBase {
 
 				ls.stderr.once('data', (data) -> {
 					trace('error: ' + data);
-					
+
 					var compile_output = this.cleanOutput(data, filename, "Main");
 					var embed = this.parseError(compile_output, final_code);
 					if (embed == null) {
@@ -144,7 +146,7 @@ class Trace extends CommandBase {
 						embed.description = this.cleanOutput(embed.description, filename, "Main");
 						interaction.reply({embeds: [embed]});
 					}
-					
+
 					ls.kill('SIGTERM');
 					return;
 				});

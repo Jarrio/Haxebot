@@ -1,15 +1,16 @@
-package systems.commands;
+package commands;
 
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class Archive extends CommandBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Archive:
-				//Archive role
+				// Archive role
 				var role = '1019915584546291712';
-				
+
 				interaction.member.fetch(true).then(function(member) {
 					var found = false;
 					for (key => _ in member.roles.cache) {
@@ -29,7 +30,7 @@ class Archive extends CommandBase {
 						}, err);
 					}
 				}, err);
-				
+
 			default:
 		}
 	}

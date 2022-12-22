@@ -1,15 +1,15 @@
-package systems.commands.mod;
+package commands.mod;
 
 import haxe.Json;
 import sys.io.File;
 import discord_js.MessageEmbed;
-import discord_js.Message;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class Ban extends CommandBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
-		switch(command.content) {
+		switch (command.content) {
 			case Ban(user, reason, delete_messages):
 				var member = interaction.channel.guild.members.cache.get(user.id);
 				if (member == null) {
@@ -57,7 +57,7 @@ class Ban extends CommandBase {
 
 										log.push({
 											user_tag: message.author.tag,
-											user_id:  message.author.id,
+											user_id: message.author.id,
 											message: message.content,
 											timestamp: message.createdTimestamp,
 											user_joined: message.member.joinedTimestamp,
@@ -74,16 +74,18 @@ class Ban extends CommandBase {
 									}
 
 									File.saveContent('./commands/ban_log.json', Json.stringify(log));
-									DiscordUtil.getChannel('952952631079362650', function(channel){
+									DiscordUtil.getChannel('952952631079362650', function(channel) {
 										var embed = new MessageEmbed();
-										embed.setAuthor({{
-											name: interaction.user.tag,
-											iconURL: interaction.user.avatarURL()
-										}});
+										embed.setAuthor({
+											{
+												name: interaction.user.tag,
+												iconURL: interaction.user.avatarURL()
+											}
+										});
 										embed.addField('Banned:', user.tag);
 										embed.addField('Reason:', reason);
 										embed.setFooter({text: 'Moderator: ${interaction.user.tag} banned a user'});
-										
+
 										interaction.reply({embeds: [embed]}).then(null, err);
 										var files = null;
 										if (log.length > 0) {
@@ -105,7 +107,6 @@ class Ban extends CommandBase {
 							}, err);
 						}, err);
 					}
-
 				});
 
 			default:
@@ -113,6 +114,7 @@ class Ban extends CommandBase {
 	}
 
 	var set_permissions:Bool = false;
+
 	override function update(_) {
 		super.update(_);
 		if (!this.set_permissions && Main.commands_active && Main.commands.exists(this.name)) {

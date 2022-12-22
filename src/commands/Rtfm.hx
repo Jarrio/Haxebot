@@ -1,14 +1,16 @@
-package systems.commands;
+package commands;
 
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class Rtfm extends CommandBase {
 	var data:Array<TRtfmFormat>;
+
 	override function onEnabled() {
 		this.data = loadFile('rtfm');
 	}
-	
+
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		if (this.data == null) {
 			trace("failed to read rtfm data");
@@ -20,7 +22,7 @@ class Rtfm extends CommandBase {
 				if (channel == null) {
 					compare = interaction.channel.name;
 				}
-				
+
 				for (item in data) {
 					for (val in item.keys) {
 						if (val == compare) {

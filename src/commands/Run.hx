@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import util.Random;
 import ecs.System;
@@ -210,13 +210,14 @@ class Run extends System {
 		}
 		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
+
 	var varname = '';
+
 	function insertLoopBreak(name:String, code:String) {
 		varname = '___' + Random.string(6);
 
 		var regex = ~/((while|for)\s*\(.*\)\s*\{|(while|for)\s*\(.*?\))|(function.*?\(.*?\)\s*{)/gmui;
 		var copy = code;
-		
 
 		copy = copy.replace('class $name {', 'class $name {\nstatic public final $varname = Date.now().getTime();');
 		copy = copy.replace('class $name{', 'class $name {\nstatic public final $varname = Date.now().getTime();');
@@ -254,7 +255,7 @@ class Run extends System {
 			var end_char = regex.matched(4).parseInt();
 			var str = '';
 			var new_code = '';
-			
+
 			for (key => value in code.split('\n')) {
 				if (key != (line - 1)) {
 					new_code += value + '\n';
@@ -358,7 +359,7 @@ class Run extends System {
 
 				ls.stderr.once('data', (data) -> {
 					var compile_output = this.cleanOutput(data, filename, class_entry);
-					var embed = this.parseError(compile_output, pre_loop);	
+					var embed = this.parseError(compile_output, pre_loop);
 					if (embed == null) {
 						message.reply({content: mention + '```\n${compile_output}```'});
 					} else {

@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import externs.FuzzySort;
 import sys.io.File;
@@ -6,6 +6,7 @@ import haxe.Http;
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import components.Command;
+import systems.CommandBase;
 
 typedef Data = {
 	var type:String;
@@ -243,9 +244,9 @@ class Api extends CommandBase {
 			var last = 0;
 			var response = [];
 			var results = [];
-			
-			//trace(header_arr);
-			
+
+			// trace(header_arr);
+
 			while (true) {
 				for (k => v in header_arr) {
 					if (a != null && b != null) {
@@ -446,7 +447,7 @@ class Api extends CommandBase {
 		var results = [];
 		var narrow = new Array<Data>();
 		var keywords = [
-			"flixel" => ['flx', 'flixel'], 
+			"flixel" => ['flx', 'flixel'],
 			"heaps" => ['h2d', 'hxd', 'hxsl', 'h3d'],
 			"ceramic" => ['ceramic', 'clay', 'spine'],
 			"openfl" => ['openfl'],

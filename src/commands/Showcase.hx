@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import haxe.PosInfos;
 import discord_js.WebhookClient;
@@ -11,6 +11,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import Main.CommandForward;
 import discord_js.Message;
+import systems.CommandBase;
 
 class Showcase extends CommandBase {
 	var channel:TextChannel;
@@ -71,7 +72,6 @@ class Showcase extends CommandBase {
 				return;
 			}
 
-
 			#if !block
 			var thread = cast(message.channel.asType0, ThreadChannel);
 			if (thread.id != "1024905470621798410") { // TODO: (LD thread id) better solution
@@ -100,7 +100,7 @@ class Showcase extends CommandBase {
 				avatarURL: message.author.avatarURL()
 			});
 
-			//trace(message.attachments);
+			// trace(message.attachments);
 			this.webhook.send({
 				content: content,
 				username: name,
@@ -108,7 +108,7 @@ class Showcase extends CommandBase {
 				files: arr
 			}).then(function(_) {
 				cont();
-			}, function (err:{message:String}, ?posInfo:PosInfos) {
+			}, function(err:{message:String}, ?posInfo:PosInfos) {
 				if (err!.message.contains("Request entity too large")) {
 					this.webhook.send({
 						content: content + '\n' + arr[0].url,

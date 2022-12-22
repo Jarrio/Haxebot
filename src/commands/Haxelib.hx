@@ -1,10 +1,11 @@
-package systems.commands;
+package commands;
 
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
 import components.Command;
 import js.node.ChildProcess.spawn;
+import systems.CommandBase;
 
 typedef CommandHistory = {
 	var timestamp:Float;
@@ -15,6 +16,7 @@ class Haxelib extends CommandBase {
 	var last_interaction:BaseCommandInteraction;
 	final super_mod_id:String = '198916468312637440';
 	var message_history:Map<String, MessageEmbed> = [];
+
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		for (key => data in message_history) {
 			var time = Date.now().getTime();
@@ -52,7 +54,7 @@ class Haxelib extends CommandBase {
 				var ls = spawn(process, commands);
 				var output = '';
 				ls.stdout.on('data', function(data:String) {
-					//Filter out download progress from output message
+					// Filter out download progress from output message
 					if (data.contains('KB') || data.contains('%')) {
 						return;
 					}
@@ -76,8 +78,7 @@ class Haxelib extends CommandBase {
 					channel.send(embed);
 				});
 			default:
-	}
-
+		}
 	}
 
 	function addHistory(command:String, embed:MessageEmbed) {

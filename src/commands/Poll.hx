@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import haxe.Json;
 import firebase.web.firestore.Timestamp;
@@ -10,6 +10,7 @@ import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
+import systems.CommandDbBase;
 
 class Poll extends CommandDbBase {
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
@@ -250,7 +251,7 @@ class Poll extends CommandDbBase {
 			if (reaction.emoji.name == "🇬" && rcount >= 7) {
 				return true;
 			}
-			
+
 			reaction.remove();
 			return false;
 		}

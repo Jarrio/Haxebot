@@ -1,7 +1,8 @@
-package systems.commands;
+package commands;
 
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class Help extends CommandBase {
 	var data:Array<THelpFormat>;

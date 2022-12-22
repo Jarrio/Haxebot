@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import js.Browser;
 import discord_builder.APIActionRowComponent;
@@ -9,6 +9,7 @@ import discord_js.MessageEmbed;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import Main.CommandForward;
+import systems.CommandDbBase;
 
 enum abstract QuoteCommand(String) to String {
 	var get;

@@ -1,5 +1,6 @@
-package systems.commands;
+package commands;
 
+import systems.CommandBase;
 import discord_js.GuildMember;
 import discord_builder.BaseCommandInteraction;
 import components.Command;

@@ -1,6 +1,6 @@
 package components;
 
-import systems.commands.Poll.PollTime;
+import commands.Poll.PollTime;
 import discord_js.User;
 
 typedef Command = {
@@ -27,8 +27,7 @@ enum CommandOptions {
 	Notify(channel:String);
 	Code(code:String);
 	Help(category:String);
-	Haxelib(command:String);	
-	Quote(name:String, type:String);	
+	Haxelib(command:String);
+	Quote(name:String, type:String);
 	Showcase;
 }
-

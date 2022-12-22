@@ -18,7 +18,7 @@ import discord_builder.SlashCommandBooleanOption;
 import discord_builder.SlashCommandUserOption;
 import discord_js.TextChannel;
 import discord_js.Message;
-import systems.commands.Run;
+import commands.Run;
 import discord_builder.SlashCommandNumberOption;
 import discord_builder.SlashCommandStringOption;
 import discord_builder.SharedSlashCommandOptions;
@@ -31,10 +31,10 @@ import haxe.Json;
 import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
-import systems.commands.*;
+import commands.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
-import systems.commands.AutoRole;
+import commands.AutoRole;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -57,6 +57,7 @@ class Main {
 	#end
 
 	public static var discord(get, never):TDiscordConfig;
+
 	static function get_discord() {
 		var config = null;
 		#if block
@@ -81,7 +82,6 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [],
-
 				},
 				{
 					name: 'main',
@@ -398,7 +398,6 @@ static function parseCommands() {
 	}
 	return commands;
 }
-
 } typedef THelpPls = {
 	var user:User;
 	var content:String;

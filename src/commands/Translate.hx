@@ -1,8 +1,9 @@
-package systems.commands;
+package commands;
 
 import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class Translate extends CommandBase {
 	var usage:TUsage;

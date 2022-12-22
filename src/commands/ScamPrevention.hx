@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import js.html.URL;
 import discord_js.MessageEmbed;
@@ -9,6 +9,7 @@ import discord_js.Message;
 import Main.CommandForward;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class ScamPrevention extends CommandBase {
 	@:fastFamily var messages:{forward:CommandForward, message:Message};

@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import firebase.web.firestore.Timestamp;
 import discord_js.User;
@@ -9,6 +9,7 @@ import shared.TStoreContent;
 import discord_js.MessageEmbed;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandDbBase;
 
 class Helpdescription extends CommandDbBase {
 	final validate_timout = 60000 * 60 * 24;
@@ -62,17 +63,19 @@ class Helpdescription extends CommandDbBase {
 
 			data.solved = true;
 			data.solution.description = description;
-			
+
 			Firestore.setDoc(ref, data).then(function(succ) {
 				interaction.reply({content: 'Thanks! <@${interaction.user.id}>', embeds: [embed]}).then(function(succ) {
 					this.validateThread(ref, data);
 					var command = Main.getCommand(this.name);
 					if (command != null) {
-						command.setCommandPermission([{
-							id: interaction.user.id,
-							type: USER,
-							permission: false
-						}]);
+						command.setCommandPermission([
+							{
+								id: interaction.user.id,
+								type: USER,
+								permission: false
+							}
+						]);
 					}
 				}, err);
 			}, err);
@@ -83,7 +86,7 @@ class Helpdescription extends CommandDbBase {
 		if (dateWithinTimeout(Date.now(), thread.validate_timestamp, this.validate_timout)) {
 			return;
 		}
-		
+
 		DiscordUtil.getChannel(this.review_thread, (channel) -> {
 			if (channel == null) {
 				return;
@@ -91,7 +94,6 @@ class Helpdescription extends CommandDbBase {
 			var embed = this.createThreadEmbed(thread);
 			var topic = thread.topic;
 
-		
 			var solution_summary = '**Solution Summary**:\n${thread.solution.description}';
 			if (thread.solution != null && thread.solution.description == null) {
 				solution_summary = "";
@@ -109,7 +111,7 @@ class Helpdescription extends CommandDbBase {
 					}
 
 					var valid = null;
-					
+
 					if (collected.emoji.name == "✅") {
 						valid = true;
 					}
@@ -157,7 +159,7 @@ class Helpdescription extends CommandDbBase {
 		embed.setTitle('__${title.answer}__');
 		embed.setURL(remote.source_url);
 		embed.setAuthor({name: remote.author.name, iconURL: remote.author.icon_url});
-		
+
 		for (value in session.questions) {
 			var answer:String = (value.answer);
 			var output = '**${value.question}**';
@@ -199,4 +201,4 @@ class Helpdescription extends CommandDbBase {
 typedef TThreadInfo = {
 	var id:Int;
 	var threads:Int;
-}; 
+};

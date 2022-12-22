@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import discord_js.Activity;
 import ecs.Entity;
@@ -19,6 +19,7 @@ import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 import firebase.web.firestore.Timestamp;
+import systems.CommandDbBase;
 
 typedef THelpQuestions = {
 	var id:Int;
@@ -51,7 +52,7 @@ class Helppls extends CommandDbBase {
 	final check_verified_interval = 60000;
 	final initial_request_timeout = 60000 * 5;
 	final review_thread = '946834684741050398';
-	#else	
+	#else
 	final review_thread = '948626893148663838';
 	final solution_timeout = 60000 * 30;
 	final check_threads_interval = 60000 * 30;
@@ -75,7 +76,7 @@ class Helppls extends CommandDbBase {
 		if (now - timestamp < this.initial_request_timeout) {
 			return;
 		}
-		
+
 		if (data.solution != null && data.solution.timestamp != null) {
 			timestamp = data.solution.timestamp.toDate().getTime();
 		}
@@ -112,7 +113,6 @@ class Helppls extends CommandDbBase {
 					if (docs.size != 1) {
 						return;
 					}
-					
 
 					var content = docs.docs[0].data();
 					content.discussion = discussion;
@@ -130,12 +130,12 @@ class Helppls extends CommandDbBase {
 							content.solution.timestamp = Timestamp.now();
 							Firestore.updateDoc(docs.docs[0].ref, 'solution', content.solution);
 						}
-						
+
 						DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
 							if (user.bot) {
 								return;
 							}
-							
+
 							if (collected.emoji.name == "✅") {
 								channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
 									DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
@@ -264,7 +264,8 @@ class Helppls extends CommandDbBase {
 	function checkDocs() {
 		var topics = ['haxe', 'haxeui', 'tools', 'flixel', 'heaps', 'ceramic', 'openfl'];
 		for (item in topics) {
-			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), where('valid', '==', null), orderBy('timestamp', DESCENDING));
+			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), where('valid', '==', null),
+				orderBy('timestamp', DESCENDING));
 			Firestore.getDocs(q).then(function(docs) {
 				if (docs.empty) {
 					return;
@@ -274,7 +275,7 @@ class Helppls extends CommandDbBase {
 					var data = doc.data();
 					var start = data.timestamp.toDate().getTime();
 					if (data.solution != null && data.solution.timestamp != null && data.solution.user != null) {
-						if(!fbDateWithinTimeout(Timestamp.now(), data.solution.timestamp, this.solution_timeout)) {
+						if (!fbDateWithinTimeout(Timestamp.now(), data.solution.timestamp, this.solution_timeout)) {
 							var command = Main.getCommand('helpdescription');
 							if (command != null) {
 								command.setCommandPermission([
@@ -656,9 +657,9 @@ class Helppls extends CommandDbBase {
 			case 'flixel': '165234904815239168';
 			case 'test': '597067735771381771';
 			default: {
-				trace('failed to find a channel id');
-				channel;
-			};
+					trace('failed to find a channel id');
+					channel;
+				};
 		}
 	}
 

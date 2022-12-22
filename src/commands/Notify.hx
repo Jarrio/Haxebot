@@ -1,7 +1,8 @@
-package systems.commands;
+package commands;
 
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 class Notify extends CommandBase {
 	function getRole(channel:String) {
@@ -36,7 +37,7 @@ class Notify extends CommandBase {
 					interaction.reply('Invalid channel');
 					return;
 				}
-				
+
 				interaction.member.fetch(true).then(function(member) {
 					var found = false;
 					for (key => _ in member.roles.cache) {
@@ -56,7 +57,7 @@ class Notify extends CommandBase {
 						}, err);
 					}
 				}, err);
-				
+
 			default:
 		}
 	}

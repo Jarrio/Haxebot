@@ -1,10 +1,11 @@
-package systems.commands;
+package commands;
 
 import discord_js.TextChannel;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import discord_js.Message;
 import Main.CommandForward;
+import systems.CommandBase;
 
 class React extends CommandBase {
 	@:fastFamily var messages:{forward:CommandForward, message:Message};
@@ -21,7 +22,7 @@ class React extends CommandBase {
 			var channel = split[1].replace('<#', '').replace('>', '');
 
 			message.client.channels.fetch(channel).then(channel -> {
-				channel.messages.fetch(split[2]).then(function(react_message){
+				channel.messages.fetch(split[2]).then(function(react_message) {
 					react_message.asType0.react(split[3]);
 					message.delete();
 				});

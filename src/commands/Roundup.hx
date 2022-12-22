@@ -1,4 +1,4 @@
-package systems.commands;
+package commands;
 
 import haxe.Json;
 import sys.io.File;
@@ -6,6 +6,7 @@ import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import discord_js.TextChannel;
 import components.Command;
+import systems.CommandBase;
 
 class Roundup extends CommandBase {
 	var last_checked:Float = -1;

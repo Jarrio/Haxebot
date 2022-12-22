@@ -1,14 +1,15 @@
-package systems.commands;
+package commands;
 
 import sys.io.File;
 import haxe.Timer;
 import haxe.ds.Vector;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
-import systems.commands.Poll.PollTime;
+import commands.Poll.PollTime;
 import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
+import systems.CommandBase;
 
 typedef TTweet = {
 	var edit_history_tweet_ids:Array<String>;
@@ -84,7 +85,7 @@ class Twitter extends CommandBase {
 		this.async_check[4] = false;
 		this.async_check[5] = false;
 
-		var checker = new Timer((this.ping_rate:Float).int());
+		var checker = new Timer((this.ping_rate : Float).int());
 		checker.run = () -> {
 			if (Main.connected && !this.checking && this.channel != null) {
 				this.checking = true;
@@ -121,7 +122,7 @@ class Twitter extends CommandBase {
 										twitter_links.push(tweet);
 									}
 								}
-								//trace('${queries[k]} - ${twitter_links.length}');
+								// trace('${queries[k]} - ${twitter_links.length}');
 							} catch (e) {
 								trace(this.since_id);
 								trace(url);
