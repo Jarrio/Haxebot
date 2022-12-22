@@ -24,21 +24,26 @@ class Poll extends CommandDbBase {
 
 			var query:Query<PollData> = Firestore.query(collection(this.db, 'discord/polls/entries'));
 			Firestore.getDocs(query).then(function(res) {
+				var now = Date.now().getTime();
 				for (doc in res.docs) {
 					var data = doc.data();
 					if (!data.active) {
 						var four_weeks = data.timestamp.toMillis() + (PollTime.two_weeks : Float) * 2;
-						if (Date.now().getTime() - four_weeks < 0) {
+						if (now - four_weeks < 0) {
 							continue;
 						}
 
 						Firestore.deleteDoc(doc.ref).then(null, err);
 						continue;
 					}
-
-					var time_left = (data.timestamp.toMillis() + data.duration) - Date.now().getTime();
-					if (time_left < 0) {
+					var start = data.timestamp.toMillis();
+					var finish = start + data.duration;
+					var time_left = 0.;
+					
+					if (finish < now) {
 						time_left = 30000;
+					} else {
+						time_left = finish - now;
 					}
 
 					Main.client.channels.fetch(data.channel).then(function(succ) {
@@ -143,13 +148,14 @@ class Poll extends CommandDbBase {
 	}
 
 	function addCollector(message:Message, data:PollData, ?time_left:Float) {
+		
 		var filter = this.filter(message, data);
 		var time:Float = data.duration;
 		if (time_left != null) {
 			time = time_left;
 		}
 
-		var collector = message.createReactionCollector({filter: filter, time: data.duration});
+		var collector = message.createReactionCollector({filter: filter, time: time});
 
 		collector.on('collect', (reaction:MessageReaction, user:User) -> {});
 

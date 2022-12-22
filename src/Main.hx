@@ -81,7 +81,9 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [],
+					systems: [
+						Poll
+					],
 				},
 				{
 					name: 'main',

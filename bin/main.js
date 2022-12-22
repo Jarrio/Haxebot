@@ -657,8 +657,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(0);
-	var this2 = new Array(0);
+	var this1 = new Array(1);
+	var this2 = new Array(1);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
 	var this1 = new Array(20);
 	var this2 = new Array(20);
@@ -766,6 +766,11 @@ Main.start = function() {
 	vec1[5] = new ecs_Family(5,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
+	var phase = vec[0];
+	var s = new commands_Poll(u);
+	phase.systems[0] = s;
+	phase.enabledSystems[0] = true;
+	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_AutoRole(u);
 	phase.systems[0] = s;
@@ -859,7 +864,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 129, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 131, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -870,12 +875,12 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 138, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + Std.string(item.name) + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 140, className : "Main", methodName : "start"});
 			}
 		},Util_err);
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 148, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 150, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,2,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,3,member);
@@ -986,7 +991,7 @@ Main.start = function() {
 		}
 		if(channel.type == "GUILD_PUBLIC_THREAD" && channel.parentId == "1019922106370232360") {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 185, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 187, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,2,"showcase");
 				Main.universe.components.set(_ecsTmpEntity,5,message);
@@ -1031,8 +1036,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 192, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 193, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 194, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 195, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1145,7 +1150,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 212, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 214, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1253,7 +1258,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 305, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 307, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1262,14 +1267,14 @@ Main.main = function() {
 		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 314, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 316, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 323, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 325, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -3628,6 +3633,7 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 			this.checked = true;
 			var query = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"));
 			firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+				var now = new Date().getTime();
 				var _g = 0;
 				var _g1 = res.docs;
 				while(_g < _g1.length) {
@@ -3636,21 +3642,25 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 					var data = [doc.data()];
 					if(!data[0].active) {
 						var four_weeks = data[0].timestamp.toMillis() + 1210000000 * 2;
-						if(new Date().getTime() - four_weeks < 0) {
+						if(now - four_weeks < 0) {
 							continue;
 						}
 						firebase_web_firestore_Firestore.deleteDoc(doc.ref).then(null,Util_err);
 						continue;
 					}
-					var time_left = [data[0].timestamp.toMillis() + data[0].duration - new Date().getTime()];
-					if(time_left[0] < 0) {
+					var start = data[0].timestamp.toMillis();
+					var finish = start + data[0].duration;
+					var time_left = [0.];
+					if(finish < now) {
 						time_left[0] = 30000;
+					} else {
+						time_left[0] = finish - now;
 					}
 					Main.client.channels.fetch(data[0].channel).then((function(time_left,data) {
 						return function(succ) {
 							succ.messages.fetch(data[0].message_id).then((function(time_left,data) {
 								return function(message) {
-									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/commands/Poll.hx", lineNumber : 46, className : "commands.Poll", methodName : "update"});
+									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/commands/Poll.hx", lineNumber : 51, className : "commands.Poll", methodName : "update"});
 									_gthis.addCollector(message,data[0],time_left[0]);
 								};
 							})(time_left,data),Util_err);
@@ -3739,7 +3749,11 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,addCollector: function(message,data,time_left) {
 		var filter = this.filter(message,data);
-		var collector = message.createReactionCollector({ filter : filter, time : data.duration});
+		var time = data.duration;
+		if(time_left != null) {
+			time = time_left;
+		}
+		var collector = message.createReactionCollector({ filter : filter, time : time});
 		collector.on("collect",function(reaction,user) {
 		});
 		collector.on("end",function(collected,reason) {
