@@ -8,7 +8,7 @@ import Main;
 
 class AutoRole extends CommandBase {
 	@:fastFamily var users:{command:CommandForward, member:GuildMember};
-	final news_role_id:String = "1053111948255953006";
+	final news_role_id:String = "761714325227700225";
 	final event_role_id:String = "1054432874473996408";
 
 	override function update(_:Float) {
