@@ -122,7 +122,7 @@ class Twitter extends CommandBase {
 										twitter_links.push(tweet);
 									}
 								}
-								// trace('${queries[k]} - ${twitter_links.length}');
+								this.removeDupes();
 							} catch (e) {
 								trace(this.since_id);
 								trace(url);
@@ -136,6 +136,16 @@ class Twitter extends CommandBase {
 				}
 			}
 		}
+	}
+
+	function removeDupes() {
+		var list = [];
+		for (link in this.twitter_links) {
+			if (list.indexOf(link) == -1) {
+				list.push(link);
+			}
+		}
+		this.twitter_links = list;
 	}
 
 	override function update(_:Float) {

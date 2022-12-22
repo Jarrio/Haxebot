@@ -6027,6 +6027,7 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 												_gthis.twitter_links.push(tweet);
 											}
 										}
+										_gthis.removeDupes();
 									} catch( _g ) {
 										var e = haxe_Exception.caught(_g);
 										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 127, className : "commands.Twitter", methodName : "onEnabled"});
@@ -6043,6 +6044,19 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 				}
 			}
 		};
+	}
+	,removeDupes: function() {
+		var list = [];
+		var _g = 0;
+		var _g1 = this.twitter_links;
+		while(_g < _g1.length) {
+			var link = _g1[_g];
+			++_g;
+			if(list.indexOf(link) == -1) {
+				list.push(link);
+			}
+		}
+		this.twitter_links = list;
 	}
 	,update: function(_) {
 		var _gthis = this;
@@ -6107,7 +6121,7 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 203, className : "commands.Twitter", methodName : "update"});
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 213, className : "commands.Twitter", methodName : "update"});
 			},Util_err);
 		}
 	}
