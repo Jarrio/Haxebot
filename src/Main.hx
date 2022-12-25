@@ -82,7 +82,10 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Social],
+					systems: [
+						Twitter,
+						Social
+					],
 				},
 				{
 					name: 'main',
@@ -91,6 +94,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						Social,
 						AutoRole,
 						Twitter,
 						Quote,
@@ -182,7 +186,7 @@ class Main {
 			#if block
 			check = (channel.id == '597067735771381771');
 			#else
-			check = (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360'))
+			check = (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360'));
 			#end
 
 			if (check) {

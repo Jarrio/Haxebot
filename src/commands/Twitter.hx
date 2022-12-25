@@ -1,15 +1,16 @@
 package commands;
 
+import commands.mod.Social.TSocial;
+import firebase.web.firestore.DocumentReference;
 import sys.io.File;
 import haxe.Timer;
 import haxe.ds.Vector;
 import discord_js.TextChannel;
-import discord_js.MessageEmbed;
 import commands.Poll.PollTime;
 import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
-import systems.CommandBase;
+import systems.CommandDbBase;
 
 typedef TTweet = {
 	var edit_history_tweet_ids:Array<String>;
@@ -64,9 +65,9 @@ private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes
 	}
 }
 
-class Twitter extends CommandBase {
+class Twitter extends CommandDbBase {
 	var tweets:Map<String, TTweet> = [];
-	var ping_rate:PollTime = PollTime.fifteen;
+	var ping_rate:Float = 60000;
 	var channel:TextChannel;
 	#if block
 	var channel_id:String = '1028078544867311727';
@@ -76,31 +77,32 @@ class Twitter extends CommandBase {
 	var async_check = new Vector<Bool>(6);
 	var twitter_links = [];
 	var checking = false;
-
+	var tags:Array<String> = [];
+	var users:Array<String> = [];
+	var start_timer = false;
 	override function onEnabled() {
-		this.async_check[0] = false;
-		this.async_check[1] = false;
-		this.async_check[2] = false;
-		this.async_check[3] = false;
-		this.async_check[4] = false;
-		this.async_check[5] = false;
+		var doc:DocumentReference<TSocial> = Firestore.doc(this.db, 'discord/social');
+		Firestore.onSnapshot(doc, (update) -> {
+			this.tags = update.data().twitter_tags;
+			this.users = update.data().twitter_users;
+			async_check = new Vector<Bool>(tags.length);
+			for (k => _ in tags) {
+				this.async_check.set(k, false);
+			}
+			if (!this.start_timer) {
+				this.start_timer = true;
+				this.poll();
+			}
+		});
+	}
 
+	inline function poll() {
+		trace('started');
 		var checker = new Timer((this.ping_rate : Float).int());
 		checker.run = () -> {
 			if (Main.connected && !this.checking && this.channel != null) {
 				this.checking = true;
-
-				var queries = [
-					'#haxe',
-					'#haxeflixel',
-					'#haxe #openfl',
-					'#yeswekha',
-					'#haxe #heaps',
-					'#haxeui',
-					'#heapsio'
-				];
-
-				for (k => query in queries) {
+				for (k => query in this.tags) {
 					var url = 'https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25';
 
 					if (this.since_id != "") {
@@ -184,12 +186,9 @@ class Twitter extends CommandBase {
 				this.channel.send({content: link}).then(null, err);
 			}
 
-			this.async_check[0] = false;
-			this.async_check[1] = false;
-			this.async_check[2] = false;
-			this.async_check[3] = false;
-			this.async_check[4] = false;
-			this.async_check[5] = false;
+			for (k => _ in tags) {
+				async_check[k] = false;
+			}
 
 			var split = this.twitter_links[twitter_links.length - 1].split('/');
 			this.since_id = split[split.length - 1];
@@ -197,12 +196,9 @@ class Twitter extends CommandBase {
 		}
 
 		if (check && this.twitter_links.length == 0) {
-			this.async_check[0] = false;
-			this.async_check[1] = false;
-			this.async_check[2] = false;
-			this.async_check[3] = false;
-			this.async_check[4] = false;
-			this.async_check[5] = false;
+			for (k => _ in tags) {
+				async_check[k] = false;
+			}
 		}
 
 		if (!checking && this.channel == null) {
@@ -225,7 +221,7 @@ class Twitter extends CommandBase {
 
 	inline function set_since_id(value:String) {
 		Main.state.twitter_since_id = value;
-		File.saveContent('config.json', Json.stringify(Main.state));
+		File.saveContent('./config/state.json', Json.stringify(Main.state));
 
 		return value;
 	}

@@ -7,3 +7,7 @@
 /bin/haxebot
 .ecs_invalidation
 /bin/config/keys.json
+/bin/.haxelib
+/bin/*.tar.gz
+/bin/haxe
+/bin/yarn-error.log

@@ -646,7 +646,7 @@ Main.command_file = null;
 Main.universe = null;
 Main.get_discord = function() {
 	var config = null;
-	config = Main.keys.discord_test;
+	config = Main.keys.discord_live;
 	return config;
 };
 Main.token = function(rest) {
@@ -657,12 +657,12 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(1);
-	var this2 = new Array(1);
-	vec[0] = new ecs_Phase(true,"testing",this1,this2);
-	var this1 = new Array(20);
-	var this2 = new Array(20);
-	vec[1] = new ecs_Phase(false,"main",this1,this2);
+	var this1 = new Array(2);
+	var this2 = new Array(2);
+	vec[0] = new ecs_Phase(false,"testing",this1,this2);
+	var this1 = new Array(21);
+	var this2 = new Array(21);
+	vec[1] = new ecs_Phase(true,"main",this1,this2);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(7);
 	var vec1 = this1;
@@ -767,90 +767,98 @@ Main.start = function() {
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
 	var phase = vec[0];
+	var s = new commands_Twitter(u);
+	phase.systems[0] = s;
+	phase.enabledSystems[0] = true;
+	s.onEnabled();
+	var s = new commands_mod_Social(u);
+	phase.systems[1] = s;
+	phase.enabledSystems[1] = true;
+	s.onEnabled();
+	var phase = vec[1];
 	var s = new commands_mod_Social(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var phase = vec[1];
 	var s = new commands_AutoRole(u);
-	phase.systems[0] = s;
-	phase.enabledSystems[0] = true;
-	s.onEnabled();
-	var s = new commands_Twitter(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_Twitter(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new commands_ScamPrevention(u);
+	var s = new commands_Quote(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_ScamPrevention(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new commands_Haxelib(u);
+	var s = new commands_Api(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new commands_Trace(u);
+	var s = new commands_Haxelib(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Trace(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_React(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_Helpdescription(u);
+	var s = new commands_Notify(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Helpdescription(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Poll(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Boop(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Archive(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Help(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Translate(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Run(u);
+	var s = new commands_Hi(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_Run(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Showcase(u);
+	var s = new commands_Roundup(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
+	s.onEnabled();
+	var s = new commands_Showcase(u);
+	phase.systems[20] = s;
+	phase.enabledSystems[20] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -864,7 +872,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 130, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 134, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -875,13 +883,12 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 139, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 143, className : "Main", methodName : "start"});
 			}
-			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 143, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 149, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 153, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,2,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,3,member);
@@ -991,10 +998,10 @@ Main.start = function() {
 			}
 		}
 		var check = false;
-		check = channel.id == "597067735771381771";
+		check = channel.type == "GUILD_PUBLIC_THREAD" && channel.parentId == "1019922106370232360";
 		if(check) {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 190, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 194, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,2,"showcase");
 				Main.universe.components.set(_ecsTmpEntity,5,message);
@@ -1039,8 +1046,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 198, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 199, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 202, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 203, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1153,7 +1160,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 220, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 224, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1261,7 +1268,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 317, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 321, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1270,14 +1277,14 @@ Main.main = function() {
 		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 326, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 330, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 335, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 339, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -2669,7 +2676,7 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 13) {
+		if(_g._hx_index == 14) {
 			var _g1 = _g.content;
 			var _g2 = _g.field;
 			var type = this.packages.h[_g1];
@@ -3121,7 +3128,7 @@ commands_Boop.__super__ = systems_CommandBase;
 commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 7) {
+		if(_g._hx_index == 8) {
 			interaction.reply("*boop* <@" + _g.user.id + ">");
 		}
 	}
@@ -3160,7 +3167,7 @@ commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
-		if(_g._hx_index == 17) {
+		if(_g._hx_index == 18) {
 			var _g1 = _g.command;
 			var route = _g1;
 			if(_g1.indexOf(" ") != -1) {
@@ -3252,7 +3259,7 @@ commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 16) {
+		if(_g._hx_index == 17) {
 			var _g1 = _g.category;
 			var msg = "";
 			var _this = this.data;
@@ -3346,9 +3353,9 @@ systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
 	,__properties__: {get_name:"get_name",get_db:"get_db"}
 });
 var commands_Helpdescription = function(_universe) {
-	this.review_thread = "946834684741050398";
-	this.check_verified_interval = 60000;
+	this.check_verified_interval = 86400000;
 	this.check_threads_interval = 1800000;
+	this.review_thread = "";
 	this.validate_timout = 86400000;
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -3357,12 +3364,12 @@ commands_Helpdescription.__name__ = "commands.Helpdescription";
 commands_Helpdescription.__super__ = systems_CommandDbBase;
 commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 	validate_timout: null
+	,review_thread: null
 	,check_threads_interval: null
 	,check_verified_interval: null
-	,review_thread: null
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 12) {
+		if(_g._hx_index == 13) {
 			if(!interaction.channel.isThread()) {
 				interaction.reply("This command is only available in a thread.").then(null,Util_err);
 				return;
@@ -3513,7 +3520,7 @@ commands_Helpdescription.prototype = $extend(systems_CommandDbBase.prototype,{
 		case "853414608747364352":
 			return "ceramic";
 		default:
-			return "haxe";
+			return null;
 		}
 	}
 	,get_name: function() {
@@ -3577,7 +3584,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "dvorak":
 			return "903006951896666153";
 		case "events":
-			return "738508312382799874";
+			return "1054432874473996408";
 		case "flixel":
 			return "761714697468248125";
 		case "haxeui":
@@ -3592,7 +3599,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 14) {
+		if(_g._hx_index == 15) {
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
@@ -3690,7 +3697,7 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 8) {
+		if(_g._hx_index == 9) {
 			var _g1 = _g.length;
 			var _g2 = _g.a;
 			var _g3 = _g.b;
@@ -4070,7 +4077,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 18) {
+		if(_g._hx_index == 19) {
 			var _g1 = _g.type;
 			var name = _g.name;
 			var type = "get";
@@ -4455,7 +4462,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 9) {
+		if(_g._hx_index == 10) {
 			var _g1 = _g.number;
 			if(this.active) {
 				this.active = false;
@@ -4508,7 +4515,7 @@ commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 10) {
+		if(_g._hx_index == 11) {
 			var _g1 = _g.channel;
 			var compare = _g1;
 			if(_g1 == null) {
@@ -4560,7 +4567,15 @@ commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
+		var _gthis = this;
 		if(!Main.connected) {
+			return;
+		}
+		if(this.channel == null && !this.checked) {
+			this.checked = true;
+			Main.client.channels.fetch("663246792426782730").then(function(channel) {
+				return _gthis.channel = channel;
+			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -5344,7 +5359,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Showcase = function(_) {
 	this.checking = false;
-	this.channel_id = "597067735771381771";
+	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
 	this.modal = this.universe.families.get(5);
 	this.messages = this.universe.families.get(3);
@@ -5413,7 +5428,12 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(command1 != "showcase" && !this.channel.isThread()) {
 				return;
 			}
-			var thread = [js_Boot.__cast(message[0].channel , discord_$js_TextChannel)];
+			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
+			if(thread[0].id != "1024905470621798410") {
+				if(thread[0].ownerId != message[0].author.id) {
+					return;
+				}
+			}
 			var arr = [[]];
 			var content1 = [StringTools.trim(message[0].content.substring(10))];
 			var jsIterator = message[0].attachments.values();
@@ -5663,7 +5683,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 6) {
+		if(_g._hx_index == 7) {
 			var _g1 = _g.code;
 			if(!this.isSafe(_g1,interaction)) {
 				interaction.reply("That code is not safe.");
@@ -5856,7 +5876,7 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 11) {
+		if(_g._hx_index == 12) {
 			var _g1 = _g.message;
 			if(this.usage == null) {
 				interaction.reply("An error occured");
@@ -5969,19 +5989,22 @@ commands__$Twitter_Response.get_users = function(this1) {
 	return this1.includes.users;
 };
 var commands_Twitter = function(_universe) {
+	this.start_timer = false;
+	this.users = [];
+	this.tags = [];
 	this.checking = false;
 	this.twitter_links = [];
 	var this1 = new Array(6);
 	this.async_check = this1;
-	this.channel_id = "1028078544867311727";
-	this.ping_rate = 900000;
+	this.channel_id = "1030188275341729882";
+	this.ping_rate = 60000;
 	this.tweets = new haxe_ds_StringMap();
-	systems_CommandBase.call(this,_universe);
+	systems_CommandDbBase.call(this,_universe);
 };
 $hxClasses["commands.Twitter"] = commands_Twitter;
 commands_Twitter.__name__ = "commands.Twitter";
-commands_Twitter.__super__ = systems_CommandBase;
-commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
+commands_Twitter.__super__ = systems_CommandDbBase;
+commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 	tweets: null
 	,ping_rate: null
 	,channel: null
@@ -5989,21 +6012,90 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 	,async_check: null
 	,twitter_links: null
 	,checking: null
+	,tags: null
+	,users: null
+	,start_timer: null
 	,onEnabled: function() {
 		var _gthis = this;
-		this.async_check[0] = false;
-		this.async_check[1] = false;
-		this.async_check[2] = false;
-		this.async_check[3] = false;
-		this.async_check[4] = false;
-		this.async_check[5] = false;
+		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/social");
+		firebase_web_firestore_Firestore.onSnapshot(doc,function(update) {
+			_gthis.tags = update.data().twitter_tags;
+			_gthis.users = update.data().twitter_users;
+			var this1 = new Array(_gthis.tags.length);
+			_gthis.async_check = this1;
+			var _g_current = 0;
+			var _g_array = _gthis.tags;
+			while(_g_current < _g_array.length) {
+				var _g_key = _g_current++;
+				var k = _g_key;
+				_gthis.async_check[k] = false;
+			}
+			if(!_gthis.start_timer) {
+				_gthis.start_timer = true;
+				var _gthis1 = _gthis;
+				haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 100, className : "commands.Twitter", methodName : "poll"});
+				var checker = new haxe_Timer(_gthis.ping_rate | 0);
+				checker.run = function() {
+					if(Main.connected && !_gthis1.checking && _gthis1.channel != null) {
+						_gthis1.checking = true;
+						var _g_current = 0;
+						var _g_array = _gthis1.tags;
+						while(_g_current < _g_array.length) {
+							var _g_value = _g_array[_g_current];
+							var _g_key = _g_current++;
+							var k = [_g_key];
+							var query = _g_value;
+							var url = ["https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25"];
+							if(Main.state.twitter_since_id != "") {
+								url[0] += "&since_id=" + Main.state.twitter_since_id;
+							}
+							query += " -is:retweet";
+							url[0] += "&query=" + encodeURIComponent(query);
+							externs_Fetch(url[0],{ headers : { Authorization : "Bearer " + Main.keys.twitter_token}, method : "GET"}).then((function(url,k) {
+								return function(succ) {
+									succ.json().then((function(url,k) {
+										return function(json) {
+											try {
+												if(json.meta.result_count > 0) {
+													var h = commands__$Twitter_Response.createLinks(json).h;
+													var tweet_h = h;
+													var tweet_keys = Object.keys(h);
+													var tweet_length = tweet_keys.length;
+													var tweet_current = 0;
+													while(tweet_current < tweet_length) {
+														var tweet = tweet_h[tweet_keys[tweet_current++]];
+														_gthis1.twitter_links.push(tweet);
+													}
+												}
+												_gthis1.removeDupes();
+											} catch( _g ) {
+												var e = haxe_Exception.caught(_g);
+												haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 129, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 130, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 131, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
+											}
+											_gthis1.async_check[k[0]] = true;
+											_gthis1.checking = false;
+										};
+									})(url,k),Util_err);
+								};
+							})(url,k),Util_err);
+						}
+					}
+				};
+			}
+		});
+	}
+	,poll: function() {
+		var _gthis = this;
+		haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 100, className : "commands.Twitter", methodName : "poll"});
 		var checker = new haxe_Timer(this.ping_rate | 0);
 		checker.run = function() {
 			if(Main.connected && !_gthis.checking && _gthis.channel != null) {
 				_gthis.checking = true;
-				var queries = ["#haxe","#haxeflixel","#haxe #openfl","#yeswekha","#haxe #heaps","#haxeui","#heapsio"];
 				var _g_current = 0;
-				var _g_array = queries;
+				var _g_array = _gthis.tags;
 				while(_g_current < _g_array.length) {
 					var _g_value = _g_array[_g_current];
 					var _g_key = _g_current++;
@@ -6034,10 +6126,10 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 										_gthis.removeDupes();
 									} catch( _g ) {
 										var e = haxe_Exception.caught(_g);
-										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 127, className : "commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 128, className : "commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 129, className : "commands.Twitter", methodName : "onEnabled"});
-										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 130, className : "commands.Twitter", methodName : "onEnabled"});
+										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 129, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 130, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 131, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
 									}
 									_gthis.async_check[k[0]] = true;
 									_gthis.checking = false;
@@ -6064,7 +6156,7 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,update: function(_) {
 		var _gthis = this;
-		systems_CommandBase.prototype.update.call(this,_);
+		systems_CommandDbBase.prototype.update.call(this,_);
 		if(!Main.connected) {
 			return;
 		}
@@ -6100,32 +6192,32 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 				++_g;
 				this.channel.send({ content : link}).then(null,Util_err);
 			}
-			this.async_check[0] = false;
-			this.async_check[1] = false;
-			this.async_check[2] = false;
-			this.async_check[3] = false;
-			this.async_check[4] = false;
-			this.async_check[5] = false;
+			var _this = this.tags;
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g_key = _g_current++;
+				this.async_check[_g_key] = false;
+			}
 			var split = this.twitter_links[this.twitter_links.length - 1].split("/");
 			var value = split[split.length - 1];
 			Main.state.twitter_since_id = value;
-			js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.state));
+			js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
 			this.twitter_links = [];
 		}
 		if(check && this.twitter_links.length == 0) {
-			this.async_check[0] = false;
-			this.async_check[1] = false;
-			this.async_check[2] = false;
-			this.async_check[3] = false;
-			this.async_check[4] = false;
-			this.async_check[5] = false;
+			var _this = this.tags;
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g_key = _g_current++;
+				this.async_check[_g_key] = false;
+			}
 		}
 		if(!this.checking && this.channel == null) {
 			this.checking = true;
 			Main.client.channels.fetch(this.channel_id).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 213, className : "commands.Twitter", methodName : "update"});
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 209, className : "commands.Twitter", methodName : "update"});
 			},Util_err);
 		}
 	}
@@ -6136,14 +6228,14 @@ commands_Twitter.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,set_since_id: function(value) {
 		Main.state.twitter_since_id = value;
-		js_node_Fs.writeFileSync("config.json",JSON.stringify(Main.state));
+		js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
 		return value;
 	}
 	,get_name: function() {
 		return "twitter";
 	}
 	,__class__: commands_Twitter
-	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{set_since_id:"set_since_id",get_since_id:"get_since_id"})
+	,__properties__: $extend(systems_CommandDbBase.prototype.__properties__,{set_since_id:"set_since_id",get_since_id:"get_since_id"})
 });
 var commands_mod_Social = function(_universe) {
 	systems_CommandDbBase.call(this,_universe);
@@ -6154,7 +6246,7 @@ commands_mod_Social.__super__ = systems_CommandDbBase;
 commands_mod_Social.prototype = $extend(systems_CommandDbBase.prototype,{
 	run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 2) {
+		if(_g._hx_index == 3) {
 			this.parseTwitter(interaction,_g.tag,_g.user);
 		}
 	}
@@ -6188,26 +6280,27 @@ commands_mod_Social.prototype = $extend(systems_CommandDbBase.prototype,{
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
-	,Social: ($_=function(tag,user) { return {_hx_index:2,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
-	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:3,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
-	,React: ($_=function(emoji,message_id) { return {_hx_index:4,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
-	,Helppls: ($_=function(topic) { return {_hx_index:5,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
-	,Trace: ($_=function(code) { return {_hx_index:6,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
-	,Boop: ($_=function(user) { return {_hx_index:7,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
-	,Poll: ($_=function(question,length,a,b,c,d,e,f,g,votes) { return {_hx_index:8,question:question,length:length,a:a,b:b,c:c,d:d,e:e,f:f,g:g,votes:votes,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","length","a","b","c","d","e","f","g","votes"],$_)
-	,Roundup: ($_=function(number) { return {_hx_index:9,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
-	,Rtfm: ($_=function(channel) { return {_hx_index:10,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
-	,Translate: ($_=function(to,message,from) { return {_hx_index:11,to:to,message:message,from:from,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Translate",$_.__params__ = ["to","message","from"],$_)
-	,Helpdescription: ($_=function(description) { return {_hx_index:12,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helpdescription",$_.__params__ = ["description"],$_)
-	,Api: ($_=function(content,field) { return {_hx_index:13,content:content,field:field,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["content","field"],$_)
-	,Notify: ($_=function(channel) { return {_hx_index:14,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
-	,Code: ($_=function(code) { return {_hx_index:15,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
-	,Help: ($_=function(category) { return {_hx_index:16,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
-	,Haxelib: ($_=function(command) { return {_hx_index:17,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
-	,Quote: ($_=function(name,type) { return {_hx_index:18,name:name,type:type,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["name","type"],$_)
-	,Showcase: {_hx_name:"Showcase",_hx_index:19,__enum__:"components.CommandOptions",toString:$estr}
+	,Remind: ($_=function(content,when,personal) { return {_hx_index:2,content:content,when:when,personal:personal,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Remind",$_.__params__ = ["content","when","personal"],$_)
+	,Social: ($_=function(tag,user) { return {_hx_index:3,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
+	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:4,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
+	,React: ($_=function(emoji,message_id) { return {_hx_index:5,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
+	,Helppls: ($_=function(topic) { return {_hx_index:6,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
+	,Trace: ($_=function(code) { return {_hx_index:7,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
+	,Boop: ($_=function(user) { return {_hx_index:8,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
+	,Poll: ($_=function(question,length,a,b,c,d,e,f,g,votes) { return {_hx_index:9,question:question,length:length,a:a,b:b,c:c,d:d,e:e,f:f,g:g,votes:votes,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","length","a","b","c","d","e","f","g","votes"],$_)
+	,Roundup: ($_=function(number) { return {_hx_index:10,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
+	,Rtfm: ($_=function(channel) { return {_hx_index:11,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
+	,Translate: ($_=function(to,message,from) { return {_hx_index:12,to:to,message:message,from:from,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Translate",$_.__params__ = ["to","message","from"],$_)
+	,Helpdescription: ($_=function(description) { return {_hx_index:13,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helpdescription",$_.__params__ = ["description"],$_)
+	,Api: ($_=function(content,field) { return {_hx_index:14,content:content,field:field,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["content","field"],$_)
+	,Notify: ($_=function(channel) { return {_hx_index:15,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
+	,Code: ($_=function(code) { return {_hx_index:16,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
+	,Help: ($_=function(category) { return {_hx_index:17,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
+	,Haxelib: ($_=function(command) { return {_hx_index:18,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
+	,Quote: ($_=function(name,type) { return {_hx_index:19,name:name,type:type,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["name","type"],$_)
+	,Showcase: {_hx_name:"Showcase",_hx_index:20,__enum__:"components.CommandOptions",toString:$estr}
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quote,components_CommandOptions.Showcase];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Remind,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quote,components_CommandOptions.Showcase];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Showcase];
 var components_ShowcaseModalSubmit = function(title,description) {
 	this.title_or_link = title;
@@ -11914,7 +12007,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 CommandPermission.admin = 8;
 CommandPermission.supermod = 4;
 CommandPermission.everyone = 1024 | 2048;
