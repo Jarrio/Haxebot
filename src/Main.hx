@@ -35,6 +35,7 @@ import commands.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
 import commands.AutoRole;
+import commands.mod.Social;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -81,9 +82,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [
-						Poll
-					],
+					systems: [Social],
 				},
 				{
 					name: 'main',
@@ -178,229 +177,242 @@ class Main {
 					universe.setComponents(universe.createEntity(), CommandForward.react, message);
 				}
 			}
+			var check = false;
+
 			#if block
-			if (channel.id == '597067735771381771') {
+			check = (channel.id == '597067735771381771');
 			#else
-			if (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360')) {
+			check = (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360'))
 			#end
+
+			if (check) {
 				if (message.content.startsWith("[showcase]")) {
 					trace('here');
 					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
 				}
 			}
-				universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
 		});
-	client.on('ChatInputAutoCompleteEvent', (incoming) -> {
-		trace('disconnected');
-		trace(incoming);
-	});
-	client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
-		if (interaction.isButton()) {
-			if (interaction.customId == 'showcase_agree') {
-				universe.setComponents(universe.createEntity(), CommandForward.showcase_agree, interaction);
-			}
-			if (interaction.customId == 'showcase_disagree') {
-				universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
-			}
-			return;
-		}
-		if (interaction.isModalSubmit()) {
-			switch (interaction.customId) {
-				case 'quote_set':
-					universe.setComponents(universe.createEntity(), CommandForward.quote_set, interaction);
-				case 'quote_edit':
-					universe.setComponents(universe.createEntity(), CommandForward.quote_edit, interaction);
-				default:
-					trace(interaction.customId + ' - unhandled model');
-			}
-			return;
-		}
-		if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
-			return;
-		}
-		var command = createCommand(interaction);
 
-		universe.setComponents(universe.createEntity(), command, interaction);
-	});
-	client.login(discord.token);
-	new Timer(500).run = function() {
-		if (!connected || !commands_active) {
-			return;
-		}
-		universe.update(1);
-	}
-} public static function createCommand(interaction:BaseCommandInteraction) {
-	var command:Command = {
-		name: interaction.commandName,
-		content: null
-	}
+		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
+			trace('disconnected');
+			trace(incoming);
+		});
 
-	switch (command.name) {
-		case 'helppls':
-			var time = Date.now().getTime();
-			dm_help_tracking.set(interaction.user.id, time);
-		default:
-	}
-
-	var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
-
-	for (value in command_file) {
-		if (value.name != command.name) {
-			continue;
-		}
-
-		if (value.params == null) {
-			command.content = Type.createEnum(CommandOptions, enum_id);
-			break;
-		} else {
-			var params = new Array<Dynamic>();
-			for (param in value.params) {
-				switch (param.type) {
-					case user:
-						params.push(interaction.options.getUser(param.name));
-					case bool:
-						params.push(interaction.options.getBoolean(param.name));
-					case mention:
-						params.push(interaction.options.getMentionable(param.name));
-					case channel:
-						params.push(interaction.options.getChannel(param.name));
-					case role:
-						params.push(interaction.options.getRole(param.name));
-					case string:
-						params.push(interaction.options.getString(param.name));
-					case number:
-						params.push(interaction.options.getNumber(param.name));
-					default:
-						throw 'Something went wrong.';
+		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
+			if (interaction.isButton()) {
+				if (interaction.customId == 'showcase_agree') {
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree, interaction);
 				}
+				if (interaction.customId == 'showcase_disagree') {
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
+				}
+				return;
 			}
 
-			command.content = Type.createEnum(CommandOptions, enum_id, params);
-			break;
+			if (interaction.isModalSubmit()) {
+				switch (interaction.customId) {
+					case 'quote_set':
+						universe.setComponents(universe.createEntity(), CommandForward.quote_set, interaction);
+					case 'quote_edit':
+						universe.setComponents(universe.createEntity(), CommandForward.quote_edit, interaction);
+					default:
+						trace(interaction.customId + ' - unhandled model');
+				}
+				return;
+			}
+
+			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
+				return;
+			}
+			var command = createCommand(interaction);
+
+			universe.setComponents(universe.createEntity(), command, interaction);
+		});
+
+		client.login(discord.token);
+		new Timer(500).run = function() {
+			if (!connected || !commands_active) {
+				return;
+			}
+			universe.update(1);
 		}
 	}
 
-	return command;
+	public static function createCommand(interaction:BaseCommandInteraction) {
+		var command:Command = {
+			name: interaction.commandName,
+			content: null
+		}
 
-	if (command.content == null) {
-		trace(interaction);
-		trace(enum_id);
-		trace('Unmatched command. (${command.name})');
-	}
-	return null;
-}
+		switch (command.name) {
+			case 'helppls':
+				var time = Date.now().getTime();
+				dm_help_tracking.set(interaction.user.id, time);
+			default:
+		}
 
-public static function getCommand(name:String) {
-	if (Main.registered_commands == null) {
+		var enum_id = command.name.charAt(0).toUpperCase() + command.name.substring(1);
+
+		for (value in command_file) {
+			if (value.name != command.name) {
+				continue;
+			}
+
+			if (value.params == null) {
+				command.content = Type.createEnum(CommandOptions, enum_id);
+				break;
+			} else {
+				var params = new Array<Dynamic>();
+				for (param in value.params) {
+					switch (param.type) {
+						case user:
+							params.push(interaction.options.getUser(param.name));
+						case bool:
+							params.push(interaction.options.getBoolean(param.name));
+						case mention:
+							params.push(interaction.options.getMentionable(param.name));
+						case channel:
+							params.push(interaction.options.getChannel(param.name));
+						case role:
+							params.push(interaction.options.getRole(param.name));
+						case string:
+							params.push(interaction.options.getString(param.name));
+						case number:
+							params.push(interaction.options.getNumber(param.name));
+						default:
+							throw 'Something went wrong.';
+					}
+				}
+
+				command.content = Type.createEnum(CommandOptions, enum_id, params);
+				break;
+			}
+		}
+
+		return command;
+
+		if (command.content == null) {
+			trace(interaction);
+			trace(enum_id);
+			trace('Unmatched command. (${command.name})');
+		}
 		return null;
 	}
-	for (command in Main.registered_commands) {
-		if (name == command.name) {
-			return command;
+
+	public static function getCommand(name:String) {
+		if (Main.registered_commands == null) {
+			return null;
 		}
-	}
-	return null;
-}
-
-static function saveCommand(command:ApplicationCommand) {
-	Main.registered_commands.set(command.name, command);
-	trace('registered ${command.name}');
-}
-
-static function main() {
-	try {
-		keys = Json.parse(File.getContent('./config/keys.json'));
-		command_file = Json.parse(File.getContent('./config/commands.json'));
-		state = Json.parse(File.getContent('./config/state.json'));
-	} catch (e) {
-		trace(e.message);
-	}
-
-	if (keys == null || discord.token == null) {
-		throw('Enter your discord auth token.');
-	}
-
-	Main.app = FirebaseApp.initializeApp(keys.firebase);
-	Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password).then(function(res) {
-		trace('logged in');
-		Main.auth = res.user;
-		Main.logged_in = true;
-	}, err);
-
-	start();
-}
-
-static function parseCommands() {
-	if (command_file == null || command_file.length == 0) {
-		throw 'No commands configured in the config.json file.';
-	}
-
-	var commands = new Array<AnySlashCommand>();
-	for (command in command_file) {
-		var permission:Int = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
-		if (command.is_public != null) {
-			if (!command.is_public) {
-				permission = PermissionFlags.ADMINISTRATOR;
+		for (command in Main.registered_commands) {
+			if (name == command.name) {
+				return command;
 			}
 		}
+		return null;
+	}
 
-		var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
+	static function saveCommand(command:ApplicationCommand) {
+		Main.registered_commands.set(command.name, command);
+		trace('registered ${command.name}');
+	}
 
-		if (command.params != null) {
-			for (param in command.params) {
-				var autocomplete = false;
-				if (param.autocomplete != null) {
-					autocomplete = param.autocomplete;
+	static function main() {
+		try {
+			keys = Json.parse(File.getContent('./config/keys.json'));
+			command_file = Json.parse(File.getContent('./config/commands.json'));
+			state = Json.parse(File.getContent('./config/state.json'));
+		} catch (e) {
+			trace(e.message);
+		}
+
+		if (keys == null || discord.token == null) {
+			throw('Enter your discord auth token.');
+		}
+
+		Main.app = FirebaseApp.initializeApp(keys.firebase);
+		Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password).then(function(res) {
+			trace('logged in');
+			Main.auth = res.user;
+			Main.logged_in = true;
+		}, err);
+
+		start();
+	}
+
+	static function parseCommands() {
+		if (command_file == null || command_file.length == 0) {
+			throw 'No commands configured in the config.json file.';
+		}
+
+		var commands = new Array<AnySlashCommand>();
+		for (command in command_file) {
+			var permission:Int = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
+			if (command.is_public != null) {
+				if (!command.is_public) {
+					permission = PermissionFlags.ADMINISTRATOR;
 				}
+			}
 
-				switch (param.type) {
-					case user:
-						main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
-							.setDescription(param.description)
-							.setRequired(param.required));
-					case string:
-						var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
-						if (param.description != null) {
-							cmd = cmd.setDescription(param.description);
-						}
-						if (param.choices != null && !autocomplete) {
-							var choices = [];
-							for (option in param.choices) {
-								choices.push({name: option.name, value: option.value});
+			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
+
+			if (command.params != null) {
+				for (param in command.params) {
+					var autocomplete = false;
+					if (param.autocomplete != null) {
+						autocomplete = param.autocomplete;
+					}
+
+					switch (param.type) {
+						case user:
+							main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
+						case string:
+							var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
+							if (param.description != null) {
+								cmd = cmd.setDescription(param.description);
 							}
-							cmd.addChoices(...Rest.of(choices));
-						}
+							if (param.choices != null && !autocomplete) {
+								var choices = [];
+								for (option in param.choices) {
+									choices.push({name: option.name, value: option.value});
+								}
+								cmd.addChoices(...Rest.of(choices));
+							}
 
-						main_command.addStringOption(cmd);
-					case bool:
-						main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
-							.setDescription(param.description)
-							.setRequired(param.required));
-					case channel:
-						main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
-							.setDescription(param.description)
-							.setRequired(param.required));
-					case role:
-						main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
-							.setDescription(param.description)
-							.setRequired(param.required));
-					case mention:
-						main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
-							.setDescription(param.description)
-							.setRequired(param.required));
-					case number:
-						main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
-							.setDescription(param.description)
-							.setRequired(param.required));
-					default:
+							main_command.addStringOption(cmd);
+						case bool:
+							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
+						case channel:
+							main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
+						case role:
+							main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
+						case mention:
+							main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
+						case number:
+							main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
+								.setDescription(param.description)
+								.setRequired(param.required));
+						default:
+					}
 				}
 			}
+			commands.push(main_command);
 		}
-		commands.push(main_command);
+		return commands;
 	}
-	return commands;
 }
-} typedef THelpPls = {
+
+typedef THelpPls = {
 	var user:User;
 	var content:String;
 	var message:Message;
