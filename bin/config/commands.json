@@ -116,6 +116,31 @@
 		"description": "Say hi to the bot"
 	},
 	{
+		"name": "reminder",
+		"description": "Setup some reminders for yourself",
+		"permissions": "admin",
+		"params": [
+			{
+				"name": "message",
+				"type": "string",
+				"description": "The reminder",
+				"required": true
+			},
+			{
+				"name": "when",
+				"type": "string",
+				"description": "The duration to pass. (m)ins, (h)ours, (d)ays, (w)eeks or (m)onths",
+				"required": true
+			},
+			{
+				"name": "personal",
+				"type": "bool",
+				"description": "Default: false. True, will hide the message from everyone",
+				"required": false
+			}
+		]
+	},
+	{
 		"name": "archive",
 		"description": "Show or hide the channel archives. These are channels which are no longer active."
 	},

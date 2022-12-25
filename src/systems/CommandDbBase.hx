@@ -26,7 +26,7 @@ abstract class CommandDbBase extends System {
 		});
 	}
 
-	public inline function addDoc<T>(path:String, data:T, success:(doc:DocumentReference<T>) -> Void, failure:(error:Dynamic, ?pos:PosInfos) -> Void) {
+	public inline function addDoc<T>(path:String, data:T, success:(doc:DocumentReference<T>) -> Void, failure:(error:Dynamic) -> Void) {
 		Firestore.addDoc(collection(this.db, path), data).then(success, failure);
 	}
 

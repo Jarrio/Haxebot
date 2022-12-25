@@ -37,6 +37,7 @@ import js.lib.Promise;
 import commands.AutoRole;
 import commands.mod.Social;
 
+
 class Main {
 	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
@@ -83,8 +84,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						Twitter,
-						Social
+						Reminder
 					],
 				},
 				{
@@ -94,6 +94,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						Reminder,
 						Social,
 						AutoRole,
 						Twitter,

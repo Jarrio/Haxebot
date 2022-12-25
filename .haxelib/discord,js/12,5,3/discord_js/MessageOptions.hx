@@ -2,6 +2,7 @@ package discord_js;
 
 typedef MessageOptions = {
 	@:optional var tts:Bool;
+	@:optional var ephemeral:Bool;
 	@:optional var nonce:String;
 	@:optional var content:String;
 	@:optional var embeds:Array<MessageEmbed>;

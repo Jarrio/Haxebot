@@ -44,7 +44,7 @@ function fbDateWithinTimeout(a:Timestamp, b:Timestamp, timeout:Float) {
 	return a.toDate().getTime() - b.toDate().getTime() < timeout;
 }
 
-inline function err(err:Dynamic, ?pos:PosInfos) {
+inline function err(err:Dynamic) {
 	Browser.console.dir(err);
-	trace(err.message, pos);
+	trace(err.message);
 }

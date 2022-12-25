@@ -21,7 +21,7 @@ class DiscordUtil {
 				succ();
 			}
 			trace('Updated permissions for ' + command.name);
-		}, function(err, ?pos:PosInfos) {
+		}, function(err) {
 			if (fail != null) {
 				fail(err);
 			}
