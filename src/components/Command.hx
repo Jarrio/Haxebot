@@ -1,5 +1,6 @@
 package components;
 
+import commands.mod.Social.SocialPlatform;
 import commands.Poll.PollTime;
 import discord_js.User;
 
@@ -12,6 +13,7 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Archive;
+	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);
 	React(emoji:String, message_id:String);
 	Helppls(topic:String);

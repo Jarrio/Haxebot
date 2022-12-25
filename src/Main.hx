@@ -133,12 +133,12 @@ class Main {
 
 			var rest = new REST({version: '9'}).setToken(discord.token);
 			var res = token(rest);
-			res.then(function(foo:Array<Dynamic>) {
+			res.then(function(foo:Array<RegisteredApplicationCommand>) {
 				commands_active = true;
 				for (item in foo) {
 					trace('DEBUG - ${item.name} is REGISTERED');
 				}
-
+				
 				#if block
 				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
 				#end
@@ -347,11 +347,13 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_file) {
-			var permission:Int = PermissionFlags.VIEW_CHANNEL | PermissionFlags.SEND_MESSAGES;
-			if (command.is_public != null) {
-				if (!command.is_public) {
-					permission = PermissionFlags.ADMINISTRATOR;
-				}
+			if (command.is_public != null && !command.is_public) {
+				continue;
+			}
+
+			var permission = CommandPermission.fromString(command.permissions);
+			if (permission == null) {
+				permission = everyone;
 			}
 
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
@@ -412,6 +414,20 @@ class Main {
 	}
 }
 
+enum abstract CommandPermission(Int) to Int {
+	var admin = PermissionFlags.ADMINISTRATOR;
+	var supermod = PermissionFlags.BAN_MEMBERS;
+	var everyone = VIEW_CHANNEL | SEND_MESSAGES;
+	@:from public static function fromString(value:String):CommandPermission {
+		return switch(value) {
+			case "admin": admin;
+			case "supermod": supermod;
+			case "everyone": everyone;
+			default: everyone;
+		}
+	}
+}
+
 typedef THelpPls = {
 	var user:User;
 	var content:String;
@@ -450,6 +466,7 @@ typedef TCommands = {
 	var name:String;
 	var description:String;
 	@:optional var is_public:Bool;
+	@:optional var permissions:String;
 	@:optional var params:Array<TCommands>;
 	@:optional var required:Bool;
 	@:optional var autocomplete:Bool;

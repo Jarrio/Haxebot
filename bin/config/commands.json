@@ -434,6 +434,25 @@
 		]
 	},
 	{
+		"name": "social",
+		"permissions": "supermod",
+		"description": "[Mod] Add sources to social media scanner",
+		"params": [
+			{
+				"name": "tag",
+				"type": "string",
+				"description": "search topic",
+				"required": false
+			},
+			{
+				"name": "user",
+				"type": "string",
+				"description": "twitter account to track",
+				"required": false
+			}
+		]
+	},
+	{
 		"name": "trace",
 		"description": "Runs your input/expression through haxe's trace function",
 		"params": [
