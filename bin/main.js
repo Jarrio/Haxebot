@@ -4402,6 +4402,10 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				personal = false;
 			}
 			var obj = { sent : false, id : "", message_id : "", duration : commands_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
+			obj.content = StringTools.replace(obj.content,"@everyone","");
+			obj.content = StringTools.replace(obj.content,"@here","");
+			obj.content = StringTools.replace(obj.content,"<@1056701703833006102>","");
+			obj.content = StringTools.replace(obj.content,"<@1056701811211374764>","");
 			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries");
 			firebase_web_firestore_Firestore.addDoc(col,obj).then(function(doc) {
 				var post_time = Math.round((obj.timestamp + obj.duration) / 1000);
@@ -4420,7 +4424,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(this.bot_channel).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 70, className : "commands.Reminder", methodName : "update"});
+				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 75, className : "commands.Reminder", methodName : "update"});
 			},Util_err);
 		}
 		if(this.channel == null) {
@@ -4442,9 +4446,9 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(reminder[0].personal) {
 				Main.client.users.fetch(reminder[0].author).then((function(reminder) {
 					return function(user) {
-						user.send("*Reminder: " + reminder[0].content + "*").then(null,(function(reminder) {
+						user.send("*Reminder - " + reminder[0].content + "*").then(null,(function(reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 91, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 96, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += 86400000;
 								_gthis.channel.send("<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?");
@@ -4453,9 +4457,9 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					};
 				})(reminder));
 			} else {
-				this.channel.send({ content : "*<@" + reminder[0].author + ">: " + reminder[0].content + "*"}).then(null,(function(reminder) {
+				this.channel.send({ content : "*" + reminder[0].author + "> - " + reminder[0].content + "*"}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 99, className : "commands.Reminder", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 104, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
 						reminder[0].duration += 3600000;
 					};

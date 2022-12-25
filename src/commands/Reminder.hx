@@ -45,6 +45,11 @@ class Reminder extends CommandDbBase {
 					personal: personal
 				}
 
+				obj.content = obj.content.replace('@everyone', '');
+				obj.content = obj.content.replace('@here', '');
+				obj.content = obj.content.replace('<@1056701703833006102>', '');
+				obj.content = obj.content.replace('<@1056701811211374764>', '');
+
 				var col = Firestore.collection(this.db, 'discord/reminders/entries');
 				Firestore.addDoc(col, obj).then(function(doc) {
 					var post_time = Math.round((obj.timestamp + obj.duration) / 1000);
@@ -87,7 +92,7 @@ class Reminder extends CommandDbBase {
 			reminder.sent = true;
 			if (reminder.personal) {
 				Main.client.users.fetch(reminder.author).then(function(user) {
-					user.send('*Reminder: ${reminder.content}*').then(null, function(err) {
+					user.send('*Reminder - ${reminder.content}*').then(null, function(err) {
 						trace(err);
 						reminder.sent = false;
 						reminder.duration += day;
@@ -95,7 +100,7 @@ class Reminder extends CommandDbBase {
 					});
 				});
 			} else {
-				this.channel.send({content: '*<@${reminder.author}>: ${reminder.content}*'}).then(null, function(err) {
+				this.channel.send({content: '*${reminder.author}> - ${reminder.content}*'}).then(null, function(err) {
 					trace(err);
 					reminder.sent = false;
 					reminder.duration += hour;
