@@ -1,5 +1,7 @@
 package commands;
 
+import firebase.web.firestore.CollectionReference;
+import discord_js.User;
 import js.Browser;
 import discord_builder.APIActionRowComponent;
 import discord_builder.APITextInputComponent;
@@ -15,6 +17,7 @@ enum abstract QuoteCommand(String) to String {
 	var get;
 	var set;
 	var edit;
+	var list;
 	var delete;
 }
 
@@ -92,13 +95,17 @@ class Quote extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Quote(name, t):
+			case Quote(name, t, user):
 				var type:String = QuoteCommand.get;
 				if (t != null) {
 					type = t;
 				}
 
 				var column = 'id';
+				if (name == null) {
+					name = "";
+				}
+
 				if (this.isName(name) && type != get) {
 					if (name.length < 2) {
 						if (interaction.isAutocomplete()) {
@@ -227,7 +234,8 @@ class Quote extends CommandDbBase {
 								interaction.reply("Quote deleted!");
 							}, err);
 						}, err);
-
+					case list:
+						this.quoteList(interaction, user);
 					case get | _:
 						query = Firestore.query(col, where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 
@@ -275,6 +283,28 @@ class Quote extends CommandDbBase {
 			default:
 				// interaction.reply();
 		}
+	}
+
+	inline function quoteList(interaction:BaseCommandInteraction, user:User) {
+		var sort = Firestore.orderBy('id', ASCENDING);
+		var col:CollectionReference<TQuoteData> = collection(this.db, 'discord/quotes/entries');
+		var query = Firestore.query(col, sort);
+		if (user != null) {
+			query = Firestore.query(col, where('author', EQUAL_TO, user.id), sort);
+		}
+
+		Firestore.getDocs(query).then(function(resp) {
+			var embed = new MessageEmbed();
+			embed.setTitle('List of Quotes');
+			var body = '';
+			for (doc in resp.docs) {
+				var data = doc.data();
+				body += '**#${data.id}** ${data.name} by <@${data.author}> \n';
+			}
+			embed.setDescription(body);
+			embed.setColor('#EA8220');
+			interaction.reply({embeds: [embed]});
+		}, err);
 	}
 
 	inline function acResponse(data:TQuoteData) {

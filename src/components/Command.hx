@@ -31,6 +31,6 @@ enum CommandOptions {
 	Code(code:String);
 	Help(category:String);
 	Haxelib(command:String);
-	Quote(name:String, type:String);
+	Quote(name:String, type:String, user:Null<User>);
 	Showcase;
 }

@@ -623,7 +623,7 @@
 				"name": "name",
 				"type": "string",
 				"description": "A string identifier",
-				"required": true,
+				"required": false,
 				"autocomplete": true
 			},
 			{
@@ -641,6 +641,10 @@
 						"value": "set"
 					},
 					{
+						"name": "List",
+						"value": "list"
+					},
+					{
 						"name": "Delete",
 						"value": "delete"
 					},
@@ -649,6 +653,12 @@
 						"value": "get"
 					}
 				]
+			},
+			{
+				"name": "user",
+				"type": "user",
+				"description": "Used with the `list` type, filter results from a user",
+				"required": false
 			}
 		]
 	}

@@ -4016,7 +4016,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 77, className : "commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 78, className : "commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -4086,6 +4086,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				type = _g1;
 			}
 			var column = "id";
+			if(name == null) {
+				name = "";
+			}
 			if(this.isName(name) && type != "get") {
 				if(name.length < 2) {
 					if(interaction.isAutocomplete()) {
@@ -4207,11 +4210,29 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,Util_err);
 				break;
 			case "list":
+				var interaction1 = interaction;
+				var sort = firebase_web_firestore_Firestore.orderBy("id","asc");
 				var col1 = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
-				firebase_web_firestore_Firestore.query(col1);
+				var query1 = firebase_web_firestore_Firestore.query(col1,sort);
 				if(_g2 != null) {
-					firebase_web_firestore_Firestore.query(col1,firebase_web_firestore_Firestore.where("author","==",_g2.id));
+					query1 = firebase_web_firestore_Firestore.query(col1,firebase_web_firestore_Firestore.where("author","==",_g2.id),sort);
 				}
+				firebase_web_firestore_Firestore.getDocs(query1).then(function(resp) {
+					var embed = new discord_$js_MessageEmbed();
+					embed.setTitle("List of Quotes");
+					var body = "";
+					var _g = 0;
+					var _g1 = resp.docs;
+					while(_g < _g1.length) {
+						var doc = _g1[_g];
+						++_g;
+						var data = doc.data();
+						body += "**#" + data.id + "** " + data.name + " by <@" + data.author + "> \n";
+					}
+					embed.setDescription(body);
+					embed.setColor("#EA8220");
+					interaction1.reply({ embeds : [embed]});
+				},Util_err);
 				break;
 			case "set":
 				if(!this.isValidName(name)) {
@@ -4281,11 +4302,28 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 	}
 	,quoteList: function(interaction,user) {
+		var sort = firebase_web_firestore_Firestore.orderBy("id","asc");
 		var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
-		firebase_web_firestore_Firestore.query(col);
+		var query = firebase_web_firestore_Firestore.query(col,sort);
 		if(user != null) {
-			firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("author","==",user.id));
+			query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("author","==",user.id),sort);
 		}
+		firebase_web_firestore_Firestore.getDocs(query).then(function(resp) {
+			var embed = new discord_$js_MessageEmbed();
+			embed.setTitle("List of Quotes");
+			var body = "";
+			var _g = 0;
+			var _g1 = resp.docs;
+			while(_g < _g1.length) {
+				var doc = _g1[_g];
+				++_g;
+				var data = doc.data();
+				body += "**#" + data.id + "** " + data.name + " by <@" + data.author + "> \n";
+			}
+			embed.setDescription(body);
+			embed.setColor("#EA8220");
+			interaction.reply({ embeds : [embed]});
+		},Util_err);
 	}
 	,acResponse: function(data) {
 		var name = data.name;
