@@ -15,9 +15,6 @@ class Reminder extends CommandDbBase {
 	final bot_channel = #if block '597067735771381771' #else '663246792426782730' #end;
 
 	override function onEnabled() {
-		// var doc:DocumentReference<TReminder> = Firestore.doc(this.db, 'discord/reminders/entries');
-		// var query:Query<TReminder> = Firestore.query(collection(this.db, 'discord/reminders/entries'));
-
 		Firestore.onSnapshot(collection(this.db, 'discord/reminders/entries'), function(resp) {
 			var arr = [];
 			for (item in resp.docs) {
@@ -56,6 +53,11 @@ class Reminder extends CommandDbBase {
 					personal: personal
 				}
 
+				if (Duration.fromString('4mins') >= obj.duration) {
+					interaction.reply('Please set a reminder that is at least 5mins');
+					return;
+				}
+
 				obj.content = obj.content.replace('@everyone', '');
 				obj.content = obj.content.replace('@here', '');
 				obj.content = obj.content.replace('<@1056701703833006102>', '');
@@ -69,7 +71,9 @@ class Reminder extends CommandDbBase {
 						content: 'Your reminder has been set for <t:${post_time}>'
 					}).then(function(msg) {
 						obj.id = doc.id;
-						Firestore.updateDoc(doc, obj);
+						Firestore.updateDoc(doc, obj).then(null, function(err) {
+							trace(err);
+						});
 					}, err);
 				}, err);
 			default:
@@ -148,7 +152,7 @@ typedef TReminder = {
 	var thread_reply:Bool;
 	var id:String;
 	var thread_id:String;
-	var duration:Float;
+	var duration:Duration;
 	var timestamp:Float;
 	var author:String;
 	var content:String;
@@ -165,6 +169,12 @@ enum abstract Duration(Float) to Float {
 	public function new(value) {
 		this = value;
 	}
+
+	@:op(A > B) static function gt(a:Duration, b:Duration):Bool;
+	@:op(A >= B) static function gtequalto(a:Duration, b:Duration):Bool;
+	@:op(A < B) static function lt(a:Duration, b:Duration):Bool;
+	@:op(A <= B) static function ltequalto(a:Duration, b:Duration):Bool;
+	@:op(A + B) static function ltequalto(a:Duration, b:Duration):Duration;
 
 	@:from public static function fromString(input:String):Duration {
 		var time = 0.;

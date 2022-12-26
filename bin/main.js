@@ -657,8 +657,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(0);
-	var this2 = new Array(0);
+	var this1 = new Array(1);
+	var this2 = new Array(1);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
 	var this1 = new Array(22);
 	var this2 = new Array(22);
@@ -766,6 +766,11 @@ Main.start = function() {
 	vec1[5] = new ecs_Family(5,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
+	var phase = vec[0];
+	var s = new commands_Reminder(u);
+	phase.systems[0] = s;
+	phase.enabledSystems[0] = true;
+	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_Reminder(u);
 	phase.systems[0] = s;
@@ -4460,6 +4465,10 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 			}
 			var obj = { sent : false, thread_reply : _g1, thread_id : thread_id, id : "", duration : commands_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
+			if(commands_Duration.fromString("4mins") >= obj.duration) {
+				interaction.reply("Please set a reminder that is at least 5mins");
+				return;
+			}
 			obj.content = StringTools.replace(obj.content,"@everyone","");
 			obj.content = StringTools.replace(obj.content,"@here","");
 			obj.content = StringTools.replace(obj.content,"<@1056701703833006102>","");
@@ -4469,7 +4478,9 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				var post_time = Math.round((obj.timestamp + obj.duration) / 1000);
 				interaction.reply({ ephemeral : personal, content : "Your reminder has been set for <t:" + post_time + ">"}).then(function(msg) {
 					obj.id = doc.id;
-					firebase_web_firestore_Firestore.updateDoc(doc,obj);
+					firebase_web_firestore_Firestore.updateDoc(doc,obj).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 78, className : "commands.Reminder", methodName : "run"});
+					});
 				},Util_err);
 			},Util_err);
 		}
@@ -4482,7 +4493,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(this.bot_channel).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 86, className : "commands.Reminder", methodName : "update"});
+				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 93, className : "commands.Reminder", methodName : "update"});
 			},Util_err);
 		}
 		if(this.channel == null) {
@@ -4506,7 +4517,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(channel) {
 						channel.send("*<@" + reminder[0].author + "> - " + reminder[0].content + "*").then(null,(function(reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 107, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 114, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += commands_Duration.fromString("3hrs");
 								_gthis.channel.send("<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.");
@@ -4519,7 +4530,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(user) {
 						user.send("*Reminder - " + reminder[0].content + "*").then(null,(function(reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 116, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 123, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += 86400000;
 								_gthis.channel.send("<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?");
@@ -4530,7 +4541,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			} else {
 				this.channel.send({ content : "*<@" + reminder[0].author + "> - " + reminder[0].content + "*"}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 124, className : "commands.Reminder", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 131, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
 						reminder[0].duration += 3600000;
 					};
