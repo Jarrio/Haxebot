@@ -30,7 +30,7 @@ class Reminder extends CommandDbBase {
 				if (personal == null) {
 					personal = false;
 				}
-				
+
 				var thread_id = '';
 				if (thread_reply) {
 					if (interaction.channel.isThread()) {
@@ -53,8 +53,13 @@ class Reminder extends CommandDbBase {
 					personal: personal
 				}
 
-				if (Duration.fromString('4mins') >= obj.duration) {
+				if (obj.duration <= Duration.fromString('4mins')) {
 					interaction.reply('Please set a reminder that is at least 5mins');
+					return;
+				}
+
+				if (obj.duration >= Duration.fromString('366days')) {
+					interaction.reply('A reminder can\'t be set for longer than 366 days');
 					return;
 				}
 
