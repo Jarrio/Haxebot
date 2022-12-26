@@ -767,7 +767,7 @@ Main.start = function() {
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
 	var phase = vec[0];
-	var s = new commands_Reminder(u);
+	var s = new commands_Quote(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
@@ -4016,7 +4016,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 75, className : "commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 77, className : "commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -4079,6 +4079,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _g = command.content;
 		if(_g._hx_index == 19) {
 			var _g1 = _g.type;
+			var _g2 = _g.user;
 			var name = _g.name;
 			var type = "get";
 			if(_g1 != null) {
@@ -4205,6 +4206,13 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					interaction.reply({ embeds : [embed]}).then(null,Util_err);
 				}).then(null,Util_err);
 				break;
+			case "list":
+				var col1 = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+				firebase_web_firestore_Firestore.query(col1);
+				if(_g2 != null) {
+					firebase_web_firestore_Firestore.query(col1,firebase_web_firestore_Firestore.where("author","==",_g2.id));
+				}
+				break;
 			case "set":
 				if(!this.isValidName(name)) {
 					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
@@ -4270,6 +4278,13 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					interaction.reply({ embeds : [embed]}).then(null,Util_err);
 				}).then(null,Util_err);
 			}
+		}
+	}
+	,quoteList: function(interaction,user) {
+		var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+		firebase_web_firestore_Firestore.query(col);
+		if(user != null) {
+			firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("author","==",user.id));
 		}
 	}
 	,acResponse: function(data) {
@@ -4457,7 +4472,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					};
 				})(reminder));
 			} else {
-				this.channel.send({ content : "*" + reminder[0].author + "> - " + reminder[0].content + "*"}).then(null,(function(reminder) {
+				this.channel.send({ content : "*<@" + reminder[0].author + "> - " + reminder[0].content + "*"}).then(null,(function(reminder) {
 					return function(err) {
 						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 104, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
@@ -6450,7 +6465,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Code: ($_=function(code) { return {_hx_index:16,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
 	,Help: ($_=function(category) { return {_hx_index:17,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
 	,Haxelib: ($_=function(command) { return {_hx_index:18,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
-	,Quote: ($_=function(name,type) { return {_hx_index:19,name:name,type:type,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["name","type"],$_)
+	,Quote: ($_=function(name,type,user) { return {_hx_index:19,name:name,type:type,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["name","type","user"],$_)
 	,Showcase: {_hx_name:"Showcase",_hx_index:20,__enum__:"components.CommandOptions",toString:$estr}
 };
 components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quote,components_CommandOptions.Showcase];

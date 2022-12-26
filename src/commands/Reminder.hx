@@ -100,7 +100,7 @@ class Reminder extends CommandDbBase {
 					});
 				});
 			} else {
-				this.channel.send({content: '*${reminder.author}> - ${reminder.content}*'}).then(null, function(err) {
+				this.channel.send({content: '*<@${reminder.author}> - ${reminder.content}*'}).then(null, function(err) {
 					trace(err);
 					reminder.sent = false;
 					reminder.duration += hour;
