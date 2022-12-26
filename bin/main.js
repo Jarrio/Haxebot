@@ -657,8 +657,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(1);
-	var this2 = new Array(1);
+	var this1 = new Array(0);
+	var this2 = new Array(0);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
 	var this1 = new Array(22);
 	var this2 = new Array(22);
@@ -766,11 +766,6 @@ Main.start = function() {
 	vec1[5] = new ecs_Family(5,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
-	var phase = vec[0];
-	var s = new commands_Quote(u);
-	phase.systems[0] = s;
-	phase.enabledSystems[0] = true;
-	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_Reminder(u);
 	phase.systems[0] = s;
@@ -4450,11 +4445,21 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 2) {
+			var _g1 = _g.thread_reply;
 			var personal = _g.personal;
 			if(personal == null) {
 				personal = false;
 			}
-			var obj = { sent : false, id : "", message_id : "", duration : commands_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
+			var thread_id = "";
+			if(_g1) {
+				if(interaction.channel.isThread()) {
+					thread_id = interaction.channel.id;
+				} else {
+					interaction.reply("You marked `thread_reply` to true. Please trigger this command from a thread.");
+					return;
+				}
+			}
+			var obj = { sent : false, thread_reply : _g1, thread_id : thread_id, id : "", duration : commands_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
 			obj.content = StringTools.replace(obj.content,"@everyone","");
 			obj.content = StringTools.replace(obj.content,"@here","");
 			obj.content = StringTools.replace(obj.content,"<@1056701703833006102>","");
@@ -4477,7 +4482,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(this.bot_channel).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 75, className : "commands.Reminder", methodName : "update"});
+				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 86, className : "commands.Reminder", methodName : "update"});
 			},Util_err);
 		}
 		if(this.channel == null) {
@@ -4496,12 +4501,25 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				continue;
 			}
 			reminder[0].sent = true;
-			if(reminder[0].personal) {
+			if(reminder[0].thread_reply) {
+				Main.client.channels.fetch(reminder[0].thread_id).then((function(reminder) {
+					return function(channel) {
+						channel.send("*<@" + reminder[0].author + "> - " + reminder[0].content + "*").then(null,(function(reminder) {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 107, className : "commands.Reminder", methodName : "update"});
+								reminder[0].sent = false;
+								reminder[0].duration += commands_Duration.fromString("3hrs");
+								_gthis.channel.send("<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.");
+							};
+						})(reminder));
+					};
+				})(reminder));
+			} else if(reminder[0].personal) {
 				Main.client.users.fetch(reminder[0].author).then((function(reminder) {
 					return function(user) {
 						user.send("*Reminder - " + reminder[0].content + "*").then(null,(function(reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 96, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 116, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += 86400000;
 								_gthis.channel.send("<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?");
@@ -4512,7 +4530,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			} else {
 				this.channel.send({ content : "*<@" + reminder[0].author + "> - " + reminder[0].content + "*"}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 104, className : "commands.Reminder", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 124, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
 						reminder[0].duration += 3600000;
 					};
@@ -6486,7 +6504,7 @@ commands_mod_Social.prototype = $extend(systems_CommandDbBase.prototype,{
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
-	,Reminder: ($_=function(content,when,personal) { return {_hx_index:2,content:content,when:when,personal:personal,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal"],$_)
+	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:2,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
 	,Social: ($_=function(tag,user) { return {_hx_index:3,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
 	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:4,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
 	,React: ($_=function(emoji,message_id) { return {_hx_index:5,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)

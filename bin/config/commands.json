@@ -137,6 +137,12 @@
 				"type": "bool",
 				"description": "Default: false. True, will hide the message from everyone",
 				"required": false
+			},
+			{
+				"name": "thread_reply",
+				"type": "bool",
+				"description": "Will route all replies to the thread you send this command in",
+				"required": false
 			}
 		]
 	},

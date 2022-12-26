@@ -29,15 +29,26 @@ class Reminder extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Reminder(content, when, personal):
+			case Reminder(content, when, personal, thread_reply):
 				if (personal == null) {
 					personal = false;
+				}
+				
+				var thread_id = '';
+				if (thread_reply) {
+					if (interaction.channel.isThread()) {
+						thread_id = interaction.channel.id;
+					} else {
+						interaction.reply('You marked `thread_reply` to true. Please trigger this command from a thread.');
+						return;
+					}
 				}
 
 				var obj:TReminder = {
 					sent: false,
+					thread_reply: thread_reply,
+					thread_id: thread_id,
 					id: "",
-					message_id: "",
 					duration: Duration.fromString(when),
 					timestamp: Date.now().getTime(),
 					author: interaction.user.id,
@@ -90,7 +101,16 @@ class Reminder extends CommandDbBase {
 			}
 
 			reminder.sent = true;
-			if (reminder.personal) {
+			if (reminder.thread_reply) {
+				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
+					channel.send('*<@${reminder.author}> - ${reminder.content}*').then(null, function(err) {
+						trace(err);
+						reminder.sent = false;
+						reminder.duration += Duration.fromString('3hrs');
+						this.channel.send('<@${reminder.author}> I failed to post a reminder to your thread. Might be an issue.');
+					});
+				});
+			} else if (reminder.personal) {
 				Main.client.users.fetch(reminder.author).then(function(user) {
 					user.send('*Reminder - ${reminder.content}*').then(null, function(err) {
 						trace(err);
@@ -125,8 +145,9 @@ class Reminder extends CommandDbBase {
 
 typedef TReminder = {
 	var sent:Bool;
+	var thread_reply:Bool;
 	var id:String;
-	var message_id:String;
+	var thread_id:String;
 	var duration:Float;
 	var timestamp:Float;
 	var author:String;
@@ -141,7 +162,7 @@ enum abstract Duration(Float) to Float {
 	var week = 604800000;
 	var month = 2419200000;
 
-	function new(value) {
+	public function new(value) {
 		this = value;
 	}
 

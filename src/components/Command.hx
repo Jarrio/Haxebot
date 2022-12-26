@@ -13,7 +13,7 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Archive;
-	Reminder(content:String, when:String, personal:Null<Bool>);
+	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);
 	React(emoji:String, message_id:String);
