@@ -118,7 +118,7 @@
 	{
 		"name": "reminder",
 		"description": "Setup some reminders for yourself",
-		"permissions": "admin",
+		"permissions": "everyone",
 		"params": [
 			{
 				"name": "message",
