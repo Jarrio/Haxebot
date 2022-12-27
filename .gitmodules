@@ -28,3 +28,6 @@
 [submodule "haxe_modules/http"]
 	path = haxe_modules/http
 	url = https://github.com/jarrio/http
+[submodule "haxe_modules/thenshim"]
+	path = haxe_modules/thenshim
+	url = https://github.com/chfoo/thenshim
