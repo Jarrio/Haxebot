@@ -25,3 +25,6 @@
 [submodule "haxe_modules/queues-core"]
 	path = haxe_modules/queues-core
 	url = https://github.com/core-haxe/queues-core
+[submodule "haxe_modules/http"]
+	path = haxe_modules/http
+	url = https://github.com/jarrio/http
