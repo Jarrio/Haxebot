@@ -16,3 +16,15 @@
 [submodule ".haxelib/jsimport/jsimport"]
 	path = .haxelib/jsimport/jsimport
 	url = https://github.com/haxiomic/jsImport
+[submodule "haxe_modules/promises"]
+	path = haxe_modules/promises
+	url = https://github.com/core-haxe/promises
+[submodule "haxe_modules/logging"]
+	path = haxe_modules/logging
+	url = https://github.com/core-haxe/logging
+[submodule "haxe_modules/queues-core"]
+	path = haxe_modules/queues-core
+	url = https://github.com/core-haxe/queues-core
+[submodule "haxe_modules/http"]
+	path = haxe_modules/http
+	url = https://github.com/jarrio/http
