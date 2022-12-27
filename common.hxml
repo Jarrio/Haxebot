@@ -15,6 +15,7 @@
 --library node
 --library firebase
 --library shadows
+--library http
 
 -D ecs.no_debug_output
 -D ecs.static_loading
