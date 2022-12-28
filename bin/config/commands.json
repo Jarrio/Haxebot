@@ -484,19 +484,6 @@
 		]
 	},
 	{
-		"name": "run",
-		"description": "Runs full haxe code ",
-		"params": [
-			{
-				"name": "code",
-				"type": "string",
-				"description": "code",
-				"required": true,
-				"permissions": "everyone"
-			}
-		]
-	},
-	{
 		"name": "trace",
 		"description": "Convenient trace function that runs through haxe",
 		"params": [
@@ -598,7 +585,8 @@
 	{
 		"name": "roundup",
 		"description": "[Mod] Configure auto-roundup posting",
-		"is_public": false,
+		"is_public": true,
+		"permissions":"admin",
 		"params": [
 			{
 				"name": "issue",

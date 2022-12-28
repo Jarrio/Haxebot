@@ -105,7 +105,6 @@ class Main {
 						Trace,
 						React,
 						Notify,
-						Helpdescription,
 						Rtfm,
 						Poll,
 						Boop,
@@ -124,6 +123,7 @@ class Main {
 		client = new Client({
 			intents: [
 				IntentFlags.GUILDS,
+				IntentFlags.MESSAGE_CONTENT,
 				IntentFlags.GUILD_MESSAGES,
 				IntentFlags.DIRECT_MESSAGES,
 				IntentFlags.GUILD_MEMBERS,
@@ -169,10 +169,10 @@ class Main {
 			}
 
 			if (channel.type == GUILD_TEXT) {
-				// if (message.content.startsWith("!run")) {
-				// 	var code:RunMessage = message.toString();
-				// 	universe.setComponents(universe.createEntity(), code, message);
-				// }
+				if (message.content.startsWith("!run")) {
+					var code:RunMessage = message.toString();
+					universe.setComponents(universe.createEntity(), code, message);
+				}
 
 				if (channel.id == '162664383082790912') {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase_message, message);

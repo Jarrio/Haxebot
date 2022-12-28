@@ -52,20 +52,6 @@ class Roundup extends CommandBase {
 
 	override function update(_) {
 		super.update(_);
-		if (!this.set_permissions && Main.commands_active && Main.registered_commands.exists(this.name)) {
-			this.set_permissions = true;
-			var command = Main.getCommand(this.name);
-			if (command != null) {
-				command.setCommandPermission([
-					{
-						id: '661960123035418629',
-						type: USER,
-						permission: true
-					}
-				]);
-			}
-		}
-
 		if (this.channel == null && this.checking_channel == false) {
 			this.checking_channel = true;
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {

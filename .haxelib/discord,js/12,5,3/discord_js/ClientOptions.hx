@@ -59,5 +59,6 @@ enum abstract IntentFlags(Int) to Int {
 	var DIRECT_MESSAGES = 1 << 12;
 	var DIRECT_MESSAGE_REACTIONS = 1 << 13;
 	var DIRECT_MESSAGE_TYPING = 1 << 14;
+	var MESSAGE_CONTENT = 1 << 15;
 	var GUILD_SCHEDULED_EVENTS = 1 << 16;
 }

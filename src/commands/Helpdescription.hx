@@ -68,15 +68,6 @@ class Helpdescription extends CommandDbBase {
 				interaction.reply({content: 'Thanks! <@${interaction.user.id}>', embeds: [embed]}).then(function(succ) {
 					this.validateThread(ref, data);
 					var command = Main.getCommand(this.name);
-					if (command != null) {
-						command.setCommandPermission([
-							{
-								id: interaction.user.id,
-								type: USER,
-								permission: false
-							}
-						]);
-					}
 				}, err);
 			}, err);
 		}, err);
