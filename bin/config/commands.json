@@ -492,7 +492,7 @@
 				"type": "string",
 				"description": "code",
 				"required": true,
-				"permissions": "supermod"
+				"permissions": "everyone"
 			}
 		]
 	},
