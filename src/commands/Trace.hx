@@ -90,7 +90,7 @@ class Trace extends CommandBase {
 				new_code += str + '\n';
 			}
 			embed.setDescription('```hx\n' + new_code + '```');
-			embed.addField('Error', error);
+			embed.description += 'Error \n + $error';
 			return embed;
 		}
 

@@ -1,6 +1,6 @@
 package discord_js;
 
-enum abstract ChannelType(String) {
+enum abstract ChannelType(Int) {
 	var GUILD_TEXT;
 	var DM;
 	var GUILD_VOICE;

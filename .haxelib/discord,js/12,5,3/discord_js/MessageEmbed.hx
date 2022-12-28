@@ -13,7 +13,8 @@ typedef EmbedFooterData = {
 	@:optional var iconURL:String;
 }
 
-@:jsRequire("discord.js", "MessageEmbed") extern class MessageEmbed {
+@:jsRequire('@discordjs/builders', 'EmbedBuilder')
+extern class MessageEmbed {
 	function new(?data:ts.AnyOf2<MessageEmbed, MessageEmbedOptions>);
 	public var author : Null<MessageEmbedAuthor>;
 	public var color : Null<Float>;
@@ -32,8 +33,7 @@ typedef EmbedFooterData = {
 	public var type : String;
 	public var url : Null<String>;
 	public final video : Null<MessageEmbedVideo>;
-	public function addField(name:Dynamic, value:Dynamic, ?inline_:Bool):MessageEmbed;
-	public function addFields(fields:haxe.extern.Rest<Any>):MessageEmbed;
+	public function addFields(fields:haxe.extern.Rest<Field>):MessageEmbed;
 	public function attachFiles(file:Array<ts.AnyOf3<String, FileOptions, MessageAttachment>>):MessageEmbed;
 	public function setAuthor(options:EmbedAuthorData):MessageEmbed;
 	public function setColor(color:ColorResolvable):MessageEmbed;
@@ -59,4 +59,17 @@ typedef EmbedFooterData = {
 		@:native("inline")
 		var inline_ : Bool;
 	}>;
+}
+
+@:structInit
+class Field {
+	var name:String;
+	var value:String;
+	@:native('inline')
+	var in_line:Null<Bool>;
+	public function new(name:String, value:String, ?in_line:Bool) {
+		this.name = name;
+		this.value = value;
+		this.in_line = in_line;
+	}
 }

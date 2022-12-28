@@ -73,7 +73,7 @@ class Haxelib extends CommandBase {
 				ls.stderr.on('data', (data) -> {
 					var embed = new MessageEmbed();
 					embed.type = 'article';
-					embed.addField('Haxelib Error', data);
+					embed.description += 'Error \n + $error';
 
 					channel.send(embed);
 				});

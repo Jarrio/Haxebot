@@ -484,8 +484,21 @@
 		]
 	},
 	{
+		"name": "run",
+		"description": "Runs full haxe code ",
+		"params": [
+			{
+				"name": "code",
+				"type": "string",
+				"description": "code",
+				"required": true,
+				"permissions": "supermod"
+			}
+		]
+	},
+	{
 		"name": "trace",
-		"description": "Runs your input/expression through haxe's trace function",
+		"description": "Convenient trace function that runs through haxe",
 		"params": [
 			{
 				"name": "expression",

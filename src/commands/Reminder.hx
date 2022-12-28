@@ -52,8 +52,14 @@ class Reminder extends CommandDbBase {
 					content: content,
 					personal: personal
 				}
+				var min = #if block "0min" #else "4mins" #end;
+				var duration = Duration.fromString(min);
+				if (obj.duration == 0.) {
+					interaction.reply('Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)');
+					return;
+				}
 
-				if (obj.duration <= Duration.fromString('4mins')) {
+				if (obj.duration <= duration) {
 					interaction.reply('Please set a reminder that is at least 5mins');
 					return;
 				}
@@ -63,10 +69,10 @@ class Reminder extends CommandDbBase {
 					return;
 				}
 
-				obj.content = obj.content.replace('@everyone', '');
-				obj.content = obj.content.replace('@here', '');
-				obj.content = obj.content.replace('<@1056701703833006102>', '');
-				obj.content = obj.content.replace('<@1056701811211374764>', '');
+				// obj.content = obj.content.replace('@everyone', '');
+				// obj.content = obj.content.replace('@here', '');
+				// obj.content = obj.content.replace('<@1056701703833006102>', '');
+				// obj.content = obj.content.replace('<@1056701811211374764>', '');
 
 				var col = Firestore.collection(this.db, 'discord/reminders/entries');
 				Firestore.addDoc(col, obj).then(function(doc) {
@@ -110,13 +116,18 @@ class Reminder extends CommandDbBase {
 			}
 
 			reminder.sent = true;
+			var parse = {parse: ['users']};
+
 			if (reminder.thread_reply) {
 				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
-					channel.send('*<@${reminder.author}> - ${reminder.content}*').then(null, function(err) {
+					channel.send({content: '*<@${reminder.author}> - ${reminder.content}*', allowedMentions: parse}).then(null, function(err) {
 						trace(err);
 						reminder.sent = false;
 						reminder.duration += Duration.fromString('3hrs');
-						this.channel.send('<@${reminder.author}> I failed to post a reminder to your thread. Might be an issue.');
+						this.channel.send({
+							content: '<@${reminder.author}> I failed to post a reminder to your thread. Might be an issue.',
+							allowedMentions: parse
+						});
 					});
 				});
 			} else if (reminder.personal) {
@@ -125,11 +136,14 @@ class Reminder extends CommandDbBase {
 						trace(err);
 						reminder.sent = false;
 						reminder.duration += day;
-						this.channel.send('<@${reminder.author}> I tried to DM you a reminder, but it failed. Do you accept messages from this server?');
+						this.channel.send({
+							content: '<@${reminder.author}> I tried to DM you a reminder, but it failed. Do you accept messages from this server?',
+							allowedMentions: parse
+						});
 					});
 				});
 			} else {
-				this.channel.send({content: '*<@${reminder.author}> - ${reminder.content}*'}).then(null, function(err) {
+				this.channel.send({content: '*<@${reminder.author}> - ${reminder.content}*', allowedMentions: parse}).then(null, function(err) {
 					trace(err);
 					reminder.sent = false;
 					reminder.duration += hour;
@@ -176,10 +190,15 @@ enum abstract Duration(Float) to Float {
 	}
 
 	@:op(A > B) static function gt(a:Duration, b:Duration):Bool;
+
 	@:op(A >= B) static function gtequalto(a:Duration, b:Duration):Bool;
+
 	@:op(A < B) static function lt(a:Duration, b:Duration):Bool;
+
 	@:op(A <= B) static function ltequalto(a:Duration, b:Duration):Bool;
-	@:op(A + B) static function ltequalto(a:Duration, b:Duration):Duration;
+
+	@:op(A == B) static function equality(a:Duration, b:Duration):Bool;
+	@:op(A + B) static function addition(a:Duration, b:Duration):Duration;
 
 	@:from public static function fromString(input:String):Duration {
 		var time = 0.;
@@ -208,7 +227,7 @@ enum abstract Duration(Float) to Float {
 			time = num * 604800000;
 		}
 
-		var month_regex = ~/([0-9]+)[ ]?(mo|mths|month|months)\b/gi;
+		var month_regex = ~/([0-9]+)[ ]?(mo|mos|mths|month|months)\b/gi;
 		if (month_regex.match(input)) {
 			var num = month_regex.matched(1).parseFloat();
 			time = num * 2419200000;

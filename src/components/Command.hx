@@ -18,6 +18,7 @@ enum CommandOptions {
 	Ban(user:User, reason:String, delete_messages:String);
 	React(emoji:String, message_id:String);
 	Helppls(topic:String);
+	Run(code:String);
 	Trace(code:String);
 	Boop(user:User);
 	Poll(question:String, length:String, a:Null<String>, b:Null<String>, c:Null<String>, d:Null<String>, e:Null<String>, f:Null<String>, g:Null<String>,
