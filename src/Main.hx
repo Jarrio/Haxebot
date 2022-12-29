@@ -491,6 +491,7 @@ typedef RegisteredApplicationCommand = {
 }
 
 enum abstract CommandType(String) {
+	var context_menu;
 	var string;
 	var number;
 	var user;

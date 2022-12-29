@@ -117,10 +117,15 @@ class Reminder extends CommandDbBase {
 
 			reminder.sent = true;
 			var parse = {parse: ['users']};
-
+			var embed = new MessageEmbed();
+			embed.setTitle("Reminder");
+			embed.setDescription(reminder.content);
+			embed.setFooter({text: '<t:${Math.round(reminder.timestamp / 1000)}>'});
+			var message = '> <@${reminder.author}> Your reminder was sent <t:${Math.round(reminder.timestamp / 1000)}:R>';
+			var content = '$message\n${reminder.content}';
 			if (reminder.thread_reply) {
 				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
-					channel.send({content: '*<@${reminder.author}> - ${reminder.content}*', allowedMentions: parse}).then(null, function(err) {
+					channel.send({content: content,  allowedMentions: parse}).then(null, function(err) {
 						trace(err);
 						reminder.sent = false;
 						reminder.duration += Duration.fromString('3hrs');
@@ -132,7 +137,7 @@ class Reminder extends CommandDbBase {
 				});
 			} else if (reminder.personal) {
 				Main.client.users.fetch(reminder.author).then(function(user) {
-					user.send('*Reminder - ${reminder.content}*').then(null, function(err) {
+					user.send(content).then(null, function(err) {
 						trace(err);
 						reminder.sent = false;
 						reminder.duration += day;
@@ -143,7 +148,7 @@ class Reminder extends CommandDbBase {
 					});
 				});
 			} else {
-				this.channel.send({content: '*<@${reminder.author}> - ${reminder.content}*', allowedMentions: parse}).then(null, function(err) {
+				this.channel.send({content: content, allowedMentions: parse}).then(null, function(err) {
 					trace(err);
 					reminder.sent = false;
 					reminder.duration += hour;
