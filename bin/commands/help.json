@@ -1,18 +1,18 @@
 [
 	{
 		"show_help": true,
-		"type": "run",
-		"content": "Run haxe code in discord! See pin in <#663246792426782730> for a description on how to use this"
+		"type": "api",
+		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `/api haxe.Json` \n\t2)`/api haxe.Json parse`\n\t3) `/api flixel.FlxBasic active`"
 	},
 	{
 		"show_help": true,
-		"type": "poll",
-		"content": "Just a quick an easy way to create a basic poll for up to 3 days"
+		"type": "archive",
+		"content": "Over time, some frameworks and channels have been closed down. You can have a browse through the chat history"
 	},
 	{
 		"show_help": true,
-		"type": "rtfm",
-		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `/rtfm heaps`"
+		"type": "haxelib",
+		"content": "Used in conjunction with the `/run` command. Just shows the available libraries you can use with said command"
 	},
 	{
 		"show_help": true,
@@ -21,8 +21,51 @@
 	},
 	{
 		"show_help": true,
-		"type": "api",
-		"content": "Prints documentation of the inputted package and/or field. Usage Examples: \n\t1) `/api haxe.Json` \n\t2)`/api haxe.Json parse`\n\t3) `/api flixel.FlxBasic active`"
+		"type": "poll",
+		"content": "Just a quick an easy way to create a basic poll for up to 3 days"
+	},
+	{
+		"show_help": true,
+		"type": "quote",
+		"content": [
+			"A command to save content, save things that are useful to yourself or others. The first parameter is the identifier you select quotes by, however you may also you the generated id.\n The second is what you want to do with a quote. \n\n- Quote names are unique users, can contain: `_-: and spaces`.\n- Names are case insensitive"
+		]
+	},
+	{
+		"show_help": true,
+		"type": "reminder",
+		"content": "It is what it is, want to make a note and get pinged/dmed about it after some time? Use this command!"
+	},
+	{
+		"show_help": true,
+		"type": "rtfm",
+		"content": "An introduction tailored to the channel framework, leave the parameter empty or specify the framework `/rtfm heaps`"
+	},
+	{
+		"show_help": true,
+		"type": "run",
+		"content": "Run haxe code in discord! See pin in <#663246792426782730> for a description on how to use this"
+	},
+	{
+		"show_help": true,
+		"type": "showcase",
+		"content": [
+			"The command to gain access to posting into the <#162664383082790912> channel!"
+		]
+	},
+	{
+		"show_help": true,
+		"type": "trace",
+		"content": [
+			"This just runs a haxe trace log, useful for quick tests or math. `/trace 5 + 5` or `/trace 'hey'`"
+		]
+	},
+	{
+		"show_help": true,
+		"type": "translate",
+		"content": [
+			"A language translation command"
+		]
 	},
 	{
 		"show_help": false,
@@ -49,20 +92,6 @@
 		"type": "guide",
 		"content": [
 			"There are ways to request help that will get you the help you need faster. Check out the following guide: \n <https://github.com/runkanrenchu/syntax-guide/blob/master/HOW%20TO%20ASK.md>"
-		]
-	},
-	{
-		"show_help": true,
-		"type": "showcase",
-		"content": [
-			"The command to gain access to posting into the <#162664383082790912> channel!"
-		]
-	},
-	{
-		"show_help": true,
-		"type": "quote",
-		"content": [
-			"A command to save content, save things that are useful to yourself or others. The first parameter is the identifier you select quotes by, however you may also you the generated id.\n The second is what you want to do with a quote. \n\n- Quote names are unique users, can contain: `_-: and spaces`.\n- Names are case insensitive"
 		]
 	}
 ]
