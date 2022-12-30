@@ -1,5 +1,6 @@
 package commands;
 
+import commands.types.Duration;
 import discord_js.MessageEmbed;
 import discord_js.TextChannel;
 import firebase.web.firestore.DocumentReference;
@@ -69,11 +70,6 @@ class Reminder extends CommandDbBase {
 					return;
 				}
 
-				// obj.content = obj.content.replace('@everyone', '');
-				// obj.content = obj.content.replace('@here', '');
-				// obj.content = obj.content.replace('<@1056701703833006102>', '');
-				// obj.content = obj.content.replace('<@1056701811211374764>', '');
-
 				var col = Firestore.collection(this.db, 'discord/reminders/entries');
 				Firestore.addDoc(col, obj).then(function(doc) {
 					var post_time = Math.round((obj.timestamp + obj.duration) / 1000);
@@ -125,7 +121,7 @@ class Reminder extends CommandDbBase {
 			var content = '$message\n${reminder.content}';
 			if (reminder.thread_reply) {
 				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
-					channel.send({content: content,  allowedMentions: parse}).then(null, function(err) {
+					channel.send({content: content, allowedMentions: parse}).then(null, function(err) {
 						trace(err);
 						reminder.sent = false;
 						reminder.duration += Duration.fromString('3hrs');
@@ -181,63 +177,4 @@ typedef TReminder = {
 	var author:String;
 	var content:String;
 	var personal:Bool;
-}
-
-enum abstract Duration(Float) to Float {
-	var minute = 60000;
-	var hour = 3600000;
-	var day = 86400000;
-	var week = 604800000;
-	var month = 2419200000;
-
-	public function new(value) {
-		this = value;
-	}
-
-	@:op(A > B) static function gt(a:Duration, b:Duration):Bool;
-
-	@:op(A >= B) static function gtequalto(a:Duration, b:Duration):Bool;
-
-	@:op(A < B) static function lt(a:Duration, b:Duration):Bool;
-
-	@:op(A <= B) static function ltequalto(a:Duration, b:Duration):Bool;
-
-	@:op(A == B) static function equality(a:Duration, b:Duration):Bool;
-	@:op(A + B) static function addition(a:Duration, b:Duration):Duration;
-
-	@:from public static function fromString(input:String):Duration {
-		var time = 0.;
-
-		var min_regex = ~/([0-9]+)[ ]?(m|min|mins)\b/gi;
-		if (min_regex.match(input)) {
-			var num = min_regex.matched(1).parseFloat();
-			time = num * 60000;
-		}
-
-		var hour_regex = ~/([0-9]+)[ ]?(h|hr|hrs|hours)\b/gi;
-		if (hour_regex.match(input)) {
-			var num = hour_regex.matched(1).parseFloat();
-			time = num * 3600000;
-		}
-
-		var day_regex = ~/([0-9]+)[ ]?(d|day|days)\b/gi;
-		if (day_regex.match(input)) {
-			var num = day_regex.matched(1).parseFloat();
-			time = num * 86400000;
-		}
-
-		var week_regex = ~/([0-9]+)[ ]?(w|wk|wks|week|weeks)\b/gi;
-		if (week_regex.match(input)) {
-			var num = week_regex.matched(1).parseFloat();
-			time = num * 604800000;
-		}
-
-		var month_regex = ~/([0-9]+)[ ]?(mo|mos|mths|month|months)\b/gi;
-		if (month_regex.match(input)) {
-			var num = month_regex.matched(1).parseFloat();
-			time = num * 2419200000;
-		}
-
-		return new Duration(time);
-	}
 }

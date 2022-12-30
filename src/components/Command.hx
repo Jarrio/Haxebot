@@ -1,5 +1,6 @@
 package components;
 
+import commands.types.ActionList;
 import commands.mod.Social.SocialPlatform;
 import commands.Poll.PollTime;
 import discord_js.User;
@@ -13,6 +14,8 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Archive;
+	Snippet(title:String, tags:String);
+	SnippetAdd(title:String, description:String, url:String, code:String);
 	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);

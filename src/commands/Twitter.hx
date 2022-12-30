@@ -1,5 +1,6 @@
 package commands;
 
+import commands.types.Duration;
 import commands.mod.Social.TSocial;
 import firebase.web.firestore.DocumentReference;
 import sys.io.File;
@@ -67,7 +68,7 @@ private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes
 
 class Twitter extends CommandDbBase {
 	var tweets:Map<String, TTweet> = [];
-	var ping_rate:Float = 60000;
+	var ping_rate:Float = #if block Duration.minute #else Duration.hour #end;
 	var channel:TextChannel;
 	#if block
 	var channel_id:String = '1028078544867311727';
@@ -80,6 +81,7 @@ class Twitter extends CommandDbBase {
 	var tags:Array<String> = [];
 	var users:Array<String> = [];
 	var start_timer = false;
+
 	override function onEnabled() {
 		var doc:DocumentReference<TSocial> = Firestore.doc(this.db, 'discord/social');
 		Firestore.onSnapshot(doc, (update) -> {
