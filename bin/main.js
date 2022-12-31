@@ -997,7 +997,7 @@ Main.start = function() {
 			}
 		}
 		var check = false;
-		check = channel.type == 8 && channel.parentId == "1019922106370232360";
+		check = channel.type == 11 && channel.parentId == "1019922106370232360";
 		if(check) {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
 				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 197, className : "Main", methodName : "start"});

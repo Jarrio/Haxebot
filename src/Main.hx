@@ -189,7 +189,7 @@ class Main {
 			#if block
 			check = (channel.id == '597067735771381771');
 			#else
-			check = (channel.type == GUILD_PUBLIC_THREAD && (channel.parentId == '1019922106370232360'));
+			check = (channel.type == PUBLIC_THREAD && (channel.parentId == '1019922106370232360'));
 			#end
 
 			if (check) {
