@@ -12,14 +12,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import Main.CommandForward;
 import systems.CommandDbBase;
-
-enum abstract QuoteCommand(String) to String {
-	var get;
-	var set;
-	var edit;
-	var list;
-	var delete;
-}
+import commands.types.ActionList;
 
 class Quote extends CommandDbBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
@@ -95,8 +88,8 @@ class Quote extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Quote(name, t, user):
-				var type:String = QuoteCommand.get;
+			case Quote(name, t):
+				var type:String = ActionList.get;
 				if (t != null) {
 					type = t;
 				}
@@ -234,8 +227,6 @@ class Quote extends CommandDbBase {
 								interaction.reply("Quote deleted!");
 							}, err);
 						}, err);
-					case list:
-						this.quoteList(interaction, user);
 					case get | _:
 						query = Firestore.query(col, where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 
@@ -283,28 +274,6 @@ class Quote extends CommandDbBase {
 			default:
 				// interaction.reply();
 		}
-	}
-
-	inline function quoteList(interaction:BaseCommandInteraction, user:User) {
-		var sort = Firestore.orderBy('id', ASCENDING);
-		var col:CollectionReference<TQuoteData> = collection(this.db, 'discord/quotes/entries');
-		var query = Firestore.query(col, sort);
-		if (user != null) {
-			query = Firestore.query(col, where('author', EQUAL_TO, user.id), sort);
-		}
-
-		Firestore.getDocs(query).then(function(resp) {
-			var embed = new MessageEmbed();
-			embed.setTitle('List of Quotes');
-			var body = '';
-			for (doc in resp.docs) {
-				var data = doc.data();
-				body += '**#${data.id}** ${data.name} by <@${data.author}> \n';
-			}
-			embed.setDescription(body);
-			embed.setColor('#EA8220');
-			interaction.reply({embeds: [embed]});
-		}, err);
 	}
 
 	inline function acResponse(data:TQuoteData) {

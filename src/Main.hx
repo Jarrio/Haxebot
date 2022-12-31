@@ -84,7 +84,8 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						Reminder
+						Quotelist
+						//Snippet
 					],
 				},
 				{
@@ -94,6 +95,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						Quotelist,
 						Reminder,
 						Social,
 						AutoRole,

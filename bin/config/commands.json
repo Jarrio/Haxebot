@@ -622,6 +622,20 @@
 		"description": "Gain access to posting in the #showcase channel"
 	},
 	{
+		"name": "quotelist",
+		"is_public": true,
+		"description": "List all the saved quotes",
+		"permissions": "everyone",
+		"params": [
+			{
+				"name": "user",
+				"description": "get all quotes by a particular user",
+				"type": "user",
+				"required": false
+			}
+		]
+	},
+	{
 		"name": "quote",
 		"is_public": true,
 		"description": "Get or create a quote that can be recalled at anytime by using either the id or the name",
@@ -630,7 +644,7 @@
 				"name": "name",
 				"type": "string",
 				"description": "A string identifier",
-				"required": false,
+				"required": true,
 				"autocomplete": true
 			},
 			{
@@ -648,10 +662,6 @@
 						"value": "set"
 					},
 					{
-						"name": "List",
-						"value": "list"
-					},
-					{
 						"name": "Delete",
 						"value": "delete"
 					},
@@ -660,12 +670,6 @@
 						"value": "get"
 					}
 				]
-			},
-			{
-				"name": "user",
-				"type": "user",
-				"description": "Used with the `list` type, filter results from a user",
-				"required": false
 			}
 		]
 	}
