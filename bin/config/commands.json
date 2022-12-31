@@ -565,6 +565,10 @@
 					{
 						"name": "heaps",
 						"value": "heaps"
+					},
+					{
+						"name": "jam",
+						"value": "jam"
 					}
 				]
 			}
@@ -632,6 +636,39 @@
 				"description": "get all quotes by a particular user",
 				"type": "user",
 				"required": false
+			}
+		]
+	},
+	{
+		"name": "snippetadd",
+		"is_public": true,
+		"description": "Store a link to a project/repo/tutorial/gist etc ",
+		"permissions": "admin",
+		"params": [
+			{
+				"name": "title",
+				"description": "The title of the snippet/project/code",
+				"type": "string",
+				"required": true
+			},
+			{
+				"name": "description",
+				"description": "A description for the content being stored",
+				"type": "string",
+				"required": true
+			},
+			{
+				"name": "url",
+				"description": "The source of the content",
+				"type": "string",
+				"required": true
+			},
+			{
+				"name": "tags",
+				"description": "A comma separated list of tags. Autocomplete enabled, examples: flixel, haxeui, game",
+				"type": "string",
+				"required": true,
+				"autocomplete": true
 			}
 		]
 	},

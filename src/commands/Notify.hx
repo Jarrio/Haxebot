@@ -23,6 +23,7 @@ class Notify extends CommandBase {
 			case 'ceramic': '914171888748609546';
 			// #devserver notes test
 			case 'dvorak': '903006951896666153';
+			case 'jam': '1058843687687295066';
 			default: 'err';
 		}
 	}

@@ -657,11 +657,11 @@ Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
 	var this1 = new Array(1);
-	var this2 = new Array(1);
-	vec[0] = new ecs_Phase(false,"testing",this1,this2);
+	var this11 = new Array(1);
+	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(22);
-	var this2 = new Array(22);
-	vec[1] = new ecs_Phase(true,"main",this1,this2);
+	var this11 = new Array(22);
+	vec[1] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(7);
 	var vec1 = this1;
@@ -1387,7 +1387,6 @@ Reflect.field = function(o,field) {
 	try {
 		return o[field];
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -2142,7 +2141,6 @@ Type.enumEq = function(a,b) {
 			}
 		}
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 	return true;
@@ -3391,6 +3389,8 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			return "761714853403820052";
 		case "heaps":
 			return "761714775902126080";
+		case "jam":
+			return "1058843687687295066";
 		case "kha":
 			return "761714809179209818";
 		default:
@@ -3403,8 +3403,8 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
-				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 35, className : "commands.Notify", methodName : "run"});
-				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 36, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 36, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 37, className : "commands.Notify", methodName : "run"});
 				interaction.reply("Invalid channel");
 				return;
 			}
@@ -5592,18 +5592,18 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 					var path1 = "" + path + "/" + folder;
 					if(sys_FileSystem.exists(path1)) {
 						var _g1 = 0;
-						var _g2 = js_node_Fs.readdirSync(path1);
-						while(_g1 < _g2.length) {
-							var file = _g2[_g1];
+						var _g11 = js_node_Fs.readdirSync(path1);
+						while(_g1 < _g11.length) {
+							var file = _g11[_g1];
 							++_g1;
 							var curPath = path1 + "/" + file;
 							if(sys_FileSystem.isDirectory(curPath)) {
 								if(sys_FileSystem.exists(curPath)) {
-									var _g3 = 0;
-									var _g4 = js_node_Fs.readdirSync(curPath);
-									while(_g3 < _g4.length) {
-										var file1 = _g4[_g3];
-										++_g3;
+									var _g2 = 0;
+									var _g12 = js_node_Fs.readdirSync(curPath);
+									while(_g2 < _g12.length) {
+										var file1 = _g12[_g2];
+										++_g2;
 										var curPath1 = curPath + "/" + file1;
 										if(sys_FileSystem.isDirectory(curPath1)) {
 											sys_FileSystem.deleteDirectory(curPath1);
@@ -5647,18 +5647,18 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 				var path1 = "" + path + "/" + folder;
 				if(sys_FileSystem.exists(path1)) {
 					var _g1 = 0;
-					var _g2 = js_node_Fs.readdirSync(path1);
-					while(_g1 < _g2.length) {
-						var file = _g2[_g1];
+					var _g11 = js_node_Fs.readdirSync(path1);
+					while(_g1 < _g11.length) {
+						var file = _g11[_g1];
 						++_g1;
 						var curPath = path1 + "/" + file;
 						if(sys_FileSystem.isDirectory(curPath)) {
 							if(sys_FileSystem.exists(curPath)) {
-								var _g3 = 0;
-								var _g4 = js_node_Fs.readdirSync(curPath);
-								while(_g3 < _g4.length) {
-									var file1 = _g4[_g3];
-									++_g3;
+								var _g2 = 0;
+								var _g12 = js_node_Fs.readdirSync(curPath);
+								while(_g2 < _g12.length) {
+									var file1 = _g12[_g2];
+									++_g2;
 									var curPath1 = curPath + "/" + file1;
 									if(sys_FileSystem.isDirectory(curPath1)) {
 										sys_FileSystem.deleteDirectory(curPath1);
@@ -6354,7 +6354,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
 	,Snippet: ($_=function(title,tags) { return {_hx_index:2,title:title,tags:tags,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Snippet",$_.__params__ = ["title","tags"],$_)
-	,SnippetAdd: ($_=function(title,description,url,code) { return {_hx_index:3,title:title,description:description,url:url,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["title","description","url","code"],$_)
+	,SnippetAdd: ($_=function(title,description,url,tags) { return {_hx_index:3,title:title,description:description,url:url,tags:tags,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["title","description","url","tags"],$_)
 	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:4,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
 	,Social: ($_=function(tag,user) { return {_hx_index:5,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
 	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:6,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
@@ -8738,7 +8738,6 @@ haxe_ds_BalancedTree.prototype = {
 			this.root = this.removeLoop(key,this.root);
 			return true;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(typeof(haxe_Exception.caught(_g).unwrap()) == "string") {
 				return false;
 			} else {
@@ -10418,7 +10417,6 @@ haxe_io_Input.prototype = {
 				--k;
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -10446,7 +10444,6 @@ haxe_io_Input.prototype = {
 				total.addBytes(buf,0,len);
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -10505,7 +10502,6 @@ haxe_io_Input.prototype = {
 				s = HxOverrides.substr(s,0,-1);
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(((_g1) instanceof haxe_io_Eof)) {
 				var e = _g1;
@@ -10740,7 +10736,6 @@ haxe_io_Output.prototype = {
 				}
 			}
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
 				throw _g;
 			}
@@ -11640,7 +11635,6 @@ js_Boot.__string_rec = function(o,s) {
 		try {
 			tostr = o.toString;
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			return "???";
 		}
 		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
@@ -11802,7 +11796,6 @@ js_Browser.getLocalStorage = function() {
 		}
 		return s;
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -11817,7 +11810,6 @@ js_Browser.getSessionStorage = function() {
 		}
 		return s;
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -12044,7 +12036,6 @@ sys_FileSystem.exists = function(path) {
 		js_node_Fs.accessSync(path);
 		return true;
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -12058,7 +12049,6 @@ sys_FileSystem.fullPath = function(relPath) {
 	try {
 		return js_node_Fs.realpathSync(relPath);
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return null;
 	}
 };
@@ -12072,7 +12062,6 @@ sys_FileSystem.isDirectory = function(path) {
 	try {
 		return js_node_Fs.statSync(path).isDirectory();
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		return false;
 	}
 };
@@ -12080,7 +12069,6 @@ sys_FileSystem.createDirectory = function(path) {
 	try {
 		js_node_Fs.mkdirSync(path);
 	} catch( _g ) {
-		haxe_NativeStackTrace.lastError = _g;
 		var _g1 = haxe_Exception.caught(_g).unwrap();
 		if(_g1.code == "ENOENT") {
 			sys_FileSystem.createDirectory(js_node_Path.dirname(path));
@@ -12200,7 +12188,6 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,0,1,this.pos);
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
@@ -12222,7 +12209,6 @@ sys_io_FileInput.prototype = $extend(haxe_io_Input.prototype,{
 		try {
 			bytesRead = js_node_Fs.readSync(this.fd,buf,pos,len,this.pos);
 		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
 			if(_g1.code == "EOF") {
 				this.hasReachedEof = true;
