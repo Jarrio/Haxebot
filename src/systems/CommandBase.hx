@@ -6,6 +6,7 @@ import components.Command;
 import ecs.System;
 
 abstract class CommandBase extends System {
+	final has_subcommands:Bool = false;
 	@:fastFamily var commands:{command:Command, interaction:BaseCommandInteraction};
 
 	override function update(_) {
@@ -13,9 +14,16 @@ abstract class CommandBase extends System {
 			return;
 		}
 		iterate(commands, entity -> {
-			if (command.name == this.name) {
-				this.run(command, interaction);
-				this.universe.deleteEntity(entity);
+			if (this.has_subcommands) {
+				if (command.name.indexOf(this.name, 0) != -1) {
+					this.run(command, interaction);
+					this.universe.deleteEntity(entity);
+				}
+			} else {
+				if (command.name == this.name) {
+					this.run(command, interaction);
+					this.universe.deleteEntity(entity);
+				}
 			}
 		});
 	}
@@ -25,7 +33,4 @@ abstract class CommandBase extends System {
 	public var name(get, never):String;
 
 	abstract function get_name():String;
-
-
 }
-

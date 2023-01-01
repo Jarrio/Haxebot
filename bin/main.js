@@ -659,8 +659,8 @@ Main.start = function() {
 	var this1 = new Array(1);
 	var this11 = new Array(1);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
-	var this1 = new Array(22);
-	var this11 = new Array(22);
+	var this1 = new Array(21);
+	var this11 = new Array(21);
 	vec[1] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(7);
@@ -766,98 +766,94 @@ Main.start = function() {
 	var families = new ecs_core_FamilyManager(components,resources,vec1);
 	var u = new ecs_Universe(entities,components,resources,families,vec);
 	var phase = vec[0];
-	var s = new commands_Quotelist(u);
+	var s = new commands_Quote(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
 	var phase = vec[1];
-	var s = new commands_Quotelist(u);
+	var s = new commands_Reminder(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new commands_Reminder(u);
+	var s = new commands_mod_Social(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new commands_mod_Social(u);
+	var s = new commands_AutoRole(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new commands_AutoRole(u);
+	var s = new commands_Twitter(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new commands_Twitter(u);
+	var s = new commands_Quote(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_ScamPrevention(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new commands_ScamPrevention(u);
+	var s = new commands_Api(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_Haxelib(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new commands_Haxelib(u);
+	var s = new commands_Trace(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_Trace(u);
+	var s = new commands_React(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Notify(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Poll(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Boop(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Archive(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Help(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Translate(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Hi(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Run(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Run(u);
+	var s = new commands_Roundup(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_Showcase(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
-	s.onEnabled();
-	var s = new commands_Showcase(u);
-	phase.systems[21] = s;
-	phase.enabledSystems[21] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -1211,6 +1207,7 @@ Main.createCommand = function(interaction) {
 			command.content = Type.createEnum(components_CommandOptions,enum_id);
 			break;
 		} else {
+			var subcommand = null;
 			var params = [];
 			var _g2 = 0;
 			var _g3 = value.params;
@@ -1236,6 +1233,20 @@ Main.createCommand = function(interaction) {
 				case "string":
 					params.push(interaction.options.getString(param.name));
 					break;
+				case "subcommand":
+					var type = interaction.options.getSubcommand();
+					if(param.name != type) {
+						continue;
+					}
+					subcommand = type;
+					var _g4 = 0;
+					var _g5 = param.params;
+					while(_g4 < _g5.length) {
+						var subparam = _g5[_g4];
+						++_g4;
+						Main.parseIncomingCommand(params,subparam,interaction);
+					}
+					break;
 				case "user":
 					params.push(interaction.options.getUser(param.name));
 					break;
@@ -1243,11 +1254,41 @@ Main.createCommand = function(interaction) {
 					throw haxe_Exception.thrown("Something went wrong.");
 				}
 			}
+			if(subcommand != null) {
+				enum_id += subcommand;
+			}
 			command.content = Type.createEnum(components_CommandOptions,enum_id,params);
 			break;
 		}
 	}
 	return command;
+};
+Main.parseIncomingCommand = function(args,param,interaction) {
+	switch(param.type) {
+	case "bool":
+		args.push(interaction.options.getBoolean(param.name));
+		break;
+	case "channel":
+		args.push(interaction.options.getChannel(param.name));
+		break;
+	case "mention":
+		args.push(interaction.options.getMentionable(param.name));
+		break;
+	case "number":
+		args.push(interaction.options.getNumber(param.name));
+		break;
+	case "role":
+		args.push(interaction.options.getRole(param.name));
+		break;
+	case "string":
+		args.push(interaction.options.getString(param.name));
+		break;
+	case "user":
+		args.push(interaction.options.getUser(param.name));
+		break;
+	default:
+		throw haxe_Exception.thrown("Something went wrong.");
+	}
 };
 Main.getCommand = function(name) {
 	if(Main.registered_commands == null) {
@@ -1267,7 +1308,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 320, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 357, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1276,14 +1317,14 @@ Main.main = function() {
 		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 329, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 366, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 338, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 375, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -1314,53 +1355,72 @@ Main.parseCommands = function() {
 				var param = _g3[_g2];
 				++_g2;
 				var autocomplete = false;
-				if(param.autocomplete != null) {
-					autocomplete = param.autocomplete;
-				}
-				switch(param.type) {
-				case "bool":
-					main_command.addBooleanOption(new discord_$builder_SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required));
-					break;
-				case "channel":
-					main_command.addChannelOption(new discord_$builder_SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required));
-					break;
-				case "mention":
-					main_command.addMentionableOption(new discord_$builder_SlashCommandMentionableOption().setName(param.name).setDescription(param.description).setRequired(param.required));
-					break;
-				case "number":
-					main_command.addNumberOption(new discord_$builder_SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required));
-					break;
-				case "role":
-					main_command.addRoleOption(new discord_$builder_SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required));
-					break;
-				case "string":
-					var cmd = new discord_$builder_SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
-					if(param.description != null) {
-						cmd = cmd.setDescription(param.description);
-					}
-					if(param.choices != null && !autocomplete) {
-						var choices = [];
-						var _g4 = 0;
-						var _g5 = param.choices;
-						while(_g4 < _g5.length) {
-							var option = _g5[_g4];
-							++_g4;
-							choices.push({ name : option.name, value : option.value});
+				if(param.type == "subcommand") {
+					var subcommand = new discord_$builder_SlashCommandSubcommandBuilder().setName(param.name).setDescription(param.description);
+					var _g4 = 0;
+					var _g5 = param.params;
+					while(_g4 < _g5.length) {
+						var subparam = _g5[_g4];
+						++_g4;
+						var autocomplete1 = false;
+						if(subparam.autocomplete != null) {
+							autocomplete1 = subparam.autocomplete;
 						}
-						($_=cmd,$_.addChoices.apply($_,choices));
+						Main.parseCommandType(subparam,autocomplete1,subcommand);
 					}
-					main_command.addStringOption(cmd);
-					break;
-				case "user":
-					main_command.addUserOption(new discord_$builder_SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required));
-					break;
-				default:
+					main_command.addSubcommand(subcommand);
+				} else {
+					if(param.autocomplete != null) {
+						autocomplete = param.autocomplete;
+					}
+					Main.parseCommandType(param,autocomplete,main_command);
 				}
 			}
+			commands.push(discord_$builder_AnySlashCommand.fromBase(main_command));
 		}
-		commands.push(discord_$builder_AnySlashCommand.fromBase(main_command));
 	}
 	return commands;
+};
+Main.parseCommandType = function(param,autocomplete,builder) {
+	switch(param.type) {
+	case "bool":
+		builder.addBooleanOption(new discord_$builder_SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+		break;
+	case "channel":
+		builder.addChannelOption(new discord_$builder_SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+		break;
+	case "mention":
+		builder.addMentionableOption(new discord_$builder_SlashCommandMentionableOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+		break;
+	case "number":
+		builder.addNumberOption(new discord_$builder_SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+		break;
+	case "role":
+		builder.addRoleOption(new discord_$builder_SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+		break;
+	case "string":
+		var cmd = new discord_$builder_SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
+		if(param.description != null) {
+			cmd = cmd.setDescription(param.description);
+		}
+		if(param.choices != null && !autocomplete) {
+			var choices = [];
+			var _g = 0;
+			var _g1 = param.choices;
+			while(_g < _g1.length) {
+				var option = _g1[_g];
+				++_g;
+				choices.push({ name : option.name, value : option.value});
+			}
+			($_=cmd,$_.addChoices.apply($_,choices));
+		}
+		builder.addStringOption(cmd);
+		break;
+	case "user":
+		builder.addUserOption(new discord_$builder_SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+		break;
+	default:
+	}
 };
 var CommandPermission = {};
 CommandPermission.fromString = function(value) {
@@ -2582,6 +2642,7 @@ ecs_System.prototype = {
 	,__class__: ecs_System
 };
 var systems_CommandBase = function(_universe) {
+	this.has_subcommands = false;
 	ecs_System.call(this,_universe);
 	this.commands = this.universe.families.get(0);
 	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(1);
@@ -2591,7 +2652,8 @@ $hxClasses["systems.CommandBase"] = systems_CommandBase;
 systems_CommandBase.__name__ = "systems.CommandBase";
 systems_CommandBase.__super__ = ecs_System;
 systems_CommandBase.prototype = $extend(ecs_System.prototype,{
-	update: function(_) {
+	has_subcommands: null
+	,update: function(_) {
 		if(!Main.connected || !Main.commands_active) {
 			return;
 		}
@@ -2603,7 +2665,12 @@ systems_CommandBase.prototype = $extend(ecs_System.prototype,{
 			var entity = _set.getDense(_g_idx--);
 			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
 			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
-			if(command.name == this.get_name()) {
+			if(this.has_subcommands) {
+				if(command.name.indexOf(this.get_name(),0) != -1) {
+					this.run(command,interaction);
+					this.universe.deleteEntity(entity);
+				}
+			} else if(command.name == this.get_name()) {
 				this.run(command,interaction);
 				this.universe.deleteEntity(entity);
 			}
@@ -3919,12 +3986,52 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 23) {
-			var _g1 = _g.type;
+		switch(_g._hx_index) {
+		case 22:
+			var _g1 = _g.user;
+			var sort = firebase_web_firestore_Firestore.orderBy("id","asc");
+			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+			var query = firebase_web_firestore_Firestore.query(col,sort);
+			if(_g1 != null) {
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("author","==",_g1.id),sort);
+			}
+			firebase_web_firestore_Firestore.getDocs(query).then(function(resp) {
+				if(resp.empty) {
+					interaction.reply("No quotes by that user!");
+					return;
+				}
+				var embed = new discord_$js_MessageEmbed();
+				embed.setTitle("List of Quotes");
+				var body = "";
+				var _g = 0;
+				var _g1 = resp.docs;
+				while(_g < _g1.length) {
+					var doc = _g1[_g];
+					++_g;
+					var data = doc.data();
+					body += "**#" + data.id + "** " + data.name + " by <@" + data.author + "> \n";
+				}
+				embed.setDescription(body);
+				embed.setColor(15368736);
+				interaction.reply({ embeds : [embed]});
+			},Util_err);
+			break;
+		case 23:
 			var name = _g.name;
 			var type = "get";
-			if(_g1 != null) {
-				type = _g1;
+			var e = command.content;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			if(enum_name.indexOf("get") != -1) {
+				type = "get";
+			}
+			if(enum_name.indexOf("create") != -1) {
+				type = "set";
+			}
+			if(enum_name.indexOf("delete") != -1) {
+				type = "delete";
+			}
+			if(enum_name.indexOf("edit") != -1) {
+				type = "edit";
 			}
 			var column = "id";
 			if(name == null) {
@@ -4115,6 +4222,629 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					interaction.reply({ embeds : [embed]}).then(null,Util_err);
 				}).then(null,Util_err);
 			}
+			break;
+		case 24:
+			var name1 = _g.name;
+			var type = "get";
+			var e = command.content;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			if(enum_name.indexOf("get") != -1) {
+				type = "get";
+			}
+			if(enum_name.indexOf("create") != -1) {
+				type = "set";
+			}
+			if(enum_name.indexOf("delete") != -1) {
+				type = "delete";
+			}
+			if(enum_name.indexOf("edit") != -1) {
+				type = "edit";
+			}
+			var column = "id";
+			if(name1 == null) {
+				name1 = "";
+			}
+			if(this.isName(name1) && type != "get") {
+				if(name1.length < 2) {
+					if(interaction.isAutocomplete()) {
+						interaction.respond([]);
+					}
+					return;
+				}
+				if(this.isValidName(name1)) {
+					column = "name";
+					name1 = name1.toLowerCase();
+				}
+			}
+			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name1) ? name1 : Std.parseInt(name1)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
+			if(interaction.isAutocomplete() && type != "get") {
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					var results = [];
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						var data = d.data();
+						var name = data.name;
+						if(name.length > 25) {
+							name = HxOverrides.substr(name,0,25) + "...";
+						}
+						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+					}
+					interaction.respond(results).then(null,Util_err);
+				}).then(null,Util_err);
+				return;
+			}
+			switch(type) {
+			case "delete":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						return;
+					}
+					if(res.docs.length > 1) {
+						interaction.reply("An odd situation occured. <@151104106973495296>");
+						return;
+					}
+					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
+						interaction.reply("Quote deleted!");
+					},Util_err);
+				},Util_err);
+				break;
+			case "edit":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find quote");
+						return;
+					}
+					var doc = null;
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						if(interaction.user.id == d.data().author) {
+							doc = d.data();
+							break;
+						}
+					}
+					if(doc == null) {
+						interaction.reply("That isn't your quote!").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("" + doc.name + ":").setStyle(2).setValue(doc.description).setMinLength(10).setMaxLength(2000);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_b);
+					_gthis.cache.h[interaction.user.id] = doc.id;
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			case "get":
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							var name = data.name;
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + data.name + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+				break;
+			case "set":
+				if(!this.isValidName(name1)) {
+					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
+					if(name1.length < this.max_name_length) {
+						error_msg = "*Names can only contain `_-` and/or spaces.*";
+					}
+					interaction.reply({ content : error_msg, ephemeral : true});
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length >= 1) {
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name1 + "__").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name1.toLowerCase()).setMinLength(3).setMaxLength(20);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
+					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_a,action_b);
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			default:
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							var name = data.name;
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + data.name + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+			}
+			break;
+		case 25:
+			var name2 = _g.name;
+			var type = "get";
+			var e = command.content;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			if(enum_name.indexOf("get") != -1) {
+				type = "get";
+			}
+			if(enum_name.indexOf("create") != -1) {
+				type = "set";
+			}
+			if(enum_name.indexOf("delete") != -1) {
+				type = "delete";
+			}
+			if(enum_name.indexOf("edit") != -1) {
+				type = "edit";
+			}
+			var column = "id";
+			if(name2 == null) {
+				name2 = "";
+			}
+			if(this.isName(name2) && type != "get") {
+				if(name2.length < 2) {
+					if(interaction.isAutocomplete()) {
+						interaction.respond([]);
+					}
+					return;
+				}
+				if(this.isValidName(name2)) {
+					column = "name";
+					name2 = name2.toLowerCase();
+				}
+			}
+			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name2) ? name2 : Std.parseInt(name2)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
+			if(interaction.isAutocomplete() && type != "get") {
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					var results = [];
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						var data = d.data();
+						var name = data.name;
+						if(name.length > 25) {
+							name = HxOverrides.substr(name,0,25) + "...";
+						}
+						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+					}
+					interaction.respond(results).then(null,Util_err);
+				}).then(null,Util_err);
+				return;
+			}
+			switch(type) {
+			case "delete":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						return;
+					}
+					if(res.docs.length > 1) {
+						interaction.reply("An odd situation occured. <@151104106973495296>");
+						return;
+					}
+					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
+						interaction.reply("Quote deleted!");
+					},Util_err);
+				},Util_err);
+				break;
+			case "edit":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find quote");
+						return;
+					}
+					var doc = null;
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						if(interaction.user.id == d.data().author) {
+							doc = d.data();
+							break;
+						}
+					}
+					if(doc == null) {
+						interaction.reply("That isn't your quote!").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("" + doc.name + ":").setStyle(2).setValue(doc.description).setMinLength(10).setMaxLength(2000);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_b);
+					_gthis.cache.h[interaction.user.id] = doc.id;
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			case "get":
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							var name = data.name;
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + data.name + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+				break;
+			case "set":
+				if(!this.isValidName(name2)) {
+					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
+					if(name2.length < this.max_name_length) {
+						error_msg = "*Names can only contain `_-` and/or spaces.*";
+					}
+					interaction.reply({ content : error_msg, ephemeral : true});
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length >= 1) {
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name2 + "__").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name2.toLowerCase()).setMinLength(3).setMaxLength(20);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
+					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_a,action_b);
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			default:
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							var name = data.name;
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + data.name + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+			}
+			break;
+		case 26:
+			var name3 = _g.name;
+			var type = "get";
+			var e = command.content;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			if(enum_name.indexOf("get") != -1) {
+				type = "get";
+			}
+			if(enum_name.indexOf("create") != -1) {
+				type = "set";
+			}
+			if(enum_name.indexOf("delete") != -1) {
+				type = "delete";
+			}
+			if(enum_name.indexOf("edit") != -1) {
+				type = "edit";
+			}
+			var column = "id";
+			if(name3 == null) {
+				name3 = "";
+			}
+			if(this.isName(name3) && type != "get") {
+				if(name3.length < 2) {
+					if(interaction.isAutocomplete()) {
+						interaction.respond([]);
+					}
+					return;
+				}
+				if(this.isValidName(name3)) {
+					column = "name";
+					name3 = name3.toLowerCase();
+				}
+			}
+			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
+			var query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where(column,"==",this.isName(name3) ? name3 : Std.parseInt(name3)),firebase_web_firestore_Firestore.where("author","==",interaction.user.id));
+			if(interaction.isAutocomplete() && type != "get") {
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					var results = [];
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						var data = d.data();
+						var name = data.name;
+						if(name.length > 25) {
+							name = HxOverrides.substr(name,0,25) + "...";
+						}
+						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+					}
+					interaction.respond(results).then(null,Util_err);
+				}).then(null,Util_err);
+				return;
+			}
+			switch(type) {
+			case "delete":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						return;
+					}
+					if(res.docs.length > 1) {
+						interaction.reply("An odd situation occured. <@151104106973495296>");
+						return;
+					}
+					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
+						interaction.reply("Quote deleted!");
+					},Util_err);
+				},Util_err);
+				break;
+			case "edit":
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find quote");
+						return;
+					}
+					var doc = null;
+					var _g = 0;
+					var _g1 = res.docs;
+					while(_g < _g1.length) {
+						var d = _g1[_g];
+						++_g;
+						if(interaction.user.id == d.data().author) {
+							doc = d.data();
+							break;
+						}
+					}
+					if(doc == null) {
+						interaction.reply("That isn't your quote!").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("" + doc.name + ":").setStyle(2).setValue(doc.description).setMinLength(10).setMaxLength(2000);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_b);
+					_gthis.cache.h[interaction.user.id] = doc.id;
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			case "get":
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							var name = data.name;
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + data.name + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+				break;
+			case "set":
+				if(!this.isValidName(name3)) {
+					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
+					if(name3.length < this.max_name_length) {
+						error_msg = "*Names can only contain `_-` and/or spaces.*";
+					}
+					interaction.reply({ content : error_msg, ephemeral : true});
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length >= 1) {
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name3 + "__").then(null,Util_err);
+						return;
+					}
+					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
+					var title_input = new discord_$builder_APITextInputComponent().setCustomId("name").setLabel("name").setStyle(1).setValue(name3.toLowerCase()).setMinLength(3).setMaxLength(20);
+					var desc_input = new discord_$builder_APITextInputComponent().setCustomId("description").setLabel("description").setStyle(2).setMinLength(10).setMaxLength(2000);
+					var action_a = new discord_$builder_APIActionRowComponent().addComponents(title_input);
+					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
+					modal.addComponents(action_a,action_b);
+					interaction.showModal(modal);
+				},Util_err);
+				break;
+			default:
+				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
+				if(interaction.isAutocomplete()) {
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						var results = [];
+						var _g = 0;
+						var _g1 = res.docs;
+						while(_g < _g1.length) {
+							var d = _g1[_g];
+							++_g;
+							var data = d.data();
+							var name = data.name;
+							if(name.length > 25) {
+								name = HxOverrides.substr(name,0,25) + "...";
+							}
+							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+						}
+						interaction.respond(results).then(null,Util_err);
+					}).then(null,Util_err);
+					return;
+				}
+				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+					if(res.docs.length == 0) {
+						interaction.reply("Could not find any quotes with that identifier");
+						return;
+					}
+					var data = res.docs[0].data();
+					var embed = new discord_$js_MessageEmbed();
+					var user = interaction.client.users.cache.get(data.author);
+					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+					var content = data.username;
+					if(user != null) {
+						icon = user.avatarURL();
+						content = user.username;
+					}
+					embed.setDescription("***" + data.name + "***\n" + data.description);
+					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+					interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				}).then(null,Util_err);
+			}
+			break;
+		default:
 		}
 	}
 	,acResponse: function(data) {
@@ -4158,54 +4888,6 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 	,modal: null
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,__class__: commands_Quote
-});
-var commands_Quotelist = function(_universe) {
-	this.max_name_length = 20;
-	this.cache = new haxe_ds_StringMap();
-	systems_CommandDbBase.call(this,_universe);
-	this.modal = this.universe.families.get(4);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
-};
-$hxClasses["commands.Quotelist"] = commands_Quotelist;
-commands_Quotelist.__name__ = "commands.Quotelist";
-commands_Quotelist.__super__ = systems_CommandDbBase;
-commands_Quotelist.prototype = $extend(systems_CommandDbBase.prototype,{
-	cache: null
-	,max_name_length: null
-	,run: function(command,interaction) {
-		var _g = command.content;
-		if(_g._hx_index == 22) {
-			var _g1 = _g.user;
-			var sort = firebase_web_firestore_Firestore.orderBy("id","asc");
-			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
-			var query = firebase_web_firestore_Firestore.query(col,sort);
-			if(_g1 != null) {
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("author","==",_g1.id),sort);
-			}
-			firebase_web_firestore_Firestore.getDocs(query).then(function(resp) {
-				var embed = new discord_$js_MessageEmbed();
-				embed.setTitle("List of Quotes");
-				var body = "";
-				var _g = 0;
-				var _g1 = resp.docs;
-				while(_g < _g1.length) {
-					var doc = _g1[_g];
-					++_g;
-					var data = doc.data();
-					body += "**#" + data.id + "** " + data.name + " by <@" + data.author + "> \n";
-				}
-				embed.setDescription(body);
-				embed.setColor(15368736);
-				interaction.reply({ embeds : [embed]});
-			},Util_err);
-		}
-	}
-	,get_name: function() {
-		return "quotelist";
-	}
-	,modal: null
-	,table87a8f92f715c03d0822a55d9b93a210d: null
-	,__class__: commands_Quotelist
 });
 var commands_React = function(_universe) {
 	this.set_permission = false;
@@ -6371,10 +7053,13 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Help: ($_=function(category) { return {_hx_index:20,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
 	,Haxelib: ($_=function(command) { return {_hx_index:21,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
 	,Quotelist: ($_=function(user) { return {_hx_index:22,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quotelist",$_.__params__ = ["user"],$_)
-	,Quote: ($_=function(name,type) { return {_hx_index:23,name:name,type:type,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quote",$_.__params__ = ["name","type"],$_)
-	,Showcase: {_hx_name:"Showcase",_hx_index:24,__enum__:"components.CommandOptions",toString:$estr}
+	,Quoteget: ($_=function(name) { return {_hx_index:23,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quoteget",$_.__params__ = ["name"],$_)
+	,Quotedelete: ($_=function(name) { return {_hx_index:24,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quotedelete",$_.__params__ = ["name"],$_)
+	,Quoteedit: ($_=function(name) { return {_hx_index:25,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quoteedit",$_.__params__ = ["name"],$_)
+	,Quotecreate: ($_=function(name) { return {_hx_index:26,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quotecreate",$_.__params__ = ["name"],$_)
+	,Showcase: {_hx_name:"Showcase",_hx_index:27,__enum__:"components.CommandOptions",toString:$estr}
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Snippet,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quotelist,components_CommandOptions.Quote,components_CommandOptions.Showcase];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Snippet,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quotelist,components_CommandOptions.Quoteget,components_CommandOptions.Quotedelete,components_CommandOptions.Quoteedit,components_CommandOptions.Quotecreate,components_CommandOptions.Showcase];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Showcase];
 var components_ShowcaseModalSubmit = function(title,description) {
 	this.title_or_link = title;

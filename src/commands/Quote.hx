@@ -88,10 +88,47 @@ class Quote extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Quote(name, t):
-				var type:String = ActionList.get;
-				if (t != null) {
-					type = t;
+			case Quotelist(user):
+				var sort = Firestore.orderBy('id', ASCENDING);
+				var col:CollectionReference<TQuoteData> = collection(this.db, 'discord/quotes/entries');
+				var query = Firestore.query(col, sort);
+				if (user != null) {
+					query = Firestore.query(col, where('author', EQUAL_TO, user.id), sort);
+				}
+
+				Firestore.getDocs(query).then(function(resp) {
+					if (resp.empty) {
+						interaction.reply("No quotes by that user!");
+						return;
+					}
+					var embed = new MessageEmbed();
+					embed.setTitle('List of Quotes');
+					var body = '';
+					for (doc in resp.docs) {
+						var data = doc.data();
+						body += '**#${data.id}** ${data.name} by <@${data.author}> \n';
+					}
+					embed.setDescription(body);
+					embed.setColor(0xEA8220);
+					interaction.reply({embeds: [embed]});
+				}, err);
+			case Quoteget(name) | Quotecreate(name) | Quoteedit(name) | Quotedelete(name):
+				var type = get;
+				var enum_name = command.content.getName();
+				if (enum_name.contains('get')) {
+					type = get;
+				}
+
+				if (enum_name.contains('create')) {
+					type = set;
+				}
+
+				if (enum_name.contains('delete')) {
+					type = delete;
+				}
+
+				if (enum_name.contains('edit')) {
+					type = edit;
 				}
 
 				var column = 'id';

@@ -1,3 +1,4 @@
+import discord_builder.SlashCommandSubcommandBuilder;
 import discord_js.GuildMember;
 import discord_js.PermissionFlags;
 import firebase.web.auth.Auth;
@@ -81,7 +82,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						Quotelist // Snippet
+						Quote,
 					],
 				},
 				{
@@ -91,7 +92,6 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
-						Quotelist,
 						Reminder,
 						Social,
 						AutoRole,
@@ -228,8 +228,8 @@ class Main {
 			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
-			var command = createCommand(interaction);
 
+			var command = createCommand(interaction);
 			universe.setComponents(universe.createEntity(), command, interaction);
 		});
 
@@ -266,8 +266,10 @@ class Main {
 				command.content = Type.createEnum(CommandOptions, enum_id);
 				break;
 			} else {
+				var subcommand = null;
 				var params = new Array<Dynamic>();
 				for (param in value.params) {
+
 					switch (param.type) {
 						case user:
 							params.push(interaction.options.getUser(param.name));
@@ -283,9 +285,23 @@ class Main {
 							params.push(interaction.options.getString(param.name));
 						case number:
 							params.push(interaction.options.getNumber(param.name));
+						case subcommand:
+							var type = interaction.options.getSubcommand();
+							if (param.name != type) {
+								continue;
+							}
+							subcommand = type;
+							//params.push(type);
+							for (subparam in param.params) {
+								parseIncomingCommand(params, subparam, interaction);
+							}
+							
 						default:
 							throw 'Something went wrong.';
 					}
+				}
+				if (subcommand != null) {
+					enum_id += subcommand;
 				}
 
 				command.content = Type.createEnum(CommandOptions, enum_id, params);
@@ -301,6 +317,27 @@ class Main {
 			trace('Unmatched command. (${command.name})');
 		}
 		return null;
+	}
+
+	static function parseIncomingCommand(args:Array<Dynamic>, param:TCommands, interaction:BaseCommandInteraction) {
+		switch (param.type) {
+			case user:
+				args.push(interaction.options.getUser(param.name));
+			case bool:
+				args.push(interaction.options.getBoolean(param.name));
+			case mention:
+				args.push(interaction.options.getMentionable(param.name));
+			case channel:
+				args.push(interaction.options.getChannel(param.name));
+			case role:
+				args.push(interaction.options.getRole(param.name));
+			case string:
+				args.push(interaction.options.getString(param.name));
+			case number:
+				args.push(interaction.options.getNumber(param.name));
+			default:
+				throw 'Something went wrong.';
+		}
 	}
 
 	public static function getCommand(name:String) {
@@ -364,56 +401,64 @@ class Main {
 			if (command.params != null) {
 				for (param in command.params) {
 					var autocomplete = false;
-					if (param.autocomplete != null) {
-						autocomplete = param.autocomplete;
-					}
 
 					switch (param.type) {
-						case user:
-							main_command.addUserOption(new SlashCommandUserOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
-						case string:
-							var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
-							if (param.description != null) {
-								cmd = cmd.setDescription(param.description);
-							}
-							if (param.choices != null && !autocomplete) {
-								var choices = [];
-								for (option in param.choices) {
-									choices.push({name: option.name, value: option.value});
+						case subcommand:
+							var subcommand = new SlashCommandSubcommandBuilder().setName(param.name).setDescription(param.description);
+							for (subparam in param.params) {
+								var autocomplete = false;
+								if (subparam.autocomplete != null) {
+									autocomplete = subparam.autocomplete;
 								}
-								cmd.addChoices(...Rest.of(choices));
+								parseCommandType(subparam, autocomplete, subcommand);
 							}
-
-							main_command.addStringOption(cmd);
-						case bool:
-							main_command.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
-						case channel:
-							main_command.addChannelOption(new SlashCommandChannelOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
-						case role:
-							main_command.addRoleOption(new SlashCommandRoleOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
-						case mention:
-							main_command.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
-						case number:
-							main_command.addNumberOption(new SlashCommandNumberOption().setName(param.name)
-								.setDescription(param.description)
-								.setRequired(param.required));
+							
+							main_command.addSubcommand(subcommand);
 						default:
+							if (param.autocomplete != null) {
+								autocomplete = param.autocomplete;
+							}
+							parseCommandType(param, autocomplete, main_command);
 					}
 				}
+				commands.push(main_command);
 			}
-			commands.push(main_command);
 		}
 		return commands;
+	}
+
+	static function parseCommandType(param:TCommands, autocomplete:Bool, builder:SharedSlashCommandOptions) {
+		switch (param.type) {
+			case user:
+				builder.addUserOption(new SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+			case string:
+				var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
+				if (param.description != null) {
+					cmd = cmd.setDescription(param.description);
+				}
+				if (param.choices != null && !autocomplete) {
+					var choices = [];
+					for (option in param.choices) {
+						choices.push({name: option.name, value: option.value});
+					}
+					cmd.addChoices(...Rest.of(choices));
+				}
+
+				builder.addStringOption(cmd);
+			case bool:
+				builder.addBooleanOption(new SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+			case channel:
+				builder.addChannelOption(new SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+			case role:
+				builder.addRoleOption(new SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+			case mention:
+				builder.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
+					.setDescription(param.description)
+					.setRequired(param.required));
+			case number:
+				builder.addNumberOption(new SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+			default:
+		}
 	}
 }
 
@@ -490,6 +535,7 @@ typedef RegisteredApplicationCommand = {
 }
 
 enum abstract CommandType(String) {
+	var subcommand;
 	var context_menu;
 	var string;
 	var number;

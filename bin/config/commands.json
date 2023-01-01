@@ -640,6 +640,39 @@
 		]
 	},
 	{
+		"name": "test",
+		"description": "Store a link to a project/repo/tutorial/gist etc ",
+		"permissions": "admin",
+		"params": [
+			{
+				"name": "info",
+				"description": "test",
+				"type": "subcommand",
+				"params":[
+					{
+						"name": "a",
+						"description": "b",
+						"type": "bool",
+						"required":true
+					}
+				]
+			},
+			{
+				"name": "server",
+				"description": "other",
+				"type": "subcommand",
+				"params":[
+					{
+						"name": "a",
+						"description": "b",
+						"type": "user",
+						"required":true
+					}
+				]
+			}
+		]
+	},
+	{
 		"name": "snippetadd",
 		"is_public": true,
 		"description": "Store a link to a project/repo/tutorial/gist etc ",
@@ -678,33 +711,71 @@
 		"description": "Get or create a quote that can be recalled at anytime by using either the id or the name",
 		"params": [
 			{
-				"name": "name",
-				"type": "string",
-				"description": "A string identifier",
-				"required": true,
-				"autocomplete": true
+				"name": "get",
+				"type": "subcommand",
+				"description": "Get a quote",
+				"params":[
+					{
+						"name": "identifier",
+						"description": "The string or id of the quote you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					}
+				]
 			},
 			{
-				"name": "type",
-				"type": "string",
-				"description": "[default=get] What do you want to do?",
-				"required": false,
-				"choices": [
+				"name": "list",
+				"type": "subcommand",
+				"description": "List of available quotes",
+				"params":[
 					{
-						"name": "Edit",
-						"value": "edit"
-					},
+						"name": "user",
+						"description": "Get all quotes by a particular user",
+						"type": "user",
+						"required": false
+					}
+				]
+			},
+			{
+				"name": "create",
+				"type": "subcommand",
+				"description": "Create a quote",
+				"params":[
 					{
-						"name": "Set",
-						"value": "set"
-					},
+						"name": "identifier",
+						"description": "The string or id of the quote you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete":true
+					}
+				]
+			},
+			{
+				"name": "edit",
+				"type": "subcommand",
+				"description": "Recall a quote",
+				"params":[
 					{
-						"name": "Delete",
-						"value": "delete"
-					},
+						"name": "identifier",
+						"description": "The string or id of the quote you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete":true
+					}
+				]
+			},
+			{
+				"name": "delete",
+				"type": "subcommand",
+				"description": "Recall a quote",
+				"params":[
 					{
-						"name": "Get",
-						"value": "get"
+						"name": "identifier",
+						"description": "The string or id of the quote you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete":true
 					}
 				]
 			}
