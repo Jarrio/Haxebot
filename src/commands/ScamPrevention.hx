@@ -78,9 +78,6 @@ class ScamPrevention extends CommandBase {
 	function reviewMessage(messages:Array<Message>) {
 		var message = messages[0];
 		var embed = this.reformatMessage('SPAM ALERT - Timed out', message);
-		if (embed == null || embed.description.length == 0) {
-			return;
-		}
 
 		this.timeoutUser(message, function(_) {
 			message.reply({content: '<@&198916468312637440> Please review this message by: <@${message.author.id}>', embeds: [embed]}).then(function(_) {
