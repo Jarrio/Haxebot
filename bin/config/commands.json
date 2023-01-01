@@ -626,53 +626,6 @@
 		"description": "Gain access to posting in the #showcase channel"
 	},
 	{
-		"name": "quotelist",
-		"is_public": true,
-		"description": "List all the saved quotes",
-		"permissions": "everyone",
-		"params": [
-			{
-				"name": "user",
-				"description": "get all quotes by a particular user",
-				"type": "user",
-				"required": false
-			}
-		]
-	},
-	{
-		"name": "test",
-		"description": "Store a link to a project/repo/tutorial/gist etc ",
-		"permissions": "admin",
-		"params": [
-			{
-				"name": "info",
-				"description": "test",
-				"type": "subcommand",
-				"params":[
-					{
-						"name": "a",
-						"description": "b",
-						"type": "bool",
-						"required":true
-					}
-				]
-			},
-			{
-				"name": "server",
-				"description": "other",
-				"type": "subcommand",
-				"params":[
-					{
-						"name": "a",
-						"description": "b",
-						"type": "user",
-						"required":true
-					}
-				]
-			}
-		]
-	},
-	{
 		"name": "snippetadd",
 		"is_public": true,
 		"description": "Store a link to a project/repo/tutorial/gist etc ",
