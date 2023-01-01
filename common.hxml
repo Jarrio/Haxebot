@@ -3,10 +3,9 @@
 --library safety
 --library vm2
 --library node-html-parser
---library discord-builder
 --library aidan-ecs
 --library hxnodejs
---library discord
+--library discordjs
 --library node
 --library firebase
 --library shadows
