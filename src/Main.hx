@@ -1,6 +1,4 @@
 import discord_js.GuildMember;
-import haxe.PosInfos;
-import systems.CommandBase;
 import discord_js.PermissionFlags;
 import firebase.web.auth.Auth;
 import haxe.Rest;
