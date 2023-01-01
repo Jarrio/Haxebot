@@ -15,7 +15,7 @@ enum CommandOptions {
 	Hi;
 	Archive;
 	Snippet(title:String, tags:String);
-	SnippetAdd(title:String, description:String, url:String, code:String);
+	SnippetAdd(title:String, description:String, url:String, tags:String);
 	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);

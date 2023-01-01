@@ -39,7 +39,7 @@ class Poll extends CommandDbBase {
 					var start = data.timestamp.toMillis();
 					var finish = start + data.duration;
 					var time_left = 0.;
-					
+
 					if (finish < now) {
 						time_left = 30000;
 					} else {
@@ -148,7 +148,6 @@ class Poll extends CommandDbBase {
 	}
 
 	function addCollector(message:Message, data:PollData, ?time_left:Float) {
-		
 		var filter = this.filter(message, data);
 		var time:Float = data.duration;
 		if (time_left != null) {

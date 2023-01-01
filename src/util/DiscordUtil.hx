@@ -30,7 +30,8 @@ class DiscordUtil {
 		});
 	}
 
-	public static function reactionTracker(message:Message, track:(collector:ReactionCollector, collected:MessageReaction, user:User)->Void, ?time:Float = -1) {
+	public static function reactionTracker(message:Message, track:(collector:ReactionCollector, collected:MessageReaction, user:User) -> Void,
+			?time:Float = -1) {
 		var filter = (reaction:MessageReaction, user:User) -> {
 			if (reaction.emoji.name == "✅") {
 				return true;
@@ -54,7 +55,7 @@ class DiscordUtil {
 		});
 	}
 
-	public static function getChannel(channel_id:String, callback:(channel:TextChannel)->Void) {
+	public static function getChannel(channel_id:String, callback:(channel:TextChannel) -> Void) {
 		Main.client.channels.fetch(channel_id).then(callback, err);
 	}
 }

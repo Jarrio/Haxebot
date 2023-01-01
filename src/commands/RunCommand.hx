@@ -375,6 +375,7 @@ class Run extends CommandBase {
 	}
 
 	var varname = '';
+
 	function insertLoopBreak(name:String, code:String) {
 		varname = '___' + Random.string(6);
 

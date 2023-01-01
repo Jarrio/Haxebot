@@ -5,17 +5,11 @@
 --library node-html-parser
 --library discord-builder
 --library aidan-ecs
---library discord.js
 --library hxnodejs
---library discord.js
---library discord-api-types
---library discordjs-collection
---library discordjs-rest
---library discord-builder
+--library discord
 --library node
 --library firebase
 --library shadows
---library http
 
 -D ecs.no_debug_output
 -D ecs.static_loading

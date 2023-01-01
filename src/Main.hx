@@ -5,7 +5,7 @@ import discord_js.PermissionFlags;
 import firebase.web.auth.Auth;
 import haxe.Rest;
 import discord_api_types.Routes;
-import discordjs.rest.REST;
+import discord_js.rest.REST;
 import discord_js.ApplicationCommandManager.ApplicationCommandData;
 import discord_js.Snowflake;
 import discord_js.ApplicationCommand;
@@ -36,7 +36,6 @@ import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
 import commands.AutoRole;
 import commands.mod.Social;
-
 
 class Main {
 	public static var app:FirebaseApp;
@@ -84,8 +83,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						Quotelist
-						//Snippet
+						Quotelist // Snippet
 					],
 				},
 				{
@@ -145,7 +143,7 @@ class Main {
 				for (item in foo) {
 					trace('DEBUG - ${item.name} is REGISTERED');
 				}
-				
+
 				#if block
 				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
 				#end
@@ -425,8 +423,9 @@ enum abstract CommandPermission(Int) to Int {
 	var admin = PermissionFlags.ADMINISTRATOR;
 	var supermod = PermissionFlags.BAN_MEMBERS;
 	var everyone = VIEW_CHANNEL | SEND_MESSAGES;
+
 	@:from public static function fromString(value:String):CommandPermission {
-		return switch(value) {
+		return switch (value) {
 			case "admin": admin;
 			case "supermod": supermod;
 			case "everyone": everyone;

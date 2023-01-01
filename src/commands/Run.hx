@@ -360,7 +360,7 @@ class Run extends System {
 				ls.stderr.once('data', (data) -> {
 					var compile_output = this.cleanOutput(data, filename, class_entry);
 					pre_loop = pre_loop.replace(filename, class_entry);
-					
+
 					var embed = this.parseError(compile_output, pre_loop);
 					if (embed == null) {
 						message.reply({content: mention + '```\n${compile_output}```'});

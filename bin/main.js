@@ -645,7 +645,7 @@ Main.command_file = null;
 Main.universe = null;
 Main.get_discord = function() {
 	var config = null;
-	config = Main.keys.discord_live;
+	config = Main.keys.discord_test;
 	return config;
 };
 Main.token = function(rest) {
@@ -658,10 +658,10 @@ Main.start = function() {
 	var vec = this1;
 	var this1 = new Array(1);
 	var this11 = new Array(1);
-	vec[0] = new ecs_Phase(false,"testing",this1,this11);
+	vec[0] = new ecs_Phase(true,"testing",this1,this11);
 	var this1 = new Array(22);
 	var this11 = new Array(22);
-	vec[1] = new ecs_Phase(true,"main",this1,this11);
+	vec[1] = new ecs_Phase(false,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(7);
 	var vec1 = this1;
@@ -871,10 +871,10 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 137, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 135, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
-		var rest = new discordjs_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
+		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
 		var res = Main.token(rest);
 		res.then(function(foo) {
 			Main.commands_active = true;
@@ -882,12 +882,13 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 146, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 144, className : "Main", methodName : "start"});
 			}
+			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 148, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 156, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 154, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,2,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,3,member);
@@ -997,10 +998,10 @@ Main.start = function() {
 			}
 		}
 		var check = false;
-		check = channel.type == 11 && channel.parentId == "1019922106370232360";
+		check = channel.id == "597067735771381771";
 		if(check) {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 197, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 195, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,2,"showcase");
 				Main.universe.components.set(_ecsTmpEntity,5,message);
@@ -1045,8 +1046,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 205, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 206, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 203, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 204, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1159,7 +1160,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 227, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 225, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1267,7 +1268,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 324, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 322, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1276,14 +1277,14 @@ Main.main = function() {
 		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 333, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 331, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 342, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 340, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -3382,7 +3383,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "dvorak":
 			return "903006951896666153";
 		case "events":
-			return "1054432874473996408";
+			return "738508312382799874";
 		case "flixel":
 			return "761714697468248125";
 		case "haxeui":
@@ -4258,7 +4259,7 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_React
 });
 var commands_Reminder = function(_universe) {
-	this.bot_channel = "663246792426782730";
+	this.bot_channel = "597067735771381771";
 	this.sent = [];
 	this.reminders = [];
 	this.checking = false;
@@ -4305,7 +4306,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 			}
 			var obj = { sent : false, thread_reply : _g1, thread_id : thread_id, id : "", duration : commands_types_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
-			var duration = commands_types_Duration.fromString("4mins");
+			var duration = commands_types_Duration.fromString("0min");
 			if(obj.duration == 0.) {
 				interaction.reply("Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)");
 				return;
@@ -4606,15 +4607,7 @@ commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
-		var _gthis = this;
 		if(!Main.connected) {
-			return;
-		}
-		if(this.channel == null && !this.checked) {
-			this.checked = true;
-			Main.client.channels.fetch("663246792426782730").then(function(channel) {
-				return _gthis.channel = channel;
-			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -5396,7 +5389,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Showcase = function(_) {
 	this.checking = false;
-	this.channel_id = "162664383082790912";
+	this.channel_id = "597067735771381771";
 	systems_CommandBase.call(this,_);
 	this.modal = this.universe.families.get(5);
 	this.messages = this.universe.families.get(3);
@@ -5465,12 +5458,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(command1 != "showcase" && !this.channel.isThread()) {
 				return;
 			}
-			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
-			if(thread[0].id != "1024905470621798410") {
-				if(thread[0].ownerId != message[0].author.id) {
-					return;
-				}
-			}
+			var thread = [js_Boot.__cast(message[0].channel , discord_$js_TextChannel)];
 			var arr = [[]];
 			var content1 = [StringTools.trim(message[0].content.substring(10))];
 			var jsIterator = message[0].attachments.values();
@@ -6033,8 +6021,8 @@ var commands_Twitter = function(_universe) {
 	this.twitter_links = [];
 	var this1 = new Array(6);
 	this.async_check = this1;
-	this.channel_id = "1030188275341729882";
-	this.ping_rate = 3600000;
+	this.channel_id = "1028078544867311727";
+	this.ping_rate = 60000;
 	this.tweets = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -6612,7 +6600,7 @@ var discord_$js_ClientApplication = require("discord.js").ClientApplication;
 var discord_$js_User = require("discord.js").User;
 var discord_$js_ClientUser = require("discord.js").ClientUser;
 var discord_$js_ClientVoiceManager = require("discord.js").ClientVoiceManager;
-var discordjs_collection_Collection = require("@discordjs/collection").Collection;
+var discord_$js_collection_Collection = require("@discordjs/collection").Collection;
 var discord_$js_Collection = require("discord.js").Collection;
 var discord_$js_Collector = require("discord.js").Collector;
 var discord_$js_DMChannel = require("discord.js").DMChannel;
@@ -6690,10 +6678,10 @@ var discord_$js_WebSocketManager = require("discord.js").WebSocketManager;
 var discord_$js_WebSocketShard = require("discord.js").WebSocketShard;
 var discord_$js_Webhook = require("discord.js").Webhook;
 var discord_$js_WebhookClient = require("discord.js").WebhookClient;
-var discordjs_rest_CDN = require("@discordjs/rest").CDN;
+var discord_$js_rest_CDN = require("@discordjs/rest").CDN;
 var node_Events = require("events");
-var discordjs_rest_REST = require("@discordjs/rest").REST;
-var discordjs_rest_RequestManager = require("@discordjs/rest").RequestManager;
+var discord_$js_rest_REST = require("@discordjs/rest").REST;
+var discord_$js_rest_RequestManager = require("@discordjs/rest").RequestManager;
 var ecs_Components = function(_size) {
 	var this1 = new Array(_size);
 	this.components = this1;
@@ -9750,8 +9738,6 @@ haxe_http_HttpBase.prototype = {
 	,__properties__: {get_responseData:"get_responseData"}
 };
 var haxe_http_HttpNodeJs = function(url) {
-	this._customRequestPost = null;
-	this._customRequestMethod = null;
 	haxe_http_HttpBase.call(this,url);
 };
 $hxClasses["haxe.http.HttpNodeJs"] = haxe_http_HttpNodeJs;
@@ -9759,7 +9745,6 @@ haxe_http_HttpNodeJs.__name__ = "haxe.http.HttpNodeJs";
 haxe_http_HttpNodeJs.__super__ = haxe_http_HttpBase;
 haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 	req: null
-	,responseHeaders: null
 	,cancel: function() {
 		if(this.req == null) {
 			return;
@@ -9771,11 +9756,10 @@ haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 		var _gthis = this;
 		this.responseAsString = null;
 		this.responseBytes = null;
-		this.responseHeaders = null;
-		var parsedUrl = js_node_Url.parse(this.url);
+		var parsedUrl = new js_node_url_URL(this.url);
 		var secure = parsedUrl.protocol == "https:";
 		var host = parsedUrl.hostname;
-		var path = parsedUrl.path;
+		var path = parsedUrl.pathname;
 		var port = parsedUrl.port != null ? Std.parseInt(parsedUrl.port) : secure ? 443 : 80;
 		var h = { };
 		var _g = 0;
@@ -9813,14 +9797,7 @@ haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 		if(uri != null) {
 			path += (question ? "?" : "&") + uri;
 		}
-		var method = post ? "POST" : "GET";
-		if(this._customRequestMethod != null) {
-			method = this._customRequestMethod;
-		}
-		if(this._customRequestPost != null) {
-			post = this._customRequestPost;
-		}
-		var opts = { protocol : parsedUrl.protocol, hostname : host, port : port, method : method, path : path, headers : h};
+		var opts = { protocol : parsedUrl.protocol, hostname : host, port : port, method : post ? "POST" : "GET", path : path, headers : h};
 		var httpResponse = function(res) {
 			res.setEncoding("binary");
 			var s = res.statusCode;
@@ -9832,17 +9809,6 @@ haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 				data.push(js_node_buffer_Buffer.from(chunk,"binary"));
 			});
 			res.on("end",function(_) {
-				if(res.headers != null) {
-					_gthis.responseHeaders = new haxe_ds_StringMap();
-					var _g = 0;
-					var _g1 = Reflect.fields(res.headers);
-					while(_g < _g1.length) {
-						var f = _g1[_g];
-						++_g;
-						var v = Reflect.field(res.headers,f);
-						_gthis.responseHeaders.h[f] = v;
-					}
-				}
 				var buf = data.length == 1 ? data[0] : js_node_buffer_Buffer.concat(data);
 				var httpResponse = buf.buffer.slice(buf.byteOffset,buf.byteOffset + buf.byteLength);
 				_gthis.responseBytes = haxe_io_Bytes.ofData(httpResponse);
@@ -9864,12 +9830,6 @@ haxe_http_HttpNodeJs.prototype = $extend(haxe_http_HttpBase.prototype,{
 			}
 		}
 		this.req.end();
-	}
-	,_customRequestMethod: null
-	,_customRequestPost: null
-	,customRequest: function(post,method) {
-		this._customRequestPost = post;
-		this._customRequestMethod = method;
 	}
 	,__class__: haxe_http_HttpNodeJs
 });
@@ -11241,309 +11201,6 @@ haxe_iterators_StringKeyValueIterator.prototype = {
 	}
 	,__class__: haxe_iterators_StringKeyValueIterator
 };
-var haxe_macro_StringLiteralKind = $hxEnums["haxe.macro.StringLiteralKind"] = { __ename__:"haxe.macro.StringLiteralKind",__constructs__:null
-	,DoubleQuotes: {_hx_name:"DoubleQuotes",_hx_index:0,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
-	,SingleQuotes: {_hx_name:"SingleQuotes",_hx_index:1,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
-};
-haxe_macro_StringLiteralKind.__constructs__ = [haxe_macro_StringLiteralKind.DoubleQuotes,haxe_macro_StringLiteralKind.SingleQuotes];
-haxe_macro_StringLiteralKind.__empty_constructs__ = [haxe_macro_StringLiteralKind.DoubleQuotes,haxe_macro_StringLiteralKind.SingleQuotes];
-var haxe_macro_Constant = $hxEnums["haxe.macro.Constant"] = { __ename__:"haxe.macro.Constant",__constructs__:null
-	,CInt: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CInt",$_.__params__ = ["v"],$_)
-	,CFloat: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CFloat",$_.__params__ = ["f"],$_)
-	,CString: ($_=function(s,kind) { return {_hx_index:2,s:s,kind:kind,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CString",$_.__params__ = ["s","kind"],$_)
-	,CIdent: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CIdent",$_.__params__ = ["s"],$_)
-	,CRegexp: ($_=function(r,opt) { return {_hx_index:4,r:r,opt:opt,__enum__:"haxe.macro.Constant",toString:$estr}; },$_._hx_name="CRegexp",$_.__params__ = ["r","opt"],$_)
-};
-haxe_macro_Constant.__constructs__ = [haxe_macro_Constant.CInt,haxe_macro_Constant.CFloat,haxe_macro_Constant.CString,haxe_macro_Constant.CIdent,haxe_macro_Constant.CRegexp];
-haxe_macro_Constant.__empty_constructs__ = [];
-var haxe_macro_Binop = $hxEnums["haxe.macro.Binop"] = { __ename__:"haxe.macro.Binop",__constructs__:null
-	,OpAdd: {_hx_name:"OpAdd",_hx_index:0,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpMult: {_hx_name:"OpMult",_hx_index:1,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpDiv: {_hx_name:"OpDiv",_hx_index:2,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpSub: {_hx_name:"OpSub",_hx_index:3,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpAssign: {_hx_name:"OpAssign",_hx_index:4,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpEq: {_hx_name:"OpEq",_hx_index:5,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpNotEq: {_hx_name:"OpNotEq",_hx_index:6,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpGt: {_hx_name:"OpGt",_hx_index:7,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpGte: {_hx_name:"OpGte",_hx_index:8,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpLt: {_hx_name:"OpLt",_hx_index:9,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpLte: {_hx_name:"OpLte",_hx_index:10,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpAnd: {_hx_name:"OpAnd",_hx_index:11,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpOr: {_hx_name:"OpOr",_hx_index:12,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpXor: {_hx_name:"OpXor",_hx_index:13,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpBoolAnd: {_hx_name:"OpBoolAnd",_hx_index:14,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpBoolOr: {_hx_name:"OpBoolOr",_hx_index:15,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpShl: {_hx_name:"OpShl",_hx_index:16,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpShr: {_hx_name:"OpShr",_hx_index:17,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpUShr: {_hx_name:"OpUShr",_hx_index:18,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpMod: {_hx_name:"OpMod",_hx_index:19,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpAssignOp: ($_=function(op) { return {_hx_index:20,op:op,__enum__:"haxe.macro.Binop",toString:$estr}; },$_._hx_name="OpAssignOp",$_.__params__ = ["op"],$_)
-	,OpInterval: {_hx_name:"OpInterval",_hx_index:21,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpArrow: {_hx_name:"OpArrow",_hx_index:22,__enum__:"haxe.macro.Binop",toString:$estr}
-	,OpIn: {_hx_name:"OpIn",_hx_index:23,__enum__:"haxe.macro.Binop",toString:$estr}
-};
-haxe_macro_Binop.__constructs__ = [haxe_macro_Binop.OpAdd,haxe_macro_Binop.OpMult,haxe_macro_Binop.OpDiv,haxe_macro_Binop.OpSub,haxe_macro_Binop.OpAssign,haxe_macro_Binop.OpEq,haxe_macro_Binop.OpNotEq,haxe_macro_Binop.OpGt,haxe_macro_Binop.OpGte,haxe_macro_Binop.OpLt,haxe_macro_Binop.OpLte,haxe_macro_Binop.OpAnd,haxe_macro_Binop.OpOr,haxe_macro_Binop.OpXor,haxe_macro_Binop.OpBoolAnd,haxe_macro_Binop.OpBoolOr,haxe_macro_Binop.OpShl,haxe_macro_Binop.OpShr,haxe_macro_Binop.OpUShr,haxe_macro_Binop.OpMod,haxe_macro_Binop.OpAssignOp,haxe_macro_Binop.OpInterval,haxe_macro_Binop.OpArrow,haxe_macro_Binop.OpIn];
-haxe_macro_Binop.__empty_constructs__ = [haxe_macro_Binop.OpAdd,haxe_macro_Binop.OpMult,haxe_macro_Binop.OpDiv,haxe_macro_Binop.OpSub,haxe_macro_Binop.OpAssign,haxe_macro_Binop.OpEq,haxe_macro_Binop.OpNotEq,haxe_macro_Binop.OpGt,haxe_macro_Binop.OpGte,haxe_macro_Binop.OpLt,haxe_macro_Binop.OpLte,haxe_macro_Binop.OpAnd,haxe_macro_Binop.OpOr,haxe_macro_Binop.OpXor,haxe_macro_Binop.OpBoolAnd,haxe_macro_Binop.OpBoolOr,haxe_macro_Binop.OpShl,haxe_macro_Binop.OpShr,haxe_macro_Binop.OpUShr,haxe_macro_Binop.OpMod,haxe_macro_Binop.OpInterval,haxe_macro_Binop.OpArrow,haxe_macro_Binop.OpIn];
-var haxe_macro_Unop = $hxEnums["haxe.macro.Unop"] = { __ename__:"haxe.macro.Unop",__constructs__:null
-	,OpIncrement: {_hx_name:"OpIncrement",_hx_index:0,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpDecrement: {_hx_name:"OpDecrement",_hx_index:1,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpNot: {_hx_name:"OpNot",_hx_index:2,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpNeg: {_hx_name:"OpNeg",_hx_index:3,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpNegBits: {_hx_name:"OpNegBits",_hx_index:4,__enum__:"haxe.macro.Unop",toString:$estr}
-	,OpSpread: {_hx_name:"OpSpread",_hx_index:5,__enum__:"haxe.macro.Unop",toString:$estr}
-};
-haxe_macro_Unop.__constructs__ = [haxe_macro_Unop.OpIncrement,haxe_macro_Unop.OpDecrement,haxe_macro_Unop.OpNot,haxe_macro_Unop.OpNeg,haxe_macro_Unop.OpNegBits,haxe_macro_Unop.OpSpread];
-haxe_macro_Unop.__empty_constructs__ = [haxe_macro_Unop.OpIncrement,haxe_macro_Unop.OpDecrement,haxe_macro_Unop.OpNot,haxe_macro_Unop.OpNeg,haxe_macro_Unop.OpNegBits,haxe_macro_Unop.OpSpread];
-var haxe_macro_QuoteStatus = $hxEnums["haxe.macro.QuoteStatus"] = { __ename__:"haxe.macro.QuoteStatus",__constructs__:null
-	,Unquoted: {_hx_name:"Unquoted",_hx_index:0,__enum__:"haxe.macro.QuoteStatus",toString:$estr}
-	,Quoted: {_hx_name:"Quoted",_hx_index:1,__enum__:"haxe.macro.QuoteStatus",toString:$estr}
-};
-haxe_macro_QuoteStatus.__constructs__ = [haxe_macro_QuoteStatus.Unquoted,haxe_macro_QuoteStatus.Quoted];
-haxe_macro_QuoteStatus.__empty_constructs__ = [haxe_macro_QuoteStatus.Unquoted,haxe_macro_QuoteStatus.Quoted];
-var haxe_macro_FunctionKind = $hxEnums["haxe.macro.FunctionKind"] = { __ename__:"haxe.macro.FunctionKind",__constructs__:null
-	,FAnonymous: {_hx_name:"FAnonymous",_hx_index:0,__enum__:"haxe.macro.FunctionKind",toString:$estr}
-	,FNamed: ($_=function(name,inlined) { return {_hx_index:1,name:name,inlined:inlined,__enum__:"haxe.macro.FunctionKind",toString:$estr}; },$_._hx_name="FNamed",$_.__params__ = ["name","inlined"],$_)
-	,FArrow: {_hx_name:"FArrow",_hx_index:2,__enum__:"haxe.macro.FunctionKind",toString:$estr}
-};
-haxe_macro_FunctionKind.__constructs__ = [haxe_macro_FunctionKind.FAnonymous,haxe_macro_FunctionKind.FNamed,haxe_macro_FunctionKind.FArrow];
-haxe_macro_FunctionKind.__empty_constructs__ = [haxe_macro_FunctionKind.FAnonymous,haxe_macro_FunctionKind.FArrow];
-var haxe_macro_ExprDef = $hxEnums["haxe.macro.ExprDef"] = { __ename__:"haxe.macro.ExprDef",__constructs__:null
-	,EConst: ($_=function(c) { return {_hx_index:0,c:c,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EConst",$_.__params__ = ["c"],$_)
-	,EArray: ($_=function(e1,e2) { return {_hx_index:1,e1:e1,e2:e2,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EArray",$_.__params__ = ["e1","e2"],$_)
-	,EBinop: ($_=function(op,e1,e2) { return {_hx_index:2,op:op,e1:e1,e2:e2,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EBinop",$_.__params__ = ["op","e1","e2"],$_)
-	,EField: ($_=function(e,field) { return {_hx_index:3,e:e,field:field,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EField",$_.__params__ = ["e","field"],$_)
-	,EParenthesis: ($_=function(e) { return {_hx_index:4,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EParenthesis",$_.__params__ = ["e"],$_)
-	,EObjectDecl: ($_=function(fields) { return {_hx_index:5,fields:fields,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EObjectDecl",$_.__params__ = ["fields"],$_)
-	,EArrayDecl: ($_=function(values) { return {_hx_index:6,values:values,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EArrayDecl",$_.__params__ = ["values"],$_)
-	,ECall: ($_=function(e,params) { return {_hx_index:7,e:e,params:params,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECall",$_.__params__ = ["e","params"],$_)
-	,ENew: ($_=function(t,params) { return {_hx_index:8,t:t,params:params,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ENew",$_.__params__ = ["t","params"],$_)
-	,EUnop: ($_=function(op,postFix,e) { return {_hx_index:9,op:op,postFix:postFix,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EUnop",$_.__params__ = ["op","postFix","e"],$_)
-	,EVars: ($_=function(vars) { return {_hx_index:10,vars:vars,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EVars",$_.__params__ = ["vars"],$_)
-	,EFunction: ($_=function(kind,f) { return {_hx_index:11,kind:kind,f:f,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EFunction",$_.__params__ = ["kind","f"],$_)
-	,EBlock: ($_=function(exprs) { return {_hx_index:12,exprs:exprs,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EBlock",$_.__params__ = ["exprs"],$_)
-	,EFor: ($_=function(it,expr) { return {_hx_index:13,it:it,expr:expr,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EFor",$_.__params__ = ["it","expr"],$_)
-	,EIf: ($_=function(econd,eif,eelse) { return {_hx_index:14,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EIf",$_.__params__ = ["econd","eif","eelse"],$_)
-	,EWhile: ($_=function(econd,e,normalWhile) { return {_hx_index:15,econd:econd,e:e,normalWhile:normalWhile,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EWhile",$_.__params__ = ["econd","e","normalWhile"],$_)
-	,ESwitch: ($_=function(e,cases,edef) { return {_hx_index:16,e:e,cases:cases,edef:edef,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ESwitch",$_.__params__ = ["e","cases","edef"],$_)
-	,ETry: ($_=function(e,catches) { return {_hx_index:17,e:e,catches:catches,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ETry",$_.__params__ = ["e","catches"],$_)
-	,EReturn: ($_=function(e) { return {_hx_index:18,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EReturn",$_.__params__ = ["e"],$_)
-	,EBreak: {_hx_name:"EBreak",_hx_index:19,__enum__:"haxe.macro.ExprDef",toString:$estr}
-	,EContinue: {_hx_name:"EContinue",_hx_index:20,__enum__:"haxe.macro.ExprDef",toString:$estr}
-	,EUntyped: ($_=function(e) { return {_hx_index:21,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EUntyped",$_.__params__ = ["e"],$_)
-	,EThrow: ($_=function(e) { return {_hx_index:22,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EThrow",$_.__params__ = ["e"],$_)
-	,ECast: ($_=function(e,t) { return {_hx_index:23,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECast",$_.__params__ = ["e","t"],$_)
-	,EDisplay: ($_=function(e,displayKind) { return {_hx_index:24,e:e,displayKind:displayKind,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EDisplay",$_.__params__ = ["e","displayKind"],$_)
-	,EDisplayNew: ($_=function(t) { return {_hx_index:25,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EDisplayNew",$_.__params__ = ["t"],$_)
-	,ETernary: ($_=function(econd,eif,eelse) { return {_hx_index:26,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ETernary",$_.__params__ = ["econd","eif","eelse"],$_)
-	,ECheckType: ($_=function(e,t) { return {_hx_index:27,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="ECheckType",$_.__params__ = ["e","t"],$_)
-	,EMeta: ($_=function(s,e) { return {_hx_index:28,s:s,e:e,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EMeta",$_.__params__ = ["s","e"],$_)
-	,EIs: ($_=function(e,t) { return {_hx_index:29,e:e,t:t,__enum__:"haxe.macro.ExprDef",toString:$estr}; },$_._hx_name="EIs",$_.__params__ = ["e","t"],$_)
-};
-haxe_macro_ExprDef.__constructs__ = [haxe_macro_ExprDef.EConst,haxe_macro_ExprDef.EArray,haxe_macro_ExprDef.EBinop,haxe_macro_ExprDef.EField,haxe_macro_ExprDef.EParenthesis,haxe_macro_ExprDef.EObjectDecl,haxe_macro_ExprDef.EArrayDecl,haxe_macro_ExprDef.ECall,haxe_macro_ExprDef.ENew,haxe_macro_ExprDef.EUnop,haxe_macro_ExprDef.EVars,haxe_macro_ExprDef.EFunction,haxe_macro_ExprDef.EBlock,haxe_macro_ExprDef.EFor,haxe_macro_ExprDef.EIf,haxe_macro_ExprDef.EWhile,haxe_macro_ExprDef.ESwitch,haxe_macro_ExprDef.ETry,haxe_macro_ExprDef.EReturn,haxe_macro_ExprDef.EBreak,haxe_macro_ExprDef.EContinue,haxe_macro_ExprDef.EUntyped,haxe_macro_ExprDef.EThrow,haxe_macro_ExprDef.ECast,haxe_macro_ExprDef.EDisplay,haxe_macro_ExprDef.EDisplayNew,haxe_macro_ExprDef.ETernary,haxe_macro_ExprDef.ECheckType,haxe_macro_ExprDef.EMeta,haxe_macro_ExprDef.EIs];
-haxe_macro_ExprDef.__empty_constructs__ = [haxe_macro_ExprDef.EBreak,haxe_macro_ExprDef.EContinue];
-var haxe_macro_DisplayKind = $hxEnums["haxe.macro.DisplayKind"] = { __ename__:"haxe.macro.DisplayKind",__constructs__:null
-	,DKCall: {_hx_name:"DKCall",_hx_index:0,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKDot: {_hx_name:"DKDot",_hx_index:1,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKStructure: {_hx_name:"DKStructure",_hx_index:2,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKMarked: {_hx_name:"DKMarked",_hx_index:3,__enum__:"haxe.macro.DisplayKind",toString:$estr}
-	,DKPattern: ($_=function(outermost) { return {_hx_index:4,outermost:outermost,__enum__:"haxe.macro.DisplayKind",toString:$estr}; },$_._hx_name="DKPattern",$_.__params__ = ["outermost"],$_)
-};
-haxe_macro_DisplayKind.__constructs__ = [haxe_macro_DisplayKind.DKCall,haxe_macro_DisplayKind.DKDot,haxe_macro_DisplayKind.DKStructure,haxe_macro_DisplayKind.DKMarked,haxe_macro_DisplayKind.DKPattern];
-haxe_macro_DisplayKind.__empty_constructs__ = [haxe_macro_DisplayKind.DKCall,haxe_macro_DisplayKind.DKDot,haxe_macro_DisplayKind.DKStructure,haxe_macro_DisplayKind.DKMarked];
-var haxe_macro_ComplexType = $hxEnums["haxe.macro.ComplexType"] = { __ename__:"haxe.macro.ComplexType",__constructs__:null
-	,TPath: ($_=function(p) { return {_hx_index:0,p:p,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TPath",$_.__params__ = ["p"],$_)
-	,TFunction: ($_=function(args,ret) { return {_hx_index:1,args:args,ret:ret,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TFunction",$_.__params__ = ["args","ret"],$_)
-	,TAnonymous: ($_=function(fields) { return {_hx_index:2,fields:fields,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TAnonymous",$_.__params__ = ["fields"],$_)
-	,TParent: ($_=function(t) { return {_hx_index:3,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TParent",$_.__params__ = ["t"],$_)
-	,TExtend: ($_=function(p,fields) { return {_hx_index:4,p:p,fields:fields,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TExtend",$_.__params__ = ["p","fields"],$_)
-	,TOptional: ($_=function(t) { return {_hx_index:5,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TOptional",$_.__params__ = ["t"],$_)
-	,TNamed: ($_=function(n,t) { return {_hx_index:6,n:n,t:t,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TNamed",$_.__params__ = ["n","t"],$_)
-	,TIntersection: ($_=function(tl) { return {_hx_index:7,tl:tl,__enum__:"haxe.macro.ComplexType",toString:$estr}; },$_._hx_name="TIntersection",$_.__params__ = ["tl"],$_)
-};
-haxe_macro_ComplexType.__constructs__ = [haxe_macro_ComplexType.TPath,haxe_macro_ComplexType.TFunction,haxe_macro_ComplexType.TAnonymous,haxe_macro_ComplexType.TParent,haxe_macro_ComplexType.TExtend,haxe_macro_ComplexType.TOptional,haxe_macro_ComplexType.TNamed,haxe_macro_ComplexType.TIntersection];
-haxe_macro_ComplexType.__empty_constructs__ = [];
-var haxe_macro_TypeParam = $hxEnums["haxe.macro.TypeParam"] = { __ename__:"haxe.macro.TypeParam",__constructs__:null
-	,TPType: ($_=function(t) { return {_hx_index:0,t:t,__enum__:"haxe.macro.TypeParam",toString:$estr}; },$_._hx_name="TPType",$_.__params__ = ["t"],$_)
-	,TPExpr: ($_=function(e) { return {_hx_index:1,e:e,__enum__:"haxe.macro.TypeParam",toString:$estr}; },$_._hx_name="TPExpr",$_.__params__ = ["e"],$_)
-};
-haxe_macro_TypeParam.__constructs__ = [haxe_macro_TypeParam.TPType,haxe_macro_TypeParam.TPExpr];
-haxe_macro_TypeParam.__empty_constructs__ = [];
-var haxe_macro_Access = $hxEnums["haxe.macro.Access"] = { __ename__:"haxe.macro.Access",__constructs__:null
-	,APublic: {_hx_name:"APublic",_hx_index:0,__enum__:"haxe.macro.Access",toString:$estr}
-	,APrivate: {_hx_name:"APrivate",_hx_index:1,__enum__:"haxe.macro.Access",toString:$estr}
-	,AStatic: {_hx_name:"AStatic",_hx_index:2,__enum__:"haxe.macro.Access",toString:$estr}
-	,AOverride: {_hx_name:"AOverride",_hx_index:3,__enum__:"haxe.macro.Access",toString:$estr}
-	,ADynamic: {_hx_name:"ADynamic",_hx_index:4,__enum__:"haxe.macro.Access",toString:$estr}
-	,AInline: {_hx_name:"AInline",_hx_index:5,__enum__:"haxe.macro.Access",toString:$estr}
-	,AMacro: {_hx_name:"AMacro",_hx_index:6,__enum__:"haxe.macro.Access",toString:$estr}
-	,AFinal: {_hx_name:"AFinal",_hx_index:7,__enum__:"haxe.macro.Access",toString:$estr}
-	,AExtern: {_hx_name:"AExtern",_hx_index:8,__enum__:"haxe.macro.Access",toString:$estr}
-	,AAbstract: {_hx_name:"AAbstract",_hx_index:9,__enum__:"haxe.macro.Access",toString:$estr}
-	,AOverload: {_hx_name:"AOverload",_hx_index:10,__enum__:"haxe.macro.Access",toString:$estr}
-};
-haxe_macro_Access.__constructs__ = [haxe_macro_Access.APublic,haxe_macro_Access.APrivate,haxe_macro_Access.AStatic,haxe_macro_Access.AOverride,haxe_macro_Access.ADynamic,haxe_macro_Access.AInline,haxe_macro_Access.AMacro,haxe_macro_Access.AFinal,haxe_macro_Access.AExtern,haxe_macro_Access.AAbstract,haxe_macro_Access.AOverload];
-haxe_macro_Access.__empty_constructs__ = [haxe_macro_Access.APublic,haxe_macro_Access.APrivate,haxe_macro_Access.AStatic,haxe_macro_Access.AOverride,haxe_macro_Access.ADynamic,haxe_macro_Access.AInline,haxe_macro_Access.AMacro,haxe_macro_Access.AFinal,haxe_macro_Access.AExtern,haxe_macro_Access.AAbstract,haxe_macro_Access.AOverload];
-var haxe_macro_FieldType = $hxEnums["haxe.macro.FieldType"] = { __ename__:"haxe.macro.FieldType",__constructs__:null
-	,FVar: ($_=function(t,e) { return {_hx_index:0,t:t,e:e,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FVar",$_.__params__ = ["t","e"],$_)
-	,FFun: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FFun",$_.__params__ = ["f"],$_)
-	,FProp: ($_=function(get,set,t,e) { return {_hx_index:2,get:get,set:set,t:t,e:e,__enum__:"haxe.macro.FieldType",toString:$estr}; },$_._hx_name="FProp",$_.__params__ = ["get","set","t","e"],$_)
-};
-haxe_macro_FieldType.__constructs__ = [haxe_macro_FieldType.FVar,haxe_macro_FieldType.FFun,haxe_macro_FieldType.FProp];
-haxe_macro_FieldType.__empty_constructs__ = [];
-var haxe_macro_TypeDefKind = $hxEnums["haxe.macro.TypeDefKind"] = { __ename__:"haxe.macro.TypeDefKind",__constructs__:null
-	,TDEnum: {_hx_name:"TDEnum",_hx_index:0,__enum__:"haxe.macro.TypeDefKind",toString:$estr}
-	,TDStructure: {_hx_name:"TDStructure",_hx_index:1,__enum__:"haxe.macro.TypeDefKind",toString:$estr}
-	,TDClass: ($_=function(superClass,interfaces,isInterface,isFinal,isAbstract) { return {_hx_index:2,superClass:superClass,interfaces:interfaces,isInterface:isInterface,isFinal:isFinal,isAbstract:isAbstract,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDClass",$_.__params__ = ["superClass","interfaces","isInterface","isFinal","isAbstract"],$_)
-	,TDAlias: ($_=function(t) { return {_hx_index:3,t:t,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDAlias",$_.__params__ = ["t"],$_)
-	,TDAbstract: ($_=function(tthis,from,to) { return {_hx_index:4,tthis:tthis,from:from,to:to,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDAbstract",$_.__params__ = ["tthis","from","to"],$_)
-	,TDField: ($_=function(kind,access) { return {_hx_index:5,kind:kind,access:access,__enum__:"haxe.macro.TypeDefKind",toString:$estr}; },$_._hx_name="TDField",$_.__params__ = ["kind","access"],$_)
-};
-haxe_macro_TypeDefKind.__constructs__ = [haxe_macro_TypeDefKind.TDEnum,haxe_macro_TypeDefKind.TDStructure,haxe_macro_TypeDefKind.TDClass,haxe_macro_TypeDefKind.TDAlias,haxe_macro_TypeDefKind.TDAbstract,haxe_macro_TypeDefKind.TDField];
-haxe_macro_TypeDefKind.__empty_constructs__ = [haxe_macro_TypeDefKind.TDEnum,haxe_macro_TypeDefKind.TDStructure];
-var haxe_macro_Error = function(message,pos,previous) {
-	haxe_Exception.call(this,message,previous);
-	this.pos = pos;
-	this.__skipStack++;
-};
-$hxClasses["haxe.macro.Error"] = haxe_macro_Error;
-haxe_macro_Error.__name__ = "haxe.macro.Error";
-haxe_macro_Error.__super__ = haxe_Exception;
-haxe_macro_Error.prototype = $extend(haxe_Exception.prototype,{
-	pos: null
-	,__class__: haxe_macro_Error
-});
-var haxe_macro_ImportMode = $hxEnums["haxe.macro.ImportMode"] = { __ename__:"haxe.macro.ImportMode",__constructs__:null
-	,INormal: {_hx_name:"INormal",_hx_index:0,__enum__:"haxe.macro.ImportMode",toString:$estr}
-	,IAsName: ($_=function(alias) { return {_hx_index:1,alias:alias,__enum__:"haxe.macro.ImportMode",toString:$estr}; },$_._hx_name="IAsName",$_.__params__ = ["alias"],$_)
-	,IAll: {_hx_name:"IAll",_hx_index:2,__enum__:"haxe.macro.ImportMode",toString:$estr}
-};
-haxe_macro_ImportMode.__constructs__ = [haxe_macro_ImportMode.INormal,haxe_macro_ImportMode.IAsName,haxe_macro_ImportMode.IAll];
-haxe_macro_ImportMode.__empty_constructs__ = [haxe_macro_ImportMode.INormal,haxe_macro_ImportMode.IAll];
-var haxe_macro_Type = $hxEnums["haxe.macro.Type"] = { __ename__:"haxe.macro.Type",__constructs__:null
-	,TMono: ($_=function(t) { return {_hx_index:0,t:t,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TMono",$_.__params__ = ["t"],$_)
-	,TEnum: ($_=function(t,params) { return {_hx_index:1,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TEnum",$_.__params__ = ["t","params"],$_)
-	,TInst: ($_=function(t,params) { return {_hx_index:2,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TInst",$_.__params__ = ["t","params"],$_)
-	,TType: ($_=function(t,params) { return {_hx_index:3,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TType",$_.__params__ = ["t","params"],$_)
-	,TFun: ($_=function(args,ret) { return {_hx_index:4,args:args,ret:ret,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TFun",$_.__params__ = ["args","ret"],$_)
-	,TAnonymous: ($_=function(a) { return {_hx_index:5,a:a,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TAnonymous",$_.__params__ = ["a"],$_)
-	,TDynamic: ($_=function(t) { return {_hx_index:6,t:t,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TDynamic",$_.__params__ = ["t"],$_)
-	,TLazy: ($_=function(f) { return {_hx_index:7,f:f,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TLazy",$_.__params__ = ["f"],$_)
-	,TAbstract: ($_=function(t,params) { return {_hx_index:8,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr}; },$_._hx_name="TAbstract",$_.__params__ = ["t","params"],$_)
-};
-haxe_macro_Type.__constructs__ = [haxe_macro_Type.TMono,haxe_macro_Type.TEnum,haxe_macro_Type.TInst,haxe_macro_Type.TType,haxe_macro_Type.TFun,haxe_macro_Type.TAnonymous,haxe_macro_Type.TDynamic,haxe_macro_Type.TLazy,haxe_macro_Type.TAbstract];
-haxe_macro_Type.__empty_constructs__ = [];
-var haxe_macro_AnonStatus = $hxEnums["haxe.macro.AnonStatus"] = { __ename__:"haxe.macro.AnonStatus",__constructs__:null
-	,AClosed: {_hx_name:"AClosed",_hx_index:0,__enum__:"haxe.macro.AnonStatus",toString:$estr}
-	,AOpened: {_hx_name:"AOpened",_hx_index:1,__enum__:"haxe.macro.AnonStatus",toString:$estr}
-	,AConst: {_hx_name:"AConst",_hx_index:2,__enum__:"haxe.macro.AnonStatus",toString:$estr}
-	,AExtend: ($_=function(tl) { return {_hx_index:3,tl:tl,__enum__:"haxe.macro.AnonStatus",toString:$estr}; },$_._hx_name="AExtend",$_.__params__ = ["tl"],$_)
-	,AClassStatics: ($_=function(t) { return {_hx_index:4,t:t,__enum__:"haxe.macro.AnonStatus",toString:$estr}; },$_._hx_name="AClassStatics",$_.__params__ = ["t"],$_)
-	,AEnumStatics: ($_=function(t) { return {_hx_index:5,t:t,__enum__:"haxe.macro.AnonStatus",toString:$estr}; },$_._hx_name="AEnumStatics",$_.__params__ = ["t"],$_)
-	,AAbstractStatics: ($_=function(t) { return {_hx_index:6,t:t,__enum__:"haxe.macro.AnonStatus",toString:$estr}; },$_._hx_name="AAbstractStatics",$_.__params__ = ["t"],$_)
-};
-haxe_macro_AnonStatus.__constructs__ = [haxe_macro_AnonStatus.AClosed,haxe_macro_AnonStatus.AOpened,haxe_macro_AnonStatus.AConst,haxe_macro_AnonStatus.AExtend,haxe_macro_AnonStatus.AClassStatics,haxe_macro_AnonStatus.AEnumStatics,haxe_macro_AnonStatus.AAbstractStatics];
-haxe_macro_AnonStatus.__empty_constructs__ = [haxe_macro_AnonStatus.AClosed,haxe_macro_AnonStatus.AOpened,haxe_macro_AnonStatus.AConst];
-var haxe_macro_ClassKind = $hxEnums["haxe.macro.ClassKind"] = { __ename__:"haxe.macro.ClassKind",__constructs__:null
-	,KNormal: {_hx_name:"KNormal",_hx_index:0,__enum__:"haxe.macro.ClassKind",toString:$estr}
-	,KTypeParameter: ($_=function(constraints) { return {_hx_index:1,constraints:constraints,__enum__:"haxe.macro.ClassKind",toString:$estr}; },$_._hx_name="KTypeParameter",$_.__params__ = ["constraints"],$_)
-	,KModuleFields: ($_=function(module) { return {_hx_index:2,module:module,__enum__:"haxe.macro.ClassKind",toString:$estr}; },$_._hx_name="KModuleFields",$_.__params__ = ["module"],$_)
-	,KExpr: ($_=function(expr) { return {_hx_index:3,expr:expr,__enum__:"haxe.macro.ClassKind",toString:$estr}; },$_._hx_name="KExpr",$_.__params__ = ["expr"],$_)
-	,KGeneric: {_hx_name:"KGeneric",_hx_index:4,__enum__:"haxe.macro.ClassKind",toString:$estr}
-	,KGenericInstance: ($_=function(cl,params) { return {_hx_index:5,cl:cl,params:params,__enum__:"haxe.macro.ClassKind",toString:$estr}; },$_._hx_name="KGenericInstance",$_.__params__ = ["cl","params"],$_)
-	,KMacroType: {_hx_name:"KMacroType",_hx_index:6,__enum__:"haxe.macro.ClassKind",toString:$estr}
-	,KAbstractImpl: ($_=function(a) { return {_hx_index:7,a:a,__enum__:"haxe.macro.ClassKind",toString:$estr}; },$_._hx_name="KAbstractImpl",$_.__params__ = ["a"],$_)
-	,KGenericBuild: {_hx_name:"KGenericBuild",_hx_index:8,__enum__:"haxe.macro.ClassKind",toString:$estr}
-};
-haxe_macro_ClassKind.__constructs__ = [haxe_macro_ClassKind.KNormal,haxe_macro_ClassKind.KTypeParameter,haxe_macro_ClassKind.KModuleFields,haxe_macro_ClassKind.KExpr,haxe_macro_ClassKind.KGeneric,haxe_macro_ClassKind.KGenericInstance,haxe_macro_ClassKind.KMacroType,haxe_macro_ClassKind.KAbstractImpl,haxe_macro_ClassKind.KGenericBuild];
-haxe_macro_ClassKind.__empty_constructs__ = [haxe_macro_ClassKind.KNormal,haxe_macro_ClassKind.KGeneric,haxe_macro_ClassKind.KMacroType,haxe_macro_ClassKind.KGenericBuild];
-var haxe_macro_FieldKind = $hxEnums["haxe.macro.FieldKind"] = { __ename__:"haxe.macro.FieldKind",__constructs__:null
-	,FVar: ($_=function(read,write) { return {_hx_index:0,read:read,write:write,__enum__:"haxe.macro.FieldKind",toString:$estr}; },$_._hx_name="FVar",$_.__params__ = ["read","write"],$_)
-	,FMethod: ($_=function(k) { return {_hx_index:1,k:k,__enum__:"haxe.macro.FieldKind",toString:$estr}; },$_._hx_name="FMethod",$_.__params__ = ["k"],$_)
-};
-haxe_macro_FieldKind.__constructs__ = [haxe_macro_FieldKind.FVar,haxe_macro_FieldKind.FMethod];
-haxe_macro_FieldKind.__empty_constructs__ = [];
-var haxe_macro_VarAccess = $hxEnums["haxe.macro.VarAccess"] = { __ename__:"haxe.macro.VarAccess",__constructs__:null
-	,AccNormal: {_hx_name:"AccNormal",_hx_index:0,__enum__:"haxe.macro.VarAccess",toString:$estr}
-	,AccNo: {_hx_name:"AccNo",_hx_index:1,__enum__:"haxe.macro.VarAccess",toString:$estr}
-	,AccNever: {_hx_name:"AccNever",_hx_index:2,__enum__:"haxe.macro.VarAccess",toString:$estr}
-	,AccResolve: {_hx_name:"AccResolve",_hx_index:3,__enum__:"haxe.macro.VarAccess",toString:$estr}
-	,AccCall: {_hx_name:"AccCall",_hx_index:4,__enum__:"haxe.macro.VarAccess",toString:$estr}
-	,AccInline: {_hx_name:"AccInline",_hx_index:5,__enum__:"haxe.macro.VarAccess",toString:$estr}
-	,AccRequire: ($_=function(r,msg) { return {_hx_index:6,r:r,msg:msg,__enum__:"haxe.macro.VarAccess",toString:$estr}; },$_._hx_name="AccRequire",$_.__params__ = ["r","msg"],$_)
-	,AccCtor: {_hx_name:"AccCtor",_hx_index:7,__enum__:"haxe.macro.VarAccess",toString:$estr}
-};
-haxe_macro_VarAccess.__constructs__ = [haxe_macro_VarAccess.AccNormal,haxe_macro_VarAccess.AccNo,haxe_macro_VarAccess.AccNever,haxe_macro_VarAccess.AccResolve,haxe_macro_VarAccess.AccCall,haxe_macro_VarAccess.AccInline,haxe_macro_VarAccess.AccRequire,haxe_macro_VarAccess.AccCtor];
-haxe_macro_VarAccess.__empty_constructs__ = [haxe_macro_VarAccess.AccNormal,haxe_macro_VarAccess.AccNo,haxe_macro_VarAccess.AccNever,haxe_macro_VarAccess.AccResolve,haxe_macro_VarAccess.AccCall,haxe_macro_VarAccess.AccInline,haxe_macro_VarAccess.AccCtor];
-var haxe_macro_MethodKind = $hxEnums["haxe.macro.MethodKind"] = { __ename__:"haxe.macro.MethodKind",__constructs__:null
-	,MethNormal: {_hx_name:"MethNormal",_hx_index:0,__enum__:"haxe.macro.MethodKind",toString:$estr}
-	,MethInline: {_hx_name:"MethInline",_hx_index:1,__enum__:"haxe.macro.MethodKind",toString:$estr}
-	,MethDynamic: {_hx_name:"MethDynamic",_hx_index:2,__enum__:"haxe.macro.MethodKind",toString:$estr}
-	,MethMacro: {_hx_name:"MethMacro",_hx_index:3,__enum__:"haxe.macro.MethodKind",toString:$estr}
-};
-haxe_macro_MethodKind.__constructs__ = [haxe_macro_MethodKind.MethNormal,haxe_macro_MethodKind.MethInline,haxe_macro_MethodKind.MethDynamic,haxe_macro_MethodKind.MethMacro];
-haxe_macro_MethodKind.__empty_constructs__ = [haxe_macro_MethodKind.MethNormal,haxe_macro_MethodKind.MethInline,haxe_macro_MethodKind.MethDynamic,haxe_macro_MethodKind.MethMacro];
-var haxe_macro_TConstant = $hxEnums["haxe.macro.TConstant"] = { __ename__:"haxe.macro.TConstant",__constructs__:null
-	,TInt: ($_=function(i) { return {_hx_index:0,i:i,__enum__:"haxe.macro.TConstant",toString:$estr}; },$_._hx_name="TInt",$_.__params__ = ["i"],$_)
-	,TFloat: ($_=function(s) { return {_hx_index:1,s:s,__enum__:"haxe.macro.TConstant",toString:$estr}; },$_._hx_name="TFloat",$_.__params__ = ["s"],$_)
-	,TString: ($_=function(s) { return {_hx_index:2,s:s,__enum__:"haxe.macro.TConstant",toString:$estr}; },$_._hx_name="TString",$_.__params__ = ["s"],$_)
-	,TBool: ($_=function(b) { return {_hx_index:3,b:b,__enum__:"haxe.macro.TConstant",toString:$estr}; },$_._hx_name="TBool",$_.__params__ = ["b"],$_)
-	,TNull: {_hx_name:"TNull",_hx_index:4,__enum__:"haxe.macro.TConstant",toString:$estr}
-	,TThis: {_hx_name:"TThis",_hx_index:5,__enum__:"haxe.macro.TConstant",toString:$estr}
-	,TSuper: {_hx_name:"TSuper",_hx_index:6,__enum__:"haxe.macro.TConstant",toString:$estr}
-};
-haxe_macro_TConstant.__constructs__ = [haxe_macro_TConstant.TInt,haxe_macro_TConstant.TFloat,haxe_macro_TConstant.TString,haxe_macro_TConstant.TBool,haxe_macro_TConstant.TNull,haxe_macro_TConstant.TThis,haxe_macro_TConstant.TSuper];
-haxe_macro_TConstant.__empty_constructs__ = [haxe_macro_TConstant.TNull,haxe_macro_TConstant.TThis,haxe_macro_TConstant.TSuper];
-var haxe_macro_ModuleType = $hxEnums["haxe.macro.ModuleType"] = { __ename__:"haxe.macro.ModuleType",__constructs__:null
-	,TClassDecl: ($_=function(c) { return {_hx_index:0,c:c,__enum__:"haxe.macro.ModuleType",toString:$estr}; },$_._hx_name="TClassDecl",$_.__params__ = ["c"],$_)
-	,TEnumDecl: ($_=function(e) { return {_hx_index:1,e:e,__enum__:"haxe.macro.ModuleType",toString:$estr}; },$_._hx_name="TEnumDecl",$_.__params__ = ["e"],$_)
-	,TTypeDecl: ($_=function(t) { return {_hx_index:2,t:t,__enum__:"haxe.macro.ModuleType",toString:$estr}; },$_._hx_name="TTypeDecl",$_.__params__ = ["t"],$_)
-	,TAbstract: ($_=function(a) { return {_hx_index:3,a:a,__enum__:"haxe.macro.ModuleType",toString:$estr}; },$_._hx_name="TAbstract",$_.__params__ = ["a"],$_)
-};
-haxe_macro_ModuleType.__constructs__ = [haxe_macro_ModuleType.TClassDecl,haxe_macro_ModuleType.TEnumDecl,haxe_macro_ModuleType.TTypeDecl,haxe_macro_ModuleType.TAbstract];
-haxe_macro_ModuleType.__empty_constructs__ = [];
-var haxe_macro_FieldAccess = $hxEnums["haxe.macro.FieldAccess"] = { __ename__:"haxe.macro.FieldAccess",__constructs__:null
-	,FInstance: ($_=function(c,params,cf) { return {_hx_index:0,c:c,params:params,cf:cf,__enum__:"haxe.macro.FieldAccess",toString:$estr}; },$_._hx_name="FInstance",$_.__params__ = ["c","params","cf"],$_)
-	,FStatic: ($_=function(c,cf) { return {_hx_index:1,c:c,cf:cf,__enum__:"haxe.macro.FieldAccess",toString:$estr}; },$_._hx_name="FStatic",$_.__params__ = ["c","cf"],$_)
-	,FAnon: ($_=function(cf) { return {_hx_index:2,cf:cf,__enum__:"haxe.macro.FieldAccess",toString:$estr}; },$_._hx_name="FAnon",$_.__params__ = ["cf"],$_)
-	,FDynamic: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"haxe.macro.FieldAccess",toString:$estr}; },$_._hx_name="FDynamic",$_.__params__ = ["s"],$_)
-	,FClosure: ($_=function(c,cf) { return {_hx_index:4,c:c,cf:cf,__enum__:"haxe.macro.FieldAccess",toString:$estr}; },$_._hx_name="FClosure",$_.__params__ = ["c","cf"],$_)
-	,FEnum: ($_=function(e,ef) { return {_hx_index:5,e:e,ef:ef,__enum__:"haxe.macro.FieldAccess",toString:$estr}; },$_._hx_name="FEnum",$_.__params__ = ["e","ef"],$_)
-};
-haxe_macro_FieldAccess.__constructs__ = [haxe_macro_FieldAccess.FInstance,haxe_macro_FieldAccess.FStatic,haxe_macro_FieldAccess.FAnon,haxe_macro_FieldAccess.FDynamic,haxe_macro_FieldAccess.FClosure,haxe_macro_FieldAccess.FEnum];
-haxe_macro_FieldAccess.__empty_constructs__ = [];
-var haxe_macro_TypedExprDef = $hxEnums["haxe.macro.TypedExprDef"] = { __ename__:"haxe.macro.TypedExprDef",__constructs__:null
-	,TConst: ($_=function(c) { return {_hx_index:0,c:c,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TConst",$_.__params__ = ["c"],$_)
-	,TLocal: ($_=function(v) { return {_hx_index:1,v:v,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TLocal",$_.__params__ = ["v"],$_)
-	,TArray: ($_=function(e1,e2) { return {_hx_index:2,e1:e1,e2:e2,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TArray",$_.__params__ = ["e1","e2"],$_)
-	,TBinop: ($_=function(op,e1,e2) { return {_hx_index:3,op:op,e1:e1,e2:e2,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TBinop",$_.__params__ = ["op","e1","e2"],$_)
-	,TField: ($_=function(e,fa) { return {_hx_index:4,e:e,fa:fa,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TField",$_.__params__ = ["e","fa"],$_)
-	,TTypeExpr: ($_=function(m) { return {_hx_index:5,m:m,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TTypeExpr",$_.__params__ = ["m"],$_)
-	,TParenthesis: ($_=function(e) { return {_hx_index:6,e:e,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TParenthesis",$_.__params__ = ["e"],$_)
-	,TObjectDecl: ($_=function(fields) { return {_hx_index:7,fields:fields,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TObjectDecl",$_.__params__ = ["fields"],$_)
-	,TArrayDecl: ($_=function(el) { return {_hx_index:8,el:el,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TArrayDecl",$_.__params__ = ["el"],$_)
-	,TCall: ($_=function(e,el) { return {_hx_index:9,e:e,el:el,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TCall",$_.__params__ = ["e","el"],$_)
-	,TNew: ($_=function(c,params,el) { return {_hx_index:10,c:c,params:params,el:el,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TNew",$_.__params__ = ["c","params","el"],$_)
-	,TUnop: ($_=function(op,postFix,e) { return {_hx_index:11,op:op,postFix:postFix,e:e,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TUnop",$_.__params__ = ["op","postFix","e"],$_)
-	,TFunction: ($_=function(tfunc) { return {_hx_index:12,tfunc:tfunc,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TFunction",$_.__params__ = ["tfunc"],$_)
-	,TVar: ($_=function(v,expr) { return {_hx_index:13,v:v,expr:expr,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TVar",$_.__params__ = ["v","expr"],$_)
-	,TBlock: ($_=function(el) { return {_hx_index:14,el:el,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TBlock",$_.__params__ = ["el"],$_)
-	,TFor: ($_=function(v,e1,e2) { return {_hx_index:15,v:v,e1:e1,e2:e2,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TFor",$_.__params__ = ["v","e1","e2"],$_)
-	,TIf: ($_=function(econd,eif,eelse) { return {_hx_index:16,econd:econd,eif:eif,eelse:eelse,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TIf",$_.__params__ = ["econd","eif","eelse"],$_)
-	,TWhile: ($_=function(econd,e,normalWhile) { return {_hx_index:17,econd:econd,e:e,normalWhile:normalWhile,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TWhile",$_.__params__ = ["econd","e","normalWhile"],$_)
-	,TSwitch: ($_=function(e,cases,edef) { return {_hx_index:18,e:e,cases:cases,edef:edef,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TSwitch",$_.__params__ = ["e","cases","edef"],$_)
-	,TTry: ($_=function(e,catches) { return {_hx_index:19,e:e,catches:catches,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TTry",$_.__params__ = ["e","catches"],$_)
-	,TReturn: ($_=function(e) { return {_hx_index:20,e:e,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TReturn",$_.__params__ = ["e"],$_)
-	,TBreak: {_hx_name:"TBreak",_hx_index:21,__enum__:"haxe.macro.TypedExprDef",toString:$estr}
-	,TContinue: {_hx_name:"TContinue",_hx_index:22,__enum__:"haxe.macro.TypedExprDef",toString:$estr}
-	,TThrow: ($_=function(e) { return {_hx_index:23,e:e,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TThrow",$_.__params__ = ["e"],$_)
-	,TCast: ($_=function(e,m) { return {_hx_index:24,e:e,m:m,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TCast",$_.__params__ = ["e","m"],$_)
-	,TMeta: ($_=function(m,e1) { return {_hx_index:25,m:m,e1:e1,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TMeta",$_.__params__ = ["m","e1"],$_)
-	,TEnumParameter: ($_=function(e1,ef,index) { return {_hx_index:26,e1:e1,ef:ef,index:index,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TEnumParameter",$_.__params__ = ["e1","ef","index"],$_)
-	,TEnumIndex: ($_=function(e1) { return {_hx_index:27,e1:e1,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TEnumIndex",$_.__params__ = ["e1"],$_)
-	,TIdent: ($_=function(s) { return {_hx_index:28,s:s,__enum__:"haxe.macro.TypedExprDef",toString:$estr}; },$_._hx_name="TIdent",$_.__params__ = ["s"],$_)
-};
-haxe_macro_TypedExprDef.__constructs__ = [haxe_macro_TypedExprDef.TConst,haxe_macro_TypedExprDef.TLocal,haxe_macro_TypedExprDef.TArray,haxe_macro_TypedExprDef.TBinop,haxe_macro_TypedExprDef.TField,haxe_macro_TypedExprDef.TTypeExpr,haxe_macro_TypedExprDef.TParenthesis,haxe_macro_TypedExprDef.TObjectDecl,haxe_macro_TypedExprDef.TArrayDecl,haxe_macro_TypedExprDef.TCall,haxe_macro_TypedExprDef.TNew,haxe_macro_TypedExprDef.TUnop,haxe_macro_TypedExprDef.TFunction,haxe_macro_TypedExprDef.TVar,haxe_macro_TypedExprDef.TBlock,haxe_macro_TypedExprDef.TFor,haxe_macro_TypedExprDef.TIf,haxe_macro_TypedExprDef.TWhile,haxe_macro_TypedExprDef.TSwitch,haxe_macro_TypedExprDef.TTry,haxe_macro_TypedExprDef.TReturn,haxe_macro_TypedExprDef.TBreak,haxe_macro_TypedExprDef.TContinue,haxe_macro_TypedExprDef.TThrow,haxe_macro_TypedExprDef.TCast,haxe_macro_TypedExprDef.TMeta,haxe_macro_TypedExprDef.TEnumParameter,haxe_macro_TypedExprDef.TEnumIndex,haxe_macro_TypedExprDef.TIdent];
-haxe_macro_TypedExprDef.__empty_constructs__ = [haxe_macro_TypedExprDef.TBreak,haxe_macro_TypedExprDef.TContinue];
 var js_Boot = function() { };
 $hxClasses["js.Boot"] = js_Boot;
 js_Boot.__name__ = "js.Boot";
@@ -11949,7 +11606,6 @@ var js_node_events_EventEmitter = require("events").EventEmitter;
 var js_node_Stream = require("stream");
 var js_node_Timers = require("timers");
 var js_node_Tls = require("tls");
-var js_node_Url = require("url");
 var js_node_buffer_Buffer = require("buffer").Buffer;
 var js_node_buffer__$Buffer_Helper = function() { };
 $hxClasses["js.node.buffer._Buffer.Helper"] = js_node_buffer__$Buffer_Helper;
@@ -12459,7 +12115,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "162395145352904705";
+Main.guild_id = "416069724158427137";
 CommandPermission.admin = 8;
 CommandPermission.supermod = 4;
 CommandPermission.everyone = 1024 | 2048;
