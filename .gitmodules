@@ -13,6 +13,6 @@
 [submodule ".haxelib/bits/git"]
 	path = .haxelib/bits/git
 	url = https://github.com/RealyUniqueName/Bits
-[submodule ".haxelib/jsimport/jsimport"]
-	path = .haxelib/jsimport/jsimport
-	url = https://github.com/haxiomic/jsImport
+[submodule ".haxelib/discordjs/discordjs"]
+	path = .haxelib/discordjs/discordjs
+	url = https://github.com/Jarrio/discordjs
