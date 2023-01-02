@@ -555,6 +555,10 @@
 						"value": "haxeui"
 					},
 					{
+						"name": "hxgodot",
+						"value": "godot"
+					},
+					{
 						"name": "ceramic",
 						"value": "ceramic"
 					},
@@ -655,6 +659,101 @@
 				"type": "string",
 				"required": true,
 				"autocomplete": true
+			}
+		]
+	},
+	{
+		"name": "snippet",
+		"is_public": true,
+		"permissions": "admin",
+		"description": "Get or create a reference to a code snippet/link/project/repo",
+		"params": [
+			{
+				"name": "get",
+				"type": "subcommand",
+				"description": "Get a snippet",
+				"params":[
+					{
+						"name": "identifier",
+						"description": "The string or id of the snippet you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					}
+				]
+			},
+			{
+				"name": "list",
+				"type": "subcommand",
+				"description": "List of available quotes",
+				"params":[
+					{
+						"name": "user",
+						"description": "Get all quotes by a particular user",
+						"type": "user",
+						"required": false
+					}
+				]
+			},
+			{
+				"name": "create",
+				"type": "subcommand",
+				"description": "Create a snippet",
+				"params":[
+					{
+						"name": "title",
+						"description": "The title of the snippet/project/code",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "description",
+						"description": "A description for the content being stored",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "url",
+						"description": "The source of the content",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "tags",
+						"description": "A space separated list of tags",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					}
+				]
+			},
+			{
+				"name": "edit",
+				"type": "subcommand",
+				"description": "edit a snippet",
+				"params":[
+					{
+						"name": "identifier",
+						"description": "The string or id of the quote you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete":true
+					}
+				]
+			},
+			{
+				"name": "delete",
+				"type": "subcommand",
+				"description": "Recall a quote",
+				"params":[
+					{
+						"name": "identifier",
+						"description": "The string or id of the quote you wish to grab",
+						"type": "string",
+						"required": true,
+						"autocomplete":true
+					}
+				]
 			}
 		]
 	},
