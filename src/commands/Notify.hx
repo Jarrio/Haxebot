@@ -24,6 +24,7 @@ class Notify extends CommandBase {
 			// #devserver notes test
 			case 'dvorak': '903006951896666153';
 			case 'jam': '1058843687687295066';
+			case 'godot': '1059447670344794142';
 			default: 'err';
 		}
 	}
