@@ -645,7 +645,7 @@ Main.command_file = null;
 Main.universe = null;
 Main.get_discord = function() {
 	var config = null;
-	config = Main.keys.discord_test;
+	config = Main.keys.discord_live;
 	return config;
 };
 Main.token = function(rest) {
@@ -658,10 +658,10 @@ Main.start = function() {
 	var vec = this1;
 	var this1 = new Array(2);
 	var this11 = new Array(2);
-	vec[0] = new ecs_Phase(true,"testing",this1,this11);
+	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(21);
 	var this11 = new Array(21);
-	vec[1] = new ecs_Phase(false,"main",this1,this11);
+	vec[1] = new ecs_Phase(true,"main",this1,this11);
 	var entities = new ecs_core_EntityManager(1000);
 	var this1 = new Array(7);
 	var vec1 = this1;
@@ -884,7 +884,6 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 143, className : "Main", methodName : "start"});
 			}
-			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 147, className : "Main", methodName : "start"});
 		},Util_err);
 	});
 	Main.client.on("guildMemberAdd",function(member) {
@@ -998,7 +997,7 @@ Main.start = function() {
 			}
 		}
 		var check = false;
-		check = channel.id == "597067735771381771";
+		check = channel.type == 11 && channel.parentId == "1019922106370232360";
 		if(check) {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
 				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 194, className : "Main", methodName : "start"});
@@ -3454,15 +3453,15 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "dvorak":
 			return "903006951896666153";
 		case "events":
-			return "738508312382799874";
+			return "1054432874473996408";
 		case "flixel":
 			return "761714697468248125";
+		case "godot":
+			return "1059447670344794142";
 		case "haxeui":
 			return "761714853403820052";
 		case "heaps":
 			return "761714775902126080";
-		case "hxgodot":
-			return "1059447670344794142";
 		case "jam":
 			return "1058843687687295066";
 		case "kha":
@@ -4957,7 +4956,7 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_React
 });
 var commands_Reminder = function(_universe) {
-	this.bot_channel = "597067735771381771";
+	this.bot_channel = "663246792426782730";
 	this.sent = [];
 	this.reminders = [];
 	this.checking = false;
@@ -5004,7 +5003,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 			}
 			var obj = { sent : false, thread_reply : _g1, thread_id : thread_id, id : "", duration : commands_types_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
-			var duration = commands_types_Duration.fromString("0min");
+			var duration = commands_types_Duration.fromString("4mins");
 			if(obj.duration == 0.) {
 				interaction.reply("Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)");
 				return;
@@ -5305,7 +5304,15 @@ commands_Run.prototype = $extend(ecs_System.prototype,{
 	,checked: null
 	,timeout: null
 	,update: function(_) {
+		var _gthis = this;
 		if(!Main.connected) {
+			return;
+		}
+		if(this.channel == null && !this.checked) {
+			this.checked = true;
+			Main.client.channels.fetch("663246792426782730").then(function(channel) {
+				return _gthis.channel = channel;
+			});
 			return;
 		}
 		var _this = this.code_messages;
@@ -6087,7 +6094,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Showcase = function(_) {
 	this.checking = false;
-	this.channel_id = "597067735771381771";
+	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
 	this.modal = this.universe.families.get(5);
 	this.messages = this.universe.families.get(2);
@@ -6156,7 +6163,12 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(command1 != "showcase" && !this.channel.isThread()) {
 				return;
 			}
-			var thread = [js_Boot.__cast(message[0].channel , discord_$js_TextChannel)];
+			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
+			if(thread[0].id != "1024905470621798410") {
+				if(thread[0].ownerId != message[0].author.id) {
+					return;
+				}
+			}
 			var arr = [[]];
 			var content1 = [StringTools.trim(message[0].content.substring(10))];
 			var jsIterator = message[0].attachments.values();
@@ -6794,8 +6806,8 @@ var commands_Twitter = function(_universe) {
 	this.twitter_links = [];
 	var this1 = new Array(6);
 	this.async_check = this1;
-	this.channel_id = "1028078544867311727";
-	this.ping_rate = 60000;
+	this.channel_id = "1030188275341729882";
+	this.ping_rate = 3600000;
 	this.tweets = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -12895,7 +12907,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 CommandPermission.admin = 8;
 CommandPermission.supermod = 4;
 CommandPermission.everyone = 1024 | 2048;
