@@ -10,6 +10,7 @@ import components.Command;
 import ecs.System;
 
 abstract class CommandDbBase extends System {
+	var has_subcommands:Bool = false;
 	var db(get, never):Firestore;
 
 	@:fastFamily var commands:{command:Command, interaction:BaseCommandInteraction};
@@ -19,9 +20,16 @@ abstract class CommandDbBase extends System {
 			return;
 		}
 		iterate(commands, entity -> {
-			if (command.name == this.name) {
-				this.run(command, interaction);
-				this.universe.deleteEntity(entity);
+			if (this.has_subcommands) {
+				if (command.name.indexOf(this.name, 0) != -1) {
+					this.run(command, interaction);
+					this.universe.deleteEntity(entity);
+				}
+			} else {
+				if (command.name == this.name) {
+					this.run(command, interaction);
+					this.universe.deleteEntity(entity);
+				}
 			}
 		});
 	}

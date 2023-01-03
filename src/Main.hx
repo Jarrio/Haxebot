@@ -1,3 +1,4 @@
+import components.TextCommand;
 import discord_builder.SlashCommandSubcommandBuilder;
 import discord_js.GuildMember;
 import discord_js.PermissionFlags;
@@ -35,6 +36,7 @@ import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
 import commands.AutoRole;
 import commands.mod.Social;
+import commands.mod.Mention;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -83,6 +85,9 @@ class Main {
 					enabled: #if block true #else false #end,
 					systems: [
 						Quote,
+						Snippet,
+						Mention,
+						TextMention
 					],
 				},
 				{
@@ -92,6 +97,8 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						Mention,
+						TextMention,
 						Reminder,
 						Social,
 						AutoRole,
@@ -164,6 +171,16 @@ class Main {
 					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
 				}
 				return;
+			}
+
+			var match = message.content.split(' ')[0];
+			if (match != null && match.charAt(0) == '!') {
+				for (command in TextCommand.list()) {
+					if (match == command) {
+						universe.setComponents(universe.createEntity(), command, message);
+						break;
+					}
+				}
 			}
 
 			if (channel.type == GUILD_TEXT) {

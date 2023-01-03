@@ -1,5 +1,6 @@
 package components;
 
+import discord_js.Role;
 import commands.types.ActionList;
 import commands.mod.Social.SocialPlatform;
 import commands.Poll.PollTime;
@@ -15,7 +16,9 @@ enum CommandOptions {
 	Hi;
 	Archive;
 	Snippet(title:String, tags:String);
-	SnippetAdd(title:String, description:String, url:String, tags:String);
+	Snippetcreate(title:String, description:String, url:String, tags:String);
+
+	
 	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);
@@ -40,5 +43,6 @@ enum CommandOptions {
 	Quotedelete(name:String);
 	Quoteedit(name:String);
 	Quotecreate(name:String);
+	Mention(user:User, role:Role);
 	Showcase;
 }

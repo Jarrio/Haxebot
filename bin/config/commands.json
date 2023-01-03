@@ -832,5 +832,25 @@
 				]
 			}
 		]
+	},
+	{
+		"name": "mention",
+		"is_public": true,
+		"permissions": "supermod",
+		"description": "Allow a user to mention a role through the `!mention` text command",
+		"params": [
+			{
+				"name": "user",
+				"description": "The user to add the permission to",
+				"type": "user",
+				"required": true
+			},					
+			{
+				"name": "role",
+				"description": "The role that will be pingable by the user",
+				"type": "role",
+				"required": true
+			}
+		]
 	}
 ]
