@@ -10,10 +10,14 @@ import systems.CommandDbBase;
 
 class Reminder extends CommandDbBase {
 	var channel:TextChannel;
+	var channels:Map<String, TextChannel> = [];
 	var checking = false;
 	var reminders:Array<TReminder> = [];
 	var sent:Array<TReminder> = [];
 	final bot_channel = #if block '597067735771381771' #else '663246792426782730' #end;
+	final casual_chat = '';
+	
+
 
 	override function onEnabled() {
 		Firestore.onSnapshot(collection(this.db, 'discord/reminders/entries'), function(resp) {
@@ -28,6 +32,7 @@ class Reminder extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Reminder(content, when, personal, thread_reply):
+				
 				if (personal == null) {
 					personal = false;
 				}
@@ -41,8 +46,14 @@ class Reminder extends CommandDbBase {
 						return;
 					}
 				}
+				var channel_id = null;
+				var category = interaction.channel.parent.name;
+				if (category.toLowerCase() == 'offtopic') {
+					channel_id = interaction.channelId;
+				}
 
 				var obj:TReminder = {
+					channel_id: channel_id,
 					sent: false,
 					thread_reply: thread_reply,
 					thread_id: thread_id,
@@ -53,8 +64,10 @@ class Reminder extends CommandDbBase {
 					content: content,
 					personal: personal
 				}
+
 				var min = #if block "0min" #else "4mins" #end;
 				var duration = Duration.fromString(min);
+
 				if (obj.duration == 0.) {
 					interaction.reply('Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)');
 					return;
@@ -62,7 +75,7 @@ class Reminder extends CommandDbBase {
 
 				if (obj.duration <= duration) {
 					interaction.reply('Please set a reminder that is at least 5mins');
-					return;
+					return; // 1060187497398812734
 				}
 
 				if (obj.duration >= Duration.fromString('366days')) {
@@ -93,12 +106,13 @@ class Reminder extends CommandDbBase {
 			checking = true;
 			Main.client.channels.fetch(bot_channel).then(function(succ) {
 				this.channel = succ;
+				this.channels.set(succ.id, succ);
 				checking = false;
 				trace('Found reminder channel');
 			}, err);
 		}
 
-		if (this.channel == null) {
+		if (this.channel == null || this.channels[bot_channel] == null) {
 			return;
 		}
 
@@ -106,6 +120,11 @@ class Reminder extends CommandDbBase {
 			if (reminder.sent) {
 				continue;
 			}
+			
+			if (reminder.channel_id != null && !this.channels.exists(reminder.channel_id)) {
+				this.getChannel(reminder.channel_id);
+			}
+
 			var post_time = reminder.timestamp + reminder.duration;
 			if (Date.now().getTime() < post_time) {
 				continue;
@@ -144,7 +163,12 @@ class Reminder extends CommandDbBase {
 					});
 				});
 			} else {
-				this.channel.send({content: content, allowedMentions: parse}).then(null, function(err) {
+				var channel = this.channel;
+				if (reminder.channel_id != null && this.channels.exists(reminder.channel_id)) {
+					channel = this.channels.get(reminder.channel_id);
+				}
+
+				channel.send({content: content, allowedMentions: parse}).then(null, function(err) {
 					trace(err);
 					reminder.sent = false;
 					reminder.duration += hour;
@@ -162,6 +186,17 @@ class Reminder extends CommandDbBase {
 		}
 	}
 
+	function getChannel(channel_id:String) {
+		if (!this.checking && this.channels.get(channel_id) == null) {
+			this.checking = true;
+			Main.client.channels.fetch(channel_id).then(function(channel) {
+				this.channels.set(channel.id, channel);
+				this.checking = false;
+				trace('Found ${channel.name} channel');
+			}, err);
+		}
+	}
+
 	function get_name():String {
 		return 'reminder';
 	}
@@ -171,6 +206,7 @@ typedef TReminder = {
 	var sent:Bool;
 	var thread_reply:Bool;
 	var id:String;
+	var channel_id:String;
 	var thread_id:String;
 	var duration:Duration;
 	var timestamp:Float;

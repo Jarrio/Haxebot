@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(4);
-	var this11 = new Array(4);
+	var this1 = new Array(5);
+	var this11 = new Array(5);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(23);
 	var this11 = new Array(23);
@@ -797,6 +797,10 @@ Main.start = function() {
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
+	var s = new commands_Reminder(u);
+	phase.systems[4] = s;
+	phase.enabledSystems[4] = true;
+	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_mod_Mention(u);
 	phase.systems[0] = s;
@@ -902,7 +906,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 140, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 141, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -913,12 +917,12 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 149, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 150, className : "Main", methodName : "start"});
 			}
 		},Util_err);
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 159, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 160, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,2,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,3,member);
@@ -1075,7 +1079,7 @@ Main.start = function() {
 		check = channel.type == 11 && channel.parentId == "1019922106370232360";
 		if(check) {
 			if(StringTools.startsWith(message.content,"[showcase]")) {
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 210, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 211, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,2,"showcase");
 				Main.universe.components.set(_ecsTmpEntity,4,message);
@@ -1128,8 +1132,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 218, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 219, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 219, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 220, className : "Main", methodName : "start"});
 	});
 	Main.client.on("interactionCreate",function(interaction) {
 		if(interaction.isButton()) {
@@ -1242,7 +1246,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 240, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 241, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1342,7 +1346,7 @@ Main.createCommand = function(interaction) {
 				}
 			}
 			if(subcommand != null) {
-				enum_id += subcommand;
+				enum_id += subcommand.charAt(0).toUpperCase() + subcommand.substring(1);
 			}
 			command.content = Type.createEnum(components_CommandOptions,enum_id,params);
 			break;
@@ -1395,7 +1399,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 374, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 375, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1404,14 +1408,14 @@ Main.main = function() {
 		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 383, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 384, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 392, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 393, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -5039,10 +5043,12 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_React
 });
 var commands_Reminder = function(_universe) {
+	this.casual_chat = "";
 	this.bot_channel = "663246792426782730";
 	this.sent = [];
 	this.reminders = [];
 	this.checking = false;
+	this.channels = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
 };
 $hxClasses["commands.Reminder"] = commands_Reminder;
@@ -5050,10 +5056,12 @@ commands_Reminder.__name__ = "commands.Reminder";
 commands_Reminder.__super__ = systems_CommandDbBase;
 commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 	channel: null
+	,channels: null
 	,checking: null
 	,reminders: null
 	,sent: null
 	,bot_channel: null
+	,casual_chat: null
 	,onEnabled: function() {
 		var _gthis = this;
 		firebase_web_firestore_Firestore.onSnapshot(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries"),function(resp) {
@@ -5085,7 +5093,12 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return;
 				}
 			}
-			var obj = { sent : false, thread_reply : _g1, thread_id : thread_id, id : "", duration : commands_types_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
+			var channel_id = null;
+			var category = interaction.channel.parent.name;
+			if(category.toLowerCase() == "offtopic") {
+				channel_id = interaction.channelId;
+			}
+			var obj = { channel_id : channel_id, sent : false, thread_reply : _g1, thread_id : thread_id, id : "", duration : commands_types_Duration.fromString(_g.when), timestamp : new Date().getTime(), author : interaction.user.id, content : _g.content, personal : personal};
 			var duration = commands_types_Duration.fromString("4mins");
 			if(obj.duration == 0.) {
 				interaction.reply("Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)");
@@ -5105,7 +5118,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				interaction.reply({ ephemeral : personal, content : "Your reminder has been set for <t:" + post_time + ">"}).then(function(msg) {
 					obj.id = doc.id;
 					firebase_web_firestore_Firestore.updateDoc(doc,obj).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 82, className : "commands.Reminder", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 95, className : "commands.Reminder", methodName : "run"});
 					});
 				},Util_err);
 			},Util_err);
@@ -5118,11 +5131,12 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			this.checking = true;
 			Main.client.channels.fetch(this.bot_channel).then(function(succ) {
 				_gthis.channel = succ;
+				_gthis.channels.h[succ.id] = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 97, className : "commands.Reminder", methodName : "update"});
+				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 111, className : "commands.Reminder", methodName : "update"});
 			},Util_err);
 		}
-		if(this.channel == null) {
+		if(this.channel == null || this.channels.h[this.bot_channel] == null) {
 			return;
 		}
 		var _g = 0;
@@ -5132,6 +5146,9 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			++_g;
 			if(reminder[0].sent) {
 				continue;
+			}
+			if(reminder[0].channel_id != null && !Object.prototype.hasOwnProperty.call(this.channels.h,reminder[0].channel_id)) {
+				this.getChannel(reminder[0].channel_id);
 			}
 			var post_time = reminder[0].timestamp + reminder[0].duration;
 			if(new Date().getTime() < post_time) {
@@ -5150,7 +5167,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(channel) {
 						channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 125, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 144, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += commands_types_Duration.fromString("3hrs");
 								_gthis.channel.send({ content : "<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.", allowedMentions : parse[0]});
@@ -5163,7 +5180,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(user) {
 						user.send(content[0]).then(null,(function(parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 137, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 156, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += 86400000;
 								_gthis.channel.send({ content : "<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?", allowedMentions : parse[0]});
@@ -5172,9 +5189,13 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					};
 				})(content,parse,reminder));
 			} else {
-				this.channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(reminder) {
+				var channel = this.channel;
+				if(reminder[0].channel_id != null && Object.prototype.hasOwnProperty.call(this.channels.h,reminder[0].channel_id)) {
+					channel = this.channels.h[reminder[0].channel_id];
+				}
+				channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 148, className : "commands.Reminder", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 172, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
 						reminder[0].duration += 3600000;
 					};
@@ -5192,6 +5213,17 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries/" + msg.id);
 			firebase_web_firestore_Firestore.deleteDoc(doc).then(null,Util_err);
 			HxOverrides.remove(this.sent,msg);
+		}
+	}
+	,getChannel: function(channel_id) {
+		var _gthis = this;
+		if(!this.checking && this.channels.h[channel_id] == null) {
+			this.checking = true;
+			Main.client.channels.fetch(channel_id).then(function(channel) {
+				_gthis.channels.h[channel.id] = channel;
+				_gthis.checking = false;
+				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 195, className : "commands.Reminder", methodName : "getChannel"});
+			},Util_err);
 		}
 	}
 	,get_name: function() {
@@ -6327,6 +6359,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Showcase
 });
 var commands_Snippet = function(_universe) {
+	this.tags = [];
 	this.sent = [];
 	systems_CommandDbBase.call(this,_universe);
 };
@@ -6335,28 +6368,94 @@ commands_Snippet.__name__ = "commands.Snippet";
 commands_Snippet.__super__ = systems_CommandDbBase;
 commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 	sent: null
+	,tags: null
 	,onEnabled: function() {
+		var _gthis = this;
 		this.has_subcommands = true;
-		firebase_web_firestore_Firestore.onSnapshot(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),function(resp) {
+		firebase_web_firestore_Firestore.onSnapshot(firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets"),function(resp) {
 			var arr = [];
 			var _g = 0;
-			var _g1 = resp.docs;
+			var _g1 = resp.data().tags;
 			while(_g < _g1.length) {
-				var item = _g1[_g];
+				var tag = _g1[_g];
 				++_g;
-				arr.push(item.data());
+				arr.push({ name : tag, value : tag});
 			}
+			_gthis.tags = arr;
+			_gthis.tags.sort(function(a,b) {
+				if(HxOverrides.cca(a.name,0) > HxOverrides.cca(b.name,0)) {
+					return 1;
+				}
+				if(HxOverrides.cca(a.name,0) < HxOverrides.cca(b.name,0)) {
+					return -1;
+				}
+				return 0;
+			});
 		});
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
 		if(_g._hx_index == 3) {
-			var _g1 = _g.tags;
+			var _g1 = _g.taga;
+			var _g2 = _g.tagb;
+			var _g3 = _g.tagc;
+			var _g4 = _g.tagd;
+			var _g5 = _g.tage;
 			var title = _g.title;
 			var description = _g.description;
+			var ac = _g1;
 			var obj = { id : -1, submitted_by : interaction.user.id, timestamp : new Date().getTime(), title : title, description : description, url : _g.url, tags : [_g1]};
-			if(_g1.indexOf(" ") != -1) {
-				obj.tags = _g1.split(" ");
+			if(_g2 != null) {
+				ac = _g2;
+				obj.tags.push(_g2);
+			}
+			if(_g3 != null) {
+				ac = _g3;
+				obj.tags.push(_g3);
+			}
+			if(_g4 != null) {
+				ac = _g4;
+				obj.tags.push(_g4);
+			}
+			if(_g5 != null) {
+				ac = _g5;
+				obj.tags.push(_g5);
+			}
+			if(interaction.isAutocomplete()) {
+				var results = [];
+				var algo = externs_FuzzySort.go(ac,this.tags,{ key : "name", limit : 20, threshold : -10000});
+				var _g = 0;
+				while(_g < algo.length) {
+					var a = algo[_g];
+					++_g;
+					results.push(a.obj);
+				}
+				if(results.length == 0) {
+					results = this.tags;
+				}
+				interaction.respond(results);
+				return;
+			}
+			var _g = 0;
+			var _g1 = obj.tags;
+			while(_g < _g1.length) {
+				var tag = _g1[_g];
+				++_g;
+				var found = false;
+				var _g2 = 0;
+				var _g3 = this.tags;
+				while(_g2 < _g3.length) {
+					var v = _g3[_g2];
+					++_g2;
+					if(tag == v.name) {
+						found = true;
+						break;
+					}
+				}
+				if(!found) {
+					interaction.reply("The tag __" + tag + "__ is not available as an option currently.");
+					return;
+				}
 			}
 			var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets");
 			firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries");
@@ -6374,14 +6473,6 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				obj.id = value.id;
 				obj.tags.splice(0,0,"" + value.id);
 				firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),obj).then(function(_) {
-					if(interaction.isAutocomplete()) {
-						var arr = [];
-						arr.push({ name : "Please do not select any of these options, they are instructional only", value : "-1"});
-						arr.push({ name : "Your tag is invalid.", value : "-1"});
-						arr.push({ name : "The following tags are valid: flixel, haxeui, haxe", value : "-1"});
-						interaction.respond(arr);
-						return;
-					}
 					interaction.reply("*Snippet #" + value.id + " added!*\ntitle: " + title + "\n" + description + "\n");
 				},Util_err);
 			},Util_err);
@@ -7399,7 +7490,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
 	,Snippet: ($_=function(title,tags) { return {_hx_index:2,title:title,tags:tags,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Snippet",$_.__params__ = ["title","tags"],$_)
-	,Snippetcreate: ($_=function(title,description,url,tags) { return {_hx_index:3,title:title,description:description,url:url,tags:tags,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Snippetcreate",$_.__params__ = ["title","description","url","tags"],$_)
+	,SnippetAdd: ($_=function(title,description,url,taga,tagb,tagc,tagd,tage) { return {_hx_index:3,title:title,description:description,url:url,taga:taga,tagb:tagb,tagc:tagc,tagd:tagd,tage:tage,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["title","description","url","taga","tagb","tagc","tagd","tage"],$_)
 	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:4,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
 	,Social: ($_=function(tag,user) { return {_hx_index:5,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
 	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:6,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
@@ -7418,15 +7509,15 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Code: ($_=function(code) { return {_hx_index:19,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
 	,Help: ($_=function(category) { return {_hx_index:20,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
 	,Haxelib: ($_=function(command) { return {_hx_index:21,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
-	,Quotelist: ($_=function(user) { return {_hx_index:22,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quotelist",$_.__params__ = ["user"],$_)
-	,Quoteget: ($_=function(name) { return {_hx_index:23,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quoteget",$_.__params__ = ["name"],$_)
-	,Quotedelete: ($_=function(name) { return {_hx_index:24,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quotedelete",$_.__params__ = ["name"],$_)
-	,Quoteedit: ($_=function(name) { return {_hx_index:25,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quoteedit",$_.__params__ = ["name"],$_)
-	,Quotecreate: ($_=function(name) { return {_hx_index:26,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Quotecreate",$_.__params__ = ["name"],$_)
+	,QuoteList: ($_=function(user) { return {_hx_index:22,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteList",$_.__params__ = ["user"],$_)
+	,QuoteGet: ($_=function(name) { return {_hx_index:23,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteGet",$_.__params__ = ["name"],$_)
+	,QuoteDelete: ($_=function(name) { return {_hx_index:24,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteDelete",$_.__params__ = ["name"],$_)
+	,QuoteEdit: ($_=function(name) { return {_hx_index:25,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteEdit",$_.__params__ = ["name"],$_)
+	,QuoteCreate: ($_=function(name) { return {_hx_index:26,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteCreate",$_.__params__ = ["name"],$_)
 	,Mention: ($_=function(user,role) { return {_hx_index:27,user:user,role:role,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Mention",$_.__params__ = ["user","role"],$_)
 	,Showcase: {_hx_name:"Showcase",_hx_index:28,__enum__:"components.CommandOptions",toString:$estr}
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Snippet,components_CommandOptions.Snippetcreate,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.Quotelist,components_CommandOptions.Quoteget,components_CommandOptions.Quotedelete,components_CommandOptions.Quoteedit,components_CommandOptions.Quotecreate,components_CommandOptions.Mention,components_CommandOptions.Showcase];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Snippet,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.QuoteList,components_CommandOptions.QuoteGet,components_CommandOptions.QuoteDelete,components_CommandOptions.QuoteEdit,components_CommandOptions.QuoteCreate,components_CommandOptions.Mention,components_CommandOptions.Showcase];
 components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Showcase];
 var components_ShowcaseModalSubmit = function(title,description) {
 	this.title_or_link = title;
