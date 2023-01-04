@@ -632,7 +632,7 @@
 	{
 		"name": "snippet",
 		"is_public": true,
-		"permissions": "everyone",
+		"permissions": "admin",
 		"description": "Reference to a code snippet/project/repo/guide/tutorial/documentation",
 		"params": [
 			{
