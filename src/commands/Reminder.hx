@@ -9,7 +9,6 @@ import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
 
 class Reminder extends CommandDbBase {
-	var channel:TextChannel;
 	var channels:Map<String, TextChannel> = [];
 	var checking = false;
 	var reminders:Array<TReminder> = [];
@@ -75,7 +74,7 @@ class Reminder extends CommandDbBase {
 
 				if (obj.duration <= duration) {
 					interaction.reply('Please set a reminder that is at least 5mins');
-					return; // 1060187497398812734
+					return;
 				}
 
 				if (obj.duration >= Duration.fromString('366days')) {
@@ -102,17 +101,10 @@ class Reminder extends CommandDbBase {
 
 	override function update(_) {
 		super.update(_);
-		if (!checking && this.channel == null) {
-			checking = true;
-			Main.client.channels.fetch(bot_channel).then(function(succ) {
-				this.channel = succ;
-				this.channels.set(succ.id, succ);
-				checking = false;
-				trace('Found reminder channel');
-			}, err);
-		}
 
-		if (this.channel == null || this.channels[bot_channel] == null) {
+		this.getChannel(bot_channel);
+
+		if (this.channels[bot_channel] == null) {
 			return;
 		}
 
@@ -138,6 +130,7 @@ class Reminder extends CommandDbBase {
 			embed.setFooter({text: '<t:${Math.round(reminder.timestamp / 1000)}>'});
 			var message = '> <@${reminder.author}> Your reminder was sent <t:${Math.round(reminder.timestamp / 1000)}:R>';
 			var content = '$message\n${reminder.content}';
+
 			if (reminder.thread_reply) {
 				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
 					channel.send({content: content, allowedMentions: parse}).then(null, function(err) {
@@ -195,6 +188,11 @@ class Reminder extends CommandDbBase {
 				trace('Found ${channel.name} channel');
 			}, err);
 		}
+	}
+
+	var channel(get, never):TextChannel;
+	function get_channel() {
+		return this.channels[bot_channel];
 	}
 
 	function get_name():String {

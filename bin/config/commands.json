@@ -630,43 +630,10 @@
 		"description": "Gain access to posting in the #showcase channel"
 	},
 	{
-		"name": "snippetadd",
-		"is_public": true,
-		"description": "Store a link to a project/repo/tutorial/gist etc ",
-		"permissions": "admin",
-		"params": [
-			{
-				"name": "title",
-				"description": "The title of the snippet/project/code",
-				"type": "string",
-				"required": true
-			},
-			{
-				"name": "description",
-				"description": "A description for the content being stored",
-				"type": "string",
-				"required": true
-			},
-			{
-				"name": "url",
-				"description": "The source of the content",
-				"type": "string",
-				"required": true
-			},
-			{
-				"name": "tags",
-				"description": "A comma separated list of tags. Autocomplete enabled, examples: flixel, haxeui, game",
-				"type": "string",
-				"required": true,
-				"autocomplete": true
-			}
-		]
-	},
-	{
 		"name": "snippet",
 		"is_public": true,
-		"permissions": "admin",
-		"description": "Get or create a reference to a code snippet/link/project/repo",
+		"permissions": "everyone",
+		"description": "Reference to a code snippet/project/repo/guide/tutorial/documentation",
 		"params": [
 			{
 				"name": "get",
@@ -685,20 +652,48 @@
 			{
 				"name": "list",
 				"type": "subcommand",
-				"description": "List of available quotes",
-				"params":[
+				"description": "List of available snippets",
+				"params": [
 					{
 						"name": "user",
-						"description": "Get all quotes by a particular user",
+						"description": "Get snippets by user",
 						"type": "user",
 						"required": false
 					}
 				]
 			},
 			{
-				"name": "create",
+				"name": "search",
 				"type": "subcommand",
-				"description": "Create a snippet",
+				"description": "Search snippets by tag",
+				"params":[
+					{
+						"name": "taga",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					},
+					{
+						"name": "tagb",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": false,
+						"autocomplete": true
+					},
+					{
+						"name": "tagc",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": false,
+						"autocomplete": true
+					}
+				]
+			},
+			{
+				"name": "add",
+				"type": "subcommand",
+				"description": "Add a snippet",
 				"params":[
 					{
 						"name": "title",
@@ -719,10 +714,38 @@
 						"required": true
 					},
 					{
-						"name": "tags",
-						"description": "A space separated list of tags",
+						"name": "taga",
+						"description": "Tag to describe the snippet",
 						"type": "string",
 						"required": true,
+						"autocomplete": true
+					},
+					{
+						"name": "tagb",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": false,
+						"autocomplete": true
+					},
+					{
+						"name": "tagc",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": false,
+						"autocomplete": true
+					},
+					{
+						"name": "tagd",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": false,
+						"autocomplete": true
+					},
+					{
+						"name": "tage",
+						"description": "Tag to describe the snippet",
+						"type": "string",
+						"required": false,
 						"autocomplete": true
 					}
 				]
@@ -744,11 +767,11 @@
 			{
 				"name": "delete",
 				"type": "subcommand",
-				"description": "Recall a quote",
+				"description": "Delete a snippet",
 				"params":[
 					{
 						"name": "identifier",
-						"description": "The string or id of the quote you wish to grab",
+						"description": "The string or id of the quote you wish to delete",
 						"type": "string",
 						"required": true,
 						"autocomplete":true

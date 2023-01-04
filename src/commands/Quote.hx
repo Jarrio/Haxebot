@@ -19,6 +19,10 @@ class Quote extends CommandDbBase {
 	var cache:Map<String, Int> = [];
 	final max_name_length = 20;
 
+	override function onEnabled() {
+		this.has_subcommands = true;
+	}
+
 	override function update(_:Float) {
 		super.update(_);
 		iterate(modal, entity -> {
@@ -88,7 +92,7 @@ class Quote extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Quotelist(user):
+			case QuoteList(user):
 				var sort = Firestore.orderBy('id', ASCENDING);
 				var col:CollectionReference<TQuoteData> = collection(this.db, 'discord/quotes/entries');
 				var query = Firestore.query(col, sort);
@@ -112,7 +116,7 @@ class Quote extends CommandDbBase {
 					embed.setColor(0xEA8220);
 					interaction.reply({embeds: [embed]});
 				}, err);
-			case Quoteget(name) | Quotecreate(name) | Quoteedit(name) | Quotedelete(name):
+			case QuoteGet(name) | QuoteCreate(name) | QuoteEdit(name) | QuoteDelete(name):
 				var type = get;
 				var enum_name = command.content.getName();
 				if (enum_name.contains('get')) {

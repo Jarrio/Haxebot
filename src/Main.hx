@@ -87,7 +87,8 @@ class Main {
 						Quote,
 						Snippet,
 						Mention,
-						TextMention
+						TextMention,
+						Reminder
 					],
 				},
 				{
@@ -318,7 +319,7 @@ class Main {
 					}
 				}
 				if (subcommand != null) {
-					enum_id += subcommand;
+					enum_id += subcommand.charAt(0).toUpperCase() + subcommand.substring(1);
 				}
 
 				command.content = Type.createEnum(CommandOptions, enum_id, params);

@@ -1,9 +1,6 @@
 package components;
 
 import discord_js.Role;
-import commands.types.ActionList;
-import commands.mod.Social.SocialPlatform;
-import commands.Poll.PollTime;
 import discord_js.User;
 
 typedef Command = {
@@ -15,10 +12,12 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Archive;
-	Snippet(title:String, tags:String);
-	Snippetcreate(title:String, description:String, url:String, tags:String);
+	SnippetList(user:User);
+	SnippetEdit(id:String);	
+	SnippetDelete(id:String);	
+	SnippetSearch(taga:String, tagb:String, tagc:String);
+	SnippetAdd(title:String, description:String, url:String, taga:String, tagb:String, tagc:String, tagd:String, tage:String);
 
-	
 	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);
@@ -38,11 +37,11 @@ enum CommandOptions {
 	Code(code:String);
 	Help(category:String);
 	Haxelib(command:String);
-	Quotelist(user:User);
-	Quoteget(name:String);
-	Quotedelete(name:String);
-	Quoteedit(name:String);
-	Quotecreate(name:String);
+	QuoteList(user:User);
+	QuoteGet(name:String);
+	QuoteDelete(name:String);
+	QuoteEdit(name:String);
+	QuoteCreate(name:String);
 	Mention(user:User, role:Role);
 	Showcase;
 }
