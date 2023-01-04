@@ -5055,8 +5055,7 @@ $hxClasses["commands.Reminder"] = commands_Reminder;
 commands_Reminder.__name__ = "commands.Reminder";
 commands_Reminder.__super__ = systems_CommandDbBase;
 commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
-	channel: null
-	,channels: null
+	channels: null
 	,checking: null
 	,reminders: null
 	,sent: null
@@ -5118,7 +5117,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				interaction.reply({ ephemeral : personal, content : "Your reminder has been set for <t:" + post_time + ">"}).then(function(msg) {
 					obj.id = doc.id;
 					firebase_web_firestore_Firestore.updateDoc(doc,obj).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 95, className : "commands.Reminder", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 94, className : "commands.Reminder", methodName : "run"});
 					});
 				},Util_err);
 			},Util_err);
@@ -5127,16 +5126,8 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 	,update: function(_) {
 		var _gthis = this;
 		systems_CommandDbBase.prototype.update.call(this,_);
-		if(!this.checking && this.channel == null) {
-			this.checking = true;
-			Main.client.channels.fetch(this.bot_channel).then(function(succ) {
-				_gthis.channel = succ;
-				_gthis.channels.h[succ.id] = succ;
-				_gthis.checking = false;
-				haxe_Log.trace("Found reminder channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 111, className : "commands.Reminder", methodName : "update"});
-			},Util_err);
-		}
-		if(this.channel == null || this.channels.h[this.bot_channel] == null) {
+		this.getChannel(this.bot_channel);
+		if(this.channels.h[this.bot_channel] == null) {
 			return;
 		}
 		var _g = 0;
@@ -5167,10 +5158,11 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(channel) {
 						channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 144, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 137, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += commands_types_Duration.fromString("3hrs");
-								_gthis.channel.send({ content : "<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.", allowedMentions : parse[0]});
+								var tmp = "<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.";
+								_gthis.get_channel().send({ content : tmp, allowedMentions : parse[0]});
 							};
 						})(parse,reminder));
 					};
@@ -5180,22 +5172,23 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(user) {
 						user.send(content[0]).then(null,(function(parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 156, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 149, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += 86400000;
-								_gthis.channel.send({ content : "<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?", allowedMentions : parse[0]});
+								var tmp = "<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?";
+								_gthis.get_channel().send({ content : tmp, allowedMentions : parse[0]});
 							};
 						})(parse,reminder));
 					};
 				})(content,parse,reminder));
 			} else {
-				var channel = this.channel;
+				var channel = this.get_channel();
 				if(reminder[0].channel_id != null && Object.prototype.hasOwnProperty.call(this.channels.h,reminder[0].channel_id)) {
 					channel = this.channels.h[reminder[0].channel_id];
 				}
 				channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 172, className : "commands.Reminder", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 165, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
 						reminder[0].duration += 3600000;
 					};
@@ -5222,14 +5215,18 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(channel_id).then(function(channel) {
 				_gthis.channels.h[channel.id] = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 195, className : "commands.Reminder", methodName : "getChannel"});
+				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 188, className : "commands.Reminder", methodName : "getChannel"});
 			},Util_err);
 		}
+	}
+	,get_channel: function() {
+		return this.channels.h[this.bot_channel];
 	}
 	,get_name: function() {
 		return "reminder";
 	}
 	,__class__: commands_Reminder
+	,__properties__: $extend(systems_CommandDbBase.prototype.__properties__,{get_channel:"get_channel"})
 });
 var commands_Roundup = function(_universe) {
 	this.set_permissions = false;
