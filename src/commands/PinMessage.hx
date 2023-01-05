@@ -11,6 +11,7 @@ class PinMessage extends CommandDbBase {
 
 	override function update(_) {
 		iterate(options, entity -> {
+
 			var author = interaction.user.id;
 			if (interaction.channel.isThread()) {
 				try {
