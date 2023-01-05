@@ -3718,10 +3718,10 @@ commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
 							interaction.targetMessage.pin();
 							interaction.reply({ content : "Pinned", ephemeral : true});
 						}
-						return;
 					} else {
 						interaction.reply({ content : "This isn't your thread!", ephemeral : true});
 					}
+					return;
 				} catch( _g ) {
 					haxe_Log.trace("thread cast failed",{ fileName : "src/commands/PinMessage.hx", lineNumber : 32, className : "commands.PinMessage", methodName : "update"});
 				}

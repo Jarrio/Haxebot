@@ -24,10 +24,10 @@ class PinMessage extends CommandDbBase {
 							interaction.targetMessage.pin();
 							interaction.reply({content: 'Pinned', ephemeral: true});
 						}
-						return;
 					} else {
 						interaction.reply({content: "This isn't your thread!", ephemeral: true});
 					}
+					return; 
 				} catch (e) {
 					trace('thread cast failed');
 				}
