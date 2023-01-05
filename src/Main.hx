@@ -100,6 +100,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						Snippet,
 						PinMessage,
 						Mention,
 						TextMention,
