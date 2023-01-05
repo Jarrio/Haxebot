@@ -208,7 +208,6 @@ class Main {
 
 			if (check) {
 				if (message.content.startsWith("[showcase]")) {
-					trace('here');
 					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
 				}
 			}

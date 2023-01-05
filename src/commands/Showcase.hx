@@ -55,8 +55,7 @@ class Showcase extends CommandBase {
 		iterate(messages, entity -> {
 			if (command == CommandForward.showcase_message) {
 				var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
-				trace(message.embeds.length);
-				trace(message.attachments.size);
+
 				if (!regex.match(message.content) && message.attachments.size == 0) {
 					var content = '```\n${message.content}\n```';
 					content += '\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n';
