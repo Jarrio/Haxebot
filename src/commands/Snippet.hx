@@ -1,5 +1,6 @@
 package commands;
 
+import js.html.URL;
 import externs.FuzzySort;
 import firebase.web.firestore.DocumentSnapshot;
 import discord_js.MessageEmbed;
@@ -78,6 +79,15 @@ class Snippet extends CommandDbBase {
 					return;
 				}
 
+				if (!validateURL(url)) {
+					interaction.reply('Invalid URL format');
+					return;
+				}
+
+				if (url.charAt(url.length - 1) == '/') {
+					url = url.substring(0, url.length - 2);
+				}
+
 				for (tag in obj.tags) {
 					var found = false;
 					for (v in this.tags) {
@@ -93,23 +103,31 @@ class Snippet extends CommandDbBase {
 					}
 				}
 
-				var doc = doc(db, 'discord/snippets');
-				Firestore.runTransaction(this.db, function(transaction) {
-					return transaction.get(doc).then(function(doc) {
-						if (!doc.exists()) {
-							return {id: -1};
-						}
-						var data:{id:Int} = (doc.data());
-						data.id = data.id + 1;
-						transaction.update(doc.ref, data);
-						return data;
-					});
-				}).then(function(value) {
-					obj.id = value.id;
-					obj.tags.insert(0, '${value.id}');
+				var q = query(collection(db, 'discord/snippets/entries'), where('url', EQUAL_TO, url));
+				Firestore.getDocs(q).then(function(resp) {
+					if (!resp.empty) {
+						interaction.reply('Snippet already exists');
+						return;
+					}
+					
+					var doc = doc(db, 'discord/snippets');
+					Firestore.runTransaction(this.db, function(transaction) {
+						return transaction.get(doc).then(function(doc) {
+							if (!doc.exists()) {
+								return {id: -1};
+							}
+							var data:{id:Int} = (doc.data());
+							data.id = data.id + 1;
+							transaction.update(doc.ref, data);
+							return data;
+						});
+					}).then(function(value) {
+						obj.id = value.id;
+						obj.tags.insert(0, '${value.id}');
 
-					this.addDoc('discord/snippets/entries', obj, function(_) {
-						interaction.reply('*Snippet #${value.id} added!*\ntitle: $title\n$description\n');
+						this.addDoc('discord/snippets/entries', obj, function(_) {
+							interaction.reply('*Snippet #${value.id} added!*\ntitle: $title\n$description\n');
+						}, err);
 					}, err);
 				}, err);
 			case SnippetSearch(taga, tagb, tagc):
@@ -181,7 +199,8 @@ class Snippet extends CommandDbBase {
 					interaction.reply({embeds: [embed]});
 				}, err);
 			case SnippetEdit(id):
-				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id), where('submitted_by', EQUAL_TO, interaction.user.id));
+				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id),
+					where('submitted_by', EQUAL_TO, interaction.user.id));
 				getDocs(q).then(function(resp) {
 					if (resp.empty && !interaction.isAutocomplete()) {
 						interaction.reply('No snippets with that id were found that could belong to you');
@@ -202,7 +221,8 @@ class Snippet extends CommandDbBase {
 					interaction.reply('Editting currently not implemented');
 				}, err);
 			case SnippetDelete(id):
-				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id.parseInt()), where('submitted_by', EQUAL_TO, interaction.user.id));
+				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id.parseInt()),
+					where('submitted_by', EQUAL_TO, interaction.user.id));
 				getDocs(q).then(function(resp) {
 					if (resp.empty && !interaction.isAutocomplete()) {
 						interaction.reply('No snippets with that id were found that could belong to you');
@@ -226,6 +246,14 @@ class Snippet extends CommandDbBase {
 				}, err);
 			default:
 		}
+	}
+
+	function validateURL(content:String) {
+		var regex = ~/((((https?:)(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/gm;
+		if (regex.match(content)) {
+			return true;
+		}
+		return false;
 	}
 
 	function autoComplete(term:String) {

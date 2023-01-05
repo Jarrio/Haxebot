@@ -640,7 +640,7 @@
 	{
 		"name": "snippet",
 		"is_public": true,
-		"permissions": "admin",
+		"permissions": "everyone",
 		"description": "Reference to a code snippet/project/repo/guide/tutorial/documentation",
 		"params": [
 			{
@@ -755,20 +755,6 @@
 						"type": "string",
 						"required": false,
 						"autocomplete": true
-					}
-				]
-			},
-			{
-				"name": "edit",
-				"type": "subcommand",
-				"description": "edit a snippet",
-				"params":[
-					{
-						"name": "identifier",
-						"description": "The string or id of the quote you wish to grab",
-						"type": "string",
-						"required": true,
-						"autocomplete":true
 					}
 				]
 			},

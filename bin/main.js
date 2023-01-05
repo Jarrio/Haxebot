@@ -6197,7 +6197,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 166, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 168, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 						if(link != url.hostname) {
@@ -6600,19 +6600,17 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			},Util_err);
 			break;
 		case 6:
-			var _g1 = _g.taga;
-			var _g2 = _g.tagb;
-			var _g3 = _g.tagc;
-			var _g4 = _g.tagd;
-			var _g5 = _g.tage;
+			var _g1 = _g.url;
+			var _g2 = _g.taga;
+			var _g3 = _g.tagb;
+			var _g4 = _g.tagc;
+			var _g5 = _g.tagd;
+			var _g6 = _g.tage;
 			var title = _g.title;
 			var description = _g.description;
-			var ac = _g1;
-			var obj = { id : -1, submitted_by : interaction.user.id, timestamp : new Date().getTime(), title : title, description : description, url : _g.url, tags : [_g1]};
-			if(_g2 != null) {
-				ac = _g2;
-				obj.tags.push(_g2);
-			}
+			var url = _g1;
+			var ac = _g2;
+			var obj = { id : -1, submitted_by : interaction.user.id, timestamp : new Date().getTime(), title : title, description : description, url : _g1, tags : [_g2]};
 			if(_g3 != null) {
 				ac = _g3;
 				obj.tags.push(_g3);
@@ -6625,10 +6623,21 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				ac = _g5;
 				obj.tags.push(_g5);
 			}
+			if(_g6 != null) {
+				ac = _g6;
+				obj.tags.push(_g6);
+			}
 			if(interaction.isAutocomplete()) {
 				var results = this.autoComplete(ac);
 				interaction.respond(results);
 				return;
+			}
+			if(!this.validateURL(_g1)) {
+				interaction.reply("Invalid URL format");
+				return;
+			}
+			if(_g1.charAt(_g1.length - 1) == "/") {
+				url = _g1.substring(0,_g1.length - 2);
 			}
 			var _g = 0;
 			var _g1 = obj.tags;
@@ -6651,27 +6660,41 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					return;
 				}
 			}
-			var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets");
-			firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
-				return transaction.get(doc).then(function(doc) {
-					if(!doc.exists()) {
-						return { id : -1};
-					}
-					var data = doc.data();
-					data.id += 1;
-					transaction.update(doc.ref,data);
-					return data;
-				});
-			}).then(function(value) {
-				obj.id = value.id;
-				obj.tags.splice(0,0,"" + value.id);
-				firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),obj).then(function(_) {
-					interaction.reply("*Snippet #" + value.id + " added!*\ntitle: " + title + "\n" + description + "\n");
+			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("url","==",url));
+			firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
+				if(!resp.empty) {
+					interaction.reply("Snippet already exists");
+					return;
+				}
+				var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets");
+				firebase_web_firestore_Firestore.runTransaction(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),function(transaction) {
+					return transaction.get(doc).then(function(doc) {
+						if(!doc.exists()) {
+							return { id : -1};
+						}
+						var data = doc.data();
+						data.id += 1;
+						transaction.update(doc.ref,data);
+						return data;
+					});
+				}).then(function(value) {
+					obj.id = value.id;
+					obj.tags.splice(0,0,"" + value.id);
+					firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),obj).then(function(_) {
+						interaction.reply("*Snippet #" + value.id + " added!*\ntitle: " + title + "\n" + description + "\n");
+					},Util_err);
 				},Util_err);
 			},Util_err);
 			break;
 		default:
 		}
+	}
+	,validateURL: function(content) {
+		var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
+		if(regex.match(content)) {
+			return true;
+		}
+		return false;
 	}
 	,autoComplete: function(term) {
 		var results = [];

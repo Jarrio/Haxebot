@@ -143,6 +143,8 @@ class ScamPrevention extends CommandBase {
 		}, err);
 	}
 
+
+
 	function checkPhishingLinks(messages:Array<Message>) {
 		for (message in messages) {
 			for (link in this.phishing_urls) {
