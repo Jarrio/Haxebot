@@ -1,3 +1,4 @@
+import discord_js.ThreadChannel;
 import discord_builder.ContextMenuCommandBuilder;
 import components.TextCommand;
 import discord_builder.SlashCommandSubcommandBuilder;
@@ -38,6 +39,7 @@ import js.lib.Promise;
 import commands.AutoRole;
 import commands.mod.Social;
 import commands.mod.Mention;
+import commands.events.PinMessageInfo;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -84,19 +86,13 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [
-						Quote,
-						Snippet,
-						Mention,
-						TextMention,
-						Reminder,
-						PinMessage
-					],
+					systems: [Quote, Snippet, Mention, TextMention, Reminder, PinMessage, PinMessageInfo],
 				},
 				{
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						PinMessageInfo,
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
@@ -223,6 +219,10 @@ class Main {
 			trace(incoming);
 		});
 
+		client.on('threadCreate', (thread:ThreadChannel) -> {
+			universe.setComponents(universe.createEntity(), CommandForward.thread_pin_message, thread);
+		});
+
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
 			if (interaction.isButton()) {
 				if (interaction.customId == 'showcase_agree') {
@@ -298,7 +298,6 @@ class Main {
 				var subcommand = null;
 				var params = new Array<Dynamic>();
 				for (param in value.params) {
-
 					switch (param.type) {
 						case user:
 							params.push(interaction.options.getUser(param.name));
@@ -320,11 +319,11 @@ class Main {
 								continue;
 							}
 							subcommand = type;
-							//params.push(type);
+							// params.push(type);
 							for (subparam in param.params) {
 								parseIncomingCommand(params, subparam, interaction);
 							}
-							
+
 						default:
 							throw 'Something went wrong.';
 					}
@@ -432,8 +431,6 @@ class Main {
 
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
 
-
-				
 			if (command.params != null) {
 				for (param in command.params) {
 					var autocomplete = false;
@@ -448,7 +445,7 @@ class Main {
 								}
 								parseCommandType(subparam, autocomplete, subcommand);
 							}
-							
+
 							main_command.addSubcommand(subcommand);
 						default:
 							if (param.autocomplete != null) {
@@ -585,6 +582,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) {
+	var thread_pin_message;
 	var helppls;
 	var message_context_menu;
 	var scam_prevention;
