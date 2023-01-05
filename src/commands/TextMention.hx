@@ -1,5 +1,6 @@
 package commands;
 
+import discord_js.MessageAttachment;
 import discord_js.MessageEmbed;
 import commands.mod.Mention.TMention;
 import firebase.web.app.FirebaseApp;
@@ -45,8 +46,8 @@ class TextMention extends TextCommandBase {
 		}
 
 		if (found > 0) {
-			var attachments = [];
-			if (message.attachments.length > 0) {
+			var attachments = new js.lib.Map<String, MessageAttachment>();
+			if (message.attachments.size > 0) {
 				attachments = message.attachments;
 			}
 			var embed = new MessageEmbed();

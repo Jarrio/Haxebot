@@ -29,7 +29,6 @@ class Showcase extends CommandBase {
 
 	public function new(_) {
 		super(_);
-
 		this.webhook = new WebhookClient({url: Main.keys.showcase_hook});
 	}
 
@@ -56,10 +55,15 @@ class Showcase extends CommandBase {
 		iterate(messages, entity -> {
 			if (command == CommandForward.showcase_message) {
 				var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
-				if (!regex.match(message.content) && message.attachments.length == 0) {
+				trace(message.embeds.length);
+				trace(message.attachments.size);
+				if (!regex.match(message.content) && message.attachments.size == 0) {
 					var content = '```\n${message.content}\n```';
-					content += '\n Your message was removed due to not having any attachments or links. Please chat within threads only.';
-					message.author.send(content).then(function(succ) {
+					content += '\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n';
+					content += '**Showcase Channel guidelines:**\n\n';
+					content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
+
+					message.author.send({content: content}).then(function(succ) {
 						message.delete();
 					}, err);
 				}

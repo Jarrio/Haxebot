@@ -6232,7 +6232,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("loaded showcase channel",{ fileName : "src/commands/Showcase.hx", lineNumber : 44, className : "commands.Showcase", methodName : "update"});
+				haxe_Log.trace("loaded showcase channel",{ fileName : "src/commands/Showcase.hx", lineNumber : 43, className : "commands.Showcase", methodName : "update"});
 			},Util_err);
 		}
 		var _this = this.modal;
@@ -6260,10 +6260,14 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
 			if(command1 == "showcase_message") {
 				var regex = new EReg("https?://(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&/=]*)","ig");
-				if(!regex.match(message[0].content) && message[0].attachments.length == 0) {
+				haxe_Log.trace(message[0].embeds.length,{ fileName : "src/commands/Showcase.hx", lineNumber : 58, className : "commands.Showcase", methodName : "update"});
+				haxe_Log.trace(message[0].attachments.size,{ fileName : "src/commands/Showcase.hx", lineNumber : 59, className : "commands.Showcase", methodName : "update"});
+				if(!regex.match(message[0].content) && message[0].attachments.size == 0) {
 					var content = "```\n" + message[0].content + "\n```";
-					content += "\n Your message was removed due to not having any attachments or links. Please chat within threads only.";
-					message[0].author.send(content).then((function(message) {
+					content += "\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n";
+					content += "**Showcase Channel guidelines:**\n\n";
+					content += "1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here";
+					message[0].author.send({ content : content}).then((function(message) {
 						return function(succ) {
 							message[0].delete();
 						};
@@ -6283,13 +6287,13 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			var arr = [[]];
 			var content1 = [StringTools.trim(message[0].content.substring(10))];
-			var _g = 0;
-			var _g1 = message[0].attachments;
-			while(_g < _g1.length) {
-				var a = _g1[_g];
-				++_g;
-				arr[0].push(a);
-				haxe_Log.trace(a,{ fileName : "src/commands/Showcase.hx", lineNumber : 91, className : "commands.Showcase", methodName : "update"});
+			var jsIterator = message[0].attachments.values();
+			var _g1_lastStep = jsIterator.next();
+			while(!_g1_lastStep.done) {
+				var v = _g1_lastStep.value;
+				_g1_lastStep = jsIterator.next();
+				arr[0].push(v);
+				haxe_Log.trace(v,{ fileName : "src/commands/Showcase.hx", lineNumber : 95, className : "commands.Showcase", methodName : "update"});
 			}
 			var name = [message[0].author.username];
 			if(message[0].member.nickname != null && message[0].member.nickname.length > 0) {
@@ -6706,8 +6710,8 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 			}
 		}
 		if(found > 0) {
-			var attachments = [];
-			if(message.attachments.length > 0) {
+			var attachments = new Map();
+			if(message.attachments.size > 0) {
 				attachments = message.attachments;
 			}
 			var embed = new discord_$js_MessageEmbed();
