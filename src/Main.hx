@@ -1,3 +1,4 @@
+import discord_builder.ContextMenuCommandBuilder;
 import components.TextCommand;
 import discord_builder.SlashCommandSubcommandBuilder;
 import discord_js.GuildMember;
@@ -88,7 +89,8 @@ class Main {
 						Snippet,
 						Mention,
 						TextMention,
-						Reminder
+						Reminder,
+						PinMessage
 					],
 				},
 				{
@@ -242,6 +244,10 @@ class Main {
 				return;
 			}
 
+			if (interaction.isMessageContextMenuCommand()) {
+				universe.setComponents(universe.createEntity(), CommandForward.message_context_menu, interaction);
+			}
+
 			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
@@ -280,8 +286,12 @@ class Main {
 			}
 
 			if (value.params == null) {
-				command.content = Type.createEnum(CommandOptions, enum_id);
-				break;
+				if (value.type == menu) {
+					command.content = Type.createEnum(CommandOptions, value.id);
+					break;
+				} else {
+					throw 'Command config issue located: ${value.name}';
+				}
 			} else {
 				var subcommand = null;
 				var params = new Array<Dynamic>();
@@ -413,8 +423,15 @@ class Main {
 				permission = everyone;
 			}
 
+			if (command.type == menu) {
+				commands.push(new ContextMenuCommandBuilder().setName(command.name).setType(command.menu_type).setDefaultMemberPermissions(permission));
+				continue;
+			}
+
 			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
 
+
+				
 			if (command.params != null) {
 				for (param in command.params) {
 					var autocomplete = false;
@@ -435,7 +452,7 @@ class Main {
 							if (param.autocomplete != null) {
 								autocomplete = param.autocomplete;
 							}
-							parseCommandType(param, autocomplete, main_command);
+							parseCommandType(param, autocomplete, cast main_command);
 					}
 				}
 				commands.push(main_command);
@@ -529,8 +546,10 @@ typedef Foo = ApplicationCommandData;
 
 typedef TCommands = {
 	var type:CommandType;
+	var menu_type:ContextMenuCommandType;
 	var name:String;
 	var description:String;
+	var id:String;
 	@:optional var is_public:Bool;
 	@:optional var permissions:String;
 	@:optional var params:Array<TCommands>;
@@ -553,7 +572,7 @@ typedef RegisteredApplicationCommand = {
 
 enum abstract CommandType(String) {
 	var subcommand;
-	var context_menu;
+	var menu;
 	var string;
 	var number;
 	var user;
@@ -565,6 +584,7 @@ enum abstract CommandType(String) {
 
 enum abstract CommandForward(String) {
 	var helppls;
+	var message_context_menu;
 	var scam_prevention;
 	var react;
 	var showcase;

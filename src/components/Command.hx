@@ -44,4 +44,5 @@ enum CommandOptions {
 	QuoteCreate(name:String);
 	Mention(user:User, role:Role);
 	Showcase;
+	PinMessage;
 }

@@ -630,6 +630,14 @@
 		"description": "Gain access to posting in the #showcase channel"
 	},
 	{
+		"name": "(Un)Pin Message",
+		"is_public": true,
+		"permissions": "everyone",
+		"type": "menu",
+		"menu_type": 3,
+		"id": "PinMessage"
+	},
+	{
 		"name": "snippet",
 		"is_public": true,
 		"permissions": "admin",
