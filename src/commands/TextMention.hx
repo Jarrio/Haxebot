@@ -10,6 +10,7 @@ import systems.TextCommandBase;
 class TextMention extends TextCommandBase {
 	var cached = false;
 	var permissions:Map<String, TMention> = [];
+	var roles:Map<String, String> = [];
 
 	override function onEnabled() {
 		var db = Firestore.getFirestore(FirebaseApp.getApp());
@@ -23,10 +24,16 @@ class TextMention extends TextCommandBase {
 				cached = true;
 			}
 		});
+
+		Firestore.getDoc(doc(db, 'discord/admin')).then(function(doc) {
+			for (role in (doc.data().roles:Array<TTag>)) {
+				this.roles.set(role.tag, role.id);
+			}
+		}, err);
 	}
 
 	function run(message:Message, content:String) {
-		if (!cached) {
+		if (!cached || this.roles == null) {
 			return;
 		}
 
@@ -37,6 +44,17 @@ class TextMention extends TextCommandBase {
 		var user = this.permissions.get(message.author.id);
 		var found = 0;
 		var roles_found = '';
+
+		for (tag => id in this.roles) {
+			var copy = content.toLowerCase();
+			if (copy.contains(tag)) {
+				var pos = copy.indexOf(tag);
+				var mention = content.substring(pos, pos + tag.length);
+				content = content.replace(mention, '<@&$id>');
+				break;
+			}
+		}
+
 		for (role in user.roles) {
 			if (content.contains('<@&$role>')) {
 				roles_found += '<@&$role>';
@@ -63,4 +81,9 @@ class TextMention extends TextCommandBase {
 	function get_name():String {
 		return '!mention';
 	}
+}
+
+typedef TTag = {
+	var tag:String;
+	var id:String;
 }

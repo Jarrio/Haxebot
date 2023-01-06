@@ -7051,6 +7051,7 @@ systems_TextCommandBase.prototype = $extend(ecs_System.prototype,{
 	,__properties__: {get_name:"get_name"}
 });
 var commands_TextMention = function(_universe) {
+	this.roles = new haxe_ds_StringMap();
 	this.permissions = new haxe_ds_StringMap();
 	this.cached = false;
 	systems_TextCommandBase.call(this,_universe);
@@ -7061,6 +7062,7 @@ commands_TextMention.__super__ = systems_TextCommandBase;
 commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 	cached: null
 	,permissions: null
+	,roles: null
 	,onEnabled: function() {
 		var _gthis = this;
 		var db = firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp());
@@ -7077,9 +7079,18 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 				_gthis.cached = true;
 			}
 		});
+		firebase_web_firestore_Firestore.getDoc(firebase_web_firestore_Firestore.doc(db,"discord/admin")).then(function(doc) {
+			var _g = 0;
+			var _g1 = doc.data().roles;
+			while(_g < _g1.length) {
+				var role = _g1[_g];
+				++_g;
+				_gthis.roles.h[role.tag] = role.id;
+			}
+		},Util_err);
 	}
 	,run: function(message,content) {
-		if(!this.cached) {
+		if(!this.cached || this.roles == null) {
 			return;
 		}
 		if(!Object.prototype.hasOwnProperty.call(this.permissions.h,message.author.id)) {
@@ -7088,6 +7099,21 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 		var user = this.permissions.h[message.author.id];
 		var found = 0;
 		var roles_found = "";
+		var h = this.roles.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g1_value = h[key];
+			var copy = content.toLowerCase();
+			if(copy.indexOf(key) != -1) {
+				var pos = copy.indexOf(key);
+				var mention = content.substring(pos,pos + key.length);
+				content = StringTools.replace(content,mention,"<@&" + _g1_value + ">");
+				break;
+			}
+		}
 		var _g = 0;
 		var _g1 = user.roles;
 		while(_g < _g1.length) {

@@ -10,15 +10,15 @@
 				"closingPolicy": "before"
 			},
 			"funcParamParens": {
-        "openingPolicy": "none",
-        "closingPolicy": "onlyAfter",
-        "removeInnerWhenEmpty": true
-      },
-      "anonFuncParamParens": {
-        "openingPolicy": "none",
-        "closingPolicy": "onlyAfter",
-        "removeInnerWhenEmpty": true
-      },
+				"openingPolicy": "none",
+				"closingPolicy": "onlyAfter",
+				"removeInnerWhenEmpty": true
+			},
+			"anonFuncParamParens": {
+				"openingPolicy": "none",
+				"closingPolicy": "onlyAfter",
+				"removeInnerWhenEmpty": true
+			},
 			"ifConditionParens": {
 				"openingPolicy": "onlyBefore",
 				"closingPolicy": "onlyAfter"
@@ -37,23 +37,37 @@
 			}
 		},
 		"typeParamOpenPolicy": "none",
-    "typeParamClosePolicy": "none",
+		"typeParamClosePolicy": "none",
 		"functionTypeHaxe4Policy": "around",
 		"arrowFunctionsPolicy": "around",
 		"colonPolicy": "none",
 		"caseColonPolicy": "onlyAfter"
 	},
-  "wrapping": {
-    "casePattern": {
-      "defaultWrap": "fillLineWithLeadingBreak",
-      "defaultLocation": "beforeLast"
-    },
+	"wrapping": {
+		"casePattern": {
+			"defaultWrap": "fillLineWithLeadingBreak",
+			"defaultLocation": "beforeLast"
+		},
 		"methodChain": {
-      "defaultWrap": "onePerLine",
-      "defaultLocation": "afterLast",
-      "rules": []
-    },
-    "maxLineLength": 100,
-    "arrayMatrixWrap": "matrixWrapNoAlign"
-  }
+			"defaultWrap": "onePerLine",
+			"defaultLocation": "afterLast",
+			"rules": []
+		},
+		"callParameter": {
+			"defaultWrap": "fillLine",
+			"rules": [
+				{
+					"conditions": [
+						{
+							"cond": "anyItemLength >= n",
+							"value": 60
+						}
+					],
+					"type": "onePerLine"
+				}
+			]
+		},
+		"maxLineLength": 100,
+		"arrayMatrixWrap": "matrixWrapNoAlign"
+	}
 }
