@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(2);
-	var this11 = new Array(2);
+	var this1 = new Array(3);
+	var this11 = new Array(3);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(26);
 	var this11 = new Array(26);
@@ -785,9 +785,13 @@ Main.start = function() {
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new commands_Run(u);
+	var s = new commands_Snippet(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
+	s.onEnabled();
+	var s = new commands_Run(u);
+	phase.systems[2] = s;
+	phase.enabledSystems[2] = true;
 	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
@@ -6535,7 +6539,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 var commands_Snippet = function(_universe) {
 	this.cache = new haxe_ds_StringMap();
 	this.results_per_page_no_desc = 20;
-	this.results_per_page = 10;
+	this.results_per_page = 5;
 	this.tags = [];
 	this.sent = [];
 	systems_CommandDbBase.call(this,_universe);

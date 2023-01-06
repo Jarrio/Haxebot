@@ -14,32 +14,33 @@ import systems.CommandDbBase;
 class Snippet extends CommandDbBase {
 	var sent:Array<TSnippet> = [];
 	var tags:Array<{name:String, value:String}> = [];
-	final results_per_page:Int = 10;
+	final results_per_page:Int = 5;
 	final results_per_page_no_desc:Int = 20;
 	var cache:Map<String, TListState> = [];
 	@:fastFamily var button_events:{command:CommandForward, interaction:BaseCommandInteraction};
 
 	override function onEnabled() {
 		this.has_subcommands = true;
-		Firestore.onSnapshot(doc(this.db, 'discord/snippets'), function(resp:DocumentSnapshot<{tags:Array<String>}>) {
-			var arr = [];
-			for (tag in resp.data().tags) {
-				arr.push({
-					name: tag,
-					value: tag
+		Firestore.onSnapshot(doc(this.db, 'discord/snippets'),
+			function(resp:DocumentSnapshot<{tags:Array<String>}>) {
+				var arr = [];
+				for (tag in resp.data().tags) {
+					arr.push({
+						name: tag,
+						value: tag
+					});
+				}
+				this.tags = arr;
+				this.tags.sort(function(a, b) {
+					if (a.name.charCodeAt(0) > b.name.charCodeAt(0)) {
+						return 1;
+					}
+					if (a.name.charCodeAt(0) < b.name.charCodeAt(0)) {
+						return -1;
+					}
+					return 0;
 				});
-			}
-			this.tags = arr;
-			this.tags.sort(function(a, b) {
-				if (a.name.charCodeAt(0) > b.name.charCodeAt(0)) {
-					return 1;
-				}
-				if (a.name.charCodeAt(0) < b.name.charCodeAt(0)) {
-					return -1;
-				}
-				return 0;
 			});
-		});
 	}
 
 	override function update(_) {
@@ -136,7 +137,7 @@ class Snippet extends CommandDbBase {
 				if (url.charAt(url.length - 1) == '/') {
 					url = url.substring(0, url.length - 1);
 				}
-				
+
 				for (tag in obj.tags) {
 					var found = false;
 					for (v in this.tags) {
@@ -147,12 +148,15 @@ class Snippet extends CommandDbBase {
 					}
 
 					if (!found) {
-						interaction.reply('The tag __${tag}__ is not available as an option currently.');
+						interaction.reply(
+							'The tag __${tag}__ is not available as an option currently.'
+						);
 						return;
 					}
 				}
 
-				var q = query(collection(db, 'discord/snippets/entries'), where('url', EQUAL_TO, url));
+				var q = query(collection(db, 'discord/snippets/entries'),
+					where('url', EQUAL_TO, url));
 				Firestore.getDocs(q).then(function(resp) {
 					if (!resp.empty) {
 						interaction.reply('Snippet already exists');
@@ -175,7 +179,9 @@ class Snippet extends CommandDbBase {
 						obj.tags.insert(0, '${value.id}');
 
 						this.addDoc('discord/snippets/entries', obj, function(_) {
-							interaction.reply('*Snippet #${value.id} added!*\ntitle: $title\n$description\n');
+							interaction.reply(
+								'*Snippet #${value.id} added!*\ntitle: $title\n$description\n'
+							);
 						}, err);
 					}, err);
 				}, err);
@@ -215,7 +221,8 @@ class Snippet extends CommandDbBase {
 					restraints.push(tagc);
 				}
 
-				var q = query(collection(this.db, 'discord/snippets/entries'), where('tags', ARRAY_CONTAINS_ANY, restraints));
+				var q = query(collection(this.db, 'discord/snippets/entries'),
+					where('tags', ARRAY_CONTAINS_ANY, restraints));
 				getDocs(q).then(function(resp) {
 					var res = [];
 
@@ -238,9 +245,11 @@ class Snippet extends CommandDbBase {
 					show_desc = true;
 				}
 
-				var q = query(collection(this.db, 'discord/snippets/entries'), orderBy('id', ASCENDING));
+				var q = query(collection(this.db, 'discord/snippets/entries'),
+					orderBy('id', ASCENDING));
 				if (user != null) {
-					q = query(collection(this.db, 'discord/snippets/entries'), where('submitted_by', EQUAL_TO, user.id), orderBy('id', ASCENDING));
+					q = query(collection(this.db, 'discord/snippets/entries'),
+						where('submitted_by', EQUAL_TO, user.id), orderBy('id', ASCENDING));
 				}
 
 				getDocs(q).then(function(resp) {
@@ -261,11 +270,14 @@ class Snippet extends CommandDbBase {
 					this.handleSearchResponse(interaction, obj);
 				}, err);
 			case SnippetEdit(id):
-				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id),
+				var q = query(collection(this.db, 'discord/snippets/entries'),
+					where('id', EQUAL_TO, id),
 					where('submitted_by', EQUAL_TO, interaction.user.id));
 				getDocs(q).then(function(resp) {
 					if (resp.empty && !interaction.isAutocomplete()) {
-						interaction.reply('No snippets with that id were found that could belong to you');
+						interaction.reply(
+							'No snippets with that id were found that could belong to you'
+						);
 						return;
 					}
 
@@ -283,11 +295,14 @@ class Snippet extends CommandDbBase {
 					interaction.reply('Editting currently not implemented');
 				}, err);
 			case SnippetDelete(id):
-				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id.parseInt()),
+				var q = query(collection(this.db, 'discord/snippets/entries'),
+					where('id', EQUAL_TO, id.parseInt()),
 					where('submitted_by', EQUAL_TO, interaction.user.id));
 				getDocs(q).then(function(resp) {
 					if (resp.empty && !interaction.isAutocomplete()) {
-						interaction.reply('No snippets with that id were found that could belong to you');
+						interaction.reply(
+							'No snippets with that id were found that could belong to you'
+						);
 						return;
 					}
 
@@ -316,6 +331,7 @@ class Snippet extends CommandDbBase {
 			new ButtonBuilder().setCustomId('snippet_left').setLabel('Prev').setStyle(Primary),
 			new ButtonBuilder().setCustomId('snippet_right').setLabel('Next').setStyle(Primary)
 		);
+
 		var arr = [];
 		var results_pp = (state.desc) ? results_per_page : results_per_page_no_desc;
 		var max = Math.ceil(state.results.length / results_pp);
@@ -324,10 +340,11 @@ class Snippet extends CommandDbBase {
 		}
 
 		var embed = formatResultOutput(state, 0);
-		interaction.reply({embeds: [embed], components: arr, fetchReply: true}).then(function(message) {
-			state.message = message;
-			this.cache.set(interaction.user.id, state);
-		}, err);
+		interaction.reply({embeds: [embed], components: arr, fetchReply: true})
+			.then(function(message) {
+				state.message = message;
+				this.cache.set(interaction.user.id, state);
+			}, err);
 	}
 
 	function formatResultOutput(state:TListState, forward:Int) {
@@ -374,7 +391,10 @@ class Snippet extends CommandDbBase {
 
 		embed.setColor(0xEA8220);
 		embed.setDescription(desc);
-		embed.setFooter({iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1', text: 'Page ${state.page + 1} / $max'});
+		embed.setFooter(
+			{iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1',
+				text: 'Page ${state.page + 1} / $max'}
+		);
 		return embed;
 	}
 

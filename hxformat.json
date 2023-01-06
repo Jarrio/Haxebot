@@ -48,11 +48,6 @@
 			"defaultWrap": "fillLineWithLeadingBreak",
 			"defaultLocation": "beforeLast"
 		},
-		"methodChain": {
-			"defaultWrap": "onePerLine",
-			"defaultLocation": "afterLast",
-			"rules": []
-		},
 		"callParameter": {
 			"defaultWrap": "fillLine",
 			"rules": [

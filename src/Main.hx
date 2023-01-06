@@ -86,7 +86,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Quote, Run],
+					systems: [Quote, Snippet, Run],
 				},
 				{
 					name: 'main',
