@@ -6696,15 +6696,15 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			},Util_err);
 			break;
 		case 6:
-			var _g1 = _g.description;
+			var _g1 = _g.url;
 			var _g2 = _g.taga;
 			var _g3 = _g.tagb;
 			var _g4 = _g.tagc;
 			var _g5 = _g.tagd;
 			var _g6 = _g.tage;
-			var title = _g.url;
-			var description = _g.title;
 			var url = _g1;
+			var title = _g.title;
+			var description = _g.description;
 			var ac = _g2;
 			var obj = { id : -1, submitted_by : interaction.user.id, timestamp : new Date().getTime(), title : title, description : description, url : _g1, tags : [_g2]};
 			if(_g3 != null) {

@@ -41,7 +41,7 @@ class Snippet extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case SnippetAdd(title, description, url, taga, tagb, tagc, tagd, tage):
+			case SnippetAdd(url, title, description, taga, tagb, tagc, tagd, tage):
 				var ac = taga;
 				var obj:TSnippet = {
 					id: -1,
