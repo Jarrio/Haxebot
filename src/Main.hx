@@ -86,7 +86,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Quote, Snippet, Mention, TextMention, Reminder, PinMessage, PinMessageInfo],
+					systems: [Quote, Snippet, Mention, TextMention, Reminder, PinMessage, PinMessageInfo, Run],
 				},
 				{
 					name: 'main',
@@ -185,11 +185,6 @@ class Main {
 			}
 
 			if (channel.type == GUILD_TEXT) {
-				if (message.content.startsWith("!run")) {
-					var code:RunMessage = message.toString();
-					universe.setComponents(universe.createEntity(), code, message);
-				}
-
 				if (channel.id == '162664383082790912') {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase_message, message);
 				}

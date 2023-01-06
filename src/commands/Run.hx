@@ -1,5 +1,7 @@
 package commands;
 
+import systems.TextCommandBase;
+import components.TextCommand;
 import util.Random;
 import ecs.System;
 import vm2.NodeVM;
@@ -14,8 +16,8 @@ import js.node.ChildProcess.spawn;
 
 enum abstract RunMessage(String) from String to String {}
 
-class Run extends System {
-	@:fastFamily var code_messages:{message:RunMessage, response:Message};
+class Run extends TextCommandBase {
+	@:fastFamily var code_messages:{message:TextCommand, response:Message};
 	var message_id:String;
 	var haxe_version:String = null;
 	var code_requests:Map<String, Array<Float>> = [];
@@ -23,29 +25,7 @@ class Run extends System {
 	var checked:Bool = false;
 	var timeout = 5000;
 
-	override function update(_) {
-		if (!Main.connected) {
-			return;
-		}
-		#if !block
-		if (this.channel == null && !checked) {
-			checked = true;
-			Main.client.channels.fetch('663246792426782730').then(channel -> {
-				this.channel = cast channel;
-			});
-			return;
-		}
-		#end
-
-		iterate(code_messages, entity -> {
-			if (message.startsWith('!run')) {
-				this.run(message, response);
-				this.universe.deleteEntity(entity);
-			}
-		});
-	}
-
-	function run(message:String, response:Message) {
+	function run(message:Message, content:String) {
 		if (this.haxe_version == null) {
 			var process = './haxe/haxe';
 			if (!FileSystem.exists(process)) {
@@ -58,7 +38,7 @@ class Run extends System {
 			});
 		}
 
-		this.extractCode(message, response);
+		this.extractCode(message.content, message);
 	}
 
 	function codeSource(message:String) {
@@ -92,7 +72,6 @@ class Run extends System {
 
 		check_code = ~/!run[\s|\n| \n](.*)/gmis;
 		if (check_code.match(message)) {
-			trace(check_code.matched(1));
 			this.parse(check_code.matched(1), response);
 			return;
 		}

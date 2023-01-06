@@ -182,6 +182,24 @@ class Snippet extends CommandDbBase {
 			case SnippetSearch(taga, tagb, tagc):
 				var restraints = [];
 				var search = '';
+				if (taga != null) {
+					search = taga;
+				}
+
+				if (tagb != null) {
+					search = tagb;
+				}
+
+				if (tagc != null) {
+					search = tagc;
+				}
+
+				if (interaction.isAutocomplete()) {
+					var results = this.autoComplete(search);
+					interaction.respond(results);
+					return;
+				}
+
 				if (isValidTag(taga)) {
 					search = taga;
 					restraints.push(taga);
@@ -195,12 +213,6 @@ class Snippet extends CommandDbBase {
 				if (isValidTag(tagc)) {
 					search = tagc;
 					restraints.push(tagc);
-				}
-
-				if (interaction.isAutocomplete()) {
-					var results = this.autoComplete(search);
-					interaction.respond(results);
-					return;
 				}
 
 				var q = query(collection(this.db, 'discord/snippets/entries'), where('tags', ARRAY_CONTAINS_ANY, restraints));
@@ -348,7 +360,7 @@ class Snippet extends CommandDbBase {
 			}
 
 			if (end > results.length) {
-				end = results.length;
+				end = results.length - 1;
 			}
 
 			for (i => data in results.slice(start, end)) {
