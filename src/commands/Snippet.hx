@@ -376,14 +376,14 @@ class Snippet extends CommandDbBase {
 
 	function autoComplete(term:String) {
 		var results = [];
-		var algo = FuzzySort.go(term, this.tags, {key: 'name', limit: 20, threshold: -100});
+		var algo = FuzzySort.go(term, this.tags, {key: 'name', limit: 15, threshold: -1000});
 
 		for (a in algo) {
 			results.push(a.obj);
 		}
 
 		if (results.length == 0) {
-			results = this.tags;
+			results = this.tags.slice(0, 20);
 		}
 
 		return results;

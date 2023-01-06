@@ -6975,7 +6975,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,autoComplete: function(term) {
 		var results = [];
-		var algo = externs_FuzzySort.go(term,this.tags,{ key : "name", limit : 20, threshold : -100});
+		var algo = externs_FuzzySort.go(term,this.tags,{ key : "name", limit : 15, threshold : -1000});
 		var _g = 0;
 		while(_g < algo.length) {
 			var a = algo[_g];
@@ -6983,7 +6983,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			results.push(a.obj);
 		}
 		if(results.length == 0) {
-			results = this.tags;
+			results = this.tags.slice(0,20);
 		}
 		return results;
 	}
