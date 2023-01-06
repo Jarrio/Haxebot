@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(1);
-	var this11 = new Array(1);
+	var this1 = new Array(2);
+	var this11 = new Array(2);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(26);
 	var this11 = new Array(26);
@@ -784,6 +784,10 @@ Main.start = function() {
 	var s = new commands_Quote(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
+	s.onEnabled();
+	var s = new commands_Run(u);
+	phase.systems[1] = s;
+	phase.enabledSystems[1] = true;
 	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
@@ -3776,33 +3780,35 @@ commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
 		while(_active && _g_idx >= 0) {
 			var entity = _set.getDense(_g_idx--);
 			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
-			this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
-			var author = interaction.user.id;
-			if(interaction.channel.isThread()) {
-				try {
-					var thread = js_Boot.__cast(interaction.channel , discord_$js_ThreadChannel);
-					if(thread.ownerId == author) {
-						if(interaction.targetMessage.pinned) {
-							interaction.targetMessage.unpin();
-							interaction.reply({ content : "Unpinned", ephemeral : true});
+			var route = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			if(route == "thread_pin_message") {
+				var author = interaction.user.id;
+				if(interaction.channel.isThread()) {
+					try {
+						var thread = js_Boot.__cast(interaction.channel , discord_$js_ThreadChannel);
+						if(thread.ownerId == author) {
+							if(interaction.targetMessage.pinned) {
+								interaction.targetMessage.unpin();
+								interaction.reply({ content : "Unpinned", ephemeral : true});
+							} else {
+								interaction.targetMessage.pin();
+								interaction.reply({ content : "Pinned", ephemeral : true});
+							}
 						} else {
-							interaction.targetMessage.pin();
-							interaction.reply({ content : "Pinned", ephemeral : true});
+							interaction.reply({ content : "This isn't your thread!", ephemeral : true});
 						}
-					} else {
-						interaction.reply({ content : "This isn't your thread!", ephemeral : true});
+						return;
+					} catch( _g ) {
+						haxe_Log.trace("thread cast failed",{ fileName : "src/commands/PinMessage.hx", lineNumber : 33, className : "commands.PinMessage", methodName : "update"});
 					}
-					return;
-				} catch( _g ) {
-					haxe_Log.trace("thread cast failed",{ fileName : "src/commands/PinMessage.hx", lineNumber : 32, className : "commands.PinMessage", methodName : "update"});
 				}
+				interaction.reply({ content : "*Currently this only works for user threads :)*", ephemeral : true});
+				this.universe.deleteEntity(entity);
 			}
-			interaction.reply({ content : "*Currently this only works for user threads :)*", ephemeral : true});
-			this.universe.deleteEntity(entity);
 		}
 	}
 	,run: function(command,interaction) {
-		haxe_Log.trace("here",{ fileName : "src/commands/PinMessage.hx", lineNumber : 42, className : "commands.PinMessage", methodName : "run"});
+		haxe_Log.trace("here",{ fileName : "src/commands/PinMessage.hx", lineNumber : 45, className : "commands.PinMessage", methodName : "run"});
 	}
 	,get_name: function() {
 		return "pinmessage";
