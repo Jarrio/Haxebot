@@ -6605,6 +6605,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Snippet = function(_universe) {
 	this.cache = new haxe_ds_StringMap();
+	this.results_per_page_no_desc = 20;
 	this.results_per_page = 10;
 	this.tags = [];
 	this.sent = [];
@@ -6619,6 +6620,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 	sent: null
 	,tags: null
 	,results_per_page: null
+	,results_per_page_no_desc: null
 	,cache: null
 	,onEnabled: function() {
 		var _gthis = this;
@@ -6645,6 +6647,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		});
 	}
 	,update: function(_) {
+		var _gthis = this;
 		systems_CommandDbBase.prototype.update.call(this,_);
 		var _this = this.button_events;
 		var _set = _this.entities;
@@ -6655,27 +6658,58 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
 			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var cache = this.cache.h[interaction.user.id];
-			switch(command) {
-			case "snippet_left":
-				if(cache.page - 1 >= 0) {
-					var embed = this.formatResultOutput(cache,-1);
-					cache.message.edit({ embeds : [embed]});
+			if(cache != null) {
+				switch(command) {
+				case "snippet_left":
+					if(cache.page - 1 >= 0) {
+						var embed = this.formatResultOutput(cache,-1);
+						cache.message.edit({ embeds : [embed]});
+					}
+					cache.interacted_at = new Date().getTime();
+					interaction.deferUpdate().then(null,Util_err);
+					this.universe.deleteEntity(entity);
+					break;
+				case "snippet_right":
+					var page = cache.page;
+					var results_pp = cache.desc ? this.results_per_page : this.results_per_page_no_desc;
+					var max = Math.ceil(cache.results.length / results_pp);
+					if(page + 1 < max) {
+						var embed1 = this.formatResultOutput(cache,1);
+						cache.message.edit({ embeds : [embed1]});
+					}
+					cache.interacted_at = new Date().getTime();
+					interaction.deferUpdate().then(null,Util_err);
+					this.universe.deleteEntity(entity);
+					break;
+				default:
 				}
-				interaction.deferUpdate().then(null,Util_err);
-				this.universe.deleteEntity(entity);
-				break;
-			case "snippet_right":
-				var page = cache.page;
-				var max = Math.ceil(cache.results.length / this.results_per_page);
-				if(page + 1 < max) {
-					var embed1 = this.formatResultOutput(cache,1);
-					cache.message.edit({ embeds : [embed1]});
-				}
-				interaction.deferUpdate().then(null,Util_err);
-				this.universe.deleteEntity(entity);
-				break;
-			default:
 			}
+			if(command == "snippet_left" || command == "snippet_right") {
+				this.universe.deleteEntity(entity);
+			}
+		}
+		var h = this.cache.h;
+		var _g1_keys = Object.keys(h);
+		var _g1_length = _g1_keys.length;
+		var _g1_current = 0;
+		while(_g1_current < _g1_length) {
+			var key = _g1_keys[_g1_current++];
+			var _g2_value = h[key];
+			var key1 = [key];
+			var now = new Date().getTime();
+			var diff = now - _g2_value.interacted_at;
+			if(diff < 30000) {
+				continue;
+			}
+			var embed = this.formatResultOutput(_g2_value,0);
+			_g2_value.message.edit({ embeds : [embed], components : []}).then((function(key) {
+				return function(_) {
+					var _this = _gthis.cache;
+					if(Object.prototype.hasOwnProperty.call(_this.h,key[0])) {
+						delete(_this.h[key[0]]);
+					}
+				};
+			})(key1),Util_err);
 		}
 	}
 	,run: function(command,interaction) {
@@ -6688,42 +6722,21 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(show_desc == null) {
 				show_desc = true;
 			}
-			var builder = new discord_$builder_APIActionRowComponent();
-			builder.addComponents(new discord_$builder_ButtonBuilder().setCustomId("snippet_left").setLabel("Prev").setStyle(1),new discord_$builder_ButtonBuilder().setCustomId("snippet_right").setLabel("Next").setStyle(1));
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.orderBy("id","asc"));
 			if(_g1 != null) {
 				q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("submitted_by","==",_g1.id),firebase_web_firestore_Firestore.orderBy("id","asc"));
 			}
 			firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
-				var desc = "No results found";
-				if(resp.docs.length > 0) {
-					desc = "";
-				}
 				var res = [];
 				var _g = 0;
 				var _g1 = resp.docs;
 				while(_g < _g1.length) {
 					var doc = _g1[_g];
 					++_g;
-					var data = doc.data();
-					desc += "**" + data.id + ") [" + data.title + "](" + data.url + ")**\n";
-					if(show_desc) {
-						desc += data.description + "\n";
-					}
-					res.push(data);
+					res.push(doc.data());
 				}
-				var embed = new discord_$js_MessageEmbed();
-				embed.setTitle("Snippet Search");
-				if(desc.length > 3900) {
-					desc = HxOverrides.substr(desc,0,3900) + "...";
-				}
-				embed.setDescription(desc);
-				var obj = { page : 0, desc : show_desc, message : null, results : res};
-				var embed = _gthis.formatResultOutput(obj,0);
-				interaction.reply({ embeds : [embed], components : [builder], fetchReply : true}).then(function(message) {
-					obj.message = message;
-					_gthis.cache.h[interaction.user.id] = obj;
-				},Util_err);
+				var obj = { page : 0, desc : show_desc, message : null, results : res, interacted_at : new Date().getTime()};
+				_gthis.handleSearchResponse(interaction,obj);
 			},Util_err);
 			break;
 		case 3:
@@ -6792,23 +6805,16 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("tags","array-contains-any",restraints));
 			firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
-				var desc = "No results found";
-				if(resp.docs.length > 0) {
-					desc = "Results found for tags: " + restraints.toString() + "\n\n";
+				var res = [];
+				var _g = 0;
+				var _g1 = resp.docs;
+				while(_g < _g1.length) {
+					var doc = _g1[_g];
+					++_g;
+					res.push(doc.data());
 				}
-				var _this = resp.docs;
-				var _g_current = 0;
-				while(_g_current < _this.length) {
-					var _g1_value = _this[_g_current];
-					var _g1_key = _g_current++;
-					var data = _g1_value.data();
-					desc += "**" + (_g1_key + 1) + ") [" + data.title + "](" + data.url + ")**\n";
-					desc += data.description + "\n";
-				}
-				var embed = new discord_$js_MessageEmbed();
-				embed.setTitle("Snippet Search");
-				embed.setDescription(desc);
-				interaction.reply({ embeds : [embed]});
+				var obj = { page : 0, desc : true, message : null, results : res, interacted_at : new Date().getTime()};
+				_gthis.handleSearchResponse(interaction,obj);
 			},Util_err);
 			break;
 		case 6:
@@ -6901,11 +6907,29 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		default:
 		}
 	}
+	,handleSearchResponse: function(interaction,state) {
+		var _gthis = this;
+		var builder = new discord_$builder_APIActionRowComponent();
+		builder.addComponents(new discord_$builder_ButtonBuilder().setCustomId("snippet_left").setLabel("Prev").setStyle(1),new discord_$builder_ButtonBuilder().setCustomId("snippet_right").setLabel("Next").setStyle(1));
+		var arr = [];
+		var results_pp = state.desc ? this.results_per_page : this.results_per_page_no_desc;
+		var max = Math.ceil(state.results.length / results_pp);
+		if(max > 1) {
+			arr = [builder];
+		}
+		var embed = this.formatResultOutput(state,0);
+		interaction.reply({ embeds : [embed], components : arr, fetchReply : true}).then(function(message) {
+			state.message = message;
+			_gthis.cache.h[interaction.user.id] = state;
+		},Util_err);
+	}
 	,formatResultOutput: function(state,forward) {
 		var embed = new discord_$js_MessageEmbed();
 		var desc = "No results found";
 		var results = state.results;
-		embed.setTitle("List of Snippets");
+		var results_pp = state.desc ? this.results_per_page : this.results_per_page_no_desc;
+		var max = Math.ceil(results.length / results_pp);
+		embed.setTitle("Snippets");
 		if(results.length > 0) {
 			desc = "";
 			if(forward == -1) {
@@ -6916,27 +6940,30 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			}
 			var start = 0;
 			if(state.page > 0) {
-				start = state.page * this.results_per_page;
+				start = state.page * results_pp;
 			}
-			var end = start + this.results_per_page;
+			var end = start + results_pp;
 			if(start < 0) {
 				start = 0;
 			}
 			if(end > results.length) {
 				end = results.length - 1;
 			}
-			var _g = 0;
-			var _g1 = results.slice(start,end);
-			while(_g < _g1.length) {
-				var data = _g1[_g];
-				++_g;
-				desc += "**" + data.id + ") [" + data.title + "](" + data.url + ")**\n";
+			var _this = results.slice(start,end);
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g1_value = _this[_g_current];
+				var _g1_key = _g_current++;
+				var count = start + _g1_key + 1;
+				desc += "**" + count + ") [" + _g1_value.title + "](" + _g1_value.url + ")**\n";
 				if(state.desc) {
-					desc += data.description + "\n";
+					desc += _g1_value.description + "\n";
 				}
 			}
 		}
+		embed.setColor(15368736);
 		embed.setDescription(desc);
+		embed.setFooter({ iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1", text : "Page " + (state.page + 1) + " / " + max});
 		return embed;
 	}
 	,validateURL: function(content) {

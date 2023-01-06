@@ -15,6 +15,7 @@ class Snippet extends CommandDbBase {
 	var sent:Array<TSnippet> = [];
 	var tags:Array<{name:String, value:String}> = [];
 	final results_per_page:Int = 10;
+	final results_per_page_no_desc:Int = 20;
 	var cache:Map<String, TListState> = [];
 	@:fastFamily var button_events:{command:CommandForward, interaction:BaseCommandInteraction};
 
@@ -45,26 +46,46 @@ class Snippet extends CommandDbBase {
 		super.update(_);
 		iterate(button_events, entity -> {
 			var cache = this.cache.get(interaction.user.id);
-			switch (command) {
-				case snippet_left:
-					if (cache.page - 1 >= 0) {
-						var embed = this.formatResultOutput(cache, -1);
-						cache.message.edit({embeds: [embed]});
-					}
-					interaction.deferUpdate().then(null, err);
-					universe.deleteEntity(entity);
-				case snippet_right:
-					var page = cache.page;
-					var max = Math.ceil(cache.results.length / this.results_per_page);
-					if (page + 1 < max) {
-						var embed = this.formatResultOutput(cache, 1);
-						cache.message.edit({embeds: [embed]});	
-					}
-					interaction.deferUpdate().then(null, err);
-					universe.deleteEntity(entity);
-				default:
+			if (cache != null) {
+				switch (command) {
+					case snippet_left:
+						if (cache.page - 1 >= 0) {
+							var embed = this.formatResultOutput(cache, -1);
+							cache.message.edit({embeds: [embed]});
+						}
+						cache.interacted_at = Date.now().getTime();
+						interaction.deferUpdate().then(null, err);
+						universe.deleteEntity(entity);
+					case snippet_right:
+						var page = cache.page;
+						var results_pp = (cache.desc) ? results_per_page : results_per_page_no_desc;
+						var max = Math.ceil(cache.results.length / results_pp);
+						if (page + 1 < max) {
+							var embed = this.formatResultOutput(cache, 1);
+							cache.message.edit({embeds: [embed]});
+						}
+						cache.interacted_at = Date.now().getTime();
+						interaction.deferUpdate().then(null, err);
+						universe.deleteEntity(entity);
+					default:
+				}
+			}
+			if (command == snippet_left || command == snippet_right) {
+				universe.deleteEntity(entity);
 			}
 		});
+
+		for (key => item in cache) {
+			var now = Date.now().getTime();
+			var diff = now - item.interacted_at;
+			if (diff < 30000) {
+				continue;
+			}
+			var embed = this.formatResultOutput(item, 0);
+			item.message.edit({embeds: [embed], components: []}).then(function(_) {
+				this.cache.remove(key);
+			}, err);
+		}
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -184,32 +205,26 @@ class Snippet extends CommandDbBase {
 
 				var q = query(collection(this.db, 'discord/snippets/entries'), where('tags', ARRAY_CONTAINS_ANY, restraints));
 				getDocs(q).then(function(resp) {
-					var desc = 'No results found';
+					var res = [];
 
-					if (resp.docs.length > 0) {
-						desc = 'Results found for tags: ${restraints.toString()}\n\n';
+					for (doc in resp.docs) {
+						res.push(doc.data());
 					}
 
-					for (i => doc in resp.docs) {
-						var data = (doc.data() : TSnippet);
-						desc += '**${i + 1}) [${data.title}](${data.url})**\n';
-						desc += data.description + '\n';
+					var obj = {
+						page: 0,
+						desc: true,
+						message: null,
+						results: res,
+						interacted_at: Date.now().getTime()
 					}
 
-					var embed = new MessageEmbed();
-					embed.setTitle('Snippet Search');
-					embed.setDescription(desc);
-
-					interaction.reply({embeds: [embed]});
+					this.handleSearchResponse(interaction, obj);
 				}, err);
 			case SnippetList(user, show_desc):
 				if (show_desc == null) {
 					show_desc = true;
 				}
-
-				var builder = new APIActionRowComponent();
-				builder.addComponents(new ButtonBuilder().setCustomId('snippet_left').setLabel('Prev').setStyle(Primary),
-					new ButtonBuilder().setCustomId('snippet_right').setLabel('Next').setStyle(Primary));
 
 				var q = query(collection(this.db, 'discord/snippets/entries'), orderBy('id', ASCENDING));
 				if (user != null) {
@@ -217,41 +232,21 @@ class Snippet extends CommandDbBase {
 				}
 
 				getDocs(q).then(function(resp) {
-					var desc = 'No results found';
-
-					if (resp.docs.length > 0) {
-						desc = '';
-					}
 					var res = [];
 
 					for (doc in resp.docs) {
-						var data = (doc.data() : TSnippet);
-						desc += '**${data.id}) [${data.title}](${data.url})**\n';
-						if (show_desc) {
-							desc += data.description + '\n';
-						}
-						res.push(data);
+						res.push(doc.data());
 					}
 
-					var embed = new MessageEmbed();
-					embed.setTitle('Snippet Search');
-					if (desc.length > 3900) {
-						desc = desc.substr(0, 3900) + '...';
-					}
-
-					embed.setDescription(desc);
 					var obj = {
 						page: 0,
 						desc: show_desc,
 						message: null,
-						results: res
+						results: res,
+						interacted_at: Date.now().getTime()
 					}
 
-					var embed = formatResultOutput(obj, 0);
-					interaction.reply({embeds: [embed], components: [builder], fetchReply: true}).then(function(message) {
-						obj.message = message;
-						this.cache.set(interaction.user.id, obj);
-					}, err);
+					this.handleSearchResponse(interaction, obj);
 				}, err);
 			case SnippetEdit(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id),
@@ -303,11 +298,34 @@ class Snippet extends CommandDbBase {
 		}
 	}
 
+	function handleSearchResponse(interaction:BaseCommandInteraction, state:TListState) {
+		var builder = new APIActionRowComponent();
+		builder.addComponents(
+			new ButtonBuilder().setCustomId('snippet_left').setLabel('Prev').setStyle(Primary),
+			new ButtonBuilder().setCustomId('snippet_right').setLabel('Next').setStyle(Primary)
+		);
+		var arr = [];
+		var results_pp = (state.desc) ? results_per_page : results_per_page_no_desc;
+		var max = Math.ceil(state.results.length / results_pp);
+		if (max > 1) {
+			arr = [builder];
+		}
+
+		var embed = formatResultOutput(state, 0);
+		interaction.reply({embeds: [embed], components: arr, fetchReply: true}).then(function(message) {
+			state.message = message;
+			this.cache.set(interaction.user.id, state);
+		}, err);
+	}
+
 	function formatResultOutput(state:TListState, forward:Int) {
 		var embed = new MessageEmbed();
 		var desc = 'No results found';
 		var results = state.results;
-		embed.setTitle('List of Snippets');
+		var results_pp = (state.desc) ? results_per_page : results_per_page_no_desc;
+		var max = Math.ceil(results.length / results_pp);
+
+		embed.setTitle('Snippets');
 		if (results.length > 0) {
 			desc = '';
 			if (forward == -1) {
@@ -320,10 +338,10 @@ class Snippet extends CommandDbBase {
 
 			var start = 0;
 			if (state.page > 0) {
-				start = state.page * this.results_per_page;
+				start = state.page * results_pp;
 			}
 
-			var end = start + this.results_per_page;
+			var end = start + results_pp;
 
 			if (start < 0) {
 				start = 0;
@@ -333,16 +351,18 @@ class Snippet extends CommandDbBase {
 				end = results.length - 1;
 			}
 
-			for (data in results.slice(start, end)) {
-				desc += '**${data.id}) [${data.title}](${data.url})**\n';
+			for (i => data in results.slice(start, end)) {
+				var count = start + i + 1;
+				desc += '**$count) [${data.title}](${data.url})**\n';
 				if (state.desc) {
 					desc += data.description + '\n';
 				}
 			}
-			
 		}
 
+		embed.setColor(0xEA8220);
 		embed.setDescription(desc);
+		embed.setFooter({iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1', text: 'Page ${state.page + 1} / $max'});
 		return embed;
 	}
 
@@ -395,6 +415,7 @@ class Snippet extends CommandDbBase {
 typedef TListState = {
 	var page:Int;
 	var desc:Bool;
+	var interacted_at:Float;
 	var message:Message;
 	var results:Array<TSnippet>;
 }
