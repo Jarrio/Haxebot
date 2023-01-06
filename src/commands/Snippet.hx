@@ -134,9 +134,9 @@ class Snippet extends CommandDbBase {
 				}
 
 				if (url.charAt(url.length - 1) == '/') {
-					url = url.substring(0, url.length - 2);
+					url = url.substring(0, url.length - 1);
 				}
-
+				
 				for (tag in obj.tags) {
 					var found = false;
 					for (v in this.tags) {
@@ -348,7 +348,7 @@ class Snippet extends CommandDbBase {
 			}
 
 			if (end > results.length) {
-				end = results.length - 1;
+				end = results.length;
 			}
 
 			for (i => data in results.slice(start, end)) {

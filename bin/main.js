@@ -6855,7 +6855,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				return;
 			}
 			if(_g1.charAt(_g1.length - 1) == "/") {
-				url = _g1.substring(0,_g1.length - 2);
+				url = _g1.substring(0,_g1.length - 1);
 			}
 			var _g = 0;
 			var _g1 = obj.tags;
@@ -6947,7 +6947,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				start = 0;
 			}
 			if(end > results.length) {
-				end = results.length - 1;
+				end = results.length;
 			}
 			var _this = results.slice(start,end);
 			var _g_current = 0;
