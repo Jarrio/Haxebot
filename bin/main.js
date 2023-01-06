@@ -6584,6 +6584,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		case 2:
 			var _g1 = _g.user;
 			var show_desc = _g.show_desc;
+			if(show_desc == null) {
+				show_desc = true;
+			}
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.orderBy("id","asc"));
 			if(_g1 != null) {
 				q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("submitted_by","==",_g1.id),firebase_web_firestore_Firestore.orderBy("id","asc"));
@@ -6606,8 +6609,11 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				var embed = new discord_$js_MessageEmbed();
 				embed.setTitle("Snippet Search");
+				if(desc.length > 3900) {
+					desc = HxOverrides.substr(desc,0,3900) + "...";
+				}
 				embed.setDescription(desc);
-				interaction.reply({ embeds : [embed]});
+				interaction.reply({ embeds : [embed]}).then(null,Util_err);
 			},Util_err);
 			break;
 		case 3:
@@ -6784,6 +6790,13 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			break;
 		default:
 		}
+	}
+	,paginate: function(message) {
+		message.react(":arrow_left:").then(function(_) {
+			message.react(":arrow_right:").then(function(_) {
+				message.createReactionCollector({ });
+			});
+		});
 	}
 	,validateURL: function(content) {
 		var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");

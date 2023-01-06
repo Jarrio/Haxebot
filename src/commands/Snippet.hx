@@ -1,5 +1,6 @@
 package commands;
 
+import discord_js.Message;
 import js.html.URL;
 import externs.FuzzySort;
 import firebase.web.firestore.DocumentSnapshot;
@@ -175,6 +176,10 @@ class Snippet extends CommandDbBase {
 					interaction.reply({embeds: [embed]});
 				}, err);
 			case SnippetList(user, show_desc):
+				if (show_desc == null) {
+					show_desc = true;
+				}
+
 				var q = query(collection(this.db, 'discord/snippets/entries'), orderBy('id', ASCENDING));
 				if (user != null) {
 					q = query(collection(this.db, 'discord/snippets/entries'), where('submitted_by', EQUAL_TO, user.id), orderBy('id', ASCENDING));
@@ -196,9 +201,12 @@ class Snippet extends CommandDbBase {
 
 					var embed = new MessageEmbed();
 					embed.setTitle('Snippet Search');
+					if (desc.length > 3900) {
+						desc = desc.substr(0, 3900) + '...';
+					}
 					embed.setDescription(desc);
 
-					interaction.reply({embeds: [embed]});
+					interaction.reply({embeds: [embed]}).then(null, err);
 				}, err);
 			case SnippetEdit(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id),
@@ -248,6 +256,15 @@ class Snippet extends CommandDbBase {
 				}, err);
 			default:
 		}
+	}
+
+	function paginate(message:Message) {
+		message.react(':arrow_left:').then(function(_) {
+			message.react(':arrow_right:').then(function(_) {
+				message.createReactionCollector({});
+			});
+		});
+		
 	}
 
 	function validateURL(content:String) {
