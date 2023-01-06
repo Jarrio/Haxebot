@@ -1277,6 +1277,66 @@ Main.start = function() {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
+			if(interaction.customId == "snippet_left") {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,0,"snippet_left");
+				Main.universe.components.set(_ecsTmpEntity,3,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(6);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
+			if(interaction.customId == "snippet_right") {
+				var _ecsTmpEntity = Main.universe.createEntity();
+				Main.universe.components.set(_ecsTmpEntity,0,"snippet_right");
+				Main.universe.components.set(_ecsTmpEntity,3,interaction);
+				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(2);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(6);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+			}
 			return;
 		}
 		if(interaction.isModalSubmit()) {
@@ -1342,7 +1402,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 244, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 252, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1529,7 +1589,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 385, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 393, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1538,14 +1598,14 @@ Main.main = function() {
 		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 394, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 402, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 403, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 411, className : "Main", methodName : "main"});
 		Main.auth = res.user;
 		Main.logged_in = true;
 	},Util_err);
@@ -6544,9 +6604,13 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Showcase
 });
 var commands_Snippet = function(_universe) {
+	this.cache = new haxe_ds_StringMap();
+	this.results_per_page = 10;
 	this.tags = [];
 	this.sent = [];
 	systems_CommandDbBase.call(this,_universe);
+	this.button_events = this.universe.families.get(4);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(0);
 };
 $hxClasses["commands.Snippet"] = commands_Snippet;
 commands_Snippet.__name__ = "commands.Snippet";
@@ -6554,6 +6618,8 @@ commands_Snippet.__super__ = systems_CommandDbBase;
 commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 	sent: null
 	,tags: null
+	,results_per_page: null
+	,cache: null
 	,onEnabled: function() {
 		var _gthis = this;
 		this.has_subcommands = true;
@@ -6578,7 +6644,42 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			});
 		});
 	}
+	,update: function(_) {
+		systems_CommandDbBase.prototype.update.call(this,_);
+		var _this = this.button_events;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
+			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var cache = this.cache.h[interaction.user.id];
+			switch(command) {
+			case "snippet_left":
+				if(cache.page - 1 >= 0) {
+					var embed = this.formatResultOutput(cache,-1);
+					cache.message.edit({ embeds : [embed]});
+				}
+				interaction.deferUpdate().then(null,Util_err);
+				this.universe.deleteEntity(entity);
+				break;
+			case "snippet_right":
+				var page = cache.page;
+				var max = Math.ceil(cache.results.length / this.results_per_page);
+				if(page + 1 < max) {
+					var embed1 = this.formatResultOutput(cache,1);
+					cache.message.edit({ embeds : [embed1]});
+				}
+				interaction.deferUpdate().then(null,Util_err);
+				this.universe.deleteEntity(entity);
+				break;
+			default:
+			}
+		}
+	}
 	,run: function(command,interaction) {
+		var _gthis = this;
 		var _g = command.content;
 		switch(_g._hx_index) {
 		case 2:
@@ -6587,6 +6688,8 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(show_desc == null) {
 				show_desc = true;
 			}
+			var builder = new discord_$builder_APIActionRowComponent();
+			builder.addComponents(new discord_$builder_ButtonBuilder().setCustomId("snippet_left").setLabel("Prev").setStyle(1),new discord_$builder_ButtonBuilder().setCustomId("snippet_right").setLabel("Next").setStyle(1));
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.orderBy("id","asc"));
 			if(_g1 != null) {
 				q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("submitted_by","==",_g1.id),firebase_web_firestore_Firestore.orderBy("id","asc"));
@@ -6596,6 +6699,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				if(resp.docs.length > 0) {
 					desc = "";
 				}
+				var res = [];
 				var _g = 0;
 				var _g1 = resp.docs;
 				while(_g < _g1.length) {
@@ -6606,6 +6710,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					if(show_desc) {
 						desc += data.description + "\n";
 					}
+					res.push(data);
 				}
 				var embed = new discord_$js_MessageEmbed();
 				embed.setTitle("Snippet Search");
@@ -6613,7 +6718,12 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					desc = HxOverrides.substr(desc,0,3900) + "...";
 				}
 				embed.setDescription(desc);
-				interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				var obj = { page : 0, desc : show_desc, message : null, results : res};
+				var embed = _gthis.formatResultOutput(obj,0);
+				interaction.reply({ embeds : [embed], components : [builder], fetchReply : true}).then(function(message) {
+					obj.message = message;
+					_gthis.cache.h[interaction.user.id] = obj;
+				},Util_err);
 			},Util_err);
 			break;
 		case 3:
@@ -6791,12 +6901,43 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		default:
 		}
 	}
-	,paginate: function(message) {
-		message.react(":arrow_left:").then(function(_) {
-			message.react(":arrow_right:").then(function(_) {
-				message.createReactionCollector({ });
-			});
-		});
+	,formatResultOutput: function(state,forward) {
+		var embed = new discord_$js_MessageEmbed();
+		var desc = "No results found";
+		var results = state.results;
+		embed.setTitle("List of Snippets");
+		if(results.length > 0) {
+			desc = "";
+			if(forward == -1) {
+				state.page -= 1;
+			}
+			if(forward == 1) {
+				state.page += 1;
+			}
+			var start = 0;
+			if(state.page > 0) {
+				start = state.page * this.results_per_page;
+			}
+			var end = start + this.results_per_page;
+			if(start < 0) {
+				start = 0;
+			}
+			if(end > results.length) {
+				end = results.length - 1;
+			}
+			var _g = 0;
+			var _g1 = results.slice(start,end);
+			while(_g < _g1.length) {
+				var data = _g1[_g];
+				++_g;
+				desc += "**" + data.id + ") [" + data.title + "](" + data.url + ")**\n";
+				if(state.desc) {
+					desc += data.description + "\n";
+				}
+			}
+		}
+		embed.setDescription(desc);
+		return embed;
 	}
 	,validateURL: function(content) {
 		var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
@@ -6839,12 +6980,11 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		embed.setURL(obj.url);
 		embed.setDescription(obj.description);
 	}
-	,update: function(_) {
-		systems_CommandDbBase.prototype.update.call(this,_);
-	}
 	,get_name: function() {
 		return "snippet";
 	}
+	,button_events: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,__class__: commands_Snippet
 });
 var systems_TextCommandBase = function(_universe) {

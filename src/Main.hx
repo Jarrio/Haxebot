@@ -231,6 +231,14 @@ class Main {
 				if (interaction.customId == 'showcase_disagree') {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
 				}
+
+				if (interaction.customId == 'snippet_left') {
+					universe.setComponents(universe.createEntity(), CommandForward.snippet_left, interaction);
+				}
+
+				if (interaction.customId == 'snippet_right') {
+					universe.setComponents(universe.createEntity(), CommandForward.snippet_right, interaction);
+				}
 				return;
 			}
 
@@ -582,6 +590,8 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) {
+	var snippet_left;
+	var snippet_right;
 	var thread_pin_message;
 	var helppls;
 	var message_context_menu;

@@ -1,12 +1,12 @@
 package commands;
 
 import discord_js.Message;
-import js.html.URL;
+import Main.CommandForward;
+import discord_builder.APIActionRowComponent;
+import discord_builder.ButtonBuilder;
 import externs.FuzzySort;
 import firebase.web.firestore.DocumentSnapshot;
 import discord_js.MessageEmbed;
-import discord_js.TextChannel;
-import firebase.web.firestore.DocumentReference;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
@@ -14,6 +14,9 @@ import systems.CommandDbBase;
 class Snippet extends CommandDbBase {
 	var sent:Array<TSnippet> = [];
 	var tags:Array<{name:String, value:String}> = [];
+	final results_per_page:Int = 10;
+	var cache:Map<String, TListState> = [];
+	@:fastFamily var button_events:{command:CommandForward, interaction:BaseCommandInteraction};
 
 	override function onEnabled() {
 		this.has_subcommands = true;
@@ -30,13 +33,37 @@ class Snippet extends CommandDbBase {
 				if (a.name.charCodeAt(0) > b.name.charCodeAt(0)) {
 					return 1;
 				}
-
 				if (a.name.charCodeAt(0) < b.name.charCodeAt(0)) {
 					return -1;
 				}
-
 				return 0;
 			});
+		});
+	}
+
+	override function update(_) {
+		super.update(_);
+		iterate(button_events, entity -> {
+			var cache = this.cache.get(interaction.user.id);
+			switch (command) {
+				case snippet_left:
+					if (cache.page - 1 >= 0) {
+						var embed = this.formatResultOutput(cache, -1);
+						cache.message.edit({embeds: [embed]});
+					}
+					interaction.deferUpdate().then(null, err);
+					universe.deleteEntity(entity);
+				case snippet_right:
+					var page = cache.page;
+					var max = Math.ceil(cache.results.length / this.results_per_page);
+					if (page + 1 < max) {
+						var embed = this.formatResultOutput(cache, 1);
+						cache.message.edit({embeds: [embed]});	
+					}
+					interaction.deferUpdate().then(null, err);
+					universe.deleteEntity(entity);
+				default:
+			}
 		});
 	}
 
@@ -180,16 +207,22 @@ class Snippet extends CommandDbBase {
 					show_desc = true;
 				}
 
+				var builder = new APIActionRowComponent();
+				builder.addComponents(new ButtonBuilder().setCustomId('snippet_left').setLabel('Prev').setStyle(Primary),
+					new ButtonBuilder().setCustomId('snippet_right').setLabel('Next').setStyle(Primary));
+
 				var q = query(collection(this.db, 'discord/snippets/entries'), orderBy('id', ASCENDING));
 				if (user != null) {
 					q = query(collection(this.db, 'discord/snippets/entries'), where('submitted_by', EQUAL_TO, user.id), orderBy('id', ASCENDING));
 				}
+
 				getDocs(q).then(function(resp) {
 					var desc = 'No results found';
 
 					if (resp.docs.length > 0) {
 						desc = '';
 					}
+					var res = [];
 
 					for (doc in resp.docs) {
 						var data = (doc.data() : TSnippet);
@@ -197,6 +230,7 @@ class Snippet extends CommandDbBase {
 						if (show_desc) {
 							desc += data.description + '\n';
 						}
+						res.push(data);
 					}
 
 					var embed = new MessageEmbed();
@@ -204,9 +238,20 @@ class Snippet extends CommandDbBase {
 					if (desc.length > 3900) {
 						desc = desc.substr(0, 3900) + '...';
 					}
-					embed.setDescription(desc);
 
-					interaction.reply({embeds: [embed]}).then(null, err);
+					embed.setDescription(desc);
+					var obj = {
+						page: 0,
+						desc: show_desc,
+						message: null,
+						results: res
+					}
+
+					var embed = formatResultOutput(obj, 0);
+					interaction.reply({embeds: [embed], components: [builder], fetchReply: true}).then(function(message) {
+						obj.message = message;
+						this.cache.set(interaction.user.id, obj);
+					}, err);
 				}, err);
 			case SnippetEdit(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'), where('id', EQUAL_TO, id),
@@ -258,13 +303,47 @@ class Snippet extends CommandDbBase {
 		}
 	}
 
-	function paginate(message:Message) {
-		message.react(':arrow_left:').then(function(_) {
-			message.react(':arrow_right:').then(function(_) {
-				message.createReactionCollector({});
-			});
-		});
-		
+	function formatResultOutput(state:TListState, forward:Int) {
+		var embed = new MessageEmbed();
+		var desc = 'No results found';
+		var results = state.results;
+		embed.setTitle('List of Snippets');
+		if (results.length > 0) {
+			desc = '';
+			if (forward == -1) {
+				state.page = state.page - 1;
+			}
+
+			if (forward == 1) {
+				state.page = state.page + 1;
+			}
+
+			var start = 0;
+			if (state.page > 0) {
+				start = state.page * this.results_per_page;
+			}
+
+			var end = start + this.results_per_page;
+
+			if (start < 0) {
+				start = 0;
+			}
+
+			if (end > results.length) {
+				end = results.length - 1;
+			}
+
+			for (data in results.slice(start, end)) {
+				desc += '**${data.id}) [${data.title}](${data.url})**\n';
+				if (state.desc) {
+					desc += data.description + '\n';
+				}
+			}
+			
+		}
+
+		embed.setDescription(desc);
+		return embed;
 	}
 
 	function validateURL(content:String) {
@@ -308,13 +387,16 @@ class Snippet extends CommandDbBase {
 		embed.setDescription(obj.description);
 	}
 
-	override function update(_) {
-		super.update(_);
-	}
-
 	function get_name():String {
 		return 'snippet';
 	}
+}
+
+typedef TListState = {
+	var page:Int;
+	var desc:Bool;
+	var message:Message;
+	var results:Array<TSnippet>;
 }
 
 typedef TSnippet = {
