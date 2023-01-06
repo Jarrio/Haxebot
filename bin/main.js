@@ -6889,7 +6889,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				start = 0;
 			}
 			if(end > results.length) {
-				end = results.length - 1;
+				end = results.length;
 			}
 			var _this = results.slice(start,end);
 			var _g_current = 0;

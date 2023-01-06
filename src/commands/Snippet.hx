@@ -377,7 +377,7 @@ class Snippet extends CommandDbBase {
 			}
 
 			if (end > results.length) {
-				end = results.length - 1;
+				end = results.length;
 			}
 
 			for (i => data in results.slice(start, end)) {
