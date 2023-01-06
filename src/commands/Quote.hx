@@ -118,7 +118,7 @@ class Quote extends CommandDbBase {
 				}, err);
 			case QuoteGet(name) | QuoteCreate(name) | QuoteEdit(name) | QuoteDelete(name):
 				var type = get;
-				var enum_name = command.content.getName();
+				var enum_name = command.content.getName().toLowerCase();
 				if (enum_name.contains('get')) {
 					type = get;
 				}

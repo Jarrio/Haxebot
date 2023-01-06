@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(8);
-	var this11 = new Array(8);
+	var this1 = new Array(1);
+	var this11 = new Array(1);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(26);
 	var this11 = new Array(26);
@@ -784,34 +784,6 @@ Main.start = function() {
 	var s = new commands_Quote(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
-	s.onEnabled();
-	var s = new commands_Snippet(u);
-	phase.systems[1] = s;
-	phase.enabledSystems[1] = true;
-	s.onEnabled();
-	var s = new commands_mod_Mention(u);
-	phase.systems[2] = s;
-	phase.enabledSystems[2] = true;
-	s.onEnabled();
-	var s = new commands_TextMention(u);
-	phase.systems[3] = s;
-	phase.enabledSystems[3] = true;
-	s.onEnabled();
-	var s = new commands_Reminder(u);
-	phase.systems[4] = s;
-	phase.enabledSystems[4] = true;
-	s.onEnabled();
-	var s = new commands_PinMessage(u);
-	phase.systems[5] = s;
-	phase.enabledSystems[5] = true;
-	s.onEnabled();
-	var s = new commands_events_PinMessageInfo(u);
-	phase.systems[6] = s;
-	phase.enabledSystems[6] = true;
-	s.onEnabled();
-	var s = new commands_Run(u);
-	phase.systems[7] = s;
-	phase.enabledSystems[7] = true;
 	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
@@ -4315,7 +4287,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			var name = _g.name;
 			var type = "get";
 			var e = command.content;
-			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name.toLowerCase();
 			if(enum_name.indexOf("get") != -1) {
 				type = "get";
 			}
@@ -4522,7 +4494,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			var name1 = _g.name;
 			var type = "get";
 			var e = command.content;
-			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name.toLowerCase();
 			if(enum_name.indexOf("get") != -1) {
 				type = "get";
 			}
@@ -4729,7 +4701,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			var name2 = _g.name;
 			var type = "get";
 			var e = command.content;
-			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name.toLowerCase();
 			if(enum_name.indexOf("get") != -1) {
 				type = "get";
 			}
@@ -4936,7 +4908,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 			var name3 = _g.name;
 			var type = "get";
 			var e = command.content;
-			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name;
+			var enum_name = $hxEnums[e.__enum__].__constructs__[e._hx_index]._hx_name.toLowerCase();
 			if(enum_name.indexOf("get") != -1) {
 				type = "get";
 			}

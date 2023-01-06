@@ -86,7 +86,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Quote, Snippet, Mention, TextMention, Reminder, PinMessage, PinMessageInfo, Run],
+					systems: [Quote],
 				},
 				{
 					name: 'main',
