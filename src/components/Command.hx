@@ -12,12 +12,11 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Archive;
-	SnippetList(user:User);
+	SnippetList(user:User, show_desc:Bool);
 	SnippetEdit(id:String);	
 	SnippetDelete(id:String);	
 	SnippetSearch(taga:String, tagb:String, tagc:String);
-	SnippetAdd(title:String, description:String, url:String, taga:String, tagb:String, tagc:String, tagd:String, tage:String);
-
+	SnippetAdd(url:String, title:String, description:String, taga:String, tagb:String, tagc:String, tagd:String, tage:String);
 	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);

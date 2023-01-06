@@ -6583,6 +6583,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		switch(_g._hx_index) {
 		case 2:
 			var _g1 = _g.user;
+			var show_desc = _g.show_desc;
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.orderBy("id","asc"));
 			if(_g1 != null) {
 				q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("submitted_by","==",_g1.id),firebase_web_firestore_Firestore.orderBy("id","asc"));
@@ -6599,7 +6600,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					++_g;
 					var data = doc.data();
 					desc += "**" + data.id + ") [" + data.title + "](" + data.url + ")**\n";
-					desc += data.description + "\n";
+					if(show_desc) {
+						desc += data.description + "\n";
+					}
 				}
 				var embed = new discord_$js_MessageEmbed();
 				embed.setTitle("Snippet Search");
@@ -6693,14 +6696,14 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			},Util_err);
 			break;
 		case 6:
-			var _g1 = _g.url;
+			var _g1 = _g.description;
 			var _g2 = _g.taga;
 			var _g3 = _g.tagb;
 			var _g4 = _g.tagc;
 			var _g5 = _g.tagd;
 			var _g6 = _g.tage;
-			var title = _g.title;
-			var description = _g.description;
+			var title = _g.url;
+			var description = _g.title;
 			var url = _g1;
 			var ac = _g2;
 			var obj = { id : -1, submitted_by : interaction.user.id, timestamp : new Date().getTime(), title : title, description : description, url : _g1, tags : [_g2]};
@@ -7882,11 +7885,11 @@ commands_types_Duration.fromString = function(input) {
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
-	,SnippetList: ($_=function(user) { return {_hx_index:2,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetList",$_.__params__ = ["user"],$_)
+	,SnippetList: ($_=function(user,show_desc) { return {_hx_index:2,user:user,show_desc:show_desc,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetList",$_.__params__ = ["user","show_desc"],$_)
 	,SnippetEdit: ($_=function(id) { return {_hx_index:3,id:id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetEdit",$_.__params__ = ["id"],$_)
 	,SnippetDelete: ($_=function(id) { return {_hx_index:4,id:id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetDelete",$_.__params__ = ["id"],$_)
 	,SnippetSearch: ($_=function(taga,tagb,tagc) { return {_hx_index:5,taga:taga,tagb:tagb,tagc:tagc,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetSearch",$_.__params__ = ["taga","tagb","tagc"],$_)
-	,SnippetAdd: ($_=function(title,description,url,taga,tagb,tagc,tagd,tage) { return {_hx_index:6,title:title,description:description,url:url,taga:taga,tagb:tagb,tagc:tagc,tagd:tagd,tage:tage,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["title","description","url","taga","tagb","tagc","tagd","tage"],$_)
+	,SnippetAdd: ($_=function(url,title,description,taga,tagb,tagc,tagd,tage) { return {_hx_index:6,url:url,title:title,description:description,taga:taga,tagb:tagb,tagc:tagc,tagd:tagd,tage:tage,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["url","title","description","taga","tagb","tagc","tagd","tage"],$_)
 	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:7,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
 	,Social: ($_=function(tag,user) { return {_hx_index:8,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
 	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:9,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)

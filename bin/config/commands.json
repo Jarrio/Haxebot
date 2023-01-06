@@ -667,6 +667,12 @@
 						"description": "Get snippets by user",
 						"type": "user",
 						"required": false
+					},
+					{
+						"name": "desc",
+						"description": "Show description or not",
+						"type": "bool",
+						"required": false
 					}
 				]
 			},
@@ -704,6 +710,12 @@
 				"description": "Add a snippet",
 				"params":[
 					{
+						"name": "url",
+						"description": "The source of the content",
+						"type": "string",
+						"required": true
+					},
+					{
 						"name": "title",
 						"description": "The title of the snippet/project/code",
 						"type": "string",
@@ -712,12 +724,6 @@
 					{
 						"name": "description",
 						"description": "A description for the content being stored",
-						"type": "string",
-						"required": true
-					},
-					{
-						"name": "url",
-						"description": "The source of the content",
 						"type": "string",
 						"required": true
 					},

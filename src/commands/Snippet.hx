@@ -109,7 +109,7 @@ class Snippet extends CommandDbBase {
 						interaction.reply('Snippet already exists');
 						return;
 					}
-					
+
 					var doc = doc(db, 'discord/snippets');
 					Firestore.runTransaction(this.db, function(transaction) {
 						return transaction.get(doc).then(function(doc) {
@@ -174,7 +174,7 @@ class Snippet extends CommandDbBase {
 
 					interaction.reply({embeds: [embed]});
 				}, err);
-			case SnippetList(user):
+			case SnippetList(user, show_desc):
 				var q = query(collection(this.db, 'discord/snippets/entries'), orderBy('id', ASCENDING));
 				if (user != null) {
 					q = query(collection(this.db, 'discord/snippets/entries'), where('submitted_by', EQUAL_TO, user.id), orderBy('id', ASCENDING));
@@ -189,7 +189,9 @@ class Snippet extends CommandDbBase {
 					for (doc in resp.docs) {
 						var data = (doc.data() : TSnippet);
 						desc += '**${data.id}) [${data.title}](${data.url})**\n';
-						desc += data.description + '\n';
+						if (show_desc) {
+							desc += data.description + '\n';
+						}
 					}
 
 					var embed = new MessageEmbed();
