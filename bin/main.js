@@ -1385,7 +1385,7 @@ Main.start = function() {
 	});
 	Main.client.login(Main.get_discord().token);
 	new haxe_Timer(500).run = function() {
-		if(!Main.connected || !Main.commands_active) {
+		if(!Main.connected || !Main.commands_active || Main.state == null) {
 			return;
 		}
 		Main.universe.update(1);

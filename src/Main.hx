@@ -279,7 +279,7 @@ class Main {
 
 		client.login(discord.token);
 		new Timer(500).run = function() {
-			if (!connected || !commands_active) {
+			if (!connected || !commands_active || state == null) {
 				return;
 			}
 			universe.update(1);
