@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(5);
-	var this11 = new Array(5);
+	var this1 = new Array(3);
+	var this11 = new Array(3);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(26);
 	var this11 = new Array(26);
@@ -792,14 +792,6 @@ Main.start = function() {
 	var s = new commands_Run(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
-	s.onEnabled();
-	var s = new commands_Roundup(u);
-	phase.systems[3] = s;
-	phase.enabledSystems[3] = true;
-	s.onEnabled();
-	var s = new commands_Twitter(u);
-	phase.systems[4] = s;
-	phase.enabledSystems[4] = true;
 	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
@@ -6796,6 +6788,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					++_g;
 					res.push(doc.data());
 				}
+				res = _gthis.matchTags(restraints,res);
 				var obj = { page : 0, desc : true, message : null, results : res, interacted_at : new Date().getTime()};
 				_gthis.handleSearchResponse(interaction,obj);
 			},Util_err);
@@ -6889,6 +6882,28 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 			break;
 		default:
 		}
+	}
+	,matchTags: function(tags,results) {
+		var arr = [];
+		var _g = 0;
+		while(_g < results.length) {
+			var r = results[_g];
+			++_g;
+			var matches = 0;
+			var _g1 = 0;
+			var _g2 = r.tags;
+			while(_g1 < _g2.length) {
+				var rtag = _g2[_g1];
+				++_g1;
+				if(tags.indexOf(rtag) != -1) {
+					++matches;
+				}
+			}
+			if(matches == tags.length) {
+				arr.push(r);
+			}
+		}
+		return arr;
 	}
 	,handleSearchResponse: function(interaction,state) {
 		var _gthis = this;

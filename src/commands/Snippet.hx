@@ -224,11 +224,13 @@ class Snippet extends CommandDbBase {
 				var q = query(collection(this.db, 'discord/snippets/entries'),
 					where('tags', ARRAY_CONTAINS_ANY, restraints));
 				getDocs(q).then(function(resp) {
-					var res = [];
+					var res = new Array<TSnippet>();
 
 					for (doc in resp.docs) {
 						res.push(doc.data());
 					}
+
+					res = matchTags(restraints, res);
 
 					var obj = {
 						page: 0,
@@ -323,6 +325,23 @@ class Snippet extends CommandDbBase {
 				}, err);
 			default:
 		}
+	}
+
+	function matchTags(tags:Array<String>, results:Array<TSnippet>) {
+		var arr = [];
+		for (r in results) {
+			var matches = 0;
+			
+			for (rtag in r.tags) {
+				if (tags.contains(rtag)) {
+					matches++;
+				}
+			}
+			if (matches == tags.length) {
+				arr.push(r);
+			}
+		}
+		return arr;
 	}
 
 	function handleSearchResponse(interaction:BaseCommandInteraction, state:TListState) {
