@@ -5491,7 +5491,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		var today = new Date();
 		var hour = today.getUTCHours();
 		var diff = today.getTime() - this.last_checked;
-		if(today.getUTCDay() != 6) {
+		if(today.getUTCDay() != 4) {
 			if(diff >= commands_types_Duration.fromString("1d")) {
 				return false;
 			}

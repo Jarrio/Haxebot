@@ -75,7 +75,7 @@ class Roundup extends CommandBase {
 		var today = Date.now();
 		var hour = today.getUTCHours();
 		var diff = today.getTime() - last_checked;
-		if (today.getUTCDay() != 6) {
+		if (today.getUTCDay() != 4) {
 			if (diff >= Duration.fromString('1d')) {
 				return false;
 			}
