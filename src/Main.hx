@@ -75,7 +75,10 @@ class Main {
 
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
-		var get = rest.put(Routes.applicationGuildCommands(discord.client_id, Main.guild_id), {body: commands});
+		var get = rest.put(
+			Routes.applicationGuildCommands(discord.client_id, Main.guild_id),
+			{body: commands}
+		);
 		return get;
 	}
 
@@ -86,7 +89,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Quote, Snippet, Run],
+					systems: [Quote, Snippet, Run, Roundup, Twitter],
 				},
 				{
 					name: 'main',
@@ -169,7 +172,8 @@ class Main {
 
 			if (channel.type == DM) {
 				if (dm_help_tracking.exists(message.author.id)) {
-					universe.setComponents(universe.createEntity(), CommandForward.helppls, message);
+					universe.setComponents(universe.createEntity(), CommandForward.helppls,
+						message);
 				}
 				return;
 			}
@@ -186,7 +190,8 @@ class Main {
 
 			if (channel.type == GUILD_TEXT) {
 				if (channel.id == '162664383082790912') {
-					universe.setComponents(universe.createEntity(), CommandForward.showcase_message, message);
+					universe.setComponents(universe.createEntity(),
+						CommandForward.showcase_message, message);
 				}
 
 				if (message.content.startsWith("!react")) {
@@ -203,10 +208,12 @@ class Main {
 
 			if (check) {
 				if (message.content.startsWith("[showcase]")) {
-					universe.setComponents(universe.createEntity(), CommandForward.showcase, message);
+					universe.setComponents(universe.createEntity(), CommandForward.showcase,
+						message);
 				}
 			}
-			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention, message);
+			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention,
+				message);
 		});
 
 		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
@@ -215,24 +222,29 @@ class Main {
 		});
 
 		client.on('threadCreate', (thread:ThreadChannel) -> {
-			universe.setComponents(universe.createEntity(), CommandForward.thread_pin_message, thread);
+			universe.setComponents(universe.createEntity(), CommandForward.thread_pin_message,
+				thread);
 		});
 
 		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
 			if (interaction.isButton()) {
 				if (interaction.customId == 'showcase_agree') {
-					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree, interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree,
+						interaction);
 				}
 				if (interaction.customId == 'showcase_disagree') {
-					universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
+					universe.setComponents(universe.createEntity(),
+						CommandForward.showcase_disagree, interaction);
 				}
 
 				if (interaction.customId == 'snippet_left') {
-					universe.setComponents(universe.createEntity(), CommandForward.snippet_left, interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.snippet_left,
+						interaction);
 				}
 
 				if (interaction.customId == 'snippet_right') {
-					universe.setComponents(universe.createEntity(), CommandForward.snippet_right, interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.snippet_right,
+						interaction);
 				}
 				return;
 			}
@@ -240,9 +252,11 @@ class Main {
 			if (interaction.isModalSubmit()) {
 				switch (interaction.customId) {
 					case 'quote_set':
-						universe.setComponents(universe.createEntity(), CommandForward.quote_set, interaction);
+						universe.setComponents(universe.createEntity(), CommandForward.quote_set,
+							interaction);
 					case 'quote_edit':
-						universe.setComponents(universe.createEntity(), CommandForward.quote_edit, interaction);
+						universe.setComponents(universe.createEntity(), CommandForward.quote_edit,
+							interaction);
 					default:
 						trace(interaction.customId + ' - unhandled model');
 				}
@@ -250,10 +264,12 @@ class Main {
 			}
 
 			if (interaction.isMessageContextMenuCommand()) {
-				universe.setComponents(universe.createEntity(), CommandForward.message_context_menu, interaction);
+				universe.setComponents(universe.createEntity(),
+					CommandForward.message_context_menu, interaction);
 			}
 
-			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
+			if (!interaction.isCommand() && !interaction.isAutocomplete()
+				&& !interaction.isChatInputCommand()) {
 				return;
 			}
 
@@ -350,7 +366,8 @@ class Main {
 		return null;
 	}
 
-	static function parseIncomingCommand(args:Array<Dynamic>, param:TCommands, interaction:BaseCommandInteraction) {
+	static function parseIncomingCommand(args:Array<Dynamic>, param:TCommands,
+			interaction:BaseCommandInteraction) {
 		switch (param.type) {
 			case user:
 				args.push(interaction.options.getUser(param.name));
@@ -392,8 +409,10 @@ class Main {
 		try {
 			keys = Json.parse(File.getContent('./config/keys.json'));
 			command_file = Json.parse(File.getContent('./config/commands.json'));
+			#if block
 			state = Json.parse(File.getContent('./config/state.json'));
-		} catch (e) {
+			#end
+		} catch (e ) {
 			trace(e.message);
 		}
 
@@ -402,13 +421,27 @@ class Main {
 		}
 
 		Main.app = FirebaseApp.initializeApp(keys.firebase);
-		Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password).then(function(res) {
-			trace('logged in');
-			Main.auth = res.user;
-			Main.logged_in = true;
-		}, err);
+		Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password)
+			.then(function(res) {
+				trace('logged in');
+				var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
+				Firestore.getDoc(doc).then(function(resp) {
+					#if !block
+					state = resp.data().state;
+					#end
+					Main.auth = res.user;
+					Main.logged_in = true;
+				}, err);
+			}, err);
 
 		start();
+	}
+
+	static public function updateState() {
+		#if !block
+		var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
+		Firestore.updateDoc(doc, 'state', state).then(null, err);
+		#end
 	}
 
 	static function parseCommands() {
@@ -428,11 +461,16 @@ class Main {
 			}
 
 			if (command.type == menu) {
-				commands.push(new ContextMenuCommandBuilder().setName(command.name).setType(command.menu_type).setDefaultMemberPermissions(permission));
+				commands.push(
+					new ContextMenuCommandBuilder().setName(command.name)
+						.setType(command.menu_type)
+						.setDefaultMemberPermissions(permission));
 				continue;
 			}
 
-			var main_command = new SlashCommandBuilder().setName(command.name).setDescription(command.description).setDefaultMemberPermissions(permission);
+			var main_command = new SlashCommandBuilder().setName(command.name)
+				.setDescription(command.description)
+				.setDefaultMemberPermissions(permission);
 
 			if (command.params != null) {
 				for (param in command.params) {
@@ -440,7 +478,8 @@ class Main {
 
 					switch (param.type) {
 						case subcommand:
-							var subcommand = new SlashCommandSubcommandBuilder().setName(param.name).setDescription(param.description);
+							var subcommand = new SlashCommandSubcommandBuilder().setName(param.name)
+								.setDescription(param.description);
 							for (subparam in param.params) {
 								var autocomplete = false;
 								if (subparam.autocomplete != null) {
@@ -463,12 +502,18 @@ class Main {
 		return commands;
 	}
 
-	static function parseCommandType(param:TCommands, autocomplete:Bool, builder:SharedSlashCommandOptions) {
+	static function parseCommandType(param:TCommands, autocomplete:Bool,
+			builder:SharedSlashCommandOptions) {
 		switch (param.type) {
 			case user:
-				builder.addUserOption(new SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+				builder.addUserOption(
+					new SlashCommandUserOption().setName(param.name)
+						.setDescription(param.description)
+						.setRequired(param.required));
 			case string:
-				var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
+				var cmd = new SlashCommandStringOption().setName(param.name)
+					.setRequired(param.required)
+					.setAutocomplete(autocomplete);
 				if (param.description != null) {
 					cmd = cmd.setDescription(param.description);
 				}
@@ -482,17 +527,30 @@ class Main {
 
 				builder.addStringOption(cmd);
 			case bool:
-				builder.addBooleanOption(new SlashCommandBooleanOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+				builder.addBooleanOption(
+					new SlashCommandBooleanOption().setName(param.name)
+						.setDescription(param.description)
+						.setRequired(param.required));
 			case channel:
-				builder.addChannelOption(new SlashCommandChannelOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+				builder.addChannelOption(
+					new SlashCommandChannelOption().setName(param.name)
+						.setDescription(param.description)
+						.setRequired(param.required));
 			case role:
-				builder.addRoleOption(new SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+				builder.addRoleOption(
+					new SlashCommandRoleOption().setName(param.name)
+						.setDescription(param.description)
+						.setRequired(param.required));
 			case mention:
-				builder.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
-					.setDescription(param.description)
-					.setRequired(param.required));
+				builder.addMentionableOption(
+					new SlashCommandMentionableOption().setName(param.name)
+						.setDescription(param.description)
+						.setRequired(param.required));
 			case number:
-				builder.addNumberOption(new SlashCommandNumberOption().setName(param.name).setDescription(param.description).setRequired(param.required));
+				builder.addNumberOption(
+					new SlashCommandNumberOption().setName(param.name)
+						.setDescription(param.description)
+						.setRequired(param.required));
 			default:
 		}
 	}
@@ -541,7 +599,7 @@ typedef TState = {
 	var macros:Bool;
 	var project_name:String;
 	var twitter_since_id:String;
-	var last_roundup_posted:Int;
+	var next_roundup:Int;
 }
 
 typedef Foo = ApplicationCommandData;

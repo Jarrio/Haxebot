@@ -71,7 +71,7 @@ class Twitter extends CommandDbBase {
 	var ping_rate:Float = #if block Duration.minute #else Duration.hour #end;
 	var channel:TextChannel;
 	#if block
-	var channel_id:String = '1028078544867311727';
+	var channel_id:String = '597067735771381771';
 	#else
 	var channel_id:String = '1030188275341729882';
 	#end
@@ -223,7 +223,7 @@ class Twitter extends CommandDbBase {
 
 	inline function set_since_id(value:String) {
 		Main.state.twitter_since_id = value;
-		File.saveContent('./config/state.json', Json.stringify(Main.state));
+		Main.updateState();
 
 		return value;
 	}

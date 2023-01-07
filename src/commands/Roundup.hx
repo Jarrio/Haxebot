@@ -1,5 +1,6 @@
 package commands;
 
+import commands.types.Duration;
 import haxe.Json;
 import sys.io.File;
 import discord_builder.BaseCommandInteraction;
@@ -10,13 +11,14 @@ import systems.CommandBase;
 
 class Roundup extends CommandBase {
 	var last_checked:Float = -1;
+	var thursday_check:Float = -1;
 	var active:Bool = true;
 	var roundup(get, set):Int;
 	var channel:TextChannel = null;
 	var checking_channel:Bool = false;
 	final super_mod_id:String = '198916468312637440';
 	final news_role:String = '761714325227700225';
-	final announcement_channel:String = '286485321925918721';
+	final announcement_channel:String = #if block '597067735771381771' #else '286485321925918721' #end;
 
 	function getHaxeIoPage() {
 		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/${this.roundup}.md');
@@ -24,6 +26,7 @@ class Roundup extends CommandBase {
 		data.onError = (error) -> {
 			trace(error);
 		}
+
 		data.onData = (body) -> {
 			var regex = ~/### News and Articles(.*?)##### _In case you missed it_/gmis;
 			if (regex.match(body)) {
@@ -59,13 +62,43 @@ class Roundup extends CommandBase {
 				this.checking_channel = false;
 			}, err);
 		}
-
-		if (this.roundup == -1 || this.channel == null || Date.now().getTime() - last_checked <= 86400000) {
+	
+		if (this.roundup == -1 || this.channel == null || this.shouldCheck()) {
 			return;
 		}
 
 		this.last_checked = Date.now().getTime();
 		getHaxeIoPage();
+	}
+
+	function shouldCheck() {
+		var today = Date.now();
+		var hour = today.getUTCHours();
+		var diff = today.getTime() - last_checked;
+		if (today.getUTCDay() != 6) {
+			if (diff >= Duration.fromString('1d')) {
+				return false;
+			}
+			return true;
+		}
+
+		
+		if (hour < 11 || hour > 14) {
+			return true;
+		}
+
+		var min = today.getUTCMinutes();
+		if (min % 30 != 0) {
+			return true;
+		}
+
+		var diff = today.getTime() - thursday_check;
+		if (diff <= Duration.fromString('25m')) {
+			return true;
+		}
+
+		thursday_check = today.getTime();
+		return false;
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -100,12 +133,12 @@ class Roundup extends CommandBase {
 	}
 
 	inline function get_roundup() {
-		return Main.state.last_roundup_posted;
+		return Main.state.next_roundup;
 	}
 
 	inline function set_roundup(value:Int) {
-		Main.state.last_roundup_posted = value;
-		File.saveContent('./config/state.json', Json.stringify(Main.state));
+		Main.state.next_roundup = value;
+		Main.updateState();
 
 		return value;
 	}

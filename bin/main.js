@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(3);
-	var this11 = new Array(3);
+	var this1 = new Array(5);
+	var this11 = new Array(5);
 	vec[0] = new ecs_Phase(false,"testing",this1,this11);
 	var this1 = new Array(26);
 	var this11 = new Array(26);
@@ -793,6 +793,14 @@ Main.start = function() {
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
+	var s = new commands_Roundup(u);
+	phase.systems[3] = s;
+	phase.enabledSystems[3] = true;
+	s.onEnabled();
+	var s = new commands_Twitter(u);
+	phase.systems[4] = s;
+	phase.enabledSystems[4] = true;
+	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[0] = s;
@@ -910,7 +918,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 141, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 144, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -921,12 +929,12 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 150, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 153, className : "Main", methodName : "start"});
 			}
 		},Util_err);
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 160, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,0,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,4,member);
@@ -1116,8 +1124,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 213, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 214, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 220, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 221, className : "Main", methodName : "start"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1328,7 +1336,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 247, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 261, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1515,27 +1523,34 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 388, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 405, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.keys = JSON.parse(js_node_Fs.readFileSync("./config/keys.json",{ encoding : "utf8"}));
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
-		Main.state = JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 397, className : "Main", methodName : "main"});
+		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 416, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 406, className : "Main", methodName : "main"});
-		Main.auth = res.user;
-		Main.logged_in = true;
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 426, className : "Main", methodName : "main"});
+		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
+		firebase_web_firestore_Firestore.getDoc(doc).then(function(resp) {
+			Main.state = resp.data().state;
+			Main.auth = res.user;
+			Main.logged_in = true;
+		},Util_err);
 	},Util_err);
 	Main.start();
+};
+Main.updateState = function() {
+	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
+	firebase_web_firestore_Firestore.updateDoc(doc,"state",Main.state).then(null,Util_err);
 };
 Main.parseCommands = function() {
 	if(Main.command_file == null || Main.command_file.length == 0) {
@@ -5410,6 +5425,7 @@ var commands_Roundup = function(_universe) {
 	this.checking_channel = false;
 	this.channel = null;
 	this.active = true;
+	this.thursday_check = -1;
 	this.last_checked = -1;
 	systems_CommandBase.call(this,_universe);
 };
@@ -5418,6 +5434,7 @@ commands_Roundup.__name__ = "commands.Roundup";
 commands_Roundup.__super__ = systems_CommandBase;
 commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	last_checked: null
+	,thursday_check: null
 	,active: null
 	,channel: null
 	,checking_channel: null
@@ -5426,16 +5443,16 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,announcement_channel: null
 	,getHaxeIoPage: function() {
 		var _gthis = this;
-		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.state.last_roundup_posted + ".md");
+		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.state.next_roundup + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/commands/Roundup.hx", lineNumber : 25, className : "commands.Roundup", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/commands/Roundup.hx", lineNumber : 27, className : "commands.Roundup", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
 			if(regex.match(body)) {
-				embed.setTitle("Haxe Roundup #" + Main.state.last_roundup_posted);
-				embed.setURL("https://haxe.io/roundups/" + Main.state.last_roundup_posted + "/");
+				embed.setTitle("Haxe Roundup #" + Main.state.next_roundup);
+				embed.setURL("https://haxe.io/roundups/" + Main.state.next_roundup + "/");
 				var desc_split = StringTools.trim(regex.matched(1)).split("\n");
 				var desc = "\n**News And Articles**";
 				var _g = 0;
@@ -5451,10 +5468,10 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				embed.setDescription(desc);
 				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
 					var fh = Main.state;
-					var postfix = fh.last_roundup_posted;
-					var value = fh.last_roundup_posted + 1;
-					Main.state.last_roundup_posted = value;
-					js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
+					var postfix = fh.next_roundup;
+					var value = fh.next_roundup + 1;
+					Main.state.next_roundup = value;
+					Main.updateState();
 					return postfix;
 				});
 			}
@@ -5472,11 +5489,35 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.checking_channel = false;
 			},Util_err);
 		}
-		if(Main.state.last_roundup_posted == -1 || this.channel == null || new Date().getTime() - this.last_checked <= 86400000) {
+		if(Main.state.next_roundup == -1 || this.channel == null || this.shouldCheck()) {
 			return;
 		}
 		this.last_checked = new Date().getTime();
 		this.getHaxeIoPage();
+	}
+	,shouldCheck: function() {
+		var today = new Date();
+		var hour = today.getUTCHours();
+		var diff = today.getTime() - this.last_checked;
+		if(today.getUTCDay() != 6) {
+			if(diff >= commands_types_Duration.fromString("1d")) {
+				return false;
+			}
+			return true;
+		}
+		if(hour < 11 || hour > 14) {
+			return true;
+		}
+		var min = today.getUTCMinutes();
+		if(min % 30 != 0) {
+			return true;
+		}
+		var diff = today.getTime() - this.thursday_check;
+		if(diff <= commands_types_Duration.fromString("25m")) {
+			return true;
+		}
+		this.thursday_check = today.getTime();
+		return false;
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
@@ -5499,8 +5540,8 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			this.active = true;
 			var value = _g1 | 0;
-			Main.state.last_roundup_posted = value;
-			js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
+			Main.state.next_roundup = value;
+			Main.updateState();
 			interaction.reply("Will start watching haxe roundups from **#" + _g1 + "**.");
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
@@ -5508,11 +5549,11 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		}
 	}
 	,get_roundup: function() {
-		return Main.state.last_roundup_posted;
+		return Main.state.next_roundup;
 	}
 	,set_roundup: function(value) {
-		Main.state.last_roundup_posted = value;
-		js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
+		Main.state.next_roundup = value;
+		Main.updateState();
 		return value;
 	}
 	,get_name: function() {
@@ -7743,7 +7784,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 			var split = this.twitter_links[this.twitter_links.length - 1].split("/");
 			var value = split[split.length - 1];
 			Main.state.twitter_since_id = value;
-			js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
+			Main.updateState();
 			this.twitter_links = [];
 		}
 		if(check && this.twitter_links.length == 0) {
@@ -7770,7 +7811,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,set_since_id: function(value) {
 		Main.state.twitter_since_id = value;
-		js_node_Fs.writeFileSync("./config/state.json",JSON.stringify(Main.state));
+		Main.updateState();
 		return value;
 	}
 	,get_name: function() {
