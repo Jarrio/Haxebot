@@ -6685,18 +6685,17 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		case 2:
 			var embed = new discord_$js_MessageEmbed();
 			embed.setTitle("Tags");
-			var i = 0;
-			while(i < this.tags.length) {
-				var a = this.tags[i].name;
-				if(i + 1 < this.tags.length) {
-					var b = this.tags[i + 1].name;
-					var c = this.tags[i + 2].name;
-					var d = this.tags[i + 3].name;
-					embed.addFields(new discord_$js_Field(a,b,true),new discord_$js_Field(c,d,true));
-				} else {
-					embed.addFields(new discord_$js_Field(a,"...",true));
+			var _this = this.tags;
+			var _g_current = 0;
+			while(_g_current < _this.length) {
+				var _g1_value = _this[_g_current];
+				var _g1_key = _g_current++;
+				if(_g1_key % 2 == 0 && _g1_key != this.tags.length - 1) {
+					embed.addFields(new discord_$js_Field(_g1_value.name,this.tags[_g1_key + 1].name,true));
 				}
-				i += 3;
+				if(_g1_key == this.tags.length - 1) {
+					embed.addFields(new discord_$js_Field(_g1_value.name,"...",true));
+				}
 			}
 			interaction.reply({ embeds : [embed]}).then(null,Util_err);
 			break;

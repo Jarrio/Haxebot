@@ -326,21 +326,16 @@ class Snippet extends CommandDbBase {
 			case SnippetTags:
 				var embed = new MessageEmbed();
 				embed.setTitle('Tags');
-				var i = 0;
-				var fields = [];
-				while (i < this.tags.length) {
-					var a = this.tags[i].name;
-					if (i + 1 < tags.length) {
-						var b = this.tags[i + 1].name;
-						var c = this.tags[i + 2].name;
-						var d = this.tags[i + 3].name;
-
-						embed.addFields(new Field(a, b, true), new Field(c, d, true));
-					} else {
-						embed.addFields(new Field(a, '...', true));
+				for (i => tag in tags) {
+					if (i % 2 == 0 && i != tags.length - 1) {
+						embed.addFields(new Field(tag.name, tags[i + 1].name, true));
 					}
-					i = i + 3;
+					
+					if (i == tags.length - 1) {
+						embed.addFields(new Field(tag.name, '...', true));
+					}
 				}
+
 				interaction.reply({embeds: [embed]}).then(null, err);
 			default:
 		}
