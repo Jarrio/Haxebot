@@ -403,6 +403,7 @@ class Snippet extends CommandDbBase {
 				var count = start + i + 1;
 				desc += '**$count) [${data.title}](${data.url})**\n';
 				if (state.desc) {
+					desc += '***tags: ${data.tags.slice(1).toString().replace(',', ', ')}***\n';
 					desc += data.description + '\n';
 				}
 			}

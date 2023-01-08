@@ -6955,6 +6955,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				var count = start + _g1_key + 1;
 				desc += "**" + count + ") [" + _g1_value.title + "](" + _g1_value.url + ")**\n";
 				if(state.desc) {
+					desc += "***tags: " + StringTools.replace(_g1_value.tags.slice(1).toString(),",",", ") + "***\n";
 					desc += _g1_value.description + "\n";
 				}
 			}
