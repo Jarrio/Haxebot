@@ -12,6 +12,7 @@ typedef Command = {
 enum CommandOptions {
 	Hi;
 	Archive;
+	SnippetTags;
 	SnippetList(user:User, show_desc:Bool);
 	SnippetEdit(id:String);	
 	SnippetDelete(id:String);	

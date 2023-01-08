@@ -644,6 +644,12 @@
 		"description": "Reference to a code snippet/project/repo/guide/tutorial/documentation",
 		"params": [
 			{
+				"name": "tags",
+				"type": "subcommand",
+				"description": "List of available tags",
+				"params": []
+			},
+			{
 				"name": "list",
 				"type": "subcommand",
 				"description": "List of available snippets",

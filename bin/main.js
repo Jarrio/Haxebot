@@ -2981,7 +2981,7 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 20) {
+		if(_g._hx_index == 21) {
 			var _g1 = _g.content;
 			var _g2 = _g.field;
 			var type = this.packages.h[_g1];
@@ -3429,7 +3429,7 @@ commands_Boop.__super__ = systems_CommandBase;
 commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
 	run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 14) {
+		if(_g._hx_index == 15) {
 			interaction.reply("*boop* <@" + _g.user.id + ">");
 		}
 	}
@@ -3468,7 +3468,7 @@ commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var role_status = Util_hasRole(this.super_mod_id,interaction);
 		var _g = command.content;
-		if(_g._hx_index == 24) {
+		if(_g._hx_index == 25) {
 			var _g1 = _g.command;
 			var route = _g1;
 			if(_g1.indexOf(" ") != -1) {
@@ -3560,7 +3560,7 @@ commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 23) {
+		if(_g._hx_index == 24) {
 			var _g1 = _g.category;
 			var msg = "";
 			var _this = this.data;
@@ -3686,7 +3686,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 21) {
+		if(_g._hx_index == 22) {
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
@@ -3887,7 +3887,7 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 15) {
+		if(_g._hx_index == 16) {
 			var _g1 = _g.length;
 			var _g2 = _g.a;
 			var _g3 = _g.b;
@@ -4271,7 +4271,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _gthis = this;
 		var _g = command.content;
 		switch(_g._hx_index) {
-		case 25:
+		case 26:
 			var _g1 = _g.user;
 			var sort = firebase_web_firestore_Firestore.orderBy("id","asc");
 			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/quotes/entries");
@@ -4300,7 +4300,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				interaction.reply({ embeds : [embed]});
 			},Util_err);
 			break;
-		case 26:
+		case 27:
 			var name = _g.name;
 			var type = "get";
 			var e = command.content;
@@ -4507,7 +4507,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,Util_err);
 			}
 			break;
-		case 27:
+		case 28:
 			var name1 = _g.name;
 			var type = "get";
 			var e = command.content;
@@ -4714,7 +4714,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,Util_err);
 			}
 			break;
-		case 28:
+		case 29:
 			var name2 = _g.name;
 			var type = "get";
 			var e = command.content;
@@ -4921,7 +4921,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}).then(null,Util_err);
 			}
 			break;
-		case 29:
+		case 30:
 			var name3 = _g.name;
 			var type = "get";
 			var e = command.content;
@@ -5258,7 +5258,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 7) {
+		if(_g._hx_index == 8) {
 			var _g1 = _g.thread_reply;
 			var personal = _g.personal;
 			if(personal == null) {
@@ -5518,7 +5518,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 16) {
+		if(_g._hx_index == 17) {
 			var _g1 = _g.number;
 			if(this.active) {
 				this.active = false;
@@ -5571,7 +5571,7 @@ commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 			return;
 		}
 		var _g = command.content;
-		if(_g._hx_index == 17) {
+		if(_g._hx_index == 18) {
 			var _g1 = _g.channel;
 			var compare = _g1;
 			if(_g1 == null) {
@@ -6683,6 +6683,24 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _g = command.content;
 		switch(_g._hx_index) {
 		case 2:
+			var embed = new discord_$js_MessageEmbed();
+			embed.setTitle("Tags");
+			var i = 0;
+			while(i < this.tags.length) {
+				var a = this.tags[i].name;
+				if(i + 1 < this.tags.length) {
+					var b = this.tags[i + 1].name;
+					var c = this.tags[i + 2].name;
+					var d = this.tags[i + 3].name;
+					embed.addFields(new discord_$js_Field(a,b,true),new discord_$js_Field(c,d,true));
+				} else {
+					embed.addFields(new discord_$js_Field(a,"...",true));
+				}
+				i += 3;
+			}
+			interaction.reply({ embeds : [embed]}).then(null,Util_err);
+			break;
+		case 3:
 			var _g1 = _g.user;
 			var show_desc = _g.show_desc;
 			if(show_desc == null) {
@@ -6705,7 +6723,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				_gthis.handleSearchResponse(interaction,obj);
 			},Util_err);
 			break;
-		case 3:
+		case 4:
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("id","==",_g.id),firebase_web_firestore_Firestore.where("submitted_by","==",interaction.user.id));
 			firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
 				if(resp.empty && !interaction.isAutocomplete()) {
@@ -6724,7 +6742,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				interaction.reply("Editting currently not implemented");
 			},Util_err);
 			break;
-		case 4:
+		case 5:
 			var id = _g.id;
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("id","==",Std.parseInt(id)),firebase_web_firestore_Firestore.where("submitted_by","==",interaction.user.id));
 			firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
@@ -6746,7 +6764,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				},Util_err);
 			},Util_err);
 			break;
-		case 5:
+		case 6:
 			var _g1 = _g.taga;
 			var _g2 = _g.tagb;
 			var _g3 = _g.tagc;
@@ -6793,7 +6811,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				_gthis.handleSearchResponse(interaction,obj);
 			},Util_err);
 			break;
-		case 6:
+		case 7:
 			var _g1 = _g.url;
 			var _g2 = _g.taga;
 			var _g3 = _g.tagb;
@@ -7282,7 +7300,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 13) {
+		if(_g._hx_index == 14) {
 			var _g1 = _g.code;
 			if(!this.isSafe(_g1,interaction)) {
 				interaction.reply("That code is not safe.");
@@ -7475,7 +7493,7 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 18) {
+		if(_g._hx_index == 19) {
 			var _g1 = _g.message;
 			if(this.usage == null) {
 				interaction.reply("An error occured");
@@ -7900,7 +7918,7 @@ commands_mod_Mention.prototype = $extend(systems_CommandDbBase.prototype,{
 	run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
-		if(_g._hx_index == 30) {
+		if(_g._hx_index == 31) {
 			var user = _g.user;
 			var role = _g.role;
 			var query = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/admin/mentions"),firebase_web_firestore_Firestore.where("user","==",user.id));
@@ -7987,7 +8005,7 @@ commands_mod_Social.__super__ = systems_CommandDbBase;
 commands_mod_Social.prototype = $extend(systems_CommandDbBase.prototype,{
 	run: function(command,interaction) {
 		var _g = command.content;
-		if(_g._hx_index == 8) {
+		if(_g._hx_index == 9) {
 			this.parseTwitter(interaction,_g.tag,_g.user);
 		}
 	}
@@ -8054,40 +8072,41 @@ commands_types_Duration.fromString = function(input) {
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
 	,Archive: {_hx_name:"Archive",_hx_index:1,__enum__:"components.CommandOptions",toString:$estr}
-	,SnippetList: ($_=function(user,show_desc) { return {_hx_index:2,user:user,show_desc:show_desc,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetList",$_.__params__ = ["user","show_desc"],$_)
-	,SnippetEdit: ($_=function(id) { return {_hx_index:3,id:id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetEdit",$_.__params__ = ["id"],$_)
-	,SnippetDelete: ($_=function(id) { return {_hx_index:4,id:id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetDelete",$_.__params__ = ["id"],$_)
-	,SnippetSearch: ($_=function(taga,tagb,tagc) { return {_hx_index:5,taga:taga,tagb:tagb,tagc:tagc,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetSearch",$_.__params__ = ["taga","tagb","tagc"],$_)
-	,SnippetAdd: ($_=function(url,title,description,taga,tagb,tagc,tagd,tage) { return {_hx_index:6,url:url,title:title,description:description,taga:taga,tagb:tagb,tagc:tagc,tagd:tagd,tage:tage,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["url","title","description","taga","tagb","tagc","tagd","tage"],$_)
-	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:7,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
-	,Social: ($_=function(tag,user) { return {_hx_index:8,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
-	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:9,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
-	,React: ($_=function(emoji,message_id) { return {_hx_index:10,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
-	,Helppls: ($_=function(topic) { return {_hx_index:11,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
-	,Run: ($_=function(code) { return {_hx_index:12,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Run",$_.__params__ = ["code"],$_)
-	,Trace: ($_=function(code) { return {_hx_index:13,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
-	,Boop: ($_=function(user) { return {_hx_index:14,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
-	,Poll: ($_=function(question,length,a,b,c,d,e,f,g,votes) { return {_hx_index:15,question:question,length:length,a:a,b:b,c:c,d:d,e:e,f:f,g:g,votes:votes,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","length","a","b","c","d","e","f","g","votes"],$_)
-	,Roundup: ($_=function(number) { return {_hx_index:16,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
-	,Rtfm: ($_=function(channel) { return {_hx_index:17,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
-	,Translate: ($_=function(to,message,from) { return {_hx_index:18,to:to,message:message,from:from,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Translate",$_.__params__ = ["to","message","from"],$_)
-	,Helpdescription: ($_=function(description) { return {_hx_index:19,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helpdescription",$_.__params__ = ["description"],$_)
-	,Api: ($_=function(content,field) { return {_hx_index:20,content:content,field:field,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["content","field"],$_)
-	,Notify: ($_=function(channel) { return {_hx_index:21,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
-	,Code: ($_=function(code) { return {_hx_index:22,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
-	,Help: ($_=function(category) { return {_hx_index:23,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
-	,Haxelib: ($_=function(command) { return {_hx_index:24,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
-	,QuoteList: ($_=function(user) { return {_hx_index:25,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteList",$_.__params__ = ["user"],$_)
-	,QuoteGet: ($_=function(name) { return {_hx_index:26,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteGet",$_.__params__ = ["name"],$_)
-	,QuoteDelete: ($_=function(name) { return {_hx_index:27,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteDelete",$_.__params__ = ["name"],$_)
-	,QuoteEdit: ($_=function(name) { return {_hx_index:28,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteEdit",$_.__params__ = ["name"],$_)
-	,QuoteCreate: ($_=function(name) { return {_hx_index:29,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteCreate",$_.__params__ = ["name"],$_)
-	,Mention: ($_=function(user,role) { return {_hx_index:30,user:user,role:role,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Mention",$_.__params__ = ["user","role"],$_)
-	,Showcase: {_hx_name:"Showcase",_hx_index:31,__enum__:"components.CommandOptions",toString:$estr}
-	,PinMessage: {_hx_name:"PinMessage",_hx_index:32,__enum__:"components.CommandOptions",toString:$estr}
+	,SnippetTags: {_hx_name:"SnippetTags",_hx_index:2,__enum__:"components.CommandOptions",toString:$estr}
+	,SnippetList: ($_=function(user,show_desc) { return {_hx_index:3,user:user,show_desc:show_desc,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetList",$_.__params__ = ["user","show_desc"],$_)
+	,SnippetEdit: ($_=function(id) { return {_hx_index:4,id:id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetEdit",$_.__params__ = ["id"],$_)
+	,SnippetDelete: ($_=function(id) { return {_hx_index:5,id:id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetDelete",$_.__params__ = ["id"],$_)
+	,SnippetSearch: ($_=function(taga,tagb,tagc) { return {_hx_index:6,taga:taga,tagb:tagb,tagc:tagc,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetSearch",$_.__params__ = ["taga","tagb","tagc"],$_)
+	,SnippetAdd: ($_=function(url,title,description,taga,tagb,tagc,tagd,tage) { return {_hx_index:7,url:url,title:title,description:description,taga:taga,tagb:tagb,tagc:tagc,tagd:tagd,tage:tage,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="SnippetAdd",$_.__params__ = ["url","title","description","taga","tagb","tagc","tagd","tage"],$_)
+	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:8,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
+	,Social: ($_=function(tag,user) { return {_hx_index:9,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
+	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:10,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
+	,React: ($_=function(emoji,message_id) { return {_hx_index:11,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
+	,Helppls: ($_=function(topic) { return {_hx_index:12,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
+	,Run: ($_=function(code) { return {_hx_index:13,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Run",$_.__params__ = ["code"],$_)
+	,Trace: ($_=function(code) { return {_hx_index:14,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
+	,Boop: ($_=function(user) { return {_hx_index:15,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Boop",$_.__params__ = ["user"],$_)
+	,Poll: ($_=function(question,length,a,b,c,d,e,f,g,votes) { return {_hx_index:16,question:question,length:length,a:a,b:b,c:c,d:d,e:e,f:f,g:g,votes:votes,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Poll",$_.__params__ = ["question","length","a","b","c","d","e","f","g","votes"],$_)
+	,Roundup: ($_=function(number) { return {_hx_index:17,number:number,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Roundup",$_.__params__ = ["number"],$_)
+	,Rtfm: ($_=function(channel) { return {_hx_index:18,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Rtfm",$_.__params__ = ["channel"],$_)
+	,Translate: ($_=function(to,message,from) { return {_hx_index:19,to:to,message:message,from:from,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Translate",$_.__params__ = ["to","message","from"],$_)
+	,Helpdescription: ($_=function(description) { return {_hx_index:20,description:description,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helpdescription",$_.__params__ = ["description"],$_)
+	,Api: ($_=function(content,field) { return {_hx_index:21,content:content,field:field,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Api",$_.__params__ = ["content","field"],$_)
+	,Notify: ($_=function(channel) { return {_hx_index:22,channel:channel,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Notify",$_.__params__ = ["channel"],$_)
+	,Code: ($_=function(code) { return {_hx_index:23,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Code",$_.__params__ = ["code"],$_)
+	,Help: ($_=function(category) { return {_hx_index:24,category:category,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Help",$_.__params__ = ["category"],$_)
+	,Haxelib: ($_=function(command) { return {_hx_index:25,command:command,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Haxelib",$_.__params__ = ["command"],$_)
+	,QuoteList: ($_=function(user) { return {_hx_index:26,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteList",$_.__params__ = ["user"],$_)
+	,QuoteGet: ($_=function(name) { return {_hx_index:27,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteGet",$_.__params__ = ["name"],$_)
+	,QuoteDelete: ($_=function(name) { return {_hx_index:28,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteDelete",$_.__params__ = ["name"],$_)
+	,QuoteEdit: ($_=function(name) { return {_hx_index:29,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteEdit",$_.__params__ = ["name"],$_)
+	,QuoteCreate: ($_=function(name) { return {_hx_index:30,name:name,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="QuoteCreate",$_.__params__ = ["name"],$_)
+	,Mention: ($_=function(user,role) { return {_hx_index:31,user:user,role:role,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Mention",$_.__params__ = ["user","role"],$_)
+	,Showcase: {_hx_name:"Showcase",_hx_index:32,__enum__:"components.CommandOptions",toString:$estr}
+	,PinMessage: {_hx_name:"PinMessage",_hx_index:33,__enum__:"components.CommandOptions",toString:$estr}
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetList,components_CommandOptions.SnippetEdit,components_CommandOptions.SnippetDelete,components_CommandOptions.SnippetSearch,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.QuoteList,components_CommandOptions.QuoteGet,components_CommandOptions.QuoteDelete,components_CommandOptions.QuoteEdit,components_CommandOptions.QuoteCreate,components_CommandOptions.Mention,components_CommandOptions.Showcase,components_CommandOptions.PinMessage];
-components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.Showcase,components_CommandOptions.PinMessage];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetTags,components_CommandOptions.SnippetList,components_CommandOptions.SnippetEdit,components_CommandOptions.SnippetDelete,components_CommandOptions.SnippetSearch,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Code,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.QuoteList,components_CommandOptions.QuoteGet,components_CommandOptions.QuoteDelete,components_CommandOptions.QuoteEdit,components_CommandOptions.QuoteCreate,components_CommandOptions.Mention,components_CommandOptions.Showcase,components_CommandOptions.PinMessage];
+components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetTags,components_CommandOptions.Showcase,components_CommandOptions.PinMessage];
 var components_ShowcaseModalSubmit = function(title,description) {
 	this.title_or_link = title;
 	this.description = description;

@@ -323,6 +323,25 @@ class Snippet extends CommandDbBase {
 						interaction.reply('Your snippet(#$id) has been deleted.');
 					}, err);
 				}, err);
+			case SnippetTags:
+				var embed = new MessageEmbed();
+				embed.setTitle('Tags');
+				var i = 0;
+				var fields = [];
+				while (i < this.tags.length) {
+					var a = this.tags[i].name;
+					if (i + 1 < tags.length) {
+						var b = this.tags[i + 1].name;
+						var c = this.tags[i + 2].name;
+						var d = this.tags[i + 3].name;
+
+						embed.addFields(new Field(a, b, true), new Field(c, d, true));
+					} else {
+						embed.addFields(new Field(a, '...', true));
+					}
+					i = i + 3;
+				}
+				interaction.reply({embeds: [embed]}).then(null, err);
 			default:
 		}
 	}
@@ -331,7 +350,7 @@ class Snippet extends CommandDbBase {
 		var arr = [];
 		for (r in results) {
 			var matches = 0;
-			
+
 			for (rtag in r.tags) {
 				if (tags.contains(rtag)) {
 					matches++;
@@ -411,10 +430,10 @@ class Snippet extends CommandDbBase {
 
 		embed.setColor(0xEA8220);
 		embed.setDescription(desc);
-		embed.setFooter(
-			{iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1',
-				text: 'Page ${state.page + 1} / $max'}
-		);
+		embed.setFooter({
+			iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1',
+			text: 'Page ${state.page + 1} / $max'
+		});
 		return embed;
 	}
 
