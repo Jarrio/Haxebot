@@ -15,13 +15,15 @@ class Roundup extends CommandBase {
 	var active:Bool = true;
 	var roundup(get, set):Int;
 	var channel:TextChannel = null;
-	var checking_channel:Bool = false;
+	var checking:Bool = false;
 	final super_mod_id:String = '198916468312637440';
 	final news_role:String = '761714325227700225';
 	final announcement_channel:String = #if block '597067735771381771' #else '286485321925918721' #end;
 
 	function getHaxeIoPage() {
-		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/${this.roundup}.md');
+		var data = new haxe.Http(
+			'https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/${this.roundup}.md'
+		);
 		var embed = new MessageEmbed();
 		data.onError = (error) -> {
 			trace(error);
@@ -43,9 +45,13 @@ class Roundup extends CommandBase {
 				}
 				desc += '\n...';
 				embed.setDescription(desc);
-				this.channel.send({content: '<@&$news_role>', allowedMentions: {roles: [news_role]}, embeds: [embed]}).then((_) -> {
-					this.roundup++;
-				});
+				this.channel.send(
+					{content: '<@&$news_role>', allowedMentions: {roles: [news_role]},
+						embeds: [embed]}
+				)
+					.then((_) -> {
+						this.roundup++;
+					});
 			}
 		}
 		data.request();
@@ -55,50 +61,56 @@ class Roundup extends CommandBase {
 
 	override function update(_) {
 		super.update(_);
-		if (this.channel == null && this.checking_channel == false) {
-			this.checking_channel = true;
+		if (this.channel == null && this.checking == false) {
+			this.checking = true;
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				this.channel = cast channel;
-				this.checking_channel = false;
+				this.checking = false;
 			}, err);
 		}
-	
-		if (this.roundup == -1 || this.channel == null || this.shouldCheck()) {
+
+		if (this.roundup == -1 || this.channel == null) {
 			return;
 		}
 
-		this.last_checked = Date.now().getTime();
+		var today = Date.now();
+		var diff = today.getTime() - last_checked;
+
+		if (today.getUTCDay() == 4) {
+			if (!this.shouldCheck()) {
+				return;
+			}
+		} else {
+			if (diff >= Duration.fromString('1d')) {
+				return;
+			}
+			this.last_checked = Date.now().getTime();
+		}
+
+
 		getHaxeIoPage();
 	}
 
 	function shouldCheck() {
 		var today = Date.now();
 		var hour = today.getUTCHours();
-		var diff = today.getTime() - last_checked;
-		if (today.getUTCDay() != 4) {
-			if (diff >= Duration.fromString('1d')) {
-				return false;
-			}
-			return true;
-		}
-
-		
+			
 		if (hour < 11 || hour > 14) {
-			return true;
+			return false;
 		}
 
 		var min = today.getUTCMinutes();
 		if (min % 30 != 0) {
-			return true;
+			return false;
 		}
 
 		var diff = today.getTime() - thursday_check;
 		if (diff <= Duration.fromString('25m')) {
-			return true;
+			return false;
 		}
 
 		thursday_check = today.getTime();
-		return false;
+		return true;
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -125,9 +137,10 @@ class Roundup extends CommandBase {
 				this.roundup = number.int();
 
 				interaction.reply('Will start watching haxe roundups from **#$number**.');
-				interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
-					this.channel = cast channel;
-				}, err);
+				interaction.client.channels.fetch(this.announcement_channel)
+					.then(function(channel) {
+						this.channel = cast channel;
+					}, err);
 			default:
 		}
 	}
