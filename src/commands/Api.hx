@@ -79,6 +79,7 @@ class Api extends CommandBase {
 		this.api.set('heaps', loadFile('api/heaps'));
 		this.api.set('ceramic', loadFile('api/ceramic'));
 		this.api.set('openfl', loadFile('api/openfl'));
+		this.api.set('godot', loadFile('api/hxgodot'));
 		this.cache = loadFile('api/cache/0');
 
 		if (this.cache == null) {
@@ -451,7 +452,8 @@ class Api extends CommandBase {
 			"heaps" => ['h2d', 'hxd', 'hxsl', 'h3d'],
 			"ceramic" => ['ceramic', 'clay', 'spine'],
 			"openfl" => ['openfl'],
-			"haxe" => ['haxe']
+			"haxe" => ['haxe'],
+			"godot" => ['godot'],
 		];
 
 		for (k => v in keywords) {
