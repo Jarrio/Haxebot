@@ -54,11 +54,24 @@ class TextMention extends TextCommandBase {
 				break;
 			}
 		}
-
+		var thumb = null;
 		for (role in user.roles) {
 			if (content.contains('<@&$role>')) {
 				roles_found += '<@&$role>';
 				content = content.replace('<@&$role>', '').trim();
+				switch(role) {
+					case '914171888748609546': //ceramic logo
+						thumb = 'https://raw.githubusercontent.com/ceramic-engine/ceramic/master/tools/resources/AppIcon-128.png';
+					case '1059447670344794142': //hxgodot
+						thumb = 'https://camo.githubusercontent.com/f171b5935350515b274913adb4a080390e6075c46cafa43dd24efe3b37afb4f1/68747470733a2f2f6878676f646f742e6769746875622e696f2f6c6f676f322e706e67';
+					case '761714697468248125': //flixel
+						thumb = 'https://cdn.discordapp.com/emojis/230369617774641152.webp?size=96&quality=lossless';
+					case '761714853403820052': //haxeui
+						thumb = 'https://cdn.discordapp.com/emojis/567736760243847169.webp?size=96&quality=lossless';
+					case '761714775902126080': //heaps
+						thumb = 'https://cdn.discordapp.com/emojis/567739201341095946.webp?size=96&quality=lossless';
+					default:
+				}
 				found++;
 			}
 		}
@@ -68,10 +81,13 @@ class TextMention extends TextCommandBase {
 			if (message.attachments.size > 0) {
 				attachments = message.attachments;
 			}
+			if (thumb == null) {
+				thumb = message.author.avatarURL();
+			}
 			var embed = new MessageEmbed();
 			embed.setDescription(content);
 			embed.setTitle('*${message.author.username}*');
-			embed.setThumbnail(message.author.avatarURL());
+			embed.setThumbnail(thumb);
 			message.reply({content: roles_found, embeds: [embed], attachments: attachments, allowedMentions: {roles: user.roles}}).then(function(_) {
 				message.delete();
 			}, err);

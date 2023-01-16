@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(4);
-	var this2 = new Array(4);
+	var this1 = new Array(5);
+	var this2 = new Array(5);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
 	var this1 = new Array(26);
 	var this2 = new Array(26);
@@ -796,6 +796,10 @@ Main.start = function() {
 	var s = new commands_Api(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
+	s.onEnabled();
+	var s = new commands_TextMention(u);
+	phase.systems[4] = s;
+	phase.enabledSystems[4] = true;
 	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
@@ -7108,6 +7112,7 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 				break;
 			}
 		}
+		var thumb = null;
 		var _g = 0;
 		var _g1 = user.roles;
 		while(_g < _g1.length) {
@@ -7116,6 +7121,24 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 			if(content.indexOf("<@&" + role + ">") != -1) {
 				roles_found += "<@&" + role + ">";
 				content = StringTools.trim(StringTools.replace(content,"<@&" + role + ">",""));
+				switch(role) {
+				case "1059447670344794142":
+					thumb = "https://camo.githubusercontent.com/f171b5935350515b274913adb4a080390e6075c46cafa43dd24efe3b37afb4f1/68747470733a2f2f6878676f646f742e6769746875622e696f2f6c6f676f322e706e67";
+					break;
+				case "761714697468248125":
+					thumb = "https://cdn.discordapp.com/emojis/230369617774641152.webp?size=96&quality=lossless";
+					break;
+				case "761714775902126080":
+					thumb = "https://cdn.discordapp.com/emojis/567739201341095946.webp?size=96&quality=lossless";
+					break;
+				case "761714853403820052":
+					thumb = "https://cdn.discordapp.com/emojis/567736760243847169.webp?size=96&quality=lossless";
+					break;
+				case "914171888748609546":
+					thumb = "https://raw.githubusercontent.com/ceramic-engine/ceramic/master/tools/resources/AppIcon-128.png";
+					break;
+				default:
+				}
 				++found;
 			}
 		}
@@ -7124,10 +7147,13 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 			if(message.attachments.size > 0) {
 				attachments = message.attachments;
 			}
+			if(thumb == null) {
+				thumb = message.author.avatarURL();
+			}
 			var embed = new discord_$js_MessageEmbed();
 			embed.setDescription(content);
 			embed.setTitle("*" + message.author.username + "*");
-			embed.setThumbnail(message.author.avatarURL());
+			embed.setThumbnail(thumb);
 			message.reply({ content : roles_found, embeds : [embed], attachments : attachments, allowedMentions : { roles : user.roles}}).then(function(_) {
 				message.delete();
 			},Util_err);
