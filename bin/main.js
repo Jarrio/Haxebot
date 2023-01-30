@@ -4078,38 +4078,65 @@ commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _g_idx = _set.size() - 1;
 		while(_active && _g_idx >= 0) {
 			var entity = _set.getDense(_g_idx--);
-			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
+			var interaction = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
 			var route = this.tablef1c30c373f6abc39648a24020b4b82b2.get(entity);
 			if(route == "Pin Message") {
-				var author = interaction.user.id;
-				if(interaction.channel.isThread()) {
+				var author = interaction[0].user.id;
+				if(interaction[0].channel.isThread()) {
 					try {
-						var thread = js_Boot.__cast(interaction.channel , discord_$js_ThreadChannel);
+						var thread = js_Boot.__cast(interaction[0].channel , discord_$js_ThreadChannel);
 						if(thread.ownerId == author) {
-							if(interaction.targetMessage.pinned) {
-								interaction.targetMessage.unpin();
-								interaction.reply({ content : "Unpinned", ephemeral : true});
+							if(interaction[0].targetMessage.pinned) {
+								interaction[0].targetMessage.unpin().then((function(interaction) {
+									return function(_) {
+										interaction[0].reply({ content : "Unpinned", ephemeral : true});
+									};
+								})(interaction),(function() {
+									return function(err) {
+										haxe_Log.trace(err,{ fileName : "src/commands/PinMessage.hx", lineNumber : 25, className : "commands.PinMessage", methodName : "update"});
+									};
+								})());
 							} else {
-								interaction.targetMessage.pin();
-								interaction.reply({ content : "Pinned", ephemeral : true});
+								interaction[0].targetMessage.pin().then((function(interaction) {
+									return function(_) {
+										interaction[0].reply({ content : "Pinned", ephemeral : true});
+									};
+								})(interaction),(function(interaction) {
+									return function(err) {
+										var message = null;
+										if(err.code == 50021) {
+											message = "Can't pin a system message";
+										} else {
+											message = err.message + "\n\n Contact NotBilly about this";
+										}
+										haxe_Log.trace(err,{ fileName : "src/commands/PinMessage.hx", lineNumber : 37, className : "commands.PinMessage", methodName : "update"});
+										interaction[0].reply(message).then(null,(function() {
+											return function(err) {
+												haxe_Log.trace(err,{ fileName : "src/commands/PinMessage.hx", lineNumber : 38, className : "commands.PinMessage", methodName : "update"});
+											};
+										})());
+									};
+								})(interaction));
 							}
 						} else {
-							interaction.reply({ content : "This isn't your thread!", ephemeral : true});
+							interaction[0].reply({ content : "This isn't your thread!", ephemeral : true});
 						}
 					} catch( _g ) {
-						haxe_Log.trace("thread cast failed",{ fileName : "src/commands/PinMessage.hx", lineNumber : 33, className : "commands.PinMessage", methodName : "update"});
+						haxe_Log.trace("thread cast failed",{ fileName : "src/commands/PinMessage.hx", lineNumber : 45, className : "commands.PinMessage", methodName : "update"});
 					}
 				} else {
-					interaction.reply({ content : "*Currently this only works for user threads :)*", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/PinMessage.hx", lineNumber : 39, className : "commands.PinMessage", methodName : "update"});
-					});
+					interaction[0].reply({ content : "*Currently this only works for user threads :)*", ephemeral : true}).then(null,(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/PinMessage.hx", lineNumber : 51, className : "commands.PinMessage", methodName : "update"});
+						};
+					})());
 				}
 				this.universe.deleteEntity(entity);
 			}
 		}
 	}
 	,run: function(command,interaction) {
-		haxe_Log.trace("here",{ fileName : "src/commands/PinMessage.hx", lineNumber : 48, className : "commands.PinMessage", methodName : "run"});
+		haxe_Log.trace("here",{ fileName : "src/commands/PinMessage.hx", lineNumber : 60, className : "commands.PinMessage", methodName : "run"});
 	}
 	,get_name: function() {
 		return "pinmessage";

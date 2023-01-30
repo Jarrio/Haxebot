@@ -20,11 +20,23 @@ class PinMessage extends CommandDbBase {
 							var thread = cast(interaction.channel, ThreadChannel);
 							if (thread.ownerId == author) {
 								if (interaction.targetMessage.pinned) {
-									interaction.targetMessage.unpin();
-									interaction.reply({content: 'Unpinned', ephemeral: true});
+									interaction.targetMessage.unpin().then(function(_) {
+										interaction.reply({content: 'Unpinned', ephemeral: true});
+									}, function(err) trace(err));
 								} else {
-									interaction.targetMessage.pin();
-									interaction.reply({content: 'Pinned', ephemeral: true});
+									interaction.targetMessage.pin().then(function(_) {
+										interaction.reply({content: 'Pinned', ephemeral: true});
+									}, function(err) {
+										var message = null;
+										switch(err.code) {
+											case 50021:
+												message = "Can't pin a system message";
+											default: 
+												message = err.message + '\n\n Contact NotBilly about this';
+										}
+										trace(err);
+										interaction.reply(message).then(null, function(err) trace(err));
+									});
 								}
 							} else {
 								interaction.reply({content: "This isn't your thread!", ephemeral: true});
