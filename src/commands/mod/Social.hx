@@ -1,5 +1,6 @@
 package commands.mod;
 
+import js.Browser;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
@@ -15,7 +16,10 @@ class Social extends CommandDbBase {
 
 	function parseTwitter(interaction:BaseCommandInteraction, tag:String, user:String) {
 		if (tag == null && user == null) {
-			interaction.reply('Invalid input').then(null, function(err) trace(err));
+			interaction.reply('Invalid input').then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 			return;
 		}
 

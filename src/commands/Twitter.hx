@@ -12,7 +12,7 @@ import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandDbBase;
-
+import js.Browser;
 typedef TTweet = {
 	var edit_history_tweet_ids:Array<String>;
 	var id:String;
@@ -136,8 +136,14 @@ class Twitter extends CommandDbBase {
 							}
 							async_check[k] = true;
 							this.checking = false;
-						}, function(err) trace(err));
-					}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				}
 			}
 		}
@@ -186,7 +192,10 @@ class Twitter extends CommandDbBase {
 			});
 
 			for (link in this.twitter_links) {
-				this.channel.send({content: link}).then(null, function(err) trace(err));
+				this.channel.send({content: link}).then(null, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			}
 
 			for (k => _ in tags) {
@@ -210,7 +219,10 @@ class Twitter extends CommandDbBase {
 				this.channel = succ;
 				checking = false;
 				trace('Found twitter thread');
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 

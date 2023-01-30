@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import externs.FuzzySort;
 import sys.io.File;
 import haxe.Http;
@@ -482,7 +483,10 @@ class Api extends CommandBase {
 			}
 		}
 
-		interaction.respond(results).then(null, function(err) trace(err));
+		interaction.respond(results).then(null, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function get_name():String {

@@ -7,7 +7,7 @@ import firebase.web.firestore.DocumentReference;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
-
+import js.Browser;
 class Reminder extends CommandDbBase {
 	var channels:Map<String, TextChannel> = [];
 	var checking = false;
@@ -94,8 +94,14 @@ class Reminder extends CommandDbBase {
 						Firestore.updateDoc(doc, obj).then(null, function(err) {
 							trace(err);
 						});
-					}, function(err) trace(err));
-				}, function(err) trace(err));
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			default:
 		}
 	}
@@ -176,7 +182,10 @@ class Reminder extends CommandDbBase {
 				continue;
 			}
 			var doc = Firestore.doc(this.db, 'discord/reminders/entries/${msg.id}');
-			Firestore.deleteDoc(doc).then(null, function(err) trace(err));
+			Firestore.deleteDoc(doc).then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 			this.sent.remove(msg);
 		}
 	}
@@ -188,7 +197,10 @@ class Reminder extends CommandDbBase {
 				this.channels.set(channel.id, channel);
 				this.checking = false;
 				trace('Found ${channel.name} channel');
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 

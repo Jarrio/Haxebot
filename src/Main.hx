@@ -40,7 +40,7 @@ import commands.AutoRole;
 import commands.mod.Social;
 import commands.mod.Mention;
 import commands.events.PinMessageInfo;
-
+import js.Browser;
 class Main {
 	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
@@ -156,7 +156,10 @@ class Main {
 				#if block
 				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
 				#end
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		});
 
 		client.on('guildMemberAdd', (member:GuildMember) -> {
@@ -431,8 +434,14 @@ class Main {
 					#end
 					Main.auth = res.user;
 					Main.logged_in = true;
-				}, function(err) trace(err));
-			}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 
 		start();
 	}
@@ -440,7 +449,10 @@ class Main {
 	static public function updateState() {
 		#if !block
 		var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
-		Firestore.updateDoc(doc, 'state', state).then(null, function(err) trace(err));
+		Firestore.updateDoc(doc, 'state', state).then(null, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 		#end
 	}
 

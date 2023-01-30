@@ -8,7 +8,7 @@ import discord_js.MessageReaction;
 import discord_js.Message;
 import discord_js.ApplicationCommandPermissionsManager;
 import discord_js.ApplicationCommand;
-
+import js.Browser;
 class DiscordUtil {
 	public static function setCommandPermission(command:ApplicationCommand,
 			permissions:Array<ApplicationCommandPermissionData>, ?succ:Void->Void,
@@ -49,8 +49,14 @@ class DiscordUtil {
 			time = 60000 * 60 * 48;
 		}
 
-		message.react("✅").then(null, function(err) trace(err)).then(function(_) {
-			message.react("❎").then(null, function(err) trace(err)).then(function(_) {
+		message.react("✅").then(null, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		}).then(function(_) {
+			message.react("❎").then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			}).then(function(_) {
 				var collector = message.createReactionCollector({filter: filter, time: time});
 				collector.on('collect', track.bind(collector));
 			});
@@ -58,6 +64,9 @@ class DiscordUtil {
 	}
 
 	public static function getChannel(channel_id:String, callback:(channel:TextChannel) -> Void) {
-		Main.client.channels.fetch(channel_id).then(callback, function(err) trace(err));
+		Main.client.channels.fetch(channel_id).then(callback, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 }

@@ -12,7 +12,7 @@ import components.Command;
 import Main.CommandForward;
 import discord_js.Message;
 import systems.CommandBase;
-
+import js.Browser;
 class Showcase extends CommandBase {
 	var channel:TextChannel;
 	#if block
@@ -41,7 +41,10 @@ class Showcase extends CommandBase {
 				this.channel = channel;
 				checking = false;
 				trace('loaded showcase channel');
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 
 		iterate(modal, entity -> {
@@ -64,7 +67,10 @@ class Showcase extends CommandBase {
 
 					message.author.send({content: content}).then(function(succ) {
 						message.delete();
-					}, function(err) trace(err));
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				}
 
 				this.universe.deleteEntity(entity);
@@ -129,11 +135,14 @@ class Showcase extends CommandBase {
 		iterate(interactions, entity -> {
 			if (command == CommandForward.showcase_agree) {
 				interaction.member.roles.add('1021517470080700468').then(function(success) {
-					interaction.reply(
-						{content: 'Thanks! You can now post in <#162664383082790912>',
-							ephemeral: true}
-					);
-				}, function(err) trace(err));
+					interaction.reply({
+						content: 'Thanks! You can now post in <#162664383082790912>',
+						ephemeral: true
+					});
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			}
 
 			if (command == CommandForward.showcase_disagree) {

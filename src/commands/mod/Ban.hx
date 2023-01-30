@@ -91,7 +91,10 @@ class Ban extends CommandBase {
 												embed.setFooter({text: 'Moderator: ${interaction.user.tag} banned a user'});
 
 												interaction.reply({embeds: [embed]})
-													.then(null, function(err) trace(err));
+													.then(null, function(err) {
+														trace(err);
+														Browser.console.dir(err);
+													});
 												var files = null;
 												if (log.length > 0) {
 													files = ['./commands/ban_log.json'];
@@ -106,12 +109,24 @@ class Ban extends CommandBase {
 														member.ban({
 															days: days,
 															reason: reason
-														}).then(null, function(err) trace(err));
-													}, function(err) trace(err));
+														}).then(null, function(err) {
+															trace(err);
+															Browser.console.dir(err);
+														});
+													}, function(err) {
+														trace(err);
+														Browser.console.dir(err);
+													});
 											});
 									}
-								}, function(err) trace(err));
-							}, function(err) trace(err));
+								}, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
 					}
 				});
 

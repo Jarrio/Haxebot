@@ -28,7 +28,10 @@ class Helpdescription extends CommandDbBase {
 			case Helpdescription(description):
 				if (!interaction.channel.isThread()) {
 					interaction.reply('This command is only available in a thread.')
-						.then(null, function(err) trace(err));
+						.then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					return;
 				}
 				this.findThread(interaction, description);
@@ -42,7 +45,10 @@ class Helpdescription extends CommandDbBase {
 			interaction.reply(
 				'This channel is not a valid topic. Did you run the command from a valid thread?'
 			)
-				.then(null, function(err) trace(err));
+				.then(null, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			return;
 		}
 		var q:Query<TStoreContent> = query(collection(db, 'test2', 'haxe', 'threads'),
@@ -78,9 +84,18 @@ class Helpdescription extends CommandDbBase {
 					.then(function(succ) {
 						this.validateThread(ref, data);
 						var command = Main.getCommand(this.name);
-					}, function(err) trace(err));
-			}, function(err) trace(err));
-		}, function(err) trace(err));
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function validateThread(ref:DocumentReference<TStoreContent>, thread:TStoreContent) {
@@ -150,8 +165,14 @@ class Helpdescription extends CommandDbBase {
 									'validated_timestamp', Timestamp.now())
 									.then(function(_) {
 										collector.stop('Reviewed validation.');
-									}, function(err) trace(err));
-							}, function(err) trace(err));
+									}, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
 						});
 				});
 		});

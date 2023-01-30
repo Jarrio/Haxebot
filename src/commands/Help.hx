@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
@@ -22,8 +23,10 @@ class Help extends CommandBase {
 				if (content.type != helppls_dm) {
 					continue;
 				}
-				interaction.reply({content: content.content.toString()})
-					.then(null, function(err) trace(err));
+				interaction.reply({content: content.content.toString()}).then(null, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 				break;
 			}
 			return;
@@ -57,7 +60,10 @@ class Help extends CommandBase {
 					msg = 'Nothing found, sorry :(';
 				}
 
-				interaction.reply(msg).then(null, function(err) trace(err));
+				interaction.reply(msg).then(null, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			default:
 		}
 	}

@@ -1,5 +1,6 @@
 package commands.mod;
 
+import js.Browser;
 import discord_js.MessageEmbed;
 import discord_js.Role;
 import discord_js.User;
@@ -74,7 +75,10 @@ class Mention extends CommandDbBase {
 
 	function parseTwitter(interaction:BaseCommandInteraction, tag:String, user:String) {
 		if (tag == null && user == null) {
-			interaction.reply('Invalid input').then(null, function(err) trace(err));
+			interaction.reply('Invalid input').then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 			return;
 		}
 

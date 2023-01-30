@@ -6,7 +6,7 @@ import commands.mod.Mention.TMention;
 import firebase.web.app.FirebaseApp;
 import discord_js.Message;
 import systems.TextCommandBase;
-
+import js.Browser;
 class TextMention extends TextCommandBase {
 	var cached = false;
 	var permissions:Map<String, TMention> = [];
@@ -29,7 +29,10 @@ class TextMention extends TextCommandBase {
 			for (role in (doc.data().roles : Array<TTag>)) {
 				this.roles.set(role.tag, role.id);
 			}
-		}, function(err) trace(err));
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function run(message:Message, content:String) {
@@ -95,7 +98,10 @@ class TextMention extends TextCommandBase {
 				allowedMentions: {roles: user.roles}
 			}).then(function(_) {
 				message.delete();
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 

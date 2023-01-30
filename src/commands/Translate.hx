@@ -4,7 +4,7 @@ import externs.Fetch;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
-
+import js.Browser;
 class Translate extends CommandBase {
 	var usage:TUsage;
 
@@ -39,7 +39,10 @@ class Translate extends CommandBase {
 				trace(
 					'Character count: ${this.usage.character_count}/${this.usage.character_limit}'
 				);
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		});
 	}
 
@@ -59,16 +62,24 @@ class Translate extends CommandBase {
 						for (item in body.translations) {
 							content += item.text + '\n';
 						}
-						interaction.reply(content)
-							.then((_) -> this.getCount(), function(err) trace(err));
-					}, function(err) trace(err));
+						interaction.reply(content).then((_) -> this.getCount(), function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				});
 		} catch (e ) {
 			trace('Deepl error');
 			trace(e.details);
 			trace(e.message);
 			trace(e);
-			interaction.reply('Deepl error?').then(null, function(err) trace(err));
+			interaction.reply('Deepl error?').then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 
@@ -84,7 +95,10 @@ class Translate extends CommandBase {
 				}
 				str += ']';
 				trace(str);
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		});
 	}
 

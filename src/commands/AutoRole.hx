@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import systems.CommandBase;
 import discord_js.GuildMember;
 import discord_builder.BaseCommandInteraction;
@@ -14,8 +15,14 @@ class AutoRole extends CommandBase {
 	override function update(_:Float) {
 		super.update(_);
 		iterate(users, (entity) -> {
-			member.roles.add(event_role_id).then(null, function(err) trace(err));
-			member.roles.add(news_role_id).then(null, function(err) trace(err));
+			member.roles.add(event_role_id).then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
+			member.roles.add(news_role_id).then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 			this.universe.deleteEntity(entity);
 		});
 	}

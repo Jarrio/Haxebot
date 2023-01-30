@@ -1,5 +1,5 @@
 package commands;
-
+import js.Browser;
 import haxe.Json;
 import firebase.web.firestore.Timestamp;
 import discord_js.Collection;
@@ -35,7 +35,10 @@ class Poll extends CommandDbBase {
 							continue;
 						}
 
-						Firestore.deleteDoc(doc.ref).then(null, function(err) trace(err));
+						Firestore.deleteDoc(doc.ref).then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 						continue;
 					}
 					var start = data.timestamp.toMillis();
@@ -52,10 +55,19 @@ class Poll extends CommandDbBase {
 						succ.messages.fetch(data.message_id).then(function(message) {
 							trace('Resyncing ${data.id}');
 							this.addCollector(message, data, time_left);
-						}, function(err) trace(err));
-					}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				}
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 
@@ -146,10 +158,22 @@ class Poll extends CommandDbBase {
 								'discord/polls/entries'), data)
 								.then(function(_) {
 									this.addCollector(message, data);
-								}, function(err) trace(err));
-						}, function(err) trace(err));
-					}).then(null, function(err) trace(err));
-				}, function(err) trace(err));
+								}, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}).then(null, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			default:
 		}
 	}

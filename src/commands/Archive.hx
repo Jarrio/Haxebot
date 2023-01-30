@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
@@ -23,13 +24,22 @@ class Archive extends CommandBase {
 					if (found) {
 						interaction.member.roles.remove(role).then(function(success) {
 							interaction.reply('Archives are hidden');
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					} else {
 						interaction.member.roles.add(role).then(function(success) {
 							interaction.reply('Archives are shown');
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					}
-				}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 
 			default:
 		}

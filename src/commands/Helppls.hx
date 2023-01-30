@@ -179,17 +179,28 @@ class Helppls extends CommandDbBase {
 																Firestore.updateDoc(docs.docs[0].ref,
 																	'discussion', discussion,
 																	'solution', content.solution)
-																	.then(null,
-																		function(err) trace(err));
-															}, function(err) trace(err));
+																	.then(null, function(err) {
+																		trace(err);
+																		Browser.console.dir(err);
+																	});
+															}, function(err) {
+																trace(err);
+																Browser.console.dir(err);
+															});
 														}
 													}
 												});
 										});
 								}
 							});
-					}, function(err) trace(err));
-				}, function(err) trace(err));
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			});
 		}
 		this.extractMessageHistory(data.start_message_id, data.thread_id, callback);
@@ -246,7 +257,10 @@ class Helppls extends CommandDbBase {
 								'validated_timestamp', Timestamp.now())
 								.then(function(_) {
 									collector.stop('Reviewed validation.');
-								}, function(err) trace(err));
+								}, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
 						});
 				});
 		});
@@ -325,7 +339,10 @@ class Helppls extends CommandDbBase {
 
 					this.checkExistingThreads(data);
 				}
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 
@@ -423,7 +440,10 @@ class Helppls extends CommandDbBase {
 	}
 
 	function reply(entity:Entity, message:Message, content:String) {
-		message.reply({content: content}).then(null, function(err) trace(err));
+		message.reply({content: content}).then(null, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 		this.universe.deleteEntity(entity);
 	}
 
@@ -489,7 +509,10 @@ class Helppls extends CommandDbBase {
 					this.clearData(author);
 				});
 			});
-		}, function(err) trace(err));
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function getResponseFromSession(author:String, state:HelpState) {
@@ -510,8 +533,14 @@ class Helppls extends CommandDbBase {
 
 		Main.client.channels.fetch(thread_id).then(function(channel) {
 			channel.messages.fetch({after: start_id}, {force: true})
-				.then(cast callback, function(err) trace(err));
-		}, function(err) trace(err));
+				.then(cast callback, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function remoteSaveQuestion(message:Message, url:String, thread:String) {
@@ -537,8 +566,14 @@ class Helppls extends CommandDbBase {
 		}).then(function(value) {
 			content.id = value.id;
 			this.addDoc('test2/${content.topic}/threads', content, (_) -> trace('added'),
-				function(err) trace(err));
-		}, function(err) trace(err));
+				function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function updateSessionAnswer(user:String, state:HelpState, answer:String) {

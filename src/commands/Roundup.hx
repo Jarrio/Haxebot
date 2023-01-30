@@ -1,14 +1,12 @@
 package commands;
 
 import commands.types.Duration;
-import haxe.Json;
-import sys.io.File;
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import discord_js.TextChannel;
 import components.Command;
 import systems.CommandBase;
-
+import js.Browser;
 class Roundup extends CommandBase {
 	var last_checked:Float = -1;
 	var thursday_check:Float = -1;
@@ -66,7 +64,10 @@ class Roundup extends CommandBase {
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				this.channel = cast channel;
 				this.checking = false;
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 
 		if (this.roundup == -1 || this.channel == null) {
@@ -139,7 +140,10 @@ class Roundup extends CommandBase {
 				interaction.client.channels.fetch(this.announcement_channel)
 					.then(function(channel) {
 						this.channel = cast channel;
-					}, function(err) trace(err));
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 			default:
 		}
 	}

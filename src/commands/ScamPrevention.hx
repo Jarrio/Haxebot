@@ -10,7 +10,7 @@ import Main.CommandForward;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
-
+import js.Browser;
 class ScamPrevention extends CommandBase {
 	@:fastFamily var messages:{forward:CommandForward, message:Message};
 	var time_since:Map<String, Float> = new Map();
@@ -85,9 +85,15 @@ class ScamPrevention extends CommandBase {
 				embeds: [embed]
 			}).then(function(_) {
 				for (message in messages) {
-					message.delete().then(null, function(err) trace(err));
+					message.delete().then(null, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				}
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		});
 	}
 
@@ -125,9 +131,15 @@ class ScamPrevention extends CommandBase {
 				1000 * 60 * 60 * 12,
 				'Stop spamming, a mod will review this at their convenience.'
 			)
-				.then(callback, function(err) trace(err));
+				.then(callback, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			this.resetChecks(message.author.id);
-		}, function(err) trace(err));
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function banUser(messages:Array<Message>, ?callback:(_:Dynamic) -> Void) {
@@ -140,13 +152,22 @@ class ScamPrevention extends CommandBase {
 			guild_member.ban({
 				days: 1,
 				reason: "found phishing links, auto banned."
-			}).then(null, function(err) trace(err));
+			}).then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 			this.resetChecks(message.author.id);
 			message.channel.asType0.send(
 				'User <@${message.author.id}> has been auto banned for sending scam links.'
 			)
-				.then(callback, function(err) trace(err));
-		}, function(err) trace(err));
+				.then(callback, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function logMessage(id:String, embed:MessageEmbed, action:UserActions) {
@@ -154,7 +175,10 @@ class ScamPrevention extends CommandBase {
 
 		Main.client.channels.fetch('952952631079362650').then(function(channel) {
 			channel.send({content: '<@$id>', embeds: [embed]});
-		}, function(err) trace(err));
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function checkPhishingLinks(messages:Array<Message>) {

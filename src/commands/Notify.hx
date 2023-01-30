@@ -1,5 +1,5 @@
 package commands;
-
+import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
@@ -52,13 +52,22 @@ class Notify extends CommandBase {
 					if (found) {
 						interaction.member.roles.remove(role).then(function(success) {
 							interaction.reply('Unsubscribed to $channel updates');
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					} else {
 						interaction.member.roles.add(role).then(function(success) {
 							interaction.reply('Subscribed to $channel updates');
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					}
-				}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 
 			default:
 		}

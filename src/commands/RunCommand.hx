@@ -313,16 +313,19 @@ class Run extends CommandBase {
 							var date = Date.fromTime(interaction.createdTimestamp);
 							var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
-							embed.setFooter(
-								{text: 'Haxe ${this.haxe_version}',
-									iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'}
-							);
+							embed.setFooter({
+								text: 'Haxe ${this.haxe_version}',
+								iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
+							});
 							if (response.length > 0 && data == 0) {
 								interaction.reply({embeds: [embed]}).then((succ) -> {
 									trace(
 										'${interaction.user.tag} at $format_date with file id: ${filename}'
 									);
-								}, function(err) trace(err));
+								}, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
 								ls.kill();
 								return;
 							}

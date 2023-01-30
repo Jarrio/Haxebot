@@ -10,7 +10,7 @@ import discord_js.MessageEmbed;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
-
+import js.Browser;
 class Snippet extends CommandDbBase {
 	var sent:Array<TSnippet> = [];
 	var tags:Array<{name:String, value:String}> = [];
@@ -55,7 +55,10 @@ class Snippet extends CommandDbBase {
 							cache.message.edit({embeds: [embed]});
 						}
 						cache.interacted_at = Date.now().getTime();
-						interaction.deferUpdate().then(null, function(err) trace(err));
+						interaction.deferUpdate().then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 						universe.deleteEntity(entity);
 					case snippet_right:
 						var page = cache.page;
@@ -66,7 +69,10 @@ class Snippet extends CommandDbBase {
 							cache.message.edit({embeds: [embed]});
 						}
 						cache.interacted_at = Date.now().getTime();
-						interaction.deferUpdate().then(null, function(err) trace(err));
+						interaction.deferUpdate().then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 						universe.deleteEntity(entity);
 					default:
 				}
@@ -85,7 +91,10 @@ class Snippet extends CommandDbBase {
 			var embed = this.formatResultOutput(item, 0);
 			item.message.edit({embeds: [embed], components: []}).then(function(_) {
 				this.cache.remove(key);
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 
@@ -182,9 +191,18 @@ class Snippet extends CommandDbBase {
 							interaction.reply(
 								'*Snippet #${value.id} added!*\ntitle: $title\n$description\n'
 							);
-						}, function(err) trace(err));
-					}, function(err) trace(err));
-				}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			case SnippetSearch(taga, tagb, tagc):
 				var restraints = [];
 				var search = '';
@@ -241,7 +259,10 @@ class Snippet extends CommandDbBase {
 					}
 
 					this.handleSearchResponse(interaction, obj);
-				}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			case SnippetList(user, show_desc):
 				if (show_desc == null) {
 					show_desc = true;
@@ -270,7 +291,10 @@ class Snippet extends CommandDbBase {
 					}
 
 					this.handleSearchResponse(interaction, obj);
-				}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			case SnippetEdit(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'),
 					where('id', EQUAL_TO, id),
@@ -295,7 +319,10 @@ class Snippet extends CommandDbBase {
 					}
 
 					interaction.reply('Editting currently not implemented');
-				}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			case SnippetDelete(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'),
 					where('id', EQUAL_TO, id.parseInt()),
@@ -321,8 +348,14 @@ class Snippet extends CommandDbBase {
 
 					Firestore.deleteDoc(resp.docs[0].ref).then(function(_) {
 						interaction.reply('Your snippet(#$id) has been deleted.');
-					}, function(err) trace(err));
-				}, function(err) trace(err));
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			case SnippetTags:
 				var embed = new MessageEmbed();
 				embed.setTitle('Tags');
@@ -336,7 +369,10 @@ class Snippet extends CommandDbBase {
 					}
 				}
 
-				interaction.reply({embeds: [embed]}).then(null, function(err) trace(err));
+				interaction.reply({embeds: [embed]}).then(null, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			default:
 		}
 	}
@@ -377,7 +413,10 @@ class Snippet extends CommandDbBase {
 			.then(function(message) {
 				state.message = message;
 				this.cache.set(interaction.user.id, state);
-			}, function(err) trace(err));
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 	}
 
 	function formatResultOutput(state:TListState, forward:Int) {

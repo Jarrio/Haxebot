@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
@@ -36,8 +37,10 @@ class Haxelib extends CommandBase {
 
 				if (route != "list" && route != "info" && route != "search") {
 					if (!role_status) {
-						interaction.reply('Invalid Permissions.')
-							.then(null, function(err) trace(err));
+						interaction.reply('Invalid Permissions.').then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 						return;
 					}
 				}
@@ -68,7 +71,10 @@ class Haxelib extends CommandBase {
 						output = output.substr(0, 4000) + '...';
 					}
 					embed.setDescription(output);
-					interaction.reply({embeds: [embed]}).then(null, function(err) trace(err));
+					interaction.reply({embeds: [embed]}).then(null, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				});
 
 				ls.stderr.on('data', (data) -> {

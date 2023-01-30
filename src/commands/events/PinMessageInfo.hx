@@ -1,5 +1,6 @@
 package commands.events;
 
+import js.Browser;
 import discord_js.Message;
 import discord_js.ThreadChannel;
 import Main.CommandForward;
@@ -22,7 +23,10 @@ class PinMessageInfo extends System {
 					)
 						.then(function(message) {
 							this.messages.push(message);
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					this.universe.deleteEntity(entity);
 				default:
 			}

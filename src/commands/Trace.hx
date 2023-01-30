@@ -9,7 +9,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import js.node.ChildProcess.spawn;
 import systems.CommandBase;
-
+import js.Browser;
 class Trace extends CommandBase {
 	var timeout = 5000;
 	var haxe_version:String = null;
@@ -227,16 +227,19 @@ class Trace extends CommandBase {
 						var date = Date.fromTime(interaction.createdTimestamp);
 						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
-						embed.setFooter(
-							{text: 'Haxe ${this.haxe_version}',
-								iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'}
-						);
+						embed.setFooter({
+							text: 'Haxe ${this.haxe_version}',
+							iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
+						});
 						if (response.length > 0 && data == 0) {
 							interaction.reply({embeds: [embed]}).then((succ) -> {
 								trace(
 									'${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}'
 								);
-							}, function(err) trace(err));
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
 							ls.kill();
 							return;
 						}

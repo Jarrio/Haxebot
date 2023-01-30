@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
@@ -18,7 +19,10 @@ class Hi extends CommandBase {
 				default: "Hey you, what's up?";
 			}
 		}
-		interaction.reply({content: message}).then(null, function(err) trace(err));
+		interaction.reply({content: message}).then(null, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function get_name():String {

@@ -3,17 +3,15 @@ package commands;
 import systems.TextCommandBase;
 import components.TextCommand;
 import util.Random;
-import ecs.System;
 import vm2.NodeVM;
 import js.node.Fs;
-import js.node.Timers;
 import haxe.Http;
 import discord_js.TextChannel;
 import discord_js.MessageEmbed;
 import sys.FileSystem;
 import discord_js.Message;
 import js.node.ChildProcess.spawn;
-
+import js.Browser;
 enum abstract RunMessage(String) from String to String {}
 
 class Run extends TextCommandBase {
@@ -455,8 +453,14 @@ class Run extends TextCommandBase {
 									trace(
 										'${message.author.tag} at $format_date with file id: ${filename}'
 									);
-									message.delete().then(null, function(err) trace(err));
-								}, function(err) trace(err));
+									message.delete().then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
+								}, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
 								ls.kill();
 								return;
 							}

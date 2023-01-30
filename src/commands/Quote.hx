@@ -69,8 +69,14 @@ class Quote extends CommandDbBase {
 							interaction.reply(
 								'*Quote #${data.id} added!*\nname: $name\n$description\n\nby: <@${data.author}>'
 							);
-						}, function(err) trace(err));
-					}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				case quote_edit:
 					var col = collection(db, 'discord/quotes/entries');
 					var query:Query<TQuoteData> = query(col,
@@ -89,8 +95,14 @@ class Quote extends CommandDbBase {
 							.then(function(_) {
 								interaction.reply('Quote updated!');
 								this.cache.remove(interaction.user.id);
-							}, function(err) trace(err));
-					}, function(err) trace(err));
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 				default:
 			}
 
@@ -126,7 +138,10 @@ class Quote extends CommandDbBase {
 					embed.setDescription(body);
 					embed.setColor(0xEA8220);
 					interaction.reply({embeds: [embed]});
-				}, function(err) trace(err));
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			case QuoteGet(name) | QuoteCreate(name) | QuoteEdit(name) | QuoteDelete(name):
 				var type = get;
 				var enum_name = command.content.getName().toLowerCase();
@@ -183,8 +198,14 @@ class Quote extends CommandDbBase {
 								value: '${data.id}'
 							});
 						}
-						interaction.respond(results).then(null, function(err) trace(err));
-					}).then(null, function(err) trace(err));
+						interaction.respond(results).then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}).then(null, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
 					return;
 				}
 
@@ -204,7 +225,10 @@ class Quote extends CommandDbBase {
 								interaction.reply(
 									'You already have a quote(#${res.docs[0].data().id}) with the name __${name}__'
 								)
-									.then(null, function(err) trace(err));
+									.then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
 								return;
 							}
 
@@ -230,7 +254,10 @@ class Quote extends CommandDbBase {
 
 							interaction.showModal(modal);
 							return;
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 
 					case edit:
 						Firestore.getDocs(query).then(function(res) {
@@ -252,7 +279,10 @@ class Quote extends CommandDbBase {
 
 							if (doc == null) {
 								interaction.reply("That isn't your quote!")
-									.then(null, function(err) trace(err));
+									.then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
 								return;
 							}
 
@@ -271,12 +301,18 @@ class Quote extends CommandDbBase {
 
 							this.cache.set(interaction.user.id, doc.id);
 							interaction.showModal(modal);
-						}, function(err) trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					case delete:
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
 								interaction.reply("Cannot delete this quote")
-									.then(null, function(err) trace(err));
+									.then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
 								return;
 							}
 
@@ -287,8 +323,14 @@ class Quote extends CommandDbBase {
 
 							Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 								interaction.reply("Quote deleted!");
-							}, function(err) trace(err));
-						}, function(err) trace(err));
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 					case get | _:
 						query = Firestore.query(col,
 							where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
@@ -303,8 +345,14 @@ class Quote extends CommandDbBase {
 										value: '${data.id}'
 									});
 								}
-								interaction.respond(results).then(null, function(err) trace(err));
-							}).then(null, function(err) trace(err));
+								interaction.respond(results).then(null, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
+							}).then(null, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
 							return;
 						}
 
@@ -334,9 +382,14 @@ class Quote extends CommandDbBase {
 								iconURL: icon
 							});
 
-							interaction.reply({embeds: [embed]})
-								.then(null, function(err) trace(err));
-						}).then(null, function(err) trace(err));
+							interaction.reply({embeds: [embed]}).then(null, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
+						}).then(null, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
 				}
 			default:
 				// interaction.reply();
