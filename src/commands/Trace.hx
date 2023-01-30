@@ -54,7 +54,7 @@ class Trace extends CommandBase {
 
 				FileSystem.deleteDirectory('$path/$folder');
 			}
-		} catch (e) {
+		} catch (e ) {
 			trace(e);
 		}
 	}
@@ -110,10 +110,15 @@ class Trace extends CommandBase {
 
 	function runCode(code:String, interaction:BaseCommandInteraction) {
 		var filename = 'T' + Date.now().getTime() + Math.floor(Math.random() * 100000);
-		var final_code = this.insertLoopBreak('class $filename {\n\tstatic function main() {\n\t\ttrace($code);\n\t}\n}');
+		var final_code = this.insertLoopBreak(
+			'class $filename {\n\tstatic function main() {\n\t\ttrace($code);\n\t}\n}'
+		);
 		var mention = '<@${interaction.user.id}>';
 
-		Fs.appendFile('${this.base_path}/hx/$filename.hx', final_code + '\n//User:${interaction.user.tag} id: ${interaction.user.id}| time: ${Date.now()}',
+		Fs.appendFile(
+			'${this.base_path}/hx/$filename.hx',
+			final_code +
+			'\n//User:${interaction.user.tag} id: ${interaction.user.id}| time: ${Date.now()}',
 			(error) -> {
 				if (error != null) {
 					trace(error);
@@ -207,7 +212,9 @@ class Trace extends CommandBase {
 							code_output += '\n//Output has been trimmed.';
 						}
 
-						var desc = '**Code:**\n```hx\n${code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
+						var desc = '**Code:**\n```hx\n${code}``` **Output:**\n ```markdown\n'
+							+ code_output
+							+ '\n```';
 						embed.setDescription(desc);
 
 						var author = {
@@ -220,22 +227,28 @@ class Trace extends CommandBase {
 						var date = Date.fromTime(interaction.createdTimestamp);
 						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
-						embed.setFooter({text: 'Haxe ${this.haxe_version}', iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'});
+						embed.setFooter(
+							{text: 'Haxe ${this.haxe_version}',
+								iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'}
+						);
 						if (response.length > 0 && data == 0) {
 							interaction.reply({embeds: [embed]}).then((succ) -> {
-								trace('${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}');
-							}, err);
+								trace(
+									'${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}'
+								);
+							}, function(err) trace(err));
 							ls.kill();
 							return;
 						}
-					} catch (e) {
+					} catch (e ) {
 						var compile_output = this.cleanOutput(e.message, filename, 'Main');
 						interaction.reply({content: mention + '```\n${compile_output}```'});
 						trace(e);
 					}
 					return;
 				});
-			});
+			}
+		);
 	}
 
 	var base_path(get, never):String;
@@ -311,7 +324,8 @@ class Trace extends CommandBase {
 				return false;
 			}
 		}
-		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+		return
+			!~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
 	function get_name():String {

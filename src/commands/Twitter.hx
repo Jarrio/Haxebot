@@ -28,7 +28,8 @@ typedef TTweetUser = {
 }
 
 @:forward
-private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes:{users:Array<TTweetUser>}}) from Dynamic {
+private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes:{users:Array<TTweetUser>}})
+	from Dynamic {
 	public function getUser(tweet:TTweet):TTweetUser {
 		if (users != null) {
 			for (user in users) {
@@ -127,7 +128,7 @@ class Twitter extends CommandDbBase {
 									}
 								}
 								this.removeDupes();
-							} catch (e) {
+							} catch (e ) {
 								trace(this.since_id);
 								trace(url);
 								trace(e);
@@ -135,8 +136,8 @@ class Twitter extends CommandDbBase {
 							}
 							async_check[k] = true;
 							this.checking = false;
-						}, err);
-					}, err);
+						}, function(err) trace(err));
+					}, function(err) trace(err));
 				}
 			}
 		}
@@ -185,7 +186,7 @@ class Twitter extends CommandDbBase {
 			});
 
 			for (link in this.twitter_links) {
-				this.channel.send({content: link}).then(null, err);
+				this.channel.send({content: link}).then(null, function(err) trace(err));
 			}
 
 			for (k => _ in tags) {
@@ -209,7 +210,7 @@ class Twitter extends CommandDbBase {
 				this.channel = succ;
 				checking = false;
 				trace('Found twitter thread');
-			}, err);
+			}, function(err) trace(err));
 		}
 	}
 

@@ -45,13 +45,13 @@ class Roundup extends CommandBase {
 				}
 				desc += '\n...';
 				embed.setDescription(desc);
-				this.channel.send(
-					{content: '<@&$news_role>', allowedMentions: {roles: [news_role]},
-						embeds: [embed]}
-				)
-					.then((_) -> {
-						this.roundup++;
-					});
+				this.channel.send({
+					content: '<@&$news_role>',
+					allowedMentions: {roles: [news_role]},
+					embeds: [embed]
+				}).then((_) -> {
+					this.roundup++;
+				});
 			}
 		}
 		data.request();
@@ -66,7 +66,7 @@ class Roundup extends CommandBase {
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				this.channel = cast channel;
 				this.checking = false;
-			}, err);
+			}, function(err) trace(err));
 		}
 
 		if (this.roundup == -1 || this.channel == null) {
@@ -87,14 +87,13 @@ class Roundup extends CommandBase {
 			this.last_checked = Date.now().getTime();
 		}
 
-
 		getHaxeIoPage();
 	}
 
 	function shouldCheck() {
 		var today = Date.now();
 		var hour = today.getUTCHours();
-			
+
 		if (hour < 11 || hour > 14) {
 			return false;
 		}
@@ -140,7 +139,7 @@ class Roundup extends CommandBase {
 				interaction.client.channels.fetch(this.announcement_channel)
 					.then(function(channel) {
 						this.channel = cast channel;
-					}, err);
+					}, function(err) trace(err));
 			default:
 		}
 	}

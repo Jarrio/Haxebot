@@ -15,8 +15,6 @@ class Reminder extends CommandDbBase {
 	var sent:Array<TReminder> = [];
 	final bot_channel = #if block '597067735771381771' #else '663246792426782730' #end;
 	final casual_chat = '';
-	
-
 
 	override function onEnabled() {
 		Firestore.onSnapshot(collection(this.db, 'discord/reminders/entries'), function(resp) {
@@ -31,7 +29,6 @@ class Reminder extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Reminder(content, when, personal, thread_reply):
-				
 				if (personal == null) {
 					personal = false;
 				}
@@ -41,7 +38,9 @@ class Reminder extends CommandDbBase {
 					if (interaction.channel.isThread()) {
 						thread_id = interaction.channel.id;
 					} else {
-						interaction.reply('You marked `thread_reply` to true. Please trigger this command from a thread.');
+						interaction.reply(
+							'You marked `thread_reply` to true. Please trigger this command from a thread.'
+						);
 						return;
 					}
 				}
@@ -68,7 +67,9 @@ class Reminder extends CommandDbBase {
 				var duration = Duration.fromString(min);
 
 				if (obj.duration == 0.) {
-					interaction.reply('Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)');
+					interaction.reply(
+						'Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)'
+					);
 					return;
 				}
 
@@ -93,8 +94,8 @@ class Reminder extends CommandDbBase {
 						Firestore.updateDoc(doc, obj).then(null, function(err) {
 							trace(err);
 						});
-					}, err);
-				}, err);
+					}, function(err) trace(err));
+				}, function(err) trace(err));
 			default:
 		}
 	}
@@ -112,7 +113,7 @@ class Reminder extends CommandDbBase {
 			if (reminder.sent) {
 				continue;
 			}
-			
+
 			if (reminder.channel_id != null && !this.channels.exists(reminder.channel_id)) {
 				this.getChannel(reminder.channel_id);
 			}
@@ -133,15 +134,16 @@ class Reminder extends CommandDbBase {
 
 			if (reminder.thread_reply) {
 				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
-					channel.send({content: content, allowedMentions: parse}).then(null, function(err) {
-						trace(err);
-						reminder.sent = false;
-						reminder.duration += Duration.fromString('3hrs');
-						this.channel.send({
-							content: '<@${reminder.author}> I failed to post a reminder to your thread. Might be an issue.',
-							allowedMentions: parse
+					channel.send({content: content, allowedMentions: parse})
+						.then(null, function(err) {
+							trace(err);
+							reminder.sent = false;
+							reminder.duration += Duration.fromString('3hrs');
+							this.channel.send({
+								content: '<@${reminder.author}> I failed to post a reminder to your thread. Might be an issue.',
+								allowedMentions: parse
+							});
 						});
-					});
 				});
 			} else if (reminder.personal) {
 				Main.client.users.fetch(reminder.author).then(function(user) {
@@ -174,7 +176,7 @@ class Reminder extends CommandDbBase {
 				continue;
 			}
 			var doc = Firestore.doc(this.db, 'discord/reminders/entries/${msg.id}');
-			Firestore.deleteDoc(doc).then(null, err);
+			Firestore.deleteDoc(doc).then(null, function(err) trace(err));
 			this.sent.remove(msg);
 		}
 	}
@@ -186,11 +188,12 @@ class Reminder extends CommandDbBase {
 				this.channels.set(channel.id, channel);
 				this.checking = false;
 				trace('Found ${channel.name} channel');
-			}, err);
+			}, function(err) trace(err));
 		}
 	}
 
 	var channel(get, never):TextChannel;
+
 	function get_channel() {
 		return this.channels[bot_channel];
 	}

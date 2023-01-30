@@ -108,7 +108,8 @@ class Helppls extends CommandDbBase {
 			});
 
 			DiscordUtil.getChannel(data.thread_id, function(channel) {
-				var q:Query<TStoreContent> = query(collection(db, 'test2', data.topic, 'threads'), where('thread_id', '==', data.thread_id));
+				var q:Query<TStoreContent> = query(collection(db, 'test2', data.topic, 'threads'),
+					where('thread_id', '==', data.thread_id));
 				Firestore.getDocs(q).then((docs) -> {
 					if (docs.size != 1) {
 						return;
@@ -118,8 +119,11 @@ class Helppls extends CommandDbBase {
 					content.discussion = discussion;
 
 					if (content.solution_attempt == 3) {
-						channel.send({content: 'A solution has been requested 3 times, will skip and go to validation.'});
-						Firestore.updateDoc(docs.docs[0].ref, 'solution', content.solution, 'solved', true, 'discussion', discussion);
+						channel.send(
+							{content: 'A solution has been requested 3 times, will skip and go to validation.'}
+						);
+						Firestore.updateDoc(docs.docs[0].ref, 'solution', content.solution,
+							'solved', true, 'discussion', discussion);
 						this.validateThread(docs.docs[0].ref, content);
 						return;
 					}
@@ -131,51 +135,61 @@ class Helppls extends CommandDbBase {
 							Firestore.updateDoc(docs.docs[0].ref, 'solution', content.solution);
 						}
 
-						DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
-							if (user.bot) {
-								return;
-							}
+						DiscordUtil.reactionTracker(message,
+							(_, collected:MessageReaction, user:User) -> {
+								if (user.bot) {
+									return;
+								}
 
-							if (collected.emoji.name == "✅") {
-								channel.send({content: 'Would you be willing to write a brief description on the solution?'}).then(function(message) {
-									DiscordUtil.reactionTracker(message, (_, collected:MessageReaction, user:User) -> {
-										if (user.bot) {
-											return;
-										}
-										if (collected.emoji.name == "✅") {
-											var command = Main.getCommand('helpdescription');
-											if (command != null) {
-												command.setCommandPermission([
-													{
-														id: user.id,
-														type: USER,
-														permission: true
+								if (collected.emoji.name == "✅") {
+									channel.send(
+										{content: 'Would you be willing to write a brief description on the solution?'}
+									)
+										.then(function(message) {
+											DiscordUtil.reactionTracker(message,
+												(_, collected:MessageReaction, user:User) -> {
+													if (user.bot) {
+														return;
 													}
-												], () -> {
-													channel.send('<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?');
-													content.discussion = discussion;
-													content.solution = {
-														attempt: content.solution_attempt,
-														description: null,
-														timestamp: Timestamp.now(),
-														user: {
-															id: user.id,
-															name: user.tag,
-															icon_url: user.avatarURL()
+													if (collected.emoji.name == "✅") {
+														var command = Main.getCommand('helpdescription');
+														if (command != null) {
+															command.setCommandPermission([
+																{
+																	id: user.id,
+																	type: USER,
+																	permission: true
+																}
+															], () -> {
+																channel.send(
+																	'<@${user.id}> could you run the `/helpdescription` command and give a brief description about the solution to the problem?'
+																);
+																content.discussion = discussion;
+																content.solution = {
+																	attempt: content.solution_attempt,
+																	description: null,
+																	timestamp: Timestamp.now(),
+																	user: {
+																		id: user.id,
+																		name: user.tag,
+																		icon_url: user.avatarURL()
+																	}
+																}
+
+																Firestore.updateDoc(docs.docs[0].ref,
+																	'discussion', discussion,
+																	'solution', content.solution)
+																	.then(null,
+																		function(err) trace(err));
+															}, function(err) trace(err));
 														}
 													}
-
-													Firestore.updateDoc(docs.docs[0].ref, 'discussion', discussion, 'solution', content.solution)
-														.then(null, err);
-												}, err);
-											}
-										}
-									});
-								});
-							}
-						});
-					}, err);
-				}, err);
+												});
+										});
+								}
+							});
+					}, function(err) trace(err));
+				}, function(err) trace(err));
 			});
 		}
 		this.extractMessageHistory(data.start_message_id, data.thread_id, callback);
@@ -203,32 +217,38 @@ class Helppls extends CommandDbBase {
 			var description = '**Topic**\n$topic ${embed.description}\n$solution_summary';
 			embed.setDescription(description);
 
-			channel.send({embeds: [embed], content: "Should this thread be indexed?"}).then(function(message) {
-				Firestore.updateDoc(ref, 'validate_timestamp', Date.now());
-				DiscordUtil.reactionTracker(message, (collector, collected:MessageReaction, user:User) -> {
-					if (user.bot) {
-						return;
-					}
+			channel.send(
+				{embeds: [embed], content: "Should this thread be indexed?"}
+			)
+				.then(function(message) {
+					Firestore.updateDoc(ref, 'validate_timestamp', Date.now());
+					DiscordUtil.reactionTracker(message,
+						(collector, collected:MessageReaction, user:User) -> {
+							if (user.bot) {
+								return;
+							}
 
-					var valid = null;
+							var valid = null;
 
-					if (collected.emoji.name == "✅") {
-						valid = true;
-					}
+							if (collected.emoji.name == "✅") {
+								valid = true;
+							}
 
-					if (collected.emoji.name == "❎") {
-						valid = false;
-					}
+							if (collected.emoji.name == "❎") {
+								valid = false;
+							}
 
-					if (valid == null) {
-						return;
-					}
+							if (valid == null) {
+								return;
+							}
 
-					Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id, 'validated_timestamp', Timestamp.now()).then(function(_) {
-						collector.stop('Reviewed validation.');
-					}, err);
+							Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id,
+								'validated_timestamp', Timestamp.now())
+								.then(function(_) {
+									collector.stop('Reviewed validation.');
+								}, function(err) trace(err));
+						});
 				});
-			});
 		});
 	}
 
@@ -264,7 +284,8 @@ class Helppls extends CommandDbBase {
 	function checkDocs() {
 		var topics = ['haxe', 'haxeui', 'tools', 'flixel', 'heaps', 'ceramic', 'openfl'];
 		for (item in topics) {
-			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'), where('solved', '==', false), where('valid', '==', null),
+			var q:Query<TStoreContent> = query(collection(db, 'test2', item, 'threads'),
+				where('solved', '==', false), where('valid', '==', null),
 				orderBy('timestamp', DESCENDING));
 			Firestore.getDocs(q).then(function(docs) {
 				if (docs.empty) {
@@ -274,8 +295,10 @@ class Helppls extends CommandDbBase {
 				for (doc in docs.docs) {
 					var data = doc.data();
 					var start = data.timestamp.toDate().getTime();
-					if (data.solution != null && data.solution.timestamp != null && data.solution.user != null) {
-						if (!fbDateWithinTimeout(Timestamp.now(), data.solution.timestamp, this.solution_timeout)) {
+					if (data.solution != null && data.solution.timestamp != null
+						&& data.solution.user != null) {
+						if (!fbDateWithinTimeout(Timestamp.now(), data.solution.timestamp,
+							this.solution_timeout)) {
 							var command = Main.getCommand('helpdescription');
 							if (command != null) {
 								command.setCommandPermission([
@@ -291,7 +314,9 @@ class Helppls extends CommandDbBase {
 
 									Firestore.updateDoc(doc.ref, data).catchError(err);
 									DiscordUtil.getChannel(data.thread_id, (channel) -> {
-										channel.send({content: "Timeout: Last user didn't send a solution summary"});
+										channel.send(
+											{content: "Timeout: Last user didn't send a solution summary"}
+										);
 									});
 								});
 							}
@@ -300,12 +325,13 @@ class Helppls extends CommandDbBase {
 
 					this.checkExistingThreads(data);
 				}
-			}, err);
+			}, function(err) trace(err));
 		}
 	}
 
 	override function update(_) {
-		if (Date.now().getTime() - this.threads_last_checked > this.check_threads_interval && Main.commands_active) {
+		if (Date.now().getTime() - this.threads_last_checked > this.check_threads_interval
+			&& Main.commands_active) {
 			this.checkDocs();
 			this.threads_last_checked = Date.now().getTime();
 		}
@@ -343,7 +369,11 @@ class Helppls extends CommandDbBase {
 			}
 
 			if (state == title && message.content.length > 100) {
-				return this.reply(entity, message, 'Titles have a character limit ${message.content.length}/**__100__**.');
+				return this.reply(
+					entity,
+					message,
+					'Titles have a character limit ${message.content.length}/**__100__**.'
+				);
 			}
 
 			if (message.content.length == 0) {
@@ -393,7 +423,7 @@ class Helppls extends CommandDbBase {
 	}
 
 	function reply(entity:Entity, message:Message, content:String) {
-		message.reply({content: content}).then(null, err);
+		message.reply({content: content}).then(null, function(err) trace(err));
 		this.universe.deleteEntity(entity);
 	}
 
@@ -428,12 +458,16 @@ class Helppls extends CommandDbBase {
 		var session = this.session.get(author);
 		var topic = session.topic;
 		var embed = this.createThreadEmbed(session);
-		embed.setAuthor({name: message.author.tag, iconURL: message.author.avatarURL()});
+		embed.setAuthor(
+			{name: message.author.tag, iconURL: message.author.avatarURL()}
+		);
 
 		if (embed.description.length < 30) {
 			trace(embed.description);
 			this.clearData(author);
-			message.reply({content: "Not enough answers to provide sufficient support"});
+			message.reply(
+				{content: "Not enough answers to provide sufficient support"}
+			);
 			return;
 		}
 
@@ -446,12 +480,16 @@ class Helppls extends CommandDbBase {
 			channel.send({embeds: [embed]}).then(function(channel_message) {
 				channel_message.startThread({name: title}).then(function(thread) {
 					this.remoteSaveQuestion(message, channel_message.url, thread.id);
-					message.author.send({content: 'Your thread(__<#${thread.id}>__) has been created!'});
-					channel.send("**__Please reply to the above issue within the thread.__**");
+					message.author.send(
+						{content: 'Your thread(__<#${thread.id}>__) has been created!'}
+					);
+					channel.send(
+						"**__Please reply to the above issue within the thread.__**"
+					);
 					this.clearData(author);
 				});
 			});
-		}, err);
+		}, function(err) trace(err));
 	}
 
 	function getResponseFromSession(author:String, state:HelpState) {
@@ -464,14 +502,16 @@ class Helppls extends CommandDbBase {
 		return null;
 	}
 
-	function extractMessageHistory(start_id:String, thread_id:String, callback:(messages:Collection<String, Message>) -> Void) {
+	function extractMessageHistory(start_id:String, thread_id:String,
+			callback:(messages:Collection<String, Message>) -> Void) {
 		if (!Main.connected) {
 			return;
 		}
 
 		Main.client.channels.fetch(thread_id).then(function(channel) {
-			channel.messages.fetch({after: start_id}, {force: true}).then(cast callback, err);
-		}, err);
+			channel.messages.fetch({after: start_id}, {force: true})
+				.then(cast callback, function(err) trace(err));
+		}, function(err) trace(err));
 	}
 
 	function remoteSaveQuestion(message:Message, url:String, thread:String) {
@@ -496,8 +536,9 @@ class Helppls extends CommandDbBase {
 			});
 		}).then(function(value) {
 			content.id = value.id;
-			this.addDoc('test2/${content.topic}/threads', content, (_) -> trace('added'), err);
-		}, err);
+			this.addDoc('test2/${content.topic}/threads', content, (_) -> trace('added'),
+				function(err) trace(err));
+		}, function(err) trace(err));
 	}
 
 	function updateSessionAnswer(user:String, state:HelpState, answer:String) {
@@ -538,7 +579,7 @@ class Helppls extends CommandDbBase {
 				obj[0].resource = split[split.length - 2] + '/' + split[split.length - 1];
 			}
 			return obj[0];
-		} catch (e) {
+		} catch (e ) {
 			return null;
 		}
 	}

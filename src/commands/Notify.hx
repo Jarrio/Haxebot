@@ -52,13 +52,13 @@ class Notify extends CommandBase {
 					if (found) {
 						interaction.member.roles.remove(role).then(function(success) {
 							interaction.reply('Unsubscribed to $channel updates');
-						}, err);
+						}, function(err) trace(err));
 					} else {
 						interaction.member.roles.add(role).then(function(success) {
 							interaction.reply('Subscribed to $channel updates');
-						}, err);
+						}, function(err) trace(err));
 					}
-				}, err);
+				}, function(err) trace(err));
 
 			default:
 		}

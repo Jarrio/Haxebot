@@ -23,13 +23,13 @@ class Archive extends CommandBase {
 					if (found) {
 						interaction.member.roles.remove(role).then(function(success) {
 							interaction.reply('Archives are hidden');
-						}, err);
+						}, function(err) trace(err));
 					} else {
 						interaction.member.roles.add(role).then(function(success) {
 							interaction.reply('Archives are shown');
-						}, err);
+						}, function(err) trace(err));
 					}
-				}, err);
+				}, function(err) trace(err));
 
 			default:
 		}

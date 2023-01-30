@@ -89,7 +89,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Quote, Snippet, Run, Api, TextMention],
+					systems: [Quote, Snippet, Run, Api, TextMention, Notify],
 				},
 				{
 					name: 'main',
@@ -156,7 +156,7 @@ class Main {
 				#if block
 				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
 				#end
-			}, err);
+			}, function(err) trace(err));
 		});
 
 		client.on('guildMemberAdd', (member:GuildMember) -> {
@@ -431,8 +431,8 @@ class Main {
 					#end
 					Main.auth = res.user;
 					Main.logged_in = true;
-				}, err);
-			}, err);
+				}, function(err) trace(err));
+			}, function(err) trace(err));
 
 		start();
 	}
@@ -440,7 +440,7 @@ class Main {
 	static public function updateState() {
 		#if !block
 		var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
-		Firestore.updateDoc(doc, 'state', state).then(null, err);
+		Firestore.updateDoc(doc, 'state', state).then(null, function(err) trace(err));
 		#end
 	}
 

@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(5);
-	var this2 = new Array(5);
+	var this1 = new Array(6);
+	var this2 = new Array(6);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
 	var this1 = new Array(26);
 	var this2 = new Array(26);
@@ -801,6 +801,10 @@ Main.start = function() {
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
+	var s = new commands_Notify(u);
+	phase.systems[5] = s;
+	phase.enabledSystems[5] = true;
+	s.onEnabled();
 	var phase = vec[1];
 	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[0] = s;
@@ -931,7 +935,9 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 153, className : "Main", methodName : "start"});
 			}
-		},Util_err);
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 159, className : "Main", methodName : "start"});
+		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
 		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
@@ -1544,13 +1550,19 @@ Main.main = function() {
 			Main.state = resp.data().state;
 			Main.auth = res.user;
 			Main.logged_in = true;
-		},Util_err);
-	},Util_err);
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 434, className : "Main", methodName : "main"});
+		});
+	},function(err) {
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 435, className : "Main", methodName : "main"});
+	});
 	Main.start();
 };
 Main.updateState = function() {
 	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
-	firebase_web_firestore_Firestore.updateDoc(doc,"state",Main.state).then(null,Util_err);
+	firebase_web_firestore_Firestore.updateDoc(doc,"state",Main.state).then(null,function(err) {
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 443, className : "Main", methodName : "updateState"});
+	});
 };
 Main.parseCommands = function() {
 	if(Main.command_file == null || Main.command_file.length == 0) {
@@ -2498,10 +2510,6 @@ function Util_fbDateWithinTimeout(a,b,timeout) {
 	}
 	return a.toDate().getTime() - b.toDate().getTime() < timeout;
 }
-function Util_err(err) {
-	$global.console.dir(err);
-	haxe_Log.trace(err.message,{ fileName : "src/Util.hx", lineNumber : 49, className : "_Util.Util_Fields_", methodName : "err"});
-}
 var bits_Bits = {};
 bits_Bits.fromPositions = function(positions) {
 	var this1 = [0];
@@ -3348,7 +3356,9 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 				results.push({ name : a.obj.path, value : a.obj.path});
 			}
 		}
-		interaction.respond(results).then(null,Util_err);
+		interaction.respond(results).then(null,function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/Api.hx", lineNumber : 485, className : "commands.Api", methodName : "search"});
+		});
 	}
 	,get_name: function() {
 		return "api";
@@ -3381,13 +3391,19 @@ commands_Archive.prototype = $extend(systems_CommandBase.prototype,{
 				if(found) {
 					interaction.member.roles.remove(role).then(function(success) {
 						interaction.reply("Archives are hidden");
-					},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Archive.hx", lineNumber : 26, className : "commands.Archive", methodName : "run"});
+					});
 				} else {
 					interaction.member.roles.add(role).then(function(success) {
 						interaction.reply("Archives are shown");
-					},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Archive.hx", lineNumber : 30, className : "commands.Archive", methodName : "run"});
+					});
 				}
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Archive.hx", lineNumber : 32, className : "commands.Archive", methodName : "run"});
+			});
 		}
 	}
 	,get_name: function() {
@@ -3419,8 +3435,12 @@ commands_AutoRole.prototype = $extend(systems_CommandBase.prototype,{
 			var entity = _set.getDense(_g_idx--);
 			this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var member = this.tablec254489e95ef23a8f91062a1947780b9.get(entity);
-			member.roles.add(this.event_role_id).then(null,Util_err);
-			member.roles.add(this.news_role_id).then(null,Util_err);
+			member.roles.add(this.event_role_id).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/AutoRole.hx", lineNumber : 17, className : "commands.AutoRole", methodName : "update"});
+			});
+			member.roles.add(this.news_role_id).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/AutoRole.hx", lineNumber : 18, className : "commands.AutoRole", methodName : "update"});
+			});
 			this.universe.deleteEntity(entity);
 		}
 	}
@@ -3490,7 +3510,9 @@ commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			if(route != "list" && route != "info" && route != "search") {
 				if(!role_status) {
-					interaction.reply("Invalid Permissions.").then(null,Util_err);
+					interaction.reply("Invalid Permissions.").then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Haxelib.hx", lineNumber : 40, className : "commands.Haxelib", methodName : "run"});
+					});
 					return;
 				}
 			}
@@ -3521,7 +3543,9 @@ commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 					output = HxOverrides.substr(output,0,4000) + "...";
 				}
 				embed.setDescription(output);
-				return interaction.reply({ embeds : [embed]}).then(null,Util_err);
+				return interaction.reply({ embeds : [embed]}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Haxelib.hx", lineNumber : 71, className : "commands.Haxelib", methodName : "run"});
+				});
 			});
 			ls.stderr.on("data",function(data) {
 				var embed = new discord_$js_MessageEmbed();
@@ -3568,7 +3592,9 @@ commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 				if(content.type != "helppls_dm") {
 					continue;
 				}
-				interaction.reply({ content : content.content.toString()}).then(null,Util_err);
+				interaction.reply({ content : content.content.toString()}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Help.hx", lineNumber : 26, className : "commands.Help", methodName : "run"});
+				});
 				break;
 			}
 			return;
@@ -3602,7 +3628,9 @@ commands_Help.prototype = $extend(systems_CommandBase.prototype,{
 			if(msg.length == 0 || msg == "" || msg == null) {
 				msg = "Nothing found, sorry :(";
 			}
-			interaction.reply(msg).then(null,Util_err);
+			interaction.reply(msg).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Help.hx", lineNumber : 60, className : "commands.Help", methodName : "run"});
+			});
 		}
 	}
 	,get_name: function() {
@@ -3658,7 +3686,9 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = "Hey you, what's up?";
 			}
 		}
-		interaction.reply({ content : message}).then(null,Util_err);
+		interaction.reply({ content : message}).then(null,function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/Hi.hx", lineNumber : 21, className : "commands.Hi", methodName : "run"});
+		});
 	}
 	,get_name: function() {
 		return "hi";
@@ -3725,13 +3755,19 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 				if(found) {
 					interaction.member.roles.remove(role).then(function(success) {
 						interaction.reply("Unsubscribed to " + channel + " updates");
-					},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 55, className : "commands.Notify", methodName : "run"});
+					});
 				} else {
 					interaction.member.roles.add(role).then(function(success) {
 						interaction.reply("Subscribed to " + channel + " updates");
-					},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 59, className : "commands.Notify", methodName : "run"});
+					});
 				}
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 61, className : "commands.Notify", methodName : "run"});
+			});
 		}
 	}
 	,get_name: function() {
@@ -3873,7 +3909,11 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						if(now - four_weeks < 0) {
 							continue;
 						}
-						firebase_web_firestore_Firestore.deleteDoc(doc.ref).then(null,Util_err);
+						firebase_web_firestore_Firestore.deleteDoc(doc.ref).then(null,(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 38, className : "commands.Poll", methodName : "update"});
+							};
+						})());
 						continue;
 					}
 					var start = data[0].timestamp.toMillis();
@@ -3888,14 +3928,24 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						return function(succ) {
 							succ.messages.fetch(data[0].message_id).then((function(time_left,data) {
 								return function(message) {
-									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/commands/Poll.hx", lineNumber : 51, className : "commands.Poll", methodName : "update"});
+									haxe_Log.trace("Resyncing " + data[0].id,{ fileName : "src/commands/Poll.hx", lineNumber : 53, className : "commands.Poll", methodName : "update"});
 									_gthis.addCollector(message,data[0],time_left[0]);
 								};
-							})(time_left,data),Util_err);
+							})(time_left,data),(function() {
+								return function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 55, className : "commands.Poll", methodName : "update"});
+								};
+							})());
 						};
-					})(time_left,data),Util_err);
+					})(time_left,data),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 56, className : "commands.Poll", methodName : "update"});
+						};
+					})());
 				}
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 58, className : "commands.Poll", methodName : "update"});
+			});
 		}
 	}
 	,run: function(command,interaction) {
@@ -3969,10 +4019,18 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 						data.id = value.id;
 						firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/polls/entries"),data).then(function(_) {
 							_gthis.addCollector(message,data);
-						},Util_err);
-					},Util_err);
-				}).then(null,Util_err);
-			},Util_err);
+						},function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 149, className : "commands.Poll", methodName : "run"});
+						});
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 150, className : "commands.Poll", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 151, className : "commands.Poll", methodName : "run"});
+				});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 152, className : "commands.Poll", methodName : "run"});
+			});
 		}
 	}
 	,addCollector: function(message,data,time_left) {
@@ -4223,7 +4281,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(resp) {
 						if(resp.docs.length != 1) {
 							interaction[0].reply("Something went wrong");
-							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 75, className : "commands.Quote", methodName : "update"});
+							haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 81, className : "commands.Quote", methodName : "update"});
 							return;
 						}
 						firebase_web_firestore_Firestore.updateDoc(resp.docs[0].ref,{ description : interaction[0].fields.getTextInputValue("description")}).then((function(interaction) {
@@ -4235,9 +4293,17 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 									delete(_this.h[key]);
 								}
 							};
-						})(interaction),Util_err);
+						})(interaction),(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 92, className : "commands.Quote", methodName : "update"});
+							};
+						})());
 					};
-				})(interaction),Util_err);
+				})(interaction),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 93, className : "commands.Quote", methodName : "update"});
+					};
+				})());
 				break;
 			case "quote_set":
 				var name = [interaction[0].fields.getTextInputValue("name")];
@@ -4270,9 +4336,17 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							return function(_) {
 								interaction[0].reply("*Quote #" + data[0].id + " added!*\nname: " + name[0] + "\n" + description[0] + "\n\nby: <@" + data[0].author + ">");
 							};
-						})(data,description,name,interaction),Util_err);
+						})(data,description,name,interaction),(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 72, className : "commands.Quote", methodName : "update"});
+							};
+						})());
 					};
-				})(data,description,name,interaction),Util_err);
+				})(data,description,name,interaction),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 73, className : "commands.Quote", methodName : "update"});
+					};
+				})());
 				break;
 			default:
 			}
@@ -4312,7 +4386,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				embed.setDescription(body);
 				embed.setColor(15368736);
 				interaction.reply({ embeds : [embed]});
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 129, className : "commands.Quote", methodName : "run"});
+			});
 			break;
 		case 27:
 			var name = _g.name;
@@ -4364,15 +4440,21 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 					}
-					interaction.respond(results).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.respond(results).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 186, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 187, className : "commands.Quote", methodName : "run"});
+				});
 				return;
 			}
 			switch(type) {
 			case "delete":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
-						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						interaction.reply("Cannot delete this quote").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 279, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					if(res.docs.length > 1) {
@@ -4381,8 +4463,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
-					},Util_err);
-				},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 290, className : "commands.Quote", methodName : "run"});
+					});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 291, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "edit":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4402,7 +4488,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 					}
 					if(doc == null) {
-						interaction.reply("That isn't your quote!").then(null,Util_err);
+						interaction.reply("That isn't your quote!").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 255, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
@@ -4411,7 +4499,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					modal.addComponents(action_b);
 					_gthis.cache.h[interaction.user.id] = doc.id;
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 274, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "get":
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name)));
@@ -4430,8 +4520,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4452,8 +4546,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "set":
 				if(!this.isValidName(name)) {
@@ -4466,7 +4564,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length >= 1) {
-						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name + "__").then(null,Util_err);
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name + "__").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 207, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
@@ -4476,7 +4576,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
 					modal.addComponents(action_a,action_b);
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 233, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			default:
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name)));
@@ -4495,8 +4597,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4517,8 +4623,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 			}
 			break;
 		case 28:
@@ -4571,15 +4681,21 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 					}
-					interaction.respond(results).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.respond(results).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 186, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 187, className : "commands.Quote", methodName : "run"});
+				});
 				return;
 			}
 			switch(type) {
 			case "delete":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
-						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						interaction.reply("Cannot delete this quote").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 279, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					if(res.docs.length > 1) {
@@ -4588,8 +4704,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
-					},Util_err);
-				},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 290, className : "commands.Quote", methodName : "run"});
+					});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 291, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "edit":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4609,7 +4729,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 					}
 					if(doc == null) {
-						interaction.reply("That isn't your quote!").then(null,Util_err);
+						interaction.reply("That isn't your quote!").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 255, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
@@ -4618,7 +4740,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					modal.addComponents(action_b);
 					_gthis.cache.h[interaction.user.id] = doc.id;
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 274, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "get":
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
@@ -4637,8 +4761,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4659,8 +4787,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "set":
 				if(!this.isValidName(name1)) {
@@ -4673,7 +4805,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length >= 1) {
-						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name1 + "__").then(null,Util_err);
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name1 + "__").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 207, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
@@ -4683,7 +4817,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
 					modal.addComponents(action_a,action_b);
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 233, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			default:
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
@@ -4702,8 +4838,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4724,8 +4864,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 			}
 			break;
 		case 29:
@@ -4778,15 +4922,21 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 					}
-					interaction.respond(results).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.respond(results).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 186, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 187, className : "commands.Quote", methodName : "run"});
+				});
 				return;
 			}
 			switch(type) {
 			case "delete":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
-						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						interaction.reply("Cannot delete this quote").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 279, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					if(res.docs.length > 1) {
@@ -4795,8 +4945,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
-					},Util_err);
-				},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 290, className : "commands.Quote", methodName : "run"});
+					});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 291, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "edit":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4816,7 +4970,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 					}
 					if(doc == null) {
-						interaction.reply("That isn't your quote!").then(null,Util_err);
+						interaction.reply("That isn't your quote!").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 255, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
@@ -4825,7 +4981,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					modal.addComponents(action_b);
 					_gthis.cache.h[interaction.user.id] = doc.id;
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 274, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "get":
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
@@ -4844,8 +5002,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4866,8 +5028,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "set":
 				if(!this.isValidName(name2)) {
@@ -4880,7 +5046,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length >= 1) {
-						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name2 + "__").then(null,Util_err);
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name2 + "__").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 207, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
@@ -4890,7 +5058,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
 					modal.addComponents(action_a,action_b);
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 233, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			default:
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
@@ -4909,8 +5079,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -4931,8 +5105,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 			}
 			break;
 		case 30:
@@ -4985,15 +5163,21 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 						results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 					}
-					interaction.respond(results).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.respond(results).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 186, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 187, className : "commands.Quote", methodName : "run"});
+				});
 				return;
 			}
 			switch(type) {
 			case "delete":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length == 0) {
-						interaction.reply("Cannot delete this quote").then(null,Util_err);
+						interaction.reply("Cannot delete this quote").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 279, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					if(res.docs.length > 1) {
@@ -5002,8 +5186,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					firebase_web_firestore_Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 						interaction.reply("Quote deleted!");
-					},Util_err);
-				},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 290, className : "commands.Quote", methodName : "run"});
+					});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 291, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "edit":
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -5023,7 +5211,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 					}
 					if(doc == null) {
-						interaction.reply("That isn't your quote!").then(null,Util_err);
+						interaction.reply("That isn't your quote!").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 255, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_edit").setTitle("Editting quote #" + doc.id);
@@ -5032,7 +5222,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					modal.addComponents(action_b);
 					_gthis.cache.h[interaction.user.id] = doc.id;
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 274, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "get":
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
@@ -5051,8 +5243,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -5073,8 +5269,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			case "set":
 				if(!this.isValidName(name3)) {
@@ -5087,7 +5287,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
 					if(res.docs.length >= 1) {
-						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name3 + "__").then(null,Util_err);
+						interaction.reply("You already have a quote(#" + res.docs[0].data().id + ") with the name __" + name3 + "__").then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 207, className : "commands.Quote", methodName : "run"});
+						});
 						return;
 					}
 					var modal = new discord_$builder_ModalBuilder().setCustomId("quote_set").setTitle("Creating a quote");
@@ -5097,7 +5299,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					var action_b = new discord_$builder_APIActionRowComponent().addComponents(desc_input);
 					modal.addComponents(action_a,action_b);
 					interaction.showModal(modal);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 233, className : "commands.Quote", methodName : "run"});
+				});
 				break;
 			default:
 				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
@@ -5116,8 +5320,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							}
 							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 						}
-						interaction.respond(results).then(null,Util_err);
-					}).then(null,Util_err);
+						interaction.respond(results).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 306, className : "commands.Quote", methodName : "run"});
+						});
+					}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 307, className : "commands.Quote", methodName : "run"});
+					});
 					return;
 				}
 				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
@@ -5138,8 +5346,12 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 					}
 					embed.setDescription("***" + data.name + "***\n" + data.description);
 					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,Util_err);
-				}).then(null,Util_err);
+					interaction.reply({ embeds : [embed]}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
+					});
+				}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
+				});
 			}
 			break;
 		default:
@@ -5312,10 +5524,14 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				interaction.reply({ ephemeral : personal, content : "Your reminder has been set for <t:" + post_time + ">"}).then(function(msg) {
 					obj.id = doc.id;
 					firebase_web_firestore_Firestore.updateDoc(doc,obj).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 94, className : "commands.Reminder", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 95, className : "commands.Reminder", methodName : "run"});
 					});
-				},Util_err);
-			},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 97, className : "commands.Reminder", methodName : "run"});
+				});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 98, className : "commands.Reminder", methodName : "run"});
+			});
 		}
 	}
 	,update: function(_) {
@@ -5353,7 +5569,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(channel) {
 						channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 137, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 139, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += commands_types_Duration.fromString("3hrs");
 								var tmp = "<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.";
@@ -5367,7 +5583,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 					return function(user) {
 						user.send(content[0]).then(null,(function(parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 149, className : "commands.Reminder", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 151, className : "commands.Reminder", methodName : "update"});
 								reminder[0].sent = false;
 								reminder[0].duration += 86400000;
 								var tmp = "<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?";
@@ -5383,7 +5599,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 165, className : "commands.Reminder", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 167, className : "commands.Reminder", methodName : "update"});
 						reminder[0].sent = false;
 						reminder[0].duration += 3600000;
 					};
@@ -5399,7 +5615,9 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				continue;
 			}
 			var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries/" + msg.id);
-			firebase_web_firestore_Firestore.deleteDoc(doc).then(null,Util_err);
+			firebase_web_firestore_Firestore.deleteDoc(doc).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 179, className : "commands.Reminder", methodName : "update"});
+			});
 			HxOverrides.remove(this.sent,msg);
 		}
 	}
@@ -5410,8 +5628,10 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(channel_id).then(function(channel) {
 				_gthis.channels.h[channel.id] = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 188, className : "commands.Reminder", methodName : "getChannel"});
-			},Util_err);
+				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 190, className : "commands.Reminder", methodName : "getChannel"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 191, className : "commands.Reminder", methodName : "getChannel"});
+			});
 		}
 	}
 	,get_channel: function() {
@@ -5493,7 +5713,9 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 69, className : "commands.Roundup", methodName : "update"});
+			});
 		}
 		if(Main.state.next_roundup == -1 || this.channel == null) {
 			return;
@@ -5555,7 +5777,9 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.reply("Will start watching haxe roundups from **#" + _g1 + "**.");
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 142, className : "commands.Roundup", methodName : "run"});
+			});
 		}
 	}
 	,get_roundup: function() {
@@ -5943,7 +6167,7 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 			code_content = this.insertLoopBreak(filename,code_content);
 			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + message.author.tag + " | time: " + Std.string(new Date())),function(error) {
 				if(error != null) {
-					haxe_Log.trace(error,{ fileName : "src/commands/Run.hx", lineNumber : 315, className : "commands.Run", methodName : "runCodeOnThread"});
+					haxe_Log.trace(error,{ fileName : "src/commands/Run.hx", lineNumber : 328, className : "commands.Run", methodName : "runCodeOnThread"});
 				}
 				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
 				var $process = "./haxe/haxe";
@@ -5967,7 +6191,7 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 					var response = "";
 					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
 					if(!sys_FileSystem.exists(js_file)) {
-						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/commands/Run.hx", lineNumber : 359, className : "commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/commands/Run.hx", lineNumber : 373, className : "commands.Run", methodName : "runCodeOnThread"});
 						ls.kill("SIGTERM");
 						return;
 					}
@@ -6034,9 +6258,13 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 						embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 						if(response.length > 0 && data == 0) {
 							message.reply({ embeds : [embed]}).then(function(succ) {
-								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/commands/Run.hx", lineNumber : 436, className : "commands.Run", methodName : "runCodeOnThread"});
-								return message.delete().then(null,Util_err);
-							},Util_err);
+								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/commands/Run.hx", lineNumber : 455, className : "commands.Run", methodName : "runCodeOnThread"});
+								return message.delete().then(null,function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/Run.hx", lineNumber : 458, className : "commands.Run", methodName : "runCodeOnThread"});
+								});
+							},function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Run.hx", lineNumber : 459, className : "commands.Run", methodName : "runCodeOnThread"});
+							});
 							ls.kill();
 							return;
 						}
@@ -6044,7 +6272,7 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 						var _g1 = haxe_Exception.caught(_g);
 						var compile_output = _gthis.cleanOutput(_g1.get_message(),filename,class_entry);
 						message.reply({ content : mention + ("```\n" + compile_output + "```")});
-						haxe_Log.trace(_g1,{ fileName : "src/commands/Run.hx", lineNumber : 445, className : "commands.Run", methodName : "runCodeOnThread"});
+						haxe_Log.trace(_g1,{ fileName : "src/commands/Run.hx", lineNumber : 467, className : "commands.Run", methodName : "runCodeOnThread"});
 					}
 				});
 			});
@@ -6052,7 +6280,7 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/commands/Run.hx", lineNumber : 452, className : "commands.Run", methodName : "runCodeOnThread"});
+			haxe_Log.trace(_g1,{ fileName : "src/commands/Run.hx", lineNumber : 475, className : "commands.Run", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -6136,8 +6364,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 107, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 108, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 112, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 113, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -6214,9 +6442,13 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				while(_g < messages.length) {
 					var message = messages[_g];
 					++_g;
-					message.delete().then(null,Util_err);
+					message.delete().then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 88, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+					});
 				}
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 90, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+			});
 		});
 	}
 	,resetChecks: function(id) {
@@ -6245,8 +6477,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 107, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 108, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 112, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 113, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -6257,7 +6489,9 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		var _gthis = this;
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
-			guild_member.timeout(43200000,"Stop spamming, a mod will review this at their convenience.").then(callback,Util_err);
+			guild_member.timeout(43200000,"Stop spamming, a mod will review this at their convenience.").then(callback,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 128, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+			});
 			var id = message.author.id;
 			var _this = _gthis.time_since;
 			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
@@ -6271,7 +6505,9 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
 				delete(_this.h[id]);
 			}
-		},Util_err);
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 130, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+		});
 	}
 	,banUser: function(messages,callback) {
 		var _gthis = this;
@@ -6283,7 +6519,9 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				++_g;
 				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
 			}
-			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,Util_err);
+			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 143, className : "commands.ScamPrevention", methodName : "banUser"});
+			});
 			var id = message.author.id;
 			var _this = _gthis.time_since;
 			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
@@ -6297,14 +6535,20 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			if(Object.prototype.hasOwnProperty.call(_this.h,id)) {
 				delete(_this.h[id]);
 			}
-			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,Util_err);
-		},Util_err);
+			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 148, className : "commands.ScamPrevention", methodName : "banUser"});
+			});
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 149, className : "commands.ScamPrevention", methodName : "banUser"});
+		});
 	}
 	,logMessage: function(id,embed,action) {
 		embed.description += "\n\n Action: **__" + action + "__**";
 		Main.client.channels.fetch("952952631079362650").then(function(channel) {
 			channel.send({ content : "<@" + id + ">", embeds : [embed]});
-		},Util_err);
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 157, className : "commands.ScamPrevention", methodName : "logMessage"});
+		});
 	}
 	,checkPhishingLinks: function(messages) {
 		var _g = 0;
@@ -6334,7 +6578,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 168, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 180, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 						if(link != url.hostname) {
@@ -6463,7 +6707,9 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.channel = channel;
 				_gthis.checking = false;
 				haxe_Log.trace("loaded showcase channel",{ fileName : "src/commands/Showcase.hx", lineNumber : 43, className : "commands.Showcase", methodName : "update"});
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 44, className : "commands.Showcase", methodName : "update"});
+			});
 		}
 		var _this = this.modal;
 		var _set = _this.entities;
@@ -6499,7 +6745,11 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 						return function(succ) {
 							message[0].delete();
 						};
-					})(message),Util_err);
+					})(message),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 67, className : "commands.Showcase", methodName : "update"});
+						};
+					})());
 				}
 				this.universe.deleteEntity(entity);
 				return;
@@ -6562,7 +6812,11 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 					return function(success) {
 						interaction[0].reply({ content : "Thanks! You can now post in <#162664383082790912>", ephemeral : true});
 					};
-				})(interaction),Util_err);
+				})(interaction),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 136, className : "commands.Showcase", methodName : "update"});
+					};
+				})());
 			}
 			if(command1 == "showcase_disagree") {
 				interaction[0].reply({ content : "Keep on lurking :)", ephemeral : true});
@@ -6650,7 +6904,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 						cache.message.edit({ embeds : [embed]});
 					}
 					cache.interacted_at = new Date().getTime();
-					interaction.deferUpdate().then(null,Util_err);
+					interaction.deferUpdate().then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 58, className : "commands.Snippet", methodName : "update"});
+					});
 					this.universe.deleteEntity(entity);
 					break;
 				case "snippet_right":
@@ -6662,7 +6918,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 						cache.message.edit({ embeds : [embed1]});
 					}
 					cache.interacted_at = new Date().getTime();
-					interaction.deferUpdate().then(null,Util_err);
+					interaction.deferUpdate().then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 69, className : "commands.Snippet", methodName : "update"});
+					});
 					this.universe.deleteEntity(entity);
 					break;
 				default:
@@ -6693,7 +6951,11 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 						delete(_this.h[key[0]]);
 					}
 				};
-			})(key1),Util_err);
+			})(key1),(function() {
+				return function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 88, className : "commands.Snippet", methodName : "update"});
+				};
+			})());
 		}
 	}
 	,run: function(command,interaction) {
@@ -6715,7 +6977,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					embed.addFields(new discord_$js_Field(_g1_value.name,"...",true));
 				}
 			}
-			interaction.reply({ embeds : [embed]}).then(null,Util_err);
+			interaction.reply({ embeds : [embed]}).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 339, className : "commands.Snippet", methodName : "run"});
+			});
 			break;
 		case 3:
 			var _g1 = _g.user;
@@ -6738,7 +7002,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				var obj = { page : 0, desc : show_desc, message : null, results : res, interacted_at : new Date().getTime()};
 				_gthis.handleSearchResponse(interaction,obj);
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 273, className : "commands.Snippet", methodName : "run"});
+			});
 			break;
 		case 4:
 			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("id","==",_g.id),firebase_web_firestore_Firestore.where("submitted_by","==",interaction.user.id));
@@ -6757,7 +7023,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					return;
 				}
 				interaction.reply("Editting currently not implemented");
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 298, className : "commands.Snippet", methodName : "run"});
+			});
 			break;
 		case 5:
 			var id = _g.id;
@@ -6778,8 +7046,12 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				firebase_web_firestore_Firestore.deleteDoc(resp.docs[0].ref).then(function(_) {
 					interaction.reply("Your snippet(#" + id + ") has been deleted.");
-				},Util_err);
-			},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 324, className : "commands.Snippet", methodName : "run"});
+				});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 325, className : "commands.Snippet", methodName : "run"});
+			});
 			break;
 		case 6:
 			var _g1 = _g.taga;
@@ -6826,7 +7098,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				res = _gthis.matchTags(restraints,res);
 				var obj = { page : 0, desc : true, message : null, results : res, interacted_at : new Date().getTime()};
 				_gthis.handleSearchResponse(interaction,obj);
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 244, className : "commands.Snippet", methodName : "run"});
+			});
 			break;
 		case 7:
 			var _g1 = _g.url;
@@ -6911,9 +7185,15 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 					obj.tags.splice(0,0,"" + value.id);
 					firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),obj).then(function(_) {
 						interaction.reply("*Snippet #" + value.id + " added!*\ntitle: " + title + "\n" + description + "\n");
-					},Util_err);
-				},Util_err);
-			},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 185, className : "commands.Snippet", methodName : "run"});
+					});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 186, className : "commands.Snippet", methodName : "run"});
+				});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 187, className : "commands.Snippet", methodName : "run"});
+			});
 			break;
 		default:
 		}
@@ -6954,7 +7234,9 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 		interaction.reply({ embeds : [embed], components : arr, fetchReply : true}).then(function(message) {
 			state.message = message;
 			_gthis.cache.h[interaction.user.id] = state;
-		},Util_err);
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 380, className : "commands.Snippet", methodName : "handleSearchResponse"});
+		});
 	}
 	,formatResultOutput: function(state,forward) {
 		var embed = new discord_$js_MessageEmbed();
@@ -7085,7 +7367,9 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 				++_g;
 				_gthis.roles.h[role.tag] = role.id;
 			}
-		},Util_err);
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 32, className : "commands.TextMention", methodName : "onEnabled"});
+		});
 	}
 	,run: function(message,content) {
 		if(!this.cached || this.roles == null) {
@@ -7156,7 +7440,9 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 			embed.setThumbnail(thumb);
 			message.reply({ content : roles_found, embeds : [embed], attachments : attachments, allowedMentions : { roles : user.roles}}).then(function(_) {
 				message.delete();
-			},Util_err);
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 98, className : "commands.TextMention", methodName : "run"});
+			});
 		}
 	}
 	,get_name: function() {
@@ -7354,7 +7640,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 		var mention = "<@" + interaction.user.id + ">";
 		js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",final_code + ("\n//User:" + interaction.user.tag + " id: " + interaction.user.id + "| time: " + Std.string(new Date())),function(error) {
 			if(error != null) {
-				haxe_Log.trace(error,{ fileName : "src/commands/Trace.hx", lineNumber : 119, className : "commands.Trace", methodName : "runCode"});
+				haxe_Log.trace(error,{ fileName : "src/commands/Trace.hx", lineNumber : 124, className : "commands.Trace", methodName : "runCode"});
 			}
 			var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
 			var $process = "./haxe/haxe";
@@ -7363,7 +7649,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			var ls = js_node_ChildProcess.spawn($process,commands,{ timeout : _gthis.timeout});
 			ls.stderr.once("data",function(data) {
-				haxe_Log.trace("error: " + data,{ fileName : "src/commands/Trace.hx", lineNumber : 139, className : "commands.Trace", methodName : "runCode"});
+				haxe_Log.trace("error: " + data,{ fileName : "src/commands/Trace.hx", lineNumber : 144, className : "commands.Trace", methodName : "runCode"});
 				var compile_output = _gthis.cleanOutput(data,filename,"Main");
 				var embed = _gthis.parseError(compile_output,final_code);
 				if(embed == null) {
@@ -7378,7 +7664,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 				var response = "";
 				var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
 				if(!sys_FileSystem.exists(js_file)) {
-					haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/commands/Trace.hx", lineNumber : 158, className : "commands.Trace", methodName : "runCode"});
+					haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/commands/Trace.hx", lineNumber : 163, className : "commands.Trace", methodName : "runCode"});
 					return;
 				}
 				var obj = null;
@@ -7436,8 +7722,10 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 					embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 					if(response.length > 0 && data == 0) {
 						interaction.reply({ embeds : [embed]}).then(function(succ) {
-							haxe_Log.trace("" + interaction.user.tag + "(" + interaction.user.id + ") at " + format_date + " with file id: " + filename,{ fileName : "src/commands/Trace.hx", lineNumber : 226, className : "commands.Trace", methodName : "runCode"});
-						},Util_err);
+							haxe_Log.trace("" + interaction.user.tag + "(" + interaction.user.id + ") at " + format_date + " with file id: " + filename,{ fileName : "src/commands/Trace.hx", lineNumber : 236, className : "commands.Trace", methodName : "runCode"});
+						},function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Trace.hx", lineNumber : 239, className : "commands.Trace", methodName : "runCode"});
+						});
 						ls.kill();
 						return;
 					}
@@ -7445,7 +7733,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 					var _g1 = haxe_Exception.caught(_g);
 					var compile_output = _gthis.cleanOutput(_g1.get_message(),filename,"Main");
 					interaction.reply({ content : mention + ("```\n" + compile_output + "```")});
-					haxe_Log.trace(_g1,{ fileName : "src/commands/Trace.hx", lineNumber : 234, className : "commands.Trace", methodName : "runCode"});
+					haxe_Log.trace(_g1,{ fileName : "src/commands/Trace.hx", lineNumber : 246, className : "commands.Trace", methodName : "runCode"});
 				}
 			});
 		});
@@ -7550,8 +7838,10 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 		externs_Fetch("https://api-free.deepl.com" + "/v2/usage",{ method : "GET", headers : { "Authorization" : "DeepL-Auth-Key " + Main.keys.deepl_key}}).then(function(resp) {
 			return resp.json().then(function(body) {
 				_gthis.usage = body;
-				haxe_Log.trace("Character count: " + _gthis.usage.character_count + "/" + _gthis.usage.character_limit,{ fileName : "src/commands/Translate.hx", lineNumber : 37, className : "commands.Translate", methodName : "getCount"});
-			},Util_err);
+				haxe_Log.trace("Character count: " + _gthis.usage.character_count + "/" + _gthis.usage.character_limit,{ fileName : "src/commands/Translate.hx", lineNumber : 39, className : "commands.Translate", methodName : "getCount"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Translate.hx", lineNumber : 42, className : "commands.Translate", methodName : "getCount"});
+			});
 		});
 	}
 	,getTranslation: function(interaction,from,to,message) {
@@ -7572,16 +7862,22 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 					}
 					interaction.reply(content).then(function(_) {
 						_gthis.getCount();
-					},Util_err);
-				},Util_err);
+					},function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Translate.hx", lineNumber : 63, className : "commands.Translate", methodName : "getTranslation"});
+					});
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Translate.hx", lineNumber : 64, className : "commands.Translate", methodName : "getTranslation"});
+				});
 			});
 		} catch( _g ) {
 			var _g1 = haxe_Exception.caught(_g);
-			haxe_Log.trace("Deepl error",{ fileName : "src/commands/Translate.hx", lineNumber : 58, className : "commands.Translate", methodName : "getTranslation"});
-			haxe_Log.trace($bind(_g1,_g1.details),{ fileName : "src/commands/Translate.hx", lineNumber : 59, className : "commands.Translate", methodName : "getTranslation"});
-			haxe_Log.trace(_g1.get_message(),{ fileName : "src/commands/Translate.hx", lineNumber : 60, className : "commands.Translate", methodName : "getTranslation"});
-			haxe_Log.trace(_g1,{ fileName : "src/commands/Translate.hx", lineNumber : 61, className : "commands.Translate", methodName : "getTranslation"});
-			interaction.reply("Deepl error?").then(null,Util_err);
+			haxe_Log.trace("Deepl error",{ fileName : "src/commands/Translate.hx", lineNumber : 67, className : "commands.Translate", methodName : "getTranslation"});
+			haxe_Log.trace($bind(_g1,_g1.details),{ fileName : "src/commands/Translate.hx", lineNumber : 68, className : "commands.Translate", methodName : "getTranslation"});
+			haxe_Log.trace(_g1.get_message(),{ fileName : "src/commands/Translate.hx", lineNumber : 69, className : "commands.Translate", methodName : "getTranslation"});
+			haxe_Log.trace(_g1,{ fileName : "src/commands/Translate.hx", lineNumber : 70, className : "commands.Translate", methodName : "getTranslation"});
+			interaction.reply("Deepl error?").then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Translate.hx", lineNumber : 71, className : "commands.Translate", methodName : "getTranslation"});
+			});
 		}
 	}
 	,getLanguages: function() {
@@ -7595,8 +7891,10 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 					str += "{\r\n\t\t\t\t\t\t\"name\": \"" + item.name + "\",\r\n\t\t\t\t\t\t\"value\": \"" + item.language + "\"\r\n\t\t\t\t\t},";
 				}
 				str += "]";
-				haxe_Log.trace(str,{ fileName : "src/commands/Translate.hx", lineNumber : 77, className : "commands.Translate", methodName : "getLanguages"});
-			},Util_err);
+				haxe_Log.trace(str,{ fileName : "src/commands/Translate.hx", lineNumber : 86, className : "commands.Translate", methodName : "getLanguages"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Translate.hx", lineNumber : 87, className : "commands.Translate", methodName : "getLanguages"});
+			});
 		});
 	}
 	,request: function(endpoint) {
@@ -7689,7 +7987,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(!_gthis.start_timer) {
 				_gthis.start_timer = true;
 				var _gthis1 = _gthis;
-				haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 102, className : "commands.Twitter", methodName : "poll"});
+				haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 103, className : "commands.Twitter", methodName : "poll"});
 				var checker = new haxe_Timer(_gthis.ping_rate | 0);
 				checker.run = function() {
 					if(Main.connected && !_gthis1.checking && _gthis1.channel != null) {
@@ -7726,17 +8024,25 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 												_gthis1.removeDupes();
 											} catch( _g ) {
 												var e = haxe_Exception.caught(_g);
-												haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 131, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 133, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 133, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
 											}
 											_gthis1.async_check[k[0]] = true;
 											_gthis1.checking = false;
 										};
-									})(url,k),Util_err);
+									})(url,k),(function() {
+										return function(err) {
+											haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 139, className : "commands.Twitter", methodName : "poll"});
+										};
+									})());
 								};
-							})(url,k),Util_err);
+							})(url,k),(function() {
+								return function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 140, className : "commands.Twitter", methodName : "poll"});
+								};
+							})());
 						}
 					}
 				};
@@ -7745,7 +8051,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,poll: function() {
 		var _gthis = this;
-		haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 102, className : "commands.Twitter", methodName : "poll"});
+		haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 103, className : "commands.Twitter", methodName : "poll"});
 		var checker = new haxe_Timer(this.ping_rate | 0);
 		checker.run = function() {
 			if(Main.connected && !_gthis.checking && _gthis.channel != null) {
@@ -7782,17 +8088,25 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 										_gthis.removeDupes();
 									} catch( _g ) {
 										var e = haxe_Exception.caught(_g);
-										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 131, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 133, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 133, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
 									}
 									_gthis.async_check[k[0]] = true;
 									_gthis.checking = false;
 								};
-							})(url,k),Util_err);
+							})(url,k),(function() {
+								return function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 139, className : "commands.Twitter", methodName : "poll"});
+								};
+							})());
 						};
-					})(url,k),Util_err);
+					})(url,k),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 140, className : "commands.Twitter", methodName : "poll"});
+						};
+					})());
 				}
 			}
 		};
@@ -7846,7 +8160,9 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 			while(_g < _g1.length) {
 				var link = _g1[_g];
 				++_g;
-				this.channel.send({ content : link}).then(null,Util_err);
+				this.channel.send({ content : link}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 189, className : "commands.Twitter", methodName : "update"});
+				});
 			}
 			var _this = this.tags;
 			var _g4_current = 0;
@@ -7873,8 +8189,10 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 211, className : "commands.Twitter", methodName : "update"});
-			},Util_err);
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 212, className : "commands.Twitter", methodName : "update"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 213, className : "commands.Twitter", methodName : "update"});
+			});
 		}
 	}
 	,run: function(command,interaction) {
@@ -7922,7 +8240,9 @@ commands_events_PinMessageInfo.prototype = $extend(ecs_System.prototype,{
 				}
 				thread.send({ content : "<@" + thread.ownerId + "> You can pin messages in your own threads by Right clicking a message -> Apps -> Pin Message\n\n*This message will selfdestruct in 30 seconds.*"}).then(function(message) {
 					_gthis.messages.push(message);
-				},Util_err);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/events/PinMessageInfo.hx", lineNumber : 25, className : "commands.events.PinMessageInfo", methodName : "update"});
+				});
 				this.universe.deleteEntity(entity);
 			}
 		}
@@ -8010,7 +8330,9 @@ commands_mod_Mention.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,parseTwitter: function(interaction,tag,user) {
 		if(tag == null && user == null) {
-			interaction.reply("Invalid input").then(null,Util_err);
+			interaction.reply("Invalid input").then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/Mention.hx", lineNumber : 77, className : "commands.mod.Mention", methodName : "parseTwitter"});
+			});
 			return;
 		}
 		if(tag != null) {
@@ -8050,7 +8372,9 @@ commands_mod_Social.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,parseTwitter: function(interaction,tag,user) {
 		if(tag == null && user == null) {
-			interaction.reply("Invalid input").then(null,Util_err);
+			interaction.reply("Invalid input").then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/Social.hx", lineNumber : 18, className : "commands.mod.Social", methodName : "parseTwitter"});
+			});
 			return;
 		}
 		if(tag != null) {
@@ -13768,15 +14092,13 @@ util_DiscordUtil.setCommandPermission = function(command,permissions,succ,fail) 
 		if(succ != null) {
 			succ();
 		}
-		haxe_Log.trace("Updated permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 23, className : "util.DiscordUtil", methodName : "setCommandPermission"});
+		haxe_Log.trace("Updated permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 24, className : "util.DiscordUtil", methodName : "setCommandPermission"});
 	},function(err) {
 		if(fail != null) {
 			fail(err);
 		}
-		var err1 = err;
-		$global.console.dir(err1);
-		haxe_Log.trace(err1.message,{ fileName : "src/Util.hx", lineNumber : 49, className : "_Util.Util_Fields_", methodName : "err"});
-		haxe_Log.trace("Failed to update permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 29, className : "util.DiscordUtil", methodName : "setCommandPermission"});
+		haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 29, className : "util.DiscordUtil", methodName : "setCommandPermission"});
+		haxe_Log.trace("Failed to update permissions for " + command.name,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 30, className : "util.DiscordUtil", methodName : "setCommandPermission"});
 	});
 };
 util_DiscordUtil.reactionTracker = function(message,track,time) {
@@ -13796,8 +14118,12 @@ util_DiscordUtil.reactionTracker = function(message,track,time) {
 	if(time == -1) {
 		time = 172800000;
 	}
-	message.react("✅").then(null,Util_err).then(function(_) {
-		message.react("❎").then(null,Util_err).then(function(_) {
+	message.react("✅").then(null,function(err) {
+		haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 52, className : "util.DiscordUtil", methodName : "reactionTracker"});
+	}).then(function(_) {
+		message.react("❎").then(null,function(err) {
+			haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 53, className : "util.DiscordUtil", methodName : "reactionTracker"});
+		}).then(function(_) {
 			var collector = message.createReactionCollector({ filter : filter, time : time});
 			var _g = track;
 			var collector1 = collector;
@@ -13808,7 +14134,9 @@ util_DiscordUtil.reactionTracker = function(message,track,time) {
 	});
 };
 util_DiscordUtil.getChannel = function(channel_id,callback) {
-	Main.client.channels.fetch(channel_id).then(callback,Util_err);
+	Main.client.channels.fetch(channel_id).then(callback,function(err) {
+		haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 61, className : "util.DiscordUtil", methodName : "getChannel"});
+	});
 };
 var util_Random = function() { };
 $hxClasses["util.Random"] = util_Random;

@@ -21,7 +21,9 @@ class Translate extends CommandBase {
 				}
 
 				if (this.usage.character_count + message.length > this.usage.character_limit) {
-					interaction.reply("API has reached its limit unfortunately. Please wait till next month.");
+					interaction.reply(
+						"API has reached its limit unfortunately. Please wait till next month."
+					);
 					return;
 				}
 
@@ -34,32 +36,39 @@ class Translate extends CommandBase {
 		this.request('/v2/usage').then((resp) -> {
 			resp.json().then(function(body:TUsage) {
 				this.usage = body;
-				trace('Character count: ${this.usage.character_count}/${this.usage.character_limit}');
-			}, err);
+				trace(
+					'Character count: ${this.usage.character_count}/${this.usage.character_limit}'
+				);
+			}, function(err) trace(err));
 		});
 	}
 
-	function getTranslation(interaction:BaseCommandInteraction, from:String, to:String, message:String) {
+	function getTranslation(interaction:BaseCommandInteraction, from:String, to:String,
+			message:String) {
 		if (from == null) {
 			from = '';
 		}
 
 		try {
-			this.request('/v2/translate?source_lang=$from&target_lang=$to&text=$message').then((resp) -> {
-				resp.json().then(function(body:{translations:Array<TTranslated>}) {
-					var content = '';
-					for (item in body.translations) {
-						content += item.text + '\n';
-					}
-					interaction.reply(content).then((_) -> this.getCount(), err);
-				}, err);
-			});
-		} catch (e) {
+			this.request(
+				'/v2/translate?source_lang=$from&target_lang=$to&text=$message'
+			)
+				.then((resp) -> {
+					resp.json().then(function(body:{translations:Array<TTranslated>}) {
+						var content = '';
+						for (item in body.translations) {
+							content += item.text + '\n';
+						}
+						interaction.reply(content)
+							.then((_) -> this.getCount(), function(err) trace(err));
+					}, function(err) trace(err));
+				});
+		} catch (e ) {
 			trace('Deepl error');
 			trace(e.details);
 			trace(e.message);
 			trace(e);
-			interaction.reply('Deepl error?').then(null, err);
+			interaction.reply('Deepl error?').then(null, function(err) trace(err));
 		}
 	}
 
@@ -75,7 +84,7 @@ class Translate extends CommandBase {
 				}
 				str += ']';
 				trace(str);
-			}, err);
+			}, function(err) trace(err));
 		});
 	}
 

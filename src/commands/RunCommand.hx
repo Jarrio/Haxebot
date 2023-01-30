@@ -54,7 +54,7 @@ class Run extends CommandBase {
 
 				FileSystem.deleteDirectory('$path/$folder');
 			}
-		} catch (e) {
+		} catch (e ) {
 			trace(e);
 		}
 	}
@@ -173,7 +173,8 @@ class Run extends CommandBase {
 					class_entry = "Test";
 				}
 
-				replaced = check_class.replace(parsed, StringTools.replace(parsed, class_entry, filename));
+				replaced = check_class.replace(parsed,
+					StringTools.replace(parsed, class_entry, filename));
 				code_content = get_paths.code.replace(parsed, replaced);
 				var other_instances = new EReg(class_entry, 'gm');
 				if (other_instances.match(code_content)) {
@@ -188,142 +189,155 @@ class Run extends CommandBase {
 			var pre_loop = code_content;
 			code_content = this.insertLoopBreak(filename, code_content);
 
-			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${interaction.user.tag} | time: ${Date.now()}', (error) -> {
-				if (error != null) {
-					trace(error);
-				}
-
-				var commands = [
-					'-cp',
-					'${this.base_path}/hx',
-					'-main',
-					filename,
-					'-js',
-					'${this.base_path}/bin/$filename.js'
-				];
-
-				var process = './haxe/haxe';
-				if (!FileSystem.exists(process)) {
-					process = 'haxe';
-				}
-
-				var ls = spawn(process, libs.concat(commands), {timeout: this.timeout});
-
-				// to debug code output
-				// ls.stdout.on('data', (data:String) -> {
-				// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
-				// });
-
-				ls.stderr.once('data', (data) -> {
-					var compile_output = this.cleanOutput(data, filename, class_entry);
-					var embed = this.parseError(compile_output, pre_loop);
-					if (embed == null) {
-						interaction.reply({content: mention + '```\n${compile_output}```'});
-					} else {
-						embed.description = this.cleanOutput(embed.description, filename, class_entry);
-						interaction.reply({embeds: [embed]});
+			Fs.appendFile(
+				'${this.base_path}/hx/$filename.hx',
+				code_content + '//User:${interaction.user.tag} | time: ${Date.now()}',
+				(error) -> {
+					if (error != null) {
+						trace(error);
 					}
 
-					ls.kill('SIGTERM');
-					return;
-				});
+					var commands = [
+						'-cp',
+						'${this.base_path}/hx',
+						'-main',
+						filename,
+						'-js',
+						'${this.base_path}/bin/$filename.js'
+					];
 
-				ls.once('close', (data) -> {
-					var response = "";
-					var js_file = '${this.base_path}/bin/$filename.js';
-					if (!FileSystem.exists(js_file)) {
-						trace('Code likely errored and didnt compile ($filename.js)');
+					var process = './haxe/haxe';
+					if (!FileSystem.exists(process)) {
+						process = 'haxe';
+					}
+
+					var ls = spawn(process, libs.concat(commands), {timeout: this.timeout});
+
+					// to debug code output
+					// ls.stdout.on('data', (data:String) -> {
+					// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
+					// });
+
+					ls.stderr.once('data', (data) -> {
+						var compile_output = this.cleanOutput(data, filename, class_entry);
+						var embed = this.parseError(compile_output, pre_loop);
+						if (embed == null) {
+							interaction.reply({content: mention + '```\n${compile_output}```'});
+						} else {
+							embed.description = this.cleanOutput(embed.description, filename,
+								class_entry);
+							interaction.reply({embeds: [embed]});
+						}
+
 						ls.kill('SIGTERM');
 						return;
-					}
-					var obj = null;
-
-					var vm = new NodeVM({
-						sandbox: obj,
-						console: 'redirect',
-						timeout: this.timeout,
 					});
 
-					vm.on('console.log', (data, info) -> {
-						var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
-						if (regex.match(data)) {
-							data = regex.matched(1);
-						}
-
-						if (info != null) {
-							response += '$info\n';
-						} else {
-							response += '$data\n';
-						}
-					});
-
-					try {
-						vm.run(sys.io.File.getContent(js_file));
-
-						var x = response.split('\n');
-						var truncated = false;
-						if (x.length > 24) {
-							truncated = true;
-							response = "";
-							for (line in x.slice(x.length - 23)) {
-								response += line + "\n";
-							}
-						}
-
-						var embed = new MessageEmbed();
-						embed.type = 'article';
-						var code_output = '';
-						var split = response.split('\n');
-						for (key => item in split) {
-							if (key >= split.length - 1) {
-								break;
-							}
-							code_output += '$key. $item \n';
-						}
-
-						if (truncated) {
-							code_output += '\n//Output has been trimmed.';
-						}
-
-						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
-						embed.setDescription(desc);
-
-						var url = this.codeSource(code_content);
-						var author = {
-							name: '@' + interaction.user.tag,
-							iconURL: interaction.user.displayAvatarURL()
-						}
-
-						if (url == "") {
-							embed.setAuthor(author);
-						} else {
-							var tag = url.split('#')[1];
-							embed.setTitle('TryHaxe #$tag');
-							embed.setURL(url);
-							embed.setAuthor(author);
-						}
-
-						var date = Date.fromTime(interaction.createdTimestamp);
-						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
-
-						embed.setFooter({text: 'Haxe ${this.haxe_version}', iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'});
-						if (response.length > 0 && data == 0) {
-							interaction.reply({embeds: [embed]}).then((succ) -> {
-								trace('${interaction.user.tag} at $format_date with file id: ${filename}');
-							}, err);
-							ls.kill();
+					ls.once('close', (data) -> {
+						var response = "";
+						var js_file = '${this.base_path}/bin/$filename.js';
+						if (!FileSystem.exists(js_file)) {
+							trace('Code likely errored and didnt compile ($filename.js)');
+							ls.kill('SIGTERM');
 							return;
 						}
-					} catch (e) {
-						var compile_output = this.cleanOutput(e.message, filename, class_entry);
-						interaction.reply({content: mention + '```\n${compile_output}```'});
-						trace(e);
-					}
-					return;
-				});
-			});
+						var obj = null;
+
+						var vm = new NodeVM({
+							sandbox: obj,
+							console: 'redirect',
+							timeout: this.timeout,
+						});
+
+						vm.on('console.log', (data, info) -> {
+							var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
+							if (regex.match(data)) {
+								data = regex.matched(1);
+							}
+
+							if (info != null) {
+								response += '$info\n';
+							} else {
+								response += '$data\n';
+							}
+						});
+
+						try {
+							vm.run(sys.io.File.getContent(js_file));
+
+							var x = response.split('\n');
+							var truncated = false;
+							if (x.length > 24) {
+								truncated = true;
+								response = "";
+								for (line in x.slice(x.length - 23)) {
+									response += line + "\n";
+								}
+							}
+
+							var embed = new MessageEmbed();
+							embed.type = 'article';
+							var code_output = '';
+							var split = response.split('\n');
+							for (key => item in split) {
+								if (key >= split.length - 1) {
+									break;
+								}
+								code_output += '$key. $item \n';
+							}
+
+							if (truncated) {
+								code_output += '\n//Output has been trimmed.';
+							}
+
+							var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n'
+								+ code_output
+								+ '\n```';
+							embed.setDescription(desc);
+
+							var url = this.codeSource(code_content);
+							var author = {
+								name: '@' + interaction.user.tag,
+								iconURL: interaction.user.displayAvatarURL()
+							}
+
+							if (url == "") {
+								embed.setAuthor(author);
+							} else {
+								var tag = url.split('#')[1];
+								embed.setTitle('TryHaxe #$tag');
+								embed.setURL(url);
+								embed.setAuthor(author);
+							}
+
+							var date = Date.fromTime(interaction.createdTimestamp);
+							var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
+
+							embed.setFooter(
+								{text: 'Haxe ${this.haxe_version}',
+									iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'}
+							);
+							if (response.length > 0 && data == 0) {
+								interaction.reply({embeds: [embed]}).then((succ) -> {
+									trace(
+										'${interaction.user.tag} at $format_date with file id: ${filename}'
+									);
+								}, function(err) trace(err));
+								ls.kill();
+								return;
+							}
+						} catch (e ) {
+							var compile_output = this.cleanOutput(e.message, filename,
+								class_entry);
+							interaction.reply({content: mention + '```\n${compile_output}```'});
+							trace(e);
+						}
+						return;
+					});
+				}
+			);
 			return;
-		} catch (e:Dynamic) {
+		} catch (e:Dynamic ) {
 			trace(e);
 			interaction.reply({content: mention + "Code failed to execute."});
 		}
@@ -382,8 +396,14 @@ class Run extends CommandBase {
 		var regex = ~/((while|for)\s*\(.*\)\s*\{|(while|for)\s*\(.*?\))|(function.*?\(.*?\)\s*{)/gmui;
 		var copy = code;
 
-		copy = copy.replace('class $name {', 'class $name {\nstatic public final $varname = Date.now().getTime();');
-		copy = copy.replace('class $name{', 'class $name {\nstatic public final $varname = Date.now().getTime();');
+		copy = copy.replace(
+			'class $name {',
+			'class $name {\nstatic public final $varname = Date.now().getTime();'
+		);
+		copy = copy.replace(
+			'class $name{',
+			'class $name {\nstatic public final $varname = Date.now().getTime();'
+		);
 		var matched = [];
 
 		while (regex.match(code)) {
@@ -423,7 +443,8 @@ class Run extends CommandBase {
 				return false;
 			}
 		}
-		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+		return
+			!~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|command|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
 	function get_name():String {

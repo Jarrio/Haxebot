@@ -82,7 +82,7 @@ class Run extends TextCommandBase {
 	function deleteFile(filename:String) {
 		try {
 			FileSystem.deleteFile('${this.base_path}/bin/$filename.js');
-		} catch (e:Dynamic) {
+		} catch (e:Dynamic ) {
 			trace(e);
 		}
 	}
@@ -151,7 +151,9 @@ class Run extends TextCommandBase {
 
 	function parse(code:String, response:Message) {
 		if (code == null || code.length == 0) {
-			response.reply({content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'});
+			response.reply(
+				{content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'}
+			);
 			return;
 		}
 
@@ -187,7 +189,8 @@ class Run extends TextCommandBase {
 				return false;
 			}
 		}
-		return !~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+		return
+			!~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
 	var varname = '';
@@ -198,8 +201,14 @@ class Run extends TextCommandBase {
 		var regex = ~/((while|for)\s*\(.*\)\s*\{|(while|for)\s*\(.*?\))|(function.*?\(.*?\)\s*{)/gmui;
 		var copy = code;
 
-		copy = copy.replace('class $name {', 'class $name {\nstatic public final $varname = Date.now().getTime();');
-		copy = copy.replace('class $name{', 'class $name {\nstatic public final $varname = Date.now().getTime();');
+		copy = copy.replace(
+			'class $name {',
+			'class $name {\nstatic public final $varname = Date.now().getTime();'
+		);
+		copy = copy.replace(
+			'class $name{',
+			'class $name {\nstatic public final $varname = Date.now().getTime();'
+		);
 		var matched = [];
 
 		while (regex.match(code)) {
@@ -295,7 +304,8 @@ class Run extends TextCommandBase {
 					class_entry = "Test";
 				}
 
-				replaced = check_class.replace(parsed, StringTools.replace(parsed, class_entry, filename));
+				replaced = check_class.replace(parsed,
+					StringTools.replace(parsed, class_entry, filename));
 				code_content = get_paths.code.replace(parsed, replaced);
 				var other_instances = new EReg(class_entry, 'gm');
 				if (other_instances.match(code_content)) {
@@ -310,145 +320,158 @@ class Run extends TextCommandBase {
 			var pre_loop = code_content;
 			code_content = this.insertLoopBreak(filename, code_content);
 
-			Fs.appendFile('${this.base_path}/hx/$filename.hx', code_content + '//User:${message.author.tag} | time: ${Date.now()}', (error) -> {
-				if (error != null) {
-					trace(error);
-				}
-
-				var commands = [
-					'-cp',
-					'${this.base_path}/hx',
-					'-main',
-					filename,
-					'-js',
-					'${this.base_path}/bin/$filename.js'
-				];
-
-				var process = './haxe/haxe';
-				if (!FileSystem.exists(process)) {
-					process = 'haxe';
-				}
-
-				var ls = spawn(process, libs.concat(commands), {timeout: this.timeout});
-
-				// to debug code output
-				// ls.stdout.on('data', (data:String) -> {
-				// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
-				// });
-
-				ls.stderr.once('data', (data) -> {
-					var compile_output = this.cleanOutput(data, filename, class_entry);
-					pre_loop = pre_loop.replace(filename, class_entry);
-
-					var embed = this.parseError(compile_output, pre_loop);
-					if (embed == null) {
-						message.reply({content: mention + '```\n${compile_output}```'});
-					} else {
-						embed.description = this.cleanOutput(embed.description, filename, class_entry);
-						message.reply({embeds: [embed]});
+			Fs.appendFile(
+				'${this.base_path}/hx/$filename.hx',
+				code_content + '//User:${message.author.tag} | time: ${Date.now()}',
+				(error) -> {
+					if (error != null) {
+						trace(error);
 					}
 
-					ls.kill('SIGTERM');
-					return;
-				});
+					var commands = [
+						'-cp',
+						'${this.base_path}/hx',
+						'-main',
+						filename,
+						'-js',
+						'${this.base_path}/bin/$filename.js'
+					];
 
-				ls.once('close', (data) -> {
-					var response = "";
-					var js_file = '${this.base_path}/bin/$filename.js';
-					if (!FileSystem.exists(js_file)) {
-						trace('Code likely errored and didnt compile ($filename.js)');
+					var process = './haxe/haxe';
+					if (!FileSystem.exists(process)) {
+						process = 'haxe';
+					}
+
+					var ls = spawn(process, libs.concat(commands), {timeout: this.timeout});
+
+					// to debug code output
+					// ls.stdout.on('data', (data:String) -> {
+					// 	trace('stdout: ' + this.cleanOutput(data, filename, class_entry));
+					// });
+
+					ls.stderr.once('data', (data) -> {
+						var compile_output = this.cleanOutput(data, filename, class_entry);
+						pre_loop = pre_loop.replace(filename, class_entry);
+
+						var embed = this.parseError(compile_output, pre_loop);
+						if (embed == null) {
+							message.reply({content: mention + '```\n${compile_output}```'});
+						} else {
+							embed.description = this.cleanOutput(embed.description, filename,
+								class_entry);
+							message.reply({embeds: [embed]});
+						}
+
 						ls.kill('SIGTERM');
 						return;
-					}
-					var obj = null;
-
-					var vm = new NodeVM({
-						sandbox: obj,
-						console: 'redirect',
-						timeout: this.timeout,
 					});
 
-					vm.on('console.log', (data, info) -> {
-						var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
-						if (regex.match(data)) {
-							data = regex.matched(1);
-						}
-
-						if (info != null) {
-							response += '$info\n';
-						} else {
-							response += '$data\n';
-						}
-					});
-
-					try {
-						vm.run(sys.io.File.getContent(js_file));
-
-						var x = response.split('\n');
-						var truncated = false;
-						if (x.length > 24) {
-							truncated = true;
-							response = "";
-							for (line in x.slice(x.length - 23)) {
-								response += line + "\n";
-							}
-						}
-
-						var embed = new MessageEmbed();
-						embed.type = 'article';
-						var code_output = '';
-						var split = response.split('\n');
-						for (key => item in split) {
-							if (key >= split.length - 1) {
-								break;
-							}
-							code_output += '$key. $item \n';
-						}
-
-						if (truncated) {
-							code_output += '\n//Output has been trimmed.';
-						}
-
-						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n' + code_output + '\n```';
-						embed.setDescription(desc);
-
-						var url = this.codeSource(message.content);
-						var author = {
-							name: '@' + message.author.tag,
-							iconURL: message.author.displayAvatarURL()
-						}
-
-						if (url == "") {
-							embed.setAuthor(author);
-						} else {
-							var tag = url.split('#')[1];
-							embed.setTitle('TryHaxe #$tag');
-							embed.setURL(url);
-							embed.setAuthor(author);
-						}
-
-						var date = Date.fromTime(message.createdTimestamp);
-						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
-
-						embed.setFooter({text: 'Haxe ${this.haxe_version}', iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'});
-						if (response.length > 0 && data == 0) {
-							message.reply({embeds: [embed]}).then((succ) -> {
-								trace('${message.author.tag} at $format_date with file id: ${filename}');
-								message.delete().then(null, err);
-							}, err);
-							ls.kill();
+					ls.once('close', (data) -> {
+						var response = "";
+						var js_file = '${this.base_path}/bin/$filename.js';
+						if (!FileSystem.exists(js_file)) {
+							trace('Code likely errored and didnt compile ($filename.js)');
+							ls.kill('SIGTERM');
 							return;
 						}
-					} catch (e) {
-						var compile_output = this.cleanOutput(e.message, filename, class_entry);
-						message.reply({content: mention + '```\n${compile_output}```'});
-						trace(e);
-					}
-					return;
-				});
-			});
+						var obj = null;
+
+						var vm = new NodeVM({
+							sandbox: obj,
+							console: 'redirect',
+							timeout: this.timeout,
+						});
+
+						vm.on('console.log', (data, info) -> {
+							var regex = ~/H[0-9]*..hx:[0-9]*.: (.*)/gm;
+							if (regex.match(data)) {
+								data = regex.matched(1);
+							}
+
+							if (info != null) {
+								response += '$info\n';
+							} else {
+								response += '$data\n';
+							}
+						});
+
+						try {
+							vm.run(sys.io.File.getContent(js_file));
+
+							var x = response.split('\n');
+							var truncated = false;
+							if (x.length > 24) {
+								truncated = true;
+								response = "";
+								for (line in x.slice(x.length - 23)) {
+									response += line + "\n";
+								}
+							}
+
+							var embed = new MessageEmbed();
+							embed.type = 'article';
+							var code_output = '';
+							var split = response.split('\n');
+							for (key => item in split) {
+								if (key >= split.length - 1) {
+									break;
+								}
+								code_output += '$key. $item \n';
+							}
+
+							if (truncated) {
+								code_output += '\n//Output has been trimmed.';
+							}
+
+							var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n'
+								+ code_output
+								+ '\n```';
+							embed.setDescription(desc);
+
+							var url = this.codeSource(message.content);
+							var author = {
+								name: '@' + message.author.tag,
+								iconURL: message.author.displayAvatarURL()
+							}
+
+							if (url == "") {
+								embed.setAuthor(author);
+							} else {
+								var tag = url.split('#')[1];
+								embed.setTitle('TryHaxe #$tag');
+								embed.setURL(url);
+								embed.setAuthor(author);
+							}
+
+							var date = Date.fromTime(message.createdTimestamp);
+							var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
+
+							embed.setFooter({
+								text: 'Haxe ${this.haxe_version}',
+								iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
+							});
+							if (response.length > 0 && data == 0) {
+								message.reply({embeds: [embed]}).then((succ) -> {
+									trace(
+										'${message.author.tag} at $format_date with file id: ${filename}'
+									);
+									message.delete().then(null, function(err) trace(err));
+								}, function(err) trace(err));
+								ls.kill();
+								return;
+							}
+						} catch (e ) {
+							var compile_output = this.cleanOutput(e.message, filename,
+								class_entry);
+							message.reply({content: mention + '```\n${compile_output}```'});
+							trace(e);
+						}
+						return;
+					});
+				}
+			);
 			return;
-		} catch (e:Dynamic) {
+		} catch (e:Dynamic ) {
 			trace(e);
 			this.channel.send({content: mention + "Code failed to execute."});
 		}

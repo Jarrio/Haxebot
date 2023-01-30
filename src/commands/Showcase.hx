@@ -41,7 +41,7 @@ class Showcase extends CommandBase {
 				this.channel = channel;
 				checking = false;
 				trace('loaded showcase channel');
-			}, err);
+			}, function(err) trace(err));
 		}
 
 		iterate(modal, entity -> {
@@ -64,7 +64,7 @@ class Showcase extends CommandBase {
 
 					message.author.send({content: content}).then(function(succ) {
 						message.delete();
-					}, err);
+					}, function(err) trace(err));
 				}
 
 				this.universe.deleteEntity(entity);
@@ -129,8 +129,11 @@ class Showcase extends CommandBase {
 		iterate(interactions, entity -> {
 			if (command == CommandForward.showcase_agree) {
 				interaction.member.roles.add('1021517470080700468').then(function(success) {
-					interaction.reply({content: 'Thanks! You can now post in <#162664383082790912>', ephemeral: true});
-				}, err);
+					interaction.reply(
+						{content: 'Thanks! You can now post in <#162664383082790912>',
+							ephemeral: true}
+					);
+				}, function(err) trace(err));
 			}
 
 			if (command == CommandForward.showcase_disagree) {
@@ -143,8 +146,12 @@ class Showcase extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		var text = 'If your post does not contain either an __**attachment**__ or a __**link**__, the post will be removed. Any comments on any of the works posted in the <#162664383082790912> channel should be made within threads. \n\n**Guidelines**\n1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
-		var agree_btn = new ButtonBuilder().setCustomId('showcase_agree').setLabel('Agree').setStyle(Primary);
-		var disagree_btn = new ButtonBuilder().setCustomId('showcase_disagree').setLabel('Disagree').setStyle(Secondary);
+		var agree_btn = new ButtonBuilder().setCustomId('showcase_agree')
+			.setLabel('Agree')
+			.setStyle(Primary);
+		var disagree_btn = new ButtonBuilder().setCustomId('showcase_disagree')
+			.setLabel('Disagree')
+			.setStyle(Secondary);
 		var row = new APIActionRowComponent().addComponents(agree_btn, disagree_btn);
 
 		interaction.reply({content: text, components: [row], ephemeral: true});

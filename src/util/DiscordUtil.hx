@@ -10,7 +10,8 @@ import discord_js.ApplicationCommandPermissionsManager;
 import discord_js.ApplicationCommand;
 
 class DiscordUtil {
-	public static function setCommandPermission(command:ApplicationCommand, permissions:Array<ApplicationCommandPermissionData>, ?succ:Void->Void,
+	public static function setCommandPermission(command:ApplicationCommand,
+			permissions:Array<ApplicationCommandPermissionData>, ?succ:Void->Void,
 			?fail:Dynamic->Void) {
 		command.permissions.set({
 			guild: Main.guild_id,
@@ -25,12 +26,13 @@ class DiscordUtil {
 			if (fail != null) {
 				fail(err);
 			}
-			Util.err(err);
+			trace(err);
 			trace('Failed to update permissions for ' + command.name);
 		});
 	}
 
-	public static function reactionTracker(message:Message, track:(collector:ReactionCollector, collected:MessageReaction, user:User) -> Void,
+	public static function reactionTracker(message:Message,
+			track:(collector:ReactionCollector, collected:MessageReaction, user:User) -> Void,
 			?time:Float = -1) {
 		var filter = (reaction:MessageReaction, user:User) -> {
 			if (reaction.emoji.name == "✅") {
@@ -47,8 +49,8 @@ class DiscordUtil {
 			time = 60000 * 60 * 48;
 		}
 
-		message.react("✅").then(null, err).then(function(_) {
-			message.react("❎").then(null, err).then(function(_) {
+		message.react("✅").then(null, function(err) trace(err)).then(function(_) {
+			message.react("❎").then(null, function(err) trace(err)).then(function(_) {
 				var collector = message.createReactionCollector({filter: filter, time: time});
 				collector.on('collect', track.bind(collector));
 			});
@@ -56,6 +58,6 @@ class DiscordUtil {
 	}
 
 	public static function getChannel(channel_id:String, callback:(channel:TextChannel) -> Void) {
-		Main.client.channels.fetch(channel_id).then(callback, err);
+		Main.client.channels.fetch(channel_id).then(callback, function(err) trace(err));
 	}
 }

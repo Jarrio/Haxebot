@@ -55,7 +55,7 @@ class Snippet extends CommandDbBase {
 							cache.message.edit({embeds: [embed]});
 						}
 						cache.interacted_at = Date.now().getTime();
-						interaction.deferUpdate().then(null, err);
+						interaction.deferUpdate().then(null, function(err) trace(err));
 						universe.deleteEntity(entity);
 					case snippet_right:
 						var page = cache.page;
@@ -66,7 +66,7 @@ class Snippet extends CommandDbBase {
 							cache.message.edit({embeds: [embed]});
 						}
 						cache.interacted_at = Date.now().getTime();
-						interaction.deferUpdate().then(null, err);
+						interaction.deferUpdate().then(null, function(err) trace(err));
 						universe.deleteEntity(entity);
 					default:
 				}
@@ -85,7 +85,7 @@ class Snippet extends CommandDbBase {
 			var embed = this.formatResultOutput(item, 0);
 			item.message.edit({embeds: [embed], components: []}).then(function(_) {
 				this.cache.remove(key);
-			}, err);
+			}, function(err) trace(err));
 		}
 	}
 
@@ -182,9 +182,9 @@ class Snippet extends CommandDbBase {
 							interaction.reply(
 								'*Snippet #${value.id} added!*\ntitle: $title\n$description\n'
 							);
-						}, err);
-					}, err);
-				}, err);
+						}, function(err) trace(err));
+					}, function(err) trace(err));
+				}, function(err) trace(err));
 			case SnippetSearch(taga, tagb, tagc):
 				var restraints = [];
 				var search = '';
@@ -241,7 +241,7 @@ class Snippet extends CommandDbBase {
 					}
 
 					this.handleSearchResponse(interaction, obj);
-				}, err);
+				}, function(err) trace(err));
 			case SnippetList(user, show_desc):
 				if (show_desc == null) {
 					show_desc = true;
@@ -270,7 +270,7 @@ class Snippet extends CommandDbBase {
 					}
 
 					this.handleSearchResponse(interaction, obj);
-				}, err);
+				}, function(err) trace(err));
 			case SnippetEdit(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'),
 					where('id', EQUAL_TO, id),
@@ -295,7 +295,7 @@ class Snippet extends CommandDbBase {
 					}
 
 					interaction.reply('Editting currently not implemented');
-				}, err);
+				}, function(err) trace(err));
 			case SnippetDelete(id):
 				var q = query(collection(this.db, 'discord/snippets/entries'),
 					where('id', EQUAL_TO, id.parseInt()),
@@ -321,8 +321,8 @@ class Snippet extends CommandDbBase {
 
 					Firestore.deleteDoc(resp.docs[0].ref).then(function(_) {
 						interaction.reply('Your snippet(#$id) has been deleted.');
-					}, err);
-				}, err);
+					}, function(err) trace(err));
+				}, function(err) trace(err));
 			case SnippetTags:
 				var embed = new MessageEmbed();
 				embed.setTitle('Tags');
@@ -330,13 +330,13 @@ class Snippet extends CommandDbBase {
 					if (i % 2 == 0 && i != tags.length - 1) {
 						embed.addFields(new Field(tag.name, tags[i + 1].name, true));
 					}
-					
+
 					if (i == tags.length - 1) {
 						embed.addFields(new Field(tag.name, '...', true));
 					}
 				}
 
-				interaction.reply({embeds: [embed]}).then(null, err);
+				interaction.reply({embeds: [embed]}).then(null, function(err) trace(err));
 			default:
 		}
 	}
@@ -377,7 +377,7 @@ class Snippet extends CommandDbBase {
 			.then(function(message) {
 				state.message = message;
 				this.cache.set(interaction.user.id, state);
-			}, err);
+			}, function(err) trace(err));
 	}
 
 	function formatResultOutput(state:TListState, forward:Int) {

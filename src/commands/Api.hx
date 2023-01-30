@@ -156,7 +156,7 @@ class Api extends CommandBase {
 							}
 							try {
 								this.getFieldPage(cls, field, interaction);
-							} catch (e) {
+							} catch (e ) {
 								trace(e);
 								trace(cls);
 								trace(field);
@@ -205,7 +205,8 @@ class Api extends CommandBase {
 		}
 	}
 
-	function getFieldPage(cls:Data, find:String, interaction:BaseCommandInteraction, ?ac:Array<{name:String, value:String}>) {
+	function getFieldPage(cls:Data, find:String, interaction:BaseCommandInteraction,
+			?ac:Array<{name:String, value:String}>) {
 		if (cls == null) {
 			return;
 		}
@@ -466,7 +467,8 @@ class Api extends CommandBase {
 		}
 
 		if (narrow.length == 0) {
-			var algo = FuzzySort.go(string, this.npackages, {key: 'name', limit: 10, threshold: -10000});
+			var algo = FuzzySort.go(string, this.npackages,
+				{key: 'name', limit: 10, threshold: -10000});
 			for (a in algo) {
 				results.push(a.obj);
 			}
@@ -480,7 +482,7 @@ class Api extends CommandBase {
 			}
 		}
 
-		interaction.respond(results).then(null, err);
+		interaction.respond(results).then(null, function(err) trace(err));
 	}
 
 	function get_name():String {

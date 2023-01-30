@@ -33,79 +33,85 @@ class Ban extends CommandBase {
 							break;
 						}
 
-						Main.client.channels.fetch(channel.id, {force: true}).then(function(channel) {
-							channel.messages.fetch({force: true}).then(function(response) {
-								var count = 0;
-								var messages = response.asType1;
-								for (message in messages) {
-									if (message.author.id != user.id) {
-										continue;
-									}
-									if (count >= 3) {
-										break;
-									}
-									count++;
-									history.push(message);
-								}
-
-								if (key + 1 == channels.length) {
-									var log = new Array<BanLogOutput>();
-									for (message in history) {
-										if (message.content == null || message.content.length == 0) {
+						Main.client.channels.fetch(channel.id, {force: true})
+							.then(function(channel) {
+								channel.messages.fetch({force: true}).then(function(response) {
+									var count = 0;
+									var messages = response.asType1;
+									for (message in messages) {
+										if (message.author.id != user.id) {
 											continue;
 										}
-
-										log.push({
-											user_tag: message.author.tag,
-											user_id: message.author.id,
-											message: message.content,
-											timestamp: message.createdTimestamp,
-											user_joined: message.member.joinedTimestamp,
-											channel: message.channel.asType0.name
-										});
-									}
-
-									if (delete_messages == null) {
-										delete_messages = "1";
-									}
-
-									if (reason == null) {
-										reason = "Scam bot";
-									}
-
-									File.saveContent('./commands/ban_log.json', Json.stringify(log));
-									DiscordUtil.getChannel('952952631079362650', function(channel) {
-										var embed = new MessageEmbed();
-										embed.setAuthor({
-											{
-												name: interaction.user.tag,
-												iconURL: interaction.user.avatarURL()
-											}
-										});
-										embed.addField('Banned:', user.tag);
-										embed.addField('Reason:', reason);
-										embed.setFooter({text: 'Moderator: ${interaction.user.tag} banned a user'});
-
-										interaction.reply({embeds: [embed]}).then(null, err);
-										var files = null;
-										if (log.length > 0) {
-											files = ['./commands/ban_log.json'];
+										if (count >= 3) {
+											break;
 										}
-										channel.send({embeds: [embed], files: files}).then(function(_) {
-											var days = delete_messages.parseInt();
-											if (days == null) {
-												days = 1;
+										count++;
+										history.push(message);
+									}
+
+									if (key + 1 == channels.length) {
+										var log = new Array<BanLogOutput>();
+										for (message in history) {
+											if (message.content == null
+												|| message.content.length == 0) {
+												continue;
 											}
 
-											member.ban({
-												days: days,
-												reason: reason
-											}).then(null, err);
-										}, err);
-									});
-								}
-							}, err);
-						}, err);
+											log.push({
+												user_tag: message.author.tag,
+												user_id: message.author.id,
+												message: message.content,
+												timestamp: message.createdTimestamp,
+												user_joined: message.member.joinedTimestamp,
+												channel: message.channel.asType0.name
+											});
+										}
+
+										if (delete_messages == null) {
+											delete_messages = "1";
+										}
+
+										if (reason == null) {
+											reason = "Scam bot";
+										}
+
+										File.saveContent('./commands/ban_log.json',
+											Json.stringify(log));
+										DiscordUtil.getChannel('952952631079362650',
+											function(channel) {
+												var embed = new MessageEmbed();
+												embed.setAuthor({
+													{
+														name: interaction.user.tag,
+														iconURL: interaction.user.avatarURL()
+													}
+												});
+												embed.addField('Banned:', user.tag);
+												embed.addField('Reason:', reason);
+												embed.setFooter({text: 'Moderator: ${interaction.user.tag} banned a user'});
+
+												interaction.reply({embeds: [embed]})
+													.then(null, function(err) trace(err));
+												var files = null;
+												if (log.length > 0) {
+													files = ['./commands/ban_log.json'];
+												}
+												channel.send({embeds: [embed], files: files})
+													.then(function(_) {
+														var days = delete_messages.parseInt();
+														if (days == null) {
+															days = 1;
+														}
+
+														member.ban({
+															days: days,
+															reason: reason
+														}).then(null, function(err) trace(err));
+													}, function(err) trace(err));
+											});
+									}
+								}, function(err) trace(err));
+							}, function(err) trace(err));
 					}
 				});
 

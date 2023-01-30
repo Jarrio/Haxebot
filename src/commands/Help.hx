@@ -22,7 +22,8 @@ class Help extends CommandBase {
 				if (content.type != helppls_dm) {
 					continue;
 				}
-				interaction.reply({content: content.content.toString()}).then(null, err);
+				interaction.reply({content: content.content.toString()})
+					.then(null, function(err) trace(err));
 				break;
 			}
 			return;
@@ -56,7 +57,7 @@ class Help extends CommandBase {
 					msg = 'Nothing found, sorry :(';
 				}
 
-				interaction.reply(msg).then(null, err);
+				interaction.reply(msg).then(null, function(err) trace(err));
 			default:
 		}
 	}

@@ -8,17 +8,17 @@ class Social extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Social(tag, user):
-					this.parseTwitter(interaction, tag, user);
+				this.parseTwitter(interaction, tag, user);
 			default:
 		}
 	}
 
 	function parseTwitter(interaction:BaseCommandInteraction, tag:String, user:String) {
 		if (tag == null && user == null) {
-			interaction.reply('Invalid input').then(null, err);
+			interaction.reply('Invalid input').then(null, function(err) trace(err));
 			return;
 		}
-		
+
 		if (tag != null) {
 			var doc = Firestore.doc(db, 'discord/social');
 			Firestore.updateDoc(doc, {

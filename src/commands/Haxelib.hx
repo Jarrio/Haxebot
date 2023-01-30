@@ -36,7 +36,8 @@ class Haxelib extends CommandBase {
 
 				if (route != "list" && route != "info" && route != "search") {
 					if (!role_status) {
-						interaction.reply('Invalid Permissions.').then(null, err);
+						interaction.reply('Invalid Permissions.')
+							.then(null, function(err) trace(err));
 						return;
 					}
 				}
@@ -67,7 +68,7 @@ class Haxelib extends CommandBase {
 						output = output.substr(0, 4000) + '...';
 					}
 					embed.setDescription(output);
-					interaction.reply({embeds: [embed]}).then(null, err);
+					interaction.reply({embeds: [embed]}).then(null, function(err) trace(err));
 				});
 
 				ls.stderr.on('data', (data) -> {

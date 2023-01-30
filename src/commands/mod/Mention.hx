@@ -11,7 +11,9 @@ class Mention extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Mention(user, role):
-				var query:Query<TMention> = Firestore.query(collection(this.db, 'discord/admin/mentions'), where('user', EQUAL_TO, user.id));
+				var query:Query<TMention> = Firestore.query(collection(this.db,
+					'discord/admin/mentions'),
+					where('user', EQUAL_TO, user.id));
 				Firestore.getDocs(query).then(function(resp) {
 					var obj:TMention = {
 						user: user.id,
@@ -39,10 +41,11 @@ class Mention extends CommandDbBase {
 					}
 
 					if (resp.empty) {
-						Firestore.addDoc(collection(this.db, 'discord/admin/mentions'), obj).then(function(_) {
-							var embed = this.embed(role, (found != -1));
-							interaction.reply({content: '<@${user.id}>', embeds: [embed]});
-						});
+						Firestore.addDoc(collection(this.db, 'discord/admin/mentions'), obj)
+							.then(function(_) {
+								var embed = this.embed(role, (found != -1));
+								interaction.reply({content: '<@${user.id}>', embeds: [embed]});
+							});
 					} else {
 						Firestore.updateDoc(resp.docs[0].ref, obj).then(function(_) {
 							var embed = this.embed(role, (found != -1));
@@ -71,7 +74,7 @@ class Mention extends CommandDbBase {
 
 	function parseTwitter(interaction:BaseCommandInteraction, tag:String, user:String) {
 		if (tag == null && user == null) {
-			interaction.reply('Invalid input').then(null, err);
+			interaction.reply('Invalid input').then(null, function(err) trace(err));
 			return;
 		}
 

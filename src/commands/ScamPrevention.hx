@@ -80,11 +80,14 @@ class ScamPrevention extends CommandBase {
 		var embed = this.reformatMessage('SPAM ALERT - Timed out', message);
 
 		this.timeoutUser(message, function(_) {
-			message.reply({content: '<@&198916468312637440> Please review this message by: <@${message.author.id}>', embeds: [embed]}).then(function(_) {
+			message.reply({
+				content: '<@&198916468312637440> Please review this message by: <@${message.author.id}>',
+				embeds: [embed]
+			}).then(function(_) {
 				for (message in messages) {
-					message.delete().then(null, err);
+					message.delete().then(null, function(err) trace(err));
 				}
-			}, err);
+			}, function(err) trace(err));
 		});
 	}
 
@@ -99,11 +102,13 @@ class ScamPrevention extends CommandBase {
 			return;
 		}
 		phishing_update_time = this.timestamp;
-		var links = new Http('https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json');
+		var links = new Http(
+			'https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json'
+		);
 		links.onData = function(data) {
 			try {
 				phishing_urls = Json.parse(data);
-			} catch (e) {
+			} catch (e ) {
 				trace(e);
 				trace('error parsing phishing links');
 				this.phishing_update_time = this.timestamp - 1000 * 60 * 60 * 5;
@@ -114,25 +119,34 @@ class ScamPrevention extends CommandBase {
 
 	function timeoutUser(message:Message, ?callback:(_:Dynamic) -> Void) {
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
-			this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), TIMEOUT);
-			guild_member.timeout(1000 * 60 * 60 * 12, 'Stop spamming, a mod will review this at their convenience.').then(callback, err);
+			this.logMessage(message.author.id,
+				this.reformatMessage('Original Message', message, false), TIMEOUT);
+			guild_member.timeout(
+				1000 * 60 * 60 * 12,
+				'Stop spamming, a mod will review this at their convenience.'
+			)
+				.then(callback, function(err) trace(err));
 			this.resetChecks(message.author.id);
-		}, err);
+		}, function(err) trace(err));
 	}
 
 	function banUser(messages:Array<Message>, ?callback:(_:Dynamic) -> Void) {
 		var message = messages[0];
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			for (message in messages) {
-				this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), BAN);
+				this.logMessage(message.author.id,
+					this.reformatMessage('Original Message', message, false), BAN);
 			}
 			guild_member.ban({
 				days: 1,
 				reason: "found phishing links, auto banned."
-			}).then(null, err);
+			}).then(null, function(err) trace(err));
 			this.resetChecks(message.author.id);
-			message.channel.asType0.send('User <@${message.author.id}> has been auto banned for sending scam links.').then(callback, err);
-		}, err);
+			message.channel.asType0.send(
+				'User <@${message.author.id}> has been auto banned for sending scam links.'
+			)
+				.then(callback, function(err) trace(err));
+		}, function(err) trace(err));
 	}
 
 	function logMessage(id:String, embed:MessageEmbed, action:UserActions) {
@@ -140,10 +154,8 @@ class ScamPrevention extends CommandBase {
 
 		Main.client.channels.fetch('952952631079362650').then(function(channel) {
 			channel.send({content: '<@$id>', embeds: [embed]});
-		}, err);
+		}, function(err) trace(err));
 	}
-
-
 
 	function checkPhishingLinks(messages:Array<Message>) {
 		for (message in messages) {

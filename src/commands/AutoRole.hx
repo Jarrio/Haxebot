@@ -14,8 +14,8 @@ class AutoRole extends CommandBase {
 	override function update(_:Float) {
 		super.update(_);
 		iterate(users, (entity) -> {
-			member.roles.add(event_role_id).then(null, err);
-			member.roles.add(news_role_id).then(null, err);
+			member.roles.add(event_role_id).then(null, function(err) trace(err));
+			member.roles.add(news_role_id).then(null, function(err) trace(err));
 			this.universe.deleteEntity(entity);
 		});
 	}

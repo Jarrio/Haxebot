@@ -27,7 +27,8 @@ class Helpdescription extends CommandDbBase {
 		switch (command.content) {
 			case Helpdescription(description):
 				if (!interaction.channel.isThread()) {
-					interaction.reply('This command is only available in a thread.').then(null, err);
+					interaction.reply('This command is only available in a thread.')
+						.then(null, function(err) trace(err));
 					return;
 				}
 				this.findThread(interaction, description);
@@ -38,10 +39,14 @@ class Helpdescription extends CommandDbBase {
 	function findThread(interaction:BaseCommandInteraction, description:String) {
 		var topic = this.getTopicFromChannel(interaction.channel.parentId);
 		if (topic == null) {
-			interaction.reply('This channel is not a valid topic. Did you run the command from a valid thread?').then(null, err);
+			interaction.reply(
+				'This channel is not a valid topic. Did you run the command from a valid thread?'
+			)
+				.then(null, function(err) trace(err));
 			return;
 		}
-		var q:Query<TStoreContent> = query(collection(db, 'test2', 'haxe', 'threads'), where('thread_id', EQUAL_TO, interaction.channelId));
+		var q:Query<TStoreContent> = query(collection(db, 'test2', 'haxe', 'threads'),
+			where('thread_id', EQUAL_TO, interaction.channelId));
 		var embed = new MessageEmbed();
 		embed.setDescription(description);
 		Firestore.getDocs(q).then(function(docs) {
@@ -57,7 +62,9 @@ class Helpdescription extends CommandDbBase {
 			var ref = docs.docs[0].ref;
 			var data = docs.docs[0].data();
 			if (interaction.user.id != data.solution.user.id) {
-				interaction.reply({content: 'Sorry, another user is working on summarising the solution!'});
+				interaction.reply(
+					{content: 'Sorry, another user is working on summarising the solution!'}
+				);
 				return;
 			}
 
@@ -65,12 +72,15 @@ class Helpdescription extends CommandDbBase {
 			data.solution.description = description;
 
 			Firestore.setDoc(ref, data).then(function(succ) {
-				interaction.reply({content: 'Thanks! <@${interaction.user.id}>', embeds: [embed]}).then(function(succ) {
-					this.validateThread(ref, data);
-					var command = Main.getCommand(this.name);
-				}, err);
-			}, err);
-		}, err);
+				interaction.reply(
+					{content: 'Thanks! <@${interaction.user.id}>', embeds: [embed]}
+				)
+					.then(function(succ) {
+						this.validateThread(ref, data);
+						var command = Main.getCommand(this.name);
+					}, function(err) trace(err));
+			}, function(err) trace(err));
+		}, function(err) trace(err));
 	}
 
 	function validateThread(ref:DocumentReference<TStoreContent>, thread:TStoreContent) {
@@ -94,50 +104,56 @@ class Helpdescription extends CommandDbBase {
 
 			embed.setDescription(description);
 
-			channel.send({embeds: [embed], content: "Should this thread be indexed?"}).then(function(message) {
-				Firestore.updateDoc(ref, 'validate_timestamp', Date.now());
-				DiscordUtil.reactionTracker(message, (collector, collected:MessageReaction, user:User) -> {
-					if (user.bot) {
-						return;
-					}
-
-					var valid = null;
-
-					if (collected.emoji.name == "✅") {
-						valid = true;
-					}
-
-					if (collected.emoji.name == "❎") {
-						valid = false;
-					}
-
-					if (valid == null) {
-						return;
-					}
-
-					var doc = doc(db, 'test2/$topic');
-
-					Firestore.runTransaction(this.db, function(transaction) {
-						return transaction.get(doc).then(function(doc) {
-							if (!doc.exists()) {
-								return {id: -1, threads: 0};
+			channel.send(
+				{embeds: [embed], content: "Should this thread be indexed?"}
+			)
+				.then(function(message) {
+					Firestore.updateDoc(ref, 'validate_timestamp', Date.now());
+					DiscordUtil.reactionTracker(message,
+						(collector, collected:MessageReaction, user:User) -> {
+							if (user.bot) {
+								return;
 							}
-							var data:TThreadInfo = doc.data();
-							data.id = data.id + 1;
-							data.threads = data.threads + 1;
-							transaction.update(doc.ref, data);
-							return data;
+
+							var valid = null;
+
+							if (collected.emoji.name == "✅") {
+								valid = true;
+							}
+
+							if (collected.emoji.name == "❎") {
+								valid = false;
+							}
+
+							if (valid == null) {
+								return;
+							}
+
+							var doc = doc(db, 'test2/$topic');
+
+							Firestore.runTransaction(this.db, function(transaction) {
+								return transaction.get(doc).then(function(doc) {
+									if (!doc.exists()) {
+										return {id: -1, threads: 0};
+									}
+									var data:TThreadInfo = doc.data();
+									data.id = data.id + 1;
+									data.threads = data.threads + 1;
+									transaction.update(doc.ref, data);
+									return data;
+								});
+							}).then(function(value) {
+								if (value.id == -1) {
+									return;
+								}
+								Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id,
+									'validated_timestamp', Timestamp.now())
+									.then(function(_) {
+										collector.stop('Reviewed validation.');
+									}, function(err) trace(err));
+							}, function(err) trace(err));
 						});
-					}).then(function(value) {
-						if (value.id == -1) {
-							return;
-						}
-						Firestore.updateDoc(ref, 'valid', valid, 'validated_by', user.id, 'validated_timestamp', Timestamp.now()).then(function(_) {
-							collector.stop('Reviewed validation.');
-						}, err);
-					}, err);
 				});
-			});
 		});
 	}
 

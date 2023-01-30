@@ -42,7 +42,10 @@ class Quote extends CommandDbBase {
 					}
 
 					if (!this.isValidName(name)) {
-						interaction.reply({content: '*Names can only contain `_-:` and/or spaces.*\nname: $name\n$description', ephemeral: true});
+						interaction.reply({
+							content: '*Names can only contain `_-:` and/or spaces.*\nname: $name\n$description',
+							ephemeral: true
+						});
 						return;
 					}
 
@@ -63,12 +66,15 @@ class Quote extends CommandDbBase {
 						data.tags.insert(0, '${data.id}');
 
 						this.addDoc('discord/quotes/entries', data, function(_) {
-							interaction.reply('*Quote #${data.id} added!*\nname: $name\n$description\n\nby: <@${data.author}>');
-						}, err);
-					}, err);
+							interaction.reply(
+								'*Quote #${data.id} added!*\nname: $name\n$description\n\nby: <@${data.author}>'
+							);
+						}, function(err) trace(err));
+					}, function(err) trace(err));
 				case quote_edit:
 					var col = collection(db, 'discord/quotes/entries');
-					var query:Query<TQuoteData> = query(col, where('id', EQUAL_TO, this.cache.get(interaction.user.id)));
+					var query:Query<TQuoteData> = query(col,
+						where('id', EQUAL_TO, this.cache.get(interaction.user.id)));
 					Firestore.getDocs(query).then(function(resp) {
 						if (resp.docs.length != 1) {
 							interaction.reply('Something went wrong');
@@ -76,11 +82,15 @@ class Quote extends CommandDbBase {
 							return;
 						}
 
-						Firestore.updateDoc(resp.docs[0].ref, {description: interaction.fields.getTextInputValue('description')}).then(function(_) {
-							interaction.reply('Quote updated!');
-							this.cache.remove(interaction.user.id);
-						}, err);
-					}, err);
+						Firestore.updateDoc(
+							resp.docs[0].ref,
+							{description: interaction.fields.getTextInputValue('description')}
+						)
+							.then(function(_) {
+								interaction.reply('Quote updated!');
+								this.cache.remove(interaction.user.id);
+							}, function(err) trace(err));
+					}, function(err) trace(err));
 				default:
 			}
 
@@ -94,7 +104,8 @@ class Quote extends CommandDbBase {
 		switch (command.content) {
 			case QuoteList(user):
 				var sort = Firestore.orderBy('id', ASCENDING);
-				var col:CollectionReference<TQuoteData> = collection(this.db, 'discord/quotes/entries');
+				var col:CollectionReference<TQuoteData> = collection(this.db,
+					'discord/quotes/entries');
 				var query = Firestore.query(col, sort);
 				if (user != null) {
 					query = Firestore.query(col, where('author', EQUAL_TO, user.id), sort);
@@ -115,7 +126,7 @@ class Quote extends CommandDbBase {
 					embed.setDescription(body);
 					embed.setColor(0xEA8220);
 					interaction.reply({embeds: [embed]});
-				}, err);
+				}, function(err) trace(err));
 			case QuoteGet(name) | QuoteCreate(name) | QuoteEdit(name) | QuoteDelete(name):
 				var type = get;
 				var enum_name = command.content.getName().toLowerCase();
@@ -156,8 +167,11 @@ class Quote extends CommandDbBase {
 
 				var col = collection(db, 'discord/quotes/entries');
 
-				var query:Query<TQuoteData> = Firestore.query(col, where(column, EQUAL_TO, isName(name) ? name : name.parseInt()),
-					where('author', EQUAL_TO, interaction.user.id));
+				var query:Query<TQuoteData> = Firestore.query(
+					col,
+					where(column, EQUAL_TO, isName(name) ? name : name.parseInt()),
+					where('author', EQUAL_TO, interaction.user.id)
+				);
 
 				if (interaction.isAutocomplete() && type != get) {
 					Firestore.getDocs(query).then(function(res) {
@@ -169,8 +183,8 @@ class Quote extends CommandDbBase {
 								value: '${data.id}'
 							});
 						}
-						interaction.respond(results).then(null, err);
-					}).then(null, err);
+						interaction.respond(results).then(null, function(err) trace(err));
+					}).then(null, function(err) trace(err));
 					return;
 				}
 
@@ -187,11 +201,15 @@ class Quote extends CommandDbBase {
 
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length >= 1) {
-								interaction.reply('You already have a quote(#${res.docs[0].data().id}) with the name __${name}__').then(null, err);
+								interaction.reply(
+									'You already have a quote(#${res.docs[0].data().id}) with the name __${name}__'
+								)
+									.then(null, function(err) trace(err));
 								return;
 							}
 
-							var modal = new ModalBuilder().setCustomId('quote_set').setTitle('Creating a quote');
+							var modal = new ModalBuilder().setCustomId('quote_set')
+								.setTitle('Creating a quote');
 
 							var title_input = new APITextInputComponent().setCustomId('name')
 								.setLabel('name')
@@ -212,7 +230,7 @@ class Quote extends CommandDbBase {
 
 							interaction.showModal(modal);
 							return;
-						}, err);
+						}, function(err) trace(err));
 
 					case edit:
 						Firestore.getDocs(query).then(function(res) {
@@ -233,11 +251,13 @@ class Quote extends CommandDbBase {
 							}
 
 							if (doc == null) {
-								interaction.reply("That isn't your quote!").then(null, err);
+								interaction.reply("That isn't your quote!")
+									.then(null, function(err) trace(err));
 								return;
 							}
 
-							var modal = new ModalBuilder().setCustomId('quote_edit').setTitle('Editting quote #${doc.id}');
+							var modal = new ModalBuilder().setCustomId('quote_edit')
+								.setTitle('Editting quote #${doc.id}');
 
 							var desc_input = new APITextInputComponent().setCustomId('description')
 								.setLabel('${doc.name}:')
@@ -251,11 +271,12 @@ class Quote extends CommandDbBase {
 
 							this.cache.set(interaction.user.id, doc.id);
 							interaction.showModal(modal);
-						}, err);
+						}, function(err) trace(err));
 					case delete:
 						Firestore.getDocs(query).then(function(res) {
 							if (res.docs.length == 0) {
-								interaction.reply("Cannot delete this quote").then(null, err);
+								interaction.reply("Cannot delete this quote")
+									.then(null, function(err) trace(err));
 								return;
 							}
 
@@ -266,10 +287,11 @@ class Quote extends CommandDbBase {
 
 							Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
 								interaction.reply("Quote deleted!");
-							}, err);
-						}, err);
+							}, function(err) trace(err));
+						}, function(err) trace(err));
 					case get | _:
-						query = Firestore.query(col, where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
+						query = Firestore.query(col,
+							where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 
 						if (interaction.isAutocomplete()) {
 							Firestore.getDocs(query).then(function(res) {
@@ -281,8 +303,8 @@ class Quote extends CommandDbBase {
 										value: '${data.id}'
 									});
 								}
-								interaction.respond(results).then(null, err);
-							}).then(null, err);
+								interaction.respond(results).then(null, function(err) trace(err));
+							}).then(null, function(err) trace(err));
 							return;
 						}
 
@@ -307,10 +329,14 @@ class Quote extends CommandDbBase {
 							}
 
 							embed.setDescription('***${data.name}***\n${data.description}');
-							embed.setFooter({text: '$content | $date |\t#${data.id}', iconURL: icon});
+							embed.setFooter({
+								text: '$content | $date |\t#${data.id}',
+								iconURL: icon
+							});
 
-							interaction.reply({embeds: [embed]}).then(null, err);
-						}).then(null, err);
+							interaction.reply({embeds: [embed]})
+								.then(null, function(err) trace(err));
+						}).then(null, function(err) trace(err));
 				}
 			default:
 				// interaction.reply();
