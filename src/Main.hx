@@ -41,6 +41,7 @@ import commands.mod.Social;
 import commands.mod.Mention;
 import commands.events.PinMessageInfo;
 import js.Browser;
+import commands.types.ContextMenuTypes;
 class Main {
 	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
@@ -267,8 +268,16 @@ class Main {
 			}
 
 			if (interaction.isMessageContextMenuCommand()) {
-				universe.setComponents(universe.createEntity(),
-					CommandForward.message_context_menu, interaction);
+				var type:ContextMenuTypes = none;
+				switch (interaction.commandName) {
+					case 'Pin Message': 
+						type = ContextMenuTypes.pin_message;
+					default:
+				}
+
+				if (type != none) {
+					universe.setComponents(universe.createEntity(), type, interaction);
+				}
 			}
 
 			if (!interaction.isCommand() && !interaction.isAutocomplete()

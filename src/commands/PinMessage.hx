@@ -1,5 +1,6 @@
 package commands;
 
+import commands.types.ContextMenuTypes;
 import discord_js.ThreadChannel;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
@@ -7,12 +8,12 @@ import systems.CommandDbBase;
 import Main.CommandForward;
 
 class PinMessage extends CommandDbBase {
-	@:fastFamily var options:{route:CommandForward, interaction:BaseCommandInteraction};
+	@:fastFamily var options:{route:ContextMenuTypes, interaction:BaseCommandInteraction};
 
 	override function update(_) {
 		iterate(options, entity -> {
 			switch (route) {
-				case thread_pin_message:
+				case pin_message:
 					var author = interaction.user.id;
 					if (interaction.channel.isThread()) {
 						try {
@@ -28,13 +29,15 @@ class PinMessage extends CommandDbBase {
 							} else {
 								interaction.reply({content: "This isn't your thread!", ephemeral: true});
 							}
-							return;
 						} catch (e) {
 							trace('thread cast failed');
 						}
+					} else {
+						interaction.reply(
+							{content: '*Currently this only works for user threads :)*',
+								ephemeral: true}
+						).then(null, function(err) trace(err));
 					}
-
-					interaction.reply({content: '*Currently this only works for user threads :)*', ephemeral: true});
 					universe.deleteEntity(entity);
 				default:
 			}
