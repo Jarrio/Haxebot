@@ -50,7 +50,7 @@ class Run extends TextCommandBase {
 				if (now - before < clear_frame) {
 					continue;
 				}
-				
+
 				FileSystem.deleteDirectory('$path/$folder');
 			}
 		} catch (e ) {
@@ -296,8 +296,7 @@ class Run extends TextCommandBase {
 				}
 				new_code += str + '\n';
 			}
-			embed.setDescription('```hx\n' + new_code + '```');
-			embed.description += ('Error \n $error');
+			embed.setDescription('```hx\n' + new_code + '``` **Error** \n $error');
 			return embed;
 		}
 
@@ -390,8 +389,8 @@ class Run extends TextCommandBase {
 						if (embed == null) {
 							message.reply({content: mention + '```\n${compile_output}```'});
 						} else {
-							embed.description = this.cleanOutput(embed.description, filename,
-								class_entry);
+							embed.setDescription(this.cleanOutput(embed.description, filename,
+								class_entry));
 							message.reply({embeds: [embed]});
 						}
 
