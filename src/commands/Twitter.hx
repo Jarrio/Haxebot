@@ -81,9 +81,11 @@ class Twitter extends CommandDbBase {
 	var checking = false;
 	var tags:Array<String> = [];
 	var users:Array<String> = [];
+	var ignore:Array<String> = [];
 	var start_timer = false;
 
 	override function onEnabled() {
+		this.ignore.push('first_issues');
 		var doc:DocumentReference<TSocial> = Firestore.doc(this.db, 'discord/social');
 		Firestore.onSnapshot(doc, (update) -> {
 			this.tags = update.data().twitter_tags;
@@ -152,6 +154,16 @@ class Twitter extends CommandDbBase {
 	function removeDupes() {
 		var list = [];
 		for (link in this.twitter_links) {
+			var block = false;
+			for (account in this.ignore) {
+				if (StringTools.contains(link, '/$account/')) {
+					block = true;
+					break;
+				}
+			}
+			if (block) {
+				continue;
+			}
 			if (list.indexOf(link) == -1) {
 				list.push(link);
 			}

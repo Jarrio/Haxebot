@@ -8490,6 +8490,7 @@ commands__$Twitter_Response.get_users = function(this1) {
 };
 var commands_Twitter = function(_universe) {
 	this.start_timer = false;
+	this.ignore = [];
 	this.users = [];
 	this.tags = [];
 	this.checking = false;
@@ -8514,9 +8515,11 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 	,checking: null
 	,tags: null
 	,users: null
+	,ignore: null
 	,start_timer: null
 	,onEnabled: function() {
 		var _gthis = this;
+		this.ignore.push("first_issues");
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/social");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(update) {
 			_gthis.tags = update.data().twitter_tags;
@@ -8533,7 +8536,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(!_gthis.start_timer) {
 				_gthis.start_timer = true;
 				var _gthis1 = _gthis;
-				haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 103, className : "commands.Twitter", methodName : "poll"});
+				haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 105, className : "commands.Twitter", methodName : "poll"});
 				var checker = new haxe_Timer(_gthis.ping_rate | 0);
 				checker.run = function() {
 					if(Main.connected && !_gthis1.checking && _gthis1.channel != null) {
@@ -8570,24 +8573,24 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 												_gthis1.removeDupes();
 											} catch( _g ) {
 												var e = haxe_Exception.caught(_g);
-												haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 133, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 136, className : "commands.Twitter", methodName : "poll"});
+												haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 137, className : "commands.Twitter", methodName : "poll"});
 											}
 											_gthis1.async_check[k[0]] = true;
 											_gthis1.checking = false;
 										};
 									})(url,k),(function() {
 										return function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 140, className : "commands.Twitter", methodName : "poll"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 142, className : "commands.Twitter", methodName : "poll"});
 											$global.console.dir(err);
 										};
 									})());
 								};
 							})(url,k),(function() {
 								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 144, className : "commands.Twitter", methodName : "poll"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 146, className : "commands.Twitter", methodName : "poll"});
 									$global.console.dir(err);
 								};
 							})());
@@ -8599,7 +8602,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,poll: function() {
 		var _gthis = this;
-		haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 103, className : "commands.Twitter", methodName : "poll"});
+		haxe_Log.trace("started",{ fileName : "src/commands/Twitter.hx", lineNumber : 105, className : "commands.Twitter", methodName : "poll"});
 		var checker = new haxe_Timer(this.ping_rate | 0);
 		checker.run = function() {
 			if(Main.connected && !_gthis.checking && _gthis.channel != null) {
@@ -8636,24 +8639,24 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 										_gthis.removeDupes();
 									} catch( _g ) {
 										var e = haxe_Exception.caught(_g);
-										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 132, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 133, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(Main.state.twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 136, className : "commands.Twitter", methodName : "poll"});
+										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 137, className : "commands.Twitter", methodName : "poll"});
 									}
 									_gthis.async_check[k[0]] = true;
 									_gthis.checking = false;
 								};
 							})(url,k),(function() {
 								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 140, className : "commands.Twitter", methodName : "poll"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 142, className : "commands.Twitter", methodName : "poll"});
 									$global.console.dir(err);
 								};
 							})());
 						};
 					})(url,k),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 144, className : "commands.Twitter", methodName : "poll"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 146, className : "commands.Twitter", methodName : "poll"});
 							$global.console.dir(err);
 						};
 					})());
@@ -8668,6 +8671,20 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 		while(_g < _g1.length) {
 			var link = _g1[_g];
 			++_g;
+			var block = false;
+			var _g2 = 0;
+			var _g3 = this.ignore;
+			while(_g2 < _g3.length) {
+				var account = _g3[_g2];
+				++_g2;
+				if(link.indexOf("/" + account + "/") != -1) {
+					block = true;
+					break;
+				}
+			}
+			if(block) {
+				continue;
+			}
 			if(list.indexOf(link) == -1) {
 				list.push(link);
 			}
@@ -8711,7 +8728,7 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 				var link = _g1[_g];
 				++_g;
 				this.channel.send({ content : link}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 196, className : "commands.Twitter", methodName : "update"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 208, className : "commands.Twitter", methodName : "update"});
 					$global.console.dir(err);
 				});
 			}
@@ -8742,9 +8759,9 @@ commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(succ) {
 				_gthis.channel = succ;
 				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 221, className : "commands.Twitter", methodName : "update"});
+				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 233, className : "commands.Twitter", methodName : "update"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 223, className : "commands.Twitter", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 235, className : "commands.Twitter", methodName : "update"});
 				$global.console.dir(err);
 			});
 		}
