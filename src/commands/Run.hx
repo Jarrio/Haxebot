@@ -1,5 +1,6 @@
 package commands;
 
+import commands.types.Duration;
 import systems.TextCommandBase;
 import components.TextCommand;
 import util.Random;
@@ -22,6 +23,40 @@ class Run extends TextCommandBase {
 	var channel:TextChannel;
 	var checked:Bool = false;
 	var timeout = 5000;
+	var last_cleared:Float;
+
+	override function update(_:Float) {
+		super.update(_);
+		this.cleanDirectory();
+	}
+
+	inline function cleanDirectory() {
+		var now = Date.now().getTime();
+		var clear_frame = Duration.fromString('2w');
+		if (now - this.last_cleared < clear_frame) {
+			return;
+		}
+
+		this.last_cleared = now;
+
+		var before = null;
+
+		try {
+			var path = FileSystem.absolutePath('.') + '/haxebot';
+			var folders = FileSystem.readDirectory(path);
+
+			for (folder in folders) {
+				before = Date.fromString(folder).getTime();
+				if (now - before < clear_frame) {
+					continue;
+				}
+				
+				FileSystem.deleteDirectory('$path/$folder');
+			}
+		} catch (e ) {
+			trace(e);
+		}
+	}
 
 	function run(message:Message, content:String) {
 		if (this.haxe_version == null) {
