@@ -5798,7 +5798,11 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 					return channel.messages.fetch(split[0][2]).then((function(split,message) {
 						return function(react_message) {
 							react_message.react(split[0][3]);
-							message[0].delete();
+							message[0].delete().then(null,(function() {
+								return function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 27, className : "commands.React", methodName : "update"});
+								};
+							})());
 						};
 					})(split,message));
 				};
@@ -7246,7 +7250,11 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 					content += "1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here";
 					message[0].author.send({ content : content}).then((function(message) {
 						return function(succ) {
-							message[0].delete();
+							message[0].delete().then(null,(function() {
+								return function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 69, className : "commands.Showcase", methodName : "update"});
+								};
+							})());
 						};
 					})(message),(function() {
 						return function(err) {
@@ -7972,7 +7980,9 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 			embed.setTitle("*" + message.author.username + "*");
 			embed.setThumbnail(thumb);
 			message.reply({ content : roles_found, embeds : [embed], attachments : attachments, allowedMentions : { roles : user.roles}}).then(function(_) {
-				message.delete();
+				message.delete().then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 100, className : "commands.TextMention", methodName : "run"});
+				});
 			},function(err) {
 				haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 102, className : "commands.TextMention", methodName : "run"});
 				$global.console.dir(err);

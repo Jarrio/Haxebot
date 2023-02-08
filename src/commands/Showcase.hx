@@ -66,7 +66,7 @@ class Showcase extends CommandBase {
 					content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
 
 					message.author.send({content: content}).then(function(succ) {
-						message.delete();
+						message.delete().then(null, (err) -> trace(err));
 					}, function(err) {
 						trace(err);
 						Browser.console.dir(err);

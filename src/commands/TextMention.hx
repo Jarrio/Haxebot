@@ -97,7 +97,7 @@ class TextMention extends TextCommandBase {
 				attachments: attachments,
 				allowedMentions: {roles: user.roles}
 			}).then(function(_) {
-				message.delete();
+				message.delete().then(null, (err) -> trace(err));
 			}, function(err) {
 				trace(err);
 				Browser.console.dir(err);
