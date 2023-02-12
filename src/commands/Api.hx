@@ -196,9 +196,20 @@ class Api extends CommandBase {
 				if (cls_desc == '' && field_desc == '') {
 					desc = '*No description found*';
 				}
+				
+				if (title != '') {
+					embed.setTitle(title);
+				}
 
-				embed.setTitle(title);
-				embed.setURL(link);
+				if (link != '') {
+					embed.setURL(link);
+				}
+				
+				if (link == '' && title == '') {
+					interaction.reply({content: "Couldn't find the package"}).then(null, (err) -> trace(err));
+					return;
+				}
+
 				embed.setDescription(desc);
 				interaction.reply({embeds: [embed]});
 				return;

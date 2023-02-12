@@ -3289,8 +3289,18 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			if(cls_desc == "" && field_desc == "") {
 				desc = "*No description found*";
 			}
-			embed.setTitle(title);
-			embed.setURL(link);
+			if(title != "") {
+				embed.setTitle(title);
+			}
+			if(link != "") {
+				embed.setURL(link);
+			}
+			if(link == "" && title == "") {
+				interaction.reply({ content : "Couldn't find the package"}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Api.hx", lineNumber : 209, className : "commands.Api", methodName : "run"});
+				});
+				return;
+			}
 			embed.setDescription(desc);
 			interaction.reply({ embeds : [embed]});
 			return;
@@ -3572,7 +3582,7 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			}
 		}
 		interaction.respond(results).then(null,function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/Api.hx", lineNumber : 487, className : "commands.Api", methodName : "search"});
+			haxe_Log.trace(err,{ fileName : "src/commands/Api.hx", lineNumber : 498, className : "commands.Api", methodName : "search"});
 			$global.console.dir(err);
 		});
 	}
