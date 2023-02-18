@@ -148,6 +148,7 @@
 	},
 	{
 		"name": "archive",
+		"permissions": "everyone",
 		"description": "Show or hide the channel archives. These are channels which are no longer active."
 	},
 	{
