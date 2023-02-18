@@ -319,12 +319,13 @@ class Main {
 			}
 
 			if (value.params == null) {
+				var id = '';
 				if (value.type == menu) {
-					command.content = Type.createEnum(CommandOptions, value.id);
-					break;
+					id = value.id;
 				} else {
-					throw 'Command config issue located: ${value.name}';
+					id = enum_id;
 				}
+				command.content = command.content = Type.createEnum(CommandOptions, id);
 			} else {
 				var subcommand = null;
 				var params = new Array<Dynamic>();
@@ -364,7 +365,6 @@ class Main {
 				}
 
 				command.content = Type.createEnum(CommandOptions, enum_id, params);
-				break;
 			}
 		}
 

@@ -1628,12 +1628,13 @@ Main.createCommand = function(interaction) {
 			continue;
 		}
 		if(value.params == null) {
+			var id = "";
 			if(value.type == "menu") {
-				command.content = Type.createEnum(components_CommandOptions,value.id);
-				break;
+				id = value.id;
 			} else {
-				throw haxe_Exception.thrown("Command config issue located: " + value.name);
+				id = enum_id;
 			}
+			command.content = command.content = Type.createEnum(components_CommandOptions,id);
 		} else {
 			var subcommand = null;
 			var params = [];
@@ -1686,7 +1687,6 @@ Main.createCommand = function(interaction) {
 				enum_id += subcommand.charAt(0).toUpperCase() + subcommand.substring(1);
 			}
 			command.content = Type.createEnum(components_CommandOptions,enum_id,params);
-			break;
 		}
 	}
 	return command;
