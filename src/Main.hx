@@ -517,8 +517,8 @@ class Main {
 							parseCommandType(param, autocomplete, cast main_command);
 					}
 				}
-				commands.push(main_command);
 			}
+			commands.push(main_command);
 		}
 		return commands;
 	}

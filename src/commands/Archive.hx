@@ -4,7 +4,7 @@ import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
-
+@:keep
 class Archive extends CommandBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {

@@ -1824,8 +1824,8 @@ Main.parseCommands = function() {
 					Main.parseCommandType(param,autocomplete,main_command);
 				}
 			}
-			commands.push(discord_$builder_AnySlashCommand.fromBase(main_command));
 		}
+		commands.push(discord_$builder_AnySlashCommand.fromBase(main_command));
 	}
 	return commands;
 };
