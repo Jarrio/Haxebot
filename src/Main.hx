@@ -42,6 +42,7 @@ import commands.mod.Mention;
 import commands.events.PinMessageInfo;
 import js.Browser;
 import commands.types.ContextMenuTypes;
+
 class Main {
 	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
@@ -355,7 +356,6 @@ class Main {
 							for (subparam in param.params) {
 								parseIncomingCommand(params, subparam, interaction);
 							}
-
 						default:
 							throw 'Something went wrong.';
 					}

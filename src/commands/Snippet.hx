@@ -92,6 +92,9 @@ class Snippet extends CommandDbBase {
 			item.message.edit({embeds: [embed], components: []}).then(function(_) {
 				this.cache.remove(key);
 			}, function(err) {
+				if (item.message.deleted) {
+					this.cache.remove(key);
+				}
 				trace(err);
 				Browser.console.dir(err);
 			});
