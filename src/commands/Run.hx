@@ -13,6 +13,7 @@ import sys.FileSystem;
 import discord_js.Message;
 import js.node.ChildProcess.spawn;
 import js.Browser;
+
 enum abstract RunMessage(String) from String to String {}
 
 class Run extends TextCommandBase {
@@ -487,10 +488,12 @@ class Run extends TextCommandBase {
 									trace(
 										'${message.author.tag} at $format_date with file id: ${filename}'
 									);
-									message.delete().then(null, function(err) {
-										trace(err);
-										Browser.console.dir(err);
-									});
+									if (message.deletable) {
+										message.delete().then(null, function(err) {
+											trace(err);
+											Browser.console.dir(err);
+										});
+									}
 								}, function(err) {
 									trace(err);
 									Browser.console.dir(err);
