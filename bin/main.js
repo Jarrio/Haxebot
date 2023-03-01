@@ -8503,12 +8503,12 @@ commands__$Twitter_Response.createLinks = function(this1) {
 		var tweet = _g1[_g];
 		++_g;
 		var user = commands__$Twitter_Response.getUser(this1,tweet);
-		urls.h[tweet.id] = "https://twitter.com/" + user.username + "/status/" + tweet.id;
+		urls.h[tweet.id] = "https://fxtwitter.com/" + user.username + "/status/" + tweet.id;
 	}
 	return urls;
 };
 commands__$Twitter_Response.createLink = function(user,id) {
-	return "https://twitter.com/" + user + "/status/" + id;
+	return "https://fxtwitter.com/" + user + "/status/" + id;
 };
 commands__$Twitter_Response.get_tweets = function(this1) {
 	return this1.data;

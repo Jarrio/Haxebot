@@ -51,7 +51,7 @@ private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes
 	}
 
 	public inline static function createLink(user:String, id:String) {
-		return 'https://twitter.com/$user/status/$id';
+		return 'https://fxtwitter.com/$user/status/$id';
 	}
 
 	public var tweets(get, never):Array<TTweet>;
