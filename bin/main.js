@@ -659,8 +659,8 @@ Main.start = function() {
 	var this1 = new Array(6);
 	var this2 = new Array(6);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
-	var this1 = new Array(26);
-	var this2 = new Array(26);
+	var this1 = new Array(27);
+	var this2 = new Array(27);
 	vec[1] = new ecs_Phase(true,"main",this1,this2);
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
@@ -990,105 +990,109 @@ Main.start = function() {
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new commands_Snippet(u);
+	var s = new commands_AutoThread(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new commands_PinMessage(u);
+	var s = new commands_Snippet(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new commands_mod_Mention(u);
+	var s = new commands_PinMessage(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new commands_TextMention(u);
+	var s = new commands_mod_Mention(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new commands_Reminder(u);
+	var s = new commands_TextMention(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new commands_mod_Social(u);
+	var s = new commands_Reminder(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new commands_AutoRole(u);
+	var s = new commands_mod_Social(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new commands_Twitter(u);
+	var s = new commands_AutoRole(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_Twitter(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_ScamPrevention(u);
+	var s = new commands_Quote(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_ScamPrevention(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_Haxelib(u);
+	var s = new commands_Api(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Trace(u);
+	var s = new commands_Haxelib(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Trace(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_React(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Notify(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Poll(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Boop(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Archive(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Help(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Translate(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
 	s.onEnabled();
-	var s = new commands_Run(u);
+	var s = new commands_Hi(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_Run(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
 	s.onEnabled();
-	var s = new commands_Showcase(u);
+	var s = new commands_Roundup(u);
 	phase.systems[25] = s;
 	phase.enabledSystems[25] = true;
+	s.onEnabled();
+	var s = new commands_Showcase(u);
+	phase.systems[26] = s;
+	phase.enabledSystems[26] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -1102,7 +1106,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 146, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 147, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1113,17 +1117,37 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 155, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 156, className : "Main", methodName : "start"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 162, className : "Main", methodName : "start"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 168, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 169, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,0,"add_event_role");
+		Main.universe.components.set(_ecsTmpEntity,4,member);
+		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(0);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(2);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(4);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(6);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var _ecsTmpEntity = Main.universe.createEntity();
+		Main.universe.components.set(_ecsTmpEntity,0,"auto_thread");
 		Main.universe.components.set(_ecsTmpEntity,4,member);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 		var ecsTmpFamily = Main.universe.families.get(0);
@@ -1311,8 +1335,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 225, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 226, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 227, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 228, className : "Main", methodName : "start"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1547,7 +1571,7 @@ Main.start = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 266, className : "Main", methodName : "start"});
+				haxe_Log.trace(interaction.customId + " - unhandled model",{ fileName : "src/Main.hx", lineNumber : 268, className : "Main", methodName : "start"});
 			}
 			return;
 		}
@@ -1736,7 +1760,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 417, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 419, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1744,25 +1768,25 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 428, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 430, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 438, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 440, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.getDoc(doc).then(function(resp) {
 			Main.state = resp.data().state;
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 447, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 449, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 451, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 453, className : "Main", methodName : "main"});
 		$global.console.dir(err);
 	});
 	Main.start();
@@ -1770,7 +1794,7 @@ Main.main = function() {
 Main.updateState = function() {
 	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 	firebase_web_firestore_Firestore.updateDoc(doc,"state",Main.state).then(null,function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 462, className : "Main", methodName : "updateState"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 464, className : "Main", methodName : "updateState"});
 		$global.console.dir(err);
 	});
 };
@@ -3664,17 +3688,19 @@ commands_AutoRole.prototype = $extend(systems_CommandBase.prototype,{
 		var _g_idx = _set.size() - 1;
 		while(_g_active && _g_idx >= 0) {
 			var entity = _g_set.getDense(_g_idx--);
-			this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var member = this.tablec254489e95ef23a8f91062a1947780b9.get(entity);
-			member.roles.add(this.event_role_id).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/AutoRole.hx", lineNumber : 19, className : "commands.AutoRole", methodName : "update"});
-				$global.console.dir(err);
-			});
-			member.roles.add(this.news_role_id).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/AutoRole.hx", lineNumber : 23, className : "commands.AutoRole", methodName : "update"});
-				$global.console.dir(err);
-			});
-			this.universe.deleteEntity(entity);
+			if(command == "add_event_role") {
+				member.roles.add(this.event_role_id).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/AutoRole.hx", lineNumber : 21, className : "commands.AutoRole", methodName : "update"});
+					$global.console.dir(err);
+				});
+				member.roles.add(this.news_role_id).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/AutoRole.hx", lineNumber : 25, className : "commands.AutoRole", methodName : "update"});
+					$global.console.dir(err);
+				});
+				this.universe.deleteEntity(entity);
+			}
 		}
 	}
 	,run: function(command,interaction) {
@@ -3686,6 +3712,80 @@ commands_AutoRole.prototype = $extend(systems_CommandBase.prototype,{
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tablec254489e95ef23a8f91062a1947780b9: null
 	,__class__: commands_AutoRole
+});
+var commands_AutoThread = function(_universe) {
+	this.news_feed = "1030188275341729882";
+	this.checking = false;
+	this.announcement_channel = "286485321925918721";
+	this.event_role_id = "1054432874473996408";
+	this.news_role_id = "761714325227700225";
+	systems_CommandBase.call(this,_universe);
+	this.users = this.universe.families.get(2);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(0);
+	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(4);
+};
+$hxClasses["commands.AutoThread"] = commands_AutoThread;
+commands_AutoThread.__name__ = "commands.AutoThread";
+commands_AutoThread.__super__ = systems_CommandBase;
+commands_AutoThread.prototype = $extend(systems_CommandBase.prototype,{
+	news_role_id: null
+	,event_role_id: null
+	,announcement_channel: null
+	,announcement: null
+	,checking: null
+	,news_feed: null
+	,news_feed_channel: null
+	,update: function(_) {
+		var _gthis = this;
+		systems_CommandBase.prototype.update.call(this,_);
+		if(this.announcement == null && !this.checking) {
+			this.checking = true;
+			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
+				_gthis.announcement = channel;
+				_gthis.checking = false;
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/AutoThread.hx", lineNumber : 29, className : "commands.AutoThread", methodName : "update"});
+				$global.console.dir(err);
+			});
+		}
+		if(this.announcement != null && !this.checking) {
+			this.checking = true;
+			this.announcement.threads.fetch(this.news_feed).then(function(succ) {
+				_gthis.news_feed_channel = succ;
+				_gthis.checking = false;
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/AutoThread.hx", lineNumber : 39, className : "commands.AutoThread", methodName : "update"});
+			});
+		}
+		if(this.announcement == null && this.news_feed == null) {
+			return;
+		}
+		var _this = this.users;
+		var _set = _this.entities;
+		var _g_set = _set;
+		var _g_active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_g_active && _g_idx >= 0) {
+			var entity = _g_set.getDense(_g_idx--);
+			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var member = this.tablec254489e95ef23a8f91062a1947780b9.get(entity);
+			if(command == "auto_thread") {
+				this.news_feed_channel.members.add(member.id).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/AutoThread.hx", lineNumber : 49, className : "commands.AutoThread", methodName : "update"});
+				});
+				this.universe.deleteEntity(entity);
+			}
+		}
+	}
+	,run: function(command,interaction) {
+	}
+	,get_name: function() {
+		return "autothread";
+	}
+	,users: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tablec254489e95ef23a8f91062a1947780b9: null
+	,__class__: commands_AutoThread
 });
 var commands_Boop = function(_universe) {
 	systems_CommandBase.call(this,_universe);
@@ -3973,13 +4073,14 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		}
 	}
 	,run: function(command,interaction) {
+		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 22) {
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
-				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 37, className : "commands.Notify", methodName : "run"});
-				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 38, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 38, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 39, className : "commands.Notify", methodName : "run"});
 				interaction.reply("Invalid channel");
 				return;
 			}
@@ -4001,19 +4102,41 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.member.roles.remove(role).then(function(success) {
 						interaction.reply("Unsubscribed to " + channel + " updates");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 56, className : "commands.Notify", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 57, className : "commands.Notify", methodName : "run"});
 						$global.console.dir(err);
 					});
 				} else {
 					interaction.member.roles.add(role).then(function(success) {
+						if(channel == "announcements") {
+							var _ecsTmpEntity = _gthis.universe.createEntity();
+							_gthis.universe.components.set(_ecsTmpEntity,0,"auto_thread");
+							_gthis.universe.components.set(_ecsTmpEntity,4,member);
+							var ecsEntCompFlags = _gthis.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+							var ecsTmpFamily = _gthis.universe.families.get(0);
+							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+								ecsTmpFamily.add(_ecsTmpEntity);
+							}
+							var ecsTmpFamily = _gthis.universe.families.get(2);
+							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+								ecsTmpFamily.add(_ecsTmpEntity);
+							}
+							var ecsTmpFamily = _gthis.universe.families.get(4);
+							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+								ecsTmpFamily.add(_ecsTmpEntity);
+							}
+							var ecsTmpFamily = _gthis.universe.families.get(6);
+							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+								ecsTmpFamily.add(_ecsTmpEntity);
+							}
+						}
 						interaction.reply("Subscribed to " + channel + " updates");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 63, className : "commands.Notify", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 70, className : "commands.Notify", methodName : "run"});
 						$global.console.dir(err);
 					});
 				}
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 68, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 75, className : "commands.Notify", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
@@ -9386,6 +9509,7 @@ var discord_$js_TeamMember = require("discord.js").TeamMember;
 var discord_$js_TextChannel = require("discord.js").TextChannel;
 var discord_$js_ThreadChannel = require("discord.js").ThreadChannel;
 var discord_$js_ThreadManager = require("discord.js").ThreadManager;
+var discord_$js_ThreadMemberManager = require("discord.js").ThreadMemberManager;
 var discord_$js_UserFlags = require("discord.js").UserFlags;
 var discord_$js_UserManager = require("discord.js").UserManager;
 var discord_$js_VoiceBroadcast = require("discord.js").VoiceBroadcast;

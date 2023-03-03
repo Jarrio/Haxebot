@@ -101,6 +101,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						AutoThread,
 						Snippet,
 						PinMessage,
 						Mention,
@@ -167,6 +168,7 @@ class Main {
 		client.on('guildMemberAdd', (member:GuildMember) -> {
 			trace('member ${member.user.tag}');
 			universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
+			universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 		});
 
 		client.on('messageCreate', (message:Message) -> {
@@ -678,4 +680,5 @@ enum abstract CommandForward(String) {
 	var quote_set;
 	var quote_edit;
 	var add_event_role;
+	var auto_thread;
 }

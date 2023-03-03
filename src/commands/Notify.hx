@@ -1,4 +1,5 @@
 package commands;
+import Main.CommandForward;
 import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
@@ -58,6 +59,12 @@ class Notify extends CommandBase {
 						});
 					} else {
 						interaction.member.roles.add(role).then(function(success) {
+							if (channel == 'announcements') {
+								universe.setComponents(
+									universe.createEntity(),
+									CommandForward.auto_thread, member
+								);
+							}
 							interaction.reply('Subscribed to $channel updates');
 						}, function(err) {
 							trace(err);
