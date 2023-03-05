@@ -89,8 +89,10 @@ class Trace extends CommandBase {
 				}
 				new_code += str + '\n';
 			}
-			embed.setDescription('```hx\n' + new_code + '```');
-			embed.description += 'Error \n + $error';
+			if (new_code.length > 3800) {
+				new_code = new_code.substr(0, 3800);
+			}
+			embed.setDescription('```hx\n' + new_code + '``` Error\n $error');
 			return embed;
 		}
 
@@ -101,7 +103,8 @@ class Trace extends CommandBase {
 		switch (command.content) {
 			case Trace(code):
 				if (!this.isSafe(code, interaction)) {
-					interaction.reply("That code is not safe.");
+					interaction.reply("That code is not safe.").then(null, (err) -> trace(err));
+					return;
 				}
 				this.runCode(code, interaction);
 			default:
@@ -148,7 +151,7 @@ class Trace extends CommandBase {
 					if (embed == null) {
 						interaction.reply({content: mention + '```\n${compile_output}```'});
 					} else {
-						embed.description = this.cleanOutput(embed.description, filename, "Main");
+						embed.setDescription(this.cleanOutput(embed.description, filename, "Main"));
 						interaction.reply({embeds: [embed]});
 					}
 

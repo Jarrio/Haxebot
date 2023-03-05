@@ -297,6 +297,9 @@ class Run extends TextCommandBase {
 				}
 				new_code += str + '\n';
 			}
+			if (new_code.length > 3900) {
+				new_code = new_code.substr(0, 3900);
+			}
 			embed.setDescription('```hx\n' + new_code + '``` **Error** \n $error');
 			return embed;
 		}
@@ -387,9 +390,7 @@ class Run extends TextCommandBase {
 						pre_loop = pre_loop.replace(filename, class_entry);
 
 						var embed = this.parseError(compile_output, pre_loop);
-						if (embed.description.length > 4000) {
-							embed.set_description(embed.description.substring(0, 4000));
-						}
+
 						if (embed == null) {
 							message.reply({content: mention + '```\n${compile_output}```'});
 						} else {
