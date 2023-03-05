@@ -387,6 +387,9 @@ class Run extends TextCommandBase {
 						pre_loop = pre_loop.replace(filename, class_entry);
 
 						var embed = this.parseError(compile_output, pre_loop);
+						if (embed.description.length > 4000) {
+							embed.set_description(embed.description.substring(0, 4000));
+						}
 						if (embed == null) {
 							message.reply({content: mention + '```\n${compile_output}```'});
 						} else {
