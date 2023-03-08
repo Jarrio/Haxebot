@@ -168,7 +168,7 @@ class Main {
 		client.on('guildMemberAdd', (member:GuildMember) -> {
 			trace('member ${member.user.tag}');
 			universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
-			universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
+			//universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 		});
 
 		client.on('messageCreate', (message:Message) -> {

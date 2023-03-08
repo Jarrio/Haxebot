@@ -1146,26 +1146,6 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,0,"auto_thread");
-		Main.universe.components.set(_ecsTmpEntity,4,member);
-		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(0);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(4);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(6);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
 	});
 	Main.client.on("messageCreate",function(message) {
 		if(message.author.bot) {
