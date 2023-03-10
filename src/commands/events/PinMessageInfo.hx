@@ -39,7 +39,7 @@ class PinMessageInfo extends System {
 
 			message.delete().then(function(_) {
 				this.messages.remove(message);
-			});
+			}, (err) -> trace(err));
 		}
 	}
 }

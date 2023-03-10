@@ -97,7 +97,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
-						PinMessageInfo,
+						//PinMessageInfo,
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
