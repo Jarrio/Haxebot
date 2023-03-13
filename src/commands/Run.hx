@@ -392,11 +392,12 @@ class Run extends TextCommandBase {
 						var embed = this.parseError(compile_output, pre_loop);
 
 						if (embed == null) {
-							message.reply({content: mention + '```\n${compile_output}```'});
+							message.reply(
+								{allowedMentions: {parse: []}, content: mention + '```\n${compile_output}```'});
 						} else {
 							embed.setDescription(this.cleanOutput(embed.description, filename,
 								class_entry));
-							message.reply({embeds: [embed]});
+							message.reply({allowedMentions: {parse: []}, embeds: [embed]});
 						}
 
 						ls.kill('SIGTERM');
@@ -488,27 +489,31 @@ class Run extends TextCommandBase {
 								iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
 							});
 							if (response.length > 0 && data == 0) {
-								message.reply({embeds: [embed]}).then((succ) -> {
-									trace(
-										'${message.author.tag} at $format_date with file id: ${filename}'
-									);
-									if (message.deletable) {
-										message.delete().then(null, function(err) {
-											trace(err);
-											Browser.console.dir(err);
-										});
-									}
-								}, function(err) {
-									trace(err);
-									Browser.console.dir(err);
-								});
+								message.reply({allowedMentions: {parse: []}, embeds: [embed]})
+									.then((succ) -> {
+										trace(
+											'${message.author.tag} at $format_date with file id: ${filename}'
+										);
+										if (message.deletable) {
+											message.delete().then(null, function(err) {
+												trace(err);
+												Browser.console.dir(err);
+											});
+										}
+									}, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
 								ls.kill();
 								return;
 							}
 						} catch (e ) {
 							var compile_output = this.cleanOutput(e.message, filename,
 								class_entry);
-							message.reply({content: mention + '```\n${compile_output}```'});
+							message.reply(
+								{allowedMentions: {parse: []}, content: mention
+									+ '```\n${compile_output}```'}
+							);
 							trace(e);
 						}
 						return;

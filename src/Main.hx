@@ -114,7 +114,7 @@ class Main {
 						ScamPrevention,
 						Api,
 						Haxelib,
-						//Trace,
+						Trace,
 						React,
 						Notify,
 						Rtfm,
@@ -124,7 +124,7 @@ class Main {
 						Help,
 						Translate,
 						Hi,
-						//Run,
+						Run,
 						Roundup,
 						Showcase
 					]

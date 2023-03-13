@@ -149,10 +149,10 @@ class Trace extends CommandBase {
 					var compile_output = this.cleanOutput(data, filename, "Main");
 					var embed = this.parseError(compile_output, final_code);
 					if (embed == null) {
-						interaction.reply({content: mention + '```\n${compile_output}```'});
+						interaction.reply({allowedMentions: {parse: []},content: mention + '```\n${compile_output}```'});
 					} else {
 						embed.setDescription(this.cleanOutput(embed.description, filename, "Main"));
-						interaction.reply({embeds: [embed]});
+						interaction.reply({allowedMentions: {parse: []}, embeds: [embed]});
 					}
 
 					ls.kill('SIGTERM');
@@ -235,7 +235,7 @@ class Trace extends CommandBase {
 							iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
 						});
 						if (response.length > 0 && data == 0) {
-							interaction.reply({embeds: [embed]}).then((succ) -> {
+							interaction.reply({allowedMentions: {parse: []}, embeds: [embed]}).then((succ) -> {
 								trace(
 									'${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}'
 								);
@@ -248,7 +248,8 @@ class Trace extends CommandBase {
 						}
 					} catch (e ) {
 						var compile_output = this.cleanOutput(e.message, filename, 'Main');
-						interaction.reply({content: mention + '```\n${compile_output}```'});
+						interaction.reply(
+							{allowedMentions: {parse: []}, content: mention + '```\n${compile_output}```'});
 						trace(e);
 					}
 					return;
