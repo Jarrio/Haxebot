@@ -10,6 +10,7 @@ import components.Command;
 import js.node.ChildProcess.spawn;
 import systems.CommandBase;
 import js.Browser;
+
 class Trace extends CommandBase {
 	var timeout = 5000;
 	var haxe_version:String = null;
@@ -149,10 +150,16 @@ class Trace extends CommandBase {
 					var compile_output = this.cleanOutput(data, filename, "Main");
 					var embed = this.parseError(compile_output, final_code);
 					if (embed == null) {
-						interaction.reply({allowedMentions: {parse: []},content: mention + '```\n${compile_output}```'});
+						interaction.reply(
+							{allowedMentions: {parse: []}, content: mention
+								+ '```\n${compile_output}```'}
+						)
+							.then(null, (err) -> trace(err));
 					} else {
-						embed.setDescription(this.cleanOutput(embed.description, filename, "Main"));
-						interaction.reply({allowedMentions: {parse: []}, embeds: [embed]});
+						embed.setDescription(this.cleanOutput(embed.description, filename,
+							"Main"));
+						interaction.reply({allowedMentions: {parse: []}, embeds: [embed]})
+							.then(null, (err) -> trace(err));
 					}
 
 					ls.kill('SIGTERM');
@@ -235,21 +242,24 @@ class Trace extends CommandBase {
 							iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
 						});
 						if (response.length > 0 && data == 0) {
-							interaction.reply({allowedMentions: {parse: []}, embeds: [embed]}).then((succ) -> {
-								trace(
-									'${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}'
-								);
-							}, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
+							interaction.reply({allowedMentions: {parse: []}, embeds: [embed]})
+								.then((succ) -> {
+									trace(
+										'${interaction.user.tag}(${interaction.user.id}) at ${format_date} with file id: ${filename}'
+									);
+								}, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
 							ls.kill();
 							return;
 						}
 					} catch (e ) {
 						var compile_output = this.cleanOutput(e.message, filename, 'Main');
-						interaction.reply(
-							{allowedMentions: {parse: []}, content: mention + '```\n${compile_output}```'});
+						interaction.reply({
+							allowedMentions: {parse: []},
+							content: mention + '```\n${compile_output}```'
+						}).then(null, (err) -> trace(err));
 						trace(e);
 					}
 					return;
