@@ -8099,15 +8099,19 @@ commands_TextMention.prototype = $extend(systems_TextCommandBase.prototype,{
 				thumb = message.author.avatarURL();
 			}
 			var embed = new discord_$js_MessageEmbed();
+			if(content == null || content.length < 1) {
+				haxe_Log.trace(message.author.tag,{ fileName : "src/commands/TextMention.hx", lineNumber : 92, className : "commands.TextMention", methodName : "run"});
+				return;
+			}
 			embed.setDescription(content);
 			embed.setTitle("*" + message.author.username + "*");
 			embed.setThumbnail(thumb);
 			message.reply({ content : roles_found, embeds : [embed], attachments : attachments, allowedMentions : { roles : user.roles}}).then(function(_) {
 				message.delete().then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 100, className : "commands.TextMention", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 104, className : "commands.TextMention", methodName : "run"});
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 102, className : "commands.TextMention", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/TextMention.hx", lineNumber : 106, className : "commands.TextMention", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}

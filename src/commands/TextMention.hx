@@ -88,6 +88,10 @@ class TextMention extends TextCommandBase {
 				thumb = message.author.avatarURL();
 			}
 			var embed = new MessageEmbed();
+			if (content == null || content.length < 1) {
+				trace(message.author.tag);
+				return;
+			}
 			embed.setDescription(content);
 			embed.setTitle('*${message.author.username}*');
 			embed.setThumbnail(thumb);
