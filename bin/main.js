@@ -3415,6 +3415,9 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			});
 			js_node_Fs.writeFileSync("./commands/api/cache/0.json",JSON.stringify(_gthis.cache));
 			_gthis.save_time = new Date().getTime();
+			if(ac.length > 24) {
+				ac = ac.slice(0,24);
+			}
 			interaction.respond(ac);
 		};
 		http.request();
@@ -3582,7 +3585,7 @@ commands_Api.prototype = $extend(systems_CommandBase.prototype,{
 			}
 		}
 		interaction.respond(results).then(null,function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/Api.hx", lineNumber : 498, className : "commands.Api", methodName : "search"});
+			haxe_Log.trace(err,{ fileName : "src/commands/Api.hx", lineNumber : 501, className : "commands.Api", methodName : "search"});
 			$global.console.dir(err);
 		});
 	}

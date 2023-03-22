@@ -327,6 +327,9 @@ class Api extends CommandBase {
 			}
 			ac.sort((a, b) -> a.name.length - b.name.length);
 			this.saveCache();
+			if (ac.length > 24) {
+				ac = ac.slice(0, 24);
+			}
 			interaction.respond(ac);
 		}
 		http.request();
