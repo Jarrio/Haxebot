@@ -91,7 +91,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Quote, Snippet, Run, Api, TextMention, Notify],
+					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify],
 				},
 				{
 					name: 'main',
@@ -196,7 +196,8 @@ class Main {
 			}
 
 			if (channel.type == GUILD_TEXT) {
-				if (channel.id == '162664383082790912') {
+				var showcase_channel = #if block "1100053767493255182" #else "162664383082790912" #end;
+				if (channel.id == showcase_channel && !message.system) {
 					universe.setComponents(universe.createEntity(),
 						CommandForward.showcase_message, message);
 				}

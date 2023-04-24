@@ -16,7 +16,7 @@ import js.Browser;
 class Showcase extends CommandBase {
 	var channel:TextChannel;
 	#if block
-	final channel_id = '597067735771381771';
+	final channel_id = '1100053767493255182';
 	#else
 	final channel_id = '162664383082790912';
 	#end
