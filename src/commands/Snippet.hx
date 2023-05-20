@@ -11,6 +11,7 @@ import components.Command;
 import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
 import js.Browser;
+
 class Snippet extends CommandDbBase {
 	var sent:Array<TSnippet> = [];
 	var tags:Array<{name:String, value:String}> = [];
@@ -88,6 +89,7 @@ class Snippet extends CommandDbBase {
 			if (diff < 30000) {
 				continue;
 			}
+			item.interacted_at = now;
 			var embed = this.formatResultOutput(item, 0);
 			item.message.edit({embeds: [embed], components: []}).then(function(_) {
 				this.cache.remove(key);
@@ -412,10 +414,16 @@ class Snippet extends CommandDbBase {
 		}
 
 		var embed = formatResultOutput(state, 0);
-		interaction.reply({embeds: [embed], components: arr, fetchReply: true})
+		var eph = false;
+		if (embed.description == 'No results found') {
+			eph = true;
+		}
+		interaction.reply({embeds: [embed], components: arr, ephemeral: eph, fetchReply: true})
 			.then(function(message) {
-				state.message = message;
-				this.cache.set(interaction.user.id, state);
+				if (!eph || max == 1) {
+					state.message = message;
+					this.cache.set(interaction.user.id, state);
+				}
 			}, function(err) {
 				trace(err);
 				Browser.console.dir(err);
@@ -467,10 +475,13 @@ class Snippet extends CommandDbBase {
 
 		embed.setColor(0xEA8220);
 		embed.setDescription(desc);
-		embed.setFooter({
-			iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1',
-			text: 'Page ${state.page + 1} / $max'
-		});
+		if (results.length > 0) {
+			embed.setFooter({
+				iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1',
+				text: 'Page ${state.page + 1} / ${max}'
+			});
+		}
+		
 		return embed;
 	}
 

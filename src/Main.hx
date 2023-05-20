@@ -91,13 +91,13 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify],
+					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code],
 				},
 				{
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
-						//PinMessageInfo,
+						// PinMessageInfo,
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
@@ -168,7 +168,7 @@ class Main {
 		client.on('guildMemberAdd', (member:GuildMember) -> {
 			trace('member ${member.user.tag}');
 			universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
-			//universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
+			// universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 		});
 
 		client.on('messageCreate', (message:Message) -> {
@@ -234,7 +234,7 @@ class Main {
 				thread);
 		});
 
-		client.on('interactionCreate', (interaction:BaseCommandInteraction) -> {
+		client.on('interactionCreate', function(interaction:BaseCommandInteraction) {
 			if (interaction.isButton()) {
 				if (interaction.customId == 'showcase_agree') {
 					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree,
@@ -258,15 +258,20 @@ class Main {
 			}
 
 			if (interaction.isModalSubmit()) {
-				switch (interaction.customId) {
-					case 'quote_set':
-						universe.setComponents(universe.createEntity(), CommandForward.quote_set,
-							interaction);
-					case 'quote_edit':
+				trace('here');
+				trace(interaction.customId);
+				switch ((interaction.customId:CommandForward)) {
+					case quote_edit:
 						universe.setComponents(universe.createEntity(), CommandForward.quote_edit,
 							interaction);
+					case quote_set:
+						universe.setComponents(universe.createEntity(), CommandForward.quote_set,
+							interaction);
+					case code_paste:
+						trace('here');
+						universe.setComponents(universe.createEntity(), CommandForward.code_paste,
+							interaction);
 					default:
-						trace(interaction.customId + ' - unhandled model');
 				}
 				return;
 			}
@@ -274,7 +279,7 @@ class Main {
 			if (interaction.isMessageContextMenuCommand()) {
 				var type:ContextMenuTypes = none;
 				switch (interaction.commandName) {
-					case 'Pin Message': 
+					case 'Pin Message':
 						type = ContextMenuTypes.pin_message;
 					default:
 				}
@@ -666,7 +671,7 @@ enum abstract CommandType(String) {
 	var mention;
 }
 
-enum abstract CommandForward(String) {
+enum abstract CommandForward(String) from String {
 	var snippet_left;
 	var snippet_right;
 	var thread_pin_message;
@@ -680,6 +685,7 @@ enum abstract CommandForward(String) {
 	var showcase_message;
 	var quote_set;
 	var quote_edit;
+	var code_paste;
 	var add_event_role;
 	var auto_thread;
 }

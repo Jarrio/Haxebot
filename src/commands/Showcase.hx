@@ -149,7 +149,11 @@ class Showcase extends CommandBase {
 				interaction.reply({content: "Keep on lurking :)", ephemeral: true});
 			}
 
-			this.universe.deleteEntity(entity);
+			switch(command) {
+				case showcase_agree | showcase_disagree:
+					this.universe.deleteEntity(entity);
+				default:
+			}
 		});
 	}
 

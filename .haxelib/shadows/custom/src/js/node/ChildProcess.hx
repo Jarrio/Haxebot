@@ -138,7 +138,7 @@ import haxe.DynamicAccess;
  /**
 	 A shorthand for the `stdio` argument in `ChildProcessSpawnOptions`
  **/
- @:enum abstract ChildProcessSpawnOptionsStdioSimple(String) from String to String {
+ enum abstract ChildProcessSpawnOptionsStdioSimple(String) from String to String {
 	 /**
 		 Equivalent to ['ignore', 'ignore', 'ignore']
 	 **/
@@ -158,7 +158,7 @@ import haxe.DynamicAccess;
  /**
 	 Enumeration of possible `stdio` behaviours.
  **/
- @:enum abstract ChildProcessSpawnOptionsStdioBehaviour(String) from String to String {
+ enum abstract ChildProcessSpawnOptionsStdioBehaviour(String) from String to String {
 	 /**
 		 Create a pipe between the child process and the parent process.
 		 The parent end of the pipe is exposed to the parent as a property on the child_process object as ChildProcess.stdio[fd].
