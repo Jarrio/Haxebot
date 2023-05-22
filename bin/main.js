@@ -656,11 +656,11 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(8);
-	var this2 = new Array(8);
+	var this1 = new Array(9);
+	var this2 = new Array(9);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
-	var this1 = new Array(26);
-	var this2 = new Array(26);
+	var this1 = new Array(27);
+	var this2 = new Array(27);
 	vec[1] = new ecs_Phase(true,"main",this1,this2);
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
@@ -985,6 +985,9 @@ Main.start = function() {
 	var s = new commands_Code(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
+	var s = new commands_CodeLineNumbers(u);
+	phase.systems[8] = s;
+	phase.enabledSystems[8] = true;
 	var phase = phases[1];
 	var s = new commands_AutoThread(u);
 	phase.systems[0] = s;
@@ -1090,6 +1093,10 @@ Main.start = function() {
 	phase.systems[25] = s;
 	phase.enabledSystems[25] = true;
 	s.onEnabled();
+	var s = new commands_CodeLineNumbers(u);
+	phase.systems[26] = s;
+	phase.enabledSystems[26] = true;
+	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
 	while(_g < _g1) {
@@ -1102,7 +1109,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 147, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 148, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1113,15 +1120,15 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 156, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 157, className : "Main", methodName : "start"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 164, className : "Main", methodName : "start"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 169, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 170, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,0,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,4,member);
@@ -1312,8 +1319,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 228, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 229, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 229, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 230, className : "Main", methodName : "start"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1478,11 +1485,11 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isModalSubmit()) {
-			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 261, className : "Main", methodName : "start"});
-			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 262, className : "Main", methodName : "start"});
+			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 262, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 263, className : "Main", methodName : "start"});
 			switch(interaction.customId) {
 			case "code_paste":
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 271, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 272, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,0,"code_paste");
 				Main.universe.components.set(_ecsTmpEntity,3,interaction);
@@ -1589,9 +1596,16 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isMessageContextMenuCommand()) {
-			var type = "none";
-			if(interaction.commandName == "Pin Message") {
-				type = "Pin Message";
+			var type;
+			switch(interaction.commandName) {
+			case "Line Numbers":
+				type = "CodeLineNumbers";
+				break;
+			case "Pin Message":
+				type = "PinMessage";
+				break;
+			default:
+				type = "none";
 			}
 			if(type != "none") {
 				var _ecsTmpEntity = Main.universe.createEntity();
@@ -1671,7 +1685,7 @@ Main.createCommand = function(interaction) {
 			} else {
 				id = enum_id;
 			}
-			command.content = command.content = Type.createEnum(components_CommandOptions,id);
+			command.content = Type.createEnum(components_CommandOptions,id);
 		} else {
 			var subcommand = null;
 			var params = [];
@@ -1773,7 +1787,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 425, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 428, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1781,25 +1795,25 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 436, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 439, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 446, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 449, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.getDoc(doc).then(function(resp) {
 			Main.state = resp.data().state;
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 455, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 458, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	},function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 459, className : "Main", methodName : "main"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 462, className : "Main", methodName : "main"});
 		$global.console.dir(err);
 	});
 	Main.start();
@@ -1807,7 +1821,7 @@ Main.main = function() {
 Main.updateState = function() {
 	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 	firebase_web_firestore_Firestore.updateDoc(doc,"state",Main.state).then(null,function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 470, className : "Main", methodName : "updateState"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 473, className : "Main", methodName : "updateState"});
 		$global.console.dir(err);
 	});
 };
@@ -3861,7 +3875,7 @@ commands_Code.prototype = $extend(systems_CommandBase.prototype,{
 				var content = "**__Code__**\n```hx\n" + new_code + "\n```\n**__Problem__**\n" + problem;
 				embed.setDescription(content);
 				interaction.reply({ embeds : [embed]}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Code.hx", lineNumber : 40, className : "commands.Code", methodName : "update"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Code.hx", lineNumber : 39, className : "commands.Code", methodName : "update"});
 				});
 				this.universe.deleteEntity(entity);
 			}
@@ -3922,6 +3936,180 @@ commands_Code.prototype = $extend(systems_CommandBase.prototype,{
 	,something_else: null
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,__class__: commands_Code
+});
+var commands_CodeLineNumbers = function(_universe) {
+	systems_CommandBase.call(this,_universe);
+	this.options = this.universe.families.get(7);
+	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(8);
+};
+$hxClasses["commands.CodeLineNumbers"] = commands_CodeLineNumbers;
+commands_CodeLineNumbers.__name__ = "commands.CodeLineNumbers";
+commands_CodeLineNumbers.__super__ = systems_CommandBase;
+commands_CodeLineNumbers.prototype = $extend(systems_CommandBase.prototype,{
+	update: function(_) {
+		var _this = this.options;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
+			var route = this.tablef1c30c373f6abc39648a24020b4b82b2.get(entity);
+			if(route == "CodeLineNumbers") {
+				var message = [interaction.targetMessage];
+				if(message[0] != null && message[0].content.length > 0) {
+					var replace = this.parseString(message[0].content);
+					if(replace != null) {
+						interaction.reply({ content : replace}).then((function(message) {
+							return function(_) {
+								message[0].delete().then(null,(function() {
+									return function(err) {
+										haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 20, className : "commands.CodeLineNumbers", methodName : "update"});
+									};
+								})());
+							};
+						})(message),(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 21, className : "commands.CodeLineNumbers", methodName : "update"});
+							};
+						})());
+					} else {
+						interaction.reply({ content : "No compatible code blocks were found. Only standard block or hx/haxe are supported.", ephemeral : true}).then(null,(function() {
+							return function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 27, className : "commands.CodeLineNumbers", methodName : "update"});
+							};
+						})());
+					}
+				}
+				this.universe.deleteEntity(entity);
+			}
+		}
+	}
+	,parseString: function(content) {
+		var matched = [];
+		var index = 0;
+		var start = -1;
+		var blocks = ["```hx\n","```haxe\n","```\n"];
+		var selected = null;
+		var _g = 0;
+		while(_g < blocks.length) {
+			var opt = blocks[_g];
+			++_g;
+			if(content.indexOf(opt) != -1) {
+				selected = opt;
+				break;
+			}
+		}
+		if(selected == null) {
+			haxe_Log.trace("no compatible code block",{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 51, className : "commands.CodeLineNumbers", methodName : "parseString"});
+			return null;
+		}
+		while(index != -1) {
+			var pos = start;
+			if(pos > -1) {
+				pos += selected.length;
+			} else {
+				pos = 0;
+			}
+			index = content.indexOf(selected,pos);
+			start = index;
+			if(index == -1) {
+				break;
+			}
+			var cursor = start - 1;
+			while(true) {
+				var char = content.charAt(cursor);
+				if(char == "\n") {
+					break;
+				}
+				++cursor;
+			}
+			matched.push({ start : start, end : start + selected.length});
+			if(selected != "```\n") {
+				var end_tag = content.indexOf("```",index + selected.length);
+				matched.push({ start : end_tag, end : end_tag + selected.length});
+			}
+		}
+		var replace = content;
+		var _g1_current = 0;
+		while(_g1_current < matched.length) {
+			var _g2_value = matched[_g1_current];
+			var _g2_key = _g1_current++;
+			if(_g2_key % 2 == 0) {
+				continue;
+			}
+			var last = matched[_g2_key - 1];
+			var ogcode = content.substring(last.end,_g2_value.start);
+			var lines = this.addLineNumbers(ogcode);
+			replace = StringTools.replace(replace,ogcode,lines);
+		}
+		return replace;
+	}
+	,addLineNumbers: function(code) {
+		var new_code = "\n";
+		code = StringTools.rtrim(code);
+		var split = code.split("\n");
+		var _g_current = 0;
+		while(_g_current < split.length) {
+			var _g1_value = split[_g_current];
+			var _g1_key = _g_current++;
+			var new_line = false;
+			if(_g1_key + 1 < split.length) {
+				new_line = true;
+			}
+			new_code += "" + (_g1_key + 1) + ": " + _g1_value;
+			if(new_line) {
+				new_code += "\n";
+			}
+		}
+		return new_code;
+	}
+	,cleanSpace: function(code) {
+		var shallowest = 500;
+		var largest = 0;
+		code = StringTools.replace(code,"`","\\`");
+		var _g = 0;
+		var _g1 = code.split("\n");
+		while(_g < _g1.length) {
+			var line = _g1[_g];
+			++_g;
+			var depth = 0;
+			var _g2 = 0;
+			var _g3 = line.length;
+			while(_g2 < _g3) {
+				var i = _g2++;
+				var char = line.charAt(i);
+				if(char == " " || char == "\t") {
+					continue;
+				}
+				depth = i;
+				break;
+			}
+			if(depth < shallowest && depth != 0) {
+				shallowest = depth;
+			}
+			if(depth > largest) {
+				largest = depth;
+			}
+		}
+		var new_code = "";
+		var _g = 0;
+		var _g1 = code.split("\n");
+		while(_g < _g1.length) {
+			var line = _g1[_g];
+			++_g;
+			new_code += line.substring(shallowest) + "\n";
+		}
+		return new_code;
+	}
+	,run: function(command,interaction) {
+	}
+	,get_name: function() {
+		return "codelinenumbers";
+	}
+	,options: null
+	,tablef1c30c373f6abc39648a24020b4b82b2: null
+	,__class__: commands_CodeLineNumbers
 });
 var commands_Haxelib = function(_universe) {
 	this.message_history = new haxe_ds_StringMap();
@@ -4334,7 +4522,7 @@ commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
 			var entity = _set.getDense(_g_idx--);
 			var interaction = [this.table5d38588a6ddd880f90fc8234bccb893f.get(entity)];
 			var route = this.tablef1c30c373f6abc39648a24020b4b82b2.get(entity);
-			if(route == "Pin Message") {
+			if(route == "PinMessage") {
 				var author = interaction[0].user.id;
 				if(interaction[0].channel.isThread()) {
 					try {
@@ -9347,9 +9535,10 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Showcase: {_hx_name:"Showcase",_hx_index:31,__enum__:"components.CommandOptions",toString:$estr}
 	,PinMessage: {_hx_name:"PinMessage",_hx_index:32,__enum__:"components.CommandOptions",toString:$estr}
 	,Code: {_hx_name:"Code",_hx_index:33,__enum__:"components.CommandOptions",toString:$estr}
+	,CodeLineNumbers: {_hx_name:"CodeLineNumbers",_hx_index:34,__enum__:"components.CommandOptions",toString:$estr}
 };
-components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetTags,components_CommandOptions.SnippetList,components_CommandOptions.SnippetEdit,components_CommandOptions.SnippetDelete,components_CommandOptions.SnippetSearch,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.QuoteList,components_CommandOptions.QuoteGet,components_CommandOptions.QuoteDelete,components_CommandOptions.QuoteEdit,components_CommandOptions.QuoteCreate,components_CommandOptions.Mention,components_CommandOptions.Showcase,components_CommandOptions.PinMessage,components_CommandOptions.Code];
-components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetTags,components_CommandOptions.Showcase,components_CommandOptions.PinMessage,components_CommandOptions.Code];
+components_CommandOptions.__constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetTags,components_CommandOptions.SnippetList,components_CommandOptions.SnippetEdit,components_CommandOptions.SnippetDelete,components_CommandOptions.SnippetSearch,components_CommandOptions.SnippetAdd,components_CommandOptions.Reminder,components_CommandOptions.Social,components_CommandOptions.Ban,components_CommandOptions.React,components_CommandOptions.Helppls,components_CommandOptions.Run,components_CommandOptions.Trace,components_CommandOptions.Boop,components_CommandOptions.Poll,components_CommandOptions.Roundup,components_CommandOptions.Rtfm,components_CommandOptions.Translate,components_CommandOptions.Helpdescription,components_CommandOptions.Api,components_CommandOptions.Notify,components_CommandOptions.Help,components_CommandOptions.Haxelib,components_CommandOptions.QuoteList,components_CommandOptions.QuoteGet,components_CommandOptions.QuoteDelete,components_CommandOptions.QuoteEdit,components_CommandOptions.QuoteCreate,components_CommandOptions.Mention,components_CommandOptions.Showcase,components_CommandOptions.PinMessage,components_CommandOptions.Code,components_CommandOptions.CodeLineNumbers];
+components_CommandOptions.__empty_constructs__ = [components_CommandOptions.Hi,components_CommandOptions.Archive,components_CommandOptions.SnippetTags,components_CommandOptions.Showcase,components_CommandOptions.PinMessage,components_CommandOptions.Code,components_CommandOptions.CodeLineNumbers];
 var components_ShowcaseModalSubmit = function(title,description) {
 	this.title_or_link = title;
 	this.description = description;

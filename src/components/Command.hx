@@ -34,7 +34,6 @@ enum CommandOptions {
 	Helpdescription(description:String);
 	Api(content:String, field:String);
 	Notify(channel:String);
-	Code(code:String);
 	Help(category:String);
 	Haxelib(command:String);
 	QuoteList(user:User);
@@ -45,4 +44,6 @@ enum CommandOptions {
 	Mention(user:User, role:Role);
 	Showcase;
 	PinMessage;
+	Code;
+	CodeLineNumbers;
 }

@@ -91,7 +91,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code],
+					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code, CodeLineNumbers],
 				},
 				{
 					name: 'main',
@@ -126,7 +126,8 @@ class Main {
 						Hi,
 						Run,
 						Roundup,
-						Showcase
+						Showcase,
+						CodeLineNumbers
 					]
 				}
 			]
@@ -277,11 +278,13 @@ class Main {
 			}
 
 			if (interaction.isMessageContextMenuCommand()) {
-				var type:ContextMenuTypes = none;
-				switch (interaction.commandName) {
+				var type:ContextMenuTypes = switch(interaction.commandName) {
 					case 'Pin Message':
-						type = ContextMenuTypes.pin_message;
-					default:
+						PinMessage;
+					case 'Line Numbers': 
+						CodeLineNumbers;
+					default: 
+						none;
 				}
 
 				if (type != none) {
@@ -334,7 +337,7 @@ class Main {
 				} else {
 					id = enum_id;
 				}
-				command.content = command.content = Type.createEnum(CommandOptions, id);
+				command.content = Type.createEnum(CommandOptions, id);
 			} else {
 				var subcommand = null;
 				var params = new Array<Dynamic>();
@@ -480,10 +483,11 @@ class Main {
 
 		var commands = new Array<AnySlashCommand>();
 		for (command in command_file) {
+			#if !block
 			if (command.is_public != null && !command.is_public) {
 				continue;
 			}
-
+			#end
 			var permission = CommandPermission.fromString(command.permissions);
 			if (permission == null) {
 				permission = everyone;

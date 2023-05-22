@@ -116,6 +116,12 @@
 		"description": "Say hi to the bot"
 	},
 	{
+		"name": "code",
+		"permissions": "admin",
+		"is_public": false,
+		"description": "A way to format and present your code pastes easier for others to understand and help"
+	},
+	{
 		"name": "reminder",
 		"description": "Setup some reminders for yourself",
 		"permissions": "everyone",
@@ -637,6 +643,14 @@
 		"type": "menu",
 		"menu_type": 3,
 		"id": "PinMessage"
+	},
+	{
+		"name": "Line Numbers",
+		"is_public": true,
+		"permissions": "everyone",
+		"type": "menu",
+		"menu_type": 3,
+		"id": "CodeLineNumbers"
 	},
 	{
 		"name": "snippet",

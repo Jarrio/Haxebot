@@ -13,7 +13,7 @@ class PinMessage extends CommandDbBase {
 	override function update(_) {
 		iterate(options, entity -> {
 			switch (route) {
-				case pin_message:
+				case PinMessage:
 					var author = interaction.user.id;
 					if (interaction.channel.isThread()) {
 						try {
