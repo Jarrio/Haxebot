@@ -3957,6 +3957,13 @@ commands_CodeLineNumbers.prototype = $extend(systems_CommandBase.prototype,{
 			var route = this.tablef1c30c373f6abc39648a24020b4b82b2.get(entity);
 			if(route == "CodeLineNumbers") {
 				var message = [interaction.targetMessage];
+				if(message[0].author.id != interaction.member.id) {
+					interaction.reply({ content : "Hey, that isn't your message! :angry:", ephemeral : true}).then(null,(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 20, className : "commands.CodeLineNumbers", methodName : "update"});
+						};
+					})());
+				}
 				if(message[0] != null && message[0].content.length > 0) {
 					var replace = this.parseString(message[0].content);
 					if(replace != null) {
@@ -3964,19 +3971,19 @@ commands_CodeLineNumbers.prototype = $extend(systems_CommandBase.prototype,{
 							return function(_) {
 								message[0].delete().then(null,(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 20, className : "commands.CodeLineNumbers", methodName : "update"});
+										haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 26, className : "commands.CodeLineNumbers", methodName : "update"});
 									};
 								})());
 							};
 						})(message),(function() {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 21, className : "commands.CodeLineNumbers", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 27, className : "commands.CodeLineNumbers", methodName : "update"});
 							};
 						})());
 					} else {
 						interaction.reply({ content : "No compatible code blocks were found. Only standard block or hx/haxe are supported.", ephemeral : true}).then(null,(function() {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 27, className : "commands.CodeLineNumbers", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 33, className : "commands.CodeLineNumbers", methodName : "update"});
 							};
 						})());
 					}
@@ -4001,7 +4008,7 @@ commands_CodeLineNumbers.prototype = $extend(systems_CommandBase.prototype,{
 			}
 		}
 		if(selected == null) {
-			haxe_Log.trace("no compatible code block",{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 51, className : "commands.CodeLineNumbers", methodName : "parseString"});
+			haxe_Log.trace("no compatible code block",{ fileName : "src/commands/CodeLineNumbers.hx", lineNumber : 57, className : "commands.CodeLineNumbers", methodName : "parseString"});
 			return null;
 		}
 		while(index != -1) {

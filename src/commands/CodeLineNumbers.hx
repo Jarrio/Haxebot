@@ -13,6 +13,12 @@ class CodeLineNumbers extends CommandBase {
 			switch (route) {
 				case CodeLineNumbers:
 					var message = interaction.targetMessage;
+					if (message.author.id != interaction.member.id) {
+						interaction.reply({
+							content: "Hey, that isn't your message! :angry:",
+							ephemeral: true
+						}).then(null, (err) -> trace(err));
+					}
 					if (message != null && message.content.length > 0) {
 						var replace = parseString(message.content);
 						if (replace != null) {
