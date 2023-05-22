@@ -8,33 +8,24 @@ import Main.CommandForward;
 import systems.CommandBase;
 
 class React extends CommandBase {
-	@:fastFamily var messages:{forward:CommandForward, message:Message};
 	private var set_permission:Bool = false;
 
-	override function update(_:Float) {
-		super.update(_);
-		iterate(messages, entity -> {
-			if (forward != react || message.author.id != '151104106973495296') {
-				continue;
-			}
-
-			var split = message.content.split(" ");
-			var channel = split[1].replace('<#', '').replace('>', '');
-
-			message.client.channels.fetch(channel).then(channel -> {
-				channel.messages.fetch(split[2]).then(function(react_message) {
-					react_message.asType0.react(split[3]);
-					message.delete().then(null, (err) -> trace(err));
+	function run(command:Command, interaction:BaseCommandInteraction) {
+		switch (command.content) {
+			case React(message_id, emoji):
+				interaction.channel.messages.fetch(message_id).then(function(react_message) {
+					react_message.asType0.react(emoji).then(function(_) {
+						interaction.reply({content: '*reacted*', ephemeral: true}).then(null, (err) -> trace(err));
+					}, (err) -> {
+						interaction.reply({ephemeral: true, content: '*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*'});
+						trace(err);
+					});
 				});
-			});
-
-			this.universe.deleteEntity(entity);
-		});
+			default:
+		}
 	}
 
 	function get_name():String {
 		return 'react';
 	}
-
-	function run(command:Command, interaction:BaseCommandInteraction) {}
 }

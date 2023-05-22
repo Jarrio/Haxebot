@@ -91,7 +91,7 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code, CodeLineNumbers],
+					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code, CodeLineNumbers, React],
 				},
 				{
 					name: 'main',

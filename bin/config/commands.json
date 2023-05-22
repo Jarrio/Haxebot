@@ -491,6 +491,25 @@
 		]
 	},
 	{
+		"name": "react",
+		"permissions": "supermod",
+		"description": "[Mod] React to a message as haxebot x)",
+		"params": [
+			{
+				"name": "message_id",
+				"type": "string",
+				"description": "message id, found by right clicking on a message",
+				"required": true
+			},
+			{
+				"name": "emoji",
+				"type": "string",
+				"description": "The emoji to react with, must be available to the server",
+				"required": true
+			}
+		]
+	},
+	{
 		"name": "trace",
 		"description": "Convenient trace function that runs through haxe",
 		"params": [

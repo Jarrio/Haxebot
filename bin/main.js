@@ -656,8 +656,8 @@ Main.token = function(rest) {
 Main.start = function() {
 	var this1 = new Array(2);
 	var vec = this1;
-	var this1 = new Array(9);
-	var this2 = new Array(9);
+	var this1 = new Array(10);
+	var this2 = new Array(10);
 	vec[0] = new ecs_Phase(false,"testing",this1,this2);
 	var this1 = new Array(27);
 	var this2 = new Array(27);
@@ -988,6 +988,9 @@ Main.start = function() {
 	var s = new commands_CodeLineNumbers(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
+	var s = new commands_React(u);
+	phase.systems[9] = s;
+	phase.enabledSystems[9] = true;
 	var phase = phases[1];
 	var s = new commands_AutoThread(u);
 	phase.systems[0] = s;
@@ -6218,55 +6221,31 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 var commands_React = function(_universe) {
 	this.set_permission = false;
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(5);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(0);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(6);
 };
 $hxClasses["commands.React"] = commands_React;
 commands_React.__name__ = "commands.React";
 commands_React.__super__ = systems_CommandBase;
 commands_React.prototype = $extend(systems_CommandBase.prototype,{
 	set_permission: null
-	,update: function(_) {
-		systems_CommandBase.prototype.update.call(this,_);
-		var _this = this.messages;
-		var _set = _this.entities;
-		var _active = _this.isActive();
-		var _g_idx = _set.size() - 1;
-		while(_active && _g_idx >= 0) {
-			var entity = _set.getDense(_g_idx--);
-			var forward = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
-			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
-			if(forward != "react" || message[0].author.id != "151104106973495296") {
-				continue;
-			}
-			var split = [message[0].content.split(" ")];
-			var channel = StringTools.replace(StringTools.replace(split[0][1],"<#",""),">","");
-			message[0].client.channels.fetch(channel).then((function(split,message) {
-				return function(channel) {
-					return channel.messages.fetch(split[0][2]).then((function(split,message) {
-						return function(react_message) {
-							react_message.react(split[0][3]);
-							message[0].delete().then(null,(function() {
-								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 27, className : "commands.React", methodName : "update"});
-								};
-							})());
-						};
-					})(split,message));
-				};
-			})(split,message));
-			this.universe.deleteEntity(entity);
+	,run: function(command,interaction) {
+		var _g = command.content;
+		if(_g._hx_index == 11) {
+			var emoji = _g.emoji;
+			interaction.channel.messages.fetch(_g.message_id).then(function(react_message) {
+				react_message.react(emoji).then(function(_) {
+					interaction.reply({ content : "*reacted*", ephemeral : true}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 18, className : "commands.React", methodName : "run"});
+					});
+				},function(err) {
+					interaction.reply({ ephemeral : true, content : "*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*"});
+					haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 21, className : "commands.React", methodName : "run"});
+				});
+			});
 		}
 	}
 	,get_name: function() {
 		return "react";
 	}
-	,run: function(command,interaction) {
-	}
-	,messages: null
-	,table87a8f92f715c03d0822a55d9b93a210d: null
-	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
 	,__class__: commands_React
 });
 var commands_Reminder = function(_universe) {
@@ -9519,7 +9498,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,Reminder: ($_=function(content,when,personal,thread_reply) { return {_hx_index:8,content:content,when:when,personal:personal,thread_reply:thread_reply,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Reminder",$_.__params__ = ["content","when","personal","thread_reply"],$_)
 	,Social: ($_=function(tag,user) { return {_hx_index:9,tag:tag,user:user,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Social",$_.__params__ = ["tag","user"],$_)
 	,Ban: ($_=function(user,reason,delete_messages) { return {_hx_index:10,user:user,reason:reason,delete_messages:delete_messages,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Ban",$_.__params__ = ["user","reason","delete_messages"],$_)
-	,React: ($_=function(emoji,message_id) { return {_hx_index:11,emoji:emoji,message_id:message_id,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["emoji","message_id"],$_)
+	,React: ($_=function(message_id,emoji) { return {_hx_index:11,message_id:message_id,emoji:emoji,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="React",$_.__params__ = ["message_id","emoji"],$_)
 	,Helppls: ($_=function(topic) { return {_hx_index:12,topic:topic,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Helppls",$_.__params__ = ["topic"],$_)
 	,Run: ($_=function(code) { return {_hx_index:13,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Run",$_.__params__ = ["code"],$_)
 	,Trace: ($_=function(code) { return {_hx_index:14,code:code,__enum__:"components.CommandOptions",toString:$estr}; },$_._hx_name="Trace",$_.__params__ = ["code"],$_)
