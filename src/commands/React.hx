@@ -8,8 +8,6 @@ import Main.CommandForward;
 import systems.CommandBase;
 
 class React extends CommandBase {
-	private var set_permission:Bool = false;
-
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case React(message_id, emoji):

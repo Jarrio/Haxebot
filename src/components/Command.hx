@@ -21,6 +21,7 @@ enum CommandOptions {
 	Reminder(content:String, when:String, personal:Null<Bool>, thread_reply:Null<Bool>);
 	Social(tag:Null<String>, user:Null<String>);
 	Ban(user:User, reason:String, delete_messages:String);
+	Say(message:String, message_id:Null<String>);
 	React(message_id:String, emoji:String);
 	Helppls(topic:String);
 	Run(code:String);

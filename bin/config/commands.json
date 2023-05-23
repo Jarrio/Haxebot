@@ -491,6 +491,25 @@
 		]
 	},
 	{
+		"name": "say",
+		"permissions": "supermod",
+		"description": "[Mod] Speak through haxebot x)",
+		"params": [
+			{
+				"name": "message",
+				"type": "string",
+				"description": "The message to say",
+				"required": true
+			},
+			{
+				"name": "message_id",
+				"type": "string",
+				"description": "optional message id to directly reply to",
+				"required": false
+			}
+		]
+	},
+	{
 		"name": "react",
 		"permissions": "supermod",
 		"description": "[Mod] React to a message as haxebot x)",
