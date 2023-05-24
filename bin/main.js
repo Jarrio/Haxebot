@@ -4343,7 +4343,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = "Hey Furret, gained any patience yet?";
 				break;
 			case "726161533540761662":
-				message = "Hi cheems, having a good day? :)";
+				message = Math.random() < 0.5 ? "Hi cheems, having a good day? :)" : "Hi cheems, I know you're secretly a muffin.";
 				break;
 			case "781745960829059072":
 				message = "Hi FS, don't make me go sleep :(";
@@ -4356,7 +4356,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 			}
 		}
 		interaction.reply({ content : message}).then(null,function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/Hi.hx", lineNumber : 24, className : "commands.Hi", methodName : "run"});
+			haxe_Log.trace(err,{ fileName : "src/commands/Hi.hx", lineNumber : 29, className : "commands.Hi", methodName : "run"});
 			$global.console.dir(err);
 		});
 	}
