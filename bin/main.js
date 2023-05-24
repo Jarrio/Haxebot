@@ -4343,7 +4343,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = "Hey Furret, gained any patience yet?";
 				break;
 			case "726161533540761662":
-				message = "Hi muffin, having a good day? :)";
+				message = "Hi cheems, having a good day? :)";
 				break;
 			case "781745960829059072":
 				message = "Hi FS, don't make me go sleep :(";
@@ -6239,11 +6239,11 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.channel.messages.fetch(_g.message_id).then(function(react_message) {
 				react_message.react(emoji).then(function(_) {
 					interaction.reply({ content : "*reacted*", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 16, className : "commands.React", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 14, className : "commands.React", methodName : "run"});
 					});
 				},function(err) {
 					interaction.reply({ ephemeral : true, content : "*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*"});
-					haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 19, className : "commands.React", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 20, className : "commands.React", methodName : "run"});
 				});
 			});
 		}
