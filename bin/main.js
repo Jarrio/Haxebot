@@ -4346,7 +4346,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 				message = Math.random() < 0.5 ? "Hi cheems, having a good day? :)" : "Hi cheems, I know you're secretly a muffin.";
 				break;
 			case "781745960829059072":
-				message = "Hi FS, don't make me go sleep :(";
+				message = Math.random() < 0.5 ? "Hi Ratul, don't make me go sleep :(" : "Hi... Hmm, weren't you a sasquatch?";
 				break;
 			case "817154767733653524":
 				message = "Hello " + interaction.user.tag + ", always a pleasure :)";
@@ -4356,7 +4356,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 			}
 		}
 		interaction.reply({ content : message}).then(null,function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/Hi.hx", lineNumber : 29, className : "commands.Hi", methodName : "run"});
+			haxe_Log.trace(err,{ fileName : "src/commands/Hi.hx", lineNumber : 34, className : "commands.Hi", methodName : "run"});
 			$global.console.dir(err);
 		});
 	}
