@@ -1,4 +1,5 @@
 package commands;
+import discord_js.TextChannel;
 import js.Browser;
 import haxe.Json;
 import firebase.web.firestore.Timestamp;
@@ -51,7 +52,7 @@ class Poll extends CommandDbBase {
 						time_left = finish - now;
 					}
 
-					Main.client.channels.fetch(data.channel).then(function(succ) {
+					Main.client.channels.fetch(data.channel).then(function(succ:TextChannel) {
 						succ.messages.fetch(data.message_id).then(function(message) {
 							trace('Resyncing ${data.id}');
 							this.addCollector(message, data, time_left);

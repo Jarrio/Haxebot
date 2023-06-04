@@ -12,13 +12,13 @@ class Hi extends CommandBase {
 			message = switch (interaction.user.id) {
 				case '817154767733653524': 'Hello ${interaction.user.tag}, always a pleasure :)';
 				case '726161533540761662':
-					if (Math.random() < 0.5) {
+					if (Math.random() < 0.4) {
 						"Hi cheems, having a good day? :)";
 					} else {
 						"Hi cheems, I know you're secretly a muffin.";
 					}
 				case '781745960829059072': 
-					if (Math.random() < 0.5) {
+					if (Math.random() < 0.4) {
 						"Hi Ratul, don't make me go sleep :(";
 					} else {
 						"Hi... Hmm, weren't you a sasquatch?";

@@ -1,3 +1,5 @@
+import discord_js.VoiceState;
+import discord_js.VoiceChannel;
 import discord_js.ThreadChannel;
 import discord_builder.ContextMenuCommandBuilder;
 import components.TextCommand;
@@ -91,7 +93,8 @@ class Main {
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
-					systems: [Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code, CodeLineNumbers, React, Say],
+					systems: [
+						RoundupRoundup, Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code, CodeLineNumbers, React, Say],
 				},
 				{
 					name: 'main',
@@ -101,6 +104,7 @@ class Main {
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
+						RoundupRoundup,
 						AutoThread,
 						Snippet,
 						PinMessage,
@@ -141,7 +145,9 @@ class Main {
 				IntentFlags.GUILD_MESSAGES,
 				IntentFlags.DIRECT_MESSAGES,
 				IntentFlags.GUILD_MEMBERS,
-				IntentFlags.GUILD_MESSAGE_REACTIONS
+				IntentFlags.GUILD_MESSAGE_REACTIONS,
+				IntentFlags.GUILD_VOICE_STATES,
+				IntentFlags.DIRECT_MESSAGE_REACTIONS
 			]
 		});
 
@@ -170,6 +176,12 @@ class Main {
 		client.on('guildMemberAdd', (member:GuildMember) -> {
 			trace('member ${member.user.tag}');
 			universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
+			// universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
+		});
+
+		client.on('voiceStateUpdate', (old:VoiceState, updated:VoiceState) -> {
+			universe.setComponents(universe.createEntity(), CommandForward.roundup_member_update, old, updated);
+			//universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
 			// universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 		});
 
@@ -677,6 +689,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) from String {
+	var roundup_member_update;
 	var snippet_left;
 	var snippet_right;
 	var thread_pin_message;

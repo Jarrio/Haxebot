@@ -139,7 +139,7 @@ class Reminder extends CommandDbBase {
 			var content = '$message\n${reminder.content}';
 
 			if (reminder.thread_reply) {
-				Main.client.channels.fetch(reminder.thread_id).then(function(channel) {
+				Main.client.channels.fetch(reminder.thread_id).then(function(channel:TextChannel) {
 					channel.send({content: content, allowedMentions: parse})
 						.then(null, function(err) {
 							trace(err);
@@ -193,7 +193,7 @@ class Reminder extends CommandDbBase {
 	function getChannel(channel_id:String) {
 		if (!this.checking && this.channels.get(channel_id) == null) {
 			this.checking = true;
-			Main.client.channels.fetch(channel_id).then(function(channel) {
+			Main.client.channels.fetch(channel_id).then(function(channel:TextChannel) {
 				this.channels.set(channel.id, channel);
 				this.checking = false;
 				trace('Found ${channel.name} channel');

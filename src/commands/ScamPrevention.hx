@@ -1,5 +1,6 @@
 package commands;
 
+import discord_js.TextChannel;
 import js.html.URL;
 import discord_js.MessageEmbed;
 import haxe.Json;
@@ -173,7 +174,7 @@ class ScamPrevention extends CommandBase {
 	function logMessage(id:String, embed:MessageEmbed, action:UserActions) {
 		embed.description += '\n\n Action: **__${action}__**';
 
-		Main.client.channels.fetch('952952631079362650').then(function(channel) {
+		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
 			channel.send({content: '<@$id>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
