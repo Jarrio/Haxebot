@@ -32,6 +32,8 @@ enum abstract Duration(Float) to Float {
 	@:op(A == B) static function equality(a:Float, b:Duration):Bool;
 
 	@:op(A + B) static function addition(a:Duration, b:Duration):Duration;
+	@:op(A / B) static function division(a:Duration, b:Duration):Duration;
+	@:op(A / B) static function divisionb(a:Duration, b:Float):Duration;
 
 	@:from public static function fromString(input:String):Duration {
 		var time = 0.;

@@ -94,7 +94,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						RoundupRoundup, Showcase, Quote, Snippet, Run, Api, TextMention, Notify, Code, CodeLineNumbers, React, Say],
+						RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say],
 				},
 				{
 					name: 'main',
@@ -109,7 +109,6 @@ class Main {
 						Snippet,
 						PinMessage,
 						Mention,
-						TextMention,
 						Reminder,
 						Social,
 						AutoRole,
@@ -461,9 +460,10 @@ class Main {
 			.then(function(res) {
 				trace('logged in');
 				var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
-				Firestore.getDoc(doc).then(function(resp) {
+				Firestore.onSnapshot(doc, function(resp) {
+					
 					#if !block
-					state = resp.data().state;
+					state = resp.data();
 					#end
 					Main.auth = res.user;
 					Main.logged_in = true;
@@ -471,18 +471,15 @@ class Main {
 					trace(err);
 					Browser.console.dir(err);
 				});
-			}, function(err) {
-				trace(err);
-				Browser.console.dir(err);
 			});
 
 		start();
 	}
 
-	static public function updateState() {
+	static public function updateState(field:String, value:Any) {
 		#if !block
 		var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
-		Firestore.updateDoc(doc, 'state', state).then(null, function(err) {
+		Firestore.updateDoc(doc, field, value).then(null, function(err) {
 			trace(err);
 			Browser.console.dir(err);
 		});
@@ -646,6 +643,12 @@ typedef TState = {
 	var project_name:String;
 	var twitter_since_id:String;
 	var next_roundup:Int;
+	var roundup_roundup:TRoundup;
+}
+
+typedef TRoundup = {
+	var event_id:String;
+	var host:String;
 }
 
 typedef Foo = ApplicationCommandData;

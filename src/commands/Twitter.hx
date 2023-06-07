@@ -102,7 +102,7 @@ class Twitter extends CommandDbBase {
 	}
 
 	inline function poll() {
-		trace('started');
+		trace('Started twitter scanning');
 		var checker = new Timer((this.ping_rate : Float).int());
 		checker.run = () -> {
 			if (Main.connected && !this.checking && this.channel != null) {
@@ -248,7 +248,7 @@ class Twitter extends CommandDbBase {
 
 	inline function set_since_id(value:String) {
 		Main.state.twitter_since_id = value;
-		Main.updateState();
+		Main.updateState('twitter_since_id', value);
 
 		return value;
 	}
