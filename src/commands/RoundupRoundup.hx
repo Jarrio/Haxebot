@@ -247,7 +247,7 @@ class RoundupRoundup extends CommandDbBase {
 				this.voice_text.send({content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}).then(null, (err) -> trace(err));
 				this.announcement.send({content: 'Get ready for the next roundup roundup :grin: \n$url'}).then(null, (err) -> trace(err));
 			}, (err) -> trace(err));
-			Main.updateState('roundup_roundup', this.state);
+			Main.updateState('state', this.state);
 			trace('Event setup!');
 			this.host_m.send(
 				'New roundup event scheduled for <t:${Math.round(event.scheduledStartTimestamp / 1000)}:R>'

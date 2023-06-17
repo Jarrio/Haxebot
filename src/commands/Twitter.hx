@@ -248,7 +248,7 @@ class Twitter extends CommandDbBase {
 
 	inline function set_since_id(value:String) {
 		Main.state.twitter_since_id = value;
-		Main.updateState('twitter_since_id', value);
+		Main.updateState('state', Main.state);
 
 		return value;
 	}

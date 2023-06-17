@@ -54,7 +54,8 @@ class Main {
 	public static var commands_active:Bool = false;
 	public static var connected:Bool = false;
 	public static var keys:TKeys;
-	public static var state:TState;
+	public static var admin:TAdmin;
+	public static var state(get, never):TState;
 	public static var command_file:Array<TCommands>;
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
@@ -435,6 +436,12 @@ class Main {
 		return null;
 	}
 
+	static function get_state() {
+		if (Main.admin == null) {
+			return null;
+		}
+		return Main.admin.state;
+	}
 	static function saveCommand(command:ApplicationCommand) {
 		Main.registered_commands.set(command.name, command);
 		trace('registered ${command.name}');
@@ -463,7 +470,7 @@ class Main {
 				Firestore.onSnapshot(doc, function(resp) {
 					
 					#if !block
-					state = resp.data();
+					admin = resp.data();
 					#end
 					Main.auth = res.user;
 					Main.logged_in = true;
@@ -638,9 +645,13 @@ typedef TDiscordConfig = {
 	var client_id:String;
 }
 
+typedef TAdmin = {
+	var project_name:String;
+	var state:TState;
+}
+
 typedef TState = {
 	var macros:Bool;
-	var project_name:String;
 	var twitter_since_id:String;
 	var next_roundup:Int;
 	var roundup_roundup:TRoundup;
