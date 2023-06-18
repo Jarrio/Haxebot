@@ -69,7 +69,7 @@ private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes
 
 class Twitter extends CommandDbBase {
 	var tweets:Map<String, TTweet> = [];
-	var ping_rate:Float = #if block Duration.minute #else Duration.hour #end;
+	var ping_rate:Float = #if block Duration.minute #else Duration.minute #end;
 	var channel:TextChannel;
 	#if block
 	var channel_id:String = '597067735771381771';

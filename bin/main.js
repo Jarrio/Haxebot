@@ -654,7 +654,7 @@ Main.token = function(rest) {
 Main.start = function() {
 	var vec = new Array(2);
 	vec[0] = new ecs_Phase(false,"testing",new Array(11),new Array(11));
-	vec[1] = new ecs_Phase(true,"main",new Array(28),new Array(28));
+	vec[1] = new ecs_Phase(true,"main",new Array(27),new Array(27));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
 	var vec = new Array(11);
@@ -1064,85 +1064,81 @@ Main.start = function() {
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new commands_Twitter(u);
+	var s = new commands_Quote(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_ScamPrevention(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_ScamPrevention(u);
+	var s = new commands_Api(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_Haxelib(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_Haxelib(u);
+	var s = new commands_Trace(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Trace(u);
+	var s = new commands_React(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Notify(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Poll(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Boop(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Archive(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Help(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Translate(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Hi(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Run(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
 	s.onEnabled();
-	var s = new commands_Run(u);
+	var s = new commands_Roundup(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_Showcase(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
 	s.onEnabled();
-	var s = new commands_Showcase(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[25] = s;
 	phase.enabledSystems[25] = true;
 	s.onEnabled();
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_Say(u);
 	phase.systems[26] = s;
 	phase.enabledSystems[26] = true;
-	s.onEnabled();
-	var s = new commands_Say(u);
-	phase.systems[27] = s;
-	phase.enabledSystems[27] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -9350,336 +9346,6 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 		return "translate";
 	}
 	,__class__: commands_Translate
-});
-var commands__$Twitter_Response = {};
-commands__$Twitter_Response.__properties__ = {get_users:"get_users",get_tweets:"get_tweets"};
-commands__$Twitter_Response.getUser = function(this1,tweet) {
-	if(commands__$Twitter_Response.get_users(this1) != null) {
-		var _g = 0;
-		var _g1 = commands__$Twitter_Response.get_users(this1);
-		while(_g < _g1.length) {
-			var user = _g1[_g];
-			++_g;
-			if(tweet.author_id == user.id) {
-				return user;
-			}
-		}
-	}
-	return null;
-};
-commands__$Twitter_Response.createLinks = function(this1) {
-	var urls = new haxe_ds_StringMap();
-	var _g = 0;
-	var _g1 = commands__$Twitter_Response.get_tweets(this1);
-	while(_g < _g1.length) {
-		var tweet = _g1[_g];
-		++_g;
-		var user = commands__$Twitter_Response.getUser(this1,tweet);
-		urls.h[tweet.id] = "https://fxtwitter.com/" + user.username + "/status/" + tweet.id;
-	}
-	return urls;
-};
-commands__$Twitter_Response.createLink = function(user,id) {
-	return "https://fxtwitter.com/" + user + "/status/" + id;
-};
-commands__$Twitter_Response.get_tweets = function(this1) {
-	return this1.data;
-};
-commands__$Twitter_Response.get_users = function(this1) {
-	return this1.includes.users;
-};
-var commands_Twitter = function(_universe) {
-	this.start_timer = false;
-	this.ignore = [];
-	this.users = [];
-	this.tags = [];
-	this.checking = false;
-	this.twitter_links = [];
-	this.async_check = new Array(6);
-	this.channel_id = "1030188275341729882";
-	this.ping_rate = 3600000;
-	this.tweets = new haxe_ds_StringMap();
-	systems_CommandDbBase.call(this,_universe);
-};
-$hxClasses["commands.Twitter"] = commands_Twitter;
-commands_Twitter.__name__ = "commands.Twitter";
-commands_Twitter.__super__ = systems_CommandDbBase;
-commands_Twitter.prototype = $extend(systems_CommandDbBase.prototype,{
-	tweets: null
-	,ping_rate: null
-	,channel: null
-	,channel_id: null
-	,async_check: null
-	,twitter_links: null
-	,checking: null
-	,tags: null
-	,users: null
-	,ignore: null
-	,start_timer: null
-	,onEnabled: function() {
-		var _gthis = this;
-		this.ignore.push("first_issues");
-		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/social");
-		firebase_web_firestore_Firestore.onSnapshot(doc,function(update) {
-			_gthis.tags = update.data().twitter_tags;
-			_gthis.users = update.data().twitter_users;
-			var this1 = new Array(_gthis.tags.length);
-			_gthis.async_check = this1;
-			var _g_current = 0;
-			var _g_array = _gthis.tags;
-			while(_g_current < _g_array.length) {
-				var _g_key = _g_current++;
-				var k = _g_key;
-				_gthis.async_check[k] = false;
-			}
-			if(!_gthis.start_timer) {
-				_gthis.start_timer = true;
-				var _gthis1 = _gthis;
-				haxe_Log.trace("Started twitter scanning",{ fileName : "src/commands/Twitter.hx", lineNumber : 105, className : "commands.Twitter", methodName : "poll"});
-				var checker = new haxe_Timer(_gthis.ping_rate | 0);
-				checker.run = function() {
-					if(Main.connected && !_gthis1.checking && _gthis1.channel != null) {
-						_gthis1.checking = true;
-						var _g_current = 0;
-						var _g_array = _gthis1.tags;
-						while(_g_current < _g_array.length) {
-							var _g_value = _g_array[_g_current];
-							var _g_key = _g_current++;
-							var k = [_g_key];
-							var query = _g_value;
-							var url = ["https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25"];
-							if(Main.get_state().twitter_since_id != "") {
-								url[0] += "&since_id=" + Main.get_state().twitter_since_id;
-							}
-							query += " -is:retweet";
-							url[0] += "&query=" + encodeURIComponent(query);
-							externs_Fetch(url[0],{ headers : { Authorization : "Bearer " + Main.keys.twitter_token}, method : "GET"}).then((function(url,k) {
-								return function(succ) {
-									succ.json().then((function(url,k) {
-										return function(json) {
-											try {
-												if(json.meta.result_count > 0) {
-													var h = commands__$Twitter_Response.createLinks(json).h;
-													var tweet_h = h;
-													var tweet_keys = Object.keys(h);
-													var tweet_length = tweet_keys.length;
-													var tweet_current = 0;
-													while(tweet_current < tweet_length) {
-														var tweet = tweet_h[tweet_keys[tweet_current++]];
-														_gthis1.twitter_links.push(tweet);
-													}
-												}
-												_gthis1.removeDupes();
-											} catch( _g ) {
-												var e = haxe_Exception.caught(_g);
-												haxe_Log.trace(Main.get_state().twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 136, className : "commands.Twitter", methodName : "poll"});
-												haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 137, className : "commands.Twitter", methodName : "poll"});
-											}
-											_gthis1.async_check[k[0]] = true;
-											_gthis1.checking = false;
-										};
-									})(url,k),(function() {
-										return function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 142, className : "commands.Twitter", methodName : "poll"});
-											$global.console.dir(err);
-										};
-									})());
-								};
-							})(url,k),(function() {
-								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 146, className : "commands.Twitter", methodName : "poll"});
-									$global.console.dir(err);
-								};
-							})());
-						}
-					}
-				};
-			}
-		});
-	}
-	,poll: function() {
-		var _gthis = this;
-		haxe_Log.trace("Started twitter scanning",{ fileName : "src/commands/Twitter.hx", lineNumber : 105, className : "commands.Twitter", methodName : "poll"});
-		var checker = new haxe_Timer(this.ping_rate | 0);
-		checker.run = function() {
-			if(Main.connected && !_gthis.checking && _gthis.channel != null) {
-				_gthis.checking = true;
-				var _g_current = 0;
-				var _g_array = _gthis.tags;
-				while(_g_current < _g_array.length) {
-					var _g_value = _g_array[_g_current];
-					var _g_key = _g_current++;
-					var k = [_g_key];
-					var query = _g_value;
-					var url = ["https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25"];
-					if(Main.get_state().twitter_since_id != "") {
-						url[0] += "&since_id=" + Main.get_state().twitter_since_id;
-					}
-					query += " -is:retweet";
-					url[0] += "&query=" + encodeURIComponent(query);
-					externs_Fetch(url[0],{ headers : { Authorization : "Bearer " + Main.keys.twitter_token}, method : "GET"}).then((function(url,k) {
-						return function(succ) {
-							succ.json().then((function(url,k) {
-								return function(json) {
-									try {
-										if(json.meta.result_count > 0) {
-											var h = commands__$Twitter_Response.createLinks(json).h;
-											var tweet_h = h;
-											var tweet_keys = Object.keys(h);
-											var tweet_length = tweet_keys.length;
-											var tweet_current = 0;
-											while(tweet_current < tweet_length) {
-												var tweet = tweet_h[tweet_keys[tweet_current++]];
-												_gthis.twitter_links.push(tweet);
-											}
-										}
-										_gthis.removeDupes();
-									} catch( _g ) {
-										var e = haxe_Exception.caught(_g);
-										haxe_Log.trace(Main.get_state().twitter_since_id,{ fileName : "src/commands/Twitter.hx", lineNumber : 134, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(url[0],{ fileName : "src/commands/Twitter.hx", lineNumber : 135, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(e,{ fileName : "src/commands/Twitter.hx", lineNumber : 136, className : "commands.Twitter", methodName : "poll"});
-										haxe_Log.trace(json,{ fileName : "src/commands/Twitter.hx", lineNumber : 137, className : "commands.Twitter", methodName : "poll"});
-									}
-									_gthis.async_check[k[0]] = true;
-									_gthis.checking = false;
-								};
-							})(url,k),(function() {
-								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 142, className : "commands.Twitter", methodName : "poll"});
-									$global.console.dir(err);
-								};
-							})());
-						};
-					})(url,k),(function() {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 146, className : "commands.Twitter", methodName : "poll"});
-							$global.console.dir(err);
-						};
-					})());
-				}
-			}
-		};
-	}
-	,removeDupes: function() {
-		var list = [];
-		var _g = 0;
-		var _g1 = this.twitter_links;
-		while(_g < _g1.length) {
-			var link = _g1[_g];
-			++_g;
-			var block = false;
-			var _g2 = 0;
-			var _g3 = this.ignore;
-			while(_g2 < _g3.length) {
-				var account = _g3[_g2];
-				++_g2;
-				if(link.indexOf("/" + account + "/") != -1) {
-					block = true;
-					break;
-				}
-			}
-			if(block) {
-				continue;
-			}
-			if(list.indexOf(link) == -1) {
-				list.push(link);
-			}
-		}
-		this.twitter_links = list;
-	}
-	,update: function(_) {
-		var _gthis = this;
-		systems_CommandDbBase.prototype.update.call(this,_);
-		if(!Main.connected) {
-			return;
-		}
-		var check = true;
-		var _g = 0;
-		var _g1 = this.async_check;
-		while(_g < _g1.length) {
-			var v = _g1[_g];
-			++_g;
-			if(!v) {
-				check = false;
-				break;
-			}
-		}
-		if(check && this.twitter_links.length > 0) {
-			this.twitter_links.sort(function(a,b) {
-				var split_a = a.split("/");
-				var split_b = b.split("/");
-				var x = Std.parseInt(split_a[split_a.length - 1]);
-				var y = Std.parseInt(split_b[split_b.length - 1]);
-				if(x > y) {
-					return 1;
-				}
-				if(x < y) {
-					return -1;
-				}
-				return 0;
-			});
-			var _g = 0;
-			var _g1 = this.twitter_links;
-			while(_g < _g1.length) {
-				var link = _g1[_g];
-				++_g;
-				this.channel.send({ content : link}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 208, className : "commands.Twitter", methodName : "update"});
-					$global.console.dir(err);
-				});
-			}
-			var _g_current = 0;
-			var _g_array = this.tags;
-			while(_g_current < _g_array.length) {
-				var _g_key = _g_current++;
-				var k = _g_key;
-				this.async_check[k] = false;
-			}
-			var split = this.twitter_links[this.twitter_links.length - 1].split("/");
-			var value = split[split.length - 1];
-			Main.get_state().twitter_since_id = value;
-			Main.updateState("state",Main.get_state());
-			this.twitter_links = [];
-		}
-		if(check && this.twitter_links.length == 0) {
-			var _g_current = 0;
-			var _g_array = this.tags;
-			while(_g_current < _g_array.length) {
-				var _g_key = _g_current++;
-				var k = _g_key;
-				this.async_check[k] = false;
-			}
-		}
-		if(!this.checking && this.channel == null) {
-			this.checking = true;
-			Main.client.channels.fetch(this.channel_id).then(function(succ) {
-				_gthis.channel = succ;
-				_gthis.checking = false;
-				haxe_Log.trace("Found twitter thread",{ fileName : "src/commands/Twitter.hx", lineNumber : 233, className : "commands.Twitter", methodName : "update"});
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Twitter.hx", lineNumber : 235, className : "commands.Twitter", methodName : "update"});
-				$global.console.dir(err);
-			});
-		}
-	}
-	,run: function(command,interaction) {
-	}
-	,get_since_id: function() {
-		return Main.get_state().twitter_since_id;
-	}
-	,set_since_id: function(value) {
-		Main.get_state().twitter_since_id = value;
-		Main.updateState("state",Main.get_state());
-		return value;
-	}
-	,get_name: function() {
-		return "twitter";
-	}
-	,__class__: commands_Twitter
-	,__properties__: $extend(systems_CommandDbBase.prototype.__properties__,{set_since_id:"set_since_id",get_since_id:"get_since_id"})
 });
 var commands_events_PinMessageInfo = function(_universe) {
 	this.messages = [];

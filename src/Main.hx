@@ -113,7 +113,7 @@ class Main {
 						Reminder,
 						Social,
 						AutoRole,
-						Twitter,
+						//Twitter,
 						Quote,
 						ScamPrevention,
 						Api,
