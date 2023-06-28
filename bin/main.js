@@ -6986,7 +6986,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		this.get_guild().scheduledEvents.create({ name : "Haxe Roundup Roundup", channel : this.voice_channel_id, entityType : 2, privacyLevel : 2, scheduledStartTime : date, description : "A community hosted discussion event where we go over the latest things that has gone on in the haxe over the last few weeks. We also have a period where people can show off what they're working on - its open floor come and join if you want :D"}).then(function(event) {
 			_gthis.event = event;
 			_gthis.get_state().event_id = event.id;
-			var time = Math.round(commands_types_Duration.fromString("13d") / 1000);
+			var time = Math.round(date / 1000);
 			event.createInviteURL({ maxAge : time, channel : _gthis.voice_text_id}).then(function(url) {
 				_gthis.voice_text.send({ content : "Thanks for hanging out :grin: \nGet ready for the next one! " + url}).then(null,function(err) {
 					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 247, className : "commands.RoundupRoundup", methodName : "createEvent"});
