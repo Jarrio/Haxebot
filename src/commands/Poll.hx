@@ -1,4 +1,5 @@
 package commands;
+import commands.types.Duration;
 import discord_js.TextChannel;
 import js.Browser;
 import haxe.Json;
@@ -182,6 +183,10 @@ class Poll extends CommandDbBase {
 	function addCollector(message:Message, data:PollData, ?time_left:Float) {
 		var filter = this.filter(message, data);
 		var time:Float = data.duration;
+		#if block
+		trace('Poll duration changed due to debug block on');
+		time = Duration.fromString('1m');
+		#end
 		if (time_left != null) {
 			time = time_left;
 		}
@@ -194,28 +199,24 @@ class Poll extends CommandDbBase {
 			'end',
 			(collected:Collection<String, MessageReaction>, reason:String) -> {
 				var embed = new MessageEmbed();
-				var body = '**Question**\n${data.question}\n\n**Options**\n';
+				var body = '**Question**\n${data.question}\n**Results**\n';
 
 				var options = data.answers;
 
-				for (k => ans in options) {
-					body += '$k - $ans\n';
-				}
-
-				body += '\n**Results**\n';
 				var sort = message.reactions.cache.sort(function(a, b, _, _) {
 					return b.count - a.count;
 				});
 
 				for (k => v in sort) {
 					var col = sort.get(k);
+					var ans = options.get(k);
 					var count = 0;
 
 					if (col != null) {
 						count = v.count;
 					}
-
-					body += '$k - **${count - 1}** \n';
+					
+					body += '$k / $ans /  **${count - 1}** \n';
 				}
 
 				body += '\n*Poll ran for ${data.duration}*';
@@ -342,7 +343,7 @@ typedef TPollData = {
 
 @:forward
 abstract PollData(TPollData) from TPollData {
-	public var answers(get, never):Map<String, Int>;
+	public var answers(get, never):Map<String, String>;
 
 	function get_answers() {
 		return Json.parse(this.answers);

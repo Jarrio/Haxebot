@@ -95,7 +95,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say],
+						RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
@@ -452,7 +452,12 @@ class Main {
 			keys = Json.parse(File.getContent('./config/keys.json'));
 			command_file = Json.parse(File.getContent('./config/commands.json'));
 			#if block
-			state = Json.parse(File.getContent('./config/state.json'));
+			if (admin == null) {
+				admin = {
+					state: Json.parse(File.getContent('./config/state.json')),
+					project_name: "haxebot"
+				}
+			}
 			#end
 		} catch (e ) {
 			trace(e.message);
