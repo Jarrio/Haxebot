@@ -202,7 +202,7 @@ class RoundupRoundup extends CommandDbBase {
 
 		// check if host is around before considering starting the roundup
 		if (!host_active) {
-			if (now - last_checked > Duration.fromString('1m')) {
+			if (now - last_checked > Duration.fromString('1m')) { 
 				this.last_checked = now;
 				for (member in voice_channel.members) {
 					if (member.id == host) {
@@ -247,7 +247,7 @@ class RoundupRoundup extends CommandDbBase {
 				this.voice_text.send({content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}).then(null, (err) -> trace(err));
 				this.announcement.send({content: 'Get ready for the next roundup roundup :grin: \n$url'}).then(null, (err) -> trace(err));
 			}, (err) -> trace(err));
-			Main.updateState('state', this.state);
+			Main.updateState('state', Main.state);
 			trace('Event setup!');
 			this.host_m.send(
 				'New roundup event scheduled for <t:${Math.round(event.scheduledStartTimestamp / 1000)}:R>'
