@@ -332,20 +332,58 @@ class Quote extends CommandDbBase {
 							Browser.console.dir(err);
 						});
 					case get | _:
-						query = Firestore.query(col,
-							where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
+						if (name != null) {
+							query = Firestore.query(col,
+								where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 
-						if (interaction.isAutocomplete()) {
-							Firestore.getDocs(query).then(function(res) {
-								var results = [];
-								for (d in res.docs) {
-									var data = d.data();
-									results.push({
-										name: this.acResponse(data),
-										value: '${data.id}'
+							if (interaction.isAutocomplete()) {
+								Firestore.getDocs(query).then(function(res) {
+									var results = [];
+									for (d in res.docs) {
+										var data = d.data();
+										results.push({
+											name: this.acResponse(data),
+											value: '${data.id}'
+										});
+									}
+									interaction.respond(results).then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
 									});
+								}).then(null, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
+								return;
+							}
+
+							Firestore.getDocs(query).then(function(res) {
+								if (res.docs.length == 0) {
+									interaction.reply('Could not find any quotes with that identifier');
+									return;
 								}
-								interaction.respond(results).then(null, function(err) {
+
+								var data = res.docs[0].data();
+								var embed = new MessageEmbed();
+								var user = interaction.client.users.cache.get(data.author);
+
+								var from = cast(data.timestamp, Timestamp);
+								var date = DateTools.format(from.toDate(), '%H:%M %d-%m-%Y');
+
+								var icon = 'https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless';
+								var content = data.username;
+								if (user != null) {
+									icon = user.avatarURL();
+									content = user.username;
+								}
+
+								embed.setDescription('***${data.name}***\n${data.description}');
+								embed.setFooter({
+									text: '$content | $date |\t#${data.id}',
+									iconURL: icon
+								});
+
+								interaction.reply({embeds: [embed]}).then(null, function(err) {
 									trace(err);
 									Browser.console.dir(err);
 								});
@@ -353,43 +391,7 @@ class Quote extends CommandDbBase {
 								trace(err);
 								Browser.console.dir(err);
 							});
-							return;
 						}
-
-						Firestore.getDocs(query).then(function(res) {
-							if (res.docs.length == 0) {
-								interaction.reply('Could not find any quotes with that identifier');
-								return;
-							}
-
-							var data = res.docs[0].data();
-							var embed = new MessageEmbed();
-							var user = interaction.client.users.cache.get(data.author);
-
-							var from = cast(data.timestamp, Timestamp);
-							var date = DateTools.format(from.toDate(), '%H:%M %d-%m-%Y');
-
-							var icon = 'https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless';
-							var content = data.username;
-							if (user != null) {
-								icon = user.avatarURL();
-								content = user.username;
-							}
-
-							embed.setDescription('***${data.name}***\n${data.description}');
-							embed.setFooter({
-								text: '$content | $date |\t#${data.id}',
-								iconURL: icon
-							});
-
-							interaction.reply({embeds: [embed]}).then(null, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
-						}).then(null, function(err) {
-							trace(err);
-							Browser.console.dir(err);
-						});
 				}
 			default:
 				// interaction.reply();

@@ -244,30 +244,32 @@ class Snippet extends CommandDbBase {
 					restraints.push(tagc);
 				}
 
-				var q = query(collection(this.db, 'discord/snippets/entries'),
-					where('tags', ARRAY_CONTAINS_ANY, restraints));
-				getDocs(q).then(function(resp) {
-					var res = new Array<TSnippet>();
+				if (restraints != null && restraints.length > 0) {
+					var q = query(collection(this.db, 'discord/snippets/entries'),
+						where('tags', ARRAY_CONTAINS_ANY, restraints));
+					getDocs(q).then(function(resp) {
+						var res = new Array<TSnippet>();
 
-					for (doc in resp.docs) {
-						res.push(doc.data());
-					}
+						for (doc in resp.docs) {
+							res.push(doc.data());
+						}
 
-					res = matchTags(restraints, res);
+						res = matchTags(restraints, res);
 
-					var obj = {
-						page: 0,
-						desc: true,
-						message: null,
-						results: res,
-						interacted_at: Date.now().getTime()
-					}
+						var obj = {
+							page: 0,
+							desc: true,
+							message: null,
+							results: res,
+							interacted_at: Date.now().getTime()
+						}
 
-					this.handleSearchResponse(interaction, obj);
-				}, function(err) {
-					trace(err);
-					Browser.console.dir(err);
-				});
+						this.handleSearchResponse(interaction, obj);
+					}, function(err) {
+						trace(err);
+						Browser.console.dir(err);
+					});
+				}
 			case SnippetList(user, show_desc):
 				if (show_desc == null) {
 					show_desc = true;
@@ -418,16 +420,20 @@ class Snippet extends CommandDbBase {
 		if (embed.description == 'No results found') {
 			eph = true;
 		}
-		interaction.reply({embeds: [embed], components: arr, ephemeral: eph, fetchReply: true})
-			.then(function(message) {
-				if (!eph || max == 1) {
-					state.message = message;
-					this.cache.set(interaction.user.id, state);
-				}
-			}, function(err) {
-				trace(err);
-				Browser.console.dir(err);
-			});
+		interaction.reply({
+			embeds: [embed],
+			components: arr,
+			ephemeral: eph,
+			fetchReply: true
+		}).then(function(message) {
+			if (!eph || max == 1) {
+				state.message = message;
+				this.cache.set(interaction.user.id, state);
+			}
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
 	}
 
 	function formatResultOutput(state:TListState, forward:Int) {
@@ -481,7 +487,7 @@ class Snippet extends CommandDbBase {
 				text: 'Page ${state.page + 1} / ${max}'
 			});
 		}
-		
+
 		return embed;
 	}
 

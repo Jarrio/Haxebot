@@ -5351,58 +5351,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			case "get":
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 				break;
 			case "set":
 				if(!this.isValidName(name)) {
@@ -5434,58 +5436,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			default:
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 			}
 			break;
 		case 28:
@@ -5611,58 +5615,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			case "get":
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name1 != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 				break;
 			case "set":
 				if(!this.isValidName(name1)) {
@@ -5694,58 +5700,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			default:
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name1 != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name1)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 			}
 			break;
 		case 29:
@@ -5871,58 +5879,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			case "get":
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name2 != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 				break;
 			case "set":
 				if(!this.isValidName(name2)) {
@@ -5954,58 +5964,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			default:
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name2 != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name2)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 			}
 			break;
 		case 30:
@@ -6131,58 +6143,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			case "get":
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name3 != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 				break;
 			case "set":
 				if(!this.isValidName(name3)) {
@@ -6214,58 +6228,60 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				});
 				break;
 			default:
-				query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
-				if(interaction.isAutocomplete()) {
-					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						var _g = 0;
-						var _g1 = res.docs;
-						while(_g < _g1.length) {
-							var d = _g1[_g];
-							++_g;
-							var data = d.data();
-							var name = data.name;
-							if(name.length > 25) {
-								name = HxOverrides.substr(name,0,25) + "...";
+				if(name3 != null) {
+					query = firebase_web_firestore_Firestore.query(col,firebase_web_firestore_Firestore.where("tags","array-contains-any",this.nameArray(name3)));
+					if(interaction.isAutocomplete()) {
+						firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+							var results = [];
+							var _g = 0;
+							var _g1 = res.docs;
+							while(_g < _g1.length) {
+								var d = _g1[_g];
+								++_g;
+								var data = d.data();
+								var name = data.name;
+								if(name.length > 25) {
+									name = HxOverrides.substr(name,0,25) + "...";
+								}
+								results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
 							}
-							results.push({ name : "" + name + " - " + HxOverrides.substr(data.description,0,25) + ("... by " + data.username), value : "" + data.id});
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 350, className : "commands.Quote", methodName : "run"});
+								$global.console.dir(err);
+							});
+						}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 354, className : "commands.Quote", methodName : "run"});
+							$global.console.dir(err);
+						});
+						return;
+					}
+					firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
+						if(res.docs.length == 0) {
+							interaction.reply("Could not find any quotes with that identifier");
+							return;
 						}
-						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 349, className : "commands.Quote", methodName : "run"});
+						var data = res.docs[0].data();
+						var embed = new discord_$js_MessageEmbed();
+						var user = interaction.client.users.cache.get(data.author);
+						var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
+						var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
+						var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
+						var content = data.username;
+						if(user != null) {
+							icon = user.avatarURL();
+							content = user.username;
+						}
+						embed.setDescription("***" + data.name + "***\n" + data.description);
+						embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
+						interaction.reply({ embeds : [embed]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 387, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 353, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 391, className : "commands.Quote", methodName : "run"});
 						$global.console.dir(err);
 					});
-					return;
 				}
-				firebase_web_firestore_Firestore.getDocs(query).then(function(res) {
-					if(res.docs.length == 0) {
-						interaction.reply("Could not find any quotes with that identifier");
-						return;
-					}
-					var data = res.docs[0].data();
-					var embed = new discord_$js_MessageEmbed();
-					var user = interaction.client.users.cache.get(data.author);
-					var from = js_Boot.__cast(data.timestamp , firebase_web_firestore_Timestamp);
-					var date = DateTools.format(from.toDate(),"%H:%M %d-%m-%Y");
-					var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-					var content = data.username;
-					if(user != null) {
-						icon = user.avatarURL();
-						content = user.username;
-					}
-					embed.setDescription("***" + data.name + "***\n" + data.description);
-					embed.setFooter({ text : "" + content + " | " + date + " |\t#" + data.id, iconURL : icon});
-					interaction.reply({ embeds : [embed]}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 386, className : "commands.Quote", methodName : "run"});
-						$global.console.dir(err);
-					});
-				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 390, className : "commands.Quote", methodName : "run"});
-					$global.console.dir(err);
-				});
 			}
 			break;
 		default:
@@ -8496,7 +8512,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 			}
 			interaction.reply({ embeds : [embed]}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 378, className : "commands.Snippet", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 380, className : "commands.Snippet", methodName : "run"});
 				$global.console.dir(err);
 			});
 			break;
@@ -8522,7 +8538,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				var obj = { page : 0, desc : show_desc, message : null, results : res, interacted_at : new Date().getTime()};
 				_gthis.handleSearchResponse(interaction,obj);
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 300, className : "commands.Snippet", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 302, className : "commands.Snippet", methodName : "run"});
 				$global.console.dir(err);
 			});
 			break;
@@ -8545,7 +8561,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				interaction.reply("Editting currently not implemented");
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 328, className : "commands.Snippet", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 330, className : "commands.Snippet", methodName : "run"});
 				$global.console.dir(err);
 			});
 			break;
@@ -8569,11 +8585,11 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				firebase_web_firestore_Firestore.deleteDoc(resp.docs[0].ref).then(function(_) {
 					interaction.reply("Your snippet(#" + id + ") has been deleted.");
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 357, className : "commands.Snippet", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 359, className : "commands.Snippet", methodName : "run"});
 					$global.console.dir(err);
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 361, className : "commands.Snippet", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 363, className : "commands.Snippet", methodName : "run"});
 				$global.console.dir(err);
 			});
 			break;
@@ -8609,23 +8625,25 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				search = tagc;
 				restraints.push(tagc);
 			}
-			var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("tags","array-contains-any",restraints));
-			firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
-				var res = [];
-				var _g = 0;
-				var _g1 = resp.docs;
-				while(_g < _g1.length) {
-					var doc = _g1[_g];
-					++_g;
-					res.push(doc.data());
-				}
-				res = _gthis.matchTags(restraints,res);
-				var obj = { page : 0, desc : true, message : null, results : res, interacted_at : new Date().getTime()};
-				_gthis.handleSearchResponse(interaction,obj);
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 268, className : "commands.Snippet", methodName : "run"});
-				$global.console.dir(err);
-			});
+			if(restraints != null && restraints.length > 0) {
+				var q = firebase_web_firestore_Firestore.query(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/snippets/entries"),firebase_web_firestore_Firestore.where("tags","array-contains-any",restraints));
+				firebase_web_firestore_Firestore.getDocs(q).then(function(resp) {
+					var res = [];
+					var _g = 0;
+					var _g1 = resp.docs;
+					while(_g < _g1.length) {
+						var doc = _g1[_g];
+						++_g;
+						res.push(doc.data());
+					}
+					res = _gthis.matchTags(restraints,res);
+					var obj = { page : 0, desc : true, message : null, results : res, interacted_at : new Date().getTime()};
+					_gthis.handleSearchResponse(interaction,obj);
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 269, className : "commands.Snippet", methodName : "run"});
+					$global.console.dir(err);
+				});
+			}
 			break;
 		case 7:
 			var url = _g.url;
@@ -8768,7 +8786,7 @@ commands_Snippet.prototype = $extend(systems_CommandDbBase.prototype,{
 				_gthis.cache.h[interaction.user.id] = state;
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 428, className : "commands.Snippet", methodName : "handleSearchResponse"});
+			haxe_Log.trace(err,{ fileName : "src/commands/Snippet.hx", lineNumber : 434, className : "commands.Snippet", methodName : "handleSearchResponse"});
 			$global.console.dir(err);
 		});
 	}
