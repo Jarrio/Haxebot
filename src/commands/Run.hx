@@ -224,7 +224,7 @@ class Run extends TextCommandBase {
 			}
 		}
 		return
-			!~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax\s.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
+			!~/(sys|(("|')s(.*)y(.*)("|')s("|'))|eval|syntax\s*.|require|location|untyped|@:.*[bB]uild)/igmu.match(code);
 	}
 
 	var varname = '';

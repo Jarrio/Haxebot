@@ -7493,7 +7493,7 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
 			return false;
 		}
-		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|syntax\\s.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
+		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|syntax\\s*.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
 	}
 	,varname: null
 	,insertLoopBreak: function(name,code) {
