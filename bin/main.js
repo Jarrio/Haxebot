@@ -5079,7 +5079,7 @@ commands_PollTime.toString = function(this1) {
 	}
 };
 var commands_Quote = function(_universe) {
-	this.max_name_length = 20;
+	this.max_name_length = 30;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
 	this.modal = this.universe.families.get(8);
@@ -5410,7 +5410,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				if(!this.isValidName(name)) {
 					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
 					if(name.length < this.max_name_length) {
-						error_msg = "*Names can only contain `_-` and/or spaces.*";
+						error_msg = "*Names can only contain `_.-?` and/or spaces.*";
 					}
 					interaction.reply({ content : error_msg, ephemeral : true});
 					return;
@@ -5674,7 +5674,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				if(!this.isValidName(name1)) {
 					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
 					if(name1.length < this.max_name_length) {
-						error_msg = "*Names can only contain `_-` and/or spaces.*";
+						error_msg = "*Names can only contain `_.-?` and/or spaces.*";
 					}
 					interaction.reply({ content : error_msg, ephemeral : true});
 					return;
@@ -5938,7 +5938,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				if(!this.isValidName(name2)) {
 					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
 					if(name2.length < this.max_name_length) {
-						error_msg = "*Names can only contain `_-` and/or spaces.*";
+						error_msg = "*Names can only contain `_.-?` and/or spaces.*";
 					}
 					interaction.reply({ content : error_msg, ephemeral : true});
 					return;
@@ -6202,7 +6202,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				if(!this.isValidName(name3)) {
 					var error_msg = "name can only be 3-" + this.max_name_length + " characters long";
 					if(name3.length < this.max_name_length) {
-						error_msg = "*Names can only contain `_-` and/or spaces.*";
+						error_msg = "*Names can only contain `_.-?` and/or spaces.*";
 					}
 					interaction.reply({ content : error_msg, ephemeral : true});
 					return;
@@ -6319,7 +6319,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 		return check_letters.match(input);
 	}
 	,isValidName: function(input) {
-		var check_letters = new EReg("^[A-Za-z0-9 :_-]{2,20}$","i");
+		var check_letters = new EReg("^[A-Za-z0-9 :.?_-]{2,30}$","i");
 		return check_letters.match(input);
 	}
 	,get_name: function() {

@@ -17,7 +17,7 @@ import commands.types.ActionList;
 class Quote extends CommandDbBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
 	var cache:Map<String, Int> = [];
-	final max_name_length = 20;
+	final max_name_length = 30;
 
 	override function onEnabled() {
 		this.has_subcommands = true;
@@ -214,7 +214,7 @@ class Quote extends CommandDbBase {
 						if (!this.isValidName(name)) {
 							var error_msg = 'name can only be 3-$max_name_length characters long';
 							if (name.length < this.max_name_length) {
-								error_msg = '*Names can only contain `_-` and/or spaces.*';
+								error_msg = '*Names can only contain `_.-?` and/or spaces.*';
 							}
 							interaction.reply({content: error_msg, ephemeral: true});
 							return;
@@ -428,7 +428,7 @@ class Quote extends CommandDbBase {
 	}
 
 	function isValidName(input:String) {
-		var check_letters = ~/^[A-Za-z0-9 :_-]{2,20}$/i;
+		var check_letters = ~/^[A-Za-z0-9 :.?_-]{2,30}$/i;
 		return check_letters.match(input);
 	}
 
