@@ -240,7 +240,7 @@ class Quote extends CommandDbBase {
 								.setStyle(Short)
 								.setValue(name.toLowerCase())
 								.setMinLength(3)
-								.setMaxLength(20);
+								.setMaxLength(this.max_name_length);
 
 							var desc_input = new APITextInputComponent().setCustomId('description')
 								.setLabel('description')
