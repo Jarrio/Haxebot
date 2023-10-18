@@ -4238,21 +4238,22 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 		_g.h["Yellow"] = "1164236800747900948";
 		_g.h["Purple"] = "1164237188561653770";
 		_g.h["Red"] = "1164237399719673916";
-		_g.h["SkyBlue"] = "134786690754555916";
+		_g.h["Sky Blue"] = "134786690754555916";
 		_g.h["Pink"] = "1164238547293847622";
 		_g.h["Green"] = "1164239067353985084";
-		_g.h["Default"] = "";
+		_g.h["Default"] = "Default";
 		this.roles = _g;
 	}
 	,run: function(command,interaction) {
 		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 4) {
-			var role_id = _g.role;
+			var role_name = _g.role;
+			var role_id = this.roles.h[role_name];
 			interaction.member.fetch(true).then(function(member) {
 				var role = null;
 				var found = false;
-				if(role_id == "default") {
+				if(role_id == "Default") {
 					var h = _gthis.roles.h;
 					var value_h = h;
 					var value_keys = Object.keys(h);
@@ -4275,7 +4276,7 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 							}
 						}
 					}
-					interaction.reply("Something went wrong. Please try again.");
+					interaction.reply("You're already on the default color!");
 					return;
 				}
 				var jsIterator = member.roles.cache.entries();
@@ -4309,7 +4310,7 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 						var value = value_h[value_keys[value_current++]];
 						if(role.id == value) {
 							member.roles.remove(role.id).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 56, className : "commands.Color", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 57, className : "commands.Color", methodName : "run"});
 							});
 						}
 					}
@@ -4317,11 +4318,11 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 				interaction.member.roles.add(role_id).then(function(success) {
 					interaction.reply("Color changed!");
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 64, className : "commands.Color", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 65, className : "commands.Color", methodName : "run"});
 					$global.console.dir(err);
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 69, className : "commands.Color", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 70, className : "commands.Color", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}

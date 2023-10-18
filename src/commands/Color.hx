@@ -14,20 +14,21 @@ class Color extends CommandBase {
 			"Yellow" => "1164236800747900948",
 			"Purple" => "1164237188561653770",
 			"Red" => "1164237399719673916",
-			"SkyBlue" => "134786690754555916",
+			"Sky Blue" => "134786690754555916",
 			"Pink" => "1164238547293847622",
 			"Green" =>  "1164239067353985084",
-			"Default" => ""
+			"Default" => "Default"
 		];
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Color(role_id):
+			case Color(role_name):
+				var role_id = this.roles.get(role_name);
 				interaction.member.fetch(true).then(function(member) {
 					var role = null;
 					var found = false;
-					if (role_id == "default") {
+					if (role_id == "Default") {
 						for (value in this.roles) {
 							for (role in member.roles.cache) {
 								if (value == role.id) {
