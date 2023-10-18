@@ -14,6 +14,7 @@ enum CommandOptions {
 	Archive;
 	SnippetTags;
 	SnippetList(user:User, show_desc:Bool);
+	Color(role:String);	
 	SnippetEdit(id:String);	
 	SnippetDelete(id:String);	
 	SnippetSearch(taga:String, tagb:String, tagc:String);

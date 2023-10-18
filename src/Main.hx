@@ -132,7 +132,8 @@ class Main {
 						Roundup,
 						Showcase,
 						CodeLineNumbers,
-						Say
+						Say,
+						Color
 					]
 				}
 			]

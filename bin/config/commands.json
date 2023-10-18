@@ -624,6 +624,52 @@
 		]
 	},
 	{
+		"name": "color",
+		"description": "Choose your display color on the server",
+		"params": [
+			{
+				"name": "color",
+				"type": "string",
+				"description": "Color",
+				"required": true,
+				"choices": [
+					{
+						"name": "Default",
+						"value": "default"
+					},
+					{
+						"name": "Orange",
+						"value": "1164160370232012830"
+					},
+					{
+						"name": "Yellow",
+						"value": "1164236800747900948"
+					},
+					{
+						"name": "Purple",
+						"value": "1164237188561653770"
+					},
+					{
+						"name": "Red",
+						"value": "1164237399719673916"
+					},
+					{
+						"name": "Sky Blue",
+						"value": "1134786690754555916"
+					},
+					{
+						"name": "Pink",
+						"value": "1164238547293847622"
+					},
+					{
+						"name": "Green",
+						"value": "1164239067353985084"
+					}
+				]
+			}
+		]
+	},
+	{
 		"name": "rtfm",
 		"description": "Short paragraphs introducing frameworks",
 		"params": [

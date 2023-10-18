@@ -43,7 +43,7 @@ class Quote extends CommandDbBase {
 
 					if (!this.isValidName(name)) {
 						interaction.reply({
-							content: '*Names can only contain `_-:` and/or spaces.*\nname: $name\n$description',
+							content: '*Names can only contain `_-.?:` and/or spaces.*\nname: $name\n$description',
 							ephemeral: true
 						});
 						return;
