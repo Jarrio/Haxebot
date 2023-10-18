@@ -668,6 +668,10 @@
 					{
 						"name": "Black",
 						"value": "Black"
+					},
+					{
+						"name": "Blue",
+						"value": "Blue"
 					}
 				]
 			}

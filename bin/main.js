@@ -4242,6 +4242,7 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 		_g.h["Pink"] = "1164238547293847622";
 		_g.h["Green"] = "1164239067353985084";
 		_g.h["Black"] = "1164239176686915672";
+		_g.h["Blue"] = "1164328144241696882";
 		_g.h["Default"] = "Default";
 		this.roles = _g;
 	}
@@ -4298,7 +4299,7 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 						var v1 = _g_value;
 						if(value.id == v1) {
 							member.roles.remove(value.id).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 50, className : "commands.Color", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 51, className : "commands.Color", methodName : "run"});
 							});
 							break;
 						}
@@ -4307,14 +4308,14 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 				interaction.member.roles.add(role_id).then(function(success) {
 					interaction.reply("Color changed!");
 					if(found) {
-						haxe_Log.trace("found " + set_role,{ fileName : "src/commands/Color.hx", lineNumber : 59, className : "commands.Color", methodName : "run"});
+						haxe_Log.trace("found " + set_role,{ fileName : "src/commands/Color.hx", lineNumber : 60, className : "commands.Color", methodName : "run"});
 					}
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 63, className : "commands.Color", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 64, className : "commands.Color", methodName : "run"});
 					$global.console.dir(err);
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 68, className : "commands.Color", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 69, className : "commands.Color", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}

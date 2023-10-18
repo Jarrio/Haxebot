@@ -18,6 +18,7 @@ class Color extends CommandBase {
 			"Pink" => "1164238547293847622",
 			"Green" =>  "1164239067353985084",
 			"Black" => "1164239176686915672",
+			"Blue" => "1164328144241696882",
 			"Default" => "Default"
 		];
 	}
