@@ -14,7 +14,7 @@ class Color extends CommandBase {
 			"Yellow" => "1164236800747900948",
 			"Purple" => "1164237188561653770",
 			"Red" => "1164237399719673916",
-			"Sky Blue" => "134786690754555916",
+			"Sky Blue" => "1134786690754555916",
 			"Pink" => "1164238547293847622",
 			"Green" =>  "1164239067353985084",
 			"Black" => "1164239176686915672",
@@ -27,7 +27,7 @@ class Color extends CommandBase {
 			case Color(role_name):
 				var role_id = this.roles.get(role_name);
 				interaction.member.fetch(true).then(function(member) {
-					var role = null;
+					var set_role = null;
 					var found = false;
 					if (role_id == "Default") {
 						for (value in this.roles) {
@@ -44,24 +44,21 @@ class Color extends CommandBase {
 						return;
 					}
 
-					for (key => value in member.roles.cache) {
-						if (key == role_id) {
-							found = true;
-							role = value;
-							break;
-						}
-					}
-					
-					for (role in member.roles.cache) {
-						for (value in this.roles) {
-							if (role.id == value) {
-								member.roles.remove(role.id).then(null, (err) -> trace(err));
+					for (value in member.roles.cache) {
+						for (k => v in this.roles) {
+							if (value.id == v) {
+								member.roles.remove(value.id).then(null, (err) -> trace(err));
+								break;
 							}
 						}
 					}
 
 					interaction.member.roles.add(role_id).then(function(success) {
 						interaction.reply('Color changed!');
+						if (found) {
+							trace('found $set_role');
+							
+						}
 					}, function(err) {
 						trace(err);
 						Browser.console.dir(err);

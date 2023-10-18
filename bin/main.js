@@ -4238,7 +4238,7 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 		_g.h["Yellow"] = "1164236800747900948";
 		_g.h["Purple"] = "1164237188561653770";
 		_g.h["Red"] = "1164237399719673916";
-		_g.h["Sky Blue"] = "134786690754555916";
+		_g.h["Sky Blue"] = "1134786690754555916";
 		_g.h["Pink"] = "1164238547293847622";
 		_g.h["Green"] = "1164239067353985084";
 		_g.h["Black"] = "1164239176686915672";
@@ -4252,7 +4252,7 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 			var role_name = _g.role;
 			var role_id = this.roles.h[role_name];
 			interaction.member.fetch(true).then(function(member) {
-				var role = null;
+				var set_role = null;
 				var found = false;
 				if(role_id == "Default") {
 					var h = _gthis.roles.h;
@@ -4268,9 +4268,9 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 						while(!_g_lastStep.done) {
 							var v = _g_lastStep.value;
 							_g_lastStep = _g_jsIterator.next();
-							var role1 = v;
-							if(value == role1.id) {
-								member.roles.remove(role1.id).then(function(_) {
+							var role = v;
+							if(value == role.id) {
+								member.roles.remove(role.id).then(function(_) {
 									interaction.reply("Color set to default");
 								});
 								return;
@@ -4280,50 +4280,41 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.reply("You're already on the default color!");
 					return;
 				}
-				var jsIterator = member.roles.cache.entries();
-				var _g_jsIterator = jsIterator;
-				var _g_lastStep = jsIterator.next();
-				while(!_g_lastStep.done) {
-					var v = _g_lastStep.value;
-					_g_lastStep = _g_jsIterator.next();
-					var _g = v;
-					var key = _g[0];
-					var value = _g[1];
-					if(key == role_id) {
-						found = true;
-						role = value;
-						break;
-					}
-				}
 				var jsIterator = member.roles.cache.values();
 				var _g_jsIterator = jsIterator;
 				var _g_lastStep = jsIterator.next();
 				while(!_g_lastStep.done) {
 					var v = _g_lastStep.value;
 					_g_lastStep = _g_jsIterator.next();
-					var role = v;
+					var value = v;
 					var h = _gthis.roles.h;
-					var value_h = h;
-					var value_keys = Object.keys(h);
-					var value_length = value_keys.length;
-					var value_current = 0;
-					while(value_current < value_length) {
-						var value = value_h[value_keys[value_current++]];
-						if(role.id == value) {
-							member.roles.remove(role.id).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 58, className : "commands.Color", methodName : "run"});
+					var _g_h = h;
+					var _g_keys = Object.keys(h);
+					var _g_length = _g_keys.length;
+					var _g_current = 0;
+					while(_g_current < _g_length) {
+						var key = _g_keys[_g_current++];
+						var _g_value = _g_h[key];
+						var v1 = _g_value;
+						if(value.id == v1) {
+							member.roles.remove(value.id).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 50, className : "commands.Color", methodName : "run"});
 							});
+							break;
 						}
 					}
 				}
 				interaction.member.roles.add(role_id).then(function(success) {
 					interaction.reply("Color changed!");
+					if(found) {
+						haxe_Log.trace("found " + set_role,{ fileName : "src/commands/Color.hx", lineNumber : 59, className : "commands.Color", methodName : "run"});
+					}
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 66, className : "commands.Color", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 63, className : "commands.Color", methodName : "run"});
 					$global.console.dir(err);
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 71, className : "commands.Color", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Color.hx", lineNumber : 68, className : "commands.Color", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
