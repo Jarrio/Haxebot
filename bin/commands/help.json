@@ -74,6 +74,11 @@
 	},
 	{
 		"show_help": false,
+		"type": "psych",
+		"content": "Hey, did you read the rules? We can't help with project/game specific issues. Please check out the appropriate discord server - https://discord.gg/2ka77eMXDv"
+	},
+	{
+		"show_help": false,
 		"type": "helppls",
 		"content": [
 			"This is a question and answer process that helps users get aid, whilst also providing extra help to the helpers. \n",
