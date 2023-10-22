@@ -55,10 +55,9 @@ class Color extends CommandBase {
 					}
 
 					interaction.member.roles.add(role_id).then(function(success) {
-						interaction.reply('Color changed!');
+						interaction.reply({content: 'Color changed!'}).then(null, (err) -> trace(err));
 						if (found) {
 							trace('found $set_role');
-							
 						}
 					}, function(err) {
 						trace(err);
