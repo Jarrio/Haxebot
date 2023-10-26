@@ -5,504 +5,504 @@
 			"path": "flixel.FlxBasic",
 			"description": "This is a useful \"generic\" Flixel object. Both FlxObject and\nFlxGroup extend this class. Has no size, position or graphical data.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxBasic.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxBasic.html"
 		},
 		"flixel.FlxCamera": {
 			"name": "FlxCamera",
 			"path": "flixel.FlxCamera",
 			"description": "The camera class is used to display the game's visuals.\nBy default one camera is created automatically, that is the same size as window.\nYou can add more cameras or even replace the main camera using utilities in FlxG.cameras.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxCamera.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxCamera.html"
 		},
 		"flixel.FlxG": {
 			"name": "FlxG",
 			"path": "flixel.FlxG",
 			"description": "Global helper class for audio, input, the camera system, the debugger and other global properties.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxG.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxG.html"
 		},
 		"flixel.FlxGame": {
 			"name": "FlxGame",
 			"path": "flixel.FlxGame",
 			"description": "FlxGame is the heart of all Flixel games, and contains a bunch of basic game loops and things.\nIt is a long and sloppy file that you shouldn't have to worry about too much!\nIt is basically only used to create your game object in the first place,\nafter that FlxG and FlxState have all the useful stuff you actually need.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxGame.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxGame.html"
 		},
 		"flixel.FlxObject": {
 			"name": "FlxObject",
 			"path": "flixel.FlxObject",
 			"description": "This is the base class for most of the display objects (FlxSprite, FlxText, etc).\nIt includes some basic attributes about game objects, basic state information,\nsizes, scrolling, and basic physics and motion.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxObject.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxObject.html"
 		},
 		"flixel.FlxSprite": {
 			"name": "FlxSprite",
 			"path": "flixel.FlxSprite",
 			"description": "The main \"game object\" class, the sprite is a FlxObject\nwith a bunch of graphics options and abilities, like animation and stamping.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxSprite.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxSprite.html"
 		},
 		"flixel.FlxState": {
 			"name": "FlxState",
 			"path": "flixel.FlxState",
 			"description": "This is the basic game \"state\" object - e.g. in a simple game you might have a menu state and a play state.\nIt is for all intents and purpose a fancy FlxGroup. And really, it's not even that fancy.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxState.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxState.html"
 		},
 		"flixel.FlxStrip": {
 			"name": "FlxStrip",
 			"path": "flixel.FlxStrip",
 			"description": "A very basic rendering component which uses drawTriangles().\nYou have access to vertices, indices and uvtData vectors which are used as data storages for rendering.\nThe whole FlxGraphic object is used as a texture for this sprite.\nUse these links for more info about drawTriangles():",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxStrip.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxStrip.html"
 		},
 		"flixel.FlxSubState": {
 			"name": "FlxSubState",
 			"path": "flixel.FlxSubState",
 			"description": "A FlxSubState can be opened inside of a FlxState.\nBy default, it also stops the parent state from updating,\nmaking it convenient for pause screens or menus.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/FlxSubState.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxSubState.html"
 		},
 		"flixel.IFlxBasic": {
 			"name": "IFlxBasic",
 			"path": "flixel.IFlxBasic",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/IFlxBasic.html"
+			"link": "https://api.haxeflixel.com/flixel/IFlxBasic.html"
 		},
 		"flixel.IFlxSprite": {
 			"name": "IFlxSprite",
 			"path": "flixel.IFlxSprite",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//flixel/IFlxSprite.html"
+			"link": "https://api.haxeflixel.com/flixel/IFlxSprite.html"
 		},
 		"flixel.FlxType": {
 			"name": "FlxType",
 			"path": "flixel.FlxType",
 			"description": "Types of flixel objects - mainly for collisions.",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//flixel/FlxType.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxType.html"
 		},
 		"flixel.FlxCameraFollowStyle": {
 			"name": "FlxCameraFollowStyle",
 			"path": "flixel.FlxCameraFollowStyle",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//flixel/FlxCameraFollowStyle.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxCameraFollowStyle.html"
 		},
 		"flixel.FlxRenderMethod": {
 			"name": "FlxRenderMethod",
 			"path": "flixel.FlxRenderMethod",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//flixel/FlxRenderMethod.html"
+			"link": "https://api.haxeflixel.com/flixel/FlxRenderMethod.html"
 		},
 		"hscript.Interp": {
 			"name": "Interp",
 			"path": "hscript.Interp",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//hscript/Interp.html"
+			"link": "https://api.haxeflixel.com/hscript/Interp.html"
 		},
 		"hscript.Parser": {
 			"name": "Parser",
 			"path": "hscript.Parser",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//hscript/Parser.html"
+			"link": "https://api.haxeflixel.com/hscript/Parser.html"
 		},
 		"hscript.Tools": {
 			"name": "Tools",
 			"path": "hscript.Tools",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//hscript/Tools.html"
+			"link": "https://api.haxeflixel.com/hscript/Tools.html"
 		},
 		"hscript.CType": {
 			"name": "CType",
 			"path": "hscript.CType",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/CType.html"
+			"link": "https://api.haxeflixel.com/hscript/CType.html"
 		},
 		"hscript.Const": {
 			"name": "Const",
 			"path": "hscript.Const",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/Const.html"
+			"link": "https://api.haxeflixel.com/hscript/Const.html"
 		},
 		"hscript.Error": {
 			"name": "Error",
 			"path": "hscript.Error",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/Error.html"
+			"link": "https://api.haxeflixel.com/hscript/Error.html"
 		},
 		"hscript.Expr": {
 			"name": "Expr",
 			"path": "hscript.Expr",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/Expr.html"
+			"link": "https://api.haxeflixel.com/hscript/Expr.html"
 		},
 		"hscript.FieldAccess": {
 			"name": "FieldAccess",
 			"path": "hscript.FieldAccess",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/FieldAccess.html"
+			"link": "https://api.haxeflixel.com/hscript/FieldAccess.html"
 		},
 		"hscript.FieldKind": {
 			"name": "FieldKind",
 			"path": "hscript.FieldKind",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/FieldKind.html"
+			"link": "https://api.haxeflixel.com/hscript/FieldKind.html"
 		},
 		"hscript.ModuleDecl": {
 			"name": "ModuleDecl",
 			"path": "hscript.ModuleDecl",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/ModuleDecl.html"
+			"link": "https://api.haxeflixel.com/hscript/ModuleDecl.html"
 		},
 		"hscript.Token": {
 			"name": "Token",
 			"path": "hscript.Token",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxeflixel.com//hscript/Token.html"
+			"link": "https://api.haxeflixel.com/hscript/Token.html"
 		},
 		"hscript.Argument": {
 			"name": "Argument",
 			"path": "hscript.Argument",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/Argument.html"
+			"link": "https://api.haxeflixel.com/hscript/Argument.html"
 		},
 		"hscript.ClassDecl": {
 			"name": "ClassDecl",
 			"path": "hscript.ClassDecl",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/ClassDecl.html"
+			"link": "https://api.haxeflixel.com/hscript/ClassDecl.html"
 		},
 		"hscript.ExprDef": {
 			"name": "ExprDef",
 			"path": "hscript.ExprDef",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/ExprDef.html"
+			"link": "https://api.haxeflixel.com/hscript/ExprDef.html"
 		},
 		"hscript.FieldDecl": {
 			"name": "FieldDecl",
 			"path": "hscript.FieldDecl",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/FieldDecl.html"
+			"link": "https://api.haxeflixel.com/hscript/FieldDecl.html"
 		},
 		"hscript.FunctionDecl": {
 			"name": "FunctionDecl",
 			"path": "hscript.FunctionDecl",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/FunctionDecl.html"
+			"link": "https://api.haxeflixel.com/hscript/FunctionDecl.html"
 		},
 		"hscript.Metadata": {
 			"name": "Metadata",
 			"path": "hscript.Metadata",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/Metadata.html"
+			"link": "https://api.haxeflixel.com/hscript/Metadata.html"
 		},
 		"hscript.ModuleType": {
 			"name": "ModuleType",
 			"path": "hscript.ModuleType",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/ModuleType.html"
+			"link": "https://api.haxeflixel.com/hscript/ModuleType.html"
 		},
 		"hscript.TypeDecl": {
 			"name": "TypeDecl",
 			"path": "hscript.TypeDecl",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/TypeDecl.html"
+			"link": "https://api.haxeflixel.com/hscript/TypeDecl.html"
 		},
 		"hscript.VarDecl": {
 			"name": "VarDecl",
 			"path": "hscript.VarDecl",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//hscript/VarDecl.html"
+			"link": "https://api.haxeflixel.com/hscript/VarDecl.html"
 		},
 		"nape.Config": {
 			"name": "Config",
 			"path": "nape.Config",
 			"description": "Configuration parameters for Nape",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//nape/Config.html"
+			"link": "https://api.haxeflixel.com/nape/Config.html"
 		},
 		"openfl.Lib": {
 			"name": "Lib",
 			"path": "openfl.Lib",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//openfl/Lib.html"
+			"link": "https://api.haxeflixel.com/openfl/Lib.html"
 		},
 		"openfl.Vector": {
 			"name": "Vector",
 			"path": "openfl.Vector",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//openfl/Vector.html"
+			"link": "https://api.haxeflixel.com/openfl/Vector.html"
 		},
 		"openfl.Assets": {
 			"name": "Assets",
 			"path": "openfl.Assets",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//openfl/Assets.html"
+			"link": "https://api.haxeflixel.com/openfl/Assets.html"
 		},
 		"spinehaxe.ArrayUtils": {
 			"name": "ArrayUtils",
 			"path": "spinehaxe.ArrayUtils",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/ArrayUtils.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/ArrayUtils.html"
 		},
 		"spinehaxe.Bone": {
 			"name": "Bone",
 			"path": "spinehaxe.Bone",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Bone.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Bone.html"
 		},
 		"spinehaxe.BoneData": {
 			"name": "BoneData",
 			"path": "spinehaxe.BoneData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/BoneData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/BoneData.html"
 		},
 		"spinehaxe.Constraint": {
 			"name": "Constraint",
 			"path": "spinehaxe.Constraint",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Constraint.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Constraint.html"
 		},
 		"spinehaxe.Event": {
 			"name": "Event",
 			"path": "spinehaxe.Event",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Event.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Event.html"
 		},
 		"spinehaxe.EventData": {
 			"name": "EventData",
 			"path": "spinehaxe.EventData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/EventData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/EventData.html"
 		},
 		"spinehaxe.Exception": {
 			"name": "Exception",
 			"path": "spinehaxe.Exception",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Exception.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Exception.html"
 		},
 		"spinehaxe.IkConstraint": {
 			"name": "IkConstraint",
 			"path": "spinehaxe.IkConstraint",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/IkConstraint.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/IkConstraint.html"
 		},
 		"spinehaxe.IkConstraintData": {
 			"name": "IkConstraintData",
 			"path": "spinehaxe.IkConstraintData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/IkConstraintData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/IkConstraintData.html"
 		},
 		"spinehaxe.LinkedMesh": {
 			"name": "LinkedMesh",
 			"path": "spinehaxe.LinkedMesh",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/LinkedMesh.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/LinkedMesh.html"
 		},
 		"spinehaxe.MathUtils": {
 			"name": "MathUtils",
 			"path": "spinehaxe.MathUtils",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/MathUtils.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/MathUtils.html"
 		},
 		"spinehaxe.PathConstraint": {
 			"name": "PathConstraint",
 			"path": "spinehaxe.PathConstraint",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/PathConstraint.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/PathConstraint.html"
 		},
 		"spinehaxe.PathConstraintData": {
 			"name": "PathConstraintData",
 			"path": "spinehaxe.PathConstraintData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/PathConstraintData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/PathConstraintData.html"
 		},
 		"spinehaxe.Pool": {
 			"name": "Pool",
 			"path": "spinehaxe.Pool",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Pool.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Pool.html"
 		},
 		"spinehaxe.Poolable": {
 			"name": "Poolable",
 			"path": "spinehaxe.Poolable",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Poolable.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Poolable.html"
 		},
 		"spinehaxe.Skeleton": {
 			"name": "Skeleton",
 			"path": "spinehaxe.Skeleton",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Skeleton.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Skeleton.html"
 		},
 		"spinehaxe.SkeletonData": {
 			"name": "SkeletonData",
 			"path": "spinehaxe.SkeletonData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/SkeletonData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/SkeletonData.html"
 		},
 		"spinehaxe.SkeletonJson": {
 			"name": "SkeletonJson",
 			"path": "spinehaxe.SkeletonJson",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/SkeletonJson.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/SkeletonJson.html"
 		},
 		"spinehaxe.Skin": {
 			"name": "Skin",
 			"path": "spinehaxe.Skin",
 			"description": "Stores attachments by slot index and attachment name.",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Skin.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Skin.html"
 		},
 		"spinehaxe.Slot": {
 			"name": "Slot",
 			"path": "spinehaxe.Slot",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Slot.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Slot.html"
 		},
 		"spinehaxe.SlotData": {
 			"name": "SlotData",
 			"path": "spinehaxe.SlotData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/SlotData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/SlotData.html"
 		},
 		"spinehaxe.TransformConstraint": {
 			"name": "TransformConstraint",
 			"path": "spinehaxe.TransformConstraint",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/TransformConstraint.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/TransformConstraint.html"
 		},
 		"spinehaxe.TransformConstraintData": {
 			"name": "TransformConstraintData",
 			"path": "spinehaxe.TransformConstraintData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/TransformConstraintData.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/TransformConstraintData.html"
 		},
 		"spinehaxe.Updatable": {
 			"name": "Updatable",
 			"path": "spinehaxe.Updatable",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxeflixel.com//spinehaxe/Updatable.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/Updatable.html"
 		},
 		"spinehaxe.BlendMode": {
 			"name": "BlendMode",
 			"path": "spinehaxe.BlendMode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//spinehaxe/BlendMode.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/BlendMode.html"
 		},
 		"spinehaxe.JsonNode": {
 			"name": "JsonNode",
 			"path": "spinehaxe.JsonNode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//spinehaxe/JsonNode.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/JsonNode.html"
 		},
 		"spinehaxe.PositionMode": {
 			"name": "PositionMode",
 			"path": "spinehaxe.PositionMode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//spinehaxe/PositionMode.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/PositionMode.html"
 		},
 		"spinehaxe.RotateMode": {
 			"name": "RotateMode",
 			"path": "spinehaxe.RotateMode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//spinehaxe/RotateMode.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/RotateMode.html"
 		},
 		"spinehaxe.SpacingMode": {
 			"name": "SpacingMode",
 			"path": "spinehaxe.SpacingMode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//spinehaxe/SpacingMode.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/SpacingMode.html"
 		},
 		"spinehaxe.TransformMode": {
 			"name": "TransformMode",
 			"path": "spinehaxe.TransformMode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxeflixel.com//spinehaxe/TransformMode.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/TransformMode.html"
 		},
 		"spinehaxe.IllegalArgumentException": {
 			"name": "IllegalArgumentException",
 			"path": "spinehaxe.IllegalArgumentException",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//spinehaxe/IllegalArgumentException.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/IllegalArgumentException.html"
 		},
 		"spinehaxe.IllegalStateException": {
 			"name": "IllegalStateException",
 			"path": "spinehaxe.IllegalStateException",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//spinehaxe/IllegalStateException.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/IllegalStateException.html"
 		},
 		"spinehaxe.RuntimeException": {
 			"name": "RuntimeException",
 			"path": "spinehaxe.RuntimeException",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//spinehaxe/RuntimeException.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/RuntimeException.html"
 		},
 		"spinehaxe.SerializationException": {
 			"name": "SerializationException",
 			"path": "spinehaxe.SerializationException",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxeflixel.com//spinehaxe/SerializationException.html"
+			"link": "https://api.haxeflixel.com/spinehaxe/SerializationException.html"
 		},
 		"flixel.animation.FlxAnimation": {
 			"name": "FlxAnimation",
