@@ -5,2793 +5,2793 @@
 			"path": "cpp.ArrayBase",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/ArrayBase.html"
+			"link": "https://api.haxe.org/cpp/ArrayBase.html"
 		},
 		"cpp.AutoCast": {
 			"name": "AutoCast",
 			"path": "cpp.AutoCast",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/AutoCast.html"
+			"link": "https://api.haxe.org/cpp/AutoCast.html"
 		},
 		"cpp.ConstPointer": {
 			"name": "ConstPointer",
 			"path": "cpp.ConstPointer",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/ConstPointer.html"
+			"link": "https://api.haxe.org/cpp/ConstPointer.html"
 		},
 		"cpp.EnumBase": {
 			"name": "EnumBase",
 			"path": "cpp.EnumBase",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/EnumBase.html"
+			"link": "https://api.haxe.org/cpp/EnumBase.html"
 		},
 		"cpp.ErrorConstants": {
 			"name": "ErrorConstants",
 			"path": "cpp.ErrorConstants",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/ErrorConstants.html"
+			"link": "https://api.haxe.org/cpp/ErrorConstants.html"
 		},
 		"cpp.FILE": {
 			"name": "FILE",
 			"path": "cpp.FILE",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/FILE.html"
+			"link": "https://api.haxe.org/cpp/FILE.html"
 		},
 		"cpp.FastIterator": {
 			"name": "FastIterator",
 			"path": "cpp.FastIterator",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/FastIterator.html"
+			"link": "https://api.haxe.org/cpp/FastIterator.html"
 		},
 		"cpp.Finalizable": {
 			"name": "Finalizable",
 			"path": "cpp.Finalizable",
 			"description": "This is just a helper class. It is not actually required to inherit from this\nto use NativeGc.addFinalizable(this,inPin), only a function called\nfinalize is needed.",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Finalizable.html"
+			"link": "https://api.haxe.org/cpp/Finalizable.html"
 		},
 		"cpp.Lib": {
 			"name": "Lib",
 			"path": "cpp.Lib",
 			"description": "Platform-specific Cpp Library. Provides some platform-specific functions\nfor the C++ target, such as conversion from Haxe types to native types\nand vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Lib.html"
+			"link": "https://api.haxe.org/cpp/Lib.html"
 		},
 		"cpp.Native": {
 			"name": "Native",
 			"path": "cpp.Native",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Native.html"
+			"link": "https://api.haxe.org/cpp/Native.html"
 		},
 		"cpp.NativeArc": {
 			"name": "NativeArc",
 			"path": "cpp.NativeArc",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeArc.html"
+			"link": "https://api.haxe.org/cpp/NativeArc.html"
 		},
 		"cpp.NativeArray": {
 			"name": "NativeArray",
 			"path": "cpp.NativeArray",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeArray.html"
+			"link": "https://api.haxe.org/cpp/NativeArray.html"
 		},
 		"cpp.NativeFile": {
 			"name": "NativeFile",
 			"path": "cpp.NativeFile",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeFile.html"
+			"link": "https://api.haxe.org/cpp/NativeFile.html"
 		},
 		"cpp.NativeGc": {
 			"name": "NativeGc",
 			"path": "cpp.NativeGc",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeGc.html"
+			"link": "https://api.haxe.org/cpp/NativeGc.html"
 		},
 		"cpp.NativeMath": {
 			"name": "NativeMath",
 			"path": "cpp.NativeMath",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeMath.html"
+			"link": "https://api.haxe.org/cpp/NativeMath.html"
 		},
 		"cpp.NativeProcess": {
 			"name": "NativeProcess",
 			"path": "cpp.NativeProcess",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeProcess.html"
+			"link": "https://api.haxe.org/cpp/NativeProcess.html"
 		},
 		"cpp.NativeRandom": {
 			"name": "NativeRandom",
 			"path": "cpp.NativeRandom",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeRandom.html"
+			"link": "https://api.haxe.org/cpp/NativeRandom.html"
 		},
 		"cpp.NativeSocket": {
 			"name": "NativeSocket",
 			"path": "cpp.NativeSocket",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeSocket.html"
+			"link": "https://api.haxe.org/cpp/NativeSocket.html"
 		},
 		"cpp.NativeSsl": {
 			"name": "NativeSsl",
 			"path": "cpp.NativeSsl",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeSsl.html"
+			"link": "https://api.haxe.org/cpp/NativeSsl.html"
 		},
 		"cpp.NativeString": {
 			"name": "NativeString",
 			"path": "cpp.NativeString",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeString.html"
+			"link": "https://api.haxe.org/cpp/NativeString.html"
 		},
 		"cpp.NativeSys": {
 			"name": "NativeSys",
 			"path": "cpp.NativeSys",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeSys.html"
+			"link": "https://api.haxe.org/cpp/NativeSys.html"
 		},
 		"cpp.NativeVirtualArray": {
 			"name": "NativeVirtualArray",
 			"path": "cpp.NativeVirtualArray",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeVirtualArray.html"
+			"link": "https://api.haxe.org/cpp/NativeVirtualArray.html"
 		},
 		"cpp.NativeXmlState": {
 			"name": "NativeXmlState",
 			"path": "cpp.NativeXmlState",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/NativeXmlState.html"
+			"link": "https://api.haxe.org/cpp/NativeXmlState.html"
 		},
 		"cpp.ObjectType": {
 			"name": "ObjectType",
 			"path": "cpp.ObjectType",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/ObjectType.html"
+			"link": "https://api.haxe.org/cpp/ObjectType.html"
 		},
 		"cpp.Pointer": {
 			"name": "Pointer",
 			"path": "cpp.Pointer",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Pointer.html"
+			"link": "https://api.haxe.org/cpp/Pointer.html"
 		},
 		"cpp.Prime": {
 			"name": "Prime",
 			"path": "cpp.Prime",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Prime.html"
+			"link": "https://api.haxe.org/cpp/Prime.html"
 		},
 		"cpp.Random": {
 			"name": "Random",
 			"path": "cpp.Random",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Random.html"
+			"link": "https://api.haxe.org/cpp/Random.html"
 		},
 		"cpp.RawConstPointer": {
 			"name": "RawConstPointer",
 			"path": "cpp.RawConstPointer",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/RawConstPointer.html"
+			"link": "https://api.haxe.org/cpp/RawConstPointer.html"
 		},
 		"cpp.RawPointer": {
 			"name": "RawPointer",
 			"path": "cpp.RawPointer",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/RawPointer.html"
+			"link": "https://api.haxe.org/cpp/RawPointer.html"
 		},
 		"cpp.StdString": {
 			"name": "StdString",
 			"path": "cpp.StdString",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/StdString.html"
+			"link": "https://api.haxe.org/cpp/StdString.html"
 		},
 		"cpp.StdStringRef": {
 			"name": "StdStringRef",
 			"path": "cpp.StdStringRef",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/StdStringRef.html"
+			"link": "https://api.haxe.org/cpp/StdStringRef.html"
 		},
 		"cpp.Stdio": {
 			"name": "Stdio",
 			"path": "cpp.Stdio",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Stdio.html"
+			"link": "https://api.haxe.org/cpp/Stdio.html"
 		},
 		"cpp.Stdlib": {
 			"name": "Stdlib",
 			"path": "cpp.Stdlib",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Stdlib.html"
+			"link": "https://api.haxe.org/cpp/Stdlib.html"
 		},
 		"cpp.Void": {
 			"name": "Void",
 			"path": "cpp.Void",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Void.html"
+			"link": "https://api.haxe.org/cpp/Void.html"
 		},
 		"cpp.Xml": {
 			"name": "Xml",
 			"path": "cpp.Xml",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//cpp/Xml.html"
+			"link": "https://api.haxe.org/cpp/Xml.html"
 		},
 		"cpp.AtomicInt": {
 			"name": "AtomicInt",
 			"path": "cpp.AtomicInt",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/AtomicInt.html"
+			"link": "https://api.haxe.org/cpp/AtomicInt.html"
 		},
 		"cpp.CastCharStar": {
 			"name": "CastCharStar",
 			"path": "cpp.CastCharStar",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/CastCharStar.html"
+			"link": "https://api.haxe.org/cpp/CastCharStar.html"
 		},
 		"cpp.Char": {
 			"name": "Char",
 			"path": "cpp.Char",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Char.html"
+			"link": "https://api.haxe.org/cpp/Char.html"
 		},
 		"cpp.ConstCharStar": {
 			"name": "ConstCharStar",
 			"path": "cpp.ConstCharStar",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/ConstCharStar.html"
+			"link": "https://api.haxe.org/cpp/ConstCharStar.html"
 		},
 		"cpp.Float32": {
 			"name": "Float32",
 			"path": "cpp.Float32",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Float32.html"
+			"link": "https://api.haxe.org/cpp/Float32.html"
 		},
 		"cpp.Float64": {
 			"name": "Float64",
 			"path": "cpp.Float64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Float64.html"
+			"link": "https://api.haxe.org/cpp/Float64.html"
 		},
 		"cpp.Function": {
 			"name": "Function",
 			"path": "cpp.Function",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Function.html"
+			"link": "https://api.haxe.org/cpp/Function.html"
 		},
 		"cpp.Int16": {
 			"name": "Int16",
 			"path": "cpp.Int16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Int16.html"
+			"link": "https://api.haxe.org/cpp/Int16.html"
 		},
 		"cpp.Int32": {
 			"name": "Int32",
 			"path": "cpp.Int32",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Int32.html"
+			"link": "https://api.haxe.org/cpp/Int32.html"
 		},
 		"cpp.Int64": {
 			"name": "Int64",
 			"path": "cpp.Int64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Int64.html"
+			"link": "https://api.haxe.org/cpp/Int64.html"
 		},
 		"cpp.Int8": {
 			"name": "Int8",
 			"path": "cpp.Int8",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Int8.html"
+			"link": "https://api.haxe.org/cpp/Int8.html"
 		},
 		"cpp.Rest": {
 			"name": "Rest",
 			"path": "cpp.Rest",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/Rest.html"
+			"link": "https://api.haxe.org/cpp/Rest.html"
 		},
 		"cpp.SizeT": {
 			"name": "SizeT",
 			"path": "cpp.SizeT",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/SizeT.html"
+			"link": "https://api.haxe.org/cpp/SizeT.html"
 		},
 		"cpp.UInt16": {
 			"name": "UInt16",
 			"path": "cpp.UInt16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/UInt16.html"
+			"link": "https://api.haxe.org/cpp/UInt16.html"
 		},
 		"cpp.UInt32": {
 			"name": "UInt32",
 			"path": "cpp.UInt32",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/UInt32.html"
+			"link": "https://api.haxe.org/cpp/UInt32.html"
 		},
 		"cpp.UInt64": {
 			"name": "UInt64",
 			"path": "cpp.UInt64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/UInt64.html"
+			"link": "https://api.haxe.org/cpp/UInt64.html"
 		},
 		"cpp.UInt8": {
 			"name": "UInt8",
 			"path": "cpp.UInt8",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/UInt8.html"
+			"link": "https://api.haxe.org/cpp/UInt8.html"
 		},
 		"cpp.VirtualArray": {
 			"name": "VirtualArray",
 			"path": "cpp.VirtualArray",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/VirtualArray.html"
+			"link": "https://api.haxe.org/cpp/VirtualArray.html"
 		},
 		"cpp.XmlType": {
 			"name": "XmlType",
 			"path": "cpp.XmlType",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cpp/XmlType.html"
+			"link": "https://api.haxe.org/cpp/XmlType.html"
 		},
 		"cpp.CallableData": {
 			"name": "CallableData",
 			"path": "cpp.CallableData",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/CallableData.html"
+			"link": "https://api.haxe.org/cpp/CallableData.html"
 		},
 		"cpp.ConstStar": {
 			"name": "ConstStar",
 			"path": "cpp.ConstStar",
 			"description": "Allows haxe to type the result correctly, and hxcpp can recognise this uses\nthe correct type.",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/ConstStar.html"
+			"link": "https://api.haxe.org/cpp/ConstStar.html"
 		},
 		"cpp.FunctionData": {
 			"name": "FunctionData",
 			"path": "cpp.FunctionData",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/FunctionData.html"
+			"link": "https://api.haxe.org/cpp/FunctionData.html"
 		},
 		"cpp.Object": {
 			"name": "Object",
 			"path": "cpp.Object",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/Object.html"
+			"link": "https://api.haxe.org/cpp/Object.html"
 		},
 		"cpp.Reference": {
 			"name": "Reference",
 			"path": "cpp.Reference",
 			"description": "Allows haxe to type result correctly, and hxcpp can recognise this and\nprevent unwanted casting.",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/Reference.html"
+			"link": "https://api.haxe.org/cpp/Reference.html"
 		},
 		"cpp.Star": {
 			"name": "Star",
 			"path": "cpp.Star",
 			"description": "Allows haxe to type result correctly, and hxcpp can recognise this use the\ncorrect type.",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/Star.html"
+			"link": "https://api.haxe.org/cpp/Star.html"
 		},
 		"cpp.Struct": {
 			"name": "Struct",
 			"path": "cpp.Struct",
 			"description": "Wraps external types with a class that integrates with Dynamic.",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/Struct.html"
+			"link": "https://api.haxe.org/cpp/Struct.html"
 		},
 		"cpp.VarArg": {
 			"name": "VarArg",
 			"path": "cpp.VarArg",
 			"description": "Allows haxe to type params correctly, and hxcpp can recognise this use the\ncorrect type.",
 			"type": "type",
-			"link": "https://api.haxe.org//cpp/VarArg.html"
+			"link": "https://api.haxe.org/cpp/VarArg.html"
 		},
 		"cs.Lib": {
 			"name": "Lib",
 			"path": "cs.Lib",
 			"description": "Platform-specific C# Library. Provides some platform-specific functions for the C# target,\nsuch as conversion from haxe types to native types and vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//cs/Lib.html"
+			"link": "https://api.haxe.org/cs/Lib.html"
 		},
 		"cs.NativeArray": {
 			"name": "NativeArray",
 			"path": "cs.NativeArray",
 			"description": "Represents a C# fixed-size Array (T[])",
 			"type": "class",
-			"link": "https://api.haxe.org//cs/NativeArray.html"
+			"link": "https://api.haxe.org/cs/NativeArray.html"
 		},
 		"cs.Syntax": {
 			"name": "Syntax",
 			"path": "cs.Syntax",
 			"description": "Generate C# syntax not directly supported by Haxe.\nUse only at low-level when specific target-specific code-generation is required.",
 			"type": "class",
-			"link": "https://api.haxe.org//cs/Syntax.html"
+			"link": "https://api.haxe.org/cs/Syntax.html"
 		},
 		"cs.Char16": {
 			"name": "Char16",
 			"path": "cs.Char16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/Char16.html"
+			"link": "https://api.haxe.org/cs/Char16.html"
 		},
 		"cs.CsClass": {
 			"name": "CsClass",
 			"path": "cs.CsClass",
 			"description": "The type argument must be a reference type. This constraint applies also to\nany class, interface, delegate, or array type.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/CsClass.html"
+			"link": "https://api.haxe.org/cs/CsClass.html"
 		},
 		"cs.Flags": {
 			"name": "Flags",
 			"path": "cs.Flags",
 			"description": "Use this type to have access to the bitwise operators of C# enums that have a cs.system.FlagsAttribute attribute.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/Flags.html"
+			"link": "https://api.haxe.org/cs/Flags.html"
 		},
 		"cs.Int16": {
 			"name": "Int16",
 			"path": "cs.Int16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/Int16.html"
+			"link": "https://api.haxe.org/cs/Int16.html"
 		},
 		"cs.Int64": {
 			"name": "Int64",
 			"path": "cs.Int64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/Int64.html"
+			"link": "https://api.haxe.org/cs/Int64.html"
 		},
 		"cs.Int8": {
 			"name": "Int8",
 			"path": "cs.Int8",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/Int8.html"
+			"link": "https://api.haxe.org/cs/Int8.html"
 		},
 		"cs.Pointer": {
 			"name": "Pointer",
 			"path": "cs.Pointer",
 			"description": "This type represents pointer types for C# function parameters. It should only\nbe used inside an unsafe context (not checked by the Haxe compiler)",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/Pointer.html"
+			"link": "https://api.haxe.org/cs/Pointer.html"
 		},
 		"cs.PointerAccess": {
 			"name": "PointerAccess",
 			"path": "cs.PointerAccess",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/PointerAccess.html"
+			"link": "https://api.haxe.org/cs/PointerAccess.html"
 		},
 		"cs.UInt16": {
 			"name": "UInt16",
 			"path": "cs.UInt16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/UInt16.html"
+			"link": "https://api.haxe.org/cs/UInt16.html"
 		},
 		"cs.UInt64": {
 			"name": "UInt64",
 			"path": "cs.UInt64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/UInt64.html"
+			"link": "https://api.haxe.org/cs/UInt64.html"
 		},
 		"cs.UInt8": {
 			"name": "UInt8",
 			"path": "cs.UInt8",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//cs/UInt8.html"
+			"link": "https://api.haxe.org/cs/UInt8.html"
 		},
 		"cs.Out": {
 			"name": "Out",
 			"path": "cs.Out",
 			"description": "This type represents \"out\" types for C# function parameters.\nIt only has effect on function parameters, and conversion to/from the referenced type is automatic.",
 			"type": "type",
-			"link": "https://api.haxe.org//cs/Out.html"
+			"link": "https://api.haxe.org/cs/Out.html"
 		},
 		"cs.Ref": {
 			"name": "Ref",
 			"path": "cs.Ref",
 			"description": "This type represents \"ref\" types for C# function parameters.\nIt only has effect on function parameters, and conversion to/from the referenced type is automatic.",
 			"type": "type",
-			"link": "https://api.haxe.org//cs/Ref.html"
+			"link": "https://api.haxe.org/cs/Ref.html"
 		},
 		"eval.Vector": {
 			"name": "Vector",
 			"path": "eval.Vector",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//eval/Vector.html"
+			"link": "https://api.haxe.org/eval/Vector.html"
 		},
 		"eval.NativeString": {
 			"name": "NativeString",
 			"path": "eval.NativeString",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//eval/NativeString.html"
+			"link": "https://api.haxe.org/eval/NativeString.html"
 		},
 		"flash.Lib": {
 			"name": "Lib",
 			"path": "flash.Lib",
 			"description": "Platform-specific Flash Library. Provides some platform-specific\nfunctions for the Flash target.",
 			"type": "class",
-			"link": "https://api.haxe.org//flash/Lib.html"
+			"link": "https://api.haxe.org/flash/Lib.html"
 		},
 		"flash.Memory": {
 			"name": "Memory",
 			"path": "flash.Memory",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//flash/Memory.html"
+			"link": "https://api.haxe.org/flash/Memory.html"
 		},
 		"flash.Vector": {
 			"name": "Vector",
 			"path": "flash.Vector",
 			"description": "The Vector class is very similar to Array but is only supported by the Flash Player 10+",
 			"type": "class",
-			"link": "https://api.haxe.org//flash/Vector.html"
+			"link": "https://api.haxe.org/flash/Vector.html"
 		},
 		"flash.Xml": {
 			"name": "Xml",
 			"path": "flash.Xml",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//flash/Xml.html"
+			"link": "https://api.haxe.org/flash/Xml.html"
 		},
 		"flash.AnyType": {
 			"name": "AnyType",
 			"path": "flash.AnyType",
 			"description": "This type represents the Flash * type, which is\nactually the absense of type. It can be used as a\ntype parameter for flash.Vector to represent the\nnative Vector.&lt;*&gt; type.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//flash/AnyType.html"
+			"link": "https://api.haxe.org/flash/AnyType.html"
 		},
 		"flash.XmlType": {
 			"name": "XmlType",
 			"path": "flash.XmlType",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxe.org//flash/XmlType.html"
+			"link": "https://api.haxe.org/flash/XmlType.html"
 		},
 		"flash.NativeXml": {
 			"name": "NativeXml",
 			"path": "flash.NativeXml",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//flash/NativeXml.html"
+			"link": "https://api.haxe.org/flash/NativeXml.html"
 		},
 		"haxe.EntryPoint": {
 			"name": "EntryPoint",
 			"path": "haxe.EntryPoint",
 			"description": "If haxe.MainLoop is kept from DCE, then we will insert an haxe.EntryPoint.run() call just at then end of main().\nThis class can be redefined by custom frameworks so they can handle their own main loop logic.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/EntryPoint.html"
+			"link": "https://api.haxe.org/haxe/EntryPoint.html"
 		},
 		"haxe.EnumTools": {
 			"name": "EnumTools",
 			"path": "haxe.EnumTools",
 			"description": "This class provides advanced methods on enums. It is ideally used with\nusing EnumTools and then acts as an\nextension to the\nenum types.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/EnumTools.html"
+			"link": "https://api.haxe.org/haxe/EnumTools.html"
 		},
 		"haxe.EnumValueTools": {
 			"name": "EnumValueTools",
 			"path": "haxe.EnumValueTools",
 			"description": "This class provides advanced methods on enum values. It is ideally used with\nusing EnumValueTools and then acts as an\nextension to the\nEnumValue types.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/EnumValueTools.html"
+			"link": "https://api.haxe.org/haxe/EnumValueTools.html"
 		},
 		"haxe.Exception": {
 			"name": "Exception",
 			"path": "haxe.Exception",
 			"description": "Base class for exceptions.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Exception.html"
+			"link": "https://api.haxe.org/haxe/Exception.html"
 		},
 		"haxe.HttpFlash": {
 			"name": "HttpFlash",
 			"path": "haxe.HttpFlash",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/HttpFlash.html"
+			"link": "https://api.haxe.org/haxe/HttpFlash.html"
 		},
 		"haxe.IMap": {
 			"name": "IMap",
 			"path": "haxe.IMap",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/IMap.html"
+			"link": "https://api.haxe.org/haxe/IMap.html"
 		},
 		"haxe.Int64Helper": {
 			"name": "Int64Helper",
 			"path": "haxe.Int64Helper",
 			"description": "Helper for parsing to Int64 instances.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Int64Helper.html"
+			"link": "https://api.haxe.org/haxe/Int64Helper.html"
 		},
 		"haxe.Json": {
 			"name": "Json",
 			"path": "haxe.Json",
 			"description": "Cross-platform JSON API: it will automatically use the optimized native API if available.\nUse -D haxeJSON to force usage of the Haxe implementation even if a native API is found:\nThis will provide extra encoding features such as enums (replaced by their index) and StringMaps.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Json.html"
+			"link": "https://api.haxe.org/haxe/Json.html"
 		},
 		"haxe.Log": {
 			"name": "Log",
 			"path": "haxe.Log",
 			"description": "Log primarily provides the trace() method, which is invoked upon a call to\ntrace() in Haxe code.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Log.html"
+			"link": "https://api.haxe.org/haxe/Log.html"
 		},
 		"haxe.MainEvent": {
 			"name": "MainEvent",
 			"path": "haxe.MainEvent",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/MainEvent.html"
+			"link": "https://api.haxe.org/haxe/MainEvent.html"
 		},
 		"haxe.MainLoop": {
 			"name": "MainLoop",
 			"path": "haxe.MainLoop",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/MainLoop.html"
+			"link": "https://api.haxe.org/haxe/MainLoop.html"
 		},
 		"haxe.Resource": {
 			"name": "Resource",
 			"path": "haxe.Resource",
 			"description": "Resource can be used to access resources that were added through the\n--resource file@name command line parameter.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Resource.html"
+			"link": "https://api.haxe.org/haxe/Resource.html"
 		},
 		"haxe.Serializer": {
 			"name": "Serializer",
 			"path": "haxe.Serializer",
 			"description": "The Serializer class can be used to encode values and objects into a String,\nfrom which the Unserializer class can recreate the original representation.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Serializer.html"
+			"link": "https://api.haxe.org/haxe/Serializer.html"
 		},
 		"haxe.SysTools": {
 			"name": "SysTools",
 			"path": "haxe.SysTools",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/SysTools.html"
+			"link": "https://api.haxe.org/haxe/SysTools.html"
 		},
 		"haxe.Template": {
 			"name": "Template",
 			"path": "haxe.Template",
 			"description": "Template provides a basic templating mechanism to replace values in a source\nString, and to have some basic logic.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Template.html"
+			"link": "https://api.haxe.org/haxe/Template.html"
 		},
 		"haxe.Timer": {
 			"name": "Timer",
 			"path": "haxe.Timer",
 			"description": "The Timer class allows you to create asynchronous timers on platforms that\nsupport events.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Timer.html"
+			"link": "https://api.haxe.org/haxe/Timer.html"
 		},
 		"haxe.Unserializer": {
 			"name": "Unserializer",
 			"path": "haxe.Unserializer",
 			"description": "The Unserializer class is the complement to the Serializer class. It parses\na serialization String and creates objects from the contained data.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Unserializer.html"
+			"link": "https://api.haxe.org/haxe/Unserializer.html"
 		},
 		"haxe.Utf8": {
 			"name": "Utf8",
 			"path": "haxe.Utf8",
 			"description": "Since not all platforms guarantee that String always uses UTF-8 encoding, you\ncan use this cross-platform API to perform operations on such strings.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/Utf8.html"
+			"link": "https://api.haxe.org/haxe/Utf8.html"
 		},
 		"haxe.ValueException": {
 			"name": "ValueException",
 			"path": "haxe.ValueException",
 			"description": "An exception containing arbitrary value.",
 			"type": "class",
-			"link": "https://api.haxe.org//haxe/ValueException.html"
+			"link": "https://api.haxe.org/haxe/ValueException.html"
 		},
 		"haxe.CallStack": {
 			"name": "CallStack",
 			"path": "haxe.CallStack",
 			"description": "Get information about the call stack.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/CallStack.html"
+			"link": "https://api.haxe.org/haxe/CallStack.html"
 		},
 		"haxe.Constructible": {
 			"name": "Constructible",
 			"path": "haxe.Constructible",
 			"description": "This type unifies with any instance of classes that have a constructor\nwhich",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/Constructible.html"
+			"link": "https://api.haxe.org/haxe/Constructible.html"
 		},
 		"haxe.DynamicAccess": {
 			"name": "DynamicAccess",
 			"path": "haxe.DynamicAccess",
 			"description": "DynamicAccess is an abstract type for working with anonymous structures\nthat are intended to hold collections of objects by the string key.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/DynamicAccess.html"
+			"link": "https://api.haxe.org/haxe/DynamicAccess.html"
 		},
 		"haxe.EnumFlags": {
 			"name": "EnumFlags",
 			"path": "haxe.EnumFlags",
 			"description": "A typed interface for bit flags. This is not a real object, only a typed\ninterface for an actual Int. Each flag can be tested/set with the\ncorresponding enum instance. Up to 32 flags can be stored that way.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/EnumFlags.html"
+			"link": "https://api.haxe.org/haxe/EnumFlags.html"
 		},
 		"haxe.FlatEnum": {
 			"name": "FlatEnum",
 			"path": "haxe.FlatEnum",
 			"description": "This type unifies with an enum instance if all constructors of the enum\nrequire no arguments.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/FlatEnum.html"
+			"link": "https://api.haxe.org/haxe/FlatEnum.html"
 		},
 		"haxe.Function": {
 			"name": "Function",
 			"path": "haxe.Function",
 			"description": "This type unifies with any function type.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/Function.html"
+			"link": "https://api.haxe.org/haxe/Function.html"
 		},
 		"haxe.Int32": {
 			"name": "Int32",
 			"path": "haxe.Int32",
 			"description": "Int32 provides a 32-bit integer with consistent overflow behavior across\nall platforms.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/Int32.html"
+			"link": "https://api.haxe.org/haxe/Int32.html"
 		},
 		"haxe.Int64": {
 			"name": "Int64",
 			"path": "haxe.Int64",
 			"description": "A cross-platform signed 64-bit integer.\nInt64 instances can be created from two 32-bit words using Int64.make().",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/Int64.html"
+			"link": "https://api.haxe.org/haxe/Int64.html"
 		},
 		"haxe.NotVoid": {
 			"name": "NotVoid",
 			"path": "haxe.NotVoid",
 			"description": "This type unifies with anything but Void.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/NotVoid.html"
+			"link": "https://api.haxe.org/haxe/NotVoid.html"
 		},
 		"haxe.Rest": {
 			"name": "Rest",
 			"path": "haxe.Rest",
 			"description": "A special type that represents a \"rest\" function argument.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/Rest.html"
+			"link": "https://api.haxe.org/haxe/Rest.html"
 		},
 		"haxe.Ucs2": {
 			"name": "Ucs2",
 			"path": "haxe.Ucs2",
 			"description": "Cross platform UCS2 string API.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//haxe/Ucs2.html"
+			"link": "https://api.haxe.org/haxe/Ucs2.html"
 		},
 		"haxe.StackItem": {
 			"name": "StackItem",
 			"path": "haxe.StackItem",
 			"description": "Elements return by CallStack methods.",
 			"type": "enum",
-			"link": "https://api.haxe.org//haxe/StackItem.html"
+			"link": "https://api.haxe.org/haxe/StackItem.html"
 		},
 		"haxe.Http": {
 			"name": "Http",
 			"path": "haxe.Http",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//haxe/Http.html"
+			"link": "https://api.haxe.org/haxe/Http.html"
 		},
 		"haxe.PosInfos": {
 			"name": "PosInfos",
 			"path": "haxe.PosInfos",
 			"description": "PosInfos is a magic type which can be used to generate position information\ninto the output for debugging use.",
 			"type": "type",
-			"link": "https://api.haxe.org//haxe/PosInfos.html"
+			"link": "https://api.haxe.org/haxe/PosInfos.html"
 		},
 		"haxe.V8CallSite": {
 			"name": "V8CallSite",
 			"path": "haxe.V8CallSite",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//haxe/V8CallSite.html"
+			"link": "https://api.haxe.org/haxe/V8CallSite.html"
 		},
 		"hl.Abstract": {
 			"name": "Abstract",
 			"path": "hl.Abstract",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Abstract.html"
+			"link": "https://api.haxe.org/hl/Abstract.html"
 		},
 		"hl.Api": {
 			"name": "Api",
 			"path": "hl.Api",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Api.html"
+			"link": "https://api.haxe.org/hl/Api.html"
 		},
 		"hl.BaseType": {
 			"name": "BaseType",
 			"path": "hl.BaseType",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/BaseType.html"
+			"link": "https://api.haxe.org/hl/BaseType.html"
 		},
 		"hl.Button": {
 			"name": "Button",
 			"path": "hl.Button",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Button.html"
+			"link": "https://api.haxe.org/hl/Button.html"
 		},
 		"hl.Class": {
 			"name": "Class",
 			"path": "hl.Class",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Class.html"
+			"link": "https://api.haxe.org/hl/Class.html"
 		},
 		"hl.CoreEnum": {
 			"name": "CoreEnum",
 			"path": "hl.CoreEnum",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/CoreEnum.html"
+			"link": "https://api.haxe.org/hl/CoreEnum.html"
 		},
 		"hl.CoreType": {
 			"name": "CoreType",
 			"path": "hl.CoreType",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/CoreType.html"
+			"link": "https://api.haxe.org/hl/CoreType.html"
 		},
 		"hl.Enum": {
 			"name": "Enum",
 			"path": "hl.Enum",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Enum.html"
+			"link": "https://api.haxe.org/hl/Enum.html"
 		},
 		"hl.Format": {
 			"name": "Format",
 			"path": "hl.Format",
 			"description": "These are the bindings for the HL fmt.hdll library, which contains various low level formats handling.",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Format.html"
+			"link": "https://api.haxe.org/hl/Format.html"
 		},
 		"hl.Gc": {
 			"name": "Gc",
 			"path": "hl.Gc",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Gc.html"
+			"link": "https://api.haxe.org/hl/Gc.html"
 		},
 		"hl.Mikktspace": {
 			"name": "Mikktspace",
 			"path": "hl.Mikktspace",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Mikktspace.html"
+			"link": "https://api.haxe.org/hl/Mikktspace.html"
 		},
 		"hl.NativeArrayIterator": {
 			"name": "NativeArrayIterator",
 			"path": "hl.NativeArrayIterator",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/NativeArrayIterator.html"
+			"link": "https://api.haxe.org/hl/NativeArrayIterator.html"
 		},
 		"hl.NativeArrayKeyValueIterator": {
 			"name": "NativeArrayKeyValueIterator",
 			"path": "hl.NativeArrayKeyValueIterator",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/NativeArrayKeyValueIterator.html"
+			"link": "https://api.haxe.org/hl/NativeArrayKeyValueIterator.html"
 		},
 		"hl.Profile": {
 			"name": "Profile",
 			"path": "hl.Profile",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Profile.html"
+			"link": "https://api.haxe.org/hl/Profile.html"
 		},
 		"hl.Result": {
 			"name": "Result",
 			"path": "hl.Result",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Result.html"
+			"link": "https://api.haxe.org/hl/Result.html"
 		},
 		"hl.UI": {
 			"name": "UI",
 			"path": "hl.UI",
 			"description": "These are the bindings for the HL ui.hdll library, which contains some low level system access.",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/UI.html"
+			"link": "https://api.haxe.org/hl/UI.html"
 		},
 		"hl.WinLog": {
 			"name": "WinLog",
 			"path": "hl.WinLog",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/WinLog.html"
+			"link": "https://api.haxe.org/hl/WinLog.html"
 		},
 		"hl.Window": {
 			"name": "Window",
 			"path": "hl.Window",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//hl/Window.html"
+			"link": "https://api.haxe.org/hl/Window.html"
 		},
 		"hl.Bytes": {
 			"name": "Bytes",
 			"path": "hl.Bytes",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/Bytes.html"
+			"link": "https://api.haxe.org/hl/Bytes.html"
 		},
 		"hl.BytesAccess": {
 			"name": "BytesAccess",
 			"path": "hl.BytesAccess",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/BytesAccess.html"
+			"link": "https://api.haxe.org/hl/BytesAccess.html"
 		},
 		"hl.I64": {
 			"name": "I64",
 			"path": "hl.I64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/I64.html"
+			"link": "https://api.haxe.org/hl/I64.html"
 		},
 		"hl.LoopResult": {
 			"name": "LoopResult",
 			"path": "hl.LoopResult",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/LoopResult.html"
+			"link": "https://api.haxe.org/hl/LoopResult.html"
 		},
 		"hl.NativeArray": {
 			"name": "NativeArray",
 			"path": "hl.NativeArray",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/NativeArray.html"
+			"link": "https://api.haxe.org/hl/NativeArray.html"
 		},
 		"hl.PixelFormat": {
 			"name": "PixelFormat",
 			"path": "hl.PixelFormat",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/PixelFormat.html"
+			"link": "https://api.haxe.org/hl/PixelFormat.html"
 		},
 		"hl.Ref": {
 			"name": "Ref",
 			"path": "hl.Ref",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/Ref.html"
+			"link": "https://api.haxe.org/hl/Ref.html"
 		},
 		"hl.Sentinel": {
 			"name": "Sentinel",
 			"path": "hl.Sentinel",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/Sentinel.html"
+			"link": "https://api.haxe.org/hl/Sentinel.html"
 		},
 		"hl.Type": {
 			"name": "Type",
 			"path": "hl.Type",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/Type.html"
+			"link": "https://api.haxe.org/hl/Type.html"
 		},
 		"hl.TypeKind": {
 			"name": "TypeKind",
 			"path": "hl.TypeKind",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/TypeKind.html"
+			"link": "https://api.haxe.org/hl/TypeKind.html"
 		},
 		"hl.UI16": {
 			"name": "UI16",
 			"path": "hl.UI16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/UI16.html"
+			"link": "https://api.haxe.org/hl/UI16.html"
 		},
 		"hl.UI8": {
 			"name": "UI8",
 			"path": "hl.UI8",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//hl/UI8.html"
+			"link": "https://api.haxe.org/hl/UI8.html"
 		},
 		"hl.DialogFlags": {
 			"name": "DialogFlags",
 			"path": "hl.DialogFlags",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxe.org//hl/DialogFlags.html"
+			"link": "https://api.haxe.org/hl/DialogFlags.html"
 		},
 		"hl.GcFlag": {
 			"name": "GcFlag",
 			"path": "hl.GcFlag",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxe.org//hl/GcFlag.html"
+			"link": "https://api.haxe.org/hl/GcFlag.html"
 		},
 		"hl.TrackKind": {
 			"name": "TrackKind",
 			"path": "hl.TrackKind",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxe.org//hl/TrackKind.html"
+			"link": "https://api.haxe.org/hl/TrackKind.html"
 		},
 		"hl.F32": {
 			"name": "F32",
 			"path": "hl.F32",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//hl/F32.html"
+			"link": "https://api.haxe.org/hl/F32.html"
 		},
 		"hl.F64": {
 			"name": "F64",
 			"path": "hl.F64",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//hl/F64.html"
+			"link": "https://api.haxe.org/hl/F64.html"
 		},
 		"hl.FileOptions": {
 			"name": "FileOptions",
 			"path": "hl.FileOptions",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//hl/FileOptions.html"
+			"link": "https://api.haxe.org/hl/FileOptions.html"
 		},
 		"hl.SentinelHandle": {
 			"name": "SentinelHandle",
 			"path": "hl.SentinelHandle",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//hl/SentinelHandle.html"
+			"link": "https://api.haxe.org/hl/SentinelHandle.html"
 		},
 		"hl.Symbol": {
 			"name": "Symbol",
 			"path": "hl.Symbol",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//hl/Symbol.html"
+			"link": "https://api.haxe.org/hl/Symbol.html"
 		},
 		"hl.WinHandle": {
 			"name": "WinHandle",
 			"path": "hl.WinHandle",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//hl/WinHandle.html"
+			"link": "https://api.haxe.org/hl/WinHandle.html"
 		},
 		"java.Init": {
 			"name": "Init",
 			"path": "java.Init",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//java/Init.html"
+			"link": "https://api.haxe.org/java/Init.html"
 		},
 		"java.Lib": {
 			"name": "Lib",
 			"path": "java.Lib",
 			"description": "Platform-specific Java Library. Provides some platform-specific functions for the Java target,\nsuch as conversion from Haxe types to native types and vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//java/Lib.html"
+			"link": "https://api.haxe.org/java/Lib.html"
 		},
 		"java.NativeArray": {
 			"name": "NativeArray",
 			"path": "java.NativeArray",
 			"description": "Represents a java fixed-size Array (T[])",
 			"type": "class",
-			"link": "https://api.haxe.org//java/NativeArray.html"
+			"link": "https://api.haxe.org/java/NativeArray.html"
 		},
 		"java.NativeString": {
 			"name": "NativeString",
 			"path": "java.NativeString",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//java/NativeString.html"
+			"link": "https://api.haxe.org/java/NativeString.html"
 		},
 		"java.Char16": {
 			"name": "Char16",
 			"path": "java.Char16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//java/Char16.html"
+			"link": "https://api.haxe.org/java/Char16.html"
 		},
 		"java.Int16": {
 			"name": "Int16",
 			"path": "java.Int16",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//java/Int16.html"
+			"link": "https://api.haxe.org/java/Int16.html"
 		},
 		"java.Int64": {
 			"name": "Int64",
 			"path": "java.Int64",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//java/Int64.html"
+			"link": "https://api.haxe.org/java/Int64.html"
 		},
 		"java.Int8": {
 			"name": "Int8",
 			"path": "java.Int8",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//java/Int8.html"
+			"link": "https://api.haxe.org/java/Int8.html"
 		},
 		"js.Browser": {
 			"name": "Browser",
 			"path": "js.Browser",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//js/Browser.html"
+			"link": "https://api.haxe.org/js/Browser.html"
 		},
 		"js.Cookie": {
 			"name": "Cookie",
 			"path": "js.Cookie",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//js/Cookie.html"
+			"link": "https://api.haxe.org/js/Cookie.html"
 		},
 		"js.Lib": {
 			"name": "Lib",
 			"path": "js.Lib",
 			"description": "Platform-specific JavaScript Library. Provides some platform-specific functions\nfor the JavaScript target.",
 			"type": "class",
-			"link": "https://api.haxe.org//js/Lib.html"
+			"link": "https://api.haxe.org/js/Lib.html"
 		},
 		"js.Selection": {
 			"name": "Selection",
 			"path": "js.Selection",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//js/Selection.html"
+			"link": "https://api.haxe.org/js/Selection.html"
 		},
 		"js.Syntax": {
 			"name": "Syntax",
 			"path": "js.Syntax",
 			"description": "Generate JavaScript syntax not directly supported by Haxe.\nUse only at low-level when specific target-specific code-generation is required.",
 			"type": "class",
-			"link": "https://api.haxe.org//js/Syntax.html"
+			"link": "https://api.haxe.org/js/Syntax.html"
 		},
 		"js.Error": {
 			"name": "Error",
 			"path": "js.Error",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Error.html"
+			"link": "https://api.haxe.org/js/Error.html"
 		},
 		"js.EvalError": {
 			"name": "EvalError",
 			"path": "js.EvalError",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/EvalError.html"
+			"link": "https://api.haxe.org/js/EvalError.html"
 		},
 		"js.Function": {
 			"name": "Function",
 			"path": "js.Function",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Function.html"
+			"link": "https://api.haxe.org/js/Function.html"
 		},
 		"js.JsIterator": {
 			"name": "JsIterator",
 			"path": "js.JsIterator",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/JsIterator.html"
+			"link": "https://api.haxe.org/js/JsIterator.html"
 		},
 		"js.JsIteratorStep": {
 			"name": "JsIteratorStep",
 			"path": "js.JsIteratorStep",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/JsIteratorStep.html"
+			"link": "https://api.haxe.org/js/JsIteratorStep.html"
 		},
 		"js.Object": {
 			"name": "Object",
 			"path": "js.Object",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Object.html"
+			"link": "https://api.haxe.org/js/Object.html"
 		},
 		"js.ObjectPropertyDescriptor": {
 			"name": "ObjectPropertyDescriptor",
 			"path": "js.ObjectPropertyDescriptor",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/ObjectPropertyDescriptor.html"
+			"link": "https://api.haxe.org/js/ObjectPropertyDescriptor.html"
 		},
 		"js.ObjectPrototype": {
 			"name": "ObjectPrototype",
 			"path": "js.ObjectPrototype",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/ObjectPrototype.html"
+			"link": "https://api.haxe.org/js/ObjectPrototype.html"
 		},
 		"js.Promise": {
 			"name": "Promise",
 			"path": "js.Promise",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Promise.html"
+			"link": "https://api.haxe.org/js/Promise.html"
 		},
 		"js.PromiseHandler": {
 			"name": "PromiseHandler",
 			"path": "js.PromiseHandler",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/PromiseHandler.html"
+			"link": "https://api.haxe.org/js/PromiseHandler.html"
 		},
 		"js.RangeError": {
 			"name": "RangeError",
 			"path": "js.RangeError",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/RangeError.html"
+			"link": "https://api.haxe.org/js/RangeError.html"
 		},
 		"js.ReferenceError": {
 			"name": "ReferenceError",
 			"path": "js.ReferenceError",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/ReferenceError.html"
+			"link": "https://api.haxe.org/js/ReferenceError.html"
 		},
 		"js.RegExp": {
 			"name": "RegExp",
 			"path": "js.RegExp",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/RegExp.html"
+			"link": "https://api.haxe.org/js/RegExp.html"
 		},
 		"js.RegExpMatch": {
 			"name": "RegExpMatch",
 			"path": "js.RegExpMatch",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/RegExpMatch.html"
+			"link": "https://api.haxe.org/js/RegExpMatch.html"
 		},
 		"js.Set": {
 			"name": "Set",
 			"path": "js.Set",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Set.html"
+			"link": "https://api.haxe.org/js/Set.html"
 		},
 		"js.Symbol": {
 			"name": "Symbol",
 			"path": "js.Symbol",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Symbol.html"
+			"link": "https://api.haxe.org/js/Symbol.html"
 		},
 		"js.SyntaxError": {
 			"name": "SyntaxError",
 			"path": "js.SyntaxError",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/SyntaxError.html"
+			"link": "https://api.haxe.org/js/SyntaxError.html"
 		},
 		"js.Thenable": {
 			"name": "Thenable",
 			"path": "js.Thenable",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/Thenable.html"
+			"link": "https://api.haxe.org/js/Thenable.html"
 		},
 		"js.ThenableStruct": {
 			"name": "ThenableStruct",
 			"path": "js.ThenableStruct",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/ThenableStruct.html"
+			"link": "https://api.haxe.org/js/ThenableStruct.html"
 		},
 		"js.TypeError": {
 			"name": "TypeError",
 			"path": "js.TypeError",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/TypeError.html"
+			"link": "https://api.haxe.org/js/TypeError.html"
 		},
 		"js.URIError": {
 			"name": "URIError",
 			"path": "js.URIError",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//js/URIError.html"
+			"link": "https://api.haxe.org/js/URIError.html"
 		},
 		"lua.Bit": {
 			"name": "Bit",
 			"path": "lua.Bit",
 			"description": "Externs for the \"bit\" class that is required for Haxe lua",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Bit.html"
+			"link": "https://api.haxe.org/lua/Bit.html"
 		},
 		"lua.Coroutine": {
 			"name": "Coroutine",
 			"path": "lua.Coroutine",
 			"description": "Externs for native Lua coroutines.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Coroutine.html"
+			"link": "https://api.haxe.org/lua/Coroutine.html"
 		},
 		"lua.CoroutineResume": {
 			"name": "CoroutineResume",
 			"path": "lua.CoroutineResume",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/CoroutineResume.html"
+			"link": "https://api.haxe.org/lua/CoroutineResume.html"
 		},
 		"lua.CoroutineRunning": {
 			"name": "CoroutineRunning",
 			"path": "lua.CoroutineRunning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/CoroutineRunning.html"
+			"link": "https://api.haxe.org/lua/CoroutineRunning.html"
 		},
 		"lua.Debug": {
 			"name": "Debug",
 			"path": "lua.Debug",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Debug.html"
+			"link": "https://api.haxe.org/lua/Debug.html"
 		},
 		"lua.FileHandle": {
 			"name": "FileHandle",
 			"path": "lua.FileHandle",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/FileHandle.html"
+			"link": "https://api.haxe.org/lua/FileHandle.html"
 		},
 		"lua.HaxeIterator": {
 			"name": "HaxeIterator",
 			"path": "lua.HaxeIterator",
 			"description": "An implementation of the Haxe iterator data structure needed for identical\nlua iterator behavior.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/HaxeIterator.html"
+			"link": "https://api.haxe.org/lua/HaxeIterator.html"
 		},
 		"lua.IPairsResult": {
 			"name": "IPairsResult",
 			"path": "lua.IPairsResult",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/IPairsResult.html"
+			"link": "https://api.haxe.org/lua/IPairsResult.html"
 		},
 		"lua.Io": {
 			"name": "Io",
 			"path": "lua.Io",
 			"description": "Input and Output Facilities",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Io.html"
+			"link": "https://api.haxe.org/lua/Io.html"
 		},
 		"lua.Lib": {
 			"name": "Lib",
 			"path": "lua.Lib",
 			"description": "Platform-specific Lua Library. Provides some platform-specific functions\nfor the Lua target, such as conversion from Haxe types to native types\nand vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Lib.html"
+			"link": "https://api.haxe.org/lua/Lib.html"
 		},
 		"lua.LoadResult": {
 			"name": "LoadResult",
 			"path": "lua.LoadResult",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/LoadResult.html"
+			"link": "https://api.haxe.org/lua/LoadResult.html"
 		},
 		"lua.Lua": {
 			"name": "Lua",
 			"path": "lua.Lua",
 			"description": "These are all global static methods within Lua.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Lua.html"
+			"link": "https://api.haxe.org/lua/Lua.html"
 		},
 		"lua.Math": {
 			"name": "Math",
 			"path": "lua.Math",
 			"description": "Mathematical Functions",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Math.html"
+			"link": "https://api.haxe.org/lua/Math.html"
 		},
 		"lua.MathFrexpResult": {
 			"name": "MathFrexpResult",
 			"path": "lua.MathFrexpResult",
 			"description": "The return value of Math.frexp.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/MathFrexpResult.html"
+			"link": "https://api.haxe.org/lua/MathFrexpResult.html"
 		},
 		"lua.NativeStringTools": {
 			"name": "NativeStringTools",
 			"path": "lua.NativeStringTools",
 			"description": "These are all externs for the base Lua \"string\" class, which functions\nas an additional set of string tools.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/NativeStringTools.html"
+			"link": "https://api.haxe.org/lua/NativeStringTools.html"
 		},
 		"lua.NextResult": {
 			"name": "NextResult",
 			"path": "lua.NextResult",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/NextResult.html"
+			"link": "https://api.haxe.org/lua/NextResult.html"
 		},
 		"lua.Os": {
 			"name": "Os",
 			"path": "lua.Os",
 			"description": "Operating System Facilities.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Os.html"
+			"link": "https://api.haxe.org/lua/Os.html"
 		},
 		"lua.OsExecute": {
 			"name": "OsExecute",
 			"path": "lua.OsExecute",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/OsExecute.html"
+			"link": "https://api.haxe.org/lua/OsExecute.html"
 		},
 		"lua.OsSuccess": {
 			"name": "OsSuccess",
 			"path": "lua.OsSuccess",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/OsSuccess.html"
+			"link": "https://api.haxe.org/lua/OsSuccess.html"
 		},
 		"lua.PCallResult": {
 			"name": "PCallResult",
 			"path": "lua.PCallResult",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/PCallResult.html"
+			"link": "https://api.haxe.org/lua/PCallResult.html"
 		},
 		"lua.Package": {
 			"name": "Package",
 			"path": "lua.Package",
 			"description": "Externs for lua package handling",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Package.html"
+			"link": "https://api.haxe.org/lua/Package.html"
 		},
 		"lua.PairTools": {
 			"name": "PairTools",
 			"path": "lua.PairTools",
 			"description": "A set of utility methods for working with the Lua table extern.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/PairTools.html"
+			"link": "https://api.haxe.org/lua/PairTools.html"
 		},
 		"lua.PairsResult": {
 			"name": "PairsResult",
 			"path": "lua.PairsResult",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/PairsResult.html"
+			"link": "https://api.haxe.org/lua/PairsResult.html"
 		},
 		"lua.Result": {
 			"name": "Result",
 			"path": "lua.Result",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Result.html"
+			"link": "https://api.haxe.org/lua/Result.html"
 		},
 		"lua.StringFind": {
 			"name": "StringFind",
 			"path": "lua.StringFind",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/StringFind.html"
+			"link": "https://api.haxe.org/lua/StringFind.html"
 		},
 		"lua.StringSub": {
 			"name": "StringSub",
 			"path": "lua.StringSub",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/StringSub.html"
+			"link": "https://api.haxe.org/lua/StringSub.html"
 		},
 		"lua.Table": {
 			"name": "Table",
 			"path": "lua.Table",
 			"description": "This library provides generic functions for table manipulation.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Table.html"
+			"link": "https://api.haxe.org/lua/Table.html"
 		},
 		"lua.TableTools": {
 			"name": "TableTools",
 			"path": "lua.TableTools",
 			"description": "This library is an extern for a polyfill library of common lua table\nmethods.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/TableTools.html"
+			"link": "https://api.haxe.org/lua/TableTools.html"
 		},
 		"lua.Thread": {
 			"name": "Thread",
 			"path": "lua.Thread",
 			"description": "The sole purpose of this extern is to provide a concrete type for\nbasic reflection purposes.",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/Thread.html"
+			"link": "https://api.haxe.org/lua/Thread.html"
 		},
 		"lua.UserData": {
 			"name": "UserData",
 			"path": "lua.UserData",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//lua/UserData.html"
+			"link": "https://api.haxe.org/lua/UserData.html"
 		},
 		"lua.CollectGarbageOption": {
 			"name": "CollectGarbageOption",
 			"path": "lua.CollectGarbageOption",
 			"description": "Enum for describing garbage collection options",
 			"type": "abstract",
-			"link": "https://api.haxe.org//lua/CollectGarbageOption.html"
+			"link": "https://api.haxe.org/lua/CollectGarbageOption.html"
 		},
 		"lua.CoroutineState": {
 			"name": "CoroutineState",
 			"path": "lua.CoroutineState",
 			"description": "A enumerator that describes the output of Coroutine.status().",
 			"type": "abstract",
-			"link": "https://api.haxe.org//lua/CoroutineState.html"
+			"link": "https://api.haxe.org/lua/CoroutineState.html"
 		},
 		"lua.IoType": {
 			"name": "IoType",
 			"path": "lua.IoType",
 			"description": "A enumerator that describes the output of Io.type().",
 			"type": "abstract",
-			"link": "https://api.haxe.org//lua/IoType.html"
+			"link": "https://api.haxe.org/lua/IoType.html"
 		},
 		"lua.LocaleCategory": {
 			"name": "LocaleCategory",
 			"path": "lua.LocaleCategory",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//lua/LocaleCategory.html"
+			"link": "https://api.haxe.org/lua/LocaleCategory.html"
 		},
 		"lua.NativeIterator": {
 			"name": "NativeIterator",
 			"path": "lua.NativeIterator",
 			"description": "This abstract enables easy conversion from basic lua iterators\n(i.e., a function that is called until it returns null), and\nHaxe iterators, which provide a next/hasNext interface.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//lua/NativeIterator.html"
+			"link": "https://api.haxe.org/lua/NativeIterator.html"
 		},
 		"lua.AnyTable": {
 			"name": "AnyTable",
 			"path": "lua.AnyTable",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//lua/AnyTable.html"
+			"link": "https://api.haxe.org/lua/AnyTable.html"
 		},
 		"lua.DateType": {
 			"name": "DateType",
 			"path": "lua.DateType",
 			"description": "A typedef that describes the output of Os.date().",
 			"type": "type",
-			"link": "https://api.haxe.org//lua/DateType.html"
+			"link": "https://api.haxe.org/lua/DateType.html"
 		},
 		"lua.DebugInfo": {
 			"name": "DebugInfo",
 			"path": "lua.DebugInfo",
 			"description": "A enumerator that describes the output of Debug.getinfo().",
 			"type": "type",
-			"link": "https://api.haxe.org//lua/DebugInfo.html"
+			"link": "https://api.haxe.org/lua/DebugInfo.html"
 		},
 		"lua.Time": {
 			"name": "Time",
 			"path": "lua.Time",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//lua/Time.html"
+			"link": "https://api.haxe.org/lua/Time.html"
 		},
 		"lua.TimeParam": {
 			"name": "TimeParam",
 			"path": "lua.TimeParam",
 			"description": "A typedef that matches the date parameter Os.time() will accept.",
 			"type": "type",
-			"link": "https://api.haxe.org//lua/TimeParam.html"
+			"link": "https://api.haxe.org/lua/TimeParam.html"
 		},
 		"mbedtls.Config": {
 			"name": "Config",
 			"path": "mbedtls.Config",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/Config.html"
+			"link": "https://api.haxe.org/mbedtls/Config.html"
 		},
 		"mbedtls.CtrDrbg": {
 			"name": "CtrDrbg",
 			"path": "mbedtls.CtrDrbg",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/CtrDrbg.html"
+			"link": "https://api.haxe.org/mbedtls/CtrDrbg.html"
 		},
 		"mbedtls.Entropy": {
 			"name": "Entropy",
 			"path": "mbedtls.Entropy",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/Entropy.html"
+			"link": "https://api.haxe.org/mbedtls/Entropy.html"
 		},
 		"mbedtls.Error": {
 			"name": "Error",
 			"path": "mbedtls.Error",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/Error.html"
+			"link": "https://api.haxe.org/mbedtls/Error.html"
 		},
 		"mbedtls.PkContext": {
 			"name": "PkContext",
 			"path": "mbedtls.PkContext",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/PkContext.html"
+			"link": "https://api.haxe.org/mbedtls/PkContext.html"
 		},
 		"mbedtls.Ssl": {
 			"name": "Ssl",
 			"path": "mbedtls.Ssl",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/Ssl.html"
+			"link": "https://api.haxe.org/mbedtls/Ssl.html"
 		},
 		"mbedtls.X509Crt": {
 			"name": "X509Crt",
 			"path": "mbedtls.X509Crt",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//mbedtls/X509Crt.html"
+			"link": "https://api.haxe.org/mbedtls/X509Crt.html"
 		},
 		"mbedtls.SslAuthmode": {
 			"name": "SslAuthmode",
 			"path": "mbedtls.SslAuthmode",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//mbedtls/SslAuthmode.html"
+			"link": "https://api.haxe.org/mbedtls/SslAuthmode.html"
 		},
 		"mbedtls.SslEndpoint": {
 			"name": "SslEndpoint",
 			"path": "mbedtls.SslEndpoint",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//mbedtls/SslEndpoint.html"
+			"link": "https://api.haxe.org/mbedtls/SslEndpoint.html"
 		},
 		"mbedtls.SslPreset": {
 			"name": "SslPreset",
 			"path": "mbedtls.SslPreset",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//mbedtls/SslPreset.html"
+			"link": "https://api.haxe.org/mbedtls/SslPreset.html"
 		},
 		"mbedtls.SslTransport": {
 			"name": "SslTransport",
 			"path": "mbedtls.SslTransport",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//mbedtls/SslTransport.html"
+			"link": "https://api.haxe.org/mbedtls/SslTransport.html"
 		},
 		"neko.Lib": {
 			"name": "Lib",
 			"path": "neko.Lib",
 			"description": "Platform-specific Neko Library. Provides some platform-specific functions\nfor the Neko target, such as conversion from Haxe types to native types\nand vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/Lib.html"
+			"link": "https://api.haxe.org/neko/Lib.html"
 		},
 		"neko.NativeArray": {
 			"name": "NativeArray",
 			"path": "neko.NativeArray",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/NativeArray.html"
+			"link": "https://api.haxe.org/neko/NativeArray.html"
 		},
 		"neko.NativeString": {
 			"name": "NativeString",
 			"path": "neko.NativeString",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/NativeString.html"
+			"link": "https://api.haxe.org/neko/NativeString.html"
 		},
 		"neko.Random": {
 			"name": "Random",
 			"path": "neko.Random",
 			"description": "A seeded pseudo-random generator.",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/Random.html"
+			"link": "https://api.haxe.org/neko/Random.html"
 		},
 		"neko.Utf8": {
 			"name": "Utf8",
 			"path": "neko.Utf8",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/Utf8.html"
+			"link": "https://api.haxe.org/neko/Utf8.html"
 		},
 		"neko.Web": {
 			"name": "Web",
 			"path": "neko.Web",
 			"description": "This class is used for accessing the local Web server and the current\nclient request and information.",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/Web.html"
+			"link": "https://api.haxe.org/neko/Web.html"
 		},
 		"neko.Xml": {
 			"name": "Xml",
 			"path": "neko.Xml",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//neko/Xml.html"
+			"link": "https://api.haxe.org/neko/Xml.html"
 		},
 		"neko.XmlType": {
 			"name": "XmlType",
 			"path": "neko.XmlType",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//neko/XmlType.html"
+			"link": "https://api.haxe.org/neko/XmlType.html"
 		},
 		"neko.NativeXml": {
 			"name": "NativeXml",
 			"path": "neko.NativeXml",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//neko/NativeXml.html"
+			"link": "https://api.haxe.org/neko/NativeXml.html"
 		},
 		"php.ArrayAccess": {
 			"name": "ArrayAccess",
 			"path": "php.ArrayAccess",
 			"description": "Native PHP interface.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/ArrayAccess.html"
+			"link": "https://api.haxe.org/php/ArrayAccess.html"
 		},
 		"php.ArrayIterator": {
 			"name": "ArrayIterator",
 			"path": "php.ArrayIterator",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/ArrayIterator.html"
+			"link": "https://api.haxe.org/php/ArrayIterator.html"
 		},
 		"php.BadFunctionCallException": {
 			"name": "BadFunctionCallException",
 			"path": "php.BadFunctionCallException",
 			"description": "Exception thrown if a callback refers to an undefined function\nor if some arguments are missing.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/BadFunctionCallException.html"
+			"link": "https://api.haxe.org/php/BadFunctionCallException.html"
 		},
 		"php.BadMethodCallException": {
 			"name": "BadMethodCallException",
 			"path": "php.BadMethodCallException",
 			"description": "Exception thrown if a callback refers to an undefined method\nor if some arguments are missing.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/BadMethodCallException.html"
+			"link": "https://api.haxe.org/php/BadMethodCallException.html"
 		},
 		"php.Closure": {
 			"name": "Closure",
 			"path": "php.Closure",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Closure.html"
+			"link": "https://api.haxe.org/php/Closure.html"
 		},
 		"php.Collator": {
 			"name": "Collator",
 			"path": "php.Collator",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Collator.html"
+			"link": "https://api.haxe.org/php/Collator.html"
 		},
 		"php.Const": {
 			"name": "Const",
 			"path": "php.Const",
 			"description": "This class contains externs for native PHP constants defined in global namespace.\nFor native PHP functions in global namespace see php.Global.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Const.html"
+			"link": "https://api.haxe.org/php/Const.html"
 		},
 		"php.Countable": {
 			"name": "Countable",
 			"path": "php.Countable",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Countable.html"
+			"link": "https://api.haxe.org/php/Countable.html"
 		},
 		"php.DateInterval": {
 			"name": "DateInterval",
 			"path": "php.DateInterval",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DateInterval.html"
+			"link": "https://api.haxe.org/php/DateInterval.html"
 		},
 		"php.DatePeriod": {
 			"name": "DatePeriod",
 			"path": "php.DatePeriod",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DatePeriod.html"
+			"link": "https://api.haxe.org/php/DatePeriod.html"
 		},
 		"php.DateTime": {
 			"name": "DateTime",
 			"path": "php.DateTime",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DateTime.html"
+			"link": "https://api.haxe.org/php/DateTime.html"
 		},
 		"php.DateTimeImmutable": {
 			"name": "DateTimeImmutable",
 			"path": "php.DateTimeImmutable",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DateTimeImmutable.html"
+			"link": "https://api.haxe.org/php/DateTimeImmutable.html"
 		},
 		"php.DateTimeInterface": {
 			"name": "DateTimeInterface",
 			"path": "php.DateTimeInterface",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DateTimeInterface.html"
+			"link": "https://api.haxe.org/php/DateTimeInterface.html"
 		},
 		"php.DateTimeZone": {
 			"name": "DateTimeZone",
 			"path": "php.DateTimeZone",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DateTimeZone.html"
+			"link": "https://api.haxe.org/php/DateTimeZone.html"
 		},
 		"php.DomainException": {
 			"name": "DomainException",
 			"path": "php.DomainException",
 			"description": "Exception thrown if a value does not adhere to a defined valid data domain.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/DomainException.html"
+			"link": "https://api.haxe.org/php/DomainException.html"
 		},
 		"php.Error": {
 			"name": "Error",
 			"path": "php.Error",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Error.html"
+			"link": "https://api.haxe.org/php/Error.html"
 		},
 		"php.ErrorException": {
 			"name": "ErrorException",
 			"path": "php.ErrorException",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/ErrorException.html"
+			"link": "https://api.haxe.org/php/ErrorException.html"
 		},
 		"php.Exception": {
 			"name": "Exception",
 			"path": "php.Exception",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Exception.html"
+			"link": "https://api.haxe.org/php/Exception.html"
 		},
 		"php.Finfo": {
 			"name": "Finfo",
 			"path": "php.Finfo",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Finfo.html"
+			"link": "https://api.haxe.org/php/Finfo.html"
 		},
 		"php.Generator": {
 			"name": "Generator",
 			"path": "php.Generator",
 			"description": "Generator is not a Haxe Iterable. It can be iterated one time only.\nUnfortunately Haxe does not know that in PHP generators may have no return expression or return value with any type of value.\nUse return null or untyped cast to workaround this issue:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Generator.html"
+			"link": "https://api.haxe.org/php/Generator.html"
 		},
 		"php.Global": {
 			"name": "Global",
 			"path": "php.Global",
 			"description": "This class contains externs for native PHP functions defined in global namespace.\nFor native PHP constants in global namespace see php.Const.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Global.html"
+			"link": "https://api.haxe.org/php/Global.html"
 		},
 		"php.InvalidArgumentException": {
 			"name": "InvalidArgumentException",
 			"path": "php.InvalidArgumentException",
 			"description": "Exception thrown if an argument is not of the expected type.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/InvalidArgumentException.html"
+			"link": "https://api.haxe.org/php/InvalidArgumentException.html"
 		},
 		"php.IteratorAggregate": {
 			"name": "IteratorAggregate",
 			"path": "php.IteratorAggregate",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/IteratorAggregate.html"
+			"link": "https://api.haxe.org/php/IteratorAggregate.html"
 		},
 		"php.JsonSerializable": {
 			"name": "JsonSerializable",
 			"path": "php.JsonSerializable",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/JsonSerializable.html"
+			"link": "https://api.haxe.org/php/JsonSerializable.html"
 		},
 		"php.LengthException": {
 			"name": "LengthException",
 			"path": "php.LengthException",
 			"description": "Exception thrown if a length is invalid.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/LengthException.html"
+			"link": "https://api.haxe.org/php/LengthException.html"
 		},
 		"php.Lib": {
 			"name": "Lib",
 			"path": "php.Lib",
 			"description": "Platform-specific PHP Library. Provides some platform-specific functions\nfor the PHP target, such as conversion from Haxe types to native types\nand vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Lib.html"
+			"link": "https://api.haxe.org/php/Lib.html"
 		},
 		"php.Locale": {
 			"name": "Locale",
 			"path": "php.Locale",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Locale.html"
+			"link": "https://api.haxe.org/php/Locale.html"
 		},
 		"php.LogicException": {
 			"name": "LogicException",
 			"path": "php.LogicException",
 			"description": "Exception that represents error in the program logic.\nThis kind of exception should lead directly to a fix in your code.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/LogicException.html"
+			"link": "https://api.haxe.org/php/LogicException.html"
 		},
 		"php.NativeIterator": {
 			"name": "NativeIterator",
 			"path": "php.NativeIterator",
 			"description": "Native PHP interface.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/NativeIterator.html"
+			"link": "https://api.haxe.org/php/NativeIterator.html"
 		},
 		"php.NativeStringIterator": {
 			"name": "NativeStringIterator",
 			"path": "php.NativeStringIterator",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//php/NativeStringIterator.html"
+			"link": "https://api.haxe.org/php/NativeStringIterator.html"
 		},
 		"php.NativeStringKeyValueIterator": {
 			"name": "NativeStringKeyValueIterator",
 			"path": "php.NativeStringKeyValueIterator",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//php/NativeStringKeyValueIterator.html"
+			"link": "https://api.haxe.org/php/NativeStringKeyValueIterator.html"
 		},
 		"php.OutOfBoundsException": {
 			"name": "OutOfBoundsException",
 			"path": "php.OutOfBoundsException",
 			"description": "Exception thrown if a value is not a valid key.\nThis represents errors that cannot be detected at compile time.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/OutOfBoundsException.html"
+			"link": "https://api.haxe.org/php/OutOfBoundsException.html"
 		},
 		"php.OutOfRangeException": {
 			"name": "OutOfRangeException",
 			"path": "php.OutOfRangeException",
 			"description": "Exception thrown when an illegal index was requested.\nThis represents errors that should be detected at compile time.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/OutOfRangeException.html"
+			"link": "https://api.haxe.org/php/OutOfRangeException.html"
 		},
 		"php.OverflowException": {
 			"name": "OverflowException",
 			"path": "php.OverflowException",
 			"description": "Exception thrown when adding an element to a full container.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/OverflowException.html"
+			"link": "https://api.haxe.org/php/OverflowException.html"
 		},
 		"php.RangeException": {
 			"name": "RangeException",
 			"path": "php.RangeException",
 			"description": "Exception thrown to indicate range errors during program execution.\nNormally this means there was an arithmetic error other than under/overflow.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/RangeException.html"
+			"link": "https://api.haxe.org/php/RangeException.html"
 		},
 		"php.RuntimeException": {
 			"name": "RuntimeException",
 			"path": "php.RuntimeException",
 			"description": "Exception thrown if an error which can only be found on runtime occurs.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/RuntimeException.html"
+			"link": "https://api.haxe.org/php/RuntimeException.html"
 		},
 		"php.SeekableIterator": {
 			"name": "SeekableIterator",
 			"path": "php.SeekableIterator",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/SeekableIterator.html"
+			"link": "https://api.haxe.org/php/SeekableIterator.html"
 		},
 		"php.Serializable": {
 			"name": "Serializable",
 			"path": "php.Serializable",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Serializable.html"
+			"link": "https://api.haxe.org/php/Serializable.html"
 		},
 		"php.Session": {
 			"name": "Session",
 			"path": "php.Session",
 			"description": "Session consists of a way to preserve certain data across\nsubsequent accesses.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Session.html"
+			"link": "https://api.haxe.org/php/Session.html"
 		},
 		"php.SessionHandlerInterface": {
 			"name": "SessionHandlerInterface",
 			"path": "php.SessionHandlerInterface",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/SessionHandlerInterface.html"
+			"link": "https://api.haxe.org/php/SessionHandlerInterface.html"
 		},
 		"php.StdClass": {
 			"name": "StdClass",
 			"path": "php.StdClass",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//php/StdClass.html"
+			"link": "https://api.haxe.org/php/StdClass.html"
 		},
 		"php.SuperGlobal": {
 			"name": "SuperGlobal",
 			"path": "php.SuperGlobal",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//php/SuperGlobal.html"
+			"link": "https://api.haxe.org/php/SuperGlobal.html"
 		},
 		"php.Syntax": {
 			"name": "Syntax",
 			"path": "php.Syntax",
 			"description": "Special extern class to support PHP language specifics.\nDon't use these functions unless you are really sure what you are doing.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Syntax.html"
+			"link": "https://api.haxe.org/php/Syntax.html"
 		},
 		"php.Throwable": {
 			"name": "Throwable",
 			"path": "php.Throwable",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Throwable.html"
+			"link": "https://api.haxe.org/php/Throwable.html"
 		},
 		"php.Transliterator": {
 			"name": "Transliterator",
 			"path": "php.Transliterator",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Transliterator.html"
+			"link": "https://api.haxe.org/php/Transliterator.html"
 		},
 		"php.Traversable": {
 			"name": "Traversable",
 			"path": "php.Traversable",
 			"description": "See also:",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Traversable.html"
+			"link": "https://api.haxe.org/php/Traversable.html"
 		},
 		"php.UnderflowException": {
 			"name": "UnderflowException",
 			"path": "php.UnderflowException",
 			"description": "Exception thrown when performing an invalid operation on an empty container,\nsuch as removing an element.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/UnderflowException.html"
+			"link": "https://api.haxe.org/php/UnderflowException.html"
 		},
 		"php.UnexpectedValueException": {
 			"name": "UnexpectedValueException",
 			"path": "php.UnexpectedValueException",
 			"description": "Exception thrown if a value does not match with a set of values.\nTypically this happens when a function calls another function and\nexpects the return value to be of a certain type or value not including\narithmetic or buffer related errors.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/UnexpectedValueException.html"
+			"link": "https://api.haxe.org/php/UnexpectedValueException.html"
 		},
 		"php.Web": {
 			"name": "Web",
 			"path": "php.Web",
 			"description": "This class is used for accessing the local Web server and the current\nclient request and information.",
 			"type": "class",
-			"link": "https://api.haxe.org//php/Web.html"
+			"link": "https://api.haxe.org/php/Web.html"
 		},
 		"php.NativeArray": {
 			"name": "NativeArray",
 			"path": "php.NativeArray",
 			"description": "Native PHP array.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//php/NativeArray.html"
+			"link": "https://api.haxe.org/php/NativeArray.html"
 		},
 		"php.NativeAssocArray": {
 			"name": "NativeAssocArray",
 			"path": "php.NativeAssocArray",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//php/NativeAssocArray.html"
+			"link": "https://api.haxe.org/php/NativeAssocArray.html"
 		},
 		"php.NativeIndexedArray": {
 			"name": "NativeIndexedArray",
 			"path": "php.NativeIndexedArray",
 			"description": "",
 			"type": "abstract",
-			"link": "https://api.haxe.org//php/NativeIndexedArray.html"
+			"link": "https://api.haxe.org/php/NativeIndexedArray.html"
 		},
 		"php.NativeString": {
 			"name": "NativeString",
 			"path": "php.NativeString",
 			"description": "Native PHP string.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//php/NativeString.html"
+			"link": "https://api.haxe.org/php/NativeString.html"
 		},
 		"php.NativeStructArray": {
 			"name": "NativeStructArray",
 			"path": "php.NativeStructArray",
 			"description": "This type can be used in places where externs use associative arrays as a list of configuration options.\nThis type is a special case for Haxe->Php generator: object declaration is generated as php array declaration whenever\nthat object declaration is passed directly to a variable or a function argument of this type.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//php/NativeStructArray.html"
+			"link": "https://api.haxe.org/php/NativeStructArray.html"
 		},
 		"php.Resource": {
 			"name": "Resource",
 			"path": "php.Resource",
 			"description": "PHP native resource type",
 			"type": "abstract",
-			"link": "https://api.haxe.org//php/Resource.html"
+			"link": "https://api.haxe.org/php/Resource.html"
 		},
 		"php.CacheLimiter": {
 			"name": "CacheLimiter",
 			"path": "php.CacheLimiter",
 			"description": "",
 			"type": "enum",
-			"link": "https://api.haxe.org//php/CacheLimiter.html"
+			"link": "https://api.haxe.org/php/CacheLimiter.html"
 		},
 		"php.Ref": {
 			"name": "Ref",
 			"path": "php.Ref",
 			"description": "Special type which allows passing function arguments by reference.\nThis type should be used for externs only.",
 			"type": "type",
-			"link": "https://api.haxe.org//php/Ref.html"
+			"link": "https://api.haxe.org/php/Ref.html"
 		},
 		"php.Scalar": {
 			"name": "Scalar",
 			"path": "php.Scalar",
 			"description": "Scalar is a type that is compatible with any scalar value (int, float, bool, string)",
 			"type": "type",
-			"link": "https://api.haxe.org//php/Scalar.html"
+			"link": "https://api.haxe.org/php/Scalar.html"
 		},
 		"python.ArithmeticError": {
 			"name": "ArithmeticError",
 			"path": "python.ArithmeticError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ArithmeticError.html"
+			"link": "https://api.haxe.org/python/ArithmeticError.html"
 		},
 		"python.AssertionError": {
 			"name": "AssertionError",
 			"path": "python.AssertionError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/AssertionError.html"
+			"link": "https://api.haxe.org/python/AssertionError.html"
 		},
 		"python.AttributeError": {
 			"name": "AttributeError",
 			"path": "python.AttributeError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/AttributeError.html"
+			"link": "https://api.haxe.org/python/AttributeError.html"
 		},
 		"python.BaseException": {
 			"name": "BaseException",
 			"path": "python.BaseException",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/BaseException.html"
+			"link": "https://api.haxe.org/python/BaseException.html"
 		},
 		"python.BlockingIOError": {
 			"name": "BlockingIOError",
 			"path": "python.BlockingIOError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/BlockingIOError.html"
+			"link": "https://api.haxe.org/python/BlockingIOError.html"
 		},
 		"python.BrokenPipeError": {
 			"name": "BrokenPipeError",
 			"path": "python.BrokenPipeError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/BrokenPipeError.html"
+			"link": "https://api.haxe.org/python/BrokenPipeError.html"
 		},
 		"python.BufferError": {
 			"name": "BufferError",
 			"path": "python.BufferError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/BufferError.html"
+			"link": "https://api.haxe.org/python/BufferError.html"
 		},
 		"python.Bytearray": {
 			"name": "Bytearray",
 			"path": "python.Bytearray",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Bytearray.html"
+			"link": "https://api.haxe.org/python/Bytearray.html"
 		},
 		"python.Bytes": {
 			"name": "Bytes",
 			"path": "python.Bytes",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Bytes.html"
+			"link": "https://api.haxe.org/python/Bytes.html"
 		},
 		"python.BytesWarning": {
 			"name": "BytesWarning",
 			"path": "python.BytesWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/BytesWarning.html"
+			"link": "https://api.haxe.org/python/BytesWarning.html"
 		},
 		"python.ChildProcessError": {
 			"name": "ChildProcessError",
 			"path": "python.ChildProcessError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ChildProcessError.html"
+			"link": "https://api.haxe.org/python/ChildProcessError.html"
 		},
 		"python.ConnectionAbortedError": {
 			"name": "ConnectionAbortedError",
 			"path": "python.ConnectionAbortedError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ConnectionAbortedError.html"
+			"link": "https://api.haxe.org/python/ConnectionAbortedError.html"
 		},
 		"python.ConnectionError": {
 			"name": "ConnectionError",
 			"path": "python.ConnectionError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ConnectionError.html"
+			"link": "https://api.haxe.org/python/ConnectionError.html"
 		},
 		"python.ConnectionRefusedError": {
 			"name": "ConnectionRefusedError",
 			"path": "python.ConnectionRefusedError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ConnectionRefusedError.html"
+			"link": "https://api.haxe.org/python/ConnectionRefusedError.html"
 		},
 		"python.ConnectionResetError": {
 			"name": "ConnectionResetError",
 			"path": "python.ConnectionResetError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ConnectionResetError.html"
+			"link": "https://api.haxe.org/python/ConnectionResetError.html"
 		},
 		"python.DeprecationWarning": {
 			"name": "DeprecationWarning",
 			"path": "python.DeprecationWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/DeprecationWarning.html"
+			"link": "https://api.haxe.org/python/DeprecationWarning.html"
 		},
 		"python.Dict": {
 			"name": "Dict",
 			"path": "python.Dict",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Dict.html"
+			"link": "https://api.haxe.org/python/Dict.html"
 		},
 		"python.DictView": {
 			"name": "DictView",
 			"path": "python.DictView",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/DictView.html"
+			"link": "https://api.haxe.org/python/DictView.html"
 		},
 		"python.EOFError": {
 			"name": "EOFError",
 			"path": "python.EOFError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/EOFError.html"
+			"link": "https://api.haxe.org/python/EOFError.html"
 		},
 		"python.EnvironmentError": {
 			"name": "EnvironmentError",
 			"path": "python.EnvironmentError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/EnvironmentError.html"
+			"link": "https://api.haxe.org/python/EnvironmentError.html"
 		},
 		"python.Exception": {
 			"name": "Exception",
 			"path": "python.Exception",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Exception.html"
+			"link": "https://api.haxe.org/python/Exception.html"
 		},
 		"python.FileExistsError": {
 			"name": "FileExistsError",
 			"path": "python.FileExistsError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/FileExistsError.html"
+			"link": "https://api.haxe.org/python/FileExistsError.html"
 		},
 		"python.FileNotFoundError": {
 			"name": "FileNotFoundError",
 			"path": "python.FileNotFoundError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/FileNotFoundError.html"
+			"link": "https://api.haxe.org/python/FileNotFoundError.html"
 		},
 		"python.FloatingPointError": {
 			"name": "FloatingPointError",
 			"path": "python.FloatingPointError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/FloatingPointError.html"
+			"link": "https://api.haxe.org/python/FloatingPointError.html"
 		},
 		"python.FutureWarning": {
 			"name": "FutureWarning",
 			"path": "python.FutureWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/FutureWarning.html"
+			"link": "https://api.haxe.org/python/FutureWarning.html"
 		},
 		"python.GeneratorExit": {
 			"name": "GeneratorExit",
 			"path": "python.GeneratorExit",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/GeneratorExit.html"
+			"link": "https://api.haxe.org/python/GeneratorExit.html"
 		},
 		"python.HaxeIterable": {
 			"name": "HaxeIterable",
 			"path": "python.HaxeIterable",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/HaxeIterable.html"
+			"link": "https://api.haxe.org/python/HaxeIterable.html"
 		},
 		"python.HaxeIterator": {
 			"name": "HaxeIterator",
 			"path": "python.HaxeIterator",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/HaxeIterator.html"
+			"link": "https://api.haxe.org/python/HaxeIterator.html"
 		},
 		"python.IOError": {
 			"name": "IOError",
 			"path": "python.IOError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/IOError.html"
+			"link": "https://api.haxe.org/python/IOError.html"
 		},
 		"python.ImportError": {
 			"name": "ImportError",
 			"path": "python.ImportError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ImportError.html"
+			"link": "https://api.haxe.org/python/ImportError.html"
 		},
 		"python.ImportWarning": {
 			"name": "ImportWarning",
 			"path": "python.ImportWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ImportWarning.html"
+			"link": "https://api.haxe.org/python/ImportWarning.html"
 		},
 		"python.IndentationError": {
 			"name": "IndentationError",
 			"path": "python.IndentationError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/IndentationError.html"
+			"link": "https://api.haxe.org/python/IndentationError.html"
 		},
 		"python.IndexError": {
 			"name": "IndexError",
 			"path": "python.IndexError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/IndexError.html"
+			"link": "https://api.haxe.org/python/IndexError.html"
 		},
 		"python.InterruptedError": {
 			"name": "InterruptedError",
 			"path": "python.InterruptedError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/InterruptedError.html"
+			"link": "https://api.haxe.org/python/InterruptedError.html"
 		},
 		"python.IsADirectoryError": {
 			"name": "IsADirectoryError",
 			"path": "python.IsADirectoryError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/IsADirectoryError.html"
+			"link": "https://api.haxe.org/python/IsADirectoryError.html"
 		},
 		"python.KeyError": {
 			"name": "KeyError",
 			"path": "python.KeyError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/KeyError.html"
+			"link": "https://api.haxe.org/python/KeyError.html"
 		},
 		"python.KeyboardInterrupt": {
 			"name": "KeyboardInterrupt",
 			"path": "python.KeyboardInterrupt",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/KeyboardInterrupt.html"
+			"link": "https://api.haxe.org/python/KeyboardInterrupt.html"
 		},
 		"python.Lib": {
 			"name": "Lib",
 			"path": "python.Lib",
 			"description": "Platform-specific Python Library. Provides some platform-specific functions\nfor the Python target, such as conversion from Haxe types to native types\nand vice-versa.",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Lib.html"
+			"link": "https://api.haxe.org/python/Lib.html"
 		},
 		"python.LookupError": {
 			"name": "LookupError",
 			"path": "python.LookupError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/LookupError.html"
+			"link": "https://api.haxe.org/python/LookupError.html"
 		},
 		"python.MemoryError": {
 			"name": "MemoryError",
 			"path": "python.MemoryError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/MemoryError.html"
+			"link": "https://api.haxe.org/python/MemoryError.html"
 		},
 		"python.NameError": {
 			"name": "NameError",
 			"path": "python.NameError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/NameError.html"
+			"link": "https://api.haxe.org/python/NameError.html"
 		},
 		"python.NativeArrayTools": {
 			"name": "NativeArrayTools",
 			"path": "python.NativeArrayTools",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/NativeArrayTools.html"
+			"link": "https://api.haxe.org/python/NativeArrayTools.html"
 		},
 		"python.NativeStringTools": {
 			"name": "NativeStringTools",
 			"path": "python.NativeStringTools",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/NativeStringTools.html"
+			"link": "https://api.haxe.org/python/NativeStringTools.html"
 		},
 		"python.NotADirectoryError": {
 			"name": "NotADirectoryError",
 			"path": "python.NotADirectoryError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/NotADirectoryError.html"
+			"link": "https://api.haxe.org/python/NotADirectoryError.html"
 		},
 		"python.NotImplementedError": {
 			"name": "NotImplementedError",
 			"path": "python.NotImplementedError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/NotImplementedError.html"
+			"link": "https://api.haxe.org/python/NotImplementedError.html"
 		},
 		"python.OSError": {
 			"name": "OSError",
 			"path": "python.OSError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/OSError.html"
+			"link": "https://api.haxe.org/python/OSError.html"
 		},
 		"python.OverflowError": {
 			"name": "OverflowError",
 			"path": "python.OverflowError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/OverflowError.html"
+			"link": "https://api.haxe.org/python/OverflowError.html"
 		},
 		"python.PendingDeprecationWarning": {
 			"name": "PendingDeprecationWarning",
 			"path": "python.PendingDeprecationWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/PendingDeprecationWarning.html"
+			"link": "https://api.haxe.org/python/PendingDeprecationWarning.html"
 		},
 		"python.PermissionError": {
 			"name": "PermissionError",
 			"path": "python.PermissionError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/PermissionError.html"
+			"link": "https://api.haxe.org/python/PermissionError.html"
 		},
 		"python.ProcessLookupError": {
 			"name": "ProcessLookupError",
 			"path": "python.ProcessLookupError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ProcessLookupError.html"
+			"link": "https://api.haxe.org/python/ProcessLookupError.html"
 		},
 		"python.ResourceWarning": {
 			"name": "ResourceWarning",
 			"path": "python.ResourceWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ResourceWarning.html"
+			"link": "https://api.haxe.org/python/ResourceWarning.html"
 		},
 		"python.RuntimeError": {
 			"name": "RuntimeError",
 			"path": "python.RuntimeError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/RuntimeError.html"
+			"link": "https://api.haxe.org/python/RuntimeError.html"
 		},
 		"python.RuntimeWarning": {
 			"name": "RuntimeWarning",
 			"path": "python.RuntimeWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/RuntimeWarning.html"
+			"link": "https://api.haxe.org/python/RuntimeWarning.html"
 		},
 		"python.Set": {
 			"name": "Set",
 			"path": "python.Set",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Set.html"
+			"link": "https://api.haxe.org/python/Set.html"
 		},
 		"python.StopIteration": {
 			"name": "StopIteration",
 			"path": "python.StopIteration",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/StopIteration.html"
+			"link": "https://api.haxe.org/python/StopIteration.html"
 		},
 		"python.Syntax": {
 			"name": "Syntax",
 			"path": "python.Syntax",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Syntax.html"
+			"link": "https://api.haxe.org/python/Syntax.html"
 		},
 		"python.SyntaxError": {
 			"name": "SyntaxError",
 			"path": "python.SyntaxError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/SyntaxError.html"
+			"link": "https://api.haxe.org/python/SyntaxError.html"
 		},
 		"python.SyntaxWarning": {
 			"name": "SyntaxWarning",
 			"path": "python.SyntaxWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/SyntaxWarning.html"
+			"link": "https://api.haxe.org/python/SyntaxWarning.html"
 		},
 		"python.TimeoutError": {
 			"name": "TimeoutError",
 			"path": "python.TimeoutError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/TimeoutError.html"
+			"link": "https://api.haxe.org/python/TimeoutError.html"
 		},
 		"python.Tuple": {
 			"name": "Tuple",
 			"path": "python.Tuple",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Tuple.html"
+			"link": "https://api.haxe.org/python/Tuple.html"
 		},
 		"python.Tuple1": {
 			"name": "Tuple1",
 			"path": "python.Tuple1",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Tuple1.html"
+			"link": "https://api.haxe.org/python/Tuple1.html"
 		},
 		"python.Tuple2": {
 			"name": "Tuple2",
 			"path": "python.Tuple2",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Tuple2.html"
+			"link": "https://api.haxe.org/python/Tuple2.html"
 		},
 		"python.Tuple3": {
 			"name": "Tuple3",
 			"path": "python.Tuple3",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Tuple3.html"
+			"link": "https://api.haxe.org/python/Tuple3.html"
 		},
 		"python.Tuple4": {
 			"name": "Tuple4",
 			"path": "python.Tuple4",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Tuple4.html"
+			"link": "https://api.haxe.org/python/Tuple4.html"
 		},
 		"python.Tuple5": {
 			"name": "Tuple5",
 			"path": "python.Tuple5",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Tuple5.html"
+			"link": "https://api.haxe.org/python/Tuple5.html"
 		},
 		"python.UnboundLocalError": {
 			"name": "UnboundLocalError",
 			"path": "python.UnboundLocalError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UnboundLocalError.html"
+			"link": "https://api.haxe.org/python/UnboundLocalError.html"
 		},
 		"python.UnicodeDecodeError": {
 			"name": "UnicodeDecodeError",
 			"path": "python.UnicodeDecodeError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UnicodeDecodeError.html"
+			"link": "https://api.haxe.org/python/UnicodeDecodeError.html"
 		},
 		"python.UnicodeEncodeError": {
 			"name": "UnicodeEncodeError",
 			"path": "python.UnicodeEncodeError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UnicodeEncodeError.html"
+			"link": "https://api.haxe.org/python/UnicodeEncodeError.html"
 		},
 		"python.UnicodeError": {
 			"name": "UnicodeError",
 			"path": "python.UnicodeError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UnicodeError.html"
+			"link": "https://api.haxe.org/python/UnicodeError.html"
 		},
 		"python.UnicodeTranslateError": {
 			"name": "UnicodeTranslateError",
 			"path": "python.UnicodeTranslateError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UnicodeTranslateError.html"
+			"link": "https://api.haxe.org/python/UnicodeTranslateError.html"
 		},
 		"python.UnicodeWarning": {
 			"name": "UnicodeWarning",
 			"path": "python.UnicodeWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UnicodeWarning.html"
+			"link": "https://api.haxe.org/python/UnicodeWarning.html"
 		},
 		"python.UserWarning": {
 			"name": "UserWarning",
 			"path": "python.UserWarning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/UserWarning.html"
+			"link": "https://api.haxe.org/python/UserWarning.html"
 		},
 		"python.VMSError": {
 			"name": "VMSError",
 			"path": "python.VMSError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/VMSError.html"
+			"link": "https://api.haxe.org/python/VMSError.html"
 		},
 		"python.ValueError": {
 			"name": "ValueError",
 			"path": "python.ValueError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ValueError.html"
+			"link": "https://api.haxe.org/python/ValueError.html"
 		},
 		"python.Warning": {
 			"name": "Warning",
 			"path": "python.Warning",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/Warning.html"
+			"link": "https://api.haxe.org/python/Warning.html"
 		},
 		"python.WindowsError": {
 			"name": "WindowsError",
 			"path": "python.WindowsError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/WindowsError.html"
+			"link": "https://api.haxe.org/python/WindowsError.html"
 		},
 		"python.ZeroDivisionError": {
 			"name": "ZeroDivisionError",
 			"path": "python.ZeroDivisionError",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//python/ZeroDivisionError.html"
+			"link": "https://api.haxe.org/python/ZeroDivisionError.html"
 		},
 		"python.KwArgs": {
 			"name": "KwArgs",
 			"path": "python.KwArgs",
 			"description": "This type represents python **kwargs feature, supporting\npassing named arguments to a function.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//python/KwArgs.html"
+			"link": "https://api.haxe.org/python/KwArgs.html"
 		},
 		"python.NativeIterable": {
 			"name": "NativeIterable",
 			"path": "python.NativeIterable",
 			"description": "This type represents native Python iterables (objects that implement __iter__() method).\nIt supports Haxe iteration and conversion to Iterable by creating wrapper objects.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//python/NativeIterable.html"
+			"link": "https://api.haxe.org/python/NativeIterable.html"
 		},
 		"python.NativeIterator": {
 			"name": "NativeIterator",
 			"path": "python.NativeIterator",
 			"description": "This type represents native Python iterators.\nIt supports automatic conversion to Haxe Iterator by creating wrapper object.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//python/NativeIterator.html"
+			"link": "https://api.haxe.org/python/NativeIterator.html"
 		},
 		"python.VarArgs": {
 			"name": "VarArgs",
 			"path": "python.VarArgs",
 			"description": "This type represents python *args feature, supporting\npassing arbitrary number of arguments to a function.",
 			"type": "abstract",
-			"link": "https://api.haxe.org//python/VarArgs.html"
+			"link": "https://api.haxe.org/python/VarArgs.html"
 		},
 		"python.NativeIterableRaw": {
 			"name": "NativeIterableRaw",
 			"path": "python.NativeIterableRaw",
 			"description": "Native Python iterable protocol.",
 			"type": "type",
-			"link": "https://api.haxe.org//python/NativeIterableRaw.html"
+			"link": "https://api.haxe.org/python/NativeIterableRaw.html"
 		},
 		"python.NativeIteratorRaw": {
 			"name": "NativeIteratorRaw",
 			"path": "python.NativeIteratorRaw",
 			"description": "Native Python iterator protocol.",
 			"type": "type",
-			"link": "https://api.haxe.org//python/NativeIteratorRaw.html"
+			"link": "https://api.haxe.org/python/NativeIteratorRaw.html"
 		},
 		"python.PySys": {
 			"name": "PySys",
 			"path": "python.PySys",
 			"description": "",
 			"type": "type",
-			"link": "https://api.haxe.org//python/PySys.html"
+			"link": "https://api.haxe.org/python/PySys.html"
 		},
 		"sys.FileSystem": {
 			"name": "FileSystem",
 			"path": "sys.FileSystem",
 			"description": "This class provides information about files and directories.",
 			"type": "class",
-			"link": "https://api.haxe.org//sys/FileSystem.html"
+			"link": "https://api.haxe.org/sys/FileSystem.html"
 		},
 		"sys.Http": {
 			"name": "Http",
 			"path": "sys.Http",
 			"description": "",
 			"type": "class",
-			"link": "https://api.haxe.org//sys/Http.html"
+			"link": "https://api.haxe.org/sys/Http.html"
 		},
 		"sys.FileStat": {
 			"name": "FileStat",
 			"path": "sys.FileStat",
 			"description": "File information, as given by sys.FileSystem.stat.",
 			"type": "type",
-			"link": "https://api.haxe.org//sys/FileStat.html"
+			"link": "https://api.haxe.org/sys/FileStat.html"
 		},
 		"cpp.abi.Abi": {
 			"name": "Abi",
