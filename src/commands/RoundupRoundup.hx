@@ -39,7 +39,6 @@ class RoundupRoundup extends CommandDbBase {
 	var host_contacted:Bool = false;
 	var new_event_collector:ReactionCollector;
 	var end_event_collector:ReactionCollector;
-	final host = #if block "151104106973495296" #else "98998236320133120" #end;
 	
 	final voice_channel_id = #if block "416069724657418244" #else "198219256687493120" #end;
 	final announcement_id = #if block "597067735771381771" #else "286485321925918721" #end;
@@ -134,7 +133,7 @@ class RoundupRoundup extends CommandDbBase {
 			waiting = false;
 			host_contacted = true;
 			new_event_collector = this.addCollection('1w', reactions, message, newEventCollector);
-		});
+		}, (err) -> trace(err));
 	}
 
 	function newEventCollector(reaction:MessageReaction, user:User) {
@@ -345,6 +344,13 @@ class RoundupRoundup extends CommandDbBase {
 
 	function get_schedule() {
 		return guild.scheduledEvents;
+	}
+	var host(get, never):String;
+	function get_host() {
+		#if block
+		return "151104106973495296";
+		#end
+		return this.state.host;
 	}
 }
 
