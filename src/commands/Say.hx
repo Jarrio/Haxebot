@@ -11,13 +11,13 @@ class Say extends CommandBase {
 				if (message_id == null) {
 					interaction.channel.sendTyping().then((_) -> {
 						interaction.channel.send({content: message}).then(null, (err) -> trace(err));
-						interaction.reply({content: "sent", ephemeral: true});
+						interaction.reply({content: "sent", ephemeral: true}).then(null, (err) -> trace(err));
 					});
 				} else {
 					interaction.channel.messages.fetch(message_id).then(function(reply) {
 						reply.asType0.reply({content: message})
 							.then(null, (err) -> trace(err));
-						interaction.reply({content: "sent", ephemeral: true});
+						interaction.reply({content: "sent", ephemeral: true}).then(null, (err) -> trace(err));
 					}, (err) -> trace(err));
 				}
 			default:

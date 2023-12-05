@@ -5332,7 +5332,9 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				embed.setDescription(body);
 				embed.setColor(15368736);
-				interaction.reply({ embeds : [embed]});
+				interaction.reply({ embeds : [embed]}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 140, className : "commands.Quote", methodName : "run"});
+				});
 			},function(err) {
 				haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 142, className : "commands.Quote", methodName : "run"});
 				$global.console.dir(err);
@@ -7895,14 +7897,18 @@ commands_Say.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.channel.send({ content : message}).then(null,function(err) {
 						haxe_Log.trace(err,{ fileName : "src/commands/Say.hx", lineNumber : 13, className : "commands.Say", methodName : "run"});
 					});
-					return interaction.reply({ content : "sent", ephemeral : true});
+					return interaction.reply({ content : "sent", ephemeral : true}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Say.hx", lineNumber : 14, className : "commands.Say", methodName : "run"});
+					});
 				});
 			} else {
 				interaction.channel.messages.fetch(_g1).then(function(reply) {
 					reply.reply({ content : message}).then(null,function(err) {
 						haxe_Log.trace(err,{ fileName : "src/commands/Say.hx", lineNumber : 19, className : "commands.Say", methodName : "run"});
 					});
-					interaction.reply({ content : "sent", ephemeral : true});
+					interaction.reply({ content : "sent", ephemeral : true}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Say.hx", lineNumber : 20, className : "commands.Say", methodName : "run"});
+					});
 				},function(err) {
 					haxe_Log.trace(err,{ fileName : "src/commands/Say.hx", lineNumber : 21, className : "commands.Say", methodName : "run"});
 				});

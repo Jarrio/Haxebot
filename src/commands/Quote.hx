@@ -137,7 +137,7 @@ class Quote extends CommandDbBase {
 					}
 					embed.setDescription(body);
 					embed.setColor(0xEA8220);
-					interaction.reply({embeds: [embed]});
+					interaction.reply({embeds: [embed]}).then(null, (err) -> trace(err));
 				}, function(err) {
 					trace(err);
 					Browser.console.dir(err);
