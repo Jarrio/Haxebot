@@ -78,14 +78,12 @@ class Tracker extends CommandDbBase {
 
 						if (tracker.user_exclude != null
 							&& string_compare(message.author.id, tracker.user_exclude)) {
-							trace('skipped: ${message.author.id}');
 							continue;
 						}
 
 						if (tracker.channel_exclude != null
 							&& string_compare((message.channel : TextChannel).id,
 								tracker.channel_exclude)) {
-							trace('skipped: ${(message.channel : TextChannel).id}');
 							continue;
 						}
 
