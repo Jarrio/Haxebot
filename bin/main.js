@@ -9760,6 +9760,9 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 	}
 	,excludeKeywords: function(message,tracker) {
 		var content = message.content;
+		if(tracker.string_exclude == null) {
+			return false;
+		}
 		var _g = 0;
 		var _g1 = tracker.string_exclude;
 		while(_g < _g1.length) {
@@ -9803,12 +9806,12 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 					if(message.author.id == tracker.by) {
 						continue;
 					}
-					if(this.string_compare(message.author.id,tracker.user_exclude)) {
-						haxe_Log.trace("skipped: " + message.author.id,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 76, className : "commands.mod.Tracker", methodName : "update"});
+					if(tracker.user_exclude != null && this.string_compare(message.author.id,tracker.user_exclude)) {
+						haxe_Log.trace("skipped: " + message.author.id,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 81, className : "commands.mod.Tracker", methodName : "update"});
 						continue;
 					}
-					if(this.string_compare(message.channel.id,tracker.channel_exclude)) {
-						haxe_Log.trace("skipped: " + message.channel.id,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 81, className : "commands.mod.Tracker", methodName : "update"});
+					if(tracker.channel_exclude != null && this.string_compare(message.channel.id,tracker.channel_exclude)) {
+						haxe_Log.trace("skipped: " + message.channel.id,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 88, className : "commands.mod.Tracker", methodName : "update"});
 						continue;
 					}
 					if(this.excludeKeywords(message,tracker)) {
@@ -9817,14 +9820,16 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 					if(this.findKeywords(message,tracker)) {
 						if(Object.prototype.hasOwnProperty.call(this.dm.h,tracker.by)) {
 							var embed = new discord_$js_MessageEmbed();
-							embed.setTitle("Keyword Tracker");
+							embed.setTitle("" + tracker.name);
 							var description = message.content;
-							description += "\n ----- \n [Source](" + message.url + ")";
+							var channel = message.channel.name;
+							description += "\n ----- \n [Location: " + channel + "](" + message.url + ")";
 							embed.setDescription(description);
+							embed.setFooter({ text : "Keyword Tracker", iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 							var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
 							embed.setAuthor(author);
 							this.dm.h[tracker.by].send({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 105, className : "commands.mod.Tracker", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 116, className : "commands.mod.Tracker", methodName : "update"});
 							});
 						}
 					}
@@ -9878,7 +9883,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 235, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 245, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				usr_exclude[key] = StringTools.trim(string);
 			}
 			var _g_current = 0;
@@ -9894,7 +9899,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 235, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 245, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				chl_exclude[key] = StringTools.trim(string);
 			}
 			this.parseTracker(interaction,name,description,keywords1,str_exclude,chl_exclude,usr_exclude);
@@ -9920,22 +9925,24 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 							results.push({ name : name, value : d.id});
 						}
 						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 174, className : "commands.mod.Tracker", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 184, className : "commands.mod.Tracker", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 178, className : "commands.mod.Tracker", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 188, className : "commands.mod.Tracker", methodName : "run"});
 						$global.console.dir(err);
 					});
 					return;
 				}
 				firebase_web_firestore_Firestore.deleteDoc(firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/admin/trackers/" + name)).then(function(_) {
-					interaction.reply("Tracker deleted!");
+					interaction.reply({ content : "Tracker deleted!", ephemeral : true}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 195, className : "commands.mod.Tracker", methodName : "run"});
+					});
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 187, className : "commands.mod.Tracker", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 197, className : "commands.mod.Tracker", methodName : "run"});
 					$global.console.dir(err);
 				});
-				haxe_Log.trace(name,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 190, className : "commands.mod.Tracker", methodName : "run"});
+				haxe_Log.trace(name,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 200, className : "commands.mod.Tracker", methodName : "run"});
 			}
 			break;
 		default:
@@ -9957,10 +9964,10 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/admin/trackers"),obj).then(function(_) {
 			interaction.reply({ content : "Your tracker is now active!", ephemeral : true}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 225, className : "commands.mod.Tracker", methodName : "parseTracker"});
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 235, className : "commands.mod.Tracker", methodName : "parseTracker"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 226, className : "commands.mod.Tracker", methodName : "parseTracker"});
+			haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 236, className : "commands.mod.Tracker", methodName : "parseTracker"});
 		});
 	}
 	,cleanDiscordThings: function(string) {
@@ -9969,7 +9976,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		string = StringTools.replace(string,"#","");
 		string = StringTools.replace(string,"@","");
 		string = StringTools.replace(string,"&","");
-		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 235, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 245, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 		return string;
 	}
 	,get_name: function() {
