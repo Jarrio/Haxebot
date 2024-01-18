@@ -15,6 +15,8 @@ enum CommandOptions {
 	SnippetTags;
 	SnippetList(user:User, show_desc:Bool);
 	Color(role:String);	
+	TrackerCreate(name:String, keywords:String, description:String, string_exclude:String, channel_exclude:String, user_exclude:String);	
+	TrackerDelete(name:String);	
 	SnippetEdit(id:String);	
 	SnippetDelete(id:String);	
 	SnippetSearch(taga:String, tagb:String, tagc:String);

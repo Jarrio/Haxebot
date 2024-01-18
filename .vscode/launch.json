@@ -15,6 +15,10 @@
 			"skipFiles": [
 				"<node_internals>/**"
 			],
+			"resolveSourceMapLocations": [
+        "${workspaceFolder}/bin/**",
+        "!**/node_modules/**"
+    	],
 			"presentation": {
 				"hidden": false,
 				"group": "",

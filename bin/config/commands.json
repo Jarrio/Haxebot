@@ -693,7 +693,7 @@
 		"name": "roundup",
 		"description": "[Mod] Configure auto-roundup posting",
 		"is_public": true,
-		"permissions":"admin",
+		"permissions": "admin",
 		"params": [
 			{
 				"name": "issue",
@@ -779,7 +779,7 @@
 				"name": "search",
 				"type": "subcommand",
 				"description": "Search snippets by tag",
-				"params":[
+				"params": [
 					{
 						"name": "taga",
 						"description": "Tag to describe the snippet",
@@ -807,7 +807,7 @@
 				"name": "add",
 				"type": "subcommand",
 				"description": "Add a snippet",
-				"params":[
+				"params": [
 					{
 						"name": "url",
 						"description": "The source of the content",
@@ -867,13 +867,77 @@
 				"name": "delete",
 				"type": "subcommand",
 				"description": "Delete a snippet",
-				"params":[
+				"params": [
 					{
 						"name": "identifier",
 						"description": "The string or id of the quote you wish to delete",
 						"type": "string",
 						"required": true,
-						"autocomplete":true
+						"autocomplete": true
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "tracker",
+		"permissions": "admin",
+		"description": "[Assigned] A utility to track keywords mentioned around the server",
+		"params": [
+			{
+				"name": "create",
+				"type": "subcommand",
+				"description": "create a keyword tracker",
+				"params": [
+					{
+						"name": "name",
+						"type": "string",
+						"description": "Name of your tracker",
+						"required": true
+					},
+					{
+						"name": "keywords",
+						"type": "string",
+						"description": "A COMMA separated list of strings you wish to track",
+						"required": true
+					},
+					{
+						"name": "description",
+						"type": "string",
+						"description": "A description for your keyword tracker",
+						"required": false
+					},
+					{
+						"name": "string_exclude",
+						"type": "string",
+						"description": "A COMMA separated list of strings you wish to exclude",
+						"required": false
+					},
+					{
+						"name": "channel_exclude",
+						"type": "string",
+						"description": "A SPACE separated list of channels you wish to exclude",
+						"required": false
+					},
+					{
+						"name": "user_exclude",
+						"type": "string",
+						"description": "A SPACE separated list of users you wish to exclude. Tracker author is omitted by default",
+						"required": false
+					}
+				]
+			}, 
+			{
+				"name": "delete",
+				"type": "subcommand",
+				"description": "Delete an existing subcommand",
+				"params":[
+					{
+						"name": "name",
+						"type": "string",
+						"description": "Delete a tracker",
+						"required": true,
+						"autocomplete": true
 					}
 				]
 			}
@@ -888,7 +952,7 @@
 				"name": "get",
 				"type": "subcommand",
 				"description": "Get a quote",
-				"params":[
+				"params": [
 					{
 						"name": "identifier",
 						"description": "The string or id of the quote you wish to grab",
@@ -902,7 +966,7 @@
 				"name": "list",
 				"type": "subcommand",
 				"description": "List of available quotes",
-				"params":[
+				"params": [
 					{
 						"name": "user",
 						"description": "Get all quotes by a particular user",
@@ -915,13 +979,13 @@
 				"name": "create",
 				"type": "subcommand",
 				"description": "Create a quote",
-				"params":[
+				"params": [
 					{
 						"name": "identifier",
 						"description": "The string or id of the quote you wish to grab",
 						"type": "string",
 						"required": true,
-						"autocomplete":true
+						"autocomplete": true
 					}
 				]
 			},
@@ -929,13 +993,13 @@
 				"name": "edit",
 				"type": "subcommand",
 				"description": "Recall a quote",
-				"params":[
+				"params": [
 					{
 						"name": "identifier",
 						"description": "The string or id of the quote you wish to grab",
 						"type": "string",
 						"required": true,
-						"autocomplete":true
+						"autocomplete": true
 					}
 				]
 			},
@@ -943,13 +1007,13 @@
 				"name": "delete",
 				"type": "subcommand",
 				"description": "Recall a quote",
-				"params":[
+				"params": [
 					{
 						"name": "identifier",
 						"description": "The string or id of the quote you wish to grab",
 						"type": "string",
 						"required": true,
-						"autocomplete":true
+						"autocomplete": true
 					}
 				]
 			}
@@ -966,7 +1030,7 @@
 				"description": "The user to add the permission to",
 				"type": "user",
 				"required": true
-			},					
+			},
 			{
 				"name": "role",
 				"description": "The role that will be pingable by the user",

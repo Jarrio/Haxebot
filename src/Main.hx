@@ -36,6 +36,7 @@ import sys.io.File;
 import ecs.Universe;
 import haxe.Timer;
 import commands.*;
+import commands.mod.*;
 import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
 import commands.AutoRole;
@@ -95,12 +96,13 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						Tracker, RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						Tracker,
 						// PinMessageInfo,
 						#if update
 						Helppls Ban, Helpdescription,
@@ -235,7 +237,11 @@ class Main {
 						message);
 				}
 			}
+
 			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention,
+				message);
+
+			universe.setComponents(universe.createEntity(), CommandForward.keyword_tracker,
 				message);
 		});
 
@@ -709,6 +715,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) from String {
+	var keyword_tracker;
 	var roundup_member_update;
 	var snippet_left;
 	var snippet_right;
