@@ -47,7 +47,7 @@ class Tracker extends CommandDbBase {
 		}
 
 		for (word in tracker.string_exclude) {
-			if (content.contains(word)) {
+			if (content.toLowerCase().contains(word)) {
 				return true;
 			}
 		}
@@ -57,7 +57,7 @@ class Tracker extends CommandDbBase {
 	function findKeywords(message:Message, tracker:TTracker) {
 		var content = message.content;
 		for (word in tracker.keywords) {
-			if (content.contains(word)) {
+			if (content.toLowerCase().contains(word)) {
 				return true;
 			}
 		}
@@ -127,10 +127,16 @@ class Tracker extends CommandDbBase {
 			case TrackerCreate(name, keywords, description, string_exclude, channel_exclude,
 				user_exclude):
 				var keywords = keywords.split(',');
+				for (key => value in keywords) {
+					keywords[key] = value.toLowerCase();
+				}
 
 				var str_exclude = [];
 				if (string_exclude != null) {
 					str_exclude = string_exclude.split(',');
+					for (key => value in str_exclude) {
+						str_exclude[key] = value.toLowerCase();
+					}
 				}
 
 				var chl_exclude = [];
@@ -197,7 +203,7 @@ class Tracker extends CommandDbBase {
 								break;
 							}
 						}
-						
+
 						interaction.reply({content: 'Tracker deleted!', ephemeral: true}).then(null, (err) -> trace(err));
 					}, function(err) {
 						trace(err);

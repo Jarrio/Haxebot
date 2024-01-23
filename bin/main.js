@@ -9768,7 +9768,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		while(_g < _g1.length) {
 			var word = _g1[_g];
 			++_g;
-			if(content.indexOf(word) != -1) {
+			if(content.toLowerCase().indexOf(word) != -1) {
 				return true;
 			}
 		}
@@ -9781,7 +9781,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		while(_g < _g1.length) {
 			var word = _g1[_g];
 			++_g;
-			if(content.indexOf(word) != -1) {
+			if(content.toLowerCase().indexOf(word) != -1) {
 				return true;
 			}
 		}
@@ -9849,9 +9849,27 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 			var channel_exclude = _g.channel_exclude;
 			var user_exclude = _g.user_exclude;
 			var keywords1 = keywords.split(",");
+			var _g_current = 0;
+			var _g_array = keywords1;
+			while(_g_current < _g_array.length) {
+				var _g_value = _g_array[_g_current];
+				var _g_key = _g_current++;
+				var key = _g_key;
+				var value = _g_value;
+				keywords1[key] = value.toLowerCase();
+			}
 			var str_exclude = [];
 			if(string_exclude != null) {
 				str_exclude = string_exclude.split(",");
+				var _g_current = 0;
+				var _g_array = str_exclude;
+				while(_g_current < _g_array.length) {
+					var _g_value = _g_array[_g_current];
+					var _g_key = _g_current++;
+					var key = _g_key;
+					var value = _g_value;
+					str_exclude[key] = value.toLowerCase();
+				}
 			}
 			var chl_exclude = [];
 			if(channel_exclude != null) {
@@ -9883,7 +9901,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 251, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 257, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				usr_exclude[key] = StringTools.trim(string);
 			}
 			var _g_current = 0;
@@ -9899,7 +9917,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 251, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 257, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				chl_exclude[key] = StringTools.trim(string);
 			}
 			this.parseTracker(interaction,name,description,keywords1,str_exclude,chl_exclude,usr_exclude);
@@ -9925,11 +9943,11 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 							results.push({ name : name, value : d.id});
 						}
 						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 183, className : "commands.mod.Tracker", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 189, className : "commands.mod.Tracker", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 187, className : "commands.mod.Tracker", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 193, className : "commands.mod.Tracker", methodName : "run"});
 						$global.console.dir(err);
 					});
 					return;
@@ -9946,13 +9964,13 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 						}
 					}
 					interaction.reply({ content : "Tracker deleted!", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 201, className : "commands.mod.Tracker", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 207, className : "commands.mod.Tracker", methodName : "run"});
 					});
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 203, className : "commands.mod.Tracker", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 209, className : "commands.mod.Tracker", methodName : "run"});
 					$global.console.dir(err);
 				});
-				haxe_Log.trace(name,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 206, className : "commands.mod.Tracker", methodName : "run"});
+				haxe_Log.trace(name,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 212, className : "commands.mod.Tracker", methodName : "run"});
 			}
 			break;
 		default:
@@ -9974,10 +9992,10 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/admin/trackers"),obj).then(function(_) {
 			interaction.reply({ content : "Your tracker is now active!", ephemeral : true}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 241, className : "commands.mod.Tracker", methodName : "parseTracker"});
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 247, className : "commands.mod.Tracker", methodName : "parseTracker"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 242, className : "commands.mod.Tracker", methodName : "parseTracker"});
+			haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 248, className : "commands.mod.Tracker", methodName : "parseTracker"});
 		});
 	}
 	,cleanDiscordThings: function(string) {
@@ -9986,7 +10004,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		string = StringTools.replace(string,"#","");
 		string = StringTools.replace(string,"@","");
 		string = StringTools.replace(string,"&","");
-		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 251, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 257, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 		return string;
 	}
 	,get_name: function() {
