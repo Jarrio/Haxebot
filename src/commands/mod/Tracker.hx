@@ -191,6 +191,13 @@ class Tracker extends CommandDbBase {
 					}
 
 					Firestore.deleteDoc(doc(db, 'discord/admin/trackers/$name')).then(function(_) {
+						for (tracker in trackers) {
+							if (tracker.name == name) {
+								trackers.remove(tracker);
+								break;
+							}
+						}
+						
 						interaction.reply({content: 'Tracker deleted!', ephemeral: true}).then(null, (err) -> trace(err));
 					}, function(err) {
 						trace(err);
