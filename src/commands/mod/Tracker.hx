@@ -112,6 +112,7 @@ class Tracker extends CommandDbBase {
 								embed.setAuthor(author);
 								this.dm[tracker.by].send({embeds: [embed]})
 								.then(null, (err) -> trace(err));
+								break;
 							}
 						}
 					}
