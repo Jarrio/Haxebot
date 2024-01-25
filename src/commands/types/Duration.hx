@@ -29,7 +29,7 @@ enum abstract Duration(Float) to Float {
 
 	@:op(A <= B) static function ltequaltofloat(a:Float, b:Duration):Bool;
 
-	@:op(A == B) static function equality(a:Float, b:Duration):Bool;
+	@:op(A == B) static function equalityFloat(a:Float, b:Duration):Bool;
 
 	@:op(A + B) static function addition(a:Duration, b:Duration):Duration;
 	@:op(A / B) static function division(a:Duration, b:Duration):Duration;

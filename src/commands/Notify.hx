@@ -22,6 +22,7 @@ class Notify extends CommandBase {
 			case 'haxeui': '761714853403820052';
 			// #ceramic
 			case 'ceramic': '914171888748609546';
+			case 'reflaxe': '1200065966445449286';
 			// #devserver notes test
 			case 'dvorak': '903006951896666153';
 			case 'jam': '1058843687687295066';
