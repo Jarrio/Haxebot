@@ -10,5 +10,9 @@
 	{
 		"keys": ["565569107701923852", "haxe-ui", "haxeui", "haxeui"],
 		"content": "HaxeUI allows the creation of multi-platform, multi-framework user interfaces (including native ones) that can be built using normal haxe code as well as using a markup language like XML. \nFor more info a getting started guides see: http://haxeui.org/getting-started/"
+	},
+	{
+		"keys": ["1200065966445449286", "reflaxe"],
+		"content": "Reflaxe is a framework for creating Haxe langauage targets using macros. All you need to worry about is converting from Haxe's typed AST to your desired programming language. Reflaxe handles organizing the input AST, reading user configuration, and generating the output file(s), while also providing various configuration options and helper functions for Haxe target developers.\n\nFirst install the library:\n```\nhaxelib git reflaxe https://github.com/SomeRanDev/reflaxe.git\n```\nNext generate a project in your desired directory:\n```\nhaxelib run reflaxe new\n```\nModify the compiler class, then run tests using:\n```cd reflaxe_<langname>\nhaxelib run reflaxe test\n```\nGithub: <https://github.com/SomeRanDev/reflaxe>\nAPI: <https://somerandev.github.io/reflaxe/>\n\n__Check the pins for important info!__"
 	}
 ]
