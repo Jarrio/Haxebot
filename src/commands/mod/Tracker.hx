@@ -64,6 +64,10 @@ class Tracker extends CommandDbBase {
 		return false;
 	}
 
+	function keywordParser(content:String, matcher:Array<String>) {
+		
+	}
+
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, (entity) -> {

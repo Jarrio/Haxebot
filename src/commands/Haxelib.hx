@@ -70,6 +70,11 @@ class Haxelib extends CommandBase {
 					if (output.length > 4000) {
 						output = output.substr(0, 4000) + '...';
 					}
+
+					if (output.length == 0 || output == '') {
+						output = "No libraries installed.";
+					}
+					
 					embed.setDescription(output);
 					interaction.reply({embeds: [embed]}).then(null, function(err) {
 						trace(err);
