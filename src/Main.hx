@@ -167,6 +167,34 @@ class Main {
 					trace('DEBUG - ${item.name} is REGISTERED');
 				}
 
+				client.channels.fetch('260508365489307658')
+					.then(function(channel:TextChannel) {
+						channel.messages.fetch('1212006702069841920').then(function(msg) {
+							trace(msg.asType0.createdTimestamp);
+						}, (err) -> trace(err));
+					});
+
+				client.channels.fetch('502857487888809985')
+					.then(function(channel:TextChannel) {
+						channel.messages.fetch('1212006670486741002').then(function(msg) {
+							trace(msg.asType0.createdTimestamp);
+						}, (err) -> trace(err));
+					}, (err) -> trace(err));
+
+				client.channels.fetch('1195385288978079886')
+					.then(function(channel:TextChannel) {
+						channel.messages.fetch('1212006643655774328').then(function(msg) {
+							trace(msg.asType0.createdTimestamp);
+						}, (err) -> trace(err));
+					}, (err) -> trace(err));
+
+				client.channels.fetch('1030192290246955049')
+					.then(function(channel:TextChannel) {
+						channel.messages.fetch('1212006610314993734').then(function(msg) {
+							trace(msg.asType0.createdTimestamp);
+						}, (err) -> trace(err));
+					}, (err) -> trace(err));
+
 				#if block
 				trace('DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE');
 				#end

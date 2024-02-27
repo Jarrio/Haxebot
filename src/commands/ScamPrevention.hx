@@ -23,7 +23,7 @@ class ScamPrevention extends CommandBase {
 	var phishing_update_time:Float;
 
 	var timestamp(get, never):Float;
-	final last_message_interval = 10000;
+	final last_message_interval = 15000;
 
 	override function update(_:Float) {
 		super.update(_);
@@ -54,6 +54,10 @@ class ScamPrevention extends CommandBase {
 
 			var review = false;
 			if (this.checkTags(messages)) {
+				review = true;
+			}
+
+			if (this.checkContent(messages)) {
 				review = true;
 			}
 
@@ -180,6 +184,18 @@ class ScamPrevention extends CommandBase {
 			trace(err);
 			Browser.console.dir(err);
 		});
+	}
+
+	function checkContent(messages:Array<Message>) {
+		var keywords = ['$', 'crypto', 'market', 'profit', '£'];
+		for (m in messages) {
+			for (key in keywords) {
+				if (m.content.contains(key)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	function checkPhishingLinks(messages:Array<Message>) {

@@ -4,6 +4,7 @@ import js.Browser;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
+import discord_js.TextChannel;
 
 class Notify extends CommandBase {
 	function getRole(channel:String) {
