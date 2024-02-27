@@ -1179,47 +1179,13 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 167, className : "Main", methodName : "start"});
 			}
-			Main.client.channels.fetch("260508365489307658").then(function(channel) {
-				channel.messages.fetch("1212006702069841920").then(function(msg) {
-					haxe_Log.trace(msg.createdTimestamp,{ fileName : "src/Main.hx", lineNumber : 173, className : "Main", methodName : "start"});
-				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 174, className : "Main", methodName : "start"});
-				});
-			});
-			Main.client.channels.fetch("502857487888809985").then(function(channel) {
-				channel.messages.fetch("1212006670486741002").then(function(msg) {
-					haxe_Log.trace(msg.createdTimestamp,{ fileName : "src/Main.hx", lineNumber : 180, className : "Main", methodName : "start"});
-				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 181, className : "Main", methodName : "start"});
-				});
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 182, className : "Main", methodName : "start"});
-			});
-			Main.client.channels.fetch("1195385288978079886").then(function(channel) {
-				channel.messages.fetch("1212006643655774328").then(function(msg) {
-					haxe_Log.trace(msg.createdTimestamp,{ fileName : "src/Main.hx", lineNumber : 187, className : "Main", methodName : "start"});
-				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 188, className : "Main", methodName : "start"});
-				});
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 189, className : "Main", methodName : "start"});
-			});
-			Main.client.channels.fetch("1030192290246955049").then(function(channel) {
-				channel.messages.fetch("1212006610314993734").then(function(msg) {
-					haxe_Log.trace(msg.createdTimestamp,{ fileName : "src/Main.hx", lineNumber : 194, className : "Main", methodName : "start"});
-				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 195, className : "Main", methodName : "start"});
-				});
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 196, className : "Main", methodName : "start"});
-			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 202, className : "Main", methodName : "start"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 173, className : "Main", methodName : "start"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 208, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 179, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,0,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,4,member);
@@ -1489,8 +1455,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 277, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 278, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 248, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 249, className : "Main", methodName : "start"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1675,11 +1641,11 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isModalSubmit()) {
-			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 310, className : "Main", methodName : "start"});
-			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 311, className : "Main", methodName : "start"});
+			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 281, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 282, className : "Main", methodName : "start"});
 			switch(interaction.customId) {
 			case "code_paste":
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 320, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 291, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,0,"code_paste");
 				Main.universe.components.set(_ecsTmpEntity,3,interaction);
@@ -1995,7 +1961,7 @@ Main.get_state = function() {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 482, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 453, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -2003,21 +1969,21 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 498, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 469, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 508, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 479, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
 			Main.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 518, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 489, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
@@ -2026,7 +1992,7 @@ Main.main = function() {
 Main.updateState = function(field,value) {
 	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 	firebase_web_firestore_Firestore.updateDoc(doc,field,value).then(null,function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 530, className : "Main", methodName : "updateState"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 501, className : "Main", methodName : "updateState"});
 		$global.console.dir(err);
 	});
 };
@@ -4640,7 +4606,6 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Hi
 });
 var commands_Notify = function(_universe) {
-	this.once = false;
 	systems_CommandBase.call(this,_universe);
 };
 $hxClasses["commands.Notify"] = commands_Notify;
@@ -4675,20 +4640,15 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			return "err";
 		}
 	}
-	,once: null
 	,run: function(command,interaction) {
 		var _gthis = this;
-		if(!this.once) {
-			haxe_Log.trace("done",{ fileName : "src/commands/Notify.hx", lineNumber : 38, className : "commands.Notify", methodName : "run"});
-			this.once = true;
-		}
 		var _g = command.content;
 		if(_g._hx_index == 26) {
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
-				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 45, className : "commands.Notify", methodName : "run"});
-				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 46, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 40, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 41, className : "commands.Notify", methodName : "run"});
 				interaction.reply("Invalid channel");
 				return;
 			}
@@ -4710,7 +4670,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.member.roles.remove(role).then(function(success) {
 						interaction.reply("Unsubscribed to " + channel + " updates");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 64, className : "commands.Notify", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 59, className : "commands.Notify", methodName : "run"});
 						$global.console.dir(err);
 					});
 				} else {
@@ -4743,12 +4703,12 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 						}
 						interaction.reply("Subscribed to " + channel + " updates");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 77, className : "commands.Notify", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 72, className : "commands.Notify", methodName : "run"});
 						$global.console.dir(err);
 					});
 				}
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 82, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 77, className : "commands.Notify", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
