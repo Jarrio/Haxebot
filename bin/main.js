@@ -8323,6 +8323,10 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			if(link_regex.match(content)) {
 				content = content.replace(link_regex.r,"[Link Removed]");
 			}
+			var markdown_regex = new EReg("\\[.*\\)","ig");
+			if(markdown_regex.match(content)) {
+				content = content.replace(markdown_regex.r,"[Content Removed]");
+			}
 		}
 		var rand = Math.random();
 		var avatar = rand >= 0 && rand < 0.33 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/muffin_haxe_cop.png?raw=true&rf=1" : rand >= 0.33 && rand < 0.66 ? "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bulby_haxe_cop.png?raw=true" : "https://github.com/Jarrio/Haxebot/blob/master/bin/resources/images/bsod_haxe_cop.png?raw=true";

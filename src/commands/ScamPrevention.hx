@@ -289,6 +289,12 @@ class ScamPrevention extends CommandBase {
 			if (link_regex.match(content)) {
 				content = link_regex.replace(content, '[Link Removed]');
 			}
+
+			var markdown_regex = ~/\[.*\)/ig;
+			
+			if (markdown_regex.match(content)) {
+				content = markdown_regex.replace(content, '[Content Removed]');
+			}
 		}
 
 		var rand = Math.random();
