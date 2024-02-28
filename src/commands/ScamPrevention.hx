@@ -23,7 +23,7 @@ class ScamPrevention extends CommandBase {
 	var phishing_update_time:Float;
 
 	var timestamp(get, never):Float;
-	final last_message_interval = 15000;
+	final last_message_interval = 30000;
 
 	override function update(_:Float) {
 		super.update(_);

@@ -7961,7 +7961,7 @@ commands_Say.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Say
 });
 var commands_ScamPrevention = function(_universe) {
-	this.last_message_interval = 15000;
+	this.last_message_interval = 30000;
 	this.phishing_urls = [];
 	this.trigger_messages = new haxe_ds_StringMap();
 	this.user_list = new haxe_ds_StringMap();
