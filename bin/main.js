@@ -6501,6 +6501,9 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.reply({ ephemeral : true, content : "*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*"});
 					haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 20, className : "commands.React", methodName : "run"});
 				});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/React.hx", lineNumber : 23, className : "commands.React", methodName : "run"});
+				return interaction.reply({ ephemeral : true, content : "*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*"});
 			});
 		}
 	}

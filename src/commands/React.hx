@@ -13,11 +13,17 @@ class React extends CommandBase {
 						interaction.reply({content: '*reacted*', ephemeral: true})
 							.then(null, (err) -> trace(err));
 					}, (err) -> {
-						interaction.reply(
-							{ephemeral: true,
-								content: '*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*'}
-						);
+						interaction.reply({
+							ephemeral: true,
+							content: '*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*'
+						});
 						trace(err);
+					});
+				}, (err) -> {
+					trace(err);
+					interaction.reply({
+						ephemeral: true,
+						content: '*failed to react, not sure why. invalid emoji perhaps? ask notbilly if no obvious reason*'
 					});
 				});
 			default:
