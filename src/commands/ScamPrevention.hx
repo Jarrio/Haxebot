@@ -65,6 +65,10 @@ class ScamPrevention extends CommandBase {
 				review = true;
 			}
 
+			if (!this.checkChannels(messages)) {
+				review = false;
+			}
+
 			if (!review) {
 				continue;
 			}
@@ -145,6 +149,20 @@ class ScamPrevention extends CommandBase {
 			trace(err);
 			Browser.console.dir(err);
 		});
+	}
+
+	inline function checkChannels(messages:Array<Message>) {
+		var channel_count = 0;
+		for (k => m in messages) {
+			if (k == 0) {
+				continue;
+			}
+			var last = messages[k - 1];
+			if (last.channel.asType0.id != m.channel.asType0.id) {
+				channel_count++;
+			}
+		}
+		return channel_count > 2;
 	}
 
 	function banUser(messages:Array<Message>, ?callback:(_:Dynamic) -> Void) {

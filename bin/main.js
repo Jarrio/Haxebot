@@ -8017,8 +8017,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 123, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 124, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 127, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 128, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -8047,6 +8047,22 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			if(this.checkEquality(messages)) {
 				review = true;
+			}
+			var channel_count = 0;
+			var _g_current = 0;
+			while(_g_current < messages.length) {
+				var _g_value = messages[_g_current];
+				var _g_key = _g_current++;
+				if(_g_key == 0) {
+					continue;
+				}
+				var last = messages[_g_key - 1];
+				if(last.channel.id != _g_value.channel.id) {
+					++channel_count;
+				}
+			}
+			if(channel_count <= 2) {
+				review = false;
 			}
 			if(!review) {
 				continue;
@@ -8099,12 +8115,12 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					var message = messages[_g];
 					++_g;
 					message.delete().then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 94, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 98, className : "commands.ScamPrevention", methodName : "reviewMessage"});
 						$global.console.dir(err);
 					});
 				}
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 99, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 103, className : "commands.ScamPrevention", methodName : "reviewMessage"});
 				$global.console.dir(err);
 			});
 		});
@@ -8135,8 +8151,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 123, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 124, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 127, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 128, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -8148,7 +8164,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
 			guild_member.timeout(43200000,"Stop spamming, a mod will review this at their convenience.").then(callback,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 140, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 144, className : "commands.ScamPrevention", methodName : "timeoutUser"});
 				$global.console.dir(err);
 			});
 			var id = message.author.id;
@@ -8165,9 +8181,25 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				delete(_this.h[id]);
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 145, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 149, className : "commands.ScamPrevention", methodName : "timeoutUser"});
 			$global.console.dir(err);
 		});
+	}
+	,checkChannels: function(messages) {
+		var channel_count = 0;
+		var _g_current = 0;
+		while(_g_current < messages.length) {
+			var _g_value = messages[_g_current];
+			var _g_key = _g_current++;
+			if(_g_key == 0) {
+				continue;
+			}
+			var last = messages[_g_key - 1];
+			if(last.channel.id != _g_value.channel.id) {
+				++channel_count;
+			}
+		}
+		return channel_count > 2;
 	}
 	,banUser: function(messages,callback) {
 		var _gthis = this;
@@ -8180,7 +8212,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
 			}
 			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 161, className : "commands.ScamPrevention", methodName : "banUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 179, className : "commands.ScamPrevention", methodName : "banUser"});
 				$global.console.dir(err);
 			});
 			var id = message.author.id;
@@ -8197,11 +8229,11 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				delete(_this.h[id]);
 			}
 			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 169, className : "commands.ScamPrevention", methodName : "banUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 187, className : "commands.ScamPrevention", methodName : "banUser"});
 				$global.console.dir(err);
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 173, className : "commands.ScamPrevention", methodName : "banUser"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 191, className : "commands.ScamPrevention", methodName : "banUser"});
 			$global.console.dir(err);
 		});
 	}
@@ -8211,7 +8243,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		Main.client.channels.fetch("952952631079362650").then(function(channel) {
 			channel.send({ content : "<@" + id + ">", embeds : [embed]});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 184, className : "commands.ScamPrevention", methodName : "logMessage"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 202, className : "commands.ScamPrevention", methodName : "logMessage"});
 			$global.console.dir(err);
 		});
 	}
@@ -8260,7 +8292,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 221, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 239, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 						if(link != url.hostname) {
