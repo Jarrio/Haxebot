@@ -12,16 +12,38 @@ import discord_js.Message;
 import discord_js.TextChannel;
 
 class Tracker extends CommandDbBase {
-	var trackers:Array<TTracker> = [];
+	var trackers:Map<String, TTracker> = [];
 	var dm:Map<String, User> = [];
-
 	@:fastFamily var messages:{command:CommandForward, message:Message};
+	var init_trackers:Bool = false;
 
 	override function onEnabled() {
 		Firestore.onSnapshot(collection(this.db, 'discord/admin/trackers'), function(resp) {
+			if (init_trackers) {
+				for (item in resp.docChanges()) {
+					switch (item.type) {
+						case "added" | "modified":
+							var data = item.doc.data();
+							trackers.set(item.doc.id, data);
+							if (!dm.exists(data.by)) {
+								Main.client.users.fetch(data.by).then(function(user) {
+									this.dm.set(data.by, user);
+								}, (err) -> trace(err));
+							}
+						case "removed":
+							trackers.remove(item.doc.id);
+						default:
+							trace('item type not mapped? ${item.type}');
+					}
+				}
+				return;
+			}
+
+			init_trackers = true;
 			for (item in resp.docs) {
 				var data = item.data();
-				trackers.push(data);
+				trackers.set(item.id, cast data);
+				
 				if (!dm.exists(data.by)) {
 					Main.client.users.fetch(data.by).then(function(user) {
 						this.dm.set(data.by, user);
@@ -74,7 +96,7 @@ class Tracker extends CommandDbBase {
 			switch (command) {
 				case keyword_tracker:
 					for (tracker in trackers) {
-						if (message.author.id == tracker.by) {
+						if (message.author.id != tracker.by) {
 							continue;
 						}
 
@@ -201,19 +223,12 @@ class Tracker extends CommandDbBase {
 					}
 
 					Firestore.deleteDoc(doc(db, 'discord/admin/trackers/$name')).then(function(_) {
-						for (tracker in trackers) {
-							if (tracker.name == name) {
-								trackers.remove(tracker);
-								break;
-							}
-						}
-
+						trackers.remove(name);
 						interaction.reply({content: 'Tracker deleted!', ephemeral: true}).then(null, (err) -> trace(err));
 					}, function(err) {
 						trace(err);
 						Browser.console.dir(err);
 					});
-					trace(name);
 				}
 			default:
 		}

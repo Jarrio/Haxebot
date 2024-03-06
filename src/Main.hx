@@ -201,6 +201,8 @@ class Main {
 				return;
 			}
 
+			//suppressEmbed(message);
+
 			var match = message.content.split(' ')[0];
 			if (match != null && match.charAt(0) == '!') {
 				for (command in TextCommand.list()) {
@@ -327,6 +329,11 @@ class Main {
 			}
 			universe.update(1);
 		}
+	}
+
+	public static function supressEmbeds(message:Message) {
+		var content = message.content;
+		
 	}
 
 	public static function createCommand(interaction:BaseCommandInteraction) {
