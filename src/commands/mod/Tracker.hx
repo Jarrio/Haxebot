@@ -96,7 +96,8 @@ class Tracker extends CommandDbBase {
 			switch (command) {
 				case keyword_tracker:
 					for (tracker in trackers) {
-						if (message.author.id != tracker.by) {
+
+						if (message.author.id #if debug_block != #else == #end tracker.by) {
 							continue;
 						}
 
