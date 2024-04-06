@@ -313,6 +313,8 @@ class ScamPrevention extends CommandBase {
 			if (markdown_regex.match(content)) {
 				content = markdown_regex.replace(content, '[Content Removed]');
 			}
+
+			content = content.replace("#", "");
 		}
 
 		var rand = Math.random();
