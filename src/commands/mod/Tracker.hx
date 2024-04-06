@@ -97,7 +97,7 @@ class Tracker extends CommandDbBase {
 				case keyword_tracker:
 					for (tracker in trackers) {
 
-						if (message.author.id #if debug_block != #else == #end tracker.by) {
+						if (message.author.id == tracker.by) {
 							continue;
 						}
 
@@ -139,7 +139,7 @@ class Tracker extends CommandDbBase {
 								embed.setAuthor(author);
 								this.dm[tracker.by].send({embeds: [embed]})
 								.then(null, (err) -> trace(err));
-								break;
+								continue;
 							}
 						}
 					}

@@ -9945,7 +9945,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 							this.dm.h[tracker.by].send({ embeds : [embed]}).then(null,function(err) {
 								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 141, className : "commands.mod.Tracker", methodName : "update"});
 							});
-							break;
+							continue;
 						}
 					}
 				}
