@@ -130,7 +130,7 @@ class Main {
 						Help,
 						Translate,
 						Hi,
-						Run,
+						//Run,
 						Roundup,
 						Showcase,
 						CodeLineNumbers,

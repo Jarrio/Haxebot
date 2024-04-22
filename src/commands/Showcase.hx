@@ -118,7 +118,7 @@ class Showcase extends CommandBase {
 			}).then(function(_) {
 				cont();
 			}, function(err:{message:String}) {
-				if (err!.message.contains("Request entity too large")) {
+				if (err != null && err.message.contains("Request entity too large")) {
 					this.webhook.send({
 						content: content + '\n' + arr[0].url,
 						username: name,

@@ -20,7 +20,7 @@ function loadFile(filename:String, ?pos:PosInfos):Dynamic {
 
 function hasRole(role:String, interaction:BaseCommandInteraction) {
 	var guild = interaction.member.roles.cache.get(role);
-	return (interaction.guild.available && guild!.members!.has(interaction.user.id));
+	return (interaction.guild.available && guild != null && guild.members != null && guild.members.has(interaction.user.id));
 }
 
 function withinTime(time:Float, timeout:Float) {

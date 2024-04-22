@@ -10,6 +10,7 @@ import systems.CommandDbBase;
 import Main.CommandForward;
 import discord_js.Message;
 import discord_js.TextChannel;
+import firebase.web.firestore.DocumentSnapshot;
 
 class Tracker extends CommandDbBase {
 	var trackers:Map<String, TTracker> = [];
