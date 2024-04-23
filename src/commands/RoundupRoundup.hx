@@ -241,7 +241,7 @@ class RoundupRoundup extends CommandDbBase {
 		}).then(function(event) {
 			this.event = event;
 			this.state.event_id = event.id;
-			var time = Math.round(date / 1000);
+			var time = 604800;
 			event.createInviteURL({maxAge: time, channel: voice_text_id}).then(function(url) {
 				this.voice_text.send({content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}).then(null, (err) -> trace(err));
 				this.announcement.send({content: 'Get ready for the next roundup roundup :grin: \n$url'}).then(null, (err) -> trace(err));
