@@ -12,6 +12,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
 import js.Browser;
+
 class ScamPrevention extends CommandBase {
 	@:fastFamily var messages:{forward:CommandForward, message:Message};
 	var time_since:Map<String, Float> = new Map();
@@ -277,12 +278,17 @@ class ScamPrevention extends CommandBase {
 
 		var compare = messages[0];
 		for (message in messages) {
-			var content = message.content;
-			if (compare.content == content) {
-				equality_count++;
-			}
-			if (compare.channel.asType0.id != message.channel.asType0.id) {
-				channel_count++;
+			try {
+				var content = message.content;
+				if (compare.content == content) {
+					equality_count++;
+				}
+				if (compare.channel.asType0.id != message.channel.asType0.id) {
+					channel_count++;
+				}
+			} catch (e) {
+				trace(e);
+				trace(Json.stringify(messages));
 			}
 		}
 
@@ -309,7 +315,7 @@ class ScamPrevention extends CommandBase {
 			}
 
 			var markdown_regex = ~/\[.*\)/ig;
-			
+
 			if (markdown_regex.match(content)) {
 				content = markdown_regex.replace(content, '[Content Removed]');
 			}

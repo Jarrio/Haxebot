@@ -16,6 +16,13 @@ class Trace extends CommandBase {
 	var haxe_version:String = null;
 	var last_cleared:Float;
 
+	override function onEnabled() {
+		var path = FileSystem.absolutePath('.') + '/haxebot';
+		if (!FileSystem.exists(path)) {
+			FileSystem.createDirectory(path);
+		}
+	}
+
 	override function update(_:Float) {
 		super.update(_);
 		if (this.haxe_version == null) {
