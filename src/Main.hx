@@ -96,14 +96,14 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						Tracker, RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						PinMessageInfo, Tracker, RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
 						Tracker,
-						// PinMessageInfo,
+						PinMessageInfo,
 						#if update
 						Helppls Ban, Helpdescription,
 						#end
@@ -115,7 +115,6 @@ class Main {
 						Reminder,
 						Social,
 						AutoRole,
-						//Twitter,
 						Quote,
 						ScamPrevention,
 						Api,
@@ -130,7 +129,6 @@ class Main {
 						Help,
 						Translate,
 						Hi,
-						//Run,
 						Roundup,
 						Showcase,
 						CodeLineNumbers,
