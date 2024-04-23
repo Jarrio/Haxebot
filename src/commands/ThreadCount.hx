@@ -33,9 +33,9 @@ class ThreadCount extends CommandBase {
 					}
 					this.count.set(channel.id, count);
 					File.saveContent(path, Json.stringify(this.count));
+					universe.deleteEntity(entity);
 				default:
 			}
-			universe.deleteEntity(entity);
 		});
 	}
 

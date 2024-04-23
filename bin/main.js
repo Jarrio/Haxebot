@@ -9188,8 +9188,8 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				this.count.h[channel.id] = count;
 				js_node_Fs.writeFileSync(this.path,JSON.stringify(this.count));
+				this.universe.deleteEntity(entity);
 			}
-			this.universe.deleteEntity(entity);
 		}
 	}
 	,run: function(command,interaction) {
