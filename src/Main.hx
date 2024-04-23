@@ -45,8 +45,9 @@ import commands.mod.Mention;
 import commands.events.PinMessageInfo;
 import js.Browser;
 import commands.types.ContextMenuTypes;
-
+import commands.ThreadCount;
 class Main {
+	
 	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
 	public static var auth:firebase.web.auth.User;
@@ -102,6 +103,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						ThreadCount,
 						Tracker,
 						PinMessageInfo,
 						#if update
@@ -222,6 +224,11 @@ class Main {
 					universe.setComponents(universe.createEntity(), CommandForward.react, message);
 				}
 			}
+
+			if (channel.type == PUBLIC_THREAD) {
+				universe.setComponents(universe.createEntity(), CommandForward.thread_count, message);
+			}
+
 			var check = false;
 
 			#if block
@@ -737,4 +744,5 @@ enum abstract CommandForward(String) from String {
 	var code_paste;
 	var add_event_role;
 	var auto_thread;
+	var thread_count;
 }

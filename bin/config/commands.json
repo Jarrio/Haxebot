@@ -116,6 +116,10 @@
 		"description": "Say hi to the bot"
 	},
 	{
+		"name": "threadcount",
+		"description": "Get the number of messages in the active thread (from 23/04/24)"
+	},
+	{
 		"name": "code",
 		"permissions": "admin",
 		"is_public": false,

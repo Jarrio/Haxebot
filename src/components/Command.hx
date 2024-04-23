@@ -11,6 +11,7 @@ typedef Command = {
 @:keep
 enum CommandOptions {
 	Hi;
+	Threadcount;
 	Archive;
 	SnippetTags;
 	SnippetList(user:User, show_desc:Bool);
