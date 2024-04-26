@@ -46,8 +46,9 @@ import commands.events.PinMessageInfo;
 import js.Browser;
 import commands.types.ContextMenuTypes;
 import commands.ThreadCount;
+import discord_js.GuildScheduledEvent;
+
 class Main {
-	
 	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
 	public static var auth:firebase.web.auth.User;
@@ -97,7 +98,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						PinMessageInfo, Tracker, RoundupRoundup, Showcase, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						PinMessageInfo, Tracker, RoundupRoundup, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
@@ -145,6 +146,7 @@ class Main {
 			intents: [
 				IntentFlags.GUILDS,
 				IntentFlags.MESSAGE_CONTENT,
+				IntentFlags.GUILD_SCHEDULED_EVENTS,
 				IntentFlags.GUILD_MESSAGES,
 				IntentFlags.DIRECT_MESSAGES,
 				IntentFlags.GUILD_MEMBERS,
@@ -178,6 +180,15 @@ class Main {
 		client.on('guildMemberAdd', (member:GuildMember) -> {
 			trace('member ${member.user.tag}');
 			universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
+			// universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
+		});
+
+		client.on('guildScheduledEventCreate', (event:GuildScheduledEvent) -> {
+			trace(event.stringify());
+		});
+
+		client.on('guildScheduledEventUpdate', (event:GuildScheduledEvent) -> {
+			universe.setComponents(universe.createEntity(), CommandForward.scheduled_event_update, event);
 			// universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 		});
 
@@ -726,6 +737,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) from String {
+	var scheduled_event_update;
 	var keyword_tracker;
 	var roundup_member_update;
 	var snippet_left;

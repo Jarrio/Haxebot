@@ -18,6 +18,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandDbBase;
 import Main.CommandForward;
+import discord_js.GuildScheduledEvent;
 
 typedef RoundupEndEvent = {
 	var member:GuildMember;
@@ -48,9 +49,11 @@ class RoundupRoundup extends CommandDbBase {
 
 	@:fastFamily var end_event:{data:RoundupEndEvent};
 	@:fastFamily var voice_update_events:{forward:CommandForward, old:VoiceState, updated:VoiceState};
+	@:fastFamily var scheduled_event_updates:{forward:CommandForward, event:GuildScheduledEvent};
 
 	override function update(_) {
 		super.update(_);
+		this.handleEventUpdates();
 		this.handleVoiceEvents();
 		//this.handleEndEvent();
 
@@ -151,6 +154,23 @@ class RoundupRoundup extends CommandDbBase {
 		var date = event.scheduledStartTimestamp + Duration.fromString('${weeks}w');
 		this.createEvent(date);
 		this.new_event_collector.stop('User selected $weeks weeks');
+	}
+
+	function handleEventUpdates() {
+		if (this.event == null) {
+			return;
+		}
+		iterate(scheduled_event_updates, (entity) -> {
+			switch(forward) {
+				case scheduled_event_update:
+					if (event.id == this.event.id) {
+						this.event = event;
+						trace('updated event');
+					}
+				default:
+			}
+			universe.deleteEntity(entity);
+		});
 	}
 
 	inline function handleVoiceEvents() {
