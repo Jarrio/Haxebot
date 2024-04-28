@@ -98,6 +98,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
+						
 						PinMessageInfo, Tracker, RoundupRoundup, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
@@ -184,7 +185,7 @@ class Main {
 		});
 
 		client.on('guildScheduledEventCreate', (event:GuildScheduledEvent) -> {
-			trace(event.stringify());
+			universe.setComponents(universe.createEntity(), CommandForward.create_event, event);
 		});
 
 		client.on('guildScheduledEventUpdate', (event:GuildScheduledEvent) -> {
@@ -737,6 +738,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) from String {
+	var create_event;
 	var scheduled_event_update;
 	var keyword_tracker;
 	var roundup_member_update;

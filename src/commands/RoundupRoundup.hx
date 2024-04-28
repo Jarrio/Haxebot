@@ -236,15 +236,15 @@ class RoundupRoundup extends CommandDbBase {
 
 		if (left <= Duration.fromString('0s') && !waiting) {
 			waiting = true;
-			event.setStatus(Active, 'Time to start the event!').then(function(event) {
-				this.voice_text.send(
-					'$event_role come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!\n\n If you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`'
-				)
-					.then(null, (err) -> trace(err));
-				trace('Event Started');
-				waiting = false;
-				this.event = event;
-			}, (err) -> trace(err));
+			// event.setStatus(Active, 'Time to start the event!').then(function(event) {
+			// 	this.voice_text.send(
+			// 		'$event_role come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!\n\n If you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`'
+			// 	)
+			// 		.then(null, (err) -> trace(err));
+			 	trace('Event Started');
+			// 	waiting = false;
+			// 	this.event = event;
+			// }, (err) -> trace(err));
 		}
 	}
 

@@ -7,6 +7,7 @@ import discord_js.TextChannel;
 import components.Command;
 import systems.CommandBase;
 import js.Browser;
+
 class Roundup extends CommandBase {
 	var last_checked:Float = -1;
 	var thursday_check:Float = -1;
@@ -77,7 +78,7 @@ class Roundup extends CommandBase {
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
 
-		if (today.getUTCDay() == 4) {
+		if (today.getUTCDay() == 5) {
 			if (!this.shouldCheck()) {
 				return;
 			}
