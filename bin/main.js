@@ -654,7 +654,7 @@ Main.token = function(rest) {
 Main.start = function() {
 	var vec = new Array(2);
 	vec[0] = new ecs_Phase(false,"testing",new Array(13),new Array(13));
-	vec[1] = new ecs_Phase(true,"main",new Array(30),new Array(30));
+	vec[1] = new ecs_Phase(true,"main",new Array(31),new Array(31));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
 	var vec = new Array(12);
@@ -1070,125 +1070,129 @@ Main.start = function() {
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	var phase = phases[1];
-	var s = new commands_ThreadCount(u);
+	var s = new commands_JamSuggestionBox(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
 	s.onEnabled();
-	var s = new commands_mod_Tracker(u);
+	var s = new commands_ThreadCount(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
 	s.onEnabled();
-	var s = new commands_events_PinMessageInfo(u);
+	var s = new commands_mod_Tracker(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
 	s.onEnabled();
-	var s = new commands_RoundupRoundup(u);
+	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
 	s.onEnabled();
-	var s = new commands_AutoThread(u);
+	var s = new commands_RoundupRoundup(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
 	s.onEnabled();
-	var s = new commands_Snippet(u);
+	var s = new commands_AutoThread(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
 	s.onEnabled();
-	var s = new commands_PinMessage(u);
+	var s = new commands_Snippet(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
 	s.onEnabled();
-	var s = new commands_mod_Mention(u);
+	var s = new commands_PinMessage(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
 	s.onEnabled();
-	var s = new commands_Reminder(u);
+	var s = new commands_mod_Mention(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_mod_Social(u);
+	var s = new commands_Reminder(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_AutoRole(u);
+	var s = new commands_mod_Social(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_AutoRole(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_ScamPrevention(u);
+	var s = new commands_Quote(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_ScamPrevention(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_Haxelib(u);
+	var s = new commands_Api(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Trace(u);
+	var s = new commands_Haxelib(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Trace(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_React(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Notify(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Poll(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Boop(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Archive(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Help(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Translate(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_Hi(u);
 	phase.systems[25] = s;
 	phase.enabledSystems[25] = true;
 	s.onEnabled();
-	var s = new commands_Showcase(u);
+	var s = new commands_Roundup(u);
 	phase.systems[26] = s;
 	phase.enabledSystems[26] = true;
 	s.onEnabled();
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_Showcase(u);
 	phase.systems[27] = s;
 	phase.enabledSystems[27] = true;
 	s.onEnabled();
-	var s = new commands_Say(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[28] = s;
 	phase.enabledSystems[28] = true;
 	s.onEnabled();
-	var s = new commands_Color(u);
+	var s = new commands_Say(u);
 	phase.systems[29] = s;
 	phase.enabledSystems[29] = true;
+	s.onEnabled();
+	var s = new commands_Color(u);
+	phase.systems[30] = s;
+	phase.enabledSystems[30] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -1202,7 +1206,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 161, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 163, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1213,15 +1217,15 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 170, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 172, className : "Main", methodName : "start"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 176, className : "Main", methodName : "start"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 178, className : "Main", methodName : "start"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 182, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 184, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,2,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,5,member);
@@ -1347,6 +1351,40 @@ Main.start = function() {
 			return;
 		}
 		var channel = message.channel;
+		if(channel.id == "1234544675264925788") {
+			var _ecsTmpEntity = Main.universe.createEntity();
+			Main.universe.components.set(_ecsTmpEntity,2,"suggestion_box");
+			Main.universe.components.set(_ecsTmpEntity,3,message);
+			var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = Main.universe.families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(3);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(6);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(7);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(8);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+			var ecsTmpFamily = Main.universe.families.get(4);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
+			}
+		}
 		if(channel.type == 1) {
 			if(Object.prototype.hasOwnProperty.call(Main.dm_help_tracking.h,message.author.id)) {
 				var _ecsTmpEntity = Main.universe.createEntity();
@@ -1617,8 +1655,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 267, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 268, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 273, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 274, className : "Main", methodName : "start"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1823,11 +1861,11 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isModalSubmit()) {
-			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 300, className : "Main", methodName : "start"});
-			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 301, className : "Main", methodName : "start"});
+			haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 306, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 307, className : "Main", methodName : "start"});
 			switch(interaction.customId) {
 			case "code_paste":
-				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 310, className : "Main", methodName : "start"});
+				haxe_Log.trace("here",{ fileName : "src/Main.hx", lineNumber : 316, className : "Main", methodName : "start"});
 				var _ecsTmpEntity = Main.universe.createEntity();
 				Main.universe.components.set(_ecsTmpEntity,2,"code_paste");
 				Main.universe.components.set(_ecsTmpEntity,1,interaction);
@@ -2157,7 +2195,7 @@ Main.get_state = function() {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 477, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 483, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -2165,21 +2203,21 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 493, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 499, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 503, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 509, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
 			Main.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 513, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 519, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
@@ -2188,7 +2226,7 @@ Main.main = function() {
 Main.updateState = function(field,value) {
 	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 	firebase_web_firestore_Firestore.updateDoc(doc,field,value).then(null,function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 525, className : "Main", methodName : "updateState"});
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 531, className : "Main", methodName : "updateState"});
 		$global.console.dir(err);
 	});
 };
@@ -4802,6 +4840,56 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 		return "hi";
 	}
 	,__class__: commands_Hi
+});
+var commands_JamSuggestionBox = function(_) {
+	this.channel_id = "1234817988377706557";
+	systems_CommandBase.call(this,_);
+	this.messages = this.universe.families.get(1);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
+	this.webhook = new discord_$js_WebhookClient({ url : Main.keys.suggestionbox_hook});
+};
+$hxClasses["commands.JamSuggestionBox"] = commands_JamSuggestionBox;
+commands_JamSuggestionBox.__name__ = "commands.JamSuggestionBox";
+commands_JamSuggestionBox.__super__ = systems_CommandBase;
+commands_JamSuggestionBox.prototype = $extend(systems_CommandBase.prototype,{
+	channel: null
+	,channel_id: null
+	,webhook: null
+	,update: function(_) {
+		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
+			if(command == "suggestion_box") {
+				var name = message.author.username;
+				if(message.member.nickname != null && message.member.nickname.length > 0) {
+					name = message.member.nickname;
+				}
+				this.webhook.send({ username : name, content : message.content, avatarURL : message.author.avatarURL()}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/JamSuggestionBox.hx", lineNumber : 48, className : "commands.JamSuggestionBox", methodName : "update"});
+				});
+				message.delete().then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/JamSuggestionBox.hx", lineNumber : 50, className : "commands.JamSuggestionBox", methodName : "update"});
+				});
+				this.universe.deleteEntity(entity);
+			}
+		}
+	}
+	,run: function(command,interaction) {
+	}
+	,get_name: function() {
+		return "jamsuggestionbox";
+	}
+	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
+	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
+	,__class__: commands_JamSuggestionBox
 });
 var commands_Notify = function(_universe) {
 	systems_CommandBase.call(this,_universe);

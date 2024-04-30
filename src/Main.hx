@@ -47,6 +47,7 @@ import js.Browser;
 import commands.types.ContextMenuTypes;
 import commands.ThreadCount;
 import discord_js.GuildScheduledEvent;
+import commands.JamSuggestionBox;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -105,6 +106,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						JamSuggestionBox,
 						ThreadCount,
 						Tracker,
 						PinMessageInfo,
@@ -204,6 +206,10 @@ class Main {
 				return;
 			}
 			var channel = (message.channel : TextChannel);
+
+			if (channel.id == "1234544675264925788") {
+				universe.setComponents(universe.createEntity(), CommandForward.suggestion_box, message);
+			}
 
 			if (channel.type == DM) {
 				if (dm_help_tracking.exists(message.author.id)) {
@@ -671,6 +677,7 @@ typedef TKeys = {
 	var discord_test:TDiscordConfig;
 	var twitter_token:String;
 	var showcase_hook:String;
+	var suggestionbox_hook:String;
 }
 
 typedef TDiscordConfig = {
@@ -738,6 +745,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) from String {
+	var suggestion_box;
 	var create_event;
 	var scheduled_event_update;
 	var keyword_tracker;
