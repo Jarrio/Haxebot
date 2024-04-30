@@ -48,6 +48,7 @@ import commands.types.ContextMenuTypes;
 import commands.ThreadCount;
 import discord_js.GuildScheduledEvent;
 import commands.JamSuggestionBox;
+import systems.MessageRouter;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -95,6 +96,11 @@ class Main {
 		universe = Universe.create({
 			entities: 1000,
 			phases: [
+				{
+					name: 'systems',
+					enabled: true,
+					systems: [MessageRouter]
+				},
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
@@ -205,68 +211,7 @@ class Main {
 			if (message.author.bot) {
 				return;
 			}
-			var channel = (message.channel : TextChannel);
-
-			if (channel.id == "1234544675264925788") {
-				universe.setComponents(universe.createEntity(), CommandForward.suggestion_box, message);
-			}
-
-			if (channel.type == DM) {
-				if (dm_help_tracking.exists(message.author.id)) {
-					universe.setComponents(universe.createEntity(), CommandForward.helppls,
-						message);
-				}
-				return;
-			}
-
-			//suppressEmbed(message);
-
-			var match = message.content.split(' ')[0];
-			if (match != null && match.charAt(0) == '!') {
-				for (command in TextCommand.list()) {
-					if (match == command) {
-						universe.setComponents(universe.createEntity(), command, message);
-						break;
-					}
-				}
-			}
-
-			if (channel.type == GUILD_TEXT) {
-				var showcase_channel = #if block "1100053767493255182" #else "162664383082790912" #end;
-				if (channel.id == showcase_channel && !message.system) {
-					universe.setComponents(universe.createEntity(),
-						CommandForward.showcase_message, message);
-				}
-
-				if (message.content.startsWith("!react")) {
-					universe.setComponents(universe.createEntity(), CommandForward.react, message);
-				}
-			}
-
-			if (channel.type == PUBLIC_THREAD) {
-				universe.setComponents(universe.createEntity(), CommandForward.thread_count, message);
-			}
-
-			var check = false;
-
-			#if block
-			check = (channel.id == '597067735771381771');
-			#else
-			check = (channel.type == PUBLIC_THREAD && (channel.parentId == '1019922106370232360'));
-			#end
-
-			if (check) {
-				if (message.content.startsWith("[showcase]")) {
-					universe.setComponents(universe.createEntity(), CommandForward.showcase,
-						message);
-				}
-			}
-
-			universe.setComponents(universe.createEntity(), CommandForward.scam_prevention,
-				message);
-
-			universe.setComponents(universe.createEntity(), CommandForward.keyword_tracker,
-				message);
+			universe.setComponents(universe.createEntity(), message);
 		});
 
 		client.on('ChatInputAutoCompleteEvent', (incoming) -> {

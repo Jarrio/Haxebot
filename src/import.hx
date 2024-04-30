@@ -1,3 +1,4 @@
+#if !macro
 import Util;
 using Util;
 import ecs.Universe;
@@ -11,3 +12,6 @@ import util.DiscordUtil;
 import firebase.web.firestore.Firestore;
 import firebase.web.firestore.Query;
 import firebase.web.firestore.Firestore.*;
+
+import util.EcsTools;
+#end
