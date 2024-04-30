@@ -13,6 +13,7 @@ class ThreadCount extends CommandBase {
 	var count:Map<String, Int> = [];
 	@:fastFamily var messages:{command:CommandForward, message:Message};
 	final path = "./config/threadcount.json";
+
 	override function onEnabled() {
 		if (FileSystem.exists(path)) {
 			count = Json.parse(File.getContent(path));
@@ -22,7 +23,7 @@ class ThreadCount extends CommandBase {
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, (entity) -> {
-			switch(command) {
+			switch (command) {
 				case thread_count:
 					var count = -1;
 					var channel = message.channel.asType0;
@@ -48,11 +49,17 @@ class ThreadCount extends CommandBase {
 					Browser.console.dir(err);
 				});
 		} else {
-			interaction.reply({content: 'Either a new thread or was created before 23/04/2024. Check back later.'})
-				.then(null, function(err) {
-					trace(err);
-					Browser.console.dir(err);
-				});
+			var content = '';
+			content = switch (interaction.channel.type) {
+				case PUBLIC_THREAD | ANNOUNCEMENT_THREAD | PRIVATE_THREAD:
+					'Either a new thread or was created before 23/04/2024. Check back later.';
+				default:
+					'This is not a thread :angry:';
+			}
+			interaction.reply({content: content}).then(null, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}
 	}
 

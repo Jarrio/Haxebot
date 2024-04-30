@@ -9199,12 +9199,20 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 		if(Object.prototype.hasOwnProperty.call(this.count.h,interaction.channelId)) {
 			var count = this.count.h[interaction.channelId];
 			interaction.reply({ content : "This thread has " + count + " messages"}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 47, className : "commands.ThreadCount", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 48, className : "commands.ThreadCount", methodName : "run"});
 				$global.console.dir(err);
 			});
 		} else {
-			interaction.reply({ content : "Either a new thread or was created before 23/04/2024. Check back later."}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 53, className : "commands.ThreadCount", methodName : "run"});
+			var content = "";
+			switch(interaction.channel.type) {
+			case 10:case 11:case 12:
+				content = "Either a new thread or was created before 23/04/2024. Check back later.";
+				break;
+			default:
+				content = "This is not a thread :angry:";
+			}
+			interaction.reply({ content : content}).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 60, className : "commands.ThreadCount", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
