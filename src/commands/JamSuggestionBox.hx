@@ -42,7 +42,7 @@ class JamSuggestionBox extends CommandBase {
 					}
 					this.webhook.send({
 						username: name,
-						content: message.content,
+						content: '#theme ' + message.content,
 						avatarURL: message.author.avatarURL()
 					}).then(null, function(err:{message:String}) {
 						trace(err);

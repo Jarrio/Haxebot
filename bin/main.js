@@ -4871,7 +4871,7 @@ commands_JamSuggestionBox.prototype = $extend(systems_CommandBase.prototype,{
 				if(message.member.nickname != null && message.member.nickname.length > 0) {
 					name = message.member.nickname;
 				}
-				this.webhook.send({ username : name, content : message.content, avatarURL : message.author.avatarURL()}).then(null,function(err) {
+				this.webhook.send({ username : name, content : "#theme " + message.content, avatarURL : message.author.avatarURL()}).then(null,function(err) {
 					haxe_Log.trace(err,{ fileName : "src/commands/JamSuggestionBox.hx", lineNumber : 48, className : "commands.JamSuggestionBox", methodName : "update"});
 				});
 				message.delete().then(null,function(err) {
