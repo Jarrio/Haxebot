@@ -1,0 +1,8 @@
+<project name="interpolation" url="http://github.com/imcj/interpolation" license="MIT">
+    <user name="imcj"/>
+    <description><![CDATA[pep292]]></description>
+    <version name="0.9.1"><![CDATA[修复一个interpolation的BUG，当以变量+.作为字符串结尾时，.作为了变量名。]]></version>
+    <tag v="string"/>
+    <tag v="utility"/>
+    <tag v="sys"/>
+</project>

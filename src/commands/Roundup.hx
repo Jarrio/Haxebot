@@ -7,6 +7,7 @@ import discord_js.TextChannel;
 import components.Command;
 import systems.CommandBase;
 import js.Browser;
+import discord_js.User;
 
 class Roundup extends CommandBase {
 	var last_checked:Float = -1;
@@ -15,13 +16,44 @@ class Roundup extends CommandBase {
 	var roundup(get, set):Int;
 	var channel:TextChannel = null;
 	var checking:Bool = false;
+
+	var dmlist:Map<String, User> = ['367806496907591682' => null, '151104106973495296' => null];
+
 	final super_mod_id:String = '198916468312637440';
 	final news_role:String = '761714325227700225';
 	final announcement_channel:String = #if block '597067735771381771' #else '286485321925918721' #end;
 
+	var sent = false;
+
+	function dmUser(title:String, content:String) {
+		var regex = ~/\((.*?)\)/gmis;
+		content = regex.replace(content, "(<$1>)");
+		for (key => user in dmlist) {
+			if (user == null) {
+				trace('skipping $key');
+				continue;
+			}
+			user.send('## $title');
+			var arr = content.split('\n');
+			var half = Math.floor(arr.length / 2);
+			var a = '';
+			var b = '';
+			for (i => line in arr) {
+				if (i <= half) {
+					a += line + '\n';
+				} else {
+					b += line + '\n';
+				}
+			}
+			user.send(a).then((_) -> {
+				user.send(b).then(null, (err) -> trace(err));
+			}, (err) -> trace(err));
+		}
+	}
+
 	function getHaxeIoPage() {
 		var data = new haxe.Http(
-			'https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/${this.roundup}.md'
+			'https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/$roundup.md'
 		);
 		var embed = new MessageEmbed();
 		data.onError = (error) -> {
@@ -40,10 +72,14 @@ class Roundup extends CommandBase {
 					if (desc.length + item.trim().length + 3 + 22 >= 2048) {
 						continue;
 					}
+					if (item.contains("#### ")) {
+						item = item.replace("#### ", "### ");
+					}
 					desc += '\n' + item.trim();
 				}
 				desc += '\n...';
 				embed.setDescription(desc);
+				dmUser('Haxe Roundup #$roundup', desc);
 				this.channel.send({
 					content: '<@&$news_role>',
 					allowedMentions: {roles: [news_role]},
@@ -69,6 +105,15 @@ class Roundup extends CommandBase {
 				trace(err);
 				Browser.console.dir(err);
 			});
+
+			for (key => user in this.dmlist) {
+				if (user == null) {
+					Main.client.users.fetch(key).then((user) -> {
+						this.dmlist.set(key, user);
+						trace('Got ${user.tag}');
+					}, (err) -> trace(err));
+				}
+			}
 		}
 
 		if (this.roundup == -1 || this.channel == null) {
@@ -78,7 +123,7 @@ class Roundup extends CommandBase {
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
 
-		if (today.getUTCDay() == 5) {
+		if (today.getUTCDay() == 4) {
 			if (!this.shouldCheck()) {
 				return;
 			}

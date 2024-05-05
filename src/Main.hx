@@ -49,6 +49,7 @@ import commands.ThreadCount;
 import discord_js.GuildScheduledEvent;
 import commands.JamSuggestionBox;
 import systems.MessageRouter;
+import commands.Roundup;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -105,8 +106,8 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
-						
-						PinMessageInfo, Tracker, RoundupRoundup, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						Roundup,
+						PinMessageInfo, Tracker, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
@@ -623,6 +624,8 @@ typedef TKeys = {
 	var twitter_token:String;
 	var showcase_hook:String;
 	var suggestionbox_hook:String;
+	var twitch_client_id:String;
+	var twitch_secret:String;
 }
 
 typedef TDiscordConfig = {

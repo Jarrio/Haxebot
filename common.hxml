@@ -9,7 +9,7 @@
 --library node
 --library firebase
 --library shadows
-
+--library http
 --debug
 #-D keep-inline-positions
 -D ecs.no_debug_output
