@@ -8,7 +8,7 @@ import components.Command;
 import discord_builder.BaseCommandInteraction;
 import systems.CommandDbBase;
 
-class Mention extends CommandDbBase {
+class OMention extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case Mention(user, role):

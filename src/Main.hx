@@ -41,7 +41,6 @@ import firebase.web.app.FirebaseApp;
 import js.lib.Promise;
 import commands.AutoRole;
 import commands.mod.Social;
-import commands.mod.Mention;
 import commands.events.PinMessageInfo;
 import js.Browser;
 import commands.types.ContextMenuTypes;
@@ -50,6 +49,7 @@ import discord_js.GuildScheduledEvent;
 import commands.JamSuggestionBox;
 import systems.MessageRouter;
 import commands.Roundup;
+import commands.Everyone;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -103,9 +103,16 @@ class Main {
 					systems: [MessageRouter]
 				},
 				{
+					name: 'messages',
+					enabled: true,
+					systems: [ThreadCount, ScamPrevention, JamSuggestionBox, Showcase]
+				},
+				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
+						Hi, Boop,
+						Everyone,
 						Roundup,
 						PinMessageInfo, Tracker, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
@@ -113,8 +120,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
-						JamSuggestionBox,
-						ThreadCount,
+						Everyone,
 						Tracker,
 						PinMessageInfo,
 						#if update
@@ -124,12 +130,10 @@ class Main {
 						AutoThread,
 						Snippet,
 						PinMessage,
-						Mention,
 						Reminder,
 						Social,
 						AutoRole,
 						Quote,
-						ScamPrevention,
 						Api,
 						Haxelib,
 						Trace,
@@ -143,7 +147,6 @@ class Main {
 						Translate,
 						Hi,
 						Roundup,
-						Showcase,
 						CodeLineNumbers,
 						Say,
 						Color
@@ -209,7 +212,7 @@ class Main {
 		});
 
 		client.on('messageCreate', (message:Message) -> {
-			if (message.author.bot) {
+			if (message.author.bot || message.system) {
 				return;
 			}
 			universe.setComponents(universe.createEntity(), message);
@@ -249,7 +252,6 @@ class Main {
 			}
 
 			if (interaction.isModalSubmit()) {
-				trace('here');
 				trace(interaction.customId);
 				switch ((interaction.customId:CommandForward)) {
 					case quote_edit:
@@ -259,7 +261,6 @@ class Main {
 						universe.setComponents(universe.createEntity(), CommandForward.quote_set,
 							interaction);
 					case code_paste:
-						trace('here');
 						universe.setComponents(universe.createEntity(), CommandForward.code_paste,
 							interaction);
 					default:

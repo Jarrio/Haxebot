@@ -46,7 +46,8 @@ enum CommandOptions {
 	QuoteDelete(name:String);
 	QuoteEdit(name:String);
 	QuoteCreate(name:String);
-	Mention(user:User, role:Role);
+	Everyone(content:String);
+	//Mention(user:User, role:Role);
 	Showcase;
 	PinMessage;
 	Code;

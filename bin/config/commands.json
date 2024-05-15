@@ -464,6 +464,18 @@
 		]
 	},
 	{
+		"name": "everyone",
+		"description": "@everyone in your own threads",
+		"params": [
+			{
+				"name": "content",
+				"type": "string",
+				"description": "The content to send to everyone",
+				"required": true
+			}
+		]
+	},
+	{
 		"name": "boop",
 		"description": "Boops a user",
 		"params": [
