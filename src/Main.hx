@@ -114,6 +114,7 @@ class Main {
 						Hi, Boop,
 						Everyone,
 						Roundup,
+						RoundupRoundup,
 						PinMessageInfo, Tracker, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{

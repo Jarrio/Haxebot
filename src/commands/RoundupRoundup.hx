@@ -1,5 +1,6 @@
 package commands;
 
+import js.Browser;
 import discord_js.ReactionCollector;
 import Main.TRoundup;
 import discord_js.GuildMember;
@@ -40,12 +41,11 @@ class RoundupRoundup extends CommandDbBase {
 	var host_contacted:Bool = false;
 	var new_event_collector:ReactionCollector;
 	var end_event_collector:ReactionCollector;
-	
+
 	final voice_channel_id = #if block "416069724657418244" #else "198219256687493120" #end;
 	final announcement_id = #if block "597067735771381771" #else "286485321925918721" #end;
 	final voice_text_id = #if block "597067735771381771" #else "220626116627529728" #end;
 	final event_role = #if block "<@&1114582456381747232>" #else "<@&1054432874473996408>" #end;
-
 
 	@:fastFamily var end_event:{data:RoundupEndEvent};
 	@:fastFamily var voice_update_events:{forward:CommandForward, old:VoiceState, updated:VoiceState};
@@ -55,7 +55,7 @@ class RoundupRoundup extends CommandDbBase {
 		super.update(_);
 		this.handleEventUpdates();
 		this.handleVoiceEvents();
-		//this.handleEndEvent();
+		// this.handleEndEvent();
 
 		if (this.state == null) {
 			return;
@@ -128,13 +128,13 @@ class RoundupRoundup extends CommandDbBase {
 		if (host_contacted || waiting) {
 			return;
 		}
+		trace(this.host_m.user.tag);
 		waiting = true;
 		var message = "Time to schedule a new roundup roundup! How many weeks until the next roundup roundup?\n";
 		var reactions = ['2️⃣', '3️⃣', '4️⃣', '5️⃣'];
-		
+		host_contacted = true;
 		this.host_m.send(message).then(function(message) {
 			waiting = false;
-			host_contacted = true;
 			new_event_collector = this.addCollection('1w', reactions, message, newEventCollector);
 		}, (err) -> trace(err));
 	}
@@ -161,12 +161,17 @@ class RoundupRoundup extends CommandDbBase {
 			return;
 		}
 		iterate(scheduled_event_updates, (entity) -> {
-			switch(forward) {
+			switch (forward) {
 				case scheduled_event_update:
-					if (event.id == this.event.id) {
-						this.event = event;
-						trace('updated event');
-					}
+					event.client.guilds.fetch({guild: Main.guild_id}).then(function(guild) {
+						guild.scheduledEvents.fetch(event.id)
+							.then(function(event:GuildScheduledEvent) {
+								this.event = (event);
+								trace('Updated event: ${event.status}');
+								trace('New time: ${Date.fromTime(event.scheduledStartTimestamp)}');
+							}, (err) -> trace(err));
+					}, (err) -> trace(err));
+
 				default:
 			}
 			universe.deleteEntity(entity);
@@ -185,7 +190,8 @@ class RoundupRoundup extends CommandDbBase {
 							)
 								.then(function(message) {
 									var reactions = ["✅", "❎"];
-									end_event_collector = this.addCollection('1w', reactions, message, endEventCollector);
+									end_event_collector = this.addCollection('1w', reactions,
+										message, endEventCollector);
 								}, (err) -> trace(err));
 						}
 					}
@@ -201,10 +207,11 @@ class RoundupRoundup extends CommandDbBase {
 		}
 		switch (reaction.emoji.name) {
 			case "✅":
-				event.setStatus(Completed, "Host ended the event.").then((_) -> {
+				event.setStatus(Completed, "Host ended the event.").then((event) -> {
 					host_m.send('Event ended, thank you for hosting!').then(function(_) {
 						host_active = false;
 						waiting = false;
+						// this.event = event;
 					}, (err) -> trace(err));
 				}, (err) -> trace(err));
 			default:
@@ -221,7 +228,7 @@ class RoundupRoundup extends CommandDbBase {
 
 		// check if host is around before considering starting the roundup
 		if (!host_active) {
-			if (now - last_checked > Duration.fromString('1m')) { 
+			if (now - last_checked > Duration.fromString('1m')) {
 				this.last_checked = now;
 				for (member in voice_channel.members) {
 					if (member.id == host) {
@@ -236,15 +243,15 @@ class RoundupRoundup extends CommandDbBase {
 
 		if (left <= Duration.fromString('0s') && !waiting) {
 			waiting = true;
-			// event.setStatus(Active, 'Time to start the event!').then(function(event) {
-			// 	this.voice_text.send(
-			// 		'$event_role come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!\n\n If you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`'
-			// 	)
-			// 		.then(null, (err) -> trace(err));
-			 	trace('Event Started');
-			// 	waiting = false;
-			// 	this.event = event;
-			// }, (err) -> trace(err));
+			event.setStatus(Active, 'Time to start the event!').then(function(event) {
+				this.voice_text.send(
+					'$event_role come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!\n\n If you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`'
+				)
+					.then(null, (err) -> trace(err));
+				trace('Event Started');
+				waiting = false;
+				this.event = event;
+			}, (err) -> trace(err));
 		}
 	}
 
@@ -259,12 +266,19 @@ class RoundupRoundup extends CommandDbBase {
 			scheduledStartTime: date,
 			description: description
 		}).then(function(event) {
+			host_contacted = false;
 			this.event = event;
 			this.state.event_id = event.id;
 			var time = 604800;
 			event.createInviteURL({maxAge: time, channel: voice_text_id}).then(function(url) {
-				this.voice_text.send({content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}).then(null, (err) -> trace(err));
-				this.announcement.send({content: 'Get ready for the next roundup roundup :grin: \n$url'}).then(null, (err) -> trace(err));
+				this.voice_text.send(
+					{content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}
+				)
+					.then(null, (err) -> trace(err));
+				this.announcement.send(
+					{content: 'Get ready for the next roundup roundup :grin: \n$url'}
+				)
+					.then(null, (err) -> trace(err));
 			}, (err) -> trace(err));
 			Main.updateState('state', Main.state);
 			trace('Event setup!');
@@ -365,7 +379,9 @@ class RoundupRoundup extends CommandDbBase {
 	function get_schedule() {
 		return guild.scheduledEvents;
 	}
+
 	var host(get, never):String;
+
 	function get_host() {
 		#if block
 		return "151104106973495296";
