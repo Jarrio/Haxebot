@@ -643,7 +643,7 @@ Main.command_file = null;
 Main.universe = null;
 Main.get_discord = function() {
 	var config = null;
-	config = Main.keys.discord_test;
+	config = Main.keys.discord_live;
 	return config;
 };
 Main.token = function(rest) {
@@ -655,8 +655,8 @@ Main.start = function() {
 	var vec = new Array(4);
 	vec[0] = new ecs_Phase(true,"systems",new Array(1),new Array(1));
 	vec[1] = new ecs_Phase(true,"messages",new Array(4),new Array(4));
-	vec[2] = new ecs_Phase(true,"testing",new Array(17),new Array(17));
-	vec[3] = new ecs_Phase(false,"main",new Array(27),new Array(27));
+	vec[2] = new ecs_Phase(false,"testing",new Array(17),new Array(17));
+	vec[3] = new ecs_Phase(true,"main",new Array(27),new Array(27));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
 	var vec = new Array(12);
@@ -1087,153 +1087,163 @@ Main.start = function() {
 	var s = new commands_Hi(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
-	s.onEnabled();
 	var s = new commands_Boop(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
-	s.onEnabled();
 	var s = new commands_Everyone(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
-	s.onEnabled();
 	var s = new commands_Roundup(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
-	s.onEnabled();
 	var s = new commands_RoundupRoundup(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
-	s.onEnabled();
 	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
-	s.onEnabled();
 	var s = new commands_mod_Tracker(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
-	s.onEnabled();
 	var s = new commands_Quote(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
-	s.onEnabled();
 	var s = new commands_Snippet(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
-	s.onEnabled();
 	var s = new commands_Run(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
-	s.onEnabled();
 	var s = new commands_Api(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
-	s.onEnabled();
 	var s = new commands_Notify(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
-	s.onEnabled();
 	var s = new commands_Code(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
-	s.onEnabled();
 	var s = new commands_CodeLineNumbers(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
-	s.onEnabled();
 	var s = new commands_React(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
-	s.onEnabled();
 	var s = new commands_Say(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
-	s.onEnabled();
 	var s = new commands_Poll(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
-	s.onEnabled();
 	var phase = phases[3];
 	var s = new commands_Everyone(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
+	s.onEnabled();
 	var s = new commands_mod_Tracker(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
+	s.onEnabled();
 	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
+	s.onEnabled();
 	var s = new commands_RoundupRoundup(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
+	s.onEnabled();
 	var s = new commands_AutoThread(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
+	s.onEnabled();
 	var s = new commands_Snippet(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
+	s.onEnabled();
 	var s = new commands_PinMessage(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
+	s.onEnabled();
 	var s = new commands_Reminder(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
+	s.onEnabled();
 	var s = new commands_mod_Social(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
+	s.onEnabled();
 	var s = new commands_AutoRole(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
+	s.onEnabled();
 	var s = new commands_Quote(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
+	s.onEnabled();
 	var s = new commands_Api(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
+	s.onEnabled();
 	var s = new commands_Haxelib(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
+	s.onEnabled();
 	var s = new commands_Trace(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
+	s.onEnabled();
 	var s = new commands_React(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
+	s.onEnabled();
 	var s = new commands_Notify(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
+	s.onEnabled();
 	var s = new commands_Rtfm(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
+	s.onEnabled();
 	var s = new commands_Poll(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
+	s.onEnabled();
 	var s = new commands_Boop(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
+	s.onEnabled();
 	var s = new commands_Archive(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
+	s.onEnabled();
 	var s = new commands_Help(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
+	s.onEnabled();
 	var s = new commands_Translate(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
+	s.onEnabled();
 	var s = new commands_Hi(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
+	s.onEnabled();
 	var s = new commands_Roundup(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
+	s.onEnabled();
 	var s = new commands_CodeLineNumbers(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
+	s.onEnabled();
 	var s = new commands_Say(u);
 	phase.systems[25] = s;
 	phase.enabledSystems[25] = true;
+	s.onEnabled();
 	var s = new commands_Color(u);
 	phase.systems[26] = s;
 	phase.enabledSystems[26] = true;
+	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
 	while(_g < _g1) {
@@ -1259,7 +1269,6 @@ Main.start = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 183, className : "Main", methodName : "start"});
 			}
-			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 186, className : "Main", methodName : "start"});
 		},function(err) {
 			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 189, className : "Main", methodName : "start"});
 			$global.console.dir(err);
@@ -1952,9 +1961,6 @@ Main.main = function() {
 	try {
 		Main.keys = JSON.parse(js_node_Fs.readFileSync("./config/keys.json",{ encoding : "utf8"}));
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
-		if(Main.admin == null) {
-			Main.admin = { state : JSON.parse(js_node_Fs.readFileSync("./config/state.json",{ encoding : "utf8"})), project_name : "haxebot"};
-		}
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
 		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 447, className : "Main", methodName : "main"});
@@ -1967,6 +1973,7 @@ Main.main = function() {
 		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 457, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
+			Main.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
@@ -1977,6 +1984,11 @@ Main.main = function() {
 	Main.start();
 };
 Main.updateState = function(field,value) {
+	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
+	firebase_web_firestore_Firestore.updateDoc(doc,field,value).then(null,function(err) {
+		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 479, className : "Main", methodName : "updateState"});
+		$global.console.dir(err);
+	});
 };
 Main.parseCommands = function() {
 	if(Main.command_file == null || Main.command_file.length == 0) {
@@ -1988,6 +2000,9 @@ Main.parseCommands = function() {
 	while(_g < _g1.length) {
 		var command = _g1[_g];
 		++_g;
+		if(command.is_public != null && !command.is_public) {
+			continue;
+		}
 		var permission = CommandPermission.fromString(command.permissions);
 		if(permission == null) {
 			permission = 1024 | 2048;
@@ -3863,7 +3878,7 @@ commands_AutoRole.prototype = $extend(systems_CommandBase.prototype,{
 var commands_AutoThread = function(_universe) {
 	this.news_feed = "1030188275341729882";
 	this.checking = false;
-	this.announcement_channel = "597067735771381771";
+	this.announcement_channel = "286485321925918721";
 	this.event_role_id = "1054432874473996408";
 	this.news_role_id = "761714325227700225";
 	systems_CommandBase.call(this,_universe);
@@ -4622,7 +4637,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Hi
 });
 var commands_JamSuggestionBox = function(_) {
-	this.channel_id = "1100053767493255182";
+	this.channel_id = "1234817988377706557";
 	systems_CommandBase.call(this,_);
 	this.messages = this.universe.families.get(2);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
@@ -4687,7 +4702,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "dvorak":
 			return "903006951896666153";
 		case "events":
-			return "738508312382799874";
+			return "1054432874473996408";
 		case "flixel":
 			return "761714697468248125";
 		case "godot":
@@ -5096,8 +5111,6 @@ commands_Poll.prototype = $extend(systems_CommandDbBase.prototype,{
 	,addCollector: function(message,data,time_left) {
 		var filter = this.filter(message,data);
 		var time = data.duration;
-		haxe_Log.trace("Poll duration changed due to debug block on",{ fileName : "src/commands/Poll.hx", lineNumber : 187, className : "commands.Poll", methodName : "addCollector"});
-		time = commands_types_Duration.fromString("1m");
 		if(time_left != null) {
 			time = time_left;
 		}
@@ -6587,7 +6600,7 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Reminder = function(_universe) {
 	this.casual_chat = "";
-	this.bot_channel = "597067735771381771";
+	this.bot_channel = "663246792426782730";
 	this.sent = [];
 	this.reminders = [];
 	this.checking = false;
@@ -6643,7 +6656,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				channel_id = interaction.channelId;
 			}
 			var obj = { channel_id : channel_id, sent : false, thread_reply : thread_reply, thread_id : thread_id, id : "", duration : commands_types_Duration.fromString(when), timestamp : new Date().getTime(), author : interaction.user.id, content : content, personal : personal};
-			var min = "0min";
+			var min = "4mins";
 			var duration = commands_types_Duration.fromString(min);
 			if(obj.duration == 0.) {
 				interaction.reply("Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)");
@@ -6791,7 +6804,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 var commands_Roundup = function(_universe) {
 	this.set_permissions = false;
 	this.sent = false;
-	this.announcement_channel = "597067735771381771";
+	this.announcement_channel = "286485321925918721";
 	this.news_role = "761714325227700225";
 	this.super_mod_id = "198916468312637440";
 	var _g = new haxe_ds_StringMap();
@@ -6898,6 +6911,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 					var postfix = fh.next_roundup;
 					var value = fh.next_roundup + 1;
 					Main.get_state().next_roundup = value;
+					Main.updateState("state",Main.get_state());
 					return postfix;
 				});
 			}
@@ -6998,6 +7012,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			this.active = true;
 			var value = number | 0;
 			Main.get_state().next_roundup = value;
+			Main.updateState("state",Main.get_state());
 			interaction.reply("Will start watching haxe roundups from **#" + number + "**.");
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
@@ -7012,6 +7027,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,set_roundup: function(value) {
 		Main.get_state().next_roundup = value;
+		Main.updateState("state",Main.get_state());
 		return value;
 	}
 	,get_name: function() {
@@ -7021,10 +7037,10 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{set_roundup:"set_roundup",get_roundup:"get_roundup"})
 });
 var commands_RoundupRoundup = function(_universe) {
-	this.event_role = "<@&1114582456381747232>";
-	this.voice_text_id = "597067735771381771";
-	this.announcement_id = "597067735771381771";
-	this.voice_channel_id = "416069724657418244";
+	this.event_role = "<@&1054432874473996408>";
+	this.voice_text_id = "220626116627529728";
+	this.announcement_id = "286485321925918721";
+	this.voice_channel_id = "198219256687493120";
 	this.host_contacted = false;
 	this.host_active = false;
 	this.waiting = false;
@@ -7165,14 +7181,23 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 				} else if(left <= commands_types_Duration.fromString("0s") && !this.waiting) {
 					this.waiting = true;
 					this.event.setStatus(2,"Time to start the event!").then(function(event) {
-						_gthis2.voice_text.send("" + _gthis2.event_role + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!\n\n If you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 250, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+						var mention = _gthis2.get_state().event_ping == 3 ? _gthis2.event_role : "@everyone";
+						var message = "" + mention + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!";
+						if(_gthis2.get_state().event_ping == 3) {
+							_gthis2.get_state().event_ping = 0;
+							message += "\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`";
+						} else {
+							_gthis2.get_state().event_ping = _gthis2.get_state().event_ping + 1;
+						}
+						_gthis2.setState(_gthis2.get_state());
+						_gthis2.voice_text.send({ content : message, allowedMentions : { parse : ["everyone","roles"]}}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 261, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 						});
-						haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 251, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+						haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 262, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 						_gthis2.waiting = false;
 						_gthis2.event = event;
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 254, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+						haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 265, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 					});
 				}
 			}
@@ -7334,14 +7359,23 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		if(left <= commands_types_Duration.fromString("0s") && !this.waiting) {
 			this.waiting = true;
 			this.event.setStatus(2,"Time to start the event!").then(function(event) {
-				_gthis.voice_text.send("" + _gthis.event_role + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!\n\n If you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`").then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 250, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+				var mention = _gthis.get_state().event_ping == 3 ? _gthis.event_role : "@everyone";
+				var message = "" + mention + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!";
+				if(_gthis.get_state().event_ping == 3) {
+					_gthis.get_state().event_ping = 0;
+					message += "\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`";
+				} else {
+					_gthis.get_state().event_ping = _gthis.get_state().event_ping + 1;
+				}
+				_gthis.setState(_gthis.get_state());
+				_gthis.voice_text.send({ content : message, allowedMentions : { parse : ["everyone","roles"]}}).then(null,function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 261, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 				});
-				haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 251, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+				haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 262, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 				_gthis.waiting = false;
 				_gthis.event = event;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 254, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 265, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 			});
 		}
 	}
@@ -7353,20 +7387,21 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			_gthis.get_state().event_id = event.id;
 			event.createInviteURL({ maxAge : 604800, channel : _gthis.voice_text_id}).then(function(url) {
 				_gthis.voice_text.send({ content : "Thanks for hanging out :grin: \nGet ready for the next one! " + url}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 277, className : "commands.RoundupRoundup", methodName : "createEvent"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 288, className : "commands.RoundupRoundup", methodName : "createEvent"});
 				});
 				_gthis.announcement.send({ content : "Get ready for the next roundup roundup :grin: \n" + url}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 281, className : "commands.RoundupRoundup", methodName : "createEvent"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 292, className : "commands.RoundupRoundup", methodName : "createEvent"});
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 282, className : "commands.RoundupRoundup", methodName : "createEvent"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 293, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			});
-			haxe_Log.trace("Event setup!",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 284, className : "commands.RoundupRoundup", methodName : "createEvent"});
+			Main.updateState("state",Main.get_state());
+			haxe_Log.trace("Event setup!",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 295, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			_gthis.host_m.send("New roundup event scheduled for <t:" + Math.round(event.scheduledStartTimestamp / 1000) + ":R>").then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 288, className : "commands.RoundupRoundup", methodName : "createEvent"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 299, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 289, className : "commands.RoundupRoundup", methodName : "createEvent"});
+			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 300, className : "commands.RoundupRoundup", methodName : "createEvent"});
 		});
 	}
 	,getEvent: function() {
@@ -7376,11 +7411,11 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		this.waiting = true;
 		this.get_schedule().fetch(this.get_state().event_id).then(function(event) {
-			haxe_Log.trace("Roundup event retrieved",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 299, className : "commands.RoundupRoundup", methodName : "getEvent"});
+			haxe_Log.trace("Roundup event retrieved",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 310, className : "commands.RoundupRoundup", methodName : "getEvent"});
 			_gthis.event = event;
 			_gthis.waiting = false;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 303, className : "commands.RoundupRoundup", methodName : "getEvent"});
+			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 314, className : "commands.RoundupRoundup", methodName : "getEvent"});
 			_gthis.waiting = false;
 		});
 	}
@@ -7402,13 +7437,13 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 						};
 					})(),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 314, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 325, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
 						};
 					})());
 				};
 			})(data),(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 315, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 326, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
 				};
 			})());
 			this.universe.deleteEntity(entity);
@@ -7420,7 +7455,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			var e = emojis[_g];
 			++_g;
 			message.react(e).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 324, className : "commands.RoundupRoundup", methodName : "addCollection"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 335, className : "commands.RoundupRoundup", methodName : "addCollection"});
 			});
 		}
 		var collector = message.createReactionCollector({ time : commands_types_Duration.fromString(time)});
@@ -7464,6 +7499,10 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 	,get_state: function() {
 		return Main.get_state().roundup_roundup;
 	}
+	,setState: function(value) {
+		Main.get_state().roundup_roundup = value;
+		Main.updateState("state",Main.get_state());
+	}
 	,get_started: function() {
 		return this.event.status == 2;
 	}
@@ -7471,7 +7510,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		return this.get_guild().scheduledEvents;
 	}
 	,get_host: function() {
-		return "151104106973495296";
+		return this.get_state().host;
 	}
 	,end_event: null
 	,voice_update_events: null
@@ -8599,7 +8638,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Showcase = function(_) {
 	this.checking = false;
-	this.channel_id = "1100053767493255182";
+	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
 	this.modal = this.universe.families.get(6);
 	this.messages = this.universe.families.get(2);
@@ -8684,7 +8723,12 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			if(command1 != "showcase" && !this.channel.isThread()) {
 				return;
 			}
-			var thread = [js_Boot.__cast(message[0].channel , discord_$js_TextChannel)];
+			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
+			if(thread[0].id != "1024905470621798410") {
+				if(thread[0].ownerId != message[0].author.id) {
+					return;
+				}
+			}
 			var arr = [[]];
 			var content1 = [StringTools.trim(message[0].content.substring(10))];
 			var jsIterator = message[0].attachments.values();
@@ -16596,7 +16640,7 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 		}
 	}
 	,guildTextChannel: function(message) {
-		if(message.channel.id == "1100053767493255182" && !message.system) {
+		if(message.channel.id == "162664383082790912" && !message.system) {
 			var entity = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity,3,"showcase_message");
 			util_EcsTools.get_universe().components.set(entity,2,message);
@@ -16862,7 +16906,7 @@ Main.commands_active = false;
 Main.connected = false;
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 CommandPermission.admin = 8;
 CommandPermission.supermod = 4;
 CommandPermission.everyone = 1024 | 2048;

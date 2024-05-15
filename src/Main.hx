@@ -479,6 +479,8 @@ class Main {
 			trace(err);
 			Browser.console.dir(err);
 		});
+		#else
+			File.saveContent('./config/state.json', Json.stringify(admin.state));
 		#end
 	}
 
@@ -651,6 +653,7 @@ typedef TState = {
 
 typedef TRoundup = {
 	var event_id:String;
+	var event_ping:Int;
 	var host:String;
 }
 
