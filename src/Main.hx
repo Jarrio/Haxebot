@@ -50,6 +50,7 @@ import commands.JamSuggestionBox;
 import systems.MessageRouter;
 import commands.Roundup;
 import commands.Everyone;
+import systems.DatabaseSystem;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -60,8 +61,7 @@ class Main {
 	public static var commands_active:Bool = false;
 	public static var connected:Bool = false;
 	public static var keys:TKeys;
-	public static var admin:TAdmin;
-	public static var state(get, never):TState;
+	public static var state:TState;
 	public static var command_file:Array<TCommands>;
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
@@ -100,7 +100,7 @@ class Main {
 				{
 					name: 'systems',
 					enabled: true,
-					systems: [MessageRouter]
+					systems: [MessageRouter, DatabaseSystem]
 				},
 				{
 					name: 'messages',
@@ -420,12 +420,6 @@ class Main {
 		return null;
 	}
 
-	static function get_state() {
-		if (Main.admin == null) {
-			return null;
-		}
-		return Main.admin.state;
-	}
 	static function saveCommand(command:ApplicationCommand) {
 		Main.registered_commands.set(command.name, command);
 		trace('registered ${command.name}');
@@ -437,10 +431,7 @@ class Main {
 			command_file = Json.parse(File.getContent('./config/commands.json'));
 			#if block
 			if (admin == null) {
-				admin = {
-					state: Json.parse(File.getContent('./config/state.json')),
-					project_name: "haxebot"
-				}
+				state = Json.parse(File.getContent('./config/state.json'));
 			}
 			#end
 		} catch (e ) {
@@ -480,7 +471,7 @@ class Main {
 			Browser.console.dir(err);
 		});
 		#else
-			File.saveContent('./config/state.json', Json.stringify(admin.state));
+			File.saveContent('./config/state.json', Json.stringify(state));
 		#end
 	}
 
@@ -630,6 +621,14 @@ typedef TKeys = {
 	var suggestionbox_hook:String;
 	var twitch_client_id:String;
 	var twitch_secret:String;
+	var mysql:TMysqlConfig;
+}
+
+typedef TMysqlConfig = {
+	var user:String;
+	var pass:String;
+	var host:String;
+	var database:String;
 }
 
 typedef TDiscordConfig = {
@@ -637,11 +636,6 @@ typedef TDiscordConfig = {
 	var secret:String;
 	var server_id:String;
 	var client_id:String;
-}
-
-typedef TAdmin = {
-	var project_name:String;
-	var state:TState;
 }
 
 typedef TState = {

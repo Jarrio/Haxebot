@@ -16,3 +16,18 @@
 [submodule ".haxelib/discordjs/discordjs"]
 	path = .haxelib/discordjs/discordjs
 	url = https://github.com/Jarrio/discordjs
+[submodule "haxe_modules/db-core"]
+	path = haxe_modules/db-core
+	url = https://github.com/core-haxe/db-core
+[submodule "haxe_modules/db-mysql"]
+	path = haxe_modules/db-mysql
+	url = https://github.com/core-haxe/db-mysql
+[submodule "haxe_modules/mysql"]
+	path = haxe_modules/mysql
+	url = https://github.com/core-haxe/mysql
+[submodule "haxe_modules/promises"]
+	path = haxe_modules/promises
+	url = https://github.com/core-haxe/promises
+[submodule "haxe_modules/hx4compat"]
+	path = haxe_modules/hx4compat
+	url = https://github.com/haxefoundation/hx4compat
