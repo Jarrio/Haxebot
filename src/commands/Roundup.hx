@@ -8,6 +8,7 @@ import components.Command;
 import systems.CommandBase;
 import js.Browser;
 import discord_js.User;
+import haxe.Json;
 
 class Roundup extends CommandBase {
 	var last_checked:Float = -1;
@@ -16,7 +17,7 @@ class Roundup extends CommandBase {
 	var roundup(get, set):Int;
 	var channel:TextChannel = null;
 	var checking:Bool = false;
-
+	var _check_now:Bool = false;
 	var dmlist:Map<String, User> = ['367806496907591682' => null, '151104106973495296' => null];
 
 	final super_mod_id:String = '198916468312637440';
@@ -26,6 +27,9 @@ class Roundup extends CommandBase {
 	var sent = false;
 
 	function dmUser(title:String, content:String) {
+		#if block
+		return;
+		#end
 		var regex = ~/\((.*?)\)/gmis;
 		content = regex.replace(content, "(<$1>)");
 		for (key => user in dmlist) {
@@ -96,6 +100,10 @@ class Roundup extends CommandBase {
 
 	override function update(_) {
 		super.update(_);
+		if (Main.state == null) {
+			return;
+		}
+
 		if (this.channel == null && this.checking == false) {
 			this.checking = true;
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
@@ -123,7 +131,7 @@ class Roundup extends CommandBase {
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
 
-		if (today.getUTCDay() == 4) {
+		if (today.getUTCDay() == 4 || _check_now) {
 			if (!this.shouldCheck()) {
 				return;
 			}
@@ -140,6 +148,11 @@ class Roundup extends CommandBase {
 	function shouldCheck() {
 		var today = Date.now();
 		var hour = today.getUTCHours();
+
+		if (_check_now) {
+			_check_now = false;
+			return true;
+		}
 
 		if (hour < 11 || hour > 14) {
 			return false;
@@ -200,7 +213,7 @@ class Roundup extends CommandBase {
 
 	inline function set_roundup(value:Int) {
 		Main.state.next_roundup = value;
-		Main.updateState('state', Main.state);
+		Main.updateState('next_roundup', Json.stringify(value));	
 
 		return value;
 	}

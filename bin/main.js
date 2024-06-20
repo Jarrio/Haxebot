@@ -633,12 +633,12 @@ haxe_ds_Map.fromObjectMap = function(map) {
 var Main = function() { };
 $hxClasses["Main"] = Main;
 Main.__name__ = "Main";
-Main.__properties__ = {get_discord:"get_discord",get_state:"get_state"};
+Main.__properties__ = {get_discord:"get_discord"};
 Main.app = null;
 Main.auth = null;
 Main.client = null;
 Main.keys = null;
-Main.admin = null;
+Main.state = null;
 Main.command_file = null;
 Main.universe = null;
 Main.get_discord = function() {
@@ -653,25 +653,26 @@ Main.token = function(rest) {
 };
 Main.start = function() {
 	var vec = new Array(4);
-	vec[0] = new ecs_Phase(true,"systems",new Array(1),new Array(1));
+	vec[0] = new ecs_Phase(true,"systems",new Array(2),new Array(2));
 	vec[1] = new ecs_Phase(true,"messages",new Array(4),new Array(4));
 	vec[2] = new ecs_Phase(false,"testing",new Array(17),new Array(17));
 	vec[3] = new ecs_Phase(true,"main",new Array(27),new Array(27));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
-	var vec = new Array(12);
-	vec[0] = new ecs_Components(12);
-	vec[11] = new ecs_Components(12);
-	vec[6] = new ecs_Components(12);
-	vec[2] = new ecs_Components(12);
-	vec[10] = new ecs_Components(12);
-	vec[5] = new ecs_Components(12);
-	vec[3] = new ecs_Components(12);
-	vec[9] = new ecs_Components(12);
-	vec[4] = new ecs_Components(12);
-	vec[1] = new ecs_Components(12);
-	vec[7] = new ecs_Components(12);
-	vec[8] = new ecs_Components(12);
+	var vec = new Array(13);
+	vec[1] = new ecs_Components(13);
+	vec[12] = new ecs_Components(13);
+	vec[7] = new ecs_Components(13);
+	vec[3] = new ecs_Components(13);
+	vec[11] = new ecs_Components(13);
+	vec[6] = new ecs_Components(13);
+	vec[4] = new ecs_Components(13);
+	vec[10] = new ecs_Components(13);
+	vec[5] = new ecs_Components(13);
+	vec[2] = new ecs_Components(13);
+	vec[8] = new ecs_Components(13);
+	vec[0] = new ecs_Components(13);
+	vec[9] = new ecs_Components(13);
 	var components = new ecs_core_ComponentManager(entities,vec);
 	var capacity = 0;
 	if(capacity == null) {
@@ -687,8 +688,8 @@ Main.start = function() {
 		}
 	}
 	var resources = new ecs_core_ResourceManager(this1,new Array(0));
-	var vec = new Array(12);
-	var capacity = 12;
+	var vec = new Array(13);
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -702,7 +703,6 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,1);
 	bits_Bits.set(cmpBits,0);
 	var capacity = 0;
 	if(capacity == null) {
@@ -719,7 +719,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[0] = new ecs_Family(0,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -734,6 +734,7 @@ Main.start = function() {
 	}
 	var cmpBits = this1;
 	bits_Bits.set(cmpBits,2);
+	bits_Bits.set(cmpBits,1);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -749,7 +750,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[1] = new ecs_Family(1,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -764,7 +765,6 @@ Main.start = function() {
 	}
 	var cmpBits = this1;
 	bits_Bits.set(cmpBits,3);
-	bits_Bits.set(cmpBits,2);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -780,7 +780,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[2] = new ecs_Family(2,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -811,7 +811,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[3] = new ecs_Family(3,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -825,8 +825,8 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,3);
 	bits_Bits.set(cmpBits,5);
+	bits_Bits.set(cmpBits,4);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -842,7 +842,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[4] = new ecs_Family(4,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -856,7 +856,7 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,2);
+	bits_Bits.set(cmpBits,4);
 	bits_Bits.set(cmpBits,6);
 	var capacity = 0;
 	if(capacity == null) {
@@ -873,7 +873,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[5] = new ecs_Family(5,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -887,8 +887,8 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
+	bits_Bits.set(cmpBits,3);
 	bits_Bits.set(cmpBits,7);
-	bits_Bits.set(cmpBits,1);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -904,7 +904,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[6] = new ecs_Family(6,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -918,8 +918,8 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,1);
-	bits_Bits.set(cmpBits,3);
+	bits_Bits.set(cmpBits,8);
+	bits_Bits.set(cmpBits,2);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -935,7 +935,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[7] = new ecs_Family(7,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -949,7 +949,8 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,8);
+	bits_Bits.set(cmpBits,2);
+	bits_Bits.set(cmpBits,4);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -965,7 +966,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[8] = new ecs_Family(8,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -980,8 +981,6 @@ Main.start = function() {
 	}
 	var cmpBits = this1;
 	bits_Bits.set(cmpBits,9);
-	bits_Bits.set(cmpBits,9);
-	bits_Bits.set(cmpBits,3);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -997,7 +996,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[9] = new ecs_Family(9,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -1011,8 +1010,9 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,3);
 	bits_Bits.set(cmpBits,10);
+	bits_Bits.set(cmpBits,10);
+	bits_Bits.set(cmpBits,4);
 	var capacity = 0;
 	if(capacity == null) {
 		capacity = 0;
@@ -1028,7 +1028,7 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[10] = new ecs_Family(10,cmpBits,resBits,1000);
-	var capacity = 12;
+	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
 	}
@@ -1042,7 +1042,7 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,1);
+	bits_Bits.set(cmpBits,4);
 	bits_Bits.set(cmpBits,11);
 	var capacity = 0;
 	if(capacity == null) {
@@ -1059,12 +1059,47 @@ Main.start = function() {
 	}
 	var resBits = this1;
 	vec[11] = new ecs_Family(11,cmpBits,resBits,1000);
+	var capacity = 13;
+	if(capacity == null) {
+		capacity = 0;
+	}
+	var this1 = [0];
+	if(capacity > 0) {
+		var _g = this1.length;
+		var _g1 = Math.ceil(capacity / 32);
+		while(_g < _g1) {
+			var i = _g++;
+			this1[i] = 0;
+		}
+	}
+	var cmpBits = this1;
+	bits_Bits.set(cmpBits,2);
+	bits_Bits.set(cmpBits,12);
+	var capacity = 0;
+	if(capacity == null) {
+		capacity = 0;
+	}
+	var this1 = [0];
+	if(capacity > 0) {
+		var _g = this1.length;
+		var _g1 = Math.ceil(capacity / 32);
+		while(_g < _g1) {
+			var i = _g++;
+			this1[i] = 0;
+		}
+	}
+	var resBits = this1;
+	vec[12] = new ecs_Family(12,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec);
 	var u = new ecs_Universe(entities,components,resources,families,phases);
 	var phase = phases[0];
 	var s = new systems_MessageRouter(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
+	s.onEnabled();
+	var s = new systems_DatabaseSystem(u);
+	phase.systems[1] = s;
+	phase.enabledSystems[1] = true;
 	s.onEnabled();
 	var phase = phases[1];
 	var s = new commands_ThreadCount(u);
@@ -1251,12 +1286,47 @@ Main.start = function() {
 		u.families.tryActivate(idx);
 	}
 	Main.universe = u;
+	var e = database_DBEvents.GetAllRecords("state",function(response) {
+		if(response._hx_index == 2) {
+			var data = response.data;
+			Main.state = { next_roundup : 0, roundup_roundup : null, snippet_tags : null};
+			var d = data.iterator();
+			while(d.hasNext()) {
+				var d1 = d.next();
+				var value = d1.field("value");
+				switch(d1.field("key")) {
+				case "next_roundup":
+					Main.state.next_roundup = value;
+					break;
+				case "roundup_roundup":
+					Main.state.roundup_roundup = value;
+					break;
+				case "snippet_tags":
+					Main.state.snippet_tags = value;
+					break;
+				default:
+					var e = haxe_Log.trace;
+					var tmp = d1.field("key");
+					e(tmp == null ? "null" : Std.string(tmp),{ fileName : "src/Main.hx", lineNumber : 184, className : "Main", methodName : "start"});
+				}
+			}
+		} else {
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 188, className : "Main", methodName : "start"});
+		}
+	});
+	var _ecsTmpEntity = Main.universe.createEntity();
+	Main.universe.components.set(_ecsTmpEntity,0,e);
+	var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+	var ecsTmpFamily = Main.universe.families.get(0);
+	if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+		ecsTmpFamily.add(_ecsTmpEntity);
+	}
 	Main.client = new discord_$js_Client({ intents : [1,32768,65536,512,4096,2,1024,128,8192]});
 	Main.client.once("ready",function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 174, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 208, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1267,23 +1337,19 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 183, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 217, className : "Main", methodName : "start"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 189, className : "Main", methodName : "start"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 223, className : "Main", methodName : "start"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 195, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 229, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,3,"add_event_role");
-		Main.universe.components.set(_ecsTmpEntity,5,member);
+		Main.universe.components.set(_ecsTmpEntity,4,"add_event_role");
+		Main.universe.components.set(_ecsTmpEntity,6,member);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
 		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1292,28 +1358,28 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(7);
+		var ecsTmpFamily = Main.universe.families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(9);
+		var ecsTmpFamily = Main.universe.families.get(8);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(10);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(11);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
 	Main.client.on("guildScheduledEventCreate",function(event) {
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,3,"create_event");
-		Main.universe.components.set(_ecsTmpEntity,10,event);
+		Main.universe.components.set(_ecsTmpEntity,4,"create_event");
+		Main.universe.components.set(_ecsTmpEntity,11,event);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
 		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1322,28 +1388,28 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(7);
+		var ecsTmpFamily = Main.universe.families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(9);
+		var ecsTmpFamily = Main.universe.families.get(8);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(10);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(11);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
 	Main.client.on("guildScheduledEventUpdate",function(event) {
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,3,"scheduled_event_update");
-		Main.universe.components.set(_ecsTmpEntity,10,event);
+		Main.universe.components.set(_ecsTmpEntity,4,"scheduled_event_update");
+		Main.universe.components.set(_ecsTmpEntity,11,event);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
 		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1352,29 +1418,29 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(7);
+		var ecsTmpFamily = Main.universe.families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(9);
+		var ecsTmpFamily = Main.universe.families.get(8);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(10);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(11);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
 	Main.client.on("voiceStateUpdate",function(old,updated) {
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,3,"roundup_member_update");
-		Main.universe.components.set(_ecsTmpEntity,9,old);
-		Main.universe.components.set(_ecsTmpEntity,9,updated);
+		Main.universe.components.set(_ecsTmpEntity,4,"roundup_member_update");
+		Main.universe.components.set(_ecsTmpEntity,10,old);
+		Main.universe.components.set(_ecsTmpEntity,10,updated);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
 		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1383,15 +1449,19 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(7);
+		var ecsTmpFamily = Main.universe.families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(9);
+		var ecsTmpFamily = Main.universe.families.get(8);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(10);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(11);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1401,29 +1471,7 @@ Main.start = function() {
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,2,message);
-		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(1);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(5);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-	});
-	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 223, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 224, className : "Main", methodName : "start"});
-	});
-	Main.client.on("threadCreate",function(thread) {
-		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,3,"thread_pin_message");
-		Main.universe.components.set(_ecsTmpEntity,4,thread);
+		Main.universe.components.set(_ecsTmpEntity,3,message);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
 		var ecsTmpFamily = Main.universe.families.get(2);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
@@ -1433,19 +1481,41 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
+		var ecsTmpFamily = Main.universe.families.get(6);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+	});
+	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 257, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 258, className : "Main", methodName : "start"});
+	});
+	Main.client.on("threadCreate",function(thread) {
+		var _ecsTmpEntity = Main.universe.createEntity();
+		Main.universe.components.set(_ecsTmpEntity,4,"thread_pin_message");
+		Main.universe.components.set(_ecsTmpEntity,5,thread);
+		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(7);
+		var ecsTmpFamily = Main.universe.families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(9);
+		var ecsTmpFamily = Main.universe.families.get(8);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(10);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(11);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1454,13 +1524,9 @@ Main.start = function() {
 		if(interaction.isButton()) {
 			if(interaction.customId == "showcase_agree") {
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"showcase_agree");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"showcase_agree");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1469,11 +1535,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1481,28 +1547,28 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
 			if(interaction.customId == "showcase_disagree") {
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"showcase_disagree");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"showcase_disagree");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1511,11 +1577,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1523,28 +1589,28 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
 			if(interaction.customId == "snippet_left") {
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"snippet_left");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"snippet_left");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1553,11 +1619,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1565,28 +1631,28 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 			}
 			if(interaction.customId == "snippet_right") {
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"snippet_right");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"snippet_right");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1595,11 +1661,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1607,15 +1673,19 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1623,17 +1693,13 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isModalSubmit()) {
-			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 256, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 290, className : "Main", methodName : "start"});
 			switch(interaction.customId) {
 			case "code_paste":
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"code_paste");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"code_paste");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1642,11 +1708,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1654,28 +1720,28 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 				break;
 			case "quote_edit":
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"quote_edit");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"quote_edit");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1684,11 +1750,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1696,28 +1762,28 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 				break;
 			case "quote_set":
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,3,"quote_set");
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,4,"quote_set");
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(2);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1726,11 +1792,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1738,15 +1804,19 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(11);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1769,22 +1839,22 @@ Main.start = function() {
 			}
 			if(type != "none") {
 				var _ecsTmpEntity = Main.universe.createEntity();
-				Main.universe.components.set(_ecsTmpEntity,11,type);
-				Main.universe.components.set(_ecsTmpEntity,1,interaction);
+				Main.universe.components.set(_ecsTmpEntity,12,type);
+				Main.universe.components.set(_ecsTmpEntity,2,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(11);
+				var ecsTmpFamily = Main.universe.families.get(12);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(1);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
 				var ecsTmpFamily = Main.universe.families.get(7);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1795,14 +1865,10 @@ Main.start = function() {
 		}
 		var command = Main.createCommand(interaction);
 		var _ecsTmpEntity = Main.universe.createEntity();
-		Main.universe.components.set(_ecsTmpEntity,0,command);
-		Main.universe.components.set(_ecsTmpEntity,1,interaction);
+		Main.universe.components.set(_ecsTmpEntity,1,command);
+		Main.universe.components.set(_ecsTmpEntity,2,interaction);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(0);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(6);
+		var ecsTmpFamily = Main.universe.families.get(1);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1810,14 +1876,18 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(11);
+		var ecsTmpFamily = Main.universe.families.get(8);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(12);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 	});
 	Main.client.login(Main.get_discord().token);
 	new haxe_Timer(500).run = function() {
-		if(!Main.connected || !Main.commands_active || Main.get_state() == null) {
+		if(!Main.connected || !Main.commands_active) {
 			return;
 		}
 		Main.universe.update(1);
@@ -1947,15 +2017,9 @@ Main.getCommand = function(name) {
 	}
 	return null;
 };
-Main.get_state = function() {
-	if(Main.admin == null) {
-		return null;
-	}
-	return Main.admin.state;
-};
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 431, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 459, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1963,32 +2027,44 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 447, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 467, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 457, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 477, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
-			Main.admin = resp.data();
+			CommandPermission.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 467, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 487, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
 	Main.start();
 };
 Main.updateState = function(field,value) {
-	var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
-	firebase_web_firestore_Firestore.updateDoc(doc,field,value).then(null,function(err) {
-		haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 479, className : "Main", methodName : "updateState"});
-		$global.console.dir(err);
+	var record = new db_Record();
+	record.field("key",field);
+	record.field("value",value);
+	var e = database_DBEvents.Update("state",record,QueryExpr.QueryBinop(QBinop.QOpAssign,QueryExpr.QueryConstant(QConstant.QIdent("key")),QueryExpr.QueryValue(field)),function(response) {
+		if(response._hx_index == 4) {
+			haxe_Log.trace("updated state",{ fileName : "src/Main.hx", lineNumber : 503, className : "Main", methodName : "updateState"});
+		} else {
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 505, className : "Main", methodName : "updateState"});
+		}
 	});
+	var _ecsTmpEntity = Main.universe.createEntity();
+	Main.universe.components.set(_ecsTmpEntity,0,e);
+	var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+	var ecsTmpFamily = Main.universe.families.get(0);
+	if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+		ecsTmpFamily.add(_ecsTmpEntity);
+	}
 };
 Main.parseCommands = function() {
 	if(Main.command_file == null || Main.command_file.length == 0) {
@@ -2101,6 +2177,248 @@ CommandPermission.fromString = function(value) {
 };
 Math.__name__ = "Math";
 var NodeHtmlParser = require("node-html-parser");
+var QBinop = $hxEnums["QBinop"] = { __ename__:"QBinop",__constructs__:null
+	,QOpEq: {_hx_name:"QOpEq",_hx_index:0,__enum__:"QBinop",toString:$estr}
+	,QOpAssign: {_hx_name:"QOpAssign",_hx_index:1,__enum__:"QBinop",toString:$estr}
+	,QOpBoolAnd: {_hx_name:"QOpBoolAnd",_hx_index:2,__enum__:"QBinop",toString:$estr}
+	,QOpBoolOr: {_hx_name:"QOpBoolOr",_hx_index:3,__enum__:"QBinop",toString:$estr}
+	,QOpNotEq: {_hx_name:"QOpNotEq",_hx_index:4,__enum__:"QBinop",toString:$estr}
+	,QOpGt: {_hx_name:"QOpGt",_hx_index:5,__enum__:"QBinop",toString:$estr}
+	,QOpLt: {_hx_name:"QOpLt",_hx_index:6,__enum__:"QBinop",toString:$estr}
+	,QOpGte: {_hx_name:"QOpGte",_hx_index:7,__enum__:"QBinop",toString:$estr}
+	,QOpLte: {_hx_name:"QOpLte",_hx_index:8,__enum__:"QBinop",toString:$estr}
+	,QOpIn: {_hx_name:"QOpIn",_hx_index:9,__enum__:"QBinop",toString:$estr}
+	,QOpUnsupported: ($_=function(v) { return {_hx_index:10,v:v,__enum__:"QBinop",toString:$estr,__params__:function(){ return [this.v];}}; },$_._hx_name="QOpUnsupported",$_)
+};
+QBinop.__constructs__ = [QBinop.QOpEq,QBinop.QOpAssign,QBinop.QOpBoolAnd,QBinop.QOpBoolOr,QBinop.QOpNotEq,QBinop.QOpGt,QBinop.QOpLt,QBinop.QOpGte,QBinop.QOpLte,QBinop.QOpIn,QBinop.QOpUnsupported];
+QBinop.__empty_constructs__ = [QBinop.QOpEq,QBinop.QOpAssign,QBinop.QOpBoolAnd,QBinop.QOpBoolOr,QBinop.QOpNotEq,QBinop.QOpGt,QBinop.QOpLt,QBinop.QOpGte,QBinop.QOpLte,QBinop.QOpIn];
+var QConstant = $hxEnums["QConstant"] = { __ename__:"QConstant",__constructs__:null
+	,QInt: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"QConstant",toString:$estr,__params__:function(){ return [this.v];}}; },$_._hx_name="QInt",$_)
+	,QFloat: ($_=function(f) { return {_hx_index:1,f:f,__enum__:"QConstant",toString:$estr,__params__:function(){ return [this.f];}}; },$_._hx_name="QFloat",$_)
+	,QString: ($_=function(s) { return {_hx_index:2,s:s,__enum__:"QConstant",toString:$estr,__params__:function(){ return [this.s];}}; },$_._hx_name="QString",$_)
+	,QIdent: ($_=function(s) { return {_hx_index:3,s:s,__enum__:"QConstant",toString:$estr,__params__:function(){ return [this.s];}}; },$_._hx_name="QIdent",$_)
+};
+QConstant.__constructs__ = [QConstant.QInt,QConstant.QFloat,QConstant.QString,QConstant.QIdent];
+QConstant.__empty_constructs__ = [];
+var QueryExpr = $hxEnums["QueryExpr"] = { __ename__:"QueryExpr",__constructs__:null
+	,QueryBinop: ($_=function(op,e1,e2) { return {_hx_index:0,op:op,e1:e1,e2:e2,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.op,this.e1,this.e2];}}; },$_._hx_name="QueryBinop",$_)
+	,QueryConstant: ($_=function(c) { return {_hx_index:1,c:c,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.c];}}; },$_._hx_name="QueryConstant",$_)
+	,QueryParenthesis: ($_=function(e) { return {_hx_index:2,e:e,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.e];}}; },$_._hx_name="QueryParenthesis",$_)
+	,QueryValue: ($_=function(v) { return {_hx_index:3,v:v,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.v];}}; },$_._hx_name="QueryValue",$_)
+	,QueryCall: ($_=function(name,params) { return {_hx_index:4,name:name,params:params,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.name,this.params];}}; },$_._hx_name="QueryCall",$_)
+	,QueryArrayDecl: ($_=function(values) { return {_hx_index:5,values:values,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.values];}}; },$_._hx_name="QueryArrayDecl",$_)
+	,QueryUnsupported: ($_=function(v) { return {_hx_index:6,v:v,__enum__:"QueryExpr",toString:$estr,__params__:function(){ return [this.v];}}; },$_._hx_name="QueryUnsupported",$_)
+};
+QueryExpr.__constructs__ = [QueryExpr.QueryBinop,QueryExpr.QueryConstant,QueryExpr.QueryParenthesis,QueryExpr.QueryValue,QueryExpr.QueryCall,QueryExpr.QueryArrayDecl,QueryExpr.QueryUnsupported];
+QueryExpr.__empty_constructs__ = [];
+var Query = function() { };
+$hxClasses["Query"] = Query;
+Query.__name__ = "Query";
+Query.joinQueryParts = function(parts,op) {
+	var query = null;
+	if(parts.length > 1) {
+		var last = parts.pop();
+		var beforeLast = parts.pop();
+		var qp = QueryExpr.QueryBinop(op,beforeLast,last);
+		while(parts.length > 0) {
+			var q = parts.pop();
+			qp = QueryExpr.QueryBinop(op,q,qp);
+		}
+		query = qp;
+	} else {
+		query = parts[0];
+	}
+	return query;
+};
+Query.queryExprToSql = function(qe,values,fieldPrefix) {
+	if(qe == null) {
+		return null;
+	}
+	var sb = new StringBuf();
+	Query.queryExprPartToSql(qe,sb,values,fieldPrefix,false);
+	return sb.b;
+};
+Query.queryExprPartToSql = function(qe,sb,values,fieldPrefix,isColumn) {
+	while(true) {
+		switch(qe._hx_index) {
+		case 0:
+			var _gop = qe.op;
+			var _ge = qe.e2;
+			var isColumn2 = _gop == QBinop.QOpEq || _gop == QBinop.QOpAssign || _gop == QBinop.QOpNotEq || _gop == QBinop.QOpGt || _gop == QBinop.QOpLt || _gop == QBinop.QOpGte || _gop == QBinop.QOpLte || _gop == QBinop.QOpIn;
+			Query.queryExprPartToSql(qe.e1,sb,values,fieldPrefix,isColumn2);
+			switch(_gop._hx_index) {
+			case 0:
+				sb.b += " = ";
+				break;
+			case 1:
+				sb.b += " = ";
+				break;
+			case 2:
+				sb.b += " AND ";
+				break;
+			case 3:
+				sb.b += " OR ";
+				break;
+			case 4:
+				sb.b += " <> ";
+				break;
+			case 5:
+				sb.b += " > ";
+				break;
+			case 6:
+				sb.b += " < ";
+				break;
+			case 7:
+				sb.b += " >= ";
+				break;
+			case 8:
+				sb.b += " <= ";
+				break;
+			case 9:
+				sb.b += " IN ";
+				break;
+			case 10:
+				haxe_Log.trace("WARNING: unsupported binary operation encountered:",{ fileName : "Query.hx", lineNumber : 192, className : "Query", methodName : "queryExprPartToSql", customParams : [_gop.v]});
+				break;
+			}
+			qe = _ge;
+			continue;
+		case 1:
+			var _gc = qe.c;
+			switch(_gc._hx_index) {
+			case 0:
+				var _gv = _gc.v;
+				if(values == null) {
+					sb.b += _gv == null ? "null" : "" + _gv;
+				} else {
+					values.push(_gv);
+					sb.b += "?";
+				}
+				break;
+			case 2:
+				var _gs = _gc.s;
+				if(values == null) {
+					sb.b += Std.string("\"" + _gs + "\"");
+				} else {
+					values.push(_gs);
+					sb.b += "?";
+				}
+				break;
+			case 3:
+				var x = Query.buildColumn(_gc.s,fieldPrefix);
+				sb.b += Std.string(x);
+				break;
+			default:
+			}
+			break;
+		case 2:
+			sb.b += "(";
+			Query.queryExprPartToSql(qe.e,sb,values,fieldPrefix,false);
+			sb.b += ")";
+			break;
+		case 3:
+			var _gv1 = qe.v;
+			if(((_gv1) instanceof Array)) {
+				sb.b += "(";
+				var array = _gv1;
+				var newArray = [];
+				var _g = 0;
+				while(_g < array.length) {
+					var a = array[_g];
+					++_g;
+					if(typeof(a) == "string") {
+						newArray.push("\"" + (a == null ? "null" : Std.string(a)) + "\"");
+					} else {
+						newArray.push(a == null ? "null" : Std.string(a));
+					}
+				}
+				var x1 = newArray.join(", ");
+				sb.b += Std.string(x1);
+				sb.b += ")";
+			} else if(values == null) {
+				if(StringTools.startsWith(_gv1 == null ? "null" : Std.string(_gv1),"%")) {
+					var x2 = Query.buildColumn((_gv1 == null ? "null" : Std.string(_gv1)).substring(1),fieldPrefix);
+					sb.b += Std.string(x2);
+				} else {
+					sb.b += _gv1 == null ? "null" : Std.string(_gv1);
+				}
+			} else if(StringTools.startsWith(_gv1 == null ? "null" : Std.string(_gv1),"%")) {
+				var x3 = Query.buildColumn((_gv1 == null ? "null" : Std.string(_gv1)).substring(1),fieldPrefix);
+				sb.b += Std.string(x3);
+			} else if(isColumn) {
+				var x4 = Query.buildColumn(_gv1 == null ? "null" : Std.string(_gv1),fieldPrefix);
+				sb.b += Std.string(x4);
+			} else {
+				if(((_gv1) instanceof Date)) {
+					var date = _gv1;
+					var dateString = StringTools.replace(HxOverrides.dateStr(date)," ","T") + "Z";
+					values.push(dateString);
+				} else {
+					values.push(_gv1);
+				}
+				sb.b += "?";
+			}
+			break;
+		case 4:
+			var _gname = qe.name;
+			var _gparams = qe.params;
+			sb.b += _gname == null ? "null" : "" + _gname;
+			sb.b += "(";
+			var paramStrings = [];
+			var _g1 = 0;
+			while(_g1 < _gparams.length) {
+				var p = _gparams[_g1];
+				++_g1;
+				var temp = new StringBuf();
+				Query.queryExprPartToSql(p,temp,values,fieldPrefix,false);
+				paramStrings.push(temp.b);
+			}
+			var x5 = paramStrings.join(", ");
+			sb.b += Std.string(x5);
+			sb.b += ")";
+			break;
+		case 5:
+			var _gvalues = qe.values;
+			sb.b += "(";
+			var paramStrings1 = [];
+			var _g2 = 0;
+			while(_g2 < _gvalues.length) {
+				var av = _gvalues[_g2];
+				++_g2;
+				var temp1 = new StringBuf();
+				Query.queryExprPartToSql(av,temp1,values,fieldPrefix,false);
+				paramStrings1.push(temp1.b);
+			}
+			var x6 = paramStrings1.join(", ");
+			sb.b += Std.string(x6);
+			sb.b += ")";
+			break;
+		case 6:
+			haxe_Log.trace("WARNING: unsupported query expression encountered:",{ fileName : "Query.hx", lineNumber : 276, className : "Query", methodName : "queryExprPartToSql", customParams : [qe.v]});
+			break;
+		}
+		return;
+	}
+};
+Query.buildColumn = function(s,fieldPrefix) {
+	var full = s;
+	if(fieldPrefix != null) {
+		full = fieldPrefix + "." + s;
+	}
+	var sb_b = "";
+	if(full.indexOf(".") != -1) {
+		var parts = full.split(".");
+		var field = parts.pop();
+		sb_b = "`";
+		sb_b = "`" + Std.string(parts.join("."));
+		sb_b += "`.`";
+		sb_b += field == null ? "null" : "" + field;
+		sb_b += "`";
+	} else {
+		sb_b = "" + (full == null ? "null" : "" + full);
+	}
+	return sb_b;
+};
 var Reflect = function() { };
 $hxClasses["Reflect"] = Reflect;
 Reflect.__name__ = "Reflect";
@@ -2688,6 +3006,529 @@ StringTools.utf16CodePointAt = function(s,index) {
 	}
 	return c;
 };
+var Sys = function() { };
+$hxClasses["Sys"] = Sys;
+Sys.__name__ = "Sys";
+Sys.print = function(v) {
+	process.stdout.write(Std.string(v));
+};
+Sys.println = function(v) {
+	process.stdout.write(Std.string(v));
+	process.stdout.write("\n");
+};
+Sys.args = function() {
+	return process.argv.slice(2);
+};
+Sys.getEnv = function(s) {
+	return process.env[s];
+};
+Sys.putEnv = function(s,v) {
+	if(v == null) {
+		Reflect.deleteField(process.env,s);
+	} else {
+		process.env[s] = v;
+	}
+};
+Sys.environment = function() {
+	var m = new haxe_ds_StringMap();
+	var _g = 0;
+	var _g1 = Reflect.fields(process.env);
+	while(_g < _g1.length) {
+		var key = _g1[_g];
+		++_g;
+		var v = process.env[key];
+		m.h[key] = v;
+	}
+	return m;
+};
+Sys.setTimeLocale = function(loc) {
+	return false;
+};
+Sys.getCwd = function() {
+	return haxe_io_Path.addTrailingSlash(process.cwd());
+};
+Sys.setCwd = function(s) {
+	process.chdir(s);
+};
+Sys.systemName = function() {
+	var _g = process.platform;
+	switch(_g) {
+	case "darwin":
+		return "Mac";
+	case "freebsd":
+		return "BSD";
+	case "linux":
+		return "Linux";
+	case "win32":
+		return "Windows";
+	default:
+		return _g;
+	}
+};
+Sys.command = function(cmd,args) {
+	if(args == null) {
+		return js_node_ChildProcess.spawnSync(cmd,{ shell : true, stdio : "inherit"}).status;
+	} else {
+		return js_node_ChildProcess.spawnSync(cmd,args,{ stdio : "inherit"}).status;
+	}
+};
+Sys.exit = function(code) {
+	process.exit(code);
+};
+Sys.time = function() {
+	return Date.now() / 1000;
+};
+Sys.cpuTime = function() {
+	return process.uptime();
+};
+Sys.executablePath = function() {
+	return process.argv[0];
+};
+Sys.programPath = function() {
+	return __filename;
+};
+Sys.getChar = function(echo) {
+	throw haxe_Exception.thrown("Sys.getChar is currently not implemented on node.js");
+};
+Sys.sleep = function(seconds) {
+	var end = Date.now() + seconds * 1000;
+	while(Date.now() <= end) {
+	}
+};
+Sys.stdin = function() {
+	return new _$Sys_FileInput(0);
+};
+Sys.stdout = function() {
+	return new _$Sys_FileOutput(1);
+};
+Sys.stderr = function() {
+	return new _$Sys_FileOutput(2);
+};
+var haxe_io_Output = function() { };
+$hxClasses["haxe.io.Output"] = haxe_io_Output;
+haxe_io_Output.__name__ = "haxe.io.Output";
+haxe_io_Output.prototype = {
+	bigEndian: null
+	,writeByte: function(c) {
+		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "haxe/io/Output.hx", lineNumber : 47, className : "haxe.io.Output", methodName : "writeByte"});
+	}
+	,writeBytes: function(s,pos,len) {
+		if(pos < 0 || len < 0 || pos + len > s.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		var b = s.b;
+		var k = len;
+		while(k > 0) {
+			this.writeByte(b[pos]);
+			++pos;
+			--k;
+		}
+		return len;
+	}
+	,flush: function() {
+	}
+	,close: function() {
+	}
+	,set_bigEndian: function(b) {
+		this.bigEndian = b;
+		return b;
+	}
+	,write: function(s) {
+		var l = s.length;
+		var p = 0;
+		while(l > 0) {
+			var k = this.writeBytes(s,p,l);
+			if(k == 0) {
+				throw haxe_Exception.thrown(haxe_io_Error.Blocked);
+			}
+			p += k;
+			l -= k;
+		}
+	}
+	,writeFullBytes: function(s,pos,len) {
+		while(len > 0) {
+			var k = this.writeBytes(s,pos,len);
+			pos += k;
+			len -= k;
+		}
+	}
+	,writeFloat: function(x) {
+		this.writeInt32(haxe_io_FPHelper.floatToI32(x));
+	}
+	,writeDouble: function(x) {
+		var i64 = haxe_io_FPHelper.doubleToI64(x);
+		if(this.bigEndian) {
+			this.writeInt32(i64.high);
+			this.writeInt32(i64.low);
+		} else {
+			this.writeInt32(i64.low);
+			this.writeInt32(i64.high);
+		}
+	}
+	,writeInt8: function(x) {
+		if(x < -128 || x >= 128) {
+			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
+		}
+		this.writeByte(x & 255);
+	}
+	,writeInt16: function(x) {
+		if(x < -32768 || x >= 32768) {
+			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
+		}
+		this.writeUInt16(x & 65535);
+	}
+	,writeUInt16: function(x) {
+		if(x < 0 || x >= 65536) {
+			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
+		}
+		if(this.bigEndian) {
+			this.writeByte(x >> 8);
+			this.writeByte(x & 255);
+		} else {
+			this.writeByte(x & 255);
+			this.writeByte(x >> 8);
+		}
+	}
+	,writeInt24: function(x) {
+		if(x < -8388608 || x >= 8388608) {
+			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
+		}
+		this.writeUInt24(x & 16777215);
+	}
+	,writeUInt24: function(x) {
+		if(x < 0 || x >= 16777216) {
+			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
+		}
+		if(this.bigEndian) {
+			this.writeByte(x >> 16);
+			this.writeByte(x >> 8 & 255);
+			this.writeByte(x & 255);
+		} else {
+			this.writeByte(x & 255);
+			this.writeByte(x >> 8 & 255);
+			this.writeByte(x >> 16);
+		}
+	}
+	,writeInt32: function(x) {
+		if(this.bigEndian) {
+			this.writeByte(x >>> 24);
+			this.writeByte(x >> 16 & 255);
+			this.writeByte(x >> 8 & 255);
+			this.writeByte(x & 255);
+		} else {
+			this.writeByte(x & 255);
+			this.writeByte(x >> 8 & 255);
+			this.writeByte(x >> 16 & 255);
+			this.writeByte(x >>> 24);
+		}
+	}
+	,prepare: function(nbytes) {
+	}
+	,writeInput: function(i,bufsize) {
+		if(bufsize == null) {
+			bufsize = 4096;
+		}
+		var buf = new haxe_io_Bytes(new ArrayBuffer(bufsize));
+		try {
+			while(true) {
+				var len = i.readBytes(buf,0,bufsize);
+				if(len == 0) {
+					throw haxe_Exception.thrown(haxe_io_Error.Blocked);
+				}
+				var p = 0;
+				while(len > 0) {
+					var k = this.writeBytes(buf,p,len);
+					if(k == 0) {
+						throw haxe_Exception.thrown(haxe_io_Error.Blocked);
+					}
+					p += k;
+					len -= k;
+				}
+			}
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
+				throw _g;
+			}
+		}
+	}
+	,writeString: function(s,encoding) {
+		var b = haxe_io_Bytes.ofString(s,encoding);
+		this.writeFullBytes(b,0,b.length);
+	}
+	,__class__: haxe_io_Output
+	,__properties__: {set_bigEndian:"set_bigEndian"}
+};
+var _$Sys_FileOutput = function(fd) {
+	this.fd = fd;
+};
+$hxClasses["_Sys.FileOutput"] = _$Sys_FileOutput;
+_$Sys_FileOutput.__name__ = "_Sys.FileOutput";
+_$Sys_FileOutput.__super__ = haxe_io_Output;
+_$Sys_FileOutput.prototype = $extend(haxe_io_Output.prototype,{
+	fd: null
+	,writeByte: function(c) {
+		js_node_Fs.writeSync(this.fd,String.fromCodePoint(c));
+	}
+	,writeBytes: function(s,pos,len) {
+		var data = s.b;
+		return js_node_Fs.writeSync(this.fd,js_node_buffer_Buffer.from(data.buffer,data.byteOffset,s.length),pos,len);
+	}
+	,writeString: function(s,encoding) {
+		js_node_Fs.writeSync(this.fd,s);
+	}
+	,flush: function() {
+		js_node_Fs.fsyncSync(this.fd);
+	}
+	,close: function() {
+		js_node_Fs.closeSync(this.fd);
+	}
+	,__class__: _$Sys_FileOutput
+});
+var haxe_io_Input = function() { };
+$hxClasses["haxe.io.Input"] = haxe_io_Input;
+haxe_io_Input.__name__ = "haxe.io.Input";
+haxe_io_Input.prototype = {
+	bigEndian: null
+	,readByte: function() {
+		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "haxe/io/Input.hx", lineNumber : 51, className : "haxe.io.Input", methodName : "readByte"});
+	}
+	,readBytes: function(s,pos,len) {
+		var k = len;
+		var b = s.b;
+		if(pos < 0 || len < 0 || pos + len > s.length) {
+			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
+		}
+		try {
+			while(k > 0) {
+				b[pos] = this.readByte();
+				++pos;
+				--k;
+			}
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
+				throw _g;
+			}
+		}
+		return len - k;
+	}
+	,close: function() {
+	}
+	,set_bigEndian: function(b) {
+		this.bigEndian = b;
+		return b;
+	}
+	,readAll: function(bufsize) {
+		if(bufsize == null) {
+			bufsize = 16384;
+		}
+		var buf = new haxe_io_Bytes(new ArrayBuffer(bufsize));
+		var total = new haxe_io_BytesBuffer();
+		try {
+			while(true) {
+				var len = this.readBytes(buf,0,bufsize);
+				if(len == 0) {
+					throw haxe_Exception.thrown(haxe_io_Error.Blocked);
+				}
+				total.addBytes(buf,0,len);
+			}
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
+				throw _g;
+			}
+		}
+		return total.getBytes();
+	}
+	,readFullBytes: function(s,pos,len) {
+		while(len > 0) {
+			var k = this.readBytes(s,pos,len);
+			if(k == 0) {
+				throw haxe_Exception.thrown(haxe_io_Error.Blocked);
+			}
+			pos += k;
+			len -= k;
+		}
+	}
+	,read: function(nbytes) {
+		var s = new haxe_io_Bytes(new ArrayBuffer(nbytes));
+		var p = 0;
+		while(nbytes > 0) {
+			var k = this.readBytes(s,p,nbytes);
+			if(k == 0) {
+				throw haxe_Exception.thrown(haxe_io_Error.Blocked);
+			}
+			p += k;
+			nbytes -= k;
+		}
+		return s;
+	}
+	,readUntil: function(end) {
+		var buf = new haxe_io_BytesBuffer();
+		var last;
+		while(true) {
+			last = this.readByte();
+			if(!(last != end)) {
+				break;
+			}
+			buf.addByte(last);
+		}
+		return buf.getBytes().toString();
+	}
+	,readLine: function() {
+		var buf = new haxe_io_BytesBuffer();
+		var last;
+		var s;
+		try {
+			while(true) {
+				last = this.readByte();
+				if(!(last != 10)) {
+					break;
+				}
+				buf.addByte(last);
+			}
+			s = buf.getBytes().toString();
+			if(HxOverrides.cca(s,s.length - 1) == 13) {
+				s = HxOverrides.substr(s,0,-1);
+			}
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(((_g1) instanceof haxe_io_Eof)) {
+				var e = _g1;
+				s = buf.getBytes().toString();
+				if(s.length == 0) {
+					throw haxe_Exception.thrown(e);
+				}
+			} else {
+				throw _g;
+			}
+		}
+		return s;
+	}
+	,readFloat: function() {
+		return haxe_io_FPHelper.i32ToFloat(this.readInt32());
+	}
+	,readDouble: function() {
+		var i1 = this.readInt32();
+		var i2 = this.readInt32();
+		if(this.bigEndian) {
+			return haxe_io_FPHelper.i64ToDouble(i2,i1);
+		} else {
+			return haxe_io_FPHelper.i64ToDouble(i1,i2);
+		}
+	}
+	,readInt8: function() {
+		var n = this.readByte();
+		if(n >= 128) {
+			return n - 256;
+		}
+		return n;
+	}
+	,readInt16: function() {
+		var ch1 = this.readByte();
+		var ch2 = this.readByte();
+		var n = this.bigEndian ? ch2 | ch1 << 8 : ch1 | ch2 << 8;
+		if((n & 32768) != 0) {
+			return n - 65536;
+		}
+		return n;
+	}
+	,readUInt16: function() {
+		var ch1 = this.readByte();
+		var ch2 = this.readByte();
+		if(this.bigEndian) {
+			return ch2 | ch1 << 8;
+		} else {
+			return ch1 | ch2 << 8;
+		}
+	}
+	,readInt24: function() {
+		var ch1 = this.readByte();
+		var ch2 = this.readByte();
+		var ch3 = this.readByte();
+		var n = this.bigEndian ? ch3 | ch2 << 8 | ch1 << 16 : ch1 | ch2 << 8 | ch3 << 16;
+		if((n & 8388608) != 0) {
+			return n - 16777216;
+		}
+		return n;
+	}
+	,readUInt24: function() {
+		var ch1 = this.readByte();
+		var ch2 = this.readByte();
+		var ch3 = this.readByte();
+		if(this.bigEndian) {
+			return ch3 | ch2 << 8 | ch1 << 16;
+		} else {
+			return ch1 | ch2 << 8 | ch3 << 16;
+		}
+	}
+	,readInt32: function() {
+		var ch1 = this.readByte();
+		var ch2 = this.readByte();
+		var ch3 = this.readByte();
+		var ch4 = this.readByte();
+		if(this.bigEndian) {
+			return ch4 | ch3 << 8 | ch2 << 16 | ch1 << 24;
+		} else {
+			return ch1 | ch2 << 8 | ch3 << 16 | ch4 << 24;
+		}
+	}
+	,readString: function(len,encoding) {
+		var b = new haxe_io_Bytes(new ArrayBuffer(len));
+		this.readFullBytes(b,0,len);
+		return b.getString(0,len,encoding);
+	}
+	,getDoubleSig: function(bytes) {
+		return ((bytes[1] & 15) << 16 | bytes[2] << 8 | bytes[3]) * 4294967296. + (bytes[4] >> 7) * 2147483648 + ((bytes[4] & 127) << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7]);
+	}
+	,__class__: haxe_io_Input
+	,__properties__: {set_bigEndian:"set_bigEndian"}
+};
+var _$Sys_FileInput = function(fd) {
+	this.fd = fd;
+};
+$hxClasses["_Sys.FileInput"] = _$Sys_FileInput;
+_$Sys_FileInput.__name__ = "_Sys.FileInput";
+_$Sys_FileInput.__super__ = haxe_io_Input;
+_$Sys_FileInput.prototype = $extend(haxe_io_Input.prototype,{
+	fd: null
+	,readByte: function() {
+		var buf = js_node_buffer_Buffer.alloc(1);
+		try {
+			js_node_Fs.readSync(this.fd,buf,0,1,null);
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(_g1.code == "EOF") {
+				throw haxe_Exception.thrown(new haxe_io_Eof());
+			} else {
+				throw haxe_Exception.thrown(haxe_io_Error.Custom(_g1));
+			}
+		}
+		return buf[0];
+	}
+	,readBytes: function(s,pos,len) {
+		var data = s.b;
+		var buf = js_node_buffer_Buffer.from(data.buffer,data.byteOffset,s.length);
+		try {
+			return js_node_Fs.readSync(this.fd,buf,pos,len,null);
+		} catch( _g ) {
+			haxe_NativeStackTrace.lastError = _g;
+			var _g1 = haxe_Exception.caught(_g).unwrap();
+			if(_g1.code == "EOF") {
+				throw haxe_Exception.thrown(new haxe_io_Eof());
+			} else {
+				throw haxe_Exception.thrown(haxe_io_Error.Custom(_g1));
+			}
+		}
+	}
+	,close: function() {
+		js_node_Fs.closeSync(this.fd);
+	}
+	,__class__: _$Sys_FileInput
+});
 var ValueType = $hxEnums["ValueType"] = { __ename__:"ValueType",__constructs__:null
 	,TNull: {_hx_name:"TNull",_hx_index:0,__enum__:"ValueType",toString:$estr}
 	,TInt: {_hx_name:"TInt",_hx_index:1,__enum__:"ValueType",toString:$estr}
@@ -3272,9 +4113,9 @@ ecs_System.prototype = {
 var systems_CommandBase = function(_universe) {
 	this.has_subcommands = false;
 	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(0);
-	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(1);
-	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(0);
+	this.commands = this.universe.families.get(1);
+	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(2);
+	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(1);
 };
 $hxClasses["systems.CommandBase"] = systems_CommandBase;
 systems_CommandBase.__name__ = "systems.CommandBase";
@@ -3831,9 +4672,9 @@ var commands_AutoRole = function(_universe) {
 	this.event_role_id = "1054432874473996408";
 	this.news_role_id = "761714325227700225";
 	systems_CommandBase.call(this,_universe);
-	this.users = this.universe.families.get(4);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(5);
+	this.users = this.universe.families.get(5);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(6);
 };
 $hxClasses["commands.AutoRole"] = commands_AutoRole;
 commands_AutoRole.__name__ = "commands.AutoRole";
@@ -3882,9 +4723,9 @@ var commands_AutoThread = function(_universe) {
 	this.event_role_id = "1054432874473996408";
 	this.news_role_id = "761714325227700225";
 	systems_CommandBase.call(this,_universe);
-	this.users = this.universe.families.get(4);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(5);
+	this.users = this.universe.families.get(5);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(6);
 };
 $hxClasses["commands.AutoThread"] = commands_AutoThread;
 commands_AutoThread.__name__ = "commands.AutoThread";
@@ -3969,8 +4810,8 @@ commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Code = function(_universe) {
 	systems_CommandBase.call(this,_universe);
-	this.something_else = this.universe.families.get(7);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
+	this.something_else = this.universe.families.get(8);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 };
 $hxClasses["commands.Code"] = commands_Code;
 commands_Code.__name__ = "commands.Code";
@@ -4071,8 +4912,8 @@ commands_Code.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_CodeLineNumbers = function(_universe) {
 	systems_CommandBase.call(this,_universe);
-	this.options = this.universe.families.get(11);
-	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(11);
+	this.options = this.universe.families.get(12);
+	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(12);
 };
 $hxClasses["commands.CodeLineNumbers"] = commands_CodeLineNumbers;
 commands_CodeLineNumbers.__name__ = "commands.CodeLineNumbers";
@@ -4639,9 +5480,9 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 var commands_JamSuggestionBox = function(_) {
 	this.channel_id = "1234817988377706557";
 	systems_CommandBase.call(this,_);
-	this.messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 	this.webhook = new discord_$js_WebhookClient({ url : Main.keys.suggestionbox_hook});
 };
 $hxClasses["commands.JamSuggestionBox"] = commands_JamSuggestionBox;
@@ -4758,13 +5599,9 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.member.roles.add(role).then(function(success) {
 						if(channel == "announcements") {
 							var _ecsTmpEntity = _gthis.universe.createEntity();
-							_gthis.universe.components.set(_ecsTmpEntity,3,"auto_thread");
-							_gthis.universe.components.set(_ecsTmpEntity,5,member);
+							_gthis.universe.components.set(_ecsTmpEntity,4,"auto_thread");
+							_gthis.universe.components.set(_ecsTmpEntity,6,member);
 							var ecsEntCompFlags = _gthis.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-							var ecsTmpFamily = _gthis.universe.families.get(2);
-							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-								ecsTmpFamily.add(_ecsTmpEntity);
-							}
 							var ecsTmpFamily = _gthis.universe.families.get(3);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
@@ -4773,15 +5610,19 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
-							var ecsTmpFamily = _gthis.universe.families.get(7);
+							var ecsTmpFamily = _gthis.universe.families.get(5);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
-							var ecsTmpFamily = _gthis.universe.families.get(9);
+							var ecsTmpFamily = _gthis.universe.families.get(8);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
 							var ecsTmpFamily = _gthis.universe.families.get(10);
+							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+								ecsTmpFamily.add(_ecsTmpEntity);
+							}
+							var ecsTmpFamily = _gthis.universe.families.get(11);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
@@ -4806,9 +5647,9 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 var systems_CommandDbBase = function(_universe) {
 	this.has_subcommands = false;
 	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(0);
-	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(1);
-	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(0);
+	this.commands = this.universe.families.get(1);
+	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(2);
+	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(1);
 };
 $hxClasses["systems.CommandDbBase"] = systems_CommandDbBase;
 systems_CommandDbBase.__name__ = "systems.CommandDbBase";
@@ -4854,8 +5695,8 @@ systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
 });
 var commands_PinMessage = function(_universe) {
 	systems_CommandDbBase.call(this,_universe);
-	this.options = this.universe.families.get(11);
-	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(11);
+	this.options = this.universe.families.get(12);
+	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(12);
 };
 $hxClasses["commands.PinMessage"] = commands_PinMessage;
 commands_PinMessage.__name__ = "commands.PinMessage";
@@ -4938,9 +5779,9 @@ commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
 var commands_Poll = function(_universe) {
 	this.checked = false;
 	systems_CommandDbBase.call(this,_universe);
-	this.dm_messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.dm_messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 };
 $hxClasses["commands.Poll"] = commands_Poll;
 commands_Poll.__name__ = "commands.Poll";
@@ -5318,8 +6159,8 @@ var commands_Quote = function(_universe) {
 	this.max_name_length = 30;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
-	this.modal = this.universe.families.get(7);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
+	this.modal = this.universe.families.get(8);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 };
 $hxClasses["commands.Quote"] = commands_Quote;
 commands_Quote.__name__ = "commands.Quote";
@@ -6811,6 +7652,7 @@ var commands_Roundup = function(_universe) {
 	_g.h["367806496907591682"] = null;
 	_g.h["151104106973495296"] = null;
 	this.dmlist = _g;
+	this._check_now = false;
 	this.checking = false;
 	this.channel = null;
 	this.active = true;
@@ -6827,6 +7669,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,active: null
 	,channel: null
 	,checking: null
+	,_check_now: null
 	,dmlist: null
 	,super_mod_id: null
 	,news_role: null
@@ -6844,7 +7687,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			var _g_value = h[key];
 			var user = [_g_value];
 			if(user[0] == null) {
-				haxe_Log.trace("skipping " + key,{ fileName : "src/commands/Roundup.hx", lineNumber : 33, className : "commands.Roundup", methodName : "dmUser"});
+				haxe_Log.trace("skipping " + key,{ fileName : "src/commands/Roundup.hx", lineNumber : 37, className : "commands.Roundup", methodName : "dmUser"});
 				continue;
 			}
 			user[0].send("## " + title);
@@ -6866,29 +7709,29 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				return function(_) {
 					return user[0].send(b[0]).then(null,(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 49, className : "commands.Roundup", methodName : "dmUser"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 53, className : "commands.Roundup", methodName : "dmUser"});
 						};
 					})());
 				};
 			})(b,user),(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 50, className : "commands.Roundup", methodName : "dmUser"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 54, className : "commands.Roundup", methodName : "dmUser"});
 				};
 			})());
 		}
 	}
 	,getHaxeIoPage: function() {
 		var _gthis = this;
-		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.get_state().next_roundup + ".md");
+		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.state.next_roundup + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/commands/Roundup.hx", lineNumber : 60, className : "commands.Roundup", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/commands/Roundup.hx", lineNumber : 64, className : "commands.Roundup", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
 			if(regex.match(body)) {
-				embed.setTitle("Haxe Roundup #" + Main.get_state().next_roundup);
-				embed.setURL("https://haxe.io/roundups/" + Main.get_state().next_roundup + "/");
+				embed.setTitle("Haxe Roundup #" + Main.state.next_roundup);
+				embed.setURL("https://haxe.io/roundups/" + Main.state.next_roundup + "/");
 				var desc_split = StringTools.trim(regex.matched(1)).split("\n");
 				var desc = "\n**News And Articles**";
 				var _g = 0;
@@ -6905,13 +7748,13 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				desc += "\n...";
 				embed.setDescription(desc);
-				_gthis.dmUser("Haxe Roundup #" + Main.get_state().next_roundup,desc);
+				_gthis.dmUser("Haxe Roundup #" + Main.state.next_roundup,desc);
 				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
-					var fh = Main.get_state();
+					var fh = Main.state;
 					var postfix = fh.next_roundup;
 					var value = fh.next_roundup + 1;
-					Main.get_state().next_roundup = value;
-					Main.updateState("state",Main.get_state());
+					Main.state.next_roundup = value;
+					Main.updateState("next_roundup",JSON.stringify(value));
 					return postfix;
 				});
 			}
@@ -6922,13 +7765,16 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,update: function(_) {
 		var _gthis = this;
 		systems_CommandBase.prototype.update.call(this,_);
+		if(Main.state == null) {
+			return;
+		}
 		if(this.channel == null && this.checking == false) {
 			this.checking = true;
 			Main.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 105, className : "commands.Roundup", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 113, className : "commands.Roundup", methodName : "update"});
 				$global.console.dir(err);
 			});
 			var h = this.dmlist.h;
@@ -6946,22 +7792,22 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 					Main.client.users.fetch(key1[0]).then((function(key) {
 						return function(user) {
 							_gthis.dmlist.h[key[0]] = user;
-							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/Roundup.hx", lineNumber : 113, className : "commands.Roundup", methodName : "update"});
+							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/Roundup.hx", lineNumber : 121, className : "commands.Roundup", methodName : "update"});
 						};
 					})(key1),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 114, className : "commands.Roundup", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 122, className : "commands.Roundup", methodName : "update"});
 						};
 					})());
 				}
 			}
 		}
-		if(Main.get_state().next_roundup == -1 || this.channel == null) {
+		if(Main.state.next_roundup == -1 || this.channel == null) {
 			return;
 		}
 		var today = new Date();
 		var diff = today.getTime() - this.last_checked;
-		if(today.getUTCDay() == 4) {
+		if(today.getUTCDay() == 4 || this._check_now) {
 			if(!this.shouldCheck()) {
 				return;
 			}
@@ -6976,6 +7822,10 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,shouldCheck: function() {
 		var today = new Date();
 		var hour = today.getUTCHours();
+		if(this._check_now) {
+			this._check_now = false;
+			return true;
+		}
 		if(hour < 11 || hour > 14) {
 			return false;
 		}
@@ -7011,23 +7861,23 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			this.active = true;
 			var value = number | 0;
-			Main.get_state().next_roundup = value;
-			Main.updateState("state",Main.get_state());
+			Main.state.next_roundup = value;
+			Main.updateState("next_roundup",JSON.stringify(value));
 			interaction.reply("Will start watching haxe roundups from **#" + number + "**.");
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 190, className : "commands.Roundup", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 203, className : "commands.Roundup", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
 	}
 	,get_roundup: function() {
-		return Main.get_state().next_roundup;
+		return Main.state.next_roundup;
 	}
 	,set_roundup: function(value) {
-		Main.get_state().next_roundup = value;
-		Main.updateState("state",Main.get_state());
+		Main.state.next_roundup = value;
+		Main.updateState("next_roundup",JSON.stringify(value));
 		return value;
 	}
 	,get_name: function() {
@@ -7045,13 +7895,13 @@ var commands_RoundupRoundup = function(_universe) {
 	this.host_active = false;
 	this.waiting = false;
 	systems_CommandDbBase.call(this,_universe);
-	this.end_event = this.universe.families.get(8);
-	this.voice_update_events = this.universe.families.get(9);
-	this.scheduled_event_updates = this.universe.families.get(10);
-	this.table0f9294ec4df5372e078c34fabf7427cd = this.universe.components.getTable(8);
-	this.table83434594cd483e85f1d6ab14e011303c = this.universe.components.getTable(9);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tablec9adfcb69cacf935dab274fb9ef32870 = this.universe.components.getTable(10);
+	this.end_event = this.universe.families.get(9);
+	this.voice_update_events = this.universe.families.get(10);
+	this.scheduled_event_updates = this.universe.families.get(11);
+	this.table0f9294ec4df5372e078c34fabf7427cd = this.universe.components.getTable(9);
+	this.table83434594cd483e85f1d6ab14e011303c = this.universe.components.getTable(10);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tablec9adfcb69cacf935dab274fb9ef32870 = this.universe.components.getTable(11);
 };
 $hxClasses["commands.RoundupRoundup"] = commands_RoundupRoundup;
 commands_RoundupRoundup.__name__ = "commands.RoundupRoundup";
@@ -7075,6 +7925,63 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 	,update: function(_) {
 		var _gthis = this;
 		systems_CommandDbBase.prototype.update.call(this,_);
+		if(this.get_state() == null) {
+			return;
+		}
+		if(this.voice_channel == null && !this.waiting) {
+			this.waiting = true;
+			Main.client.channels.fetch(this.voice_channel_id).then(function(channel) {
+				_gthis.voice_channel = channel;
+				_gthis.waiting = false;
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 67, className : "commands.RoundupRoundup", methodName : "update"});
+			});
+		}
+		if(this.voice_channel == null) {
+			return;
+		}
+		if(this.announcement == null && !this.waiting) {
+			this.waiting = true;
+			Main.client.channels.fetch(this.announcement_id).then(function(channel) {
+				_gthis.announcement = channel;
+				_gthis.waiting = false;
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 79, className : "commands.RoundupRoundup", methodName : "update"});
+			});
+		}
+		if(this.announcement == null) {
+			return;
+		}
+		if(this.voice_text == null && !this.waiting) {
+			this.waiting = true;
+			Main.client.channels.fetch(this.voice_text_id).then(function(channel) {
+				_gthis.waiting = false;
+				_gthis.voice_text = channel;
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 91, className : "commands.RoundupRoundup", methodName : "update"});
+			});
+		}
+		if(this.voice_text == null) {
+			return;
+		}
+		if(this.host_m == null && !this.waiting) {
+			this.waiting = true;
+			haxe_Log.trace(this.get_state().host,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 100, className : "commands.RoundupRoundup", methodName : "update"});
+			this.get_guild().members.fetch({ user : this.get_state().host, force : true}).then(function(member) {
+				_gthis.host_m = member;
+				_gthis.waiting = false;
+				haxe_Log.trace("Roundup host obtained",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 104, className : "commands.RoundupRoundup", methodName : "update"});
+			},function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 105, className : "commands.RoundupRoundup", methodName : "update"});
+			});
+		}
+		if(this.host_m == null) {
+			return;
+		}
+		if(this.event == null) {
+			this.getEvent();
+			return;
+		}
 		this.handleEventUpdates();
 		var _gthis1 = this;
 		var _this = this.voice_update_events;
@@ -7094,126 +8001,25 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 							var reactions = ["✅","❎"];
 							_gthis1.end_event_collector = _gthis1.addCollection("1w",reactions,message,$bind(_gthis1,_gthis1.endEventCollector));
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 195, className : "commands.RoundupRoundup", methodName : "handleVoiceEvents"});
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 230, className : "commands.RoundupRoundup", methodName : "handleVoiceEvents"});
 						});
 					}
 				}
 				this.universe.deleteEntity(entity);
 			}
 		}
-		if(this.get_state() == null) {
-			return;
-		}
-		if(this.voice_channel == null && !this.waiting) {
-			this.waiting = true;
-			Main.client.channels.fetch(this.voice_channel_id).then(function(channel) {
-				_gthis.voice_channel = channel;
-				_gthis.waiting = false;
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 69, className : "commands.RoundupRoundup", methodName : "update"});
-			});
-		}
-		if(this.voice_channel == null) {
-			return;
-		}
-		if(this.announcement == null && !this.waiting) {
-			this.waiting = true;
-			Main.client.channels.fetch(this.announcement_id).then(function(channel) {
-				_gthis.announcement = channel;
-				_gthis.waiting = false;
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 81, className : "commands.RoundupRoundup", methodName : "update"});
-			});
-		}
-		if(this.announcement == null) {
-			return;
-		}
-		if(this.voice_text == null && !this.waiting) {
-			this.waiting = true;
-			Main.client.channels.fetch(this.voice_text_id).then(function(channel) {
-				_gthis.waiting = false;
-				_gthis.voice_text = channel;
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 93, className : "commands.RoundupRoundup", methodName : "update"});
-			});
-		}
-		if(this.voice_text == null) {
-			return;
-		}
-		if(this.host_m == null && !this.waiting) {
-			this.waiting = true;
-			this.get_guild().members.fetch(this.get_state().host).then(function(member) {
-				_gthis.host_m = member;
-				_gthis.waiting = false;
-				haxe_Log.trace("Roundup host obtained",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 105, className : "commands.RoundupRoundup", methodName : "update"});
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 106, className : "commands.RoundupRoundup", methodName : "update"});
-			});
-		}
-		if(this.host_m == null) {
-			return;
-		}
-		if(this.event == null) {
-			this.getEvent();
-			return;
-		}
-		switch(this.event.status) {
-		case 1:
-			var _gthis2 = this;
-			var now = new Date().getTime();
-			var left = this.event.scheduledStartTimestamp - now;
-			if(!(left > commands_types_Duration.fromString("5m"))) {
-				if(!this.host_active) {
-					if(now - this.last_checked > commands_types_Duration.fromString("1m")) {
-						this.last_checked = now;
-						var jsIterator = this.voice_channel.members.values();
-						var _g_lastStep = jsIterator.next();
-						while(!_g_lastStep.done) {
-							var v = _g_lastStep.value;
-							_g_lastStep = jsIterator.next();
-							if(v.id == this.get_host()) {
-								this.host_active = true;
-								haxe_Log.trace("Host is active",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 236, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
-								break;
-							}
-						}
-					}
-				} else if(left <= commands_types_Duration.fromString("0s") && !this.waiting) {
-					this.waiting = true;
-					this.event.setStatus(2,"Time to start the event!").then(function(event) {
-						var mention = _gthis2.get_state().event_ping == 3 ? _gthis2.event_role : "@everyone";
-						var message = "" + mention + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!";
-						if(_gthis2.get_state().event_ping == 3) {
-							_gthis2.get_state().event_ping = 0;
-							message += "\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`";
-						} else {
-							_gthis2.get_state().event_ping = _gthis2.get_state().event_ping + 1;
-						}
-						_gthis2.setState(_gthis2.get_state());
-						_gthis2.voice_text.send({ content : message, allowedMentions : { parse : ["everyone","roles"]}}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 261, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
-						});
-						haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 262, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
-						_gthis2.waiting = false;
-						_gthis2.event = event;
-					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 265, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
-					});
-				}
-			}
-			break;
-		case 3:
-			this.scheduleNewEvent();
-			break;
-		default:
-		}
+		this.handleScheduledEvent();
 	}
 	,scheduleNewEvent: function() {
 		var _gthis = this;
+		haxe_Log.trace("here",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 123, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
 		if(this.host_contacted || this.waiting) {
+			haxe_Log.trace("here",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 125, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
+			haxe_Log.trace(this.host_contacted,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 126, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
+			haxe_Log.trace(this.waiting,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 127, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
 			return;
 		}
-		haxe_Log.trace(this.host_m.user.tag,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 131, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
+		haxe_Log.trace(this.host_m.user.tag,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 130, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
 		this.waiting = true;
 		var reactions = ["2️⃣","3️⃣","4️⃣","5️⃣"];
 		this.host_contacted = true;
@@ -7221,7 +8027,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			_gthis.waiting = false;
 			_gthis.new_event_collector = _gthis.addCollection("1w",reactions,message,$bind(_gthis,_gthis.newEventCollector));
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 139, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
+			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 138, className : "commands.RoundupRoundup", methodName : "scheduleNewEvent"});
 		});
 	}
 	,newEventCollector: function(reaction,user) {
@@ -7268,6 +8074,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 						guild.scheduledEvents.fetch(event[0].id).then((function() {
 							return function(event) {
 								_gthis.event = event;
+								_gthis.handleEventStatus(event);
 								haxe_Log.trace("Updated event: " + event.status,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 170, className : "commands.RoundupRoundup", methodName : "handleEventUpdates"});
 								haxe_Log.trace("New time: " + Std.string(new Date(event.scheduledStartTimestamp)),{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 171, className : "commands.RoundupRoundup", methodName : "handleEventUpdates"});
 							};
@@ -7284,6 +8091,39 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 				})());
 			}
 			this.universe.deleteEntity(entity);
+		}
+	}
+	,handleEventStatus: function(event) {
+		haxe_Log.trace("here",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 182, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
+		haxe_Log.trace(event.status,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 183, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
+		switch(event.status) {
+		case 2:
+			if(this.get_state().announced || this.waiting) {
+				haxe_Log.trace("here",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 189, className : "commands.RoundupRoundup", methodName : "handleEventStatus", customParams : [this.get_state().announced,this.waiting]});
+				return;
+			}
+			var mention = this.get_state().event_ping >= 3 ? this.event_role : "@everyone";
+			var message = "" + mention + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!";
+			if(this.get_state().event_ping >= 3) {
+				this.get_state().event_ping = 0;
+				message += "\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`";
+			} else {
+				this.get_state().event_ping = this.get_state().event_ping + 1;
+			}
+			this.voice_text.send({ content : message, allowedMentions : { parse : ["everyone","roles"]}}).then(null,function(err) {
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 205, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
+			});
+			this.get_state().announced = true;
+			this.setState(this.get_state());
+			haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 208, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
+			this.waiting = false;
+			this.event = event;
+			break;
+		case 3:
+			this.scheduleNewEvent();
+			break;
+		default:
+			haxe_Log.trace(event.status,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 212, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
 		}
 	}
 	,handleVoiceEvents: function() {
@@ -7305,7 +8145,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 							var reactions = ["✅","❎"];
 							_gthis.end_event_collector = _gthis.addCollection("1w",reactions,message,$bind(_gthis,_gthis.endEventCollector));
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 195, className : "commands.RoundupRoundup", methodName : "handleVoiceEvents"});
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 230, className : "commands.RoundupRoundup", methodName : "handleVoiceEvents"});
 						});
 					}
 				}
@@ -7324,16 +8164,19 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 					_gthis.host_active = false;
 					_gthis.waiting = false;
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 215, className : "commands.RoundupRoundup", methodName : "endEventCollector"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 250, className : "commands.RoundupRoundup", methodName : "endEventCollector"});
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 216, className : "commands.RoundupRoundup", methodName : "endEventCollector"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 251, className : "commands.RoundupRoundup", methodName : "endEventCollector"});
 			});
 		}
 		this.end_event_collector.stop();
 	}
 	,handleScheduledEvent: function() {
 		var _gthis = this;
+		if(this.event.status != 1) {
+			return;
+		}
 		var now = new Date().getTime();
 		var left = this.event.scheduledStartTimestamp - now;
 		if(left > commands_types_Duration.fromString("5m")) {
@@ -7349,33 +8192,21 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 					_g_lastStep = jsIterator.next();
 					if(v.id == this.get_host()) {
 						this.host_active = true;
-						haxe_Log.trace("Host is active",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 236, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+						haxe_Log.trace("Host is active",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 274, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
 						break;
 					}
 				}
+			} else {
+				return;
 			}
-			return;
 		}
-		if(left <= commands_types_Duration.fromString("0s") && !this.waiting) {
+		if(left <= commands_types_Duration.fromString("0s") && !this.waiting && this.host_active) {
 			this.waiting = true;
-			this.event.setStatus(2,"Time to start the event!").then(function(event) {
-				var mention = _gthis.get_state().event_ping == 3 ? _gthis.event_role : "@everyone";
-				var message = "" + mention + " come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!";
-				if(_gthis.get_state().event_ping == 3) {
-					_gthis.get_state().event_ping = 0;
-					message += "\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`";
-				} else {
-					_gthis.get_state().event_ping = _gthis.get_state().event_ping + 1;
-				}
-				_gthis.setState(_gthis.get_state());
-				_gthis.voice_text.send({ content : message, allowedMentions : { parse : ["everyone","roles"]}}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 261, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
-				});
-				haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 262, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+			this.event.setStatus(2,"Time to start the event!").then(function(_) {
 				_gthis.waiting = false;
-				_gthis.event = event;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 265, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 288, className : "commands.RoundupRoundup", methodName : "handleScheduledEvent"});
+				_gthis.waiting = true;
 			});
 		}
 	}
@@ -7384,24 +8215,25 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		this.get_guild().scheduledEvents.create({ name : "Haxe Roundup Roundup", channel : this.voice_channel_id, entityType : 2, privacyLevel : 2, scheduledStartTime : date, description : "A community hosted discussion event where we go over the latest things that has gone on in the haxe over the last few weeks. We also have a period where people can show off what they're working on - its open floor come and join if you want :D"}).then(function(event) {
 			_gthis.host_contacted = false;
 			_gthis.event = event;
+			_gthis.get_state().announced = false;
 			_gthis.get_state().event_id = event.id;
 			event.createInviteURL({ maxAge : 604800, channel : _gthis.voice_text_id}).then(function(url) {
 				_gthis.voice_text.send({ content : "Thanks for hanging out :grin: \nGet ready for the next one! " + url}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 288, className : "commands.RoundupRoundup", methodName : "createEvent"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 314, className : "commands.RoundupRoundup", methodName : "createEvent"});
 				});
 				_gthis.announcement.send({ content : "Get ready for the next roundup roundup :grin: \n" + url}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 292, className : "commands.RoundupRoundup", methodName : "createEvent"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 318, className : "commands.RoundupRoundup", methodName : "createEvent"});
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 293, className : "commands.RoundupRoundup", methodName : "createEvent"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 319, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			});
-			Main.updateState("state",Main.get_state());
-			haxe_Log.trace("Event setup!",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 295, className : "commands.RoundupRoundup", methodName : "createEvent"});
+			_gthis.setState(_gthis.get_state());
+			haxe_Log.trace("Event setup!",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 321, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			_gthis.host_m.send("New roundup event scheduled for <t:" + Math.round(event.scheduledStartTimestamp / 1000) + ":R>").then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 299, className : "commands.RoundupRoundup", methodName : "createEvent"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 325, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 300, className : "commands.RoundupRoundup", methodName : "createEvent"});
+			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 326, className : "commands.RoundupRoundup", methodName : "createEvent"});
 		});
 	}
 	,getEvent: function() {
@@ -7411,11 +8243,12 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		this.waiting = true;
 		this.get_schedule().fetch(this.get_state().event_id).then(function(event) {
-			haxe_Log.trace("Roundup event retrieved",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 310, className : "commands.RoundupRoundup", methodName : "getEvent"});
-			_gthis.event = event;
 			_gthis.waiting = false;
+			haxe_Log.trace("Roundup event retrieved",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 337, className : "commands.RoundupRoundup", methodName : "getEvent"});
+			_gthis.event = event;
+			_gthis.handleEventStatus(event);
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 314, className : "commands.RoundupRoundup", methodName : "getEvent"});
+			haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 341, className : "commands.RoundupRoundup", methodName : "getEvent"});
 			_gthis.waiting = false;
 		});
 	}
@@ -7437,13 +8270,13 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 						};
 					})(),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 325, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 352, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
 						};
 					})());
 				};
 			})(data),(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 326, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 353, className : "commands.RoundupRoundup", methodName : "handleEndEvent"});
 				};
 			})());
 			this.universe.deleteEntity(entity);
@@ -7455,7 +8288,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			var e = emojis[_g];
 			++_g;
 			message.react(e).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 335, className : "commands.RoundupRoundup", methodName : "addCollection"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 362, className : "commands.RoundupRoundup", methodName : "addCollection"});
 			});
 		}
 		var collector = message.createReactionCollector({ time : commands_types_Duration.fromString(time)});
@@ -7478,9 +8311,9 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(reaction.emoji.name == "✅") {
 				var obj = { member : member};
 				var _ecsTmpEntity = _gthis.universe.createEntity();
-				_gthis.universe.components.set(_ecsTmpEntity,8,obj);
+				_gthis.universe.components.set(_ecsTmpEntity,9,obj);
 				var ecsEntCompFlags = _gthis.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = _gthis.universe.families.get(8);
+				var ecsTmpFamily = _gthis.universe.families.get(9);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -7497,11 +8330,14 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		return Main.client.guilds.cache.get(Main.guild_id);
 	}
 	,get_state: function() {
-		return Main.get_state().roundup_roundup;
+		if(Main.state == null) {
+			return null;
+		}
+		return Main.state.roundup_roundup;
 	}
 	,setState: function(value) {
-		Main.get_state().roundup_roundup = value;
-		Main.updateState("state",Main.get_state());
+		Main.state.roundup_roundup = value;
+		Main.updateState("roundup_roundup",JSON.stringify(Main.state.roundup_roundup));
 	}
 	,get_started: function() {
 		return this.event.status == 2;
@@ -7571,9 +8407,9 @@ commands_Rtfm.prototype = $extend(systems_CommandBase.prototype,{
 });
 var systems_TextCommandBase = function(_universe) {
 	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(5);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
-	this.tablee699e73f96d5fb19e01669534fb74875 = this.universe.components.getTable(6);
+	this.commands = this.universe.families.get(6);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
+	this.tablee699e73f96d5fb19e01669534fb74875 = this.universe.components.getTable(7);
 };
 $hxClasses["systems.TextCommandBase"] = systems_TextCommandBase;
 systems_TextCommandBase.__name__ = "systems.TextCommandBase";
@@ -7612,7 +8448,7 @@ var commands_Run = function(_universe) {
 	this.code_requests = new haxe_ds_StringMap();
 	this.haxe_version = null;
 	systems_TextCommandBase.call(this,_universe);
-	this.code_messages = this.universe.families.get(5);
+	this.code_messages = this.universe.families.get(6);
 };
 $hxClasses["commands.Run"] = commands_Run;
 commands_Run.__name__ = "commands.Run";
@@ -7876,7 +8712,7 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 		if(check_http.match(code)) {
 			return false;
 		}
-		if(!Main.get_state().macros) {
+		if(!Main.state.macros) {
 			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
 				response.reply({ content : "Currently no build macros allowed"});
 				return false;
@@ -8204,9 +9040,9 @@ var commands_ScamPrevention = function(_universe) {
 	this.sequential_tags = new haxe_ds_StringMap();
 	this.time_since = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 };
 $hxClasses["commands.ScamPrevention"] = commands_ScamPrevention;
 commands_ScamPrevention.__name__ = "commands.ScamPrevention";
@@ -8640,12 +9476,12 @@ var commands_Showcase = function(_) {
 	this.checking = false;
 	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
-	this.modal = this.universe.families.get(6);
-	this.messages = this.universe.families.get(2);
-	this.interactions = this.universe.families.get(7);
-	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(7);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.modal = this.universe.families.get(7);
+	this.messages = this.universe.families.get(3);
+	this.interactions = this.universe.families.get(8);
+	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(8);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 	this.webhook = new discord_$js_WebhookClient({ url : Main.keys.showcase_hook});
 };
 $hxClasses["commands.Showcase"] = commands_Showcase;
@@ -8823,8 +9659,8 @@ var commands_Snippet = function(_universe) {
 	this.tags = [];
 	this.sent = [];
 	systems_CommandDbBase.call(this,_universe);
-	this.button_events = this.universe.families.get(7);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
+	this.button_events = this.universe.families.get(8);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 };
 $hxClasses["commands.Snippet"] = commands_Snippet;
 commands_Snippet.__name__ = "commands.Snippet";
@@ -9345,9 +10181,9 @@ var commands_ThreadCount = function(_universe) {
 	this.path = "./config/threadcount.json";
 	this.count = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 };
 $hxClasses["commands.ThreadCount"] = commands_ThreadCount;
 commands_ThreadCount.__name__ = "commands.ThreadCount";
@@ -9776,7 +10612,7 @@ commands_Trace.prototype = $extend(systems_CommandBase.prototype,{
 		if(check_http.match(code)) {
 			return false;
 		}
-		if(!Main.get_state().macros) {
+		if(!Main.state.macros) {
 			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
 				response.reply({ content : "Currently no build macros allowed"});
 				return false;
@@ -9900,9 +10736,9 @@ var commands_events_PinMessageInfo = function(_universe) {
 	this.notified = new haxe_ds_StringMap();
 	this.messages = [];
 	ecs_System.call(this,_universe);
-	this.threads = this.universe.families.get(3);
-	this.table77d573418a21d66427b12280fbf7836b = this.universe.components.getTable(4);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
+	this.threads = this.universe.families.get(4);
+	this.table77d573418a21d66427b12280fbf7836b = this.universe.components.getTable(5);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
 };
 $hxClasses["commands.events.PinMessageInfo"] = commands_events_PinMessageInfo;
 commands_events_PinMessageInfo.__name__ = "commands.events.PinMessageInfo";
@@ -10027,9 +10863,9 @@ var commands_mod_Tracker = function(_universe) {
 	this.dm = new haxe_ds_StringMap();
 	this.trackers = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
-	this.messages = this.universe.families.get(2);
-	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(3);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(4);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 };
 $hxClasses["commands.mod.Tracker"] = commands_mod_Tracker;
 commands_mod_Tracker.__name__ = "commands.mod.Tracker";
@@ -10466,6 +11302,2706 @@ components_ShowcaseModalSubmit.prototype = {
 var components_TextCommand = {};
 components_TextCommand.list = function() {
 	return ["!mention","!run"];
+};
+var database_DBEvents = $hxEnums["database.DBEvents"] = { __ename__:"database.DBEvents",__constructs__:null
+	,Insert: ($_=function(table,value,callback) { return {_hx_index:0,table:table,value:value,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.value,this.callback];}}; },$_._hx_name="Insert",$_)
+	,Update: ($_=function(table,value,query,callback) { return {_hx_index:1,table:table,value:value,query:query,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.value,this.query,this.callback];}}; },$_._hx_name="Update",$_)
+	,InsertDontDuplicateLastRow: ($_=function(table,field,query,data,callback) { return {_hx_index:2,table:table,field:field,query:query,data:data,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.field,this.query,this.data,this.callback];}}; },$_._hx_name="InsertDontDuplicateLastRow",$_)
+	,SearchAndUpdate: ($_=function(table,key,query,value,callback) { return {_hx_index:3,table:table,key:key,query:query,value:value,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.key,this.query,this.value,this.callback];}}; },$_._hx_name="SearchAndUpdate",$_)
+	,CreateTable: ($_=function(name,columns) { return {_hx_index:4,name:name,columns:columns,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.name,this.columns];}}; },$_._hx_name="CreateTable",$_)
+	,GetRecord: ($_=function(table,query,callback) { return {_hx_index:5,table:table,query:query,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.query,this.callback];}}; },$_._hx_name="GetRecord",$_)
+	,GetRecords: ($_=function(table,query,callback) { return {_hx_index:6,table:table,query:query,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.query,this.callback];}}; },$_._hx_name="GetRecords",$_)
+	,GetAllRecords: ($_=function(table,callback) { return {_hx_index:7,table:table,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.callback];}}; },$_._hx_name="GetAllRecords",$_)
+	,DeleteRecord: ($_=function(table,column,value,callback) { return {_hx_index:8,table:table,column:column,value:value,callback:callback,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.column,this.value,this.callback];}}; },$_._hx_name="DeleteRecord",$_)
+	,Watch: ($_=function(table,condition,callback,rate) { return {_hx_index:9,table:table,condition:condition,callback:callback,rate:rate,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.table,this.condition,this.callback,this.rate];}}; },$_._hx_name="Watch",$_)
+	,Poll: ($_=function(event,ms) { return {_hx_index:10,event:event,ms:ms,__enum__:"database.DBEvents",toString:$estr,__params__:function(){ return [this.event,this.ms];}}; },$_._hx_name="Poll",$_)
+};
+database_DBEvents.__constructs__ = [database_DBEvents.Insert,database_DBEvents.Update,database_DBEvents.InsertDontDuplicateLastRow,database_DBEvents.SearchAndUpdate,database_DBEvents.CreateTable,database_DBEvents.GetRecord,database_DBEvents.GetRecords,database_DBEvents.GetAllRecords,database_DBEvents.DeleteRecord,database_DBEvents.Watch,database_DBEvents.Poll];
+database_DBEvents.__empty_constructs__ = [];
+var database_Callback = $hxEnums["database.Callback"] = { __ename__:"database.Callback",__constructs__:null
+	,Data: ($_=function(data) { return {_hx_index:0,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Data",$_)
+	,Record: ($_=function(data) { return {_hx_index:1,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Record",$_)
+	,Records: ($_=function(data) { return {_hx_index:2,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Records",$_)
+	,WatchResult: ($_=function(result) { return {_hx_index:3,result:result,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.result];}}; },$_._hx_name="WatchResult",$_)
+	,Success: ($_=function(message,data) { return {_hx_index:4,message:message,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.message,this.data];}}; },$_._hx_name="Success",$_)
+	,Error: ($_=function(message,data) { return {_hx_index:5,message:message,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.message,this.data];}}; },$_._hx_name="Error",$_)
+};
+database_Callback.__constructs__ = [database_Callback.Data,database_Callback.Record,database_Callback.Records,database_Callback.WatchResult,database_Callback.Success,database_Callback.Error];
+database_Callback.__empty_constructs__ = [];
+var database_MyRecord = function() {
+	this._record = new db_Record();
+};
+$hxClasses["database.MyRecord"] = database_MyRecord;
+database_MyRecord.__name__ = "database.MyRecord";
+database_MyRecord.prototype = {
+	_record: null
+	,get_record: null
+	,__class__: database_MyRecord
+	,__properties__: {get_record:"get_record"}
+};
+var db_ColumnDefinition = function(name,type,options) {
+	this.name = name;
+	this.type = type;
+	this.options = options;
+};
+$hxClasses["db.ColumnDefinition"] = db_ColumnDefinition;
+db_ColumnDefinition.__name__ = "db.ColumnDefinition";
+db_ColumnDefinition.prototype = {
+	name: null
+	,type: null
+	,options: null
+	,clone: function() {
+		var c = new db_ColumnDefinition(this.name,this.type,null);
+		if(this.options != null) {
+			c.options = this.options.slice();
+		}
+		return c;
+	}
+	,debugString: function() {
+		var sb_b = "";
+		sb_b = "" + Std.string(this.name);
+		sb_b += ": ";
+		sb_b += Std.string(this.type);
+		sb_b += ", ";
+		sb_b += Std.string(this.options);
+		return sb_b;
+	}
+	,__class__: db_ColumnDefinition
+};
+var db_ColumnOptions = $hxEnums["db.ColumnOptions"] = { __ename__:"db.ColumnOptions",__constructs__:null
+	,PrimaryKey: {_hx_name:"PrimaryKey",_hx_index:0,__enum__:"db.ColumnOptions",toString:$estr}
+	,NotNull: {_hx_name:"NotNull",_hx_index:1,__enum__:"db.ColumnOptions",toString:$estr}
+	,AutoIncrement: {_hx_name:"AutoIncrement",_hx_index:2,__enum__:"db.ColumnOptions",toString:$estr}
+};
+db_ColumnOptions.__constructs__ = [db_ColumnOptions.PrimaryKey,db_ColumnOptions.NotNull,db_ColumnOptions.AutoIncrement];
+db_ColumnOptions.__empty_constructs__ = [db_ColumnOptions.PrimaryKey,db_ColumnOptions.NotNull,db_ColumnOptions.AutoIncrement];
+var db_ColumnType = $hxEnums["db.ColumnType"] = { __ename__:"db.ColumnType",__constructs__:null
+	,Number: {_hx_name:"Number",_hx_index:0,__enum__:"db.ColumnType",toString:$estr}
+	,Decimal: {_hx_name:"Decimal",_hx_index:1,__enum__:"db.ColumnType",toString:$estr}
+	,Boolean: {_hx_name:"Boolean",_hx_index:2,__enum__:"db.ColumnType",toString:$estr}
+	,Text: ($_=function(n) { return {_hx_index:3,n:n,__enum__:"db.ColumnType",toString:$estr,__params__:function(){ return [this.n];}}; },$_._hx_name="Text",$_)
+	,Memo: {_hx_name:"Memo",_hx_index:4,__enum__:"db.ColumnType",toString:$estr}
+	,Binary: {_hx_name:"Binary",_hx_index:5,__enum__:"db.ColumnType",toString:$estr}
+	,Unknown: {_hx_name:"Unknown",_hx_index:6,__enum__:"db.ColumnType",toString:$estr}
+};
+db_ColumnType.__constructs__ = [db_ColumnType.Number,db_ColumnType.Decimal,db_ColumnType.Boolean,db_ColumnType.Text,db_ColumnType.Memo,db_ColumnType.Binary,db_ColumnType.Unknown];
+db_ColumnType.__empty_constructs__ = [db_ColumnType.Number,db_ColumnType.Decimal,db_ColumnType.Boolean,db_ColumnType.Memo,db_ColumnType.Binary,db_ColumnType.Unknown];
+var db_DatabaseError = function(message,call) {
+	this.message = message;
+	this.call = call;
+};
+$hxClasses["db.DatabaseError"] = db_DatabaseError;
+db_DatabaseError.__name__ = "db.DatabaseError";
+db_DatabaseError.prototype = {
+	message: null
+	,call: null
+	,__class__: db_DatabaseError
+};
+var db_DatabaseFactory = function() {
+	this._databaseTypes = new haxe_ds_StringMap();
+	this.init();
+};
+$hxClasses["db.DatabaseFactory"] = db_DatabaseFactory;
+db_DatabaseFactory.__name__ = "db.DatabaseFactory";
+db_DatabaseFactory.__properties__ = {get_instance:"get_instance"};
+db_DatabaseFactory.instance = null;
+db_DatabaseFactory.get_instance = function() {
+	if(db_DatabaseFactory._instance == null) {
+		db_DatabaseFactory._instance = new db_DatabaseFactory();
+	}
+	return db_DatabaseFactory._instance;
+};
+db_DatabaseFactory.prototype = {
+	_databaseTypes: null
+	,init: function() {
+		this.loadTypes();
+	}
+	,loadTypes: function() {
+		var p = new db_mysql_MySqlDatabaseType();
+		var typeInfo = p.typeInfo();
+		this._databaseTypes.h["mysql"] = typeInfo.ctor;
+	}
+	,createDatabase: function(typeId,config) {
+		if(!Object.prototype.hasOwnProperty.call(this._databaseTypes.h,typeId)) {
+			throw new haxe_Exception("database type \"" + typeId + "\" not registered");
+		}
+		var ctor = this._databaseTypes.h[typeId];
+		var instance = ctor();
+		if(config != null) {
+			instance.config(config);
+		}
+		return instance;
+	}
+	,__class__: db_DatabaseFactory
+};
+var db_DatabaseResult = function(database,table,data) {
+	this.database = database;
+	this.table = table;
+	this.data = data;
+};
+$hxClasses["db.DatabaseResult"] = db_DatabaseResult;
+db_DatabaseResult.__name__ = "db.DatabaseResult";
+db_DatabaseResult.prototype = {
+	database: null
+	,table: null
+	,data: null
+	,__class__: db_DatabaseResult
+};
+var db_DatabaseSchema = function(tables) {
+	this.tables = [];
+	if(tables != null) {
+		this.tables = tables;
+	}
+};
+$hxClasses["db.DatabaseSchema"] = db_DatabaseSchema;
+db_DatabaseSchema.__name__ = "db.DatabaseSchema";
+db_DatabaseSchema.prototype = {
+	tables: null
+	,findTable: function(name) {
+		var _g = 0;
+		var _g1 = this.tables;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			if(t.name.toLowerCase() == name.toLowerCase()) {
+				return t;
+			}
+		}
+		return null;
+	}
+	,setTableSchema: function(name,schema) {
+		var _g = 0;
+		var _g1 = this.tables.length;
+		while(_g < _g1) {
+			var i = _g++;
+			if(this.tables[i].name.toLowerCase() == name.toLowerCase()) {
+				this.tables[i] = schema;
+				break;
+			}
+		}
+	}
+	,clone: function() {
+		var c = new db_DatabaseSchema([]);
+		var _g = 0;
+		var _g1 = this.tables;
+		while(_g < _g1.length) {
+			var t = _g1[_g];
+			++_g;
+			c.tables.push(t.clone());
+		}
+		return c;
+	}
+	,debugString: function() {
+		var sb_b = "";
+		var _g = 0;
+		var _g1 = this.tables;
+		while(_g < _g1.length) {
+			var table = _g1[_g];
+			++_g;
+			sb_b += Std.string(table.debugString());
+		}
+		return sb_b;
+	}
+	,__class__: db_DatabaseSchema
+};
+var db_DebugUtils = function() { };
+$hxClasses["db.DebugUtils"] = db_DebugUtils;
+db_DebugUtils.__name__ = "db.DebugUtils";
+db_DebugUtils.printRecords = function(records,name) {
+	var colSizes_h = Object.create(null);
+	if(records == null || records.length == 0) {
+		if(name != null) {
+			process.stdout.write(Std.string(name + ": no records!"));
+			process.stdout.write("\n");
+		} else {
+			process.stdout.write("no records!");
+			process.stdout.write("\n");
+		}
+		return;
+	}
+	var r = records[0];
+	var _g = 0;
+	var _g1 = r.get_fieldNames();
+	while(_g < _g1.length) {
+		var fieldName = _g1[_g];
+		++_g;
+		colSizes_h[fieldName] = fieldName.length;
+	}
+	var _g = 0;
+	while(_g < records.length) {
+		var r = records[_g];
+		++_g;
+		var _g1 = 0;
+		var _g2 = r.get_fieldNames();
+		while(_g1 < _g2.length) {
+			var fieldName = _g2[_g1];
+			++_g1;
+			var value = r.field(fieldName) == null ? "null" : Std.string(r.field(fieldName));
+			var existingSize = colSizes_h[fieldName];
+			var newSize = value.length;
+			if(newSize > existingSize) {
+				colSizes_h[fieldName] = newSize;
+			}
+		}
+	}
+	process.stdout.write("");
+	process.stdout.write("\n");
+	if(name != null) {
+		var v = name + " (" + records.length + "):";
+		process.stdout.write(Std.string(v));
+		process.stdout.write("\n");
+	}
+	var r = records[0];
+	var _g = 0;
+	var _g1 = r.get_fieldNames();
+	while(_g < _g1.length) {
+		var fieldName = _g1[_g];
+		++_g;
+		var size = colSizes_h[fieldName];
+		process.stdout.write("| ");
+		var v = StringTools.rpad(fieldName," ",size);
+		process.stdout.write(Std.string(v));
+		process.stdout.write(" ");
+	}
+	process.stdout.write("|");
+	process.stdout.write("\n");
+	var _g = 0;
+	var _g1 = r.get_fieldNames();
+	while(_g < _g1.length) {
+		var fieldName = _g1[_g];
+		++_g;
+		var size = colSizes_h[fieldName];
+		process.stdout.write("|-");
+		var v = StringTools.rpad("","-",size);
+		process.stdout.write(Std.string(v));
+		process.stdout.write("-");
+	}
+	process.stdout.write("|");
+	process.stdout.write("\n");
+	var _g = 0;
+	while(_g < records.length) {
+		var r = records[_g];
+		++_g;
+		var _g1 = 0;
+		var _g2 = r.get_fieldNames();
+		while(_g1 < _g2.length) {
+			var fieldName = _g2[_g1];
+			++_g1;
+			var size = colSizes_h[fieldName];
+			var value = StringTools.trim(r.field(fieldName) == null ? "null" : Std.string(r.field(fieldName)));
+			process.stdout.write("| ");
+			var v = StringTools.rpad(value," ",size);
+			process.stdout.write(Std.string(v));
+			process.stdout.write(" ");
+		}
+		process.stdout.write("|");
+		process.stdout.write("\n");
+	}
+	process.stdout.write("");
+	process.stdout.write("\n");
+};
+var db_IDataTypeMapper = function() { };
+$hxClasses["db.IDataTypeMapper"] = db_IDataTypeMapper;
+db_IDataTypeMapper.__name__ = "db.IDataTypeMapper";
+db_IDataTypeMapper.__isInterface__ = true;
+db_IDataTypeMapper.prototype = {
+	haxeTypeToDatabaseType: null
+	,shouldConvertValueToDatabase: null
+	,convertValueToDatabase: null
+	,databaseTypeToHaxeType: null
+	,__class__: db_IDataTypeMapper
+};
+var db_IDatabase = function() { };
+$hxClasses["db.IDatabase"] = db_IDatabase;
+db_IDatabase.__name__ = "db.IDatabase";
+db_IDatabase.__isInterface__ = true;
+db_IDatabase.prototype = {
+	config: null
+	,setProperty: null
+	,getProperty: null
+	,schema: null
+	,defineTableRelationship: null
+	,definedTableRelationships: null
+	,clearTableRelationships: null
+	,connect: null
+	,disconnect: null
+	,create: null
+	,'delete': null
+	,table: null
+	,createTable: null
+	,deleteTable: null
+	,__class__: db_IDatabase
+};
+var db_ITable = function() { };
+$hxClasses["db.ITable"] = db_ITable;
+db_ITable.__name__ = "db.ITable";
+db_ITable.__isInterface__ = true;
+db_ITable.prototype = {
+	db: null
+	,name: null
+	,exists: null
+	,schema: null
+	,applySchema: null
+	,all: null
+	,page: null
+	,add: null
+	,addAll: null
+	,'delete': null
+	,deleteAll: null
+	,update: null
+	,find: null
+	,findOne: null
+	,findUnique: null
+	,count: null
+	,addColumn: null
+	,removeColumn: null
+	,__class__: db_ITable
+};
+var db_Record = function() {
+	this.data = new haxe_ds_StringMap();
+};
+$hxClasses["db.Record"] = db_Record;
+db_Record.__name__ = "db.Record";
+db_Record.fromDynamic = function(data) {
+	var r = new db_Record();
+	var _g = 0;
+	var _g1 = Reflect.fields(data);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		var v = Reflect.field(data,f);
+		r.data.h[f] = v;
+	}
+	return r;
+};
+db_Record.prototype = {
+	data: null
+	,fieldNames: null
+	,get_fieldNames: function() {
+		var list = [];
+		var h = this.data.h;
+		var f_keys = Object.keys(h);
+		var f_length = f_keys.length;
+		var f_current = 0;
+		while(f_current < f_length) {
+			var f = f_keys[f_current++];
+			list.push(f);
+		}
+		return list;
+	}
+	,fieldCount: null
+	,get_fieldCount: function() {
+		var n = 0;
+		var h = this.data.h;
+		var __keys = Object.keys(h);
+		var __length = __keys.length;
+		var __current = 0;
+		while(__current < __length) {
+			++__current;
+			++n;
+		}
+		return n;
+	}
+	,hasField: function(name) {
+		if(this.data == null) {
+			return false;
+		}
+		return Object.prototype.hasOwnProperty.call(this.data.h,name);
+	}
+	,renameField: function(fieldName,newFieldName) {
+		if(Object.prototype.hasOwnProperty.call(this.data.h,fieldName)) {
+			var v = this.data.h[fieldName];
+			this.data.h[newFieldName] = v;
+			var _this = this.data;
+			if(Object.prototype.hasOwnProperty.call(_this.h,fieldName)) {
+				delete(_this.h[fieldName]);
+			}
+		}
+	}
+	,copyField: function(fieldName,newFieldName) {
+		if(Object.prototype.hasOwnProperty.call(this.data.h,fieldName)) {
+			var v = this.data.h[fieldName];
+			this.data.h[newFieldName] = v;
+		}
+	}
+	,filterFields: function(callback) {
+		var newData = new haxe_ds_StringMap();
+		var h = this.data.h;
+		var fieldName_keys = Object.keys(h);
+		var fieldName_length = fieldName_keys.length;
+		var fieldName_current = 0;
+		while(fieldName_current < fieldName_length) {
+			var fieldName = fieldName_keys[fieldName_current++];
+			var fieldValue = this.data.h[fieldName];
+			if(callback(fieldName,fieldValue)) {
+				newData.h[fieldName] = fieldValue;
+			}
+		}
+		this.data = newData;
+	}
+	,findFields: function(callback) {
+		var list = [];
+		var h = this.data.h;
+		var fieldName_keys = Object.keys(h);
+		var fieldName_length = fieldName_keys.length;
+		var fieldName_current = 0;
+		while(fieldName_current < fieldName_length) {
+			var fieldName = fieldName_keys[fieldName_current++];
+			if(callback(fieldName)) {
+				list.push(fieldName);
+			}
+		}
+		return list;
+	}
+	,findFieldValues: function(callback) {
+		var list = [];
+		var h = this.data.h;
+		var fieldName_keys = Object.keys(h);
+		var fieldName_length = fieldName_keys.length;
+		var fieldName_current = 0;
+		while(fieldName_current < fieldName_length) {
+			var fieldName = fieldName_keys[fieldName_current++];
+			var fieldValue = this.data.h[fieldName];
+			if(fieldValue == null) {
+				continue;
+			}
+			if(callback(fieldName,fieldValue)) {
+				list.push(fieldValue);
+			}
+		}
+		return list;
+	}
+	,field: function(name,value) {
+		if(value != null) {
+			this.data.h[name] = value;
+			return value;
+		}
+		return this.data.h[name];
+	}
+	,empty: function(name) {
+		this.data.h[name] = null;
+	}
+	,values: function() {
+		var v = [];
+		var h = this.data.h;
+		var k_keys = Object.keys(h);
+		var k_length = k_keys.length;
+		var k_current = 0;
+		while(k_current < k_length) {
+			var k = k_keys[k_current++];
+			v.push(this.data.h[k]);
+		}
+		return v;
+	}
+	,stringValues: function() {
+		var v = [];
+		var h = this.data.h;
+		var k_keys = Object.keys(h);
+		var k_length = k_keys.length;
+		var k_current = 0;
+		while(k_current < k_length) {
+			var k = k_keys[k_current++];
+			var tmp;
+			var this11 = this.data;
+			if(this11.get(k) == null) {
+				tmp = "null";
+			} else {
+				var this11 = this.data;
+				tmp = Std.string(this11.get(k));
+			}
+			v.push(tmp);
+		}
+		return v;
+	}
+	,removeField: function(name) {
+		var _this = this.data;
+		if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
+			delete(_this.h[name]);
+		}
+	}
+	,copy: function() {
+		var c = new db_Record();
+		c.data = haxe_ds_StringMap.createCopy(this.data.h);
+		return c;
+	}
+	,debugString: function() {
+		var sb_b = "";
+		var h = this.data.h;
+		var f_keys = Object.keys(h);
+		var f_length = f_keys.length;
+		var f_current = 0;
+		while(f_current < f_length) {
+			var f = f_keys[f_current++];
+			sb_b += f == null ? "null" : "" + f;
+			sb_b += "=";
+			var x = this.data.h[f];
+			sb_b += x == null ? "null" : Std.string(x);
+			sb_b += "; ";
+		}
+		return sb_b;
+	}
+	,merge: function(other) {
+		var h = other.data.h;
+		var key_keys = Object.keys(h);
+		var key_length = key_keys.length;
+		var key_current = 0;
+		while(key_current < key_length) {
+			var key = key_keys[key_current++];
+			var value = other.data.h[key];
+			this.data.h[key] = value;
+		}
+	}
+	,equals: function(other) {
+		var thisFieldNames = this.get_fieldNames();
+		var otherFieldNames = other.get_fieldNames();
+		if(thisFieldNames.length != otherFieldNames.length) {
+			return false;
+		}
+		var thisData = this.data;
+		var otherData = other.data;
+		var _g = 0;
+		while(_g < thisFieldNames.length) {
+			var thisFieldName = thisFieldNames[_g];
+			++_g;
+			if(!Object.prototype.hasOwnProperty.call(otherData.h,thisFieldName)) {
+				return false;
+			}
+		}
+		var _g = 0;
+		while(_g < otherFieldNames.length) {
+			var otherFieldName = otherFieldNames[_g];
+			++_g;
+			if(!Object.prototype.hasOwnProperty.call(thisData.h,otherFieldName)) {
+				return false;
+			}
+		}
+		var _g = 0;
+		while(_g < thisFieldNames.length) {
+			var thisFieldName = thisFieldNames[_g];
+			++_g;
+			if(thisData.h[thisFieldName] != otherData.h[thisFieldName]) {
+				return false;
+			}
+		}
+		return true;
+	}
+	,__class__: db_Record
+	,__properties__: {get_fieldCount:"get_fieldCount",get_fieldNames:"get_fieldNames"}
+};
+var db_RecordSet = {};
+db_RecordSet.get = function(this1,index) {
+	return this1.records[index];
+};
+db_RecordSet.set = function(this1,index,value) {
+	this1.records[index] = value;
+	return value;
+};
+db_RecordSet.fromArray = function(records) {
+	return new db__$RecordSet_RecordSetImpl(records);
+};
+db_RecordSet.toArray = function(this1) {
+	return this1.records;
+};
+var db__$RecordSet_RecordSetImpl = function(records) {
+	this.records = null;
+	this.records = records;
+};
+$hxClasses["db._RecordSet.RecordSetImpl"] = db__$RecordSet_RecordSetImpl;
+db__$RecordSet_RecordSetImpl.__name__ = "db._RecordSet.RecordSetImpl";
+db__$RecordSet_RecordSetImpl.prototype = {
+	records: null
+	,iterator: function() {
+		return new db__$RecordSet_RecordSetIterator(this.records);
+	}
+	,length: null
+	,get_length: function() {
+		if(this.records == null) {
+			return 0;
+		}
+		return this.records.length;
+	}
+	,push: function(record) {
+		if(this.records == null) {
+			this.records = [];
+		}
+		this.records.push(record);
+	}
+	,filter: function(f) {
+		if(this.records == null) {
+			return new db__$RecordSet_RecordSetImpl([]);
+		}
+		var _this = this.records;
+		var _g = [];
+		var _g1 = 0;
+		while(_g1 < _this.length) {
+			var v = _this[_g1];
+			++_g1;
+			if(f(v)) {
+				_g.push(v);
+			}
+		}
+		return new db__$RecordSet_RecordSetImpl(_g);
+	}
+	,findRecord: function(fieldName,fieldValue) {
+		if(this.records == null) {
+			return null;
+		}
+		var _g = 0;
+		var _g1 = this.records;
+		while(_g < _g1.length) {
+			var r = _g1[_g];
+			++_g;
+			if(r.field(fieldName) == fieldValue) {
+				return r;
+			}
+		}
+		return null;
+	}
+	,extractFieldValues: function(fieldName) {
+		if(this.records == null) {
+			return [];
+		}
+		var values = [];
+		var _g = 0;
+		var _g1 = this.records;
+		while(_g < _g1.length) {
+			var r = _g1[_g];
+			++_g;
+			var v = r.field(fieldName);
+			if(v != null) {
+				values.push(v);
+			}
+		}
+		return values;
+	}
+	,renameField: function(fieldName,newFieldName) {
+		if(this.records == null) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.records;
+		while(_g < _g1.length) {
+			var r = _g1[_g];
+			++_g;
+			r.renameField(fieldName,newFieldName);
+		}
+	}
+	,copyField: function(fieldName,newFieldName) {
+		if(this.records == null) {
+			return;
+		}
+		var _g = 0;
+		var _g1 = this.records;
+		while(_g < _g1.length) {
+			var r = _g1[_g];
+			++_g;
+			r.copyField(fieldName,newFieldName);
+		}
+	}
+	,copy: function() {
+		return new db__$RecordSet_RecordSetImpl(this.records.slice());
+	}
+	,normalizeFieldNames: function() {
+		var _g = 0;
+		var _g1 = this.records;
+		while(_g < _g1.length) {
+			var r = _g1[_g];
+			++_g;
+			var h = r.data.h;
+			var fieldName_keys = Object.keys(h);
+			var fieldName_length = fieldName_keys.length;
+			var fieldName_current = 0;
+			while(fieldName_current < fieldName_length) {
+				var fieldName = fieldName_keys[fieldName_current++];
+				if(fieldName.indexOf(".") != -1) {
+					var fieldNameParts = fieldName.split(".");
+					var newFieldName = null;
+					if(fieldNameParts.length > 2) {
+						while(fieldNameParts.length > 2) fieldNameParts.shift();
+						newFieldName = fieldNameParts.join(".");
+					}
+					if(newFieldName != null) {
+						r.field(newFieldName,r.field(fieldName));
+						r.removeField(fieldName);
+					}
+				}
+			}
+		}
+	}
+	,__class__: db__$RecordSet_RecordSetImpl
+	,__properties__: {get_length:"get_length"}
+};
+var db__$RecordSet_RecordSetIterator = function(records) {
+	this.pos = 0;
+	this.records = null;
+	this.records = records;
+	this.pos = 0;
+};
+$hxClasses["db._RecordSet.RecordSetIterator"] = db__$RecordSet_RecordSetIterator;
+db__$RecordSet_RecordSetIterator.__name__ = "db._RecordSet.RecordSetIterator";
+db__$RecordSet_RecordSetIterator.prototype = {
+	records: null
+	,pos: null
+	,hasNext: function() {
+		if(this.records == null) {
+			return false;
+		}
+		return this.pos < this.records.length;
+	}
+	,next: function() {
+		var r = this.records[this.pos];
+		this.pos++;
+		return r;
+	}
+	,__class__: db__$RecordSet_RecordSetIterator
+};
+var db_RelationshipDefinitions = function() {
+	this._defs = new haxe_ds_StringMap();
+	this.complexRelationships = false;
+};
+$hxClasses["db.RelationshipDefinitions"] = db_RelationshipDefinitions;
+db_RelationshipDefinitions.__name__ = "db.RelationshipDefinitions";
+db_RelationshipDefinitions.prototype = {
+	complexRelationships: null
+	,_defs: null
+	,relationships: null
+	,add: function(field1,field2) {
+		if(this.has(field1,field2)) {
+			return;
+		}
+		var parts1 = field1.split(".");
+		var parts2 = field2.split(".");
+		var table1 = parts1.shift();
+		var table2 = parts2.shift();
+		var field1 = parts1.join(".");
+		var field2 = parts2.join(".");
+		var array = this._defs.h[table1];
+		if(array == null) {
+			array = [];
+			this._defs.h[table1] = array;
+		}
+		array.push({ table1 : table1, table2 : table2, field1 : field1, field2 : field2});
+	}
+	,has: function(field1,field2) {
+		var parts1 = field1.split(".");
+		var parts2 = field2.split(".");
+		var table1 = parts1.shift();
+		var table2 = parts2.shift();
+		var field1 = parts1.join(".");
+		var field2 = parts2.join(".");
+		var array = this._defs.h[table1];
+		if(array == null) {
+			return false;
+		}
+		var _g = 0;
+		while(_g < array.length) {
+			var item = array[_g];
+			++_g;
+			if(item.table1 == table1 && item.table2 == table2 && item.field1 == field1 && item.field2 == field2) {
+				return true;
+			}
+		}
+		return false;
+	}
+	,get: function(table) {
+		return this._defs.h[table];
+	}
+	,all: function() {
+		var list = [];
+		var h = this._defs.h;
+		var key_keys = Object.keys(h);
+		var key_length = key_keys.length;
+		var key_current = 0;
+		while(key_current < key_length) {
+			var key = key_keys[key_current++];
+			list = list.concat(this._defs.h[key]);
+		}
+		return list;
+	}
+	,keys: function() {
+		return new haxe_ds__$StringMap_StringMapKeyIterator(this._defs.h);
+	}
+	,debugString: function() {
+		var sb_b = "";
+		var h = this._defs.h;
+		var key_keys = Object.keys(h);
+		var key_length = key_keys.length;
+		var key_current = 0;
+		while(key_current < key_length) {
+			var key = key_keys[key_current++];
+			sb_b += key == null ? "null" : "" + key;
+			sb_b += "\n";
+			var _g = 0;
+			var _g1 = this._defs.h[key];
+			while(_g < _g1.length) {
+				var item = _g1[_g];
+				++_g;
+				sb_b += "    ";
+				sb_b += Std.string(item.table1 + "." + item.field1 + " <==> " + item.table2 + "." + item.field2);
+				sb_b += "\n";
+			}
+		}
+		return sb_b;
+	}
+	,__class__: db_RelationshipDefinitions
+};
+var db_TableSchema = function(name,columns,data) {
+	this.columns = [];
+	this.name = name;
+	if(columns != null) {
+		this.columns = columns;
+	}
+	this.data = data;
+};
+$hxClasses["db.TableSchema"] = db_TableSchema;
+db_TableSchema.__name__ = "db.TableSchema";
+db_TableSchema.prototype = {
+	name: null
+	,columns: null
+	,data: null
+	,equals: function(other) {
+		if(this.name != other.name) {
+			return false;
+		}
+		if(this.columns.length != other.columns.length) {
+			return false;
+		}
+		var _g = 0;
+		var _g1 = this.columns;
+		while(_g < _g1.length) {
+			var column = _g1[_g];
+			++_g;
+			if(other.findColumn(column.name) == null) {
+				return false;
+			}
+		}
+		var _g = 0;
+		var _g1 = other.columns;
+		while(_g < _g1.length) {
+			var column = _g1[_g];
+			++_g;
+			if(this.findColumn(column.name) == null) {
+				return false;
+			}
+		}
+		return true;
+	}
+	,findColumn: function(name) {
+		var _g = 0;
+		var _g1 = this.columns;
+		while(_g < _g1.length) {
+			var column = _g1[_g];
+			++_g;
+			if(column.name == name) {
+				return column;
+			}
+		}
+		return null;
+	}
+	,diff: function(other) {
+		var d = new db_TableSchemaDiff();
+		var _g = 0;
+		var _g1 = this.columns;
+		while(_g < _g1.length) {
+			var column = _g1[_g];
+			++_g;
+			if(other.findColumn(column.name) == null) {
+				d.removedColumns.push(column);
+			}
+		}
+		var _g = 0;
+		var _g1 = other.columns;
+		while(_g < _g1.length) {
+			var column = _g1[_g];
+			++_g;
+			if(this.findColumn(column.name) == null) {
+				d.addedColumns.push(column);
+			}
+		}
+		return d;
+	}
+	,clone: function() {
+		var c = new db_TableSchema(this.name,[],null);
+		c.name = this.name;
+		var _g = 0;
+		var _g1 = this.columns;
+		while(_g < _g1.length) {
+			var col = _g1[_g];
+			++_g;
+			c.columns.push(col.clone());
+		}
+		if(this.data != null) {
+			c.data = this.data.copy();
+		}
+		return c;
+	}
+	,debugString: function() {
+		var sb_b = "";
+		sb_b = "" + Std.string(this.name);
+		sb_b += ":";
+		sb_b += "\n";
+		var _g = 0;
+		var _g1 = this.columns;
+		while(_g < _g1.length) {
+			var column = _g1[_g];
+			++_g;
+			sb_b += "    ";
+			sb_b += Std.string(column.debugString());
+			sb_b += "\n";
+		}
+		return sb_b;
+	}
+	,__class__: db_TableSchema
+};
+var db_TableSchemaDiff = function() {
+	this.updatedColumns = [];
+	this.removedColumns = [];
+	this.addedColumns = [];
+};
+$hxClasses["db.TableSchemaDiff"] = db_TableSchemaDiff;
+db_TableSchemaDiff.__name__ = "db.TableSchemaDiff";
+db_TableSchemaDiff.prototype = {
+	addedColumns: null
+	,removedColumns: null
+	,updatedColumns: null
+	,__class__: db_TableSchemaDiff
+};
+var db_macros_IDatabaseType = function() { };
+$hxClasses["db.macros.IDatabaseType"] = db_macros_IDatabaseType;
+db_macros_IDatabaseType.__name__ = "db.macros.IDatabaseType";
+db_macros_IDatabaseType.__isInterface__ = true;
+db_macros_IDatabaseType.prototype = {
+	typeInfo: null
+	,__class__: db_macros_IDatabaseType
+};
+var db_mysql_MySqlDataTypeMapper = function() {
+};
+$hxClasses["db.mysql.MySqlDataTypeMapper"] = db_mysql_MySqlDataTypeMapper;
+db_mysql_MySqlDataTypeMapper.__name__ = "db.mysql.MySqlDataTypeMapper";
+db_mysql_MySqlDataTypeMapper.__interfaces__ = [db_IDataTypeMapper];
+db_mysql_MySqlDataTypeMapper.get = function() {
+	if(db_mysql_MySqlDataTypeMapper._instance == null) {
+		db_mysql_MySqlDataTypeMapper._instance = new db_mysql_MySqlDataTypeMapper();
+	}
+	return db_mysql_MySqlDataTypeMapper._instance;
+};
+db_mysql_MySqlDataTypeMapper.prototype = {
+	shouldConvertValueToDatabase: function(value) {
+		if(((value) instanceof haxe_io_Bytes)) {
+			return true;
+		}
+		return false;
+	}
+	,convertValueToDatabase: function(value) {
+		if(((value) instanceof haxe_io_Bytes)) {
+			var bytes = value;
+			return bytes.toString();
+		}
+		return value;
+	}
+	,haxeTypeToDatabaseType: function(haxeType) {
+		switch(haxeType._hx_index) {
+		case 0:
+			return "INT";
+		case 1:
+			return "DOUBLE";
+		case 2:
+			return "INT";
+		case 3:
+			return "VARCHAR(" + haxeType.n + ")";
+		case 4:
+			return "TEXT";
+		case 5:
+			return "BLOB";
+		case 6:
+			return "TEXT";
+		}
+	}
+	,databaseTypeToHaxeType: function(databaseType) {
+		var parts = databaseType.split(":");
+		var type = parts[0].toUpperCase();
+		var len = parts[1];
+		if(type == "INT") {
+			return db_ColumnType.Number;
+		} else if(type == "DOUBLE") {
+			return db_ColumnType.Decimal;
+		} else if(type == "VARCHAR") {
+			return db_ColumnType.Text(Std.parseInt(len));
+		} else if(type == "TEXT") {
+			return db_ColumnType.Memo;
+		} else if(type == "BLOB") {
+			return db_ColumnType.Binary;
+		}
+		return db_ColumnType.Unknown;
+	}
+	,__class__: db_mysql_MySqlDataTypeMapper
+};
+var logging_ILogger = function() { };
+$hxClasses["logging.ILogger"] = logging_ILogger;
+logging_ILogger.__name__ = "logging.ILogger";
+logging_ILogger.__isInterface__ = true;
+logging_ILogger.prototype = {
+	info: null
+	,debug: null
+	,error: null
+	,warn: null
+	,data: null
+	,performance: null
+	,__class__: logging_ILogger
+};
+var logging_Logger = function(ref,instanceId,generateInstanceId) {
+	if(generateInstanceId == null) {
+		generateInstanceId = false;
+	}
+	this._measurements = null;
+	this._instanceId = null;
+	this._ref = null;
+	if(ref != null) {
+		this._ref = ref.__name__;
+	}
+	this._instanceId = instanceId;
+	if(this._instanceId == null && generateInstanceId) {
+		this._instanceId = this.generateUuid();
+	}
+};
+$hxClasses["logging.Logger"] = logging_Logger;
+logging_Logger.__name__ = "logging.Logger";
+logging_Logger.__interfaces__ = [logging_ILogger];
+logging_Logger.prototype = {
+	_ref: null
+	,_instanceId: null
+	,info: function(message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Info", message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,debug: function(message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,error: function(message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,warn: function(message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Warning", message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,data: function(message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Data", message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,performance: function(message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,_measurements: null
+	,beginMeasure: function(name) {
+		if(this._measurements == null) {
+			this._measurements = new haxe_ds_StringMap();
+		}
+		var this1 = this._measurements;
+		var value = new Date().getTime();
+		this1.h[name] = value;
+	}
+	,endMeasure: function(name) {
+		if(this._measurements == null) {
+			this._measurements = new haxe_ds_StringMap();
+		}
+		if(Object.prototype.hasOwnProperty.call(this._measurements.h,name)) {
+			var start = this._measurements.h[name];
+			var time = Math.round(new Date().getTime() - start);
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name + " " + time + "ms", data : null, ref : this._ref, instanceId : this._instanceId});
+			var _this = this._measurements;
+			if(Object.prototype.hasOwnProperty.call(_this.h,name)) {
+				delete(_this.h[name]);
+			}
+		}
+	}
+	,log: function(level,message,data) {
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : level, message : message, data : data, ref : this._ref, instanceId : this._instanceId});
+	}
+	,createUniqueInstanceId: function(prefix) {
+		if(logging_Logger._uniqueIds == null) {
+			logging_Logger._uniqueIds = new haxe_ds_StringMap();
+		}
+		var key = this._ref;
+		if(prefix != null) {
+			key += "_" + prefix;
+		}
+		var n = 0;
+		if(Object.prototype.hasOwnProperty.call(logging_Logger._uniqueIds.h,key)) {
+			n = logging_Logger._uniqueIds.h[key];
+			++n;
+		}
+		logging_Logger._uniqueIds.h[key] = n;
+		if(prefix != null) {
+			this._instanceId = prefix + n;
+		} else {
+			this._instanceId = "instance" + n;
+		}
+	}
+	,generateUuid: function() {
+		var uuid = "";
+		var _g = 0;
+		while(_g < 8) {
+			var i = _g++;
+			var n = new Date().getTime() + Std.random(16777215) * Std.random(16777215);
+			var hash = haxe_crypto_Sha1.encode(n == null ? "null" : "" + n);
+			var c1 = hash.charAt(Std.random(hash.length));
+			var c2 = hash.charAt(Std.random(hash.length));
+			var c3 = hash.charAt(Std.random(hash.length));
+			var c4 = hash.charAt(Std.random(hash.length));
+			uuid += c1 + c2 + c3 + c4;
+			if(i == 1 || i == 2 || i == 3 || i == 4) {
+				uuid += "-";
+			}
+		}
+		return uuid;
+	}
+	,__class__: logging_Logger
+};
+var db_mysql_MySqlDatabase = function() {
+	this._schema = null;
+	this._properties = new haxe_ds_StringMap();
+	this._relationshipDefs = null;
+	this._connection = null;
+};
+$hxClasses["db.mysql.MySqlDatabase"] = db_mysql_MySqlDatabase;
+db_mysql_MySqlDatabase.__name__ = "db.mysql.MySqlDatabase";
+db_mysql_MySqlDatabase.__interfaces__ = [db_IDatabase];
+db_mysql_MySqlDatabase.prototype = {
+	_connection: null
+	,_relationshipDefs: null
+	,_config: null
+	,_properties: null
+	,setProperty: function(name,value) {
+		if(name == "complexRelationships") {
+			if(this._relationshipDefs == null) {
+				this._relationshipDefs = new db_RelationshipDefinitions();
+			}
+			this._relationshipDefs.complexRelationships = value;
+		}
+		var _this = db_mysql_MySqlDatabase.log;
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "setting property", data : [name,value], ref : _this._ref, instanceId : _this._instanceId});
+		this._properties.h[name] = value;
+	}
+	,getProperty: function(name,defaultValue) {
+		if(this._properties == null || !Object.prototype.hasOwnProperty.call(this._properties.h,name)) {
+			return defaultValue;
+		}
+		return this._properties.h[name];
+	}
+	,config: function(details) {
+		this._config = details;
+		var _this = db_mysql_MySqlDatabase.log;
+		var data = this._config;
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "config", data : data, ref : _this._ref, instanceId : _this._instanceId});
+	}
+	,createConnection: function() {
+		if(this._connection != null) {
+			return;
+		}
+		var _this = db_mysql_MySqlDatabase.log;
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "creating connection", data : null, ref : _this._ref, instanceId : _this._instanceId});
+		this._connection = new mysql_impl_nodejs_DatabaseConnection({ host : this._config.host, user : this._config.user, pass : this._config.pass});
+		var autoReconnect = this.getProperty("autoReconnect",null);
+		var autoReconnectIntervalMS = this.getProperty("autoReconnectIntervalMS",null);
+		var replayQueriesOnReconnection = this.getProperty("replayQueriesOnReconnection",null);
+		if(autoReconnect != null) {
+			this._connection.autoReconnect = autoReconnect;
+		}
+		if(autoReconnectIntervalMS != null) {
+			this._connection.autoReconnectIntervalMS = autoReconnectIntervalMS;
+		}
+		if(replayQueriesOnReconnection != null) {
+			this._connection.replayQueriesOnReconnection = replayQueriesOnReconnection;
+		}
+	}
+	,create: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(_gthis._config.database == null) {
+				resolve(new db_DatabaseResult(_gthis));
+				return;
+			} else {
+				var _this = db_mysql_MySqlDatabase.log;
+				var name = "create " + Std.string(_gthis._config.database);
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				var this1 = _this._measurements;
+				var value = new Date().getTime();
+				this1.h[name] = value;
+				var _this = db_mysql_MySqlDatabase.log;
+				var data = _gthis._config.database;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "creating database:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				_gthis._connection.connectionDetails.database = _gthis._config.database;
+				thenshim_Promise.then(thenshim_Promise.then(_gthis._connection.exec(db_mysql_Utils.buildCreateDatabase(_gthis._config.database)),function(response) {
+					_gthis.clearCachedSchema();
+					return _gthis._connection.query(db_mysql_Utils.buildSelectDatabase(_gthis._config.database));
+				}),function(_) {
+					var _this = db_mysql_MySqlDatabase.log;
+					var name = "create " + Std.string(_gthis._config.database);
+					if(_this._measurements == null) {
+						_this._measurements = new haxe_ds_StringMap();
+					}
+					if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name)) {
+						var start = _this._measurements.h[name];
+						var time = Math.round(new Date().getTime() - start);
+						logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+						var _this1 = _this._measurements;
+						if(Object.prototype.hasOwnProperty.call(_this1.h,name)) {
+							delete(_this1.h[name]);
+						}
+					}
+					resolve(new db_DatabaseResult(_gthis));
+				},function(error) {
+					var _this = db_mysql_MySqlDatabase.log;
+					var name = "create " + Std.string(_gthis._config.database);
+					if(_this._measurements == null) {
+						_this._measurements = new haxe_ds_StringMap();
+					}
+					if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name)) {
+						var start = _this._measurements.h[name];
+						var time = Math.round(new Date().getTime() - start);
+						logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+						var _this1 = _this._measurements;
+						if(Object.prototype.hasOwnProperty.call(_this1.h,name)) {
+							delete(_this1.h[name]);
+						}
+					}
+					var _this = db_mysql_MySqlDatabase.log;
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error creating database:", data : error, ref : _this._ref, instanceId : _this._instanceId});
+					reject(db_mysql_Utils.MySqlError2DatabaseError(error,"delete"));
+				});
+			}
+		});
+	}
+	,'delete': function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(_gthis._config.database == null) {
+				resolve(new db_DatabaseResult(_gthis,null,true));
+				return;
+			} else {
+				var _this = db_mysql_MySqlDatabase.log;
+				var name = "delete " + Std.string(_gthis._config.database);
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				var this1 = _this._measurements;
+				var value = new Date().getTime();
+				this1.h[name] = value;
+				var _this = db_mysql_MySqlDatabase.log;
+				var data = _gthis._config.database;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "deleting database:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				thenshim_Promise.then(_gthis._connection.exec(db_mysql_Utils.buildDropDatabase(_gthis._config.database)),function(response) {
+					_gthis.clearCachedSchema();
+					var _this = db_mysql_MySqlDatabase.log;
+					var name = "delete " + Std.string(_gthis._config.database);
+					if(_this._measurements == null) {
+						_this._measurements = new haxe_ds_StringMap();
+					}
+					if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name)) {
+						var start = _this._measurements.h[name];
+						var time = Math.round(new Date().getTime() - start);
+						logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+						var _this1 = _this._measurements;
+						if(Object.prototype.hasOwnProperty.call(_this1.h,name)) {
+							delete(_this1.h[name]);
+						}
+					}
+					resolve(new db_DatabaseResult(_gthis,null,true));
+				},function(error) {
+					var _this = db_mysql_MySqlDatabase.log;
+					var name = "delete " + Std.string(_gthis._config.database);
+					if(_this._measurements == null) {
+						_this._measurements = new haxe_ds_StringMap();
+					}
+					if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name)) {
+						var start = _this._measurements.h[name];
+						var time = Math.round(new Date().getTime() - start);
+						logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+						var _this1 = _this._measurements;
+						if(Object.prototype.hasOwnProperty.call(_this1.h,name)) {
+							delete(_this1.h[name]);
+						}
+					}
+					var _this = db_mysql_MySqlDatabase.log;
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error deleting database:", data : error, ref : _this._ref, instanceId : _this._instanceId});
+					reject(db_mysql_Utils.MySqlError2DatabaseError(error,"delete"));
+				});
+			}
+		});
+	}
+	,_schema: null
+	,schema: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(_gthis._schema == null) {
+				var _this = db_mysql_MySqlDatabase.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				var this1 = _this._measurements;
+				var value = new Date().getTime();
+				this1.h["schema"] = value;
+				var _this = db_mysql_MySqlDatabase.log;
+				var data = _gthis._config.database;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "loading database schema for:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				thenshim_Promise.then(db_mysql_Utils.loadFullDatabaseSchema(_gthis._connection,_gthis._config,db_mysql_MySqlDataTypeMapper.get()),function(schema) {
+					_gthis._schema = schema;
+					var _this = db_mysql_MySqlDatabase.log;
+					if(_this._measurements == null) {
+						_this._measurements = new haxe_ds_StringMap();
+					}
+					if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"schema")) {
+						var start = _this._measurements.h["schema"];
+						var time = Math.round(new Date().getTime() - start);
+						logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "schema" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+						var _this1 = _this._measurements;
+						if(Object.prototype.hasOwnProperty.call(_this1.h,"schema")) {
+							delete(_this1.h["schema"]);
+						}
+					}
+					resolve(new db_DatabaseResult(_gthis,null,_gthis._schema));
+				},function(error) {
+					var _this = db_mysql_MySqlDatabase.log;
+					if(_this._measurements == null) {
+						_this._measurements = new haxe_ds_StringMap();
+					}
+					if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"schema")) {
+						var start = _this._measurements.h["schema"];
+						var time = Math.round(new Date().getTime() - start);
+						logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "schema" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+						var _this1 = _this._measurements;
+						if(Object.prototype.hasOwnProperty.call(_this1.h,"schema")) {
+							delete(_this1.h["schema"]);
+						}
+					}
+					var _this = db_mysql_MySqlDatabase.log;
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error loading database schema:", data : error, ref : _this._ref, instanceId : _this._instanceId});
+					reject(db_mysql_Utils.MySqlError2DatabaseError(error,"schema"));
+				});
+			} else {
+				resolve(new db_DatabaseResult(_gthis,null,_gthis._schema));
+			}
+		});
+	}
+	,clearCachedSchema: function() {
+		this._schema = null;
+	}
+	,defineTableRelationship: function(field1,field2) {
+		if(this._relationshipDefs == null) {
+			this._relationshipDefs = new db_RelationshipDefinitions();
+		}
+		var _this = db_mysql_MySqlDatabase.log;
+		logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "defining relationship", data : [field1,field2], ref : _this._ref, instanceId : _this._instanceId});
+		this._relationshipDefs.add(field1,field2);
+	}
+	,definedTableRelationships: function() {
+		return this._relationshipDefs;
+	}
+	,clearTableRelationships: function() {
+		this._relationshipDefs = null;
+	}
+	,connect: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = db_mysql_MySqlDatabase.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["connect"] = value;
+			var _this = db_mysql_MySqlDatabase.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "connecting", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			_gthis.createConnection();
+			thenshim_Promise.then(thenshim_Promise.then(thenshim_Promise.then(_gthis._connection.open(),function(response) {
+				if(_gthis._config.database == null) {
+					return null;
+				}
+				var _this = db_mysql_MySqlDatabase.log;
+				var data = _gthis._config.database;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "checking for database:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				return _gthis._connection.query(db_mysql_Utils.buildHasDatabase(_gthis._config.database));
+			}),function(result) {
+				if(result == null || result.data == null || result.data.length == 0) {
+					return null;
+				}
+				var _this = db_mysql_MySqlDatabase.log;
+				var data = _gthis._config.database;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "database exists:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				return _gthis._connection.query(db_mysql_Utils.buildSelectDatabase(_gthis._config.database));
+			}),function(_) {
+				var _this = db_mysql_MySqlDatabase.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"connect")) {
+					var start = _this._measurements.h["connect"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "connect" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"connect")) {
+						delete(_this1.h["connect"]);
+					}
+				}
+				_gthis._connection.connectionDetails.database = _gthis._config.database;
+				resolve(new db_DatabaseResult(_gthis,null,true));
+			},function(error) {
+				var _this = db_mysql_MySqlDatabase.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"connect")) {
+					var start = _this._measurements.h["connect"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "connect" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"connect")) {
+						delete(_this1.h["connect"]);
+					}
+				}
+				var _this = db_mysql_MySqlDatabase.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error connecting:", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"connect"));
+			});
+		});
+	}
+	,disconnect: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = db_mysql_MySqlDatabase.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "disconnecting", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			_gthis._connection.close();
+			_gthis._connection = null;
+			_gthis.clearCachedSchema();
+			resolve(new db_DatabaseResult(_gthis,null,true));
+		});
+	}
+	,table: function(name) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = db_mysql_MySqlDatabase.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["table " + name] = value;
+			var _this = db_mysql_MySqlDatabase.log;
+			var data = [_gthis._config.database,name];
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "looking for table:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(_gthis._connection.get("SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME=?;",[_gthis._config.database,name]),function(response) {
+				var table = new db_mysql_MySqlTable(_gthis);
+				table.name = name;
+				table.exists = response.data != null;
+				var _this = db_mysql_MySqlDatabase.log;
+				var name1 = "table " + name;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name1)) {
+					var start = _this._measurements.h[name1];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name1 + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,name1)) {
+						delete(_this1.h[name1]);
+					}
+				}
+				if(table.exists) {
+					var _this = db_mysql_MySqlDatabase.log;
+					var data = [_gthis._config.database,name];
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "table found:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				} else {
+					var _this = db_mysql_MySqlDatabase.log;
+					var data = [_gthis._config.database,name];
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "table not found:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+				}
+				resolve(new db_DatabaseResult(_gthis,table));
+			},function(error) {
+				var _this = db_mysql_MySqlDatabase.log;
+				var name1 = "table " + name;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name1)) {
+					var start = _this._measurements.h[name1];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name1 + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,name1)) {
+						delete(_this1.h[name1]);
+					}
+				}
+				var _this = db_mysql_MySqlDatabase.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error looking for table:", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"table"));
+			});
+		});
+	}
+	,createTable: function(name,columns) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = db_mysql_MySqlDatabase.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["createTable " + name] = value;
+			var _this = db_mysql_MySqlDatabase.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "creating table", data : [name,columns], ref : _this._ref, instanceId : _this._instanceId});
+			var sql = db_mysql_Utils.buildCreateTable(name,columns,db_mysql_MySqlDataTypeMapper.get());
+			thenshim_Promise.then(_gthis._connection.exec(sql),function(response) {
+				var table = new db_mysql_MySqlTable(_gthis);
+				table.name = name;
+				table.exists = true;
+				var _this = db_mysql_MySqlDatabase.log;
+				var name1 = "createTable " + name;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name1)) {
+					var start = _this._measurements.h[name1];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name1 + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,name1)) {
+						delete(_this1.h[name1]);
+					}
+				}
+				_gthis._schema = null;
+				resolve(new db_DatabaseResult(_gthis,table));
+			},function(error) {
+				var _this = db_mysql_MySqlDatabase.log;
+				var name1 = "createTable " + name;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,name1)) {
+					var start = _this._measurements.h[name1];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : name1 + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,name1)) {
+						delete(_this1.h[name1]);
+					}
+				}
+				var _this = db_mysql_MySqlDatabase.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error creating table", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"createTable"));
+			});
+		});
+	}
+	,deleteTable: function(name) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			_gthis._schema = null;
+			reject(new db_DatabaseError("not implemented","deleteTable"));
+		});
+	}
+	,__class__: db_mysql_MySqlDatabase
+};
+var db_mysql_MySqlDatabaseType = function() {
+};
+$hxClasses["db.mysql.MySqlDatabaseType"] = db_mysql_MySqlDatabaseType;
+db_mysql_MySqlDatabaseType.__name__ = "db.mysql.MySqlDatabaseType";
+db_mysql_MySqlDatabaseType.__interfaces__ = [db_macros_IDatabaseType];
+db_mysql_MySqlDatabaseType.prototype = {
+	typeInfo: function() {
+		return { ctor : function() {
+			return new db_mysql_MySqlDatabase();
+		}};
+	}
+	,__class__: db_mysql_MySqlDatabaseType
+};
+var db_mysql_MySqlTable = function(db) {
+	this._tableSchema = null;
+	this.db = db;
+};
+$hxClasses["db.mysql.MySqlTable"] = db_mysql_MySqlTable;
+db_mysql_MySqlTable.__name__ = "db.mysql.MySqlTable";
+db_mysql_MySqlTable.__interfaces__ = [db_ITable];
+db_mysql_MySqlTable.prototype = {
+	db: null
+	,name: null
+	,exists: null
+	,_tableSchema: null
+	,schema: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(_gthis._tableSchema != null) {
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,_gthis._tableSchema));
+				return;
+			}
+			thenshim_Promise.then(_gthis.db.schema(),function(result) {
+				_gthis._tableSchema = result.data.findTable(_gthis.name);
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,_gthis._tableSchema));
+			},function(error) {
+				reject(error);
+			});
+		});
+	}
+	,clearCachedSchema: function() {
+		this._tableSchema = null;
+	}
+	,applySchema: function(newSchema) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var schemaChanged = false;
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["applying schema"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "applying schema", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.schema(),function(result) {
+				var promises = [];
+				var currentSchema = result.data;
+				if(currentSchema != null && !currentSchema.equals(newSchema)) {
+					var diff = currentSchema.diff(newSchema);
+					var _g = 0;
+					var _g1 = diff.addedColumns;
+					while(_g < _g1.length) {
+						var added = _g1[_g];
+						++_g;
+						promises.push((function(_g,column) {
+							return function() {
+								return _g[0].addColumn(column[0]);
+							};
+						})([_gthis],[added]));
+						schemaChanged = true;
+					}
+					var _g = 0;
+					var _g1 = diff.removedColumns;
+					while(_g < _g1.length) {
+						var removed = _g1[_g];
+						++_g;
+						promises.push((function(_g,column) {
+							return function() {
+								return _g[0].removeColumn(column[0]);
+							};
+						})([_gthis],[removed]));
+						schemaChanged = true;
+					}
+				}
+				return promises_PromiseUtils.runSequentially(promises);
+			}),function(result) {
+				if(schemaChanged) {
+					_gthis.clearCachedSchema();
+					(js_Boot.__cast(_gthis.db , db_mysql_MySqlDatabase)).clearCachedSchema();
+				}
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"applying schema")) {
+					var start = _this._measurements.h["applying schema"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "applying schema" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"applying schema")) {
+						delete(_this1.h["applying schema"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,newSchema));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "error applying schema", data : null, ref : _this._ref, instanceId : _this._instanceId});
+				reject(error);
+			});
+		});
+	}
+	,all: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","all"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["all"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "all", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var values = [];
+				var sql = db_utils_SqlUtils.buildSelect(_gthis,null,null,null,values,_gthis.db.definedTableRelationships(),schemaResult.data);
+				return _gthis.get_connection().all(sql);
+			}),function(response) {
+				var records = new db__$RecordSet_RecordSetImpl([]);
+				var _g = 0;
+				var _g1 = response.data;
+				while(_g < _g1.length) {
+					var item = _g1[_g];
+					++_g;
+					records.push(db_Record.fromDynamic(item));
+				}
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"all")) {
+					var start = _this._measurements.h["all"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "all" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"all")) {
+						delete(_this1.h["all"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,records));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "all", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"all"));
+			});
+		});
+	}
+	,page: function(pageIndex,pageSize,query,allowRelationships) {
+		if(allowRelationships == null) {
+			allowRelationships = true;
+		}
+		if(pageSize == null) {
+			pageSize = 100;
+		}
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","find"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["page"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "page", data : [pageIndex,pageSize], ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var relationshipDefinintions = _gthis.db.definedTableRelationships();
+				if(!allowRelationships) {
+					relationshipDefinintions = null;
+				}
+				var values = [];
+				var sql = db_utils_SqlUtils.buildSelect(_gthis,null,pageSize,pageIndex * pageSize,values,relationshipDefinintions,schemaResult.data);
+				return _gthis.get_connection().all(sql,values);
+			}),function(response) {
+				var records = new db__$RecordSet_RecordSetImpl([]);
+				var _g = 0;
+				var _g1 = response.data;
+				while(_g < _g1.length) {
+					var item = _g1[_g];
+					++_g;
+					records.push(db_Record.fromDynamic(item));
+				}
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"page")) {
+					var start = _this._measurements.h["page"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "page" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"page")) {
+						delete(_this1.h["page"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,records));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "page", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"page"));
+			});
+		});
+	}
+	,add: function(record) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","add"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["add"] = value;
+			if(logging_LogManager.get_instance().get_shouldLogDebug()) {
+				var _this = db_mysql_MySqlTable.log;
+				var data = record.debugString();
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "add", data : data, ref : _this._ref, instanceId : _this._instanceId});
+			}
+			var insertedId = -1;
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var values = [];
+				var sql = db_utils_SqlUtils.buildInsert(_gthis,record,values,db_mysql_MySqlDataTypeMapper.get());
+				return _gthis.get_connection().get(sql,values);
+			}),function(response) {
+				insertedId = response.data.insertId;
+				record.field("_insertedId",insertedId);
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"add")) {
+					var start = _this._measurements.h["add"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "add" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"add")) {
+						delete(_this1.h["add"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "add", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"add"));
+			});
+		});
+	}
+	,addAll: function(records) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","addAll"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["addAll"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "addAll", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			var promises = [];
+			var record = records.iterator();
+			while(record.hasNext()) {
+				var record1 = record.next();
+				promises.push((function(_g,record) {
+					return function() {
+						return _g[0].add(record[0]);
+					};
+				})([_gthis],[record1]));
+			}
+			thenshim_Promise.then(promises_PromiseUtils.runSequentially(promises),function(results) {
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"addAll")) {
+					var start = _this._measurements.h["addAll"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "addAll" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"addAll")) {
+						delete(_this1.h["addAll"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,records));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "addAll", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"addAll"));
+			});
+		});
+	}
+	,'delete': function(record) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","delete"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["delete"] = value;
+			if(logging_LogManager.get_instance().get_shouldLogDebug()) {
+				var _this = db_mysql_MySqlTable.log;
+				var data = record.debugString();
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "delete", data : data, ref : _this._ref, instanceId : _this._instanceId});
+			}
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var values = [];
+				var sql = db_utils_SqlUtils.buildDeleteRecord(_gthis,record,values);
+				return _gthis.get_connection().get(sql,values);
+			}),function(response) {
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"delete")) {
+					var start = _this._measurements.h["delete"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "delete" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"delete")) {
+						delete(_this1.h["delete"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "delete", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"delete"));
+			});
+		});
+	}
+	,deleteAll: function(query) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","deleteAll"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["deleteAll"] = value;
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				return _gthis.get_connection().exec(db_utils_SqlUtils.buildDeleteWhere(_gthis,query));
+			}),function(response) {
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"deleteAll")) {
+					var start = _this._measurements.h["deleteAll"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "deleteAll" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"deleteAll")) {
+						delete(_this1.h["deleteAll"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,true));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "deleteAll", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"deleteAll"));
+			});
+		});
+	}
+	,update: function(query,record) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","update"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["update"] = value;
+			if(logging_LogManager.get_instance().get_shouldLogDebug()) {
+				var _this = db_mysql_MySqlTable.log;
+				var data = record.debugString();
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "update", data : data, ref : _this._ref, instanceId : _this._instanceId});
+			}
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var values = [];
+				var sql = db_utils_SqlUtils.buildUpdate(_gthis,query,record,values,db_mysql_MySqlDataTypeMapper.get());
+				return _gthis.get_connection().get(sql,values);
+			}),function(response) {
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"update")) {
+					var start = _this._measurements.h["update"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "update" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"update")) {
+						delete(_this1.h["update"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "update", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"update"));
+			});
+		});
+	}
+	,find: function(query,allowRelationships) {
+		if(allowRelationships == null) {
+			allowRelationships = true;
+		}
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","find"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["find"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "find", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var relationshipDefinintions = _gthis.db.definedTableRelationships();
+				if(!allowRelationships) {
+					relationshipDefinintions = null;
+				}
+				var values = [];
+				var sql = db_utils_SqlUtils.buildSelect(_gthis,query,null,null,values,relationshipDefinintions,schemaResult.data);
+				return _gthis.get_connection().all(sql,values);
+			}),function(response) {
+				var records = new db__$RecordSet_RecordSetImpl([]);
+				var _g = 0;
+				var _g1 = response.data;
+				while(_g < _g1.length) {
+					var item = _g1[_g];
+					++_g;
+					records.push(db_Record.fromDynamic(item));
+				}
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"find")) {
+					var start = _this._measurements.h["find"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "find" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"find")) {
+						delete(_this1.h["find"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,records));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "find", data : null, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"find"));
+			});
+		});
+	}
+	,findOne: function(query,allowRelationships) {
+		if(allowRelationships == null) {
+			allowRelationships = true;
+		}
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","findOne"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["findOne"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "findOne", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var relationshipDefinintions = _gthis.db.definedTableRelationships();
+				if(!allowRelationships) {
+					relationshipDefinintions = null;
+				}
+				var values = [];
+				var sql = db_utils_SqlUtils.buildSelect(_gthis,query,1,null,values,relationshipDefinintions,schemaResult.data);
+				return _gthis.get_connection().get(sql,values);
+			}),function(response) {
+				var record = null;
+				if(response.data != null && ((response.data) instanceof Array)) {
+					record = db_Record.fromDynamic(response.data[0]);
+				} else if(response.data != null) {
+					record = db_Record.fromDynamic(response.data);
+				}
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"findOne")) {
+					var start = _this._measurements.h["findOne"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "findOne" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"findOne")) {
+						delete(_this1.h["findOne"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "findOne", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"findOne"));
+			});
+		});
+	}
+	,findUnique: function(columnName,query,allowRelationships) {
+		if(allowRelationships == null) {
+			allowRelationships = true;
+		}
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","findOne"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["findUnique"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "findUnique", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var relationshipDefinintions = _gthis.db.definedTableRelationships();
+				if(!allowRelationships) {
+					relationshipDefinintions = null;
+				}
+				var values = [];
+				var sql = db_utils_SqlUtils.buildDistinctSelect(_gthis,query,columnName,null,null,values,relationshipDefinintions,schemaResult.data);
+				return _gthis.get_connection().all(sql,values);
+			}),function(response) {
+				var records = new db__$RecordSet_RecordSetImpl([]);
+				var _g = 0;
+				var _g1 = response.data;
+				while(_g < _g1.length) {
+					var item = _g1[_g];
+					++_g;
+					records.push(db_Record.fromDynamic(item));
+				}
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"findUnique")) {
+					var start = _this._measurements.h["findUnique"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "findUnique" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"findUnique")) {
+						delete(_this1.h["findUnique"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,records));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "findUnique", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"findUnique"));
+			});
+		});
+	}
+	,count: function(query) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","findOne"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["count"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "count", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			thenshim_Promise.then(thenshim_Promise.then(_gthis.refreshSchema(),function(schemaResult) {
+				var sql = db_utils_SqlUtils.buildCount(_gthis,query);
+				return _gthis.get_connection().get(sql);
+			}),function(response) {
+				var record = db_Record.fromDynamic(response.data);
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"count")) {
+					var start = _this._measurements.h["count"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "count" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"count")) {
+						delete(_this1.h["count"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,record.values()[0]));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "count", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"count"));
+			});
+		});
+	}
+	,addColumn: function(column) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","addColumn"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["addColumn"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "addColumn", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			var sql = db_mysql_Utils.buildAddColumns(_gthis.name,[column],db_mysql_MySqlDataTypeMapper.get());
+			thenshim_Promise.then(_gthis.get_connection().exec(sql),function(result) {
+				_gthis.clearCachedSchema();
+				(js_Boot.__cast(_gthis.db , db_mysql_MySqlDatabase)).clearCachedSchema();
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"addColumn")) {
+					var start = _this._measurements.h["addColumn"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "addColumn" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"addColumn")) {
+						delete(_this1.h["addColumn"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,true));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "addColumn", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"addColumn"));
+			});
+		});
+	}
+	,removeColumn: function(column) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			if(!_gthis.exists) {
+				reject(new db_DatabaseError("table \"" + _gthis.name + "\" does not exist","addColumn"));
+				return;
+			}
+			var _this = db_mysql_MySqlTable.log;
+			if(_this._measurements == null) {
+				_this._measurements = new haxe_ds_StringMap();
+			}
+			var this1 = _this._measurements;
+			var value = new Date().getTime();
+			this1.h["removeColumn"] = value;
+			var _this = db_mysql_MySqlTable.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "removeColumn", data : null, ref : _this._ref, instanceId : _this._instanceId});
+			var sql = db_mysql_Utils.buildRemoveColumns(_gthis.name,[column],db_mysql_MySqlDataTypeMapper.get());
+			thenshim_Promise.then(_gthis.get_connection().exec(sql),function(result) {
+				_gthis.clearCachedSchema();
+				(js_Boot.__cast(_gthis.db , db_mysql_MySqlDatabase)).clearCachedSchema();
+				var _this = db_mysql_MySqlTable.log;
+				if(_this._measurements == null) {
+					_this._measurements = new haxe_ds_StringMap();
+				}
+				if(Object.prototype.hasOwnProperty.call(_this._measurements.h,"removeColumn")) {
+					var start = _this._measurements.h["removeColumn"];
+					var time = Math.round(new Date().getTime() - start);
+					logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Performance", message : "removeColumn" + " " + time + "ms", data : null, ref : _this._ref, instanceId : _this._instanceId});
+					var _this1 = _this._measurements;
+					if(Object.prototype.hasOwnProperty.call(_this1.h,"removeColumn")) {
+						delete(_this1.h["removeColumn"]);
+					}
+				}
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,true));
+			},function(error) {
+				var _this = db_mysql_MySqlTable.log;
+				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "removeColumn", data : error, ref : _this._ref, instanceId : _this._instanceId});
+				reject(db_mysql_Utils.MySqlError2DatabaseError(error,"addColumn"));
+			});
+		});
+	}
+	,connection: null
+	,get_connection: function() {
+		return (js_Boot.__cast(this.db , db_mysql_MySqlDatabase))._connection;
+	}
+	,refreshSchema: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var alwaysAliasResultFields = _gthis.db.getProperty("alwaysAliasResultFields",false);
+			if(alwaysAliasResultFields == false && _gthis.db.definedTableRelationships() == null) {
+				resolve(new db_DatabaseResult(_gthis.db,_gthis,null));
+				return;
+			}
+			thenshim_Promise.then(_gthis.db.schema(),function(result) {
+				resolve(result);
+			},function(error) {
+				reject(error);
+			});
+		});
+	}
+	,__class__: db_mysql_MySqlTable
+	,__properties__: {get_connection:"get_connection"}
+};
+var db_mysql_Utils = function() { };
+$hxClasses["db.mysql.Utils"] = db_mysql_Utils;
+db_mysql_Utils.__name__ = "db.mysql.Utils";
+db_mysql_Utils.MySqlError2DatabaseError = function(error,call) {
+	var dbError = new db_DatabaseError(error.message,call);
+	return dbError;
+};
+db_mysql_Utils.buildCreateDatabase = function(databaseName) {
+	return "CREATE DATABASE IF NOT EXISTS " + databaseName + ";";
+};
+db_mysql_Utils.buildDropDatabase = function(databaseName) {
+	return "DROP DATABASE IF EXISTS " + databaseName + ";";
+};
+db_mysql_Utils.buildSelectDatabase = function(databaseName) {
+	return "USE " + databaseName + ";";
+};
+db_mysql_Utils.buildHasDatabase = function(databaseName) {
+	return "SHOW DATABASES LIKE '" + databaseName + "';";
+};
+db_mysql_Utils.buildCreateTable = function(tableName,columns,typeMapper) {
+	var sql = "CREATE TABLE " + tableName + " (\n";
+	var columnParts = [];
+	var primaryKey = null;
+	var _g = 0;
+	while(_g < columns.length) {
+		var column = columns[_g];
+		++_g;
+		var type = typeMapper.haxeTypeToDatabaseType(column.type);
+		var columnSql = "    " + column.name;
+		columnSql += " " + type;
+		var suffix = "";
+		if(column.options != null) {
+			var _g1 = 0;
+			var _g2 = column.options;
+			while(_g1 < _g2.length) {
+				var option = _g2[_g1];
+				++_g1;
+				switch(option._hx_index) {
+				case 0:
+					primaryKey = column.name;
+					break;
+				case 1:
+					suffix += " NOT NULL";
+					break;
+				case 2:
+					suffix += " AUTO_INCREMENT";
+					break;
+				}
+			}
+		}
+		if(suffix.length > 0) {
+			columnSql += suffix;
+		}
+		columnParts.push(columnSql);
+	}
+	if(primaryKey != null) {
+		columnParts.push("    PRIMARY KEY (" + primaryKey + ")");
+	}
+	sql += columnParts.join(",\n");
+	sql += ");";
+	return sql;
+};
+db_mysql_Utils.loadFullDatabaseSchema = function(connection,config,typeMapper) {
+	return thenshim_Promise._new(function(resolve,reject) {
+		var database = null;
+		if(config != null && config.database != null) {
+			database = config.database;
+		}
+		if(database == null) {
+			reject("no database name");
+		} else {
+			var schema = new db_DatabaseSchema(null);
+			thenshim_Promise.then(connection.all("SELECT * FROM information_schema.columns\r\n                                                           WHERE table_schema = ?\r\n                                                           ORDER BY table_name,ordinal_position;",[database]),function(result) {
+				var _g = 0;
+				var _g1 = result.data;
+				while(_g < _g1.length) {
+					var r = _g1[_g];
+					++_g;
+					var table = schema.findTable(r.TABLE_NAME);
+					if(table == null) {
+						table = new db_TableSchema(r.TABLE_NAME,null,null);
+						schema.tables.push(table);
+					}
+					var dbType = r.DATA_TYPE;
+					if(r.CHARACTER_MAXIMUM_LENGTH != null) {
+						dbType = (dbType == null ? "null" : "" + dbType) + (":" + Std.string(r.CHARACTER_MAXIMUM_LENGTH));
+					}
+					var options = [];
+					var columnKey = r.COLUMN_KEY;
+					if(columnKey != null && columnKey.indexOf("PRI") != -1) {
+						options.push(db_ColumnOptions.PrimaryKey);
+					}
+					var extra = r.EXTRA;
+					if(extra != null && extra.indexOf("auto_increment") != -1) {
+						options.push(db_ColumnOptions.AutoIncrement);
+					}
+					table.columns.push(new db_ColumnDefinition(r.COLUMN_NAME,typeMapper.databaseTypeToHaxeType(dbType),options));
+				}
+				resolve(schema);
+			},function(error) {
+				reject(error);
+			});
+		}
+	});
+};
+db_mysql_Utils.buildAddColumns = function(tableName,columns,typeMapper) {
+	var sql = "ALTER TABLE " + tableName + "\n";
+	var _g = 0;
+	while(_g < columns.length) {
+		var column = columns[_g];
+		++_g;
+		var type = typeMapper.haxeTypeToDatabaseType(column.type);
+		sql += "ADD " + column.name + " " + type;
+	}
+	sql += ";";
+	return sql;
+};
+db_mysql_Utils.buildRemoveColumns = function(tableName,columns,typeMapper) {
+	var sql = "ALTER TABLE " + tableName + "\n";
+	var _g = 0;
+	while(_g < columns.length) {
+		var column = columns[_g];
+		++_g;
+		sql += "DROP COLUMN " + column.name;
+	}
+	sql += ";";
+	return sql;
+};
+var db_utils_SqlUtils = function() { };
+$hxClasses["db.utils.SqlUtils"] = db_utils_SqlUtils;
+db_utils_SqlUtils.__name__ = "db.utils.SqlUtils";
+db_utils_SqlUtils.buildInsert = function(table,record,values,typeMapper) {
+	var fieldNames = db_utils_SqlUtils.fieldNamesFromRecord(record);
+	var sql = "INSERT INTO " + table.name + " (" + fieldNames.join(", ") + ") VALUES ";
+	var placeholders = [];
+	var _g = 0;
+	var _g1 = record.get_fieldNames();
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		placeholders.push("?");
+		if(values != null) {
+			values.push(record.field(f));
+		}
+	}
+	if(typeMapper != null) {
+		var _g = 0;
+		var _g1 = values.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var v = values[i];
+			if(typeMapper.shouldConvertValueToDatabase(v)) {
+				v = typeMapper.convertValueToDatabase(v);
+				values[i] = v;
+			}
+		}
+	}
+	sql += "(" + placeholders.join(", ") + ")";
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.buildSelect = function(table,query,limit,offset,values,relationships,databaseSchema) {
+	var alwaysAliasResultFields = table.db.getProperty("alwaysAliasResultFields",false);
+	var fieldAliases = [];
+	var sqlJoin = db_utils_SqlUtils.buildJoins(table.name,null,relationships,databaseSchema,fieldAliases);
+	if(alwaysAliasResultFields == true || fieldAliases != null && fieldAliases.length > 0) {
+		if(databaseSchema != null) {
+			var tableSchema = databaseSchema.findTable(table.name);
+			if(tableSchema != null) {
+				var _g = 0;
+				var _g1 = tableSchema.columns;
+				while(_g < _g1.length) {
+					var tableColumn = _g1[_g];
+					++_g;
+					fieldAliases.splice(0,0,"" + table.name + "." + tableColumn.name + " AS `" + table.name + "." + tableColumn.name + "`");
+				}
+			}
+		}
+	}
+	var fieldList = "*";
+	if(fieldAliases.length > 0) {
+		fieldList = fieldAliases.join(", ");
+	}
+	var sql = "SELECT " + fieldList + " FROM " + table.name;
+	sql += sqlJoin;
+	if(query != null) {
+		sql += "\nWHERE (" + Query.queryExprToSql(query,values,table.name) + ")";
+	}
+	if(limit != null) {
+		sql += " LIMIT " + limit;
+	}
+	if(offset != null) {
+		sql += " OFFSET " + offset;
+	}
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.buildCount = function(table,query,values) {
+	var sql = "SELECT " + "COUNT(*)" + " FROM " + table.name;
+	if(query != null) {
+		sql += "\nWHERE (" + Query.queryExprToSql(query,values,table.name) + ")";
+	}
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.buildDistinctSelect = function(table,query,distinctColumn,limit,offset,values,relationships,databaseSchema) {
+	table.db.getProperty("alwaysAliasResultFields",false);
+	var fieldAliases = [];
+	var fieldList = "*";
+	if(distinctColumn != null) {
+		fieldAliases.push("distinct(" + distinctColumn + ")");
+	}
+	if(fieldAliases.length > 0) {
+		fieldList = fieldAliases.join(", ");
+	}
+	var sql = "SELECT " + fieldList + " FROM " + table.name;
+	if(query != null) {
+		sql += "\nWHERE (" + Query.queryExprToSql(query,values,table.name) + ")";
+	}
+	if(limit != null) {
+		sql += " LIMIT " + limit;
+	}
+	if(offset != null) {
+		sql += " OFFSET " + offset;
+	}
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.buildJoins = function(tableName,prefix,relationships,databaseSchema,fieldAliases) {
+	if(relationships == null) {
+		return "";
+	}
+	var sql = "";
+	var tableRelationships = relationships.get(tableName);
+	if(tableRelationships == null) {
+		return "";
+	}
+	var _g = 0;
+	while(_g < tableRelationships.length) {
+		var tableRelationship = tableRelationships[_g];
+		++_g;
+		var table1 = tableRelationship.table1;
+		var field1 = tableRelationship.field1;
+		var table2 = tableRelationship.table2;
+		var field2 = tableRelationship.field2;
+		if(prefix == null) {
+			prefix = table1;
+		}
+		var joinName = table1 + "." + table2;
+		if(relationships.complexRelationships) {
+			joinName = prefix + "." + field1 + "." + table2 + "." + field2;
+		}
+		var tableSchema = databaseSchema.findTable(table2);
+		if(tableSchema == null) {
+			continue;
+		}
+		var _g1 = 0;
+		var _g2 = tableSchema.columns;
+		while(_g1 < _g2.length) {
+			var tableColumn = _g2[_g1];
+			++_g1;
+			fieldAliases.push("`" + joinName + "`.`" + tableColumn.name + "` AS `" + joinName + "." + tableColumn.name + "`");
+		}
+		sql += "\n    LEFT JOIN `" + table2 + "` AS `" + joinName + "` ON `" + joinName + "`.`" + field2 + "` = `" + prefix + "`.`" + field1 + "`";
+		sql += db_utils_SqlUtils.buildJoins(table2,joinName,relationships,databaseSchema,fieldAliases);
+	}
+	return sql;
+};
+db_utils_SqlUtils.buildDeleteRecord = function(table,record,values) {
+	db_utils_SqlUtils.fieldNamesFromRecord(record);
+	var sql = "DELETE FROM " + table.name + " WHERE ";
+	var placeholders = [];
+	var _g = 0;
+	var _g1 = record.get_fieldNames();
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		var v = record.field(f);
+		f = "`" + f + "`";
+		if(((v) instanceof haxe_io_Bytes)) {
+			continue;
+		}
+		placeholders.push("" + f + " = ?");
+		if(values != null) {
+			values.push(v);
+		}
+	}
+	sql += "(" + placeholders.join(" AND ") + ")";
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.buildDeleteWhere = function(table,query) {
+	var sql = "DELETE FROM " + table.name;
+	if(query != null) {
+		sql += " WHERE (" + Query.queryExprToSql(query,null,table.name) + ")";
+	}
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.buildUpdate = function(table,query,record,values,typeMapper) {
+	db_utils_SqlUtils.fieldNamesFromRecord(record);
+	var sql = "UPDATE " + table.name + " SET ";
+	var placeholders = [];
+	var _g = 0;
+	var _g1 = record.get_fieldNames();
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		var v = record.field(f);
+		f = "`" + f + "`";
+		if(v == null) {
+			placeholders.push("" + f + " = NULL");
+		} else {
+			if(typeMapper != null && typeMapper.shouldConvertValueToDatabase(v)) {
+				v = typeMapper.convertValueToDatabase(v);
+			}
+			placeholders.push("" + f + " = ?");
+			if(values != null) {
+				values.push(v);
+			}
+		}
+	}
+	sql += "" + placeholders.join(", ");
+	sql += " WHERE (" + Query.queryExprToSql(query,values,table.name) + ")";
+	sql += ";";
+	return sql;
+};
+db_utils_SqlUtils.fieldNamesFromRecord = function(record) {
+	var names = [];
+	var _g = 0;
+	var _g1 = record.get_fieldNames();
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		names.push("`" + f + "`");
+	}
+	return names;
+};
+db_utils_SqlUtils.quoteFieldName = function(f) {
+	return "`" + f + "`";
 };
 var discord_$builder_APIBaseComponent = function() { };
 $hxClasses["discord_builder.APIBaseComponent"] = discord_$builder_APIBaseComponent;
@@ -12834,6 +16370,164 @@ haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
 	}
 	,__class__: haxe_ValueException
 });
+var haxe_crypto_Sha1 = function() {
+};
+$hxClasses["haxe.crypto.Sha1"] = haxe_crypto_Sha1;
+haxe_crypto_Sha1.__name__ = "haxe.crypto.Sha1";
+haxe_crypto_Sha1.encode = function(s) {
+	var sh = new haxe_crypto_Sha1();
+	var h = sh.doEncode(haxe_crypto_Sha1.str2blks(s));
+	return sh.hex(h);
+};
+haxe_crypto_Sha1.make = function(b) {
+	var h = new haxe_crypto_Sha1().doEncode(haxe_crypto_Sha1.bytes2blks(b));
+	var out = new haxe_io_Bytes(new ArrayBuffer(20));
+	out.b[0] = h[0] >>> 24;
+	out.b[1] = h[0] >> 16 & 255;
+	out.b[2] = h[0] >> 8 & 255;
+	out.b[3] = h[0] & 255;
+	out.b[4] = h[1] >>> 24;
+	out.b[5] = h[1] >> 16 & 255;
+	out.b[6] = h[1] >> 8 & 255;
+	out.b[7] = h[1] & 255;
+	out.b[8] = h[2] >>> 24;
+	out.b[9] = h[2] >> 16 & 255;
+	out.b[10] = h[2] >> 8 & 255;
+	out.b[11] = h[2] & 255;
+	out.b[12] = h[3] >>> 24;
+	out.b[13] = h[3] >> 16 & 255;
+	out.b[14] = h[3] >> 8 & 255;
+	out.b[15] = h[3] & 255;
+	out.b[16] = h[4] >>> 24;
+	out.b[17] = h[4] >> 16 & 255;
+	out.b[18] = h[4] >> 8 & 255;
+	out.b[19] = h[4] & 255;
+	return out;
+};
+haxe_crypto_Sha1.str2blks = function(s) {
+	var s1 = haxe_io_Bytes.ofString(s);
+	var nblk = (s1.length + 8 >> 6) + 1;
+	var blks = [];
+	var _g = 0;
+	var _g1 = nblk * 16;
+	while(_g < _g1) {
+		var i = _g++;
+		blks[i] = 0;
+	}
+	var _g = 0;
+	var _g1 = s1.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var p = i >> 2;
+		blks[p] |= s1.b[i] << 24 - ((i & 3) << 3);
+	}
+	var i = s1.length;
+	var p = i >> 2;
+	blks[p] |= 128 << 24 - ((i & 3) << 3);
+	blks[nblk * 16 - 1] = s1.length * 8;
+	return blks;
+};
+haxe_crypto_Sha1.bytes2blks = function(b) {
+	var nblk = (b.length + 8 >> 6) + 1;
+	var blks = [];
+	var _g = 0;
+	var _g1 = nblk * 16;
+	while(_g < _g1) {
+		var i = _g++;
+		blks[i] = 0;
+	}
+	var _g = 0;
+	var _g1 = b.length;
+	while(_g < _g1) {
+		var i = _g++;
+		var p = i >> 2;
+		blks[p] |= b.b[i] << 24 - ((i & 3) << 3);
+	}
+	var i = b.length;
+	var p = i >> 2;
+	blks[p] |= 128 << 24 - ((i & 3) << 3);
+	blks[nblk * 16 - 1] = b.length * 8;
+	return blks;
+};
+haxe_crypto_Sha1.prototype = {
+	doEncode: function(x) {
+		var w = [];
+		var a = 1732584193;
+		var b = -271733879;
+		var c = -1732584194;
+		var d = 271733878;
+		var e = -1009589776;
+		var i = 0;
+		while(i < x.length) {
+			var olda = a;
+			var oldb = b;
+			var oldc = c;
+			var oldd = d;
+			var olde = e;
+			var j = 0;
+			while(j < 80) {
+				if(j < 16) {
+					w[j] = x[i + j];
+				} else {
+					var num = w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16];
+					w[j] = num << 1 | num >>> 31;
+				}
+				var t = (a << 5 | a >>> 27) + this.ft(j,b,c,d) + e + w[j] + this.kt(j);
+				e = d;
+				d = c;
+				c = b << 30 | b >>> 2;
+				b = a;
+				a = t;
+				++j;
+			}
+			a += olda;
+			b += oldb;
+			c += oldc;
+			d += oldd;
+			e += olde;
+			i += 16;
+		}
+		return [a,b,c,d,e];
+	}
+	,rol: function(num,cnt) {
+		return num << cnt | num >>> 32 - cnt;
+	}
+	,ft: function(t,b,c,d) {
+		if(t < 20) {
+			return b & c | ~b & d;
+		}
+		if(t < 40) {
+			return b ^ c ^ d;
+		}
+		if(t < 60) {
+			return b & c | b & d | c & d;
+		}
+		return b ^ c ^ d;
+	}
+	,kt: function(t) {
+		if(t < 20) {
+			return 1518500249;
+		}
+		if(t < 40) {
+			return 1859775393;
+		}
+		if(t < 60) {
+			return -1894007588;
+		}
+		return -899497514;
+	}
+	,hex: function(a) {
+		var str = "";
+		var _g = 0;
+		while(_g < a.length) {
+			var num = a[_g];
+			++_g;
+			str += StringTools.hex(num,8);
+		}
+		return str.toLowerCase();
+	}
+	,__class__: haxe_crypto_Sha1
+};
 var haxe_ds_BalancedTree = function() {
 };
 $hxClasses["haxe.ds.BalancedTree"] = haxe_ds_BalancedTree;
@@ -14415,362 +18109,6 @@ haxe_io_FPHelper.doubleToI64 = function(v) {
 	i64.high = haxe_io_FPHelper.helper.getInt32(4,true);
 	return i64;
 };
-var haxe_io_Input = function() { };
-$hxClasses["haxe.io.Input"] = haxe_io_Input;
-haxe_io_Input.__name__ = "haxe.io.Input";
-haxe_io_Input.prototype = {
-	bigEndian: null
-	,readByte: function() {
-		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "haxe/io/Input.hx", lineNumber : 51, className : "haxe.io.Input", methodName : "readByte"});
-	}
-	,readBytes: function(s,pos,len) {
-		var k = len;
-		var b = s.b;
-		if(pos < 0 || len < 0 || pos + len > s.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		try {
-			while(k > 0) {
-				b[pos] = this.readByte();
-				++pos;
-				--k;
-			}
-		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
-			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
-				throw _g;
-			}
-		}
-		return len - k;
-	}
-	,close: function() {
-	}
-	,set_bigEndian: function(b) {
-		this.bigEndian = b;
-		return b;
-	}
-	,readAll: function(bufsize) {
-		if(bufsize == null) {
-			bufsize = 16384;
-		}
-		var buf = new haxe_io_Bytes(new ArrayBuffer(bufsize));
-		var total = new haxe_io_BytesBuffer();
-		try {
-			while(true) {
-				var len = this.readBytes(buf,0,bufsize);
-				if(len == 0) {
-					throw haxe_Exception.thrown(haxe_io_Error.Blocked);
-				}
-				total.addBytes(buf,0,len);
-			}
-		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
-			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
-				throw _g;
-			}
-		}
-		return total.getBytes();
-	}
-	,readFullBytes: function(s,pos,len) {
-		while(len > 0) {
-			var k = this.readBytes(s,pos,len);
-			if(k == 0) {
-				throw haxe_Exception.thrown(haxe_io_Error.Blocked);
-			}
-			pos += k;
-			len -= k;
-		}
-	}
-	,read: function(nbytes) {
-		var s = new haxe_io_Bytes(new ArrayBuffer(nbytes));
-		var p = 0;
-		while(nbytes > 0) {
-			var k = this.readBytes(s,p,nbytes);
-			if(k == 0) {
-				throw haxe_Exception.thrown(haxe_io_Error.Blocked);
-			}
-			p += k;
-			nbytes -= k;
-		}
-		return s;
-	}
-	,readUntil: function(end) {
-		var buf = new haxe_io_BytesBuffer();
-		var last;
-		while(true) {
-			last = this.readByte();
-			if(!(last != end)) {
-				break;
-			}
-			buf.addByte(last);
-		}
-		return buf.getBytes().toString();
-	}
-	,readLine: function() {
-		var buf = new haxe_io_BytesBuffer();
-		var last;
-		var s;
-		try {
-			while(true) {
-				last = this.readByte();
-				if(!(last != 10)) {
-					break;
-				}
-				buf.addByte(last);
-			}
-			s = buf.getBytes().toString();
-			if(HxOverrides.cca(s,s.length - 1) == 13) {
-				s = HxOverrides.substr(s,0,-1);
-			}
-		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
-			var _g1 = haxe_Exception.caught(_g).unwrap();
-			if(((_g1) instanceof haxe_io_Eof)) {
-				var e = _g1;
-				s = buf.getBytes().toString();
-				if(s.length == 0) {
-					throw haxe_Exception.thrown(e);
-				}
-			} else {
-				throw _g;
-			}
-		}
-		return s;
-	}
-	,readFloat: function() {
-		return haxe_io_FPHelper.i32ToFloat(this.readInt32());
-	}
-	,readDouble: function() {
-		var i1 = this.readInt32();
-		var i2 = this.readInt32();
-		if(this.bigEndian) {
-			return haxe_io_FPHelper.i64ToDouble(i2,i1);
-		} else {
-			return haxe_io_FPHelper.i64ToDouble(i1,i2);
-		}
-	}
-	,readInt8: function() {
-		var n = this.readByte();
-		if(n >= 128) {
-			return n - 256;
-		}
-		return n;
-	}
-	,readInt16: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var n = this.bigEndian ? ch2 | ch1 << 8 : ch1 | ch2 << 8;
-		if((n & 32768) != 0) {
-			return n - 65536;
-		}
-		return n;
-	}
-	,readUInt16: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		if(this.bigEndian) {
-			return ch2 | ch1 << 8;
-		} else {
-			return ch1 | ch2 << 8;
-		}
-	}
-	,readInt24: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		var n = this.bigEndian ? ch3 | ch2 << 8 | ch1 << 16 : ch1 | ch2 << 8 | ch3 << 16;
-		if((n & 8388608) != 0) {
-			return n - 16777216;
-		}
-		return n;
-	}
-	,readUInt24: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		if(this.bigEndian) {
-			return ch3 | ch2 << 8 | ch1 << 16;
-		} else {
-			return ch1 | ch2 << 8 | ch3 << 16;
-		}
-	}
-	,readInt32: function() {
-		var ch1 = this.readByte();
-		var ch2 = this.readByte();
-		var ch3 = this.readByte();
-		var ch4 = this.readByte();
-		if(this.bigEndian) {
-			return ch4 | ch3 << 8 | ch2 << 16 | ch1 << 24;
-		} else {
-			return ch1 | ch2 << 8 | ch3 << 16 | ch4 << 24;
-		}
-	}
-	,readString: function(len,encoding) {
-		var b = new haxe_io_Bytes(new ArrayBuffer(len));
-		this.readFullBytes(b,0,len);
-		return b.getString(0,len,encoding);
-	}
-	,getDoubleSig: function(bytes) {
-		return ((bytes[1] & 15) << 16 | bytes[2] << 8 | bytes[3]) * 4294967296. + (bytes[4] >> 7) * 2147483648 + ((bytes[4] & 127) << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7]);
-	}
-	,__class__: haxe_io_Input
-	,__properties__: {set_bigEndian:"set_bigEndian"}
-};
-var haxe_io_Output = function() { };
-$hxClasses["haxe.io.Output"] = haxe_io_Output;
-haxe_io_Output.__name__ = "haxe.io.Output";
-haxe_io_Output.prototype = {
-	bigEndian: null
-	,writeByte: function(c) {
-		throw new haxe_exceptions_NotImplementedException(null,null,{ fileName : "haxe/io/Output.hx", lineNumber : 47, className : "haxe.io.Output", methodName : "writeByte"});
-	}
-	,writeBytes: function(s,pos,len) {
-		if(pos < 0 || len < 0 || pos + len > s.length) {
-			throw haxe_Exception.thrown(haxe_io_Error.OutsideBounds);
-		}
-		var b = s.b;
-		var k = len;
-		while(k > 0) {
-			this.writeByte(b[pos]);
-			++pos;
-			--k;
-		}
-		return len;
-	}
-	,flush: function() {
-	}
-	,close: function() {
-	}
-	,set_bigEndian: function(b) {
-		this.bigEndian = b;
-		return b;
-	}
-	,write: function(s) {
-		var l = s.length;
-		var p = 0;
-		while(l > 0) {
-			var k = this.writeBytes(s,p,l);
-			if(k == 0) {
-				throw haxe_Exception.thrown(haxe_io_Error.Blocked);
-			}
-			p += k;
-			l -= k;
-		}
-	}
-	,writeFullBytes: function(s,pos,len) {
-		while(len > 0) {
-			var k = this.writeBytes(s,pos,len);
-			pos += k;
-			len -= k;
-		}
-	}
-	,writeFloat: function(x) {
-		this.writeInt32(haxe_io_FPHelper.floatToI32(x));
-	}
-	,writeDouble: function(x) {
-		var i64 = haxe_io_FPHelper.doubleToI64(x);
-		if(this.bigEndian) {
-			this.writeInt32(i64.high);
-			this.writeInt32(i64.low);
-		} else {
-			this.writeInt32(i64.low);
-			this.writeInt32(i64.high);
-		}
-	}
-	,writeInt8: function(x) {
-		if(x < -128 || x >= 128) {
-			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
-		}
-		this.writeByte(x & 255);
-	}
-	,writeInt16: function(x) {
-		if(x < -32768 || x >= 32768) {
-			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
-		}
-		this.writeUInt16(x & 65535);
-	}
-	,writeUInt16: function(x) {
-		if(x < 0 || x >= 65536) {
-			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
-		}
-		if(this.bigEndian) {
-			this.writeByte(x >> 8);
-			this.writeByte(x & 255);
-		} else {
-			this.writeByte(x & 255);
-			this.writeByte(x >> 8);
-		}
-	}
-	,writeInt24: function(x) {
-		if(x < -8388608 || x >= 8388608) {
-			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
-		}
-		this.writeUInt24(x & 16777215);
-	}
-	,writeUInt24: function(x) {
-		if(x < 0 || x >= 16777216) {
-			throw haxe_Exception.thrown(haxe_io_Error.Overflow);
-		}
-		if(this.bigEndian) {
-			this.writeByte(x >> 16);
-			this.writeByte(x >> 8 & 255);
-			this.writeByte(x & 255);
-		} else {
-			this.writeByte(x & 255);
-			this.writeByte(x >> 8 & 255);
-			this.writeByte(x >> 16);
-		}
-	}
-	,writeInt32: function(x) {
-		if(this.bigEndian) {
-			this.writeByte(x >>> 24);
-			this.writeByte(x >> 16 & 255);
-			this.writeByte(x >> 8 & 255);
-			this.writeByte(x & 255);
-		} else {
-			this.writeByte(x & 255);
-			this.writeByte(x >> 8 & 255);
-			this.writeByte(x >> 16 & 255);
-			this.writeByte(x >>> 24);
-		}
-	}
-	,prepare: function(nbytes) {
-	}
-	,writeInput: function(i,bufsize) {
-		if(bufsize == null) {
-			bufsize = 4096;
-		}
-		var buf = new haxe_io_Bytes(new ArrayBuffer(bufsize));
-		try {
-			while(true) {
-				var len = i.readBytes(buf,0,bufsize);
-				if(len == 0) {
-					throw haxe_Exception.thrown(haxe_io_Error.Blocked);
-				}
-				var p = 0;
-				while(len > 0) {
-					var k = this.writeBytes(buf,p,len);
-					if(k == 0) {
-						throw haxe_Exception.thrown(haxe_io_Error.Blocked);
-					}
-					p += k;
-					len -= k;
-				}
-			}
-		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
-			if(!((haxe_Exception.caught(_g).unwrap()) instanceof haxe_io_Eof)) {
-				throw _g;
-			}
-		}
-	}
-	,writeString: function(s,encoding) {
-		var b = haxe_io_Bytes.ofString(s,encoding);
-		this.writeFullBytes(b,0,b.length);
-	}
-	,__class__: haxe_io_Output
-	,__properties__: {set_bigEndian:"set_bigEndian"}
-};
 var haxe_io_Path = function(path) {
 	switch(path) {
 	case ".":case "..":
@@ -15245,6 +18583,15 @@ haxe_iterators_StringKeyValueIterator.prototype = {
 	}
 	,__class__: haxe_iterators_StringKeyValueIterator
 };
+var haxe_macro_Message = $hxEnums["haxe.macro.Message"] = { __ename__:"haxe.macro.Message",__constructs__:null
+	,Info: ($_=function(msg,pos) { return {_hx_index:0,msg:msg,pos:pos,__enum__:"haxe.macro.Message",toString:$estr,__params__:function(){ return [this.msg,this.pos];}}; },$_._hx_name="Info",$_)
+	,Warning: ($_=function(msg,pos) { return {_hx_index:1,msg:msg,pos:pos,__enum__:"haxe.macro.Message",toString:$estr,__params__:function(){ return [this.msg,this.pos];}}; },$_._hx_name="Warning",$_)
+};
+haxe_macro_Message.__constructs__ = [haxe_macro_Message.Info,haxe_macro_Message.Warning];
+haxe_macro_Message.__empty_constructs__ = [];
+var haxe_macro_Context = function() { };
+$hxClasses["haxe.macro.Context"] = haxe_macro_Context;
+haxe_macro_Context.__name__ = "haxe.macro.Context";
 var haxe_macro_StringLiteralKind = $hxEnums["haxe.macro.StringLiteralKind"] = { __ename__:"haxe.macro.StringLiteralKind",__constructs__:null
 	,DoubleQuotes: {_hx_name:"DoubleQuotes",_hx_index:0,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
 	,SingleQuotes: {_hx_name:"SingleQuotes",_hx_index:1,__enum__:"haxe.macro.StringLiteralKind",toString:$estr}
@@ -15438,6 +18785,1778 @@ var haxe_macro_ImportMode = $hxEnums["haxe.macro.ImportMode"] = { __ename__:"hax
 };
 haxe_macro_ImportMode.__constructs__ = [haxe_macro_ImportMode.INormal,haxe_macro_ImportMode.IAsName,haxe_macro_ImportMode.IAll];
 haxe_macro_ImportMode.__empty_constructs__ = [haxe_macro_ImportMode.INormal,haxe_macro_ImportMode.IAll];
+var haxe_macro_ExprTools = function() { };
+$hxClasses["haxe.macro.ExprTools"] = haxe_macro_ExprTools;
+haxe_macro_ExprTools.__name__ = "haxe.macro.ExprTools";
+haxe_macro_ExprTools.toString = function(e) {
+	return new haxe_macro_Printer().printExpr(e);
+};
+haxe_macro_ExprTools.iter = function(e,f) {
+	var _g = e.expr;
+	switch(_g._hx_index) {
+	case 0:
+		break;
+	case 1:
+		f(_g.e1);
+		f(_g.e2);
+		break;
+	case 2:
+		f(_g.e1);
+		f(_g.e2);
+		break;
+	case 3:
+		f(_g.e);
+		break;
+	case 4:
+		f(_g.e);
+		break;
+	case 5:
+		var _gfields = _g.fields;
+		var _g1 = 0;
+		while(_g1 < _gfields.length) {
+			var fd = _gfields[_g1];
+			++_g1;
+			f(fd.expr);
+		}
+		break;
+	case 6:
+		haxe_macro_ExprArrayTools.iter(_g.values,f);
+		break;
+	case 7:
+		f(_g.e);
+		haxe_macro_ExprArrayTools.iter(_g.params,f);
+		break;
+	case 8:
+		haxe_macro_ExprArrayTools.iter(_g.params,f);
+		break;
+	case 9:
+		f(_g.e);
+		break;
+	case 10:
+		var _gvars = _g.vars;
+		var _g1 = 0;
+		while(_g1 < _gvars.length) {
+			var v = _gvars[_g1];
+			++_g1;
+			var e = v.expr;
+			if(e != null) {
+				f(e);
+			}
+		}
+		break;
+	case 11:
+		var _gf = _g.f;
+		var _g1 = 0;
+		var _g2 = _gf.args;
+		while(_g1 < _g2.length) {
+			var arg = _g2[_g1];
+			++_g1;
+			var e = arg.value;
+			if(e != null) {
+				f(e);
+			}
+		}
+		var e = _gf.expr;
+		if(e != null) {
+			f(e);
+		}
+		break;
+	case 12:
+		haxe_macro_ExprArrayTools.iter(_g.exprs,f);
+		break;
+	case 13:
+		f(_g.it);
+		f(_g.expr);
+		break;
+	case 14:
+		var _geelse = _g.eelse;
+		f(_g.econd);
+		f(_g.eif);
+		if(_geelse != null) {
+			f(_geelse);
+		}
+		break;
+	case 15:
+		f(_g.econd);
+		f(_g.e);
+		break;
+	case 16:
+		var _gcases = _g.cases;
+		var _gedef = _g.edef;
+		f(_g.e);
+		var _g1 = 0;
+		while(_g1 < _gcases.length) {
+			var c = _gcases[_g1];
+			++_g1;
+			haxe_macro_ExprArrayTools.iter(c.values,f);
+			var e = c.guard;
+			if(e != null) {
+				f(e);
+			}
+			var e1 = c.expr;
+			if(e1 != null) {
+				f(e1);
+			}
+		}
+		if(_gedef != null && _gedef.expr != null) {
+			f(_gedef);
+		}
+		break;
+	case 17:
+		var _gcatches = _g.catches;
+		f(_g.e);
+		var _g1 = 0;
+		while(_g1 < _gcatches.length) {
+			var c = _gcatches[_g1];
+			++_g1;
+			f(c.expr);
+		}
+		break;
+	case 18:
+		var _ge = _g.e;
+		if(_ge != null) {
+			f(_ge);
+		}
+		break;
+	case 19:case 20:
+		break;
+	case 21:
+		f(_g.e);
+		break;
+	case 22:
+		f(_g.e);
+		break;
+	case 23:
+		f(_g.e);
+		break;
+	case 24:
+		f(_g.e);
+		break;
+	case 25:
+		var _geelse = _g.eelse;
+		f(_g.econd);
+		f(_g.eif);
+		if(_geelse != null) {
+			f(_geelse);
+		}
+		break;
+	case 26:
+		f(_g.e);
+		break;
+	case 27:
+		f(_g.e);
+		break;
+	case 28:
+		f(_g.e);
+		break;
+	}
+};
+haxe_macro_ExprTools.map = function(e,f) {
+	var e1 = e.pos;
+	var _g = e.expr;
+	var tmp;
+	switch(_g._hx_index) {
+	case 0:
+		tmp = e.expr;
+		break;
+	case 1:
+		tmp = haxe_macro_ExprDef.EArray(f(_g.e1),f(_g.e2));
+		break;
+	case 2:
+		tmp = haxe_macro_ExprDef.EBinop(_g.op,f(_g.e1),f(_g.e2));
+		break;
+	case 3:
+		tmp = haxe_macro_ExprDef.EField(f(_g.e),_g.field,_g.kind);
+		break;
+	case 4:
+		tmp = haxe_macro_ExprDef.EParenthesis(f(_g.e));
+		break;
+	case 5:
+		var _gfields = _g.fields;
+		var ret = [];
+		var _g1 = 0;
+		while(_g1 < _gfields.length) {
+			var field = _gfields[_g1];
+			++_g1;
+			ret.push({ field : field.field, expr : f(field.expr), quotes : field.quotes});
+		}
+		tmp = haxe_macro_ExprDef.EObjectDecl(ret);
+		break;
+	case 6:
+		tmp = haxe_macro_ExprDef.EArrayDecl(haxe_macro_ExprArrayTools.map(_g.values,f));
+		break;
+	case 7:
+		tmp = haxe_macro_ExprDef.ECall(f(_g.e),haxe_macro_ExprArrayTools.map(_g.params,f));
+		break;
+	case 8:
+		tmp = haxe_macro_ExprDef.ENew(_g.t,haxe_macro_ExprArrayTools.map(_g.params,f));
+		break;
+	case 9:
+		tmp = haxe_macro_ExprDef.EUnop(_g.op,_g.postFix,f(_g.e));
+		break;
+	case 10:
+		var _gvars = _g.vars;
+		var ret = [];
+		var _g1 = 0;
+		while(_g1 < _gvars.length) {
+			var v = _gvars[_g1];
+			++_g1;
+			var e2 = v.expr;
+			var v2 = { name : v.name, type : v.type, expr : e2 == null ? null : f(e2)};
+			if(v.isFinal != null) {
+				v2.isFinal = v.isFinal;
+			}
+			ret.push(v2);
+		}
+		tmp = haxe_macro_ExprDef.EVars(ret);
+		break;
+	case 11:
+		var _gkind = _g.kind;
+		var _gf = _g.f;
+		var ret = [];
+		var _g1 = 0;
+		var _g2 = _gf.args;
+		while(_g1 < _g2.length) {
+			var arg = _g2[_g1];
+			++_g1;
+			var e2 = arg.value;
+			ret.push({ name : arg.name, opt : arg.opt, type : arg.type, value : e2 == null ? null : f(e2)});
+		}
+		tmp = haxe_macro_ExprDef.EFunction(_gkind,{ args : ret, ret : _gf.ret, params : _gf.params, expr : f(_gf.expr)});
+		break;
+	case 12:
+		tmp = haxe_macro_ExprDef.EBlock(haxe_macro_ExprArrayTools.map(_g.exprs,f));
+		break;
+	case 13:
+		tmp = haxe_macro_ExprDef.EFor(f(_g.it),f(_g.expr));
+		break;
+	case 14:
+		var _geelse = _g.eelse;
+		tmp = haxe_macro_ExprDef.EIf(f(_g.econd),f(_g.eif),_geelse == null ? null : f(_geelse));
+		break;
+	case 15:
+		tmp = haxe_macro_ExprDef.EWhile(f(_g.econd),f(_g.e),_g.normalWhile);
+		break;
+	case 16:
+		var _ge = _g.e;
+		var _gcases = _g.cases;
+		var _gedef = _g.edef;
+		var ret = [];
+		var _g1 = 0;
+		while(_g1 < _gcases.length) {
+			var c = _gcases[_g1];
+			++_g1;
+			var e2 = c.expr;
+			var tmp1 = e2 == null ? null : f(e2);
+			var e3 = c.guard;
+			ret.push({ expr : tmp1, guard : e3 == null ? null : f(e3), values : haxe_macro_ExprArrayTools.map(c.values,f)});
+		}
+		tmp = haxe_macro_ExprDef.ESwitch(f(_ge),ret,_gedef == null || _gedef.expr == null ? _gedef : f(_gedef));
+		break;
+	case 17:
+		var _ge = _g.e;
+		var _gcatches = _g.catches;
+		var ret = [];
+		var _g1 = 0;
+		while(_g1 < _gcatches.length) {
+			var c = _gcatches[_g1];
+			++_g1;
+			ret.push({ name : c.name, type : c.type, expr : f(c.expr)});
+		}
+		tmp = haxe_macro_ExprDef.ETry(f(_ge),ret);
+		break;
+	case 18:
+		var _ge = _g.e;
+		tmp = haxe_macro_ExprDef.EReturn(_ge == null ? null : f(_ge));
+		break;
+	case 19:case 20:
+		tmp = e.expr;
+		break;
+	case 21:
+		tmp = haxe_macro_ExprDef.EUntyped(f(_g.e));
+		break;
+	case 22:
+		tmp = haxe_macro_ExprDef.EThrow(f(_g.e));
+		break;
+	case 23:
+		tmp = haxe_macro_ExprDef.ECast(f(_g.e),_g.t);
+		break;
+	case 24:
+		tmp = haxe_macro_ExprDef.EDisplay(f(_g.e),_g.displayKind);
+		break;
+	case 25:
+		tmp = haxe_macro_ExprDef.ETernary(f(_g.econd),f(_g.eif),f(_g.eelse));
+		break;
+	case 26:
+		tmp = haxe_macro_ExprDef.ECheckType(f(_g.e),_g.t);
+		break;
+	case 27:
+		tmp = haxe_macro_ExprDef.EMeta(_g.s,f(_g.e));
+		break;
+	case 28:
+		tmp = haxe_macro_ExprDef.EIs(f(_g.e),_g.t);
+		break;
+	}
+	return { pos : e1, expr : tmp};
+};
+haxe_macro_ExprTools.getValue = function(e) {
+	while(true) {
+		var _g = e.expr;
+		switch(_g._hx_index) {
+		case 0:
+			var _gc = _g.c;
+			switch(_gc._hx_index) {
+			case 0:
+				return Std.parseInt(_gc.v);
+			case 1:
+				return parseFloat(_gc.f);
+			case 2:
+				return _gc.s;
+			case 3:
+				switch(_gc.s) {
+				case "false":
+					return false;
+				case "null":
+					return null;
+				case "true":
+					return true;
+				default:
+					throw haxe_Exception.thrown("Unsupported expression: " + Std.string(e));
+				}
+				break;
+			default:
+				throw haxe_Exception.thrown("Unsupported expression: " + Std.string(e));
+			}
+			break;
+		case 2:
+			var e1 = haxe_macro_ExprTools.getValue(_g.e1);
+			var e2 = haxe_macro_ExprTools.getValue(_g.e2);
+			switch(_g.op._hx_index) {
+			case 0:
+				return e1 + e2;
+			case 1:
+				return e1 * e2;
+			case 2:
+				return e1 / e2;
+			case 3:
+				return e1 - e2;
+			case 5:
+				return e1 == e2;
+			case 6:
+				return e1 != e2;
+			case 7:
+				return e1 > e2;
+			case 8:
+				return e1 >= e2;
+			case 9:
+				return e1 < e2;
+			case 10:
+				return e1 <= e2;
+			case 11:
+				return e1 & e2;
+			case 12:
+				return e1 | e2;
+			case 13:
+				return e1 ^ e2;
+			case 14:
+				if(e1) {
+					return e2;
+				} else {
+					return false;
+				}
+				break;
+			case 15:
+				if(!e1) {
+					return e2;
+				} else {
+					return true;
+				}
+				break;
+			case 16:
+				return e1 << e2;
+			case 17:
+				return e1 >> e2;
+			case 18:
+				return e1 >>> e2;
+			case 19:
+				return e1 % e2;
+			default:
+				throw haxe_Exception.thrown("Unsupported expression: " + Std.string(e));
+			}
+			break;
+		case 4:
+			e = _g.e;
+			continue;
+		case 5:
+			var _gfields = _g.fields;
+			var obj = { };
+			var _g1 = 0;
+			while(_g1 < _gfields.length) {
+				var field = _gfields[_g1];
+				++_g1;
+				obj[field.field] = haxe_macro_ExprTools.getValue(field.expr);
+			}
+			return obj;
+		case 6:
+			var _gvalues = _g.values;
+			var f = haxe_macro_ExprTools.getValue;
+			var result = new Array(_gvalues.length);
+			var _g2 = 0;
+			var _g3 = _gvalues.length;
+			while(_g2 < _g3) {
+				var i = _g2++;
+				result[i] = f(_gvalues[i]);
+			}
+			return result;
+		case 9:
+			if(_g.postFix == false) {
+				var e11 = haxe_macro_ExprTools.getValue(_g.e);
+				switch(_g.op._hx_index) {
+				case 2:
+					return !e11;
+				case 3:
+					return -e11;
+				case 4:
+					return ~e11;
+				default:
+					throw haxe_Exception.thrown("Unsupported expression: " + Std.string(e));
+				}
+			} else {
+				throw haxe_Exception.thrown("Unsupported expression: " + Std.string(e));
+			}
+			break;
+		case 14:
+			var _geelse = _g.eelse;
+			if(_geelse == null) {
+				throw haxe_Exception.thrown("If statements only have a value if the else clause is defined");
+			} else {
+				var econd = haxe_macro_ExprTools.getValue(_g.econd);
+				if(econd) {
+					e = _g.eif;
+					continue;
+				} else {
+					e = _geelse;
+					continue;
+				}
+			}
+			break;
+		case 21:
+			e = _g.e;
+			continue;
+		case 25:
+			var _geelse1 = _g.eelse;
+			if(_geelse1 == null) {
+				throw haxe_Exception.thrown("If statements only have a value if the else clause is defined");
+			} else {
+				var econd1 = haxe_macro_ExprTools.getValue(_g.econd);
+				if(econd1) {
+					e = _g.eif;
+					continue;
+				} else {
+					e = _geelse1;
+					continue;
+				}
+			}
+			break;
+		case 27:
+			e = _g.e;
+			continue;
+		default:
+			throw haxe_Exception.thrown("Unsupported expression: " + Std.string(e));
+		}
+	}
+};
+haxe_macro_ExprTools.opt = function(e,f) {
+	if(e == null) {
+		return null;
+	} else {
+		return f(e);
+	}
+};
+haxe_macro_ExprTools.opt2 = function(e,f) {
+	if(e != null) {
+		f(e);
+	}
+};
+var haxe_macro_ExprArrayTools = function() { };
+$hxClasses["haxe.macro.ExprArrayTools"] = haxe_macro_ExprArrayTools;
+haxe_macro_ExprArrayTools.__name__ = "haxe.macro.ExprArrayTools";
+haxe_macro_ExprArrayTools.map = function(el,f) {
+	var ret = [];
+	var _g = 0;
+	while(_g < el.length) {
+		var e = el[_g];
+		++_g;
+		ret.push(f(e));
+	}
+	return ret;
+};
+haxe_macro_ExprArrayTools.iter = function(el,f) {
+	var _g = 0;
+	while(_g < el.length) {
+		var e = el[_g];
+		++_g;
+		f(e);
+	}
+};
+var haxe_macro_Printer = function(tabString) {
+	if(tabString == null) {
+		tabString = "\t";
+	}
+	this.tabs = "";
+	this.tabString = tabString;
+};
+$hxClasses["haxe.macro.Printer"] = haxe_macro_Printer;
+haxe_macro_Printer.__name__ = "haxe.macro.Printer";
+haxe_macro_Printer.prototype = {
+	tabs: null
+	,tabString: null
+	,printUnop: function(op) {
+		switch(op._hx_index) {
+		case 0:
+			return "++";
+		case 1:
+			return "--";
+		case 2:
+			return "!";
+		case 3:
+			return "-";
+		case 4:
+			return "~";
+		case 5:
+			return "...";
+		}
+	}
+	,printBinop: function(op) {
+		switch(op._hx_index) {
+		case 0:
+			return "+";
+		case 1:
+			return "*";
+		case 2:
+			return "/";
+		case 3:
+			return "-";
+		case 4:
+			return "=";
+		case 5:
+			return "==";
+		case 6:
+			return "!=";
+		case 7:
+			return ">";
+		case 8:
+			return ">=";
+		case 9:
+			return "<";
+		case 10:
+			return "<=";
+		case 11:
+			return "&";
+		case 12:
+			return "|";
+		case 13:
+			return "^";
+		case 14:
+			return "&&";
+		case 15:
+			return "||";
+		case 16:
+			return "<<";
+		case 17:
+			return ">>";
+		case 18:
+			return ">>>";
+		case 19:
+			return "%";
+		case 20:
+			return Std.string(this.printBinop(op.op)) + "=";
+		case 21:
+			return "...";
+		case 22:
+			return "=>";
+		case 23:
+			return "in";
+		case 24:
+			return "??";
+		}
+	}
+	,escapeString: function(s,delim) {
+		return delim + StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(StringTools.replace(s,"\\","\\\\"),"\n","\\n"),"\t","\\t"),"\r","\\r"),"'","\\'"),"\"","\\\"") + delim;
+	}
+	,printFormatString: function(s) {
+		return this.escapeString(s,"'");
+	}
+	,printString: function(s) {
+		return this.escapeString(s,"\"");
+	}
+	,printConstant: function(c) {
+		switch(c._hx_index) {
+		case 0:
+			var _gv = c.v;
+			var _gs = c.s;
+			if(_gs == null) {
+				return _gv;
+			} else {
+				return _gv + _gs;
+			}
+			break;
+		case 1:
+			var _gf = c.f;
+			var _gs = c.s;
+			if(_gs == null) {
+				return _gf;
+			} else {
+				return _gf + _gs;
+			}
+			break;
+		case 2:
+			var _gs = c.s;
+			var _gkind = c.kind;
+			if(_gkind == null) {
+				return this.printString(_gs);
+			} else if(_gkind._hx_index == 1) {
+				return this.printFormatString(_gs);
+			} else {
+				return this.printString(_gs);
+			}
+			break;
+		case 3:
+			return c.s;
+		case 4:
+			return "~/" + c.r + "/" + c.opt;
+		}
+	}
+	,printTypeParam: function(param) {
+		switch(param._hx_index) {
+		case 0:
+			return this.printComplexType(param.t);
+		case 1:
+			return this.printExpr(param.e);
+		}
+	}
+	,printTypePath: function(tp) {
+		var tmp = (tp.pack.length > 0 ? tp.pack.join(".") + "." : "") + tp.name + (tp.sub != null ? "." + tp.sub : "");
+		var tmp1;
+		if(tp.params == null) {
+			tmp1 = "";
+		} else if(tp.params.length > 0) {
+			var _this = tp.params;
+			var f = $bind(this,this.printTypeParam);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp1 = "<" + result.join(", ") + ">";
+		} else {
+			tmp1 = "";
+		}
+		return tmp + tmp1;
+	}
+	,printComplexType: function(ct) {
+		switch(ct._hx_index) {
+		case 0:
+			return this.printTypePath(ct.p);
+		case 1:
+			var _gargs = ct.args;
+			var _gret = ct.ret;
+			var wrapArgumentsInParentheses;
+			if(_gargs.length == 1) {
+				var _ga = _gargs[0];
+				switch(_ga._hx_index) {
+				case 0:
+					wrapArgumentsInParentheses = false;
+					break;
+				case 3:
+					wrapArgumentsInParentheses = false;
+					break;
+				case 5:
+					wrapArgumentsInParentheses = _ga.t._hx_index == 0 ? false : true;
+					break;
+				default:
+					wrapArgumentsInParentheses = true;
+				}
+			} else {
+				wrapArgumentsInParentheses = true;
+			}
+			var f = $bind(this,this.printComplexType);
+			var result = new Array(_gargs.length);
+			var _g = 0;
+			var _g1 = _gargs.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_gargs[i]);
+			}
+			var argStr = result.join(", ");
+			var tmp = _gret._hx_index == 1 ? "(" + Std.string(this.printComplexType(_gret)) + ")" : this.printComplexType(_gret);
+			return (wrapArgumentsInParentheses ? "(" + argStr + ")" : argStr) + " -> " + tmp;
+		case 2:
+			var _gfields = ct.fields;
+			var _g = [];
+			var _g1 = 0;
+			while(_g1 < _gfields.length) {
+				var f = _gfields[_g1];
+				++_g1;
+				_g.push(this.printField(f) + "; ");
+			}
+			return "{ " + _g.join("") + "}";
+		case 3:
+			return "(" + this.printComplexType(ct.t) + ")";
+		case 4:
+			var _gp = ct.p;
+			var _gfields = ct.fields;
+			var _g = [];
+			var _g1 = 0;
+			while(_g1 < _gp.length) {
+				var t = _gp[_g1];
+				++_g1;
+				_g.push("> " + Std.string(this.printTypePath(t)) + ", ");
+			}
+			var types = _g.join("");
+			var _g = [];
+			var _g1 = 0;
+			while(_g1 < _gfields.length) {
+				var f = _gfields[_g1];
+				++_g1;
+				_g.push(this.printField(f) + "; ");
+			}
+			var fields = _g.join("");
+			return "{" + types + fields + "}";
+		case 5:
+			return "?" + this.printComplexType(ct.t);
+		case 6:
+			return ct.n + ":" + this.printComplexType(ct.t);
+		case 7:
+			var _gtl = ct.tl;
+			var f = $bind(this,this.printComplexType);
+			var result = new Array(_gtl.length);
+			var _g = 0;
+			var _g1 = _gtl.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_gtl[i]);
+			}
+			return result.join(" & ");
+		}
+	}
+	,printMetadata: function(meta) {
+		return "@" + meta.name + (meta.params != null && meta.params.length > 0 ? "(" + this.printExprs(meta.params,", ") + ")" : "");
+	}
+	,printAccess: function(access) {
+		switch(access._hx_index) {
+		case 0:
+			return "public";
+		case 1:
+			return "private";
+		case 2:
+			return "static";
+		case 3:
+			return "override";
+		case 4:
+			return "dynamic";
+		case 5:
+			return "inline";
+		case 6:
+			return "macro";
+		case 7:
+			return "final";
+		case 8:
+			return "extern";
+		case 9:
+			return "abstract";
+		case 10:
+			return "overload";
+		case 11:
+			return "enum";
+		}
+	}
+	,printField: function(field) {
+		var tmp = field.doc != null && field.doc != "" ? "/**\n" + this.tabs + this.tabString + StringTools.replace(field.doc,"\n","\n" + this.tabs + this.tabString) + "\n" + this.tabs + "**/\n" + this.tabs : "";
+		var tmp1;
+		if(field.meta != null && field.meta.length > 0) {
+			var _this = field.meta;
+			var f = $bind(this,this.printMetadata);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp1 = result.join("\n" + this.tabs) + ("\n" + this.tabs);
+		} else {
+			tmp1 = "";
+		}
+		var tmp2 = tmp + tmp1;
+		var tmp;
+		if(field.access != null && field.access.length > 0) {
+			var access = field.access;
+			var _this;
+			if(Lambda.has(access,haxe_macro_Access.AFinal)) {
+				var _g = [];
+				var _g1 = 0;
+				while(_g1 < access.length) {
+					var v = access[_g1];
+					++_g1;
+					if(v._hx_index != 7) {
+						_g.push(v);
+					}
+				}
+				_this = _g.concat([haxe_macro_Access.AFinal]);
+			} else {
+				_this = access;
+			}
+			var f = $bind(this,this.printAccess);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp = result.join(" ") + " ";
+		} else {
+			tmp = "";
+		}
+		var tmp1 = tmp2 + tmp;
+		var _g = field.kind;
+		var tmp;
+		switch(_g._hx_index) {
+		case 0:
+			tmp = (field.access != null && Lambda.has(field.access,haxe_macro_Access.AFinal) ? "" : "var ") + ("" + field.name) + this.opt(_g.t,$bind(this,this.printComplexType)," : ") + this.opt(_g.e,$bind(this,this.printExpr)," = ");
+			break;
+		case 1:
+			tmp = "function " + field.name + this.printFunction(_g.f);
+			break;
+		case 2:
+			tmp = "var " + field.name + "(" + _g.get + ", " + _g.set + ")" + this.opt(_g.t,$bind(this,this.printComplexType)," : ") + this.opt(_g.e,$bind(this,this.printExpr)," = ");
+			break;
+		}
+		return tmp1 + tmp;
+	}
+	,printTypeParamDecl: function(tpd) {
+		var tmp;
+		if(tpd.meta != null && tpd.meta.length > 0) {
+			var _this = tpd.meta;
+			var f = $bind(this,this.printMetadata);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp = result.join(" ") + " ";
+		} else {
+			tmp = "";
+		}
+		var tmp1 = tmp + tpd.name;
+		var tmp;
+		if(tpd.params != null && tpd.params.length > 0) {
+			var _this = tpd.params;
+			var f = $bind(this,this.printTypeParamDecl);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp = "<" + result.join(", ") + ">";
+		} else {
+			tmp = "";
+		}
+		var tmp2 = tmp1 + tmp;
+		var tmp;
+		if(tpd.constraints != null && tpd.constraints.length > 0) {
+			var _this = tpd.constraints;
+			var f = $bind(this,this.printComplexType);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp = ":(" + result.join(" & ") + ")";
+		} else {
+			tmp = "";
+		}
+		return tmp2 + tmp + (tpd.defaultType != null ? "=" + this.printComplexType(tpd.defaultType) : "");
+	}
+	,printFunctionArg: function(arg) {
+		return (arg.opt ? "?" : "") + arg.name + this.opt(arg.type,$bind(this,this.printComplexType),":") + this.opt(arg.value,$bind(this,this.printExpr)," = ");
+	}
+	,printFunction: function(func,kind) {
+		var _g = func.args;
+		var skipParentheses = _g.length == 1 && (_g[0].type == null && kind == haxe_macro_FunctionKind.FArrow);
+		var tmp;
+		if(func.params == null) {
+			tmp = "";
+		} else if(func.params.length > 0) {
+			var _this = func.params;
+			var f = $bind(this,this.printTypeParamDecl);
+			var result = new Array(_this.length);
+			var _g = 0;
+			var _g1 = _this.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(_this[i]);
+			}
+			tmp = "<" + result.join(", ") + ">";
+		} else {
+			tmp = "";
+		}
+		var tmp1 = tmp + (skipParentheses ? "" : "(");
+		var _this = func.args;
+		var f = $bind(this,this.printFunctionArg);
+		var result = new Array(_this.length);
+		var _g = 0;
+		var _g1 = _this.length;
+		while(_g < _g1) {
+			var i = _g++;
+			result[i] = f(_this[i]);
+		}
+		return tmp1 + result.join(", ") + (skipParentheses ? "" : ")") + (kind == haxe_macro_FunctionKind.FArrow ? " ->" : "") + this.opt(func.ret,$bind(this,this.printComplexType),":") + this.opt(func.expr,$bind(this,this.printExpr)," ");
+	}
+	,printVar: function(v) {
+		var s = v.name + this.opt(v.type,$bind(this,this.printComplexType),":") + this.opt(v.expr,$bind(this,this.printExpr)," = ");
+		var _g = v.meta;
+		if(_g == null) {
+			return s;
+		} else if(_g.length == 0) {
+			return s;
+		} else {
+			var f = $bind(this,this.printMetadata);
+			var result = new Array(_g.length);
+			var _g1 = 0;
+			var _g2 = _g.length;
+			while(_g1 < _g2) {
+				var i = _g1++;
+				result[i] = f(_g[i]);
+			}
+			return result.join(" ") + " " + s;
+		}
+	}
+	,printObjectFieldKey: function(of) {
+		var _g = of.quotes;
+		if(_g == null) {
+			return of.field;
+		} else {
+			switch(_g._hx_index) {
+			case 0:
+				return of.field;
+			case 1:
+				return "\"" + of.field + "\"";
+			}
+		}
+	}
+	,printObjectField: function(of) {
+		return "" + this.printObjectFieldKey(of) + " : " + Std.string(this.printExpr(of.expr));
+	}
+	,printExpr: function(e) {
+		if(e == null) {
+			return "#NULL";
+		} else {
+			var _g = e.expr;
+			switch(_g._hx_index) {
+			case 0:
+				return this.printConstant(_g.c);
+			case 1:
+				return "" + Std.string(this.printExpr(_g.e1)) + "[" + Std.string(this.printExpr(_g.e2)) + "]";
+			case 2:
+				return "" + Std.string(this.printExpr(_g.e1)) + " " + this.printBinop(_g.op) + " " + Std.string(this.printExpr(_g.e2));
+			case 3:
+				var _ge = _g.e;
+				var _gfield = _g.field;
+				if(_g.kind == haxe_macro_EFieldKind.Safe) {
+					return "" + Std.string(this.printExpr(_ge)) + "?." + _gfield;
+				} else {
+					return "" + Std.string(this.printExpr(_ge)) + "." + _gfield;
+				}
+				break;
+			case 4:
+				return "(" + Std.string(this.printExpr(_g.e)) + ")";
+			case 5:
+				var _gfields = _g.fields;
+				var result = new Array(_gfields.length);
+				var _g1 = 0;
+				var _g2 = _gfields.length;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					result[i] = this.printObjectField(_gfields[i]);
+				}
+				return "{ " + result.join(", ") + " }";
+			case 6:
+				return "[" + this.printExprs(_g.values,", ") + "]";
+			case 7:
+				return "" + Std.string(this.printExpr(_g.e)) + "(" + this.printExprs(_g.params,", ") + ")";
+			case 8:
+				return "new " + this.printTypePath(_g.t) + "(" + this.printExprs(_g.params,", ") + ")";
+			case 9:
+				var _gop = _g.op;
+				var _ge = _g.e;
+				if(_g.postFix) {
+					return this.printExpr(_ge) + this.printUnop(_gop);
+				} else {
+					return this.printUnop(_gop) + this.printExpr(_ge);
+				}
+				break;
+			case 10:
+				var _gvars = _g.vars;
+				if(_gvars.length == 0) {
+					return "var ";
+				} else {
+					var tmp = (_gvars[0].isStatic ? "static " : "") + (_gvars[0].isFinal ? "final " : "var ");
+					var f = $bind(this,this.printVar);
+					var result = new Array(_gvars.length);
+					var _g1 = 0;
+					var _g2 = _gvars.length;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						result[i] = f(_gvars[i]);
+					}
+					return tmp + result.join(", ");
+				}
+				break;
+			case 11:
+				var _gkind = _g.kind;
+				var _gf = _g.f;
+				if(_gkind == null) {
+					return (_gkind != haxe_macro_FunctionKind.FArrow ? "function" : "") + this.printFunction(_gf,_gkind);
+				} else if(_gkind._hx_index == 1) {
+					return (_gkind.inlined ? "inline " : "") + ("function " + _gkind.name) + this.printFunction(_gf);
+				} else {
+					return (_gkind != haxe_macro_FunctionKind.FArrow ? "function" : "") + this.printFunction(_gf,_gkind);
+				}
+				break;
+			case 12:
+				var _gexprs = _g.exprs;
+				if(_gexprs.length == 0) {
+					return "{ }";
+				} else {
+					var old = this.tabs;
+					this.tabs += this.tabString;
+					var s = "{\n" + this.tabs + this.printExprs(_gexprs,";\n" + this.tabs);
+					this.tabs = old;
+					return s + (";\n" + this.tabs + "}");
+				}
+				break;
+			case 13:
+				return "for (" + this.printExpr(_g.it) + ") " + this.printExpr(_g.expr);
+			case 14:
+				var _gecond = _g.econd;
+				var _geif = _g.eif;
+				var _geelse = _g.eelse;
+				if(_geelse == null) {
+					return "if (" + this.printExpr(_gecond) + ") " + this.printExpr(_geif);
+				} else {
+					return "if (" + this.printExpr(_gecond) + ") " + this.printExpr(_geif) + " else " + this.printExpr(_geelse);
+				}
+				break;
+			case 15:
+				var _gecond = _g.econd;
+				var _ge = _g.e;
+				if(_g.normalWhile) {
+					return "while (" + this.printExpr(_gecond) + ") " + this.printExpr(_ge);
+				} else {
+					return "do " + this.printExpr(_ge) + " while (" + this.printExpr(_gecond) + ")";
+				}
+				break;
+			case 16:
+				var _gcases = _g.cases;
+				var _gedef = _g.edef;
+				var old = this.tabs;
+				this.tabs += this.tabString;
+				var s = "switch " + this.printExpr(_g.e) + " {\n" + this.tabs;
+				var result = new Array(_gcases.length);
+				var _g1 = 0;
+				var _g2 = _gcases.length;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					var c = _gcases[i];
+					result[i] = "case " + this.printExprs(c.values,", ") + (c.guard != null ? " if (" + this.printExpr(c.guard) + "):" : ":") + (c.expr != null ? this.opt(c.expr,$bind(this,this.printExpr)) + ";" : "");
+				}
+				var s1 = s + result.join("\n" + this.tabs);
+				if(_gedef != null) {
+					s1 += "\n" + this.tabs + "default:" + (_gedef.expr == null ? "" : this.printExpr(_gedef) + ";");
+				}
+				this.tabs = old;
+				return s1 + ("\n" + this.tabs + "}");
+			case 17:
+				var _gcatches = _g.catches;
+				var tmp = "try " + this.printExpr(_g.e);
+				var result = new Array(_gcatches.length);
+				var _g1 = 0;
+				var _g2 = _gcatches.length;
+				while(_g1 < _g2) {
+					var i = _g1++;
+					var c = _gcatches[i];
+					result[i] = " catch(" + c.name + (c.type == null ? "" : ":" + this.printComplexType(c.type)) + ") " + this.printExpr(c.expr);
+				}
+				return tmp + result.join("");
+			case 18:
+				return "return" + this.opt(_g.e,$bind(this,this.printExpr)," ");
+			case 19:
+				return "break";
+			case 20:
+				return "continue";
+			case 21:
+				return "untyped " + this.printExpr(_g.e);
+			case 22:
+				return "throw " + this.printExpr(_g.e);
+			case 23:
+				var _ge = _g.e;
+				var _gt = _g.t;
+				if(_gt != null) {
+					return "cast(" + this.printExpr(_ge) + ", " + this.printComplexType(_gt) + ")";
+				} else {
+					return "cast " + this.printExpr(_ge);
+				}
+				break;
+			case 24:
+				return "#DISPLAY(" + this.printExpr(_g.e) + ")";
+			case 25:
+				return "" + this.printExpr(_g.econd) + " ? " + this.printExpr(_g.eif) + " : " + this.printExpr(_g.eelse);
+			case 26:
+				return "(" + this.printExpr(_g.e) + " : " + this.printComplexType(_g.t) + ")";
+			case 27:
+				var _gs = _g.s;
+				var _ge = _g.e;
+				if(_gs.name == ":implicitReturn") {
+					var _gexpr = _ge.expr;
+					if(_gexpr._hx_index == 18) {
+						return this.printExpr(_gexpr.e);
+					} else {
+						return this.printMetadata(_gs) + " " + this.printExpr(_ge);
+					}
+				} else {
+					return this.printMetadata(_gs) + " " + this.printExpr(_ge);
+				}
+				break;
+			case 28:
+				return "" + this.printExpr(_g.e) + " is " + this.printComplexType(_g.t);
+			}
+		}
+	}
+	,printExprs: function(el,sep) {
+		var f = $bind(this,this.printExpr);
+		var result = new Array(el.length);
+		var _g = 0;
+		var _g1 = el.length;
+		while(_g < _g1) {
+			var i = _g++;
+			result[i] = f(el[i]);
+		}
+		return result.join(sep);
+	}
+	,printExtension: function(tpl,fields) {
+		var tmp = "{\n" + this.tabs + ">";
+		var f = $bind(this,this.printTypePath);
+		var result = new Array(tpl.length);
+		var _g = 0;
+		var _g1 = tpl.length;
+		while(_g < _g1) {
+			var i = _g++;
+			result[i] = f(tpl[i]);
+		}
+		var tmp1 = tmp + result.join(",\n" + this.tabs + ">") + ",";
+		var tmp;
+		if(fields.length > 0) {
+			var tmp2 = "\n" + this.tabs;
+			var f = $bind(this,this.printField);
+			var result = new Array(fields.length);
+			var _g = 0;
+			var _g1 = fields.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(fields[i]);
+			}
+			tmp = tmp2 + result.join(";\n" + this.tabs) + ";\n}";
+		} else {
+			tmp = "\n}";
+		}
+		return tmp1 + tmp;
+	}
+	,printStructure: function(fields) {
+		if(fields.length == 0) {
+			return "{ }";
+		} else {
+			var tmp = "{\n" + this.tabs;
+			var f = $bind(this,this.printField);
+			var result = new Array(fields.length);
+			var _g = 0;
+			var _g1 = fields.length;
+			while(_g < _g1) {
+				var i = _g++;
+				result[i] = f(fields[i]);
+			}
+			return tmp + result.join(";\n" + this.tabs) + ";\n}";
+		}
+	}
+	,printTypeDefinition: function(t,printPackage) {
+		if(printPackage == null) {
+			printPackage = true;
+		}
+		var old = this.tabs;
+		this.tabs = this.tabString;
+		var str;
+		if(t == null) {
+			str = "#NULL";
+		} else {
+			var str1 = (printPackage && t.pack.length > 0 && t.pack[0] != "" ? "package " + t.pack.join(".") + ";\n" : "") + (t.doc != null && t.doc != "" ? "/**\n" + this.tabString + StringTools.replace(t.doc,"\n","\n" + this.tabString) + "\n**/\n" : "");
+			var str2;
+			if(t.meta != null && t.meta.length > 0) {
+				var _this = t.meta;
+				var f = $bind(this,this.printMetadata);
+				var result = new Array(_this.length);
+				var _g = 0;
+				var _g1 = _this.length;
+				while(_g < _g1) {
+					var i = _g++;
+					result[i] = f(_this[i]);
+				}
+				str2 = result.join(" ") + " ";
+			} else {
+				str2 = "";
+			}
+			var str3 = str1 + str2 + (t.isExtern ? "extern " : "");
+			var _g = t.kind;
+			var str1;
+			switch(_g._hx_index) {
+			case 0:
+				var str2 = "enum " + t.name;
+				var str4;
+				if(t.params != null && t.params.length > 0) {
+					var _this = t.params;
+					var f = $bind(this,this.printTypeParamDecl);
+					var result = new Array(_this.length);
+					var _g1 = 0;
+					var _g2 = _this.length;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						result[i] = f(_this[i]);
+					}
+					str4 = "<" + result.join(", ") + ">";
+				} else {
+					str4 = "";
+				}
+				var str5 = str2 + str4 + " {\n";
+				var _g1 = [];
+				var _g2 = 0;
+				var _g3 = t.fields;
+				while(_g2 < _g3.length) {
+					var field = _g3[_g2];
+					++_g2;
+					var str2 = this.tabs + (field.doc != null && field.doc != "" ? "/**\n" + this.tabs + this.tabString + StringTools.replace(field.doc,"\n","\n" + this.tabs + this.tabString) + "\n" + this.tabs + "**/\n" + this.tabs : "");
+					var str4;
+					if(field.meta != null && field.meta.length > 0) {
+						var _this = field.meta;
+						var f = $bind(this,this.printMetadata);
+						var result = new Array(_this.length);
+						var _g4 = 0;
+						var _g5 = _this.length;
+						while(_g4 < _g5) {
+							var i = _g4++;
+							result[i] = f(_this[i]);
+						}
+						str4 = result.join(" ") + " ";
+					} else {
+						str4 = "";
+					}
+					var str6 = str2 + str4;
+					var _g6 = field.kind;
+					var str7;
+					switch(_g6._hx_index) {
+					case 0:
+						str7 = field.name + this.opt(_g6.t,$bind(this,this.printComplexType),":");
+						break;
+					case 1:
+						str7 = field.name + this.printFunction(_g6.f);
+						break;
+					case 2:
+						throw haxe_Exception.thrown("FProp is invalid for TDEnum.");
+					}
+					_g1.push(str6 + str7 + ";");
+				}
+				str1 = str5 + _g1.join("\n") + "\n}";
+				break;
+			case 1:
+				var str2 = "typedef " + t.name;
+				var str4;
+				if(t.params != null && t.params.length > 0) {
+					var _this = t.params;
+					var f = $bind(this,this.printTypeParamDecl);
+					var result = new Array(_this.length);
+					var _g1 = 0;
+					var _g2 = _this.length;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						result[i] = f(_this[i]);
+					}
+					str4 = "<" + result.join(", ") + ">";
+				} else {
+					str4 = "";
+				}
+				var str5 = str2 + str4 + " = {\n";
+				var _g1 = [];
+				var _g2 = 0;
+				var _g3 = t.fields;
+				while(_g2 < _g3.length) {
+					var f = _g3[_g2];
+					++_g2;
+					_g1.push(this.tabs + this.printField(f) + ";");
+				}
+				str1 = str5 + _g1.join("\n") + "\n}";
+				break;
+			case 2:
+				var _gsuperClass = _g.superClass;
+				var _ginterfaces = _g.interfaces;
+				var _gisInterface = _g.isInterface;
+				var str2 = (_g.isFinal ? "final " : "") + (_g.isAbstract ? "abstract " : "") + (_gisInterface ? "interface " : "class ") + t.name;
+				var str4;
+				if(t.params != null && t.params.length > 0) {
+					var _this = t.params;
+					var f = $bind(this,this.printTypeParamDecl);
+					var result = new Array(_this.length);
+					var _g1 = 0;
+					var _g2 = _this.length;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						result[i] = f(_this[i]);
+					}
+					str4 = "<" + result.join(", ") + ">";
+				} else {
+					str4 = "";
+				}
+				var str5 = str2 + str4 + (_gsuperClass != null ? " extends " + this.printTypePath(_gsuperClass) : "");
+				var str2;
+				if(_ginterfaces != null) {
+					var str4;
+					if(_gisInterface) {
+						var _g1 = [];
+						var _g2 = 0;
+						while(_g2 < _ginterfaces.length) {
+							var tp = _ginterfaces[_g2];
+							++_g2;
+							_g1.push(" extends " + this.printTypePath(tp));
+						}
+						str4 = _g1;
+					} else {
+						var _g1 = [];
+						var _g2 = 0;
+						while(_g2 < _ginterfaces.length) {
+							var tp = _ginterfaces[_g2];
+							++_g2;
+							_g1.push(" implements " + this.printTypePath(tp));
+						}
+						str4 = _g1;
+					}
+					str2 = str4.join("");
+				} else {
+					str2 = "";
+				}
+				var str4 = str5 + str2 + " {\n";
+				var _g1 = [];
+				var _g2 = 0;
+				var _g3 = t.fields;
+				while(_g2 < _g3.length) {
+					var f = _g3[_g2];
+					++_g2;
+					_g1.push(this.tabs + this.printFieldWithDelimiter(f));
+				}
+				str1 = str4 + _g1.join("\n") + "\n}";
+				break;
+			case 3:
+				var _gt = _g.t;
+				var str2 = "typedef " + t.name;
+				var str4;
+				if(t.params != null && t.params.length > 0) {
+					var _this = t.params;
+					var f = $bind(this,this.printTypeParamDecl);
+					var result = new Array(_this.length);
+					var _g1 = 0;
+					var _g2 = _this.length;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						result[i] = f(_this[i]);
+					}
+					str4 = "<" + result.join(", ") + ">";
+				} else {
+					str4 = "";
+				}
+				var str5 = str2 + str4 + " = ";
+				var str2;
+				switch(_gt._hx_index) {
+				case 2:
+					str2 = this.printStructure(_gt.fields);
+					break;
+				case 4:
+					str2 = this.printExtension(_gt.p,_gt.fields);
+					break;
+				default:
+					str2 = this.printComplexType(_gt);
+				}
+				str1 = str5 + str2 + ";";
+				break;
+			case 4:
+				var _gtthis = _g.tthis;
+				var _gflags = _g.flags;
+				var _gfrom = _g.from;
+				var _gto = _g.to;
+				var from = _gfrom == null ? [] : _gfrom.slice();
+				var to = _gto == null ? [] : _gto.slice();
+				var isEnum = false;
+				if(_gflags != null) {
+					var _g1 = 0;
+					while(_g1 < _gflags.length) {
+						var flag = _gflags[_g1];
+						++_g1;
+						switch(flag._hx_index) {
+						case 0:
+							isEnum = true;
+							break;
+						case 1:
+							from.push(flag.ct);
+							break;
+						case 2:
+							to.push(flag.ct);
+							break;
+						}
+					}
+				}
+				var str2 = (isEnum ? "enum " : "") + "abstract " + t.name;
+				var str4;
+				if(t.params != null && t.params.length > 0) {
+					var _this = t.params;
+					var f = $bind(this,this.printTypeParamDecl);
+					var result = new Array(_this.length);
+					var _g1 = 0;
+					var _g2 = _this.length;
+					while(_g1 < _g2) {
+						var i = _g1++;
+						result[i] = f(_this[i]);
+					}
+					str4 = "<" + result.join(", ") + ">";
+				} else {
+					str4 = "";
+				}
+				var str5 = str2 + str4 + (_gtthis == null ? "" : "(" + this.printComplexType(_gtthis) + ")");
+				var _g1 = [];
+				var _g2 = 0;
+				while(_g2 < from.length) {
+					var f = from[_g2];
+					++_g2;
+					_g1.push(" from " + this.printComplexType(f));
+				}
+				var str2 = str5 + _g1.join("");
+				var _g1 = [];
+				var _g2 = 0;
+				while(_g2 < to.length) {
+					var f = to[_g2];
+					++_g2;
+					_g1.push(" to " + this.printComplexType(f));
+				}
+				var str4 = str2 + _g1.join("") + " {\n";
+				var _g1 = [];
+				var _g2 = 0;
+				var _g3 = t.fields;
+				while(_g2 < _g3.length) {
+					var f = _g3[_g2];
+					++_g2;
+					_g1.push(this.tabs + this.printFieldWithDelimiter(f));
+				}
+				str1 = str4 + _g1.join("\n") + "\n}";
+				break;
+			case 5:
+				var _gkind = _g.kind;
+				var _gaccess = _g.access;
+				this.tabs = old;
+				var str2;
+				if(_gaccess != null && _gaccess.length > 0) {
+					var f = $bind(this,this.printAccess);
+					var result = new Array(_gaccess.length);
+					var _g = 0;
+					var _g1 = _gaccess.length;
+					while(_g < _g1) {
+						var i = _g++;
+						result[i] = f(_gaccess[i]);
+					}
+					str2 = result.join(" ") + " ";
+				} else {
+					str2 = "";
+				}
+				var str4;
+				switch(_gkind._hx_index) {
+				case 0:
+					str4 = (_gaccess != null && Lambda.has(_gaccess,haxe_macro_Access.AFinal) ? "" : "var ") + ("" + t.name) + this.opt(_gkind.t,$bind(this,this.printComplexType)," : ") + this.opt(_gkind.e,$bind(this,this.printExpr)," = ") + ";";
+					break;
+				case 1:
+					var _gf = _gkind.f;
+					var str5 = "function " + t.name + this.printFunction(_gf);
+					var _g = _gf.expr;
+					str4 = str5 + (_g == null ? ";" : _g.expr._hx_index == 12 ? "" : ";");
+					break;
+				case 2:
+					str4 = "var " + t.name + "(" + _gkind.get + ", " + _gkind.set + ")" + this.opt(_gkind.t,$bind(this,this.printComplexType)," : ") + this.opt(_gkind.e,$bind(this,this.printExpr)," = ") + ";";
+					break;
+				}
+				str1 = str2 + str4;
+				break;
+			}
+			str = str3 + str1;
+		}
+		this.tabs = old;
+		return str;
+	}
+	,printFieldWithDelimiter: function(f) {
+		var tmp = this.printField(f);
+		var _g = f.kind;
+		var tmp1;
+		switch(_g._hx_index) {
+		case 0:
+			tmp1 = ";";
+			break;
+		case 1:
+			var _gexpr = _g.f.expr;
+			tmp1 = _gexpr == null ? ";" : _gexpr.expr._hx_index == 12 ? "" : ";";
+			break;
+		case 2:
+			tmp1 = ";";
+			break;
+		}
+		return tmp + tmp1;
+	}
+	,opt: function(v,f,prefix) {
+		if(prefix == null) {
+			prefix = "";
+		}
+		if(v == null) {
+			return "";
+		} else {
+			return prefix + f(v);
+		}
+	}
+	,printExprWithPositions: function(e) {
+		var _gthis = this;
+		var buffer_b = "";
+		var format4 = function(i) {
+			return StringTools.lpad(i == null ? "null" : "" + i," ",4);
+		};
+		var loop = null;
+		loop = function(tabs,e) {
+			while(true) {
+				var _ge = [e];
+				var _gtabs = [tabs];
+				var add = (function(_ge,_gtabs) {
+					return function(s,p) {
+						if(p == null) {
+							p = _ge[0].pos;
+						}
+						var p = _ge[0].pos;
+						buffer_b += Std.string("" + format4(p.min) + "-" + format4(p.max) + " " + _gtabs[0] + s + "\n");
+					};
+				})(_ge,_gtabs);
+				var loopI = (function(_gtabs) {
+					return function(e) {
+						loop(_gtabs[0] + _gthis.tabString,e);
+					};
+				})(_gtabs);
+				var _g = _ge[0].expr;
+				switch(_g._hx_index) {
+				case 0:
+					add(_gthis.printConstant(_g.c));
+					break;
+				case 1:
+					add("EArray");
+					loopI(_g.e1);
+					loopI(_g.e2);
+					break;
+				case 2:
+					add("EBinop " + _gthis.printBinop(_g.op));
+					loopI(_g.e1);
+					loopI(_g.e2);
+					break;
+				case 3:
+					var _gkind = _g.kind;
+					var kind = _gkind;
+					if(_gkind == null) {
+						kind = haxe_macro_EFieldKind.Normal;
+					}
+					add("EField " + _g.field + " (" + $hxEnums[kind.__enum__].__constructs__[kind._hx_index]._hx_name + ")");
+					loopI(_g.e);
+					break;
+				case 4:
+					add("EParenthesis");
+					loopI(_g.e);
+					break;
+				case 5:
+					var _gfields = _g.fields;
+					add("EObjectDecl");
+					var _g1 = 0;
+					while(_g1 < _gfields.length) {
+						var field = _gfields[_g1];
+						++_g1;
+						add(field.field);
+						loopI(field.expr);
+					}
+					break;
+				case 6:
+					add("EArrayDecl");
+					Lambda.iter(_g.values,loopI);
+					break;
+				case 7:
+					add("ECall");
+					loopI(_g.e);
+					Lambda.iter(_g.params,loopI);
+					break;
+				case 8:
+					add("ENew " + _gthis.printTypePath(_g.t));
+					Lambda.iter(_g.params,loopI);
+					break;
+				case 9:
+					add("EUnop " + _gthis.printUnop(_g.op));
+					loopI(_g.e);
+					break;
+				case 10:
+					var _gvars = _g.vars;
+					add("EVars");
+					var _g2 = 0;
+					while(_g2 < _gvars.length) {
+						var v = _gvars[_g2];
+						++_g2;
+						if(v.expr != null) {
+							add(v.name);
+							loopI(v.expr);
+						}
+					}
+					break;
+				case 11:
+					var _gf = _g.f;
+					add("EFunction");
+					if(_gf.expr != null) {
+						loopI(_gf.expr);
+					}
+					break;
+				case 12:
+					add("EBlock");
+					Lambda.iter(_g.exprs,loopI);
+					break;
+				case 13:
+					add("EFor");
+					loopI(_g.it);
+					loopI(_g.expr);
+					break;
+				case 14:
+					var _geelse = _g.eelse;
+					add("EIf");
+					loopI(_g.econd);
+					loopI(_g.eif);
+					if(_geelse != null) {
+						loopI(_geelse);
+					}
+					break;
+				case 15:
+					add("EWhile");
+					loopI(_g.econd);
+					loopI(_g.e);
+					break;
+				case 16:
+					var _gcases = _g.cases;
+					var _gedef = _g.edef;
+					add("ESwitch");
+					loopI(_g.e);
+					var _g3 = 0;
+					while(_g3 < _gcases.length) {
+						var c = _gcases[_g3];
+						++_g3;
+						var _g4 = 0;
+						var _g5 = c.values;
+						while(_g4 < _g5.length) {
+							var pat = _g5[_g4];
+							++_g4;
+							loop(_gtabs[0] + _gthis.tabString + _gthis.tabString,pat);
+						}
+						if(c.expr != null) {
+							loop(_gtabs[0] + _gthis.tabString + _gthis.tabString + _gthis.tabString,c.expr);
+						}
+					}
+					if(_gedef != null) {
+						tabs = _gtabs[0] + _gthis.tabString + _gthis.tabString + _gthis.tabString;
+						e = _gedef;
+						continue;
+					}
+					break;
+				case 17:
+					var _gcatches = _g.catches;
+					add("ETry");
+					loopI(_g.e);
+					var _g6 = 0;
+					while(_g6 < _gcatches.length) {
+						var c1 = _gcatches[_g6];
+						++_g6;
+						loop(_gtabs[0] + _gthis.tabString + _gthis.tabString,c1.expr);
+					}
+					break;
+				case 18:
+					var _ge1 = _g.e;
+					add("EReturn");
+					if(_ge1 != null) {
+						loopI(_ge1);
+					}
+					break;
+				case 19:
+					add("EBreak");
+					break;
+				case 20:
+					add("EContinue");
+					break;
+				case 21:
+					add("EUntyped");
+					loopI(_g.e);
+					break;
+				case 22:
+					add("EThrow");
+					loopI(_g.e);
+					break;
+				case 23:
+					add("ECast");
+					loopI(_g.e);
+					break;
+				case 24:
+					add("EDisplay");
+					loopI(_g.e);
+					break;
+				case 25:
+					add("ETernary");
+					loopI(_g.econd);
+					loopI(_g.eif);
+					loopI(_g.eelse);
+					break;
+				case 26:
+					add("ECheckType");
+					loopI(_g.e);
+					break;
+				case 27:
+					add("EMeta " + _gthis.printMetadata(_g.s));
+					loopI(_g.e);
+					break;
+				case 28:
+					add("EIs");
+					loopI(_g.e);
+					break;
+				}
+				return;
+			}
+		};
+		loop("",e);
+		return buffer_b;
+	}
+	,__class__: haxe_macro_Printer
+};
 var haxe_macro_Type = $hxEnums["haxe.macro.Type"] = { __ename__:"haxe.macro.Type",__constructs__:null
 	,TMono: ($_=function(t) { return {_hx_index:0,t:t,__enum__:"haxe.macro.Type",toString:$estr,__params__:function(){ return [this.t];}}; },$_._hx_name="TMono",$_)
 	,TEnum: ($_=function(t,params) { return {_hx_index:1,t:t,params:params,__enum__:"haxe.macro.Type",toString:$estr,__params__:function(){ return [this.t,this.params];}}; },$_._hx_name="TEnum",$_)
@@ -15967,10 +21086,13 @@ js_node_KeyValue.get_key = function(this1) {
 js_node_KeyValue.get_value = function(this1) {
 	return this1[1];
 };
+var js_node_Module = require("module");
 var js_node_Path = require("path");
 var js_node_events_EventEmitter = require("events").EventEmitter;
 var js_node_Stream = require("stream");
+var js_node_Timers = require("timers");
 var js_node_Tls = require("tls");
+var js_node_Util = require("util");
 var js_node_buffer_Buffer = require("buffer").Buffer;
 var js_node_buffer__$Buffer_Helper = function() { };
 $hxClasses["js.node.buffer._Buffer.Helper"] = js_node_buffer__$Buffer_Helper;
@@ -15985,6 +21107,7 @@ js_node_buffer__$Buffer_Helper.bytesOfBuffer = function(b) {
 	return o;
 };
 var js_node_buffer__$Buffer_BufferModule = require("buffer");
+var js_node_console_Console = require("console").Console;
 var js_node_stream_Readable = require("stream").Readable;
 var js_node_stream_Writable = require("stream").Writable;
 var js_node_http_Agent = require("http").Agent;
@@ -16021,10 +21144,676 @@ js_node_url_URLSearchParamsEntry.get_name = function(this1) {
 js_node_url_URLSearchParamsEntry.get_value = function(this1) {
 	return this1[1];
 };
+var logging_ILogAdaptor = function() { };
+$hxClasses["logging.ILogAdaptor"] = logging_ILogAdaptor;
+logging_ILogAdaptor.__name__ = "logging.ILogAdaptor";
+logging_ILogAdaptor.__isInterface__ = true;
+logging_ILogAdaptor.prototype = {
+	get_config: null
+	,config: null
+	,processLogData: null
+	,__class__: logging_ILogAdaptor
+	,__properties__: {get_config:"get_config"}
+};
+var logging_ILogLineFormatter = function() { };
+$hxClasses["logging.ILogLineFormatter"] = logging_ILogLineFormatter;
+logging_ILogLineFormatter.__name__ = "logging.ILogLineFormatter";
+logging_ILogLineFormatter.__isInterface__ = true;
+logging_ILogLineFormatter.prototype = {
+	format: null
+	,formatObject: null
+	,__class__: logging_ILogLineFormatter
+};
+var logging_LogManager = function() {
+	this._shouldLogWarnings = null;
+	this._shouldLogData = null;
+	this._shouldLogDebug = null;
+	this._started = false;
+	this.StartDelay = 50;
+	this._adaptors = [];
+	this._queue = [];
+};
+$hxClasses["logging.LogManager"] = logging_LogManager;
+logging_LogManager.__name__ = "logging.LogManager";
+logging_LogManager.__properties__ = {get_instance:"get_instance"};
+logging_LogManager.instance = null;
+logging_LogManager.get_instance = function() {
+	if(logging_LogManager._instance == null) {
+		logging_LogManager._instance = new logging_LogManager();
+	}
+	return logging_LogManager._instance;
+};
+logging_LogManager.prototype = {
+	_queue: null
+	,_adaptors: null
+	,StartDelay: null
+	,_started: null
+	,start: function() {
+		var _gthis = this;
+		if(this._started == true) {
+			return;
+		}
+		this._started = true;
+		haxe_Timer.delay(function() {
+			if(_gthis._adaptors.length == 0) {
+				_gthis._adaptors.push(new logging_adaptors_NullLogAdaptor());
+			}
+			_gthis.processQueue();
+		},this.StartDelay);
+	}
+	,log: function(data) {
+		this._queue.push(data);
+		this.processQueue();
+	}
+	,processQueue: function() {
+		if(this._adaptors.length == 0) {
+			return;
+		}
+		while(this._queue.length > 0) {
+			var data = this._queue.shift();
+			this.processLogData(data);
+		}
+	}
+	,_shouldLogDebug: null
+	,shouldLogDebug: null
+	,get_shouldLogDebug: function() {
+		if(this._shouldLogDebug != null) {
+			return this._shouldLogDebug;
+		}
+		this._shouldLogDebug = this.willRespondToLevel("Debug");
+		return this._shouldLogDebug;
+	}
+	,_shouldLogData: null
+	,shouldLogData: null
+	,get_shouldLogData: function() {
+		if(this._shouldLogData != null) {
+			return this._shouldLogData;
+		}
+		this._shouldLogData = this.willRespondToLevel("Data");
+		return this._shouldLogData;
+	}
+	,_shouldLogWarnings: null
+	,shouldLogWarnings: null
+	,get_shouldLogWarnings: function() {
+		if(this._shouldLogWarnings != null) {
+			return this._shouldLogWarnings;
+		}
+		this._shouldLogWarnings = this.willRespondToLevel("Warning");
+		return this._shouldLogWarnings;
+	}
+	,willRespondToLevel: function(level) {
+		var willRespond = false;
+		var _g = 0;
+		var _g1 = this._adaptors;
+		while(_g < _g1.length) {
+			var a = _g1[_g];
+			++_g;
+			if(a.get_config().disabled) {
+				continue;
+			}
+			if(a.get_config().levels == null) {
+				willRespond = true;
+				continue;
+			}
+			if(a.get_config().levels.indexOf(level) != -1) {
+				willRespond = true;
+				break;
+			}
+		}
+		return willRespond;
+	}
+	,processLogData: function(data) {
+		var _g = 0;
+		var _g1 = this._adaptors;
+		while(_g < _g1.length) {
+			var a = _g1[_g];
+			++_g;
+			var allow = !a.get_config().disabled;
+			if(allow && a.get_config().levels != null) {
+				if(a.get_config().levels.indexOf(data.level) == -1) {
+					allow = false;
+				}
+			}
+			if(allow && data.ref != null && a.get_config().packages != null) {
+				var _g2 = 0;
+				var _g3 = a.get_config().packages;
+				while(_g2 < _g3.length) {
+					var p = _g3[_g2];
+					++_g2;
+					if(!StringTools.startsWith(data.ref,p)) {
+						allow = false;
+						break;
+					}
+				}
+			}
+			if(allow == true) {
+				a.processLogData(data);
+			}
+		}
+	}
+	,addAdaptor: function(adaptor) {
+		if(adaptor.get_config().formatter == null) {
+			adaptor.get_config().formatter = new logging_formatters_DefaultFormatter();
+		}
+		this._adaptors.push(adaptor);
+		this._shouldLogDebug = null;
+		this._shouldLogWarnings = null;
+		this.start();
+	}
+	,clearAdaptors: function() {
+		this._adaptors = [];
+		this._adaptors.push(new logging_adaptors_NullLogAdaptor());
+	}
+	,__class__: logging_LogManager
+	,__properties__: {get_shouldLogWarnings:"get_shouldLogWarnings",get_shouldLogData:"get_shouldLogData",get_shouldLogDebug:"get_shouldLogDebug"}
+};
+var logging_adaptors_NullLogAdaptor = function() {
+	this._config = { };
+};
+$hxClasses["logging.adaptors.NullLogAdaptor"] = logging_adaptors_NullLogAdaptor;
+logging_adaptors_NullLogAdaptor.__name__ = "logging.adaptors.NullLogAdaptor";
+logging_adaptors_NullLogAdaptor.__interfaces__ = [logging_ILogAdaptor];
+logging_adaptors_NullLogAdaptor.prototype = {
+	_config: null
+	,config: null
+	,get_config: function() {
+		return this._config;
+	}
+	,processLogData: function(data) {
+	}
+	,__class__: logging_adaptors_NullLogAdaptor
+	,__properties__: {get_config:"get_config"}
+};
+var logging_formatters_DefaultFormatter = function() {
+};
+$hxClasses["logging.formatters.DefaultFormatter"] = logging_formatters_DefaultFormatter;
+logging_formatters_DefaultFormatter.__name__ = "logging.formatters.DefaultFormatter";
+logging_formatters_DefaultFormatter.__interfaces__ = [logging_ILogLineFormatter];
+logging_formatters_DefaultFormatter.prototype = {
+	format: function(data,buffer) {
+		buffer.b = (buffer.b += Std.string(data.timestamp)) + " > ";
+		buffer.b = (buffer.b += Std.string(StringTools.rpad((js_Boot.__cast(data.level , String)).toUpperCase()," ",11))) + " > ";
+		if(data.ref != null) {
+			buffer.b = (buffer.b += Std.string(data.ref)) + " > ";
+		}
+		if(data.instanceId != null) {
+			buffer.b = (buffer.b += Std.string(data.instanceId)) + " > ";
+		}
+		if(data.message != null) {
+			buffer.b += Std.string(data.message);
+		}
+	}
+	,formatObject: function(obj) {
+		if(obj == null) {
+			return "";
+		}
+		var _g = Type.typeof(obj);
+		if(_g._hx_index == 6) {
+			if(_g.c == haxe_ds_StringMap) {
+				var o = { };
+				var sm = js_Boot.__cast(obj , haxe_ds_StringMap);
+				var h = sm.h;
+				var _g_keys = Object.keys(h);
+				var _g_length = _g_keys.length;
+				var _g_current = 0;
+				while(_g_current < _g_length) {
+					var key = _g_keys[_g_current++];
+					o[key] = sm.h[key];
+				}
+				return JSON.stringify(o);
+			}
+		}
+		if(obj == null) {
+			return "null";
+		} else {
+			return Std.string(obj);
+		}
+	}
+	,__class__: logging_formatters_DefaultFormatter
+};
+var mysql_MySqlError = function(name,message) {
+	this.name = name;
+	this.message = message;
+};
+$hxClasses["mysql.MySqlError"] = mysql_MySqlError;
+mysql_MySqlError.__name__ = "mysql.MySqlError";
+mysql_MySqlError.prototype = {
+	name: null
+	,message: null
+	,__class__: mysql_MySqlError
+};
+var mysql_MySqlResult = function(connection,data) {
+	this.connection = connection;
+	this.data = data;
+};
+$hxClasses["mysql.MySqlResult"] = mysql_MySqlResult;
+mysql_MySqlResult.__name__ = "mysql.MySqlResult";
+mysql_MySqlResult.prototype = {
+	connection: null
+	,data: null
+	,__class__: mysql_MySqlResult
+};
+var mysql_externs_nodejs_Connection = require("mysql2").Connection;
+var mysql_externs_nodejs_MySql2 = require("mysql2");
+var mysql_impl_DatabaseConnectionBase = function(details) {
+	this._cachedCalls = [];
+	this.replayQueriesOnReconnection = false;
+	this.autoReconnectIntervalMS = 1000;
+	this.autoReconnect = false;
+	this.connectionDetails = null;
+	this.connectionDetails = details;
+	if(this.connectionDetails.port == null) {
+		this.connectionDetails.port = 3306;
+	}
+};
+$hxClasses["mysql.impl.DatabaseConnectionBase"] = mysql_impl_DatabaseConnectionBase;
+mysql_impl_DatabaseConnectionBase.__name__ = "mysql.impl.DatabaseConnectionBase";
+mysql_impl_DatabaseConnectionBase.prototype = {
+	connectionDetails: null
+	,autoReconnect: null
+	,autoReconnectIntervalMS: null
+	,replayQueriesOnReconnection: null
+	,open: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var c = js_Boot.getClass(_gthis);
+			reject(new mysql_MySqlError("not implemented","function \"" + c.__name__ + "::open\" not implemented"));
+		});
+	}
+	,exec: function(sql) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var c = js_Boot.getClass(_gthis);
+			reject(new mysql_MySqlError("not implemented","function \"" + c.__name__ + "::exec\" not implemented"));
+		});
+	}
+	,get: function(sql,param) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var c = js_Boot.getClass(_gthis);
+			reject(new mysql_MySqlError("not implemented","function \"" + c.__name__ + "::get\" not implemented"));
+		});
+	}
+	,query: function(sql,param) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var c = js_Boot.getClass(_gthis);
+			reject(new mysql_MySqlError("not implemented","function \"" + c.__name__ + "::query\" not implemented"));
+		});
+	}
+	,all: function(sql,param) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var c = js_Boot.getClass(_gthis);
+			reject(new mysql_MySqlError("not implemented","function \"" + c.__name__ + "::all\" not implemented"));
+		});
+	}
+	,close: function() {
+	}
+	,checkForDisconnection: function(error,call,sql,param,resolve,reject) {
+		if(!this.autoReconnect) {
+			return false;
+		}
+		var isDisconnectedError = false;
+		if(error.toLowerCase() == "can't add new command when connection is in closed state") {
+			isDisconnectedError = true;
+		} else if(error.toLowerCase().indexOf("failed to send packet") != -1) {
+			isDisconnectedError = true;
+		}
+		if(isDisconnectedError) {
+			this.cacheCall({ call : call, sql : sql, param : param, resolve : resolve, reject : reject});
+			haxe_Timer.delay($bind(this,this.attemptReconnect),this.autoReconnectIntervalMS);
+			return true;
+		}
+		return false;
+	}
+	,_cachedCalls: null
+	,cacheCall: function(item) {
+		if(!this.replayQueriesOnReconnection) {
+			return;
+		}
+		this._cachedCalls.push(item);
+	}
+	,attemptReconnect: function() {
+		var _gthis = this;
+		thenshim_Promise.then(this.open(),function(_) {
+			_gthis.replayCachedCalls(_gthis._cachedCalls);
+		},function(error) {
+			return haxe_Timer.delay($bind(_gthis,_gthis.attemptReconnect),_gthis.autoReconnectIntervalMS);
+		});
+	}
+	,replayCachedCalls: function(cachedCalls) {
+		var _gthis = this;
+		if(cachedCalls.length == 0) {
+			return;
+		}
+		var item = cachedCalls.shift();
+		switch(item.call._hx_index) {
+		case 0:
+			thenshim_Promise.then(this.exec(item.sql),function(result) {
+				item.resolve(result);
+				_gthis.replayCachedCalls(cachedCalls);
+			},function(error) {
+				item.reject(error);
+				_gthis.replayCachedCalls(cachedCalls);
+			});
+			break;
+		case 1:
+			thenshim_Promise.then(this.get(item.sql,item.param),function(result) {
+				item.resolve(result);
+				_gthis.replayCachedCalls(cachedCalls);
+			},function(error) {
+				item.reject(error);
+				_gthis.replayCachedCalls(cachedCalls);
+			});
+			break;
+		case 2:
+			thenshim_Promise.then(this.query(item.sql,item.param),function(result) {
+				item.resolve(result);
+				_gthis.replayCachedCalls(cachedCalls);
+			},function(error) {
+				item.reject(error);
+				_gthis.replayCachedCalls(cachedCalls);
+			});
+			break;
+		case 3:
+			thenshim_Promise.then(this.all(item.sql,item.param),function(result) {
+				item.resolve(result);
+				_gthis.replayCachedCalls(cachedCalls);
+			},function(error) {
+				item.reject(error);
+				_gthis.replayCachedCalls(cachedCalls);
+			});
+			break;
+		}
+	}
+	,__class__: mysql_impl_DatabaseConnectionBase
+};
+var mysql_impl__$DatabaseConnectionBase_CacheCall = $hxEnums["mysql.impl._DatabaseConnectionBase.CacheCall"] = { __ename__:"mysql.impl._DatabaseConnectionBase.CacheCall",__constructs__:null
+	,CALL_EXEC: {_hx_name:"CALL_EXEC",_hx_index:0,__enum__:"mysql.impl._DatabaseConnectionBase.CacheCall",toString:$estr}
+	,CALL_GET: {_hx_name:"CALL_GET",_hx_index:1,__enum__:"mysql.impl._DatabaseConnectionBase.CacheCall",toString:$estr}
+	,CALL_QUERY: {_hx_name:"CALL_QUERY",_hx_index:2,__enum__:"mysql.impl._DatabaseConnectionBase.CacheCall",toString:$estr}
+	,CALL_ALL: {_hx_name:"CALL_ALL",_hx_index:3,__enum__:"mysql.impl._DatabaseConnectionBase.CacheCall",toString:$estr}
+};
+mysql_impl__$DatabaseConnectionBase_CacheCall.__constructs__ = [mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_EXEC,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_GET,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_QUERY,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_ALL];
+mysql_impl__$DatabaseConnectionBase_CacheCall.__empty_constructs__ = [mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_EXEC,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_GET,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_QUERY,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_ALL];
+var mysql_impl_nodejs_DatabaseConnection = function(details) {
+	this._nativeConnection = null;
+	mysql_impl_DatabaseConnectionBase.call(this,details);
+};
+$hxClasses["mysql.impl.nodejs.DatabaseConnection"] = mysql_impl_nodejs_DatabaseConnection;
+mysql_impl_nodejs_DatabaseConnection.__name__ = "mysql.impl.nodejs.DatabaseConnection";
+mysql_impl_nodejs_DatabaseConnection.__super__ = mysql_impl_DatabaseConnectionBase;
+mysql_impl_nodejs_DatabaseConnection.prototype = $extend(mysql_impl_DatabaseConnectionBase.prototype,{
+	_nativeConnection: null
+	,open: function() {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = mysql_impl_nodejs_DatabaseConnection.log;
+			var data = { host : _gthis.connectionDetails.host, user : _gthis.connectionDetails.user, password : _gthis.connectionDetails.pass, database : _gthis.connectionDetails.database, rowsAsArray : false};
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Debug", message : "creating connection:", data : data, ref : _this._ref, instanceId : _this._instanceId});
+			_gthis._nativeConnection = mysql_externs_nodejs_MySql2.createConnection({ host : _gthis.connectionDetails.host, user : _gthis.connectionDetails.user, password : _gthis.connectionDetails.pass, database : _gthis.connectionDetails.database, rowsAsArray : false});
+			_gthis._nativeConnection.connect(function(error) {
+				if(error != null) {
+					reject(new mysql_MySqlError("Error",error.message));
+					return;
+				}
+				resolve(new mysql_MySqlResult(_gthis,true));
+			});
+		});
+	}
+	,exec: function(sql) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = mysql_impl_nodejs_DatabaseConnection.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Data", message : "exec:", data : sql, ref : _this._ref, instanceId : _this._instanceId});
+			_gthis._nativeConnection.execute(sql,function(error,rows,fields) {
+				if(error != null) {
+					if(!_gthis.checkForDisconnection(error.message,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_EXEC,sql,null,resolve,reject)) {
+						reject(new mysql_MySqlError("Error",error.message));
+					}
+					return;
+				}
+				resolve(new mysql_MySqlResult(_gthis,true));
+			});
+		});
+	}
+	,get: function(sql,param) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = mysql_impl_nodejs_DatabaseConnection.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Data", message : "get:", data : [sql,param], ref : _this._ref, instanceId : _this._instanceId});
+			_gthis._nativeConnection.execute(sql,_gthis.params(param),function(error,rows,fields) {
+				if(error != null) {
+					if(!_gthis.checkForDisconnection(error.message,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_GET,sql,param,resolve,reject)) {
+						reject(new mysql_MySqlError("Error",error.message));
+					}
+					return;
+				}
+				var result = null;
+				if(((rows) instanceof Array)) {
+					result = rows[0];
+				} else {
+					result = rows;
+				}
+				_gthis.convertBuffersToBytes(rows);
+				resolve(new mysql_MySqlResult(_gthis,result));
+			});
+		});
+	}
+	,query: function(sql,param) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = mysql_impl_nodejs_DatabaseConnection.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Data", message : "query:", data : [sql,param], ref : _this._ref, instanceId : _this._instanceId});
+			_gthis._nativeConnection.query(sql,_gthis.params(param),function(error,rows,fields) {
+				if(error != null) {
+					if(!_gthis.checkForDisconnection(error.message,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_QUERY,sql,param,resolve,reject)) {
+						reject(new mysql_MySqlError("Error",error.message));
+					}
+					return;
+				}
+				_gthis.convertBuffersToBytes(rows);
+				resolve(new mysql_MySqlResult(_gthis,rows));
+			});
+		});
+	}
+	,all: function(sql,param) {
+		var _gthis = this;
+		return thenshim_Promise._new(function(resolve,reject) {
+			var _this = mysql_impl_nodejs_DatabaseConnection.log;
+			logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Data", message : "all:", data : [sql,param], ref : _this._ref, instanceId : _this._instanceId});
+			_gthis._nativeConnection.execute(sql,_gthis.params(param),function(error,rows,fields) {
+				if(error != null) {
+					if(!_gthis.checkForDisconnection(error.message,mysql_impl__$DatabaseConnectionBase_CacheCall.CALL_ALL,sql,param,resolve,reject)) {
+						reject(new mysql_MySqlError("Error",error.message));
+					}
+					return;
+				}
+				if(rows == null) {
+					resolve(new mysql_MySqlResult(_gthis,[]));
+				}
+				_gthis.convertBuffersToBytes(rows);
+				resolve(new mysql_MySqlResult(_gthis,rows));
+			});
+		});
+	}
+	,close: function() {
+		this._nativeConnection.end();
+	}
+	,params: function(param) {
+		var _g = Type.typeof(param);
+		switch(_g._hx_index) {
+		case 0:
+			return null;
+		case 6:
+			if(_g.c == Array) {
+				return param;
+			} else {
+				return [param];
+			}
+			break;
+		default:
+			return [param];
+		}
+	}
+	,convertBuffersToBytes: function(data) {
+		if(((data) instanceof Array)) {
+			var array = data;
+			var _g = 0;
+			while(_g < array.length) {
+				var item = array[_g];
+				++_g;
+				this.convertBuffersToBytes(item);
+			}
+		} else {
+			var _g = 0;
+			var _g1 = Reflect.fields(data);
+			while(_g < _g1.length) {
+				var f = _g1[_g];
+				++_g;
+				var v = Reflect.field(data,f);
+				if(((v) instanceof js_node_buffer_Buffer)) {
+					var buffer = v;
+					var bytes = js_node_buffer__$Buffer_Helper.bytesOfBuffer(buffer);
+					data[f] = bytes;
+				}
+			}
+		}
+	}
+	,__class__: mysql_impl_nodejs_DatabaseConnection
+});
 var node_buffer_Buffer = require("buffer").Buffer;
 var node_$html_$parser_Node = require("node-html-parser").Node;
 var node_$html_$parser_HTMLElement = require("node-html-parser").HTMLElement;
 var node_$html_$parser_NodeType = require("node-html-parser").NodeType;
+var promises_PromiseUtils = function() { };
+$hxClasses["promises.PromiseUtils"] = promises_PromiseUtils;
+promises_PromiseUtils.__name__ = "promises.PromiseUtils";
+promises_PromiseUtils.runSequentially = function(promises,failFast) {
+	if(failFast == null) {
+		failFast = true;
+	}
+	return thenshim_Promise._new(function(resolve,reject) {
+		var results = [];
+		promises_PromiseUtils._runSequentially(promises.slice(),failFast,results,resolve,reject);
+	});
+};
+promises_PromiseUtils.runAll = function(promises,failFast,excludeFailures) {
+	if(excludeFailures == null) {
+		excludeFailures = false;
+	}
+	if(failFast == null) {
+		failFast = false;
+	}
+	return thenshim_Promise._new(function(resolve,reject) {
+		if(promises.length == 0) {
+			resolve([]);
+			return;
+		}
+		var results = [];
+		var count = promises.length;
+		var _g = 0;
+		while(_g < promises.length) {
+			var fn = promises[_g];
+			++_g;
+			var p = fn();
+			thenshim_Promise.then(p,function(result) {
+				count -= 1;
+				results.push(result);
+				if(count == 0) {
+					resolve(results);
+				}
+			},function(e) {
+				count -= 1;
+				if(!excludeFailures) {
+					results.push(e);
+				}
+				if(failFast == true) {
+					reject(e);
+				} else if(count == 0) {
+					resolve(results);
+				}
+			});
+		}
+	});
+};
+promises_PromiseUtils.runAllMapped = function(promises,failFast,excludeFailures) {
+	if(excludeFailures == null) {
+		excludeFailures = false;
+	}
+	if(failFast == null) {
+		failFast = false;
+	}
+	return thenshim_Promise._new(function(resolve,reject) {
+		var results = new haxe_ds_StringMap();
+		if(promises.length == 0) {
+			resolve(results);
+			return;
+		}
+		var count = promises.length;
+		var _g = 0;
+		while(_g < promises.length) {
+			var item = promises[_g];
+			++_g;
+			var fn = item.promise;
+			var id = [item.id];
+			var p = fn();
+			thenshim_Promise.then(p,(function(id) {
+				return function(result) {
+					count -= 1;
+					results.h[id[0]] = result;
+					if(count == 0) {
+						resolve(results);
+					}
+				};
+			})(id),(function(id) {
+				return function(e) {
+					count -= 1;
+					if(!excludeFailures) {
+						results.h[id[0]] = e;
+					}
+					if(failFast == true) {
+						reject(e);
+					} else if(count == 0) {
+						resolve(results);
+					}
+				};
+			})(id));
+		}
+	});
+};
+promises_PromiseUtils._runSequentially = function(list,failFast,results,resolve,reject) {
+	if(list.length == 0) {
+		resolve(results);
+		return;
+	}
+	var fn = list.shift();
+	var p = fn();
+	thenshim_Promise.then(p,function(result) {
+		results.push(result);
+		promises_PromiseUtils._runSequentially(list,failFast,results,resolve,reject);
+	},function(e) {
+		if(failFast == true) {
+			reject(e);
+		} else {
+			results.push(e);
+			promises_PromiseUtils._runSequentially(list,failFast,results,resolve,reject);
+		}
+	});
+};
+promises_PromiseUtils.wait = function(amountMS) {
+	return thenshim_Promise._new(function(resolve,reject) {
+		haxe_Timer.delay(function() {
+			resolve(true);
+		},amountMS);
+	});
+};
+promises_PromiseUtils.promisify = function(param) {
+	return thenshim_Promise._new(function(resolve,_) {
+		resolve(param);
+	});
+};
 var queues_IQueue = function() { };
 $hxClasses["queues.IQueue"] = queues_IQueue;
 queues_IQueue.__name__ = "queues.IQueue";
@@ -16291,6 +22080,48 @@ sys_FileSystem.deleteDirectory = function(path) {
 sys_FileSystem.readDirectory = function(path) {
 	return js_node_Fs.readdirSync(path);
 };
+var sys_db_Connection = function() { };
+$hxClasses["sys.db.Connection"] = sys_db_Connection;
+sys_db_Connection.__name__ = "sys.db.Connection";
+sys_db_Connection.__isInterface__ = true;
+sys_db_Connection.prototype = {
+	request: null
+	,close: null
+	,escape: null
+	,quote: null
+	,addValue: null
+	,lastInsertId: null
+	,dbName: null
+	,startTransaction: null
+	,commit: null
+	,rollback: null
+	,__class__: sys_db_Connection
+};
+var sys_db_Mysql = function() { };
+$hxClasses["sys.db.Mysql"] = sys_db_Mysql;
+sys_db_Mysql.__name__ = "sys.db.Mysql";
+sys_db_Mysql.connect = function(params) {
+	throw new haxe_exceptions_NotImplementedException("Not implemented for this platform",null,{ fileName : "sys/db/Mysql.hx", lineNumber : 34, className : "sys.db.Mysql", methodName : "connect"});
+};
+var sys_db_ResultSet = function() { };
+$hxClasses["sys.db.ResultSet"] = sys_db_ResultSet;
+sys_db_ResultSet.__name__ = "sys.db.ResultSet";
+sys_db_ResultSet.__isInterface__ = true;
+sys_db_ResultSet.prototype = {
+	get_length: null
+	,get_nfields: null
+	,length: null
+	,nfields: null
+	,hasNext: null
+	,next: null
+	,results: null
+	,getResult: null
+	,getIntResult: null
+	,getFloatResult: null
+	,getFieldsNames: null
+	,__class__: sys_db_ResultSet
+	,__properties__: {get_nfields:"get_nfields",get_length:"get_length"}
+};
 var sys_io_File = function() { };
 $hxClasses["sys.io.File"] = sys_io_File;
 sys_io_File.__name__ = "sys.io.File";
@@ -16483,10 +22314,358 @@ var sys_io_FileSeek = $hxEnums["sys.io.FileSeek"] = { __ename__:"sys.io.FileSeek
 };
 sys_io_FileSeek.__constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.SeekCur,sys_io_FileSeek.SeekEnd];
 sys_io_FileSeek.__empty_constructs__ = [sys_io_FileSeek.SeekBegin,sys_io_FileSeek.SeekCur,sys_io_FileSeek.SeekEnd];
+var systems_DatabaseSystem = function(_universe) {
+	this.reverse = [];
+	this.event_cache = [];
+	this.watches = [];
+	this.updating = false;
+	this.inserting = false;
+	this.poll_times = new haxe_ds_EnumValueMap();
+	this.polls = new haxe_ds_EnumValueMap();
+	this.connected = false;
+	ecs_System.call(this,_universe);
+	this.dbevents = this.universe.families.get(0);
+	this.table2136a94390b838cdff652db2cbb1a2d7 = this.universe.components.getTable(0);
+};
+$hxClasses["systems.DatabaseSystem"] = systems_DatabaseSystem;
+systems_DatabaseSystem.__name__ = "systems.DatabaseSystem";
+systems_DatabaseSystem.__super__ = ecs_System;
+systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
+	connected: null
+	,polls: null
+	,poll_times: null
+	,inserting: null
+	,updating: null
+	,db: null
+	,watches: null
+	,connected_time: null
+	,event_cache: null
+	,reverse: null
+	,onEnabled: function() {
+		var keys = Main.keys.mysql;
+		this.db = db_DatabaseFactory.get_instance().createDatabase("mysql",{ database : keys.database, host : keys.host, user : keys.user, pass : keys.pass});
+		this.db.setProperty("autoReconnect",true);
+		this.db.setProperty("autoReconnectInterval",5000);
+		this.db.setProperty("replayQueriesOnReconnection",true);
+		this.connected_time = new Date().getTime() - util_Duration.fromString("8hrs");
+		util_Duration.fromString("1h");
+	}
+	,insert: function(table,value,callback) {
+		thenshim_Promise.then(thenshim_Promise.then(this.db.table(table),function(result) {
+			return result.table.add(value);
+		}),function(result) {
+			callback(database_Callback.Success("Inserted"));
+		},function(error) {
+			callback(database_Callback.Error("Insert failed",error));
+		});
+	}
+	,connect: function() {
+		var _gthis = this;
+		thenshim_Promise.then(this.db.connect(),function(state) {
+			if(state.data) {
+				_gthis.connected = true;
+				_gthis.connected_time = new Date().getTime();
+				haxe_Log.trace("Database connected",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 70, className : "systems.DatabaseSystem", methodName : "connect"});
+			} else {
+				_gthis.connected = false;
+				_gthis.connected_time -= util_Duration.fromString("5hrs");
+				haxe_Log.trace("Database not connected",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 74, className : "systems.DatabaseSystem", methodName : "connect"});
+			}
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 76, className : "systems.DatabaseSystem", methodName : "connect"});
+		});
+	}
+	,update: function(_) {
+		var _gthis = this;
+		if(new Date().getTime() - this.connected_time > util_Duration.fromString("5hrs")) {
+			this.connected_time = new Date().getTime();
+			this.connected = false;
+			this.connect();
+		}
+		if(!this.connected) {
+			return;
+		}
+		var this1 = this.polls;
+		var _g_keys = this1.keys();
+		while(_g_keys.hasNext()) {
+			var key = _g_keys.next();
+			var _g_value = this1.get(key);
+			var now = new Date().getTime();
+			var last_sent = this.poll_times.get(key);
+			var diff = now - last_sent;
+			if(diff > _g_value) {
+				this.poll_times.set(key,now);
+				var entity = util_EcsTools.get_universe().createEntity();
+				util_EcsTools.get_universe().components.set(entity,0,key);
+				var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+				var ecsTmpFamily = util_EcsTools.get_universe().families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(entity);
+				}
+			}
+		}
+		var _this = this.dbevents;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var event = this.table2136a94390b838cdff652db2cbb1a2d7.get(entity);
+			if(event._hx_index == 10) {
+				var _gevent = event.event;
+				if(!this.polls.exists(_gevent)) {
+					this.polls.set(_gevent,event.ms);
+					this.poll_times.set(_gevent,0);
+					haxe_Log.trace("Saved poll " + $hxEnums[_gevent.__enum__].__constructs__[_gevent._hx_index]._hx_name,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 107, className : "systems.DatabaseSystem", methodName : "update"});
+				}
+			} else {
+				this.reverse.push(event);
+			}
+			this.universe.deleteEntity(entity);
+		}
+		var _g = 0;
+		var _g1 = this.reverse.length;
+		while(_g < _g1) {
+			++_g;
+			var event = this.reverse.pop();
+			if(event == null) {
+				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 248, className : "systems.DatabaseSystem", methodName : "update"});
+			} else {
+				switch(event._hx_index) {
+				case 0:
+					var value = [event.value];
+					var callback = [event.callback];
+					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(value) {
+						return function(result) {
+							return result.table.add(value[0]);
+						};
+					})(value)),(function(callback) {
+						return function(res) {
+							callback[0](database_Callback.Success("Inserted"));
+						};
+					})(callback),(function(value) {
+						return function(err) {
+							if(err.message != null && err.message.indexOf("DUPLICATE_DATA") != -1) {
+								return;
+							} else {
+								haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 130, className : "systems.DatabaseSystem", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 131, className : "systems.DatabaseSystem", methodName : "update"});
+							}
+						};
+					})(value));
+					break;
+				case 1:
+					var value1 = [event.value];
+					var query = [event.query];
+					var callback1 = [event.callback];
+					if(this.updating) {
+						this.event_cache.push(event);
+						continue;
+					}
+					this.updating = true;
+					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query,value) {
+						return function(result) {
+							return result.table.update(query[0],value[0]);
+						};
+					})(query,value1)),(function(callback) {
+						return function(res) {
+							_gthis.updating = false;
+							callback[0](database_Callback.Success("Updated"));
+						};
+					})(callback1),(function(query,value) {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 146, className : "systems.DatabaseSystem", methodName : "update"});
+							haxe_Log.trace(Query.queryExprToSql(query[0]),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 147, className : "systems.DatabaseSystem", methodName : "update"});
+							haxe_Log.trace(value[0].debugString(),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 148, className : "systems.DatabaseSystem", methodName : "update"});
+							_gthis.updating = false;
+						};
+					})(query,value1));
+					break;
+				case 3:
+					var query1 = [event.query];
+					var value2 = [event.value];
+					var callback2 = [event.callback];
+					var parse_key = this.parseKey(event.key);
+					var column = [parse_key.column];
+					thenshim_Promise.then(thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
+						return function(result) {
+							return result.table.findOne(query[0]);
+						};
+					})(query1)),(function(column,value,query) {
+						return function(result) {
+							_gthis.updating = true;
+							if(result.data == null) {
+								return result.table.add(value[0]);
+							} else {
+								if(column[0] != null) {
+									value[0].field(column[0],result.data.field(column[0]));
+								}
+								if(value[0].hasField("id")) {
+									value[0].removeField("id");
+								}
+								return result.table.update(query[0],value[0]);
+							}
+						};
+					})(column,value2,query1)),(function(callback) {
+						return function(result) {
+							if(result.data.hasField("____status")) {
+								var tmp = haxe_Log.trace;
+								var tmp1 = result.data.field("____status");
+								tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 225, className : "systems.DatabaseSystem", methodName : "update"});
+								return;
+							}
+							_gthis.updating = false;
+							haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 230, className : "systems.DatabaseSystem", methodName : "update"});
+							if(callback[0] != null) {
+								callback[0](database_Callback.Success("Successfully updated record",result.data));
+							}
+						};
+					})(callback2),(function(callback,value) {
+						return function(err) {
+							_gthis.updating = false;
+							haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 236, className : "systems.DatabaseSystem", methodName : "update"});
+							haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 237, className : "systems.DatabaseSystem", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 238, className : "systems.DatabaseSystem", methodName : "update"});
+							haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 239, className : "systems.DatabaseSystem", methodName : "update"});
+							if(callback[0] != null) {
+								callback[0](database_Callback.Error("Failed",err));
+							}
+						};
+					})(callback2,value2));
+					break;
+				case 4:
+					this.db.createTable(event.name,event.columns);
+					break;
+				case 5:
+					var query2 = [event.query];
+					var callback3 = [event.callback];
+					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
+						return function(result) {
+							return result.table.findOne(query[0]);
+						};
+					})(query2)),(function(callback) {
+						return function(result) {
+							if(result != null) {
+								callback[0](database_Callback.Record(result.data));
+							} else {
+								callback[0](database_Callback.Error("No data",result.data));
+							}
+						};
+					})(callback3),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 160, className : "systems.DatabaseSystem", methodName : "update"});
+						};
+					})());
+					break;
+				case 6:
+					var query3 = [event.query];
+					var callback4 = [event.callback];
+					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
+						return function(result) {
+							return result.table.find(query[0]);
+						};
+					})(query3)),(function(callback) {
+						return function(result) {
+							if(result != null) {
+								callback[0](database_Callback.Records(result.data));
+							} else {
+								callback[0](database_Callback.Error("No data",result.data));
+							}
+						};
+					})(callback4),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 170, className : "systems.DatabaseSystem", methodName : "update"});
+						};
+					})());
+					break;
+				case 7:
+					var callback5 = [event.callback];
+					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function() {
+						return function(result) {
+							return result.table.all();
+						};
+					})()),(function(callback) {
+						return function(result) {
+							if(result != null) {
+								callback[0](database_Callback.Records(result.data));
+							} else {
+								callback[0](database_Callback.Error("No data",result.data));
+							}
+						};
+					})(callback5),(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 180, className : "systems.DatabaseSystem", methodName : "update"});
+						};
+					})());
+					break;
+				case 8:
+					var column1 = [event.column];
+					var value3 = [event.value];
+					var callback6 = [event.callback];
+					this.getTable(event.table,(function(callback,value,column) {
+						return function(result) {
+							var record = new db_Record();
+							record.field(column[0],value[0]);
+							thenshim_Promise.then(result.table.delete(record),(function(callback) {
+								return function(succ) {
+									callback[0](database_Callback.Success("Successfully deleted",succ));
+								};
+							})(callback),(function(callback) {
+								return function(err) {
+									callback[0](database_Callback.Error("Failed",err));
+									haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 190, className : "systems.DatabaseSystem", methodName : "update"});
+								};
+							})(callback));
+						};
+					})(callback6,value3,column1),(function(callback) {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 193, className : "systems.DatabaseSystem", methodName : "update"});
+							callback[0](database_Callback.Error("Failed",err));
+						};
+					})(callback6));
+					break;
+				default:
+					haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 248, className : "systems.DatabaseSystem", methodName : "update"});
+				}
+			}
+		}
+		var _g = 0;
+		var _g1 = this.event_cache;
+		while(_g < _g1.length) {
+			var event = _g1[_g];
+			++_g;
+			var entity = util_EcsTools.get_universe().createEntity();
+			util_EcsTools.get_universe().components.set(entity,0,event);
+			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(0);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
+		}
+	}
+	,parseKey: function(value) {
+		var key = null;
+		var column = null;
+		if(value.indexOf(":") != -1) {
+			var split = value.split(":");
+			key = split[1];
+			column = split[0];
+		} else {
+			key = value;
+		}
+		return { key : key, column : column};
+	}
+	,getTable: function(name,succ,err) {
+		thenshim_Promise.then(this.db.table(name),succ,err);
+	}
+	,dbevents: null
+	,table2136a94390b838cdff652db2cbb1a2d7: null
+	,__class__: systems_DatabaseSystem
+});
 var systems_MessageRouter = function(_universe) {
 	ecs_System.call(this,_universe);
-	this.messages = this.universe.families.get(1);
-	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(2);
+	this.messages = this.universe.families.get(2);
+	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(3);
 };
 $hxClasses["systems.MessageRouter"] = systems_MessageRouter;
 systems_MessageRouter.__name__ = "systems.MessageRouter";
@@ -16512,75 +22691,75 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			}
 			if(channel.id == "1234544675264925788") {
 				var entity1 = util_EcsTools.get_universe().createEntity();
-				util_EcsTools.get_universe().components.set(entity1,3,"suggestion_box");
-				util_EcsTools.get_universe().components.set(entity1,2,message);
+				util_EcsTools.get_universe().components.set(entity1,4,"suggestion_box");
+				util_EcsTools.get_universe().components.set(entity1,3,message);
 				var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity1)];
-				var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
+				var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(entity1);
 				}
-				var ecsTmpFamily1 = util_EcsTools.get_universe().families.get(3);
+				var ecsTmpFamily1 = util_EcsTools.get_universe().families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily1.componentsMask)) {
 					ecsTmpFamily1.add(entity1);
 				}
-				var ecsTmpFamily2 = util_EcsTools.get_universe().families.get(4);
+				var ecsTmpFamily2 = util_EcsTools.get_universe().families.get(5);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily2.componentsMask)) {
 					ecsTmpFamily2.add(entity1);
 				}
-				var ecsTmpFamily3 = util_EcsTools.get_universe().families.get(1);
+				var ecsTmpFamily3 = util_EcsTools.get_universe().families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily3.componentsMask)) {
 					ecsTmpFamily3.add(entity1);
 				}
-				var ecsTmpFamily4 = util_EcsTools.get_universe().families.get(5);
+				var ecsTmpFamily4 = util_EcsTools.get_universe().families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily4.componentsMask)) {
 					ecsTmpFamily4.add(entity1);
 				}
 			}
 			var entity2 = util_EcsTools.get_universe().createEntity();
-			util_EcsTools.get_universe().components.set(entity2,3,"scam_prevention");
-			util_EcsTools.get_universe().components.set(entity2,2,message);
+			util_EcsTools.get_universe().components.set(entity2,4,"scam_prevention");
+			util_EcsTools.get_universe().components.set(entity2,3,message);
 			var ecsEntCompFlags1 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity2)];
-			var ecsTmpFamily5 = util_EcsTools.get_universe().families.get(2);
+			var ecsTmpFamily5 = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily5.componentsMask)) {
 				ecsTmpFamily5.add(entity2);
 			}
-			var ecsTmpFamily6 = util_EcsTools.get_universe().families.get(3);
+			var ecsTmpFamily6 = util_EcsTools.get_universe().families.get(4);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily6.componentsMask)) {
 				ecsTmpFamily6.add(entity2);
 			}
-			var ecsTmpFamily7 = util_EcsTools.get_universe().families.get(4);
+			var ecsTmpFamily7 = util_EcsTools.get_universe().families.get(5);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily7.componentsMask)) {
 				ecsTmpFamily7.add(entity2);
 			}
-			var ecsTmpFamily8 = util_EcsTools.get_universe().families.get(1);
+			var ecsTmpFamily8 = util_EcsTools.get_universe().families.get(2);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily8.componentsMask)) {
 				ecsTmpFamily8.add(entity2);
 			}
-			var ecsTmpFamily9 = util_EcsTools.get_universe().families.get(5);
+			var ecsTmpFamily9 = util_EcsTools.get_universe().families.get(6);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily9.componentsMask)) {
 				ecsTmpFamily9.add(entity2);
 			}
 			var entity3 = util_EcsTools.get_universe().createEntity();
-			util_EcsTools.get_universe().components.set(entity3,3,"keyword_tracker");
-			util_EcsTools.get_universe().components.set(entity3,2,message);
+			util_EcsTools.get_universe().components.set(entity3,4,"keyword_tracker");
+			util_EcsTools.get_universe().components.set(entity3,3,message);
 			var ecsEntCompFlags2 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity3)];
-			var ecsTmpFamily10 = util_EcsTools.get_universe().families.get(2);
+			var ecsTmpFamily10 = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily10.componentsMask)) {
 				ecsTmpFamily10.add(entity3);
 			}
-			var ecsTmpFamily11 = util_EcsTools.get_universe().families.get(3);
+			var ecsTmpFamily11 = util_EcsTools.get_universe().families.get(4);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily11.componentsMask)) {
 				ecsTmpFamily11.add(entity3);
 			}
-			var ecsTmpFamily12 = util_EcsTools.get_universe().families.get(4);
+			var ecsTmpFamily12 = util_EcsTools.get_universe().families.get(5);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily12.componentsMask)) {
 				ecsTmpFamily12.add(entity3);
 			}
-			var ecsTmpFamily13 = util_EcsTools.get_universe().families.get(1);
+			var ecsTmpFamily13 = util_EcsTools.get_universe().families.get(2);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily13.componentsMask)) {
 				ecsTmpFamily13.add(entity3);
 			}
-			var ecsTmpFamily14 = util_EcsTools.get_universe().families.get(5);
+			var ecsTmpFamily14 = util_EcsTools.get_universe().families.get(6);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily14.componentsMask)) {
 				ecsTmpFamily14.add(entity3);
 			}
@@ -16590,13 +22769,9 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 	,publicThreadChannel: function(message) {
 		if(StringTools.startsWith(message.content,"[showcase]")) {
 			var entity = util_EcsTools.get_universe().createEntity();
-			util_EcsTools.get_universe().components.set(entity,3,"showcase");
-			util_EcsTools.get_universe().components.set(entity,2,message);
+			util_EcsTools.get_universe().components.set(entity,4,"showcase");
+			util_EcsTools.get_universe().components.set(entity,3,message);
 			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
-			}
 			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
@@ -16605,23 +22780,23 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(5);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(5);
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(6);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
 		}
 		var entity = util_EcsTools.get_universe().createEntity();
-		util_EcsTools.get_universe().components.set(entity,3,"thread_count");
-		util_EcsTools.get_universe().components.set(entity,2,message);
+		util_EcsTools.get_universe().components.set(entity,4,"thread_count");
+		util_EcsTools.get_universe().components.set(entity,3,message);
 		var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
-		var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(entity);
-		}
 		var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
@@ -16630,11 +22805,15 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
 		}
-		var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+		var ecsTmpFamily = util_EcsTools.get_universe().families.get(5);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
 		}
-		var ecsTmpFamily = util_EcsTools.get_universe().families.get(5);
+		var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(entity);
+		}
+		var ecsTmpFamily = util_EcsTools.get_universe().families.get(6);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
 		}
@@ -16642,13 +22821,9 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 	,guildTextChannel: function(message) {
 		if(message.channel.id == "162664383082790912" && !message.system) {
 			var entity = util_EcsTools.get_universe().createEntity();
-			util_EcsTools.get_universe().components.set(entity,3,"showcase_message");
-			util_EcsTools.get_universe().components.set(entity,2,message);
+			util_EcsTools.get_universe().components.set(entity,4,"showcase_message");
+			util_EcsTools.get_universe().components.set(entity,3,message);
 			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
-			}
 			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
@@ -16657,11 +22832,15 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(5);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(5);
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(2);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(6);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
@@ -16779,6 +22958,50 @@ util_DiscordUtil.getChannel = function(channel_id,callback) {
 		haxe_Log.trace(err,{ fileName : "src/util/DiscordUtil.hx", lineNumber : 68, className : "util.DiscordUtil", methodName : "getChannel"});
 		$global.console.dir(err);
 	});
+};
+var util_Duration = {};
+util_Duration._new = function(value) {
+	return value;
+};
+util_Duration.gt = null;
+util_Duration.gtequalto = null;
+util_Duration.lt = null;
+util_Duration.ltequalto = null;
+util_Duration.equality = null;
+util_Duration.gtfloat = null;
+util_Duration.gtequaltofloat = null;
+util_Duration.ltfloat = null;
+util_Duration.ltequaltofloat = null;
+util_Duration.equalityFloat = null;
+util_Duration.addition = null;
+util_Duration.fromString = function(input) {
+	var time = 0.;
+	var min_regex = new EReg("([0-9]+)[ ]?(m|min|mins)\\b","gi");
+	if(min_regex.match(input)) {
+		var num = parseFloat(min_regex.matched(1));
+		time = num * 60000;
+	}
+	var hour_regex = new EReg("([0-9]+)[ ]?(h|hr|hrs|hours)\\b","gi");
+	if(hour_regex.match(input)) {
+		var num = parseFloat(hour_regex.matched(1));
+		time = num * 3600000;
+	}
+	var day_regex = new EReg("([0-9]+)[ ]?(d|day|days)\\b","gi");
+	if(day_regex.match(input)) {
+		var num = parseFloat(day_regex.matched(1));
+		time = num * 86400000;
+	}
+	var week_regex = new EReg("([0-9]+)[ ]?(w|wk|wks|week|weeks)\\b","gi");
+	if(week_regex.match(input)) {
+		var num = parseFloat(week_regex.matched(1));
+		time = num * 604800000;
+	}
+	var month_regex = new EReg("([0-9]+)[ ]?(mo|mos|mths|month|months)\\b","gi");
+	if(month_regex.match(input)) {
+		var num = parseFloat(month_regex.matched(1));
+		time = num * 2419200000;
+	}
+	return util_Duration._new(time);
 };
 var util_EcsTools = function() { };
 $hxClasses["util.EcsTools"] = util_EcsTools;
@@ -16937,6 +23160,14 @@ commands_types_Duration.week = 604800000;
 commands_types_Duration.month = 2419200000;
 components_TextCommand.mention = "!mention";
 components_TextCommand.run = "!run";
+db_DatabaseFactory._instance = null;
+db_DatabaseFactory.MYSQL = "mysql";
+db_mysql_MySqlDataTypeMapper._instance = null;
+logging_Logger._uniqueIds = null;
+db_mysql_MySqlDatabase.log = new logging_Logger(db_mysql_MySqlDatabase,null,true);
+db_mysql_MySqlTable.log = new logging_Logger(db_mysql_MySqlTable,null,true);
+db_mysql_Utils.SQL_TABLE_EXISTS = "SELECT * FROM information_schema.TABLES WHERE TABLE_SCHEMA=? AND TABLE_NAME=?;";
+db_mysql_Utils.SQL_LIST_TABLES_AND_FIELDS = "SELECT * FROM information_schema.columns\r\n                                                           WHERE table_schema = ?\r\n                                                           ORDER BY table_name,ordinal_position;";
 ecs_Entity.none = ecs_Entity._new(-1);
 ecs_ds_Unit.unit = ecs_ds_Unit._new();
 haxe_Int32._mul = Math.imul != null ? Math.imul : function(a,b) {
@@ -16946,9 +23177,16 @@ haxe_io_FPHelper.i64tmp = new haxe__$Int64__$_$_$Int64(0,0);
 haxe_io_FPHelper.LN2 = 0.6931471805599453;
 haxe_io_FPHelper.helper = new DataView(new ArrayBuffer(8));
 haxe_io_UInt8Array.BYTES_PER_ELEMENT = 1;
+logging_LogManager._instance = null;
+mysql_impl_nodejs_DatabaseConnection.log = new logging_Logger(mysql_impl_nodejs_DatabaseConnection,null,true);
 sys_io_File.copyBufLen = 65536;
 sys_io_File.copyBuf = js_node_buffer_Buffer.alloc(65536);
 thenshim_Promise.factory = new thenshim_js_JSPromiseFactory();
+util_Duration.minute = 60000;
+util_Duration.hour = 3600000;
+util_Duration.day = 86400000;
+util_Duration.week = 604800000;
+util_Duration.month = 2419200000;
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 

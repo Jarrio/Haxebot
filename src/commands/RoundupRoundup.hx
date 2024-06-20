@@ -53,8 +53,6 @@ class RoundupRoundup extends CommandDbBase {
 
 	override function update(_) {
 		super.update(_);
-		this.handleEventUpdates();
-		this.handleVoiceEvents();
 		// this.handleEndEvent();
 
 		if (this.state == null) {
@@ -99,7 +97,8 @@ class RoundupRoundup extends CommandDbBase {
 
 		if (host_m == null && !waiting) {
 			waiting = true;
-			this.guild.members.fetch(this.state.host).then(function(member) {
+			trace(this.state.host);
+			this.guild.members.fetch({user: this.state.host, force: true}).then(function(member) {
 				this.host_m = member;
 				this.waiting = false;
 				trace('Roundup host obtained');
@@ -115,17 +114,17 @@ class RoundupRoundup extends CommandDbBase {
 			return;
 		}
 
-		switch (event.status) {
-			case Completed:
-				this.scheduleNewEvent();
-			case Scheduled:
-				this.handleScheduledEvent();
-			default:
-		}
+		this.handleEventUpdates();
+		this.handleVoiceEvents();
+		this.handleScheduledEvent();
 	}
 
 	function scheduleNewEvent() {
+		trace('here');
 		if (host_contacted || waiting) {
+			trace('here');
+			trace(host_contacted);
+			trace(waiting);
 			return;
 		}
 		trace(this.host_m.user.tag);
@@ -167,6 +166,7 @@ class RoundupRoundup extends CommandDbBase {
 						guild.scheduledEvents.fetch(event.id)
 							.then(function(event:GuildScheduledEvent) {
 								this.event = (event);
+								handleEventStatus(event);
 								trace('Updated event: ${event.status}');
 								trace('New time: ${Date.fromTime(event.scheduledStartTimestamp)}');
 							}, (err) -> trace(err));
@@ -176,6 +176,39 @@ class RoundupRoundup extends CommandDbBase {
 			}
 			universe.deleteEntity(entity);
 		});
+	}
+
+	function handleEventStatus(event:GuildScheduledEvent) {
+		switch (event.status) {
+			case Completed:
+				this.scheduleNewEvent();
+			case Active:
+				if (state.announced || waiting) {
+					trace('here', state.announced, waiting);
+					return;
+				}
+				var mention = (state.event_ping >= 3) ? event_role : '@everyone';
+				var message = '$mention come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!';
+				if (state.event_ping >= 3) {
+					state.event_ping = 0;
+					message += '\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`';
+				} else {
+					state.event_ping = state.event_ping + 1;
+				}
+				this.voice_text.send({
+					content: message,
+					allowedMentions: {
+						parse: [everyone, roles]
+					}
+				}).then(null, (err) -> trace(err));
+				state.announced = true;
+				this.setState(state);
+				trace('Event Started');
+				waiting = false;
+				this.event = event;
+			default:
+				trace(event.status);
+		}
 	}
 
 	inline function handleVoiceEvents() {
@@ -219,7 +252,10 @@ class RoundupRoundup extends CommandDbBase {
 		end_event_collector.stop();
 	}
 
-	inline function handleScheduledEvent() {
+	function handleScheduledEvent() {
+		if (event.status != Scheduled) {
+			return;
+		}
 		var now = Date.now().getTime();
 		var left = event.scheduledStartTimestamp - now;
 		if (left > Duration.fromString('5m')) {
@@ -237,32 +273,19 @@ class RoundupRoundup extends CommandDbBase {
 						break;
 					}
 				}
+			} else {
+				return;
 			}
-			return;
 		}
 
-		if (left <= Duration.fromString('0s') && !waiting) {
+		if (left <= Duration.fromString('0s') && !waiting && host_active) {
 			waiting = true;
-			event.setStatus(Active, 'Time to start the event!').then(function(event) {
-				var mention = (state.event_ping == 3) ? event_role : '@everyone';
-				var message = '$mention come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!';
-				if (state.event_ping == 3) {
-					state.event_ping = 0;
-					message += '\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`';
-				} else {
-					state.event_ping = state.event_ping + 1;
-				}
-				this.setState(state);
-				this.voice_text.send({
-					content: message,
-					allowedMentions: {
-						parse: [everyone, roles]
-					}
-				}).then(null, (err) -> trace(err));
-				trace('Event Started');
+			event.setStatus(Active, 'Time to start the event!').then(function(_) {
 				waiting = false;
-				this.event = event;
-			}, (err) -> trace(err));
+			}, function(err) {
+				trace(err);
+				waiting = true;
+			});
 		}
 	}
 
@@ -279,6 +302,7 @@ class RoundupRoundup extends CommandDbBase {
 		}).then(function(event) {
 			host_contacted = false;
 			this.event = event;
+			state.announced = false;
 			this.state.event_id = event.id;
 			var time = 604800;
 			event.createInviteURL({maxAge: time, channel: voice_text_id}).then(function(url) {
@@ -291,7 +315,7 @@ class RoundupRoundup extends CommandDbBase {
 				)
 					.then(null, (err) -> trace(err));
 			}, (err) -> trace(err));
-			Main.updateState('state', Main.state);
+			this.setState(state);
 			trace('Event setup!');
 			this.host_m.send(
 				'New roundup event scheduled for <t:${Math.round(event.scheduledStartTimestamp / 1000)}:R>'
@@ -307,9 +331,10 @@ class RoundupRoundup extends CommandDbBase {
 
 		waiting = true;
 		schedule.fetch(this.state.event_id).then(function(event) {
+			waiting = false;
 			trace('Roundup event retrieved');
 			this.event = event;
-			waiting = false;
+			handleEventStatus(event);
 		}, function(err) {
 			trace(err);
 			waiting = false;
@@ -380,12 +405,15 @@ class RoundupRoundup extends CommandDbBase {
 	}
 
 	function get_state() {
+		if (Main.state == null) {
+			return null;
+		}
 		return Main.state.roundup_roundup;
 	}
 
 	function setState(value) {
 		Main.state.roundup_roundup = value;
-		Main.updateState('state', Main.state);
+		Main.updateState('roundup_roundup', Json.stringify(Main.state.roundup_roundup));
 	}
 
 	function get_started() {

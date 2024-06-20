@@ -1,3 +1,5 @@
+import db.Record;
+import database.DBEvents;
 import discord_js.VoiceState;
 import discord_js.VoiceChannel;
 import discord_js.ThreadChannel;
@@ -51,6 +53,7 @@ import systems.MessageRouter;
 import commands.Roundup;
 import commands.Everyone;
 import systems.DatabaseSystem;
+import Query;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -155,6 +158,37 @@ class Main {
 				}
 			]
 		});
+
+		var e = DBEvents.GetAllRecords('state', (response) -> {
+			#if block
+			state = Json.parse(File.getContent('./config/state.json'));
+			return;
+			#end
+			switch (response) {
+				case Records(data):
+					state = {
+						next_roundup: 0,
+						roundup_roundup: null,
+						snippet_tags: null
+					}
+					for (d in data) {
+						var value:Dynamic = d.field('value');
+						switch (d.field('key')) {
+							case 'next_roundup':
+								state.next_roundup = value;
+							case 'roundup_roundup':
+								state.roundup_roundup = value;
+							case 'snippet_tags':
+								state.snippet_tags = value;
+							default:
+								trace(d.field('key'));
+						}
+					}
+				default:
+					trace(response);
+			}
+		});
+		universe.setComponents(universe.createEntity(), e);
 
 		client = new Client({
 			intents: [
@@ -295,7 +329,7 @@ class Main {
 
 		client.login(discord.token);
 		new Timer(500).run = function() {
-			if (!connected || !commands_active || state == null) {
+			if (!connected || !commands_active) {
 				return;
 			}
 			universe.update(1);
@@ -429,11 +463,6 @@ class Main {
 		try {
 			keys = Json.parse(File.getContent('./config/keys.json'));
 			command_file = Json.parse(File.getContent('./config/commands.json'));
-			#if block
-			if (admin == null) {
-				state = Json.parse(File.getContent('./config/state.json'));
-			}
-			#end
 		} catch (e ) {
 			trace(e.message);
 		}
@@ -463,7 +492,21 @@ class Main {
 		start();
 	}
 
-	static public function updateState(field:String, value:Any) {
+	static public function updateState(field:String, value:Dynamic) {
+		var record = new Record();
+		record.field('key', field);
+		record.field('value', value);
+		
+		var e = DBEvents.Update('state', record, Query.query($key = field), (response) -> {
+			switch(response) {
+				case Success(message, data):
+					trace('updated state');
+				default:
+					trace(response);
+			}
+		});
+		universe.setComponents(universe.createEntity(), e);
+		return;
 		#if !block
 		var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
 		Firestore.updateDoc(doc, field, value).then(null, function(err) {
@@ -639,8 +682,9 @@ typedef TDiscordConfig = {
 }
 
 typedef TState = {
-	var macros:Bool;
-	var twitter_since_id:String;
+	@:optional var macros:Bool;
+	@:optional var twitter_since_id:String;
+	var snippet_tags:Array<String>;
 	var next_roundup:Int;
 	var roundup_roundup:TRoundup;
 }
@@ -649,6 +693,7 @@ typedef TRoundup = {
 	var event_id:String;
 	var event_ping:Int;
 	var host:String;
+	var announced:Bool;
 }
 
 typedef Foo = ApplicationCommandData;

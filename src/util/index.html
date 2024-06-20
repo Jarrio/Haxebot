@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Download Firebase Storage Folder</title>
+</head>
+
+<body>
+	<h1>Download Firebase Storage Folder</h1>
+
+	<button id="downloadButton">Download Folder</button>
+
+	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+	<script>
+		// Initialize Firebase with your configuration
+		const firebaseConfig = {
+			apiKey: 'AIzaSyBKGASqr3dgNygiv3WnHzQKYv_iYTwK4Kk', //replace
+			authDomain: 'haxe-forum.firebaseapp.com',
+			projectId: 'haxe_forum',
+			storageBucket: "haxe-forum.appspot.com",
+			messagingSenderId: '72566195073',
+			appId: '1:72566195073:web:2850b70809f24f6ca79e80',
+		};
+
+		// Initialize Firebase
+		const app = firebase.initializeApp(firebaseConfig);
+
+		// Define the downloadFolderAsZip function here
+		const downloadFolderAsZip = async () => {
+			console.log("Starting folder download...");
+
+			const jszip = new JSZip();
+			const storage = firebase.storage(app);
+			const folderName = '/2F2024-06-20T07:50:34_34135'; //Your folder name 
+
+			try {
+				const folderRef = storage.ref(folderName);
+				console.log("Folder reference created:", folderRef);
+
+				const downloadFiles = async (folderRef, path) => {
+					const folder = await storage.ref(folderRef.fullPath).listAll();
+					console.log("Folder:", path);
+					console.log("Files in the folder:", folder.items);
+
+					const promises = folder.items.map(async (item) => {
+						console.log("Downloading file:", item.name);
+						const file = await item.getMetadata();
+						const fileRef = storage.ref(item.fullPath);
+						const fileBlob = await fileRef.getDownloadURL().then((url) => {
+							return fetch(url).then((response) => {
+								if (!response.ok) {
+									console.error("Failed to fetch file:", item.name);
+									throw new Error('Failed to fetch file');
+								}
+								return response.blob();
+							});
+						});
+						jszip.folder(path).file(item.name, fileBlob);
+					});
+
+					await Promise.all(promises);
+
+					for (const subfolder of folder.prefixes) {
+						await downloadFiles(subfolder, `${path}${subfolder.name}/`);
+					}
+				};
+
+				await downloadFiles(folderRef, '');
+
+				console.log("Number of files added to the ZIP:", jszip.files.length);
+
+				if (jszip.files.length === 0) {
+					console.log("ZIP is empty.");
+					return;
+				}
+
+				const blob = await jszip.generateAsync({ type: 'blob' });
+				saveAs(blob, 'download.zip');
+				console.log("Download completed.");
+			} catch (error) {
+				console.error('Error:', error);
+				alert('An error occurred while downloading the folder.');
+			}
+		};
+
+		// Add an event listener to the "Download Folder" button
+		const downloadButton = document.getElementById('downloadButton');
+		downloadButton.addEventListener('click', () => {
+			downloadFolderAsZip();
+		});
+	</script>
+</body>
+
+</html>
