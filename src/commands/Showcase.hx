@@ -46,6 +46,10 @@ class Showcase extends CommandBase {
 				Browser.console.dir(err);
 			});
 		}
+		
+		if (channel == null) {
+			return;
+		}
 
 		iterate(modal, entity -> {
 			this.channel.send('${modal.title_or_link} \n ${modal.description}').then(function(_) {
