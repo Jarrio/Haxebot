@@ -1,5 +1,7 @@
 package systems;
 
+import sys.io.File;
+import sys.FileSystem;
 import db.DebugUtils;
 import promises.PromiseUtils;
 import promises.Promise;
@@ -13,19 +15,22 @@ import db.IDatabase;
 import ecs.System;
 import db.DatabaseFactory;
 import db.mysql.Utils;
+import database.types.DBQuote;
+import database.types.DBSnippet;
+import database.types.DBReminder;
 
 class DatabaseSystem extends System {
 	public var connected:Bool = false;
 
 	var polls:Map<DBEvents, Int> = [];
 	var poll_times:Map<DBEvents, Float> = [];
-	
+
 	var inserting:Bool = false;
 	var updating:Bool = false;
 	var db:IDatabase;
 	var watches:Array<DBEvents> = [];
 	@:fastFamily var dbevents:{event:DBEvents};
-	
+
 	var connected_time:Float;
 
 	var event_cache:Array<DBEvents> = [];
@@ -39,17 +44,14 @@ class DatabaseSystem extends System {
 			user: keys.user,
 			pass: keys.pass
 		});
-		
-		
+
 		db.setProperty('autoReconnect', true);
 		db.setProperty('autoReconnectInterval', 5000);
 		db.setProperty('replayQueriesOnReconnection', true);
 
 		connected_time = Date.now().getTime() - (Duration.fromString('8hrs') : Float);
-		var foo = Date.now().getTime() - (Duration.fromString('1h') : Float);
-
-
 	}
+
 
 	inline function insert(table:String, value:RRecord, callback) {
 		this.db.table(table).then((result) -> {
@@ -61,20 +63,20 @@ class DatabaseSystem extends System {
 		});
 	}
 
-		function connect() {
-			db.connect().then(function(state) {
-				if (state.data) {
-					this.connected = true;
-					this.connected_time = Date.now().getTime();
+	function connect() {
+		db.connect().then(function(state) {
+			if (state.data) {
+				this.connected = true;
+				this.connected_time = Date.now().getTime();
 
-					trace('Database connected');
-				} else {
-					this.connected = false;
-					this.connected_time -= (Duration.fromString('5hrs') : Float);
-					trace('Database not connected');
-				}
-			}, (err) -> trace(err));
-		}
+				trace('Database connected');
+			} else {
+				this.connected = false;
+				this.connected_time -= (Duration.fromString('5hrs') : Float);
+				trace('Database not connected');
+			}
+		}, (err) -> trace(err));
+	}
 
 	override function update(_) {
 		if (Date.now().getTime() - this.connected_time > Duration.fromString('5hrs')) {
@@ -114,7 +116,7 @@ class DatabaseSystem extends System {
 
 		for (i in 0...reverse.length) {
 			var event = reverse.pop();
-			
+
 			switch (event) {
 				case CreateTable(name, columns):
 					this.db.createTable(name, columns);
@@ -124,7 +126,8 @@ class DatabaseSystem extends System {
 					}).then(function(res) {
 						callback(Success("Inserted"));
 					}, function(err) {
-						if (err.message != null && (err.message : String).contains('DUPLICATE_DATA')) {
+						if (err.message != null
+							&& (err.message : String).contains('DUPLICATE_DATA')) {
 							return;
 						} else {
 							trace(value);
@@ -156,7 +159,7 @@ class DatabaseSystem extends System {
 							callback(Record(result.data));
 						} else {
 							callback(Error('No data', result.data));
-						}	
+						}
 					}, (err) -> trace(err));
 				case GetRecords(table, query, callback):
 					db.table(table).then((result) -> {
@@ -172,6 +175,15 @@ class DatabaseSystem extends System {
 					db.table(table).then((result) -> {
 						return result.table.all();
 					}).then(function(result) {
+						if (result != null) {
+							callback(Records(result.data));
+						} else {
+							callback(Error('No data', result.data));
+						}
+					}, (err) -> trace(err));
+				case Search(table, field, value, callback):
+					var query = "SELECT * FROM `"+table+"` WHERE "+field+" LIKE '%"+ value + "%';";
+					db.raw(query).then(function(result) {
 						if (result != null) {
 							callback(Records(result.data));
 						} else {
@@ -225,7 +237,7 @@ class DatabaseSystem extends System {
 							trace('result null ${result.data.field('____status')}');
 							return;
 						}
-						
+
 						this.updating = false;
 						trace('unblock');
 						if (callback != null) {

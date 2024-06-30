@@ -1,5 +1,7 @@
 package commands;
 
+import database.DBEvents;
+import database.types.DBQuote;
 import firebase.web.firestore.CollectionReference;
 import discord_js.User;
 import js.Browser;
@@ -13,6 +15,8 @@ import components.Command;
 import Main.CommandForward;
 import systems.CommandDbBase;
 import commands.types.ActionList;
+import firebase.web.firestore.Query as FQuery;
+import Query;
 
 class Quote extends CommandDbBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
@@ -79,7 +83,7 @@ class Quote extends CommandDbBase {
 					});
 				case quote_edit:
 					var col = collection(db, 'discord/quotes/entries');
-					var query:Query<TQuoteData> = query(col,
+					var query:FQuery<TQuoteData> = query(col,
 						where('id', EQUAL_TO, this.cache.get(interaction.user.id)));
 					Firestore.getDocs(query).then(function(resp) {
 						if (resp.docs.length != 1) {
@@ -182,7 +186,7 @@ class Quote extends CommandDbBase {
 
 				var col = collection(db, 'discord/quotes/entries');
 
-				var query:Query<TQuoteData> = Firestore.query(
+				var query:FQuery<TQuoteData> = Firestore.query(
 					col,
 					where(column, EQUAL_TO, isName(name) ? name : name.parseInt()),
 					where('author', EQUAL_TO, interaction.user.id)
@@ -335,28 +339,66 @@ class Quote extends CommandDbBase {
 						if (name != null) {
 							query = Firestore.query(col,
 								where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
-
+							var qid = Std.parseInt(name);
 							if (interaction.isAutocomplete()) {
-								Firestore.getDocs(query).then(function(res) {
-									var results = [];
-									for (d in res.docs) {
-										var data = d.data();
-										results.push({
-											name: this.acResponse(data),
-											value: '${data.id}'
-										});
+								var results = [];
+								trace('here');
+								var e:DBEvents = null;
+								
+								if (name != null && name.length > 0) {
+									if (qid != null && qid > 0) {
+										e = DBEvents.GetRecord('quotes', Query.query($id == qid),
+											function(response) {
+												switch (response) {
+													case Record(data):
+														var quote = DBQuote.fromRecord(data);
+														results.push({
+															name: this.dbacResponse(quote),
+															value: '${quote.id}'
+														});
+														interaction.respond(results)
+															.then(null, function(err) {
+																trace(err);
+																Browser.console.dir(err);
+															});
+													default:
+														trace(response);
+												}
+											});
+									} else {
+										e = DBEvents.Search('quotes', 'title', name,
+											function(response) {
+												switch (response) {
+													case Records(data):
+														for (item in data) {
+															var quote = DBQuote.fromRecord(item);
+															results.push({
+																name: this.dbacResponse(quote),
+																value: '${quote.id}'
+															});
+														}
+														// trace(results);
+														interaction.respond(results)
+															.then(null, function(err) {
+																trace(err);
+																Browser.console.dir(err);
+															});
+													default:
+														trace(response);
+												}
+											});
 									}
-									interaction.respond(results).then(null, function(err) {
+									universe.setComponents(universe.createEntity(), e);
+									return;
+								} else {
+									interaction.respond([]).then(null, function(err) {
 										trace(err);
 										Browser.console.dir(err);
 									});
-								}).then(null, function(err) {
-									trace(err);
-									Browser.console.dir(err);
-								});
-								return;
+									return;
+								}
 							}
-
+							
 							Firestore.getDocs(query).then(function(res) {
 								if (res.docs.length == 0) {
 									interaction.reply('Could not find any quotes with that identifier');
@@ -404,6 +446,14 @@ class Quote extends CommandDbBase {
 			name = name.substr(0, 25) + '...';
 		}
 		return '$name - ' + data.description.substr(0, 25) + '... by ${data.username}';
+	}
+
+	inline function dbacResponse(data:DBQuote) {
+		var name = data.title;
+		if (name.length > 25) {
+			name = name.substr(0, 25) + '...';
+		}
+		return '$name - ' + data.description.substr(0, 25) + '... by ${data.author_tag}';
 	}
 
 	function nameArray(original:String) {

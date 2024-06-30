@@ -107,7 +107,7 @@ class Main {
 				},
 				{
 					name: 'messages',
-					enabled: true,
+					enabled: #if block false #else true #end,
 					systems: [ThreadCount, ScamPrevention, JamSuggestionBox, Showcase]
 				},
 				{

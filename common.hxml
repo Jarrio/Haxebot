@@ -16,6 +16,7 @@
 #-D keep-inline-positions
 -D ecs.no_debug_output
 -D ecs.static_loading
+-D allow_raw
 --js bin/main.js
 
 -main Main
