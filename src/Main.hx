@@ -139,8 +139,6 @@ class Main {
 						AutoRole,
 						Quote,
 						Api,
-						Haxelib,
-						Trace,
 						React,
 						Notify,
 						Rtfm,
