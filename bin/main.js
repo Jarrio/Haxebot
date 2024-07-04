@@ -9222,7 +9222,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	,onEnabled: function() {
 		var _gthis = this;
 		haxe_Log.trace("here",{ fileName : "src/commands/Run2.hx", lineNumber : 52, className : "commands.Run2", methodName : "onEnabled"});
-		this.http = new haxe_http_HttpNodeJs("http://217.160.146.136:1337");
+		this.http = new haxe_http_HttpNodeJs("http://localhost:1337");
 		this.http.onError = function(error) {
 			haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 55, className : "commands.Run2", methodName : "onEnabled"});
 		};

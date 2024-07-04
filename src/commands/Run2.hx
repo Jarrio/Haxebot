@@ -50,7 +50,7 @@ class Run2 extends TextCommandBase {
 
 	override function onEnabled() {
 		trace('here');
-		http = new Http('http://217.160.146.136:1337');
+		http = new Http('http://localhost:1337');
 		http.onError = function(error) {
 			trace(error);
 		}
