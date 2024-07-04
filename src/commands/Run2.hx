@@ -50,6 +50,7 @@ class Run2 extends TextCommandBase {
 
 	override function onEnabled() {
 		trace('here');
+
 		http = new Http('http://localhost:1337');
 		http.onError = function(error) {
 			trace(error);
@@ -168,10 +169,12 @@ class Run2 extends TextCommandBase {
 		data = data.toString();
 		var remove_vm = ~/(\[(.*|vm)\].*)$/igmu;
 
-		// data = data.replace(filename, class_entry).replace('', '');
+		//data = data.replace(filename, class_entry).replace('', '');
 		data = data.replace(this.base_path, "");
 		data = data.replace("/hx/", "");
 		data = data.replace("/bin/", "");
+		var reg = ~/Main.hx:[0-9].*?: /gm;
+		data = reg.replace(data, '');
 
 		return data;
 	}
@@ -313,6 +316,8 @@ class Run2 extends TextCommandBase {
 							code_output += '$key. $item \n';
 						}
 
+						code_output = cleanOutput(code_output, 'Main.hx', 'Main');
+//						trace(code_output);
 						if (truncated) {
 							code_output += '\n//Output has been trimmed.';
 						}
