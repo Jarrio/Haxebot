@@ -16,6 +16,7 @@ enum DBEvents {
 	GetRecord(table:String, query:QueryExpr, callback:Callback->Void);
 	GetRecords(table:String, query:QueryExpr, callback:Callback->Void);
 	GetAllRecords(table:String, callback:Callback->Void);
+	DeleteByValue(table:String, column:String, value:Any, callback:Callback -> Void);
 	DeleteRecord(table:String, column:String, value:Record, callback:Callback -> Void);
 	Watch(table:String, condition:QueryExpr, callback:Callback->Void, ?rate:Float);
 	Poll(event:DBEvents, ms:Int);
@@ -26,7 +27,7 @@ enum Callback {
 	Record(data:Record);
 	Records(data:RecordSet);
 	WatchResult(result:Array<Record>);
-	Success(message:String, ?data:Any);
+	Success(message:String, ?data:Record);
 	Error(message:String, ?data:Any);
 }
 

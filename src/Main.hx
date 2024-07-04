@@ -54,6 +54,7 @@ import commands.Roundup;
 import commands.Everyone;
 import systems.DatabaseSystem;
 import Query;
+import commands.Run2;
 
 class Main {
 	public static var app:FirebaseApp;
@@ -107,18 +108,19 @@ class Main {
 				},
 				{
 					name: 'messages',
-					enabled: #if block false #else true #end,
-					systems: [ThreadCount, ScamPrevention, JamSuggestionBox, Showcase]
+					enabled: #if block true #else true #end,
+					systems: [ThreadCount, ScamPrevention, JamSuggestionBox, Showcase, RateLimit]
 				},
 				{
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
 						Hi, Boop,
+						Run2,
 						Everyone,
 						Roundup,
 						RoundupRoundup,
-						PinMessageInfo, Tracker, Quote, Snippet, Run, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						PinMessageInfo, Tracker, Quote, Snippet, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
@@ -757,4 +759,5 @@ enum abstract CommandForward(String) from String {
 	var add_event_role;
 	var auto_thread;
 	var thread_count;
+	var rate_limit;
 }

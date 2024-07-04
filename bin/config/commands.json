@@ -900,6 +900,57 @@
 		]
 	},
 	{
+		"name": "ratelimit",
+		"permissions": "supermod",
+		"description": "[Assigned] A mod tool to add a slow mode to a particular user server wide",
+		"params": [
+			{
+				"name": "create",
+				"type": "subcommand",
+				"description": "add slow mode to a user",
+				"params": [
+					{
+						"name": "user",
+						"type": "user",
+						"description": "Name of the user",
+						"required": true
+					},
+					{
+						"name": "counter",
+						"type": "number",
+						"description": "After how many messages to activate the slow mode",
+						"required": true
+					},
+					{
+						"name": "time",
+						"type": "string",
+						"description": "How long should the user be rate limited for. Takes a string format (1m, 5m, 1hr, 1d... etc)",
+						"required": true
+					},
+					{
+						"name": "reason",
+						"type": "string",
+						"description": "A reason for the rate limit, will be sent to the user and in the admin channel",
+						"required": true
+					}
+				]
+			}, 
+			{
+				"name": "delete",
+				"type": "subcommand",
+				"description": "Remove slow mode from a user",
+				"params":[
+					{
+						"name": "name",
+						"type": "user",
+						"description": "Delete a rate limit",
+						"required": true
+					}
+				]
+			}
+		]
+	},
+	{
 		"name": "tracker",
 		"permissions": "admin",
 		"description": "[Assigned] A utility to track keywords mentioned around the server",

@@ -18,6 +18,8 @@ enum CommandOptions {
 	Color(role:String);	
 	TrackerCreate(name:String, keywords:String, description:String, string_exclude:String, channel_exclude:String, user_exclude:String);	
 	TrackerDelete(name:String);	
+	RatelimitCreate(user:User, counter:Int, time:String, reason:String);	
+	RatelimitDelete(user:User);	
 	SnippetEdit(id:String);	
 	SnippetDelete(id:String);	
 	SnippetSearch(taga:String, tagb:String, tagc:String);

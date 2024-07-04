@@ -124,7 +124,7 @@ class DatabaseSystem extends System {
 					db.table(table).then((result) -> {
 						return result.table.add(value);
 					}).then(function(res) {
-						callback(Success("Inserted"));
+						callback(Success("Inserted", res.data));
 					}, function(err) {
 						if (err.message != null
 							&& (err.message : String).contains('DUPLICATE_DATA')) {
@@ -190,13 +190,28 @@ class DatabaseSystem extends System {
 							callback(Error('No data', result.data));
 						}
 					}, (err) -> trace(err));
+				case DeleteByValue(table, column, value, callback):
+					this.getTable(table, function(result) {
+						var record = new RRecord();
+						record.field(column, value);
+
+						result.table.delete(record).then(function(succ) {
+							callback(Success("Successfully deleted", succ.data));
+						}, function(err) {
+							callback(Error("Failed", err));
+							trace(err);
+						});
+					}, function(err) {
+						trace(err);
+						callback(Error("Failed", err));
+					});
 				case DeleteRecord(table, column, value, callback):
 					this.getTable(table, function(result) {
 						var record = new RRecord();
 						record.field(column, value);
 
 						result.table.delete(record).then(function(succ) {
-							callback(Success("Successfully deleted", succ));
+							callback(Success("Successfully deleted", succ.data));
 						}, function(err) {
 							callback(Error("Failed", err));
 							trace(err);

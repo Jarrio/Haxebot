@@ -10,7 +10,7 @@ using Lambda;
 using util.DiscordUtil;
 import util.DiscordUtil;
 import firebase.web.firestore.Firestore;
-import firebase.web.firestore.Query;
+import firebase.web.firestore.Query as FQuery;
 import firebase.web.firestore.Firestore.*;
 
 import util.EcsTools;

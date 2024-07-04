@@ -24,7 +24,7 @@ class Poll extends CommandDbBase {
 		if (!checked && Main.connected) {
 			checked = true;
 
-			var query:Query<PollData> = Firestore.query(collection(this.db,
+			var query:FQuery<PollData> = Firestore.query(collection(this.db,
 				'discord/polls/entries'));
 			Firestore.getDocs(query).then(function(res) {
 				var now = Date.now().getTime();
