@@ -656,7 +656,7 @@ Main.start = function() {
 	vec[0] = new ecs_Phase(true,"systems",new Array(2),new Array(2));
 	vec[1] = new ecs_Phase(true,"messages",new Array(5),new Array(5));
 	vec[2] = new ecs_Phase(false,"testing",new Array(17),new Array(17));
-	vec[3] = new ecs_Phase(true,"main",new Array(25),new Array(25));
+	vec[3] = new ecs_Phase(true,"main",new Array(26),new Array(26));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
 	var vec = new Array(13);
@@ -1211,69 +1211,73 @@ Main.start = function() {
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_AutoRole(u);
+	var s = new commands_Run2(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_AutoRole(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_Quote(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Api(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_React(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Notify(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Poll(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Boop(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Archive(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Help(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Translate(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_Hi(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
 	s.onEnabled();
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_Roundup(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
 	s.onEnabled();
-	var s = new commands_Say(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
 	s.onEnabled();
-	var s = new commands_Color(u);
+	var s = new commands_Say(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
+	s.onEnabled();
+	var s = new commands_Color(u);
+	phase.systems[25] = s;
+	phase.enabledSystems[25] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -1303,11 +1307,11 @@ Main.start = function() {
 				default:
 					var e = haxe_Log.trace;
 					var tmp = d1.field("key");
-					e(tmp == null ? "null" : Std.string(tmp),{ fileName : "src/Main.hx", lineNumber : 184, className : "Main", methodName : "start"});
+					e(tmp == null ? "null" : Std.string(tmp),{ fileName : "src/Main.hx", lineNumber : 185, className : "Main", methodName : "start"});
 				}
 			}
 		} else {
-			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 188, className : "Main", methodName : "start"});
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 189, className : "Main", methodName : "start"});
 		}
 	});
 	var _ecsTmpEntity = Main.universe.createEntity();
@@ -1322,7 +1326,7 @@ Main.start = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 208, className : "Main", methodName : "start"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 209, className : "Main", methodName : "start"});
 		Main.client = clients[0];
 		Main.connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1333,15 +1337,15 @@ Main.start = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 217, className : "Main", methodName : "start"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 218, className : "Main", methodName : "start"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 223, className : "Main", methodName : "start"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 224, className : "Main", methodName : "start"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 229, className : "Main", methodName : "start"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 230, className : "Main", methodName : "start"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,5,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,7,member);
@@ -1483,8 +1487,8 @@ Main.start = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 257, className : "Main", methodName : "start"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 258, className : "Main", methodName : "start"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 258, className : "Main", methodName : "start"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 259, className : "Main", methodName : "start"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1689,7 +1693,7 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isModalSubmit()) {
-			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 290, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 291, className : "Main", methodName : "start"});
 			switch(interaction.customId) {
 			case "code_paste":
 				var _ecsTmpEntity = Main.universe.createEntity();
@@ -2015,7 +2019,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 459, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 460, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -2023,21 +2027,21 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 467, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 468, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 477, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 478, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
 			CommandPermission.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 487, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 488, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
@@ -2049,9 +2053,9 @@ Main.updateState = function(field,value) {
 	record.field("value",value);
 	var e = database_DBEvents.Update("state",record,QueryExpr.QueryBinop(QBinop.QOpAssign,QueryExpr.QueryConstant(QConstant.QIdent("key")),QueryExpr.QueryValue(field)),function(response) {
 		if(response._hx_index == 4) {
-			haxe_Log.trace("updated state",{ fileName : "src/Main.hx", lineNumber : 503, className : "Main", methodName : "updateState"});
+			haxe_Log.trace("updated state",{ fileName : "src/Main.hx", lineNumber : 504, className : "Main", methodName : "updateState"});
 		} else {
-			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 505, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 506, className : "Main", methodName : "updateState"});
 		}
 	});
 	var _ecsTmpEntity = Main.universe.createEntity();
@@ -9196,7 +9200,6 @@ commands_Run.prototype = $extend(systems_TextCommandBase.prototype,{
 	,__properties__: $extend(systems_TextCommandBase.prototype.__properties__,{get_base_path:"get_base_path"})
 });
 var commands_Run2 = function(_universe) {
-	this.varname = "";
 	this.timeout = 5000;
 	this.checked = false;
 	this.code_requests = new haxe_ds_StringMap();
@@ -9215,129 +9218,31 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	,checked: null
 	,timeout: null
 	,last_cleared: null
+	,http: null
 	,onEnabled: function() {
-		haxe_Log.trace("here",{ fileName : "src/commands/Run2.hx", lineNumber : 28, className : "commands.Run2", methodName : "onEnabled"});
-	}
-	,update: function(_) {
-		systems_TextCommandBase.prototype.update.call(this,_);
-		var now = new Date().getTime();
-		var clear_frame = commands_types_Duration.fromString("2w");
-		if(!(now - this.last_cleared < clear_frame)) {
-			this.last_cleared = now;
-			var before = null;
-			try {
-				var path = (haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".")) + "/haxebot";
-				var folders = js_node_Fs.readdirSync(path);
-				var _g = 0;
-				while(_g < folders.length) {
-					var folder = folders[_g];
-					++_g;
-					before = HxOverrides.strDate(folder).getTime();
-					if(now - before < clear_frame) {
-						continue;
-					}
-					var path1 = "" + path + "/" + folder;
-					if(sys_FileSystem.exists(path1)) {
-						var _g1 = 0;
-						var _g2 = js_node_Fs.readdirSync(path1);
-						while(_g1 < _g2.length) {
-							var file = _g2[_g1];
-							++_g1;
-							var curPath = path1 + "/" + file;
-							if(sys_FileSystem.isDirectory(curPath)) {
-								if(sys_FileSystem.exists(curPath)) {
-									var _g3 = 0;
-									var _g4 = js_node_Fs.readdirSync(curPath);
-									while(_g3 < _g4.length) {
-										var file1 = _g4[_g3];
-										++_g3;
-										var curPath1 = curPath + "/" + file1;
-										if(sys_FileSystem.isDirectory(curPath1)) {
-											sys_FileSystem.deleteDirectory(curPath1);
-										} else {
-											js_node_Fs.unlinkSync(curPath1);
-										}
-									}
-									js_node_Fs.rmdirSync(curPath);
-								}
-							} else {
-								js_node_Fs.unlinkSync(curPath);
-							}
-						}
-						js_node_Fs.rmdirSync(path1);
-					}
-				}
-			} catch( _g ) {
-				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/commands/Run2.hx", lineNumber : 60, className : "commands.Run2", methodName : "cleanDirectory"});
+		var _gthis = this;
+		haxe_Log.trace("here",{ fileName : "src/commands/Run2.hx", lineNumber : 52, className : "commands.Run2", methodName : "onEnabled"});
+		this.http = new haxe_http_HttpNodeJs("http://217.160.146.136:1337");
+		this.http.onError = function(error) {
+			haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 55, className : "commands.Run2", methodName : "onEnabled"});
+		};
+		this.http.setPostData("{\r\n\t\t\t\t\"action\": \"haxe_version\"\r\n\t\t\t}");
+		this.http.onData = function(response) {
+			var parse = JSON.parse(response);
+			if(parse.status == "Ok") {
+				_gthis.haxe_version = parse.output;
+				haxe_Log.trace(_gthis.haxe_version,{ fileName : "src/commands/Run2.hx", lineNumber : 67, className : "commands.Run2", methodName : "onEnabled"});
+			} else {
+				haxe_Log.trace(parse.output,{ fileName : "src/commands/Run2.hx", lineNumber : 69, className : "commands.Run2", methodName : "onEnabled"});
 			}
-		}
-	}
-	,cleanDirectory: function() {
-		var now = new Date().getTime();
-		var clear_frame = commands_types_Duration.fromString("2w");
-		if(now - this.last_cleared < clear_frame) {
-			return;
-		}
-		this.last_cleared = now;
-		var before = null;
-		try {
-			var path = (haxe_io_Path.isAbsolute(".") ? "." : js_node_Path.resolve(".")) + "/haxebot";
-			var folders = js_node_Fs.readdirSync(path);
-			var _g = 0;
-			while(_g < folders.length) {
-				var folder = folders[_g];
-				++_g;
-				before = HxOverrides.strDate(folder).getTime();
-				if(now - before < clear_frame) {
-					continue;
-				}
-				var path1 = "" + path + "/" + folder;
-				if(sys_FileSystem.exists(path1)) {
-					var _g1 = 0;
-					var _g2 = js_node_Fs.readdirSync(path1);
-					while(_g1 < _g2.length) {
-						var file = _g2[_g1];
-						++_g1;
-						var curPath = path1 + "/" + file;
-						if(sys_FileSystem.isDirectory(curPath)) {
-							if(sys_FileSystem.exists(curPath)) {
-								var _g3 = 0;
-								var _g4 = js_node_Fs.readdirSync(curPath);
-								while(_g3 < _g4.length) {
-									var file1 = _g4[_g3];
-									++_g3;
-									var curPath1 = curPath + "/" + file1;
-									if(sys_FileSystem.isDirectory(curPath1)) {
-										sys_FileSystem.deleteDirectory(curPath1);
-									} else {
-										js_node_Fs.unlinkSync(curPath1);
-									}
-								}
-								js_node_Fs.rmdirSync(curPath);
-							}
-						} else {
-							js_node_Fs.unlinkSync(curPath);
-						}
-					}
-					js_node_Fs.rmdirSync(path1);
-				}
-			}
-		} catch( _g ) {
-			var _g1 = haxe_Exception.caught(_g);
-			haxe_Log.trace(_g1,{ fileName : "src/commands/Run2.hx", lineNumber : 60, className : "commands.Run2", methodName : "cleanDirectory"});
-		}
+		};
+		this.http.request(true);
 	}
 	,run: function(message,content) {
-		var http = new haxe_http_HttpNodeJs("http://217.160.146.136:1337");
-		http.onData = function(response) {
-			haxe_Log.trace(response,{ fileName : "src/commands/Run2.hx", lineNumber : 67, className : "commands.Run2", methodName : "run"});
-		};
-		http.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 70, className : "commands.Run2", methodName : "run"});
-		};
-		http.setPostData("{\r\n    \"action\": \"run\",\r\n    \"input\" : \"class Main {static function main() {trace(9+10);}}\"\r\n}");
-		http.request(true);
+		if(this.haxe_version == null) {
+			return;
+		}
+		this.extractCode(message.content,message);
 	}
 	,codeSource: function(message) {
 		var remote = new EReg("^(!run #([a-zA-Z0-9]{5,8}))","gi");
@@ -9372,15 +9277,6 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			return;
 		}
 		this.parse(null,response);
-	}
-	,deleteFile: function(filename) {
-		try {
-			js_node_Fs.unlinkSync("" + this.get_base_path() + "/bin/" + filename + ".js");
-		} catch( _g ) {
-			haxe_NativeStackTrace.lastError = _g;
-			var _g1 = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(_g1,{ fileName : "src/commands/Run2.hx", lineNumber : 135, className : "commands.Run2", methodName : "deleteFile"});
-		}
 	}
 	,extractLibs: function(code) {
 		var check_code = new EReg("(/?/?-l\\W.*)","gmiu");
@@ -9423,7 +9319,6 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	,cleanOutput: function(data,filename,class_entry) {
 		data = data.toString();
 		new RegExp("(\\[(.*|vm)\\].*)$","igmu".split("u").join(""));
-		data = StringTools.replace(StringTools.replace(data,filename,class_entry),"\x1B","");
 		data = StringTools.replace(data,this.get_base_path(),"");
 		data = StringTools.replace(data,"/hx/","");
 		data = StringTools.replace(data,"/bin/","");
@@ -9454,64 +9349,16 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 				return;
 			}
 		}
-		if(!this.isSafe(code,response)) {
-			response.reply({ content : "Your code contains bad things."});
-			return;
-		}
 		this.runCodeOnThread(code,response);
-	}
-	,isSafe: function(code,response) {
-		var check_http = new EReg("haxe.http|haxe.Http","gmu");
-		if(check_http.match(code)) {
-			return false;
-		}
-		if(!Main.state.macros) {
-			if(new EReg("@:.*[bB]uild","igmu").match(code)) {
-				response.reply({ content : "Currently no build macros allowed"});
-				return false;
-			}
-		} else if(code.indexOf("macro") != -1 || new EReg("macro|@:.*[bB]uild","igmu").match(code)) {
-			return false;
-		}
-		return !new EReg("(sys|((\"|')s(.*)y(.*)(\"|')s(\"|'))|eval|syntax\\s*.|require|location|untyped|@:.*[bB]uild)","igmu").match(code);
-	}
-	,varname: null
-	,insertLoopBreak: function(name,code) {
-		this.varname = "___" + util_Random.string(6);
-		var regex = new EReg("((while|for)\\s*\\(.*\\)\\s*\\{|(while|for)\\s*\\(.*?\\))|(function.*?\\(.*?\\)\\s*{)","gmui");
-		var copy = code;
-		copy = StringTools.replace(copy,"class " + name + " {","class " + name + " {\nstatic public final " + this.varname + " = Date.now().getTime();");
-		copy = StringTools.replace(copy,"class " + name + "{","class " + name + " {\nstatic public final " + this.varname + " = Date.now().getTime();");
-		var matched = [];
-		while(regex.match(code)) {
-			if(regex.matched(1) != null) {
-				matched.push(regex.matched(1));
-			}
-			if(regex.matched(4) != null) {
-				matched.push(regex.matched(4));
-			}
-			code = regex.matchedRight();
-		}
-		var throw_fun = "public static function __time_fun() {if (Date.now().getTime() - " + name + "." + this.varname + " > " + this.timeout + ") { throw \"Code took too long to execute.\";}}";
-		var condition = "" + name + ".__time_fun();";
-		var _g = 0;
-		while(_g < matched.length) {
-			var match = matched[_g];
-			++_g;
-			copy = StringTools.replace(copy,match,"\n" + match + "\n" + condition);
-		}
-		copy = StringTools.replace(copy,"class " + name + " {","class " + name + " {\n\t" + throw_fun + "\n\t");
-		copy = StringTools.replace(copy,"class " + name + "{","class " + name + " {\n\t" + throw_fun + "\n\t");
-		return copy;
 	}
 	,parseError: function(error,code) {
 		var embed = new discord_$js_MessageEmbed();
 		embed.setTitle("Compilation Error");
-		var regex = new EReg("(Main|Test).hx:([0-9]+): characters ([0-9]+)-([0-9]+) : (.*)","gm");
+		var regex = new EReg("(Main|Test).hx:([0-9]+): (character|characters) ([0-9]+)(-([0-9]+))? : (.*)","gm");
 		if(regex.match(error)) {
 			var line = Std.parseInt(regex.matched(2));
-			var start_char = Std.parseInt(regex.matched(3));
-			var end_char = Std.parseInt(regex.matched(4));
+			var start_char = Std.parseInt(regex.matched(4));
+			var end_char = Std.parseInt(regex.matched(6));
 			var str = "";
 			var new_code = "";
 			var _this = code.split("\n");
@@ -9549,11 +9396,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	}
 	,runCodeOnThread: function(code,message) {
 		var _gthis = this;
-		if(!this.isSafe(code,message)) {
-			message.reply({ content : "Your code contains bad things."});
-			return;
-		}
-		var mention = "";
+		var mention = "<@" + message.id + ">";
 		var libs = this.extractLibs(code);
 		var lib_regex = new EReg("(/?/?-l\\W.*)","gmiu");
 		if(lib_regex.match(code)) {
@@ -9569,153 +9412,123 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			format += data;
 		}
 		try {
-			var filename = "H" + new Date().getTime() + Math.floor(Math.random() * 100000);
 			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mg");
-			var code_content = "";
+			var code_content = get_paths.code;
 			var class_entry = "Main";
 			if(check_class.match(get_paths.code)) {
 				var parsed = check_class.matched(0);
-				var replaced = "";
 				if(parsed.indexOf("Test") != -1) {
-					class_entry = "Test";
+					code_content = StringTools.replace(code_content,"class Test","class Main");
 				}
-				var by = StringTools.replace(parsed,class_entry,filename);
-				replaced = parsed.replace(check_class.r,by);
-				code_content = StringTools.replace(get_paths.code,parsed,replaced);
-				var other_instances = new EReg(class_entry,"gm");
-				if(other_instances.match(code_content)) {
-					code_content = code_content.replace(other_instances.r,filename);
-				}
-				code_content = StringTools.replace(code_content,parsed,parsed);
 			} else {
-				code_content = "class " + filename + " {\n\tstatic function main() {\n\t\t" + get_paths.code + "\n\t}\n}";
+				code_content = "class " + class_entry + " {\n\tstatic function main() {\n\t\t" + get_paths.code + "\n\t}\n}";
 			}
 			code_content = format + "\n" + code_content;
-			var pre_loop = code_content;
-			code_content = this.insertLoopBreak(filename,code_content);
-			js_node_Fs.appendFile("" + this.get_base_path() + "/hx/" + filename + ".hx",code_content + ("//User:" + message.author.tag + " | time: " + Std.string(new Date())),function(error) {
-				if(error != null) {
-					haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 379, className : "commands.Run2", methodName : "runCodeOnThread"});
-				}
-				var commands = ["-cp","" + _gthis.get_base_path() + "/hx","-main",filename,"-js","" + _gthis.get_base_path() + "/bin/" + filename + ".js"];
-				var $process = "./haxe/haxe";
-				if(!sys_FileSystem.exists($process)) {
-					$process = "haxe";
-				}
-				var ls = js_node_ChildProcess.spawn($process,libs.concat(commands),{ timeout : _gthis.timeout});
-				ls.stderr.once("data",function(data) {
-					var compile_output = _gthis.cleanOutput(data,filename,class_entry);
-					pre_loop = StringTools.replace(pre_loop,filename,class_entry);
-					var embed = _gthis.parseError(compile_output,pre_loop);
+			this.http.onData = function(response) {
+				var parse = JSON.parse(response);
+				switch(parse.status) {
+				case "OhNo":
+					var compile_output = _gthis.cleanOutput(parse.error,null,class_entry);
+					var errs = "";
+					var _g = 0;
+					var _g1 = parse.error.split("\n");
+					while(_g < _g1.length) {
+						var line = _g1[_g];
+						++_g;
+						var split = line.split("/");
+						errs += split[split.length - 1] + "\n";
+					}
+					var embed = _gthis.parseError(errs,code_content);
 					if(embed == null) {
 						message.reply({ allowedMentions : { parse : []}, content : mention + ("```\n" + compile_output + "```")});
 					} else {
-						embed.setDescription(_gthis.cleanOutput(embed.data.description,filename,class_entry));
 						message.reply({ allowedMentions : { parse : []}, embeds : [embed]});
 					}
-					ls.kill("SIGTERM");
-				});
-				ls.once("close",function(data) {
-					var response = "";
-					var js_file = "" + _gthis.get_base_path() + "/bin/" + filename + ".js";
-					if(!sys_FileSystem.exists(js_file)) {
-						haxe_Log.trace("Code likely errored and didnt compile (" + filename + ".js)",{ fileName : "src/commands/Run2.hx", lineNumber : 426, className : "commands.Run2", methodName : "runCodeOnThread"});
-						ls.kill("SIGTERM");
+					break;
+				case "Ok":
+					var resp = "";
+					var x = parse.output.split("\n");
+					var truncated = false;
+					if(x.length > 24) {
+						truncated = true;
+						resp = "";
+						var _g = 0;
+						var _g1 = x.slice(x.length - 23);
+						while(_g < _g1.length) {
+							var line = _g1[_g];
+							++_g;
+							resp += line + "\n";
+						}
+					}
+					var embed = new discord_$js_MessageEmbed();
+					embed.type = "article";
+					var code_output = "";
+					resp = parse.output;
+					var split = resp.split("\n");
+					var _g_current = 0;
+					var _g_array = split;
+					while(_g_current < _g_array.length) {
+						var _g_value = _g_array[_g_current];
+						var _g_key = _g_current++;
+						var key = _g_key;
+						var item = _g_value;
+						if(key >= split.length - 1) {
+							break;
+						}
+						code_output += "" + key + ". " + item + " \n";
+					}
+					if(truncated) {
+						code_output += "\n//Output has been trimmed.";
+					}
+					var desc = "**Code:**\n```hx\n" + get_paths.code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
+					embed.setDescription(desc);
+					var url = _gthis.codeSource(message.content);
+					var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
+					if(url == "") {
+						embed.setAuthor(author);
+					} else {
+						var tag = url.split("#")[1];
+						embed.setTitle("TryHaxe #" + tag);
+						embed.setURL(url);
+						embed.setAuthor(author);
+					}
+					var date = new Date(message.createdTimestamp);
+					var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
+					embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
+					if(resp.length > 0) {
+						message.reply({ allowedMentions : { parse : []}, embeds : [embed]}).then(function(succ) {
+							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 350, className : "commands.Run2", methodName : "runCodeOnThread"});
+							if(message.deletable) {
+								message.delete().then(null,function(err) {
+									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 353, className : "commands.Run2", methodName : "runCodeOnThread"});
+									$global.console.dir(err);
+								});
+							}
+						},function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 358, className : "commands.Run2", methodName : "runCodeOnThread"});
+							$global.console.dir(err);
+						});
 						return;
 					}
-					var obj = null;
-					var vm = new vm2_NodeVM({ sandbox : obj, console : "redirect", timeout : _gthis.timeout});
-					vm.on("console.log",function(data,info) {
-						var regex = new EReg("H[0-9]*..hx:[0-9]*.: (.*)","gm");
-						if(regex.match(data)) {
-							data = regex.matched(1);
-						}
-						if(info != null) {
-							response += "" + Std.string(info) + "\n";
-							return response;
-						} else {
-							response += "" + data + "\n";
-							return response;
-						}
-					});
-					try {
-						vm.run(js_node_Fs.readFileSync(js_file,{ encoding : "utf8"}));
-						var x = response.split("\n");
-						var truncated = false;
-						if(x.length > 24) {
-							truncated = true;
-							response = "";
-							var _g = 0;
-							var _g1 = x.slice(x.length - 23);
-							while(_g < _g1.length) {
-								var line = _g1[_g];
-								++_g;
-								response += line + "\n";
-							}
-						}
-						var embed = new discord_$js_MessageEmbed();
-						embed.type = "article";
-						var code_output = "";
-						var split = response.split("\n");
-						var _g_current = 0;
-						var _g_array = split;
-						while(_g_current < _g_array.length) {
-							var _g_value = _g_array[_g_current];
-							var _g_key = _g_current++;
-							var key = _g_key;
-							var item = _g_value;
-							if(key >= split.length - 1) {
-								break;
-							}
-							code_output += "" + key + ". " + item + " \n";
-						}
-						if(truncated) {
-							code_output += "\n//Output has been trimmed.";
-						}
-						var desc = "**Code:**\n```hx\n" + get_paths.code + "``` **Output:**\n ```markdown\n" + code_output + "\n```";
-						embed.setDescription(desc);
-						var url = _gthis.codeSource(message.content);
-						var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
-						if(url == "") {
-							embed.setAuthor(author);
-						} else {
-							var tag = url.split("#")[1];
-							embed.setTitle("TryHaxe #" + tag);
-							embed.setURL(url);
-							embed.setAuthor(author);
-						}
-						var date = new Date(message.createdTimestamp);
-						var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
-						embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
-						if(response.length > 0 && data == 0) {
-							message.reply({ allowedMentions : { parse : []}, embeds : [embed]}).then(function(succ) {
-								haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id: " + filename,{ fileName : "src/commands/Run2.hx", lineNumber : 509, className : "commands.Run2", methodName : "runCodeOnThread"});
-								if(message.deletable) {
-									message.delete().then(null,function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 514, className : "commands.Run2", methodName : "runCodeOnThread"});
-										$global.console.dir(err);
-									});
-								}
-							},function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 519, className : "commands.Run2", methodName : "runCodeOnThread"});
-								$global.console.dir(err);
-							});
-							ls.kill();
-							return;
-						}
-					} catch( _g ) {
-						var e = haxe_Exception.caught(_g);
-						var compile_output = _gthis.cleanOutput(e.get_message(),filename,class_entry);
-						message.reply({ allowedMentions : { parse : []}, content : mention + ("```\n" + compile_output + "```")});
-						haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 532, className : "commands.Run2", methodName : "runCodeOnThread"});
-					}
-				});
-			});
+					break;
+				}
+			};
+			var libstr = "";
+			var _g = 0;
+			while(_g < libs.length) {
+				var lib = libs[_g];
+				++_g;
+				libstr += "" + lib + "\n";
+			}
+			var request = { action : "run", input : code_content, hxml : libstr};
+			var str = JSON.stringify(request);
+			this.http.setPostData(str);
+			this.http.request(true);
 			return;
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 540, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 566, className : "commands.Run2", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
