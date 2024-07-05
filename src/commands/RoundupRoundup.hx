@@ -162,6 +162,9 @@ class RoundupRoundup extends CommandDbBase {
 		iterate(scheduled_event_updates, (entity) -> {
 			switch (forward) {
 				case scheduled_event_update:
+					if (event.id != this.event.id) {
+						continue;
+					}
 					event.client.guilds.fetch({guild: Main.guild_id}).then(function(guild) {
 						guild.scheduledEvents.fetch(event.id)
 							.then(function(event:GuildScheduledEvent) {
