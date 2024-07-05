@@ -49,7 +49,7 @@ class MessageRouter extends System {
 
 		if (message.content.startsWith('!run')) {
 			trace('here');
-			EcsTools.set(TextCommand.run, message);
+			universe.setComponents(universe.createEntity(), TextCommand.run, message);
 		}
 	}
 }

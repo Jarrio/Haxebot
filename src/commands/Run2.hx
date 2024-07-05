@@ -38,7 +38,6 @@ private typedef Response = {
 }
 
 class Run2 extends TextCommandBase {
-	@:fastFamily var code_messages:{message:TextCommand, response:Message};
 	var message_id:String;
 	var haxe_version:String = null;
 	var code_requests:Map<String, Array<Float>> = [];
