@@ -10,7 +10,7 @@ class DBRateLimit extends MyRecord {
 	@crecord public var count:Int;
 	@crecord public var time:String;
 	@record public var reason:String;
-	@record public var silenced:Float;
+	@record public var silenced:Float = -1;
 	@record public var created:Float;
 	@record public var id:Int;
 

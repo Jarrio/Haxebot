@@ -656,7 +656,7 @@ Main.start = function() {
 	vec[0] = new ecs_Phase(true,"systems",new Array(2),new Array(2));
 	vec[1] = new ecs_Phase(true,"messages",new Array(5),new Array(5));
 	vec[2] = new ecs_Phase(false,"testing",new Array(17),new Array(17));
-	vec[3] = new ecs_Phase(true,"main",new Array(26),new Array(26));
+	vec[3] = new ecs_Phase(true,"main",new Array(25),new Array(25));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
 	var vec = new Array(13);
@@ -1211,73 +1211,69 @@ Main.start = function() {
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
 	s.onEnabled();
-	var s = new commands_Run2(u);
+	var s = new commands_AutoRole(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
 	s.onEnabled();
-	var s = new commands_AutoRole(u);
+	var s = new commands_Quote(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_Api(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_React(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Notify(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Poll(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Boop(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Archive(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Help(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Translate(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Hi(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Roundup(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
 	s.onEnabled();
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_Say(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
 	s.onEnabled();
-	var s = new commands_Say(u);
+	var s = new commands_Color(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
-	s.onEnabled();
-	var s = new commands_Color(u);
-	phase.systems[25] = s;
-	phase.enabledSystems[25] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -11082,6 +11078,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						tracker[0].last_message = message.createdTimestamp;
 						tracker[0].member.roles.add(this.silence_role).then((function(tracker,limit) {
 							return function(resp) {
+								haxe_Log.trace("" + Std.string(new Date()) + " user " + limit[0].user_tag + " silenced",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 72, className : "commands.mod.RateLimit", methodName : "update"});
 								limit[0].silenced = tracker[0].last_message;
 								_gthis.updateLimit(limit[0]);
 							};
@@ -11116,10 +11113,11 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						limit[0].silenced = -1;
 						tracker[0].counter = 1;
 						_gthis.updateLimit(limit[0]);
+						haxe_Log.trace("" + Std.string(new Date()) + " user " + limit[0].user_tag + " unsilenced",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 100, className : "commands.mod.RateLimit", methodName : "update"});
 					};
 				})(tracker1,limit1),(function() {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 99, className : "commands.mod.RateLimit", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 101, className : "commands.mod.RateLimit", methodName : "update"});
 					};
 				})());
 			}
@@ -11128,7 +11126,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 	,updateLimit: function(limit) {
 		var e = database_DBEvents.Update("rate_limit",limit.get_record(),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("user_id")),QueryExpr.QueryValue(limit.user_id)),function(response) {
 			if(response._hx_index != 4) {
-				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 110, className : "commands.mod.RateLimit", methodName : "updateLimit"});
+				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 112, className : "commands.mod.RateLimit", methodName : "updateLimit"});
 			}
 		});
 		var entity = util_EcsTools.get_universe().createEntity();
@@ -11145,10 +11143,10 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 		if(!Object.prototype.hasOwnProperty.call(this.tracking.h,obj.user_id)) {
 			Main.client.guilds.cache.get(Main.guild_id).members.fetch(obj.user_id).then(function(member) {
 				tracker = { member : member, counter : 1, last_message : -1};
-				haxe_Log.trace("Added " + obj.user_tag + " to list",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 127, className : "commands.mod.RateLimit", methodName : "setTracker"});
+				haxe_Log.trace("Added " + obj.user_tag + " to list",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 129, className : "commands.mod.RateLimit", methodName : "setTracker"});
 				_gthis.tracking.h[obj.user_id] = tracker;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 129, className : "commands.mod.RateLimit", methodName : "setTracker"});
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 131, className : "commands.mod.RateLimit", methodName : "setTracker"});
 			});
 		}
 	}
@@ -11169,15 +11167,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 					var key = user.id;
 					var value = database_types_DBRateLimit.fromRecord(response.data);
 					this1.h[key] = value;
-					haxe_Log.trace("Inserted " + user.tag + " rate limit",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 146, className : "commands.mod.RateLimit", methodName : "run"});
+					haxe_Log.trace("Inserted " + user.tag + " rate limit",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 148, className : "commands.mod.RateLimit", methodName : "run"});
 					interaction.reply({ content : "<@" + user.id + "> has been rate limited"}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 149, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 151, className : "commands.mod.RateLimit", methodName : "run"});
 					});
 				} else {
 					interaction.reply({ ephemeral : true, content : "An error occured, check logs"}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 154, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 156, className : "commands.mod.RateLimit", methodName : "run"});
 					});
-					haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 155, className : "commands.mod.RateLimit", methodName : "run"});
+					haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 157, className : "commands.mod.RateLimit", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -11204,15 +11202,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
 							delete(_this.h[key]);
 						}
-						haxe_Log.trace("removed slow mode from " + user1.tag,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 167, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace("removed slow mode from " + user1.tag,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 169, className : "commands.mod.RateLimit", methodName : "run"});
 						interaction.reply({ content : "Slow mode has been removed for <@" + user1.id + ">"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 170, className : "commands.mod.RateLimit", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 172, className : "commands.mod.RateLimit", methodName : "run"});
 						});
 					} else {
 						interaction.reply({ ephemeral : true, content : "An error occured, check logs"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 175, className : "commands.mod.RateLimit", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 177, className : "commands.mod.RateLimit", methodName : "run"});
 						});
-						haxe_Log.trace(resp,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 176, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 178, className : "commands.mod.RateLimit", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -11805,6 +11803,7 @@ database_types_DBQuote.prototype = $extend(database_MyRecord.prototype,{
 	,__class__: database_types_DBQuote
 });
 var database_types_DBRateLimit = function(user_id,user_tag,mod_id,mod_tag,count,time) {
+	this.silenced = -1;
 	database_MyRecord.call(this);
 	this.user_id = user_id;
 	this.user_tag = user_tag;
@@ -23732,6 +23731,11 @@ util_Duration.equalityFloat = null;
 util_Duration.addition = null;
 util_Duration.fromString = function(input) {
 	var time = 0.;
+	var sec_regex = new EReg("([0-9]+)[ ]?(s|sec|secs)\\b","gi");
+	if(sec_regex.match(input)) {
+		var num = parseFloat(sec_regex.matched(1));
+		time = num * 1000;
+	}
 	var min_regex = new EReg("([0-9]+)[ ]?(m|min|mins)\\b","gi");
 	if(min_regex.match(input)) {
 		var num = parseFloat(min_regex.matched(1));

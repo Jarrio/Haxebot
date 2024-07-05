@@ -69,7 +69,7 @@ class RateLimit extends CommandBase {
 							// silence
 							tracker.last_message = message.createdTimestamp;
 							tracker.member.roles.add(silence_role).then(function(resp) {
-								 //trace('${Date.now()} user ${limit.user_tag} silenced');
+								 trace('${Date.now()} user ${limit.user_tag} silenced');
 								limit.silenced = tracker.last_message;
 								updateLimit(limit);
 							}, (err) -> trace(err));
@@ -89,13 +89,15 @@ class RateLimit extends CommandBase {
 			var now = Date.now().getTime();
 			var dur:Float = Duration.fromString(limit.time);
 			var diff = limit.silenced + dur;
+
 			if (now > diff) {
+				
 				var tracker = tracking.get(limit.user_id);
 				tracker.member.roles.remove(silence_role).then(function(response) {
 					limit.silenced = -1;
 					tracker.counter = 1;
 					updateLimit(limit);
-					 //trace('${Date.now()} user ${limit.user_tag} unsilenced');
+					 trace('${Date.now()} user ${limit.user_tag} unsilenced');
 				}, (err) -> trace(err));
 			}
 		}

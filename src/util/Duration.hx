@@ -36,6 +36,12 @@ enum abstract Duration(Float) to Float {
 	@:from public static function fromString(input:String):Duration {
 		var time = 0.;
 
+		var sec_regex = ~/([0-9]+)[ ]?(s|sec|secs)\b/gi;
+		if (sec_regex.match(input)) {
+			var num = Std.parseFloat(sec_regex.matched(1));
+			time = num * 1000;
+		}
+
 		var min_regex = ~/([0-9]+)[ ]?(m|min|mins)\b/gi;
 		if (min_regex.match(input)) {
 			var num = Std.parseFloat(min_regex.matched(1));
