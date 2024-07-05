@@ -11167,7 +11167,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 			var obj = new database_types_DBRateLimit(user.id,user.tag,modid,modtag,_g.counter,_g.time);
 			obj.reason = _g.reason;
 			this.setTracker(obj);
-			var e = database_DBEvents.Insert("rate_limit",obj.get_record(),function(response) {
+			var e = database_DBEvents.SearchAndUpdate("rate_limit","user_id",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("user_id")),QueryExpr.QueryValue(obj.user_id)),obj.get_record(),function(response) {
 				if(response._hx_index == 4) {
 					var this1 = _gthis.limits;
 					var key = user.id;
