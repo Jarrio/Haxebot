@@ -46,12 +46,10 @@ class Run2 extends TextCommandBase {
 	var checked:Bool = false;
 	var timeout = 5000;
 	var last_cleared:Float;
-	var http:Http;
+	final site = #if block "" #else "localhost" #end;
 
 	override function onEnabled() {
-		trace('here');
-
-		http = new Http('http://localhost:1337');
+		var http = new Http('http://$site:1337');
 		http.onError = function(error) {
 			trace(error);
 		}
@@ -65,9 +63,9 @@ class Run2 extends TextCommandBase {
 			switch (parse.status) {
 				case Ok:
 					this.haxe_version = parse.output;
-					trace(haxe_version);
 				default:
 					trace(parse.output);
+					trace(parse.error);
 			}
 		}
 
@@ -75,16 +73,6 @@ class Run2 extends TextCommandBase {
 	}
 
 	function run(message:Message, content:String) {
-		// http.onData = function(response) {
-		// 	trace(response);
-		// }
-
-		// http.setPostData('{
-		// "action": "run",
-		// "input" : "class Main {static function main() {trace(9+10);}}"
-		// }');
-		// http.request(true);
-		// return;
 		if (this.haxe_version == null) {
 			return;
 		}
@@ -288,6 +276,10 @@ class Run2 extends TextCommandBase {
 			code_content = format + '\n' + code_content;
 			var pre_loop = code_content;
 
+			var http = new Http('http://$site:1337');
+			http.onError = function(error) {
+				trace(error);
+			}
 			http.onData = function(response) {
 				var parse:Response = Json.parse(response);
 				switch (parse.status) {
