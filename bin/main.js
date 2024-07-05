@@ -9266,19 +9266,23 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					_gthis.parse(StringTools.htmlUnescape(regex.matched(2)),response);
 				}
 			};
+			haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 101, className : "commands.Run2", methodName : "extractCode"});
 			get_code.request();
 			return;
 		}
 		check_code = new EReg("^(!run(\\s|\n| \n|)```(haxe|hx|)(.*)```)","gmisu");
 		if(check_code.match(message)) {
 			this.parse(check_code.matched(4),response);
+			haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 109, className : "commands.Run2", methodName : "extractCode"});
 			return;
 		}
 		check_code = new EReg("!run[\\s|\n| \n](.*)","gmis");
 		if(check_code.match(message)) {
 			this.parse(check_code.matched(1),response);
+			haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 116, className : "commands.Run2", methodName : "extractCode"});
 			return;
 		}
+		haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 119, className : "commands.Run2", methodName : "extractCode"});
 		this.parse(null,response);
 	}
 	,extractLibs: function(code) {
@@ -9344,6 +9348,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	,parse: function(code,response) {
 		if(code == null || code.length == 0) {
 			response.reply({ content : "Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>."});
+			haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 192, className : "commands.Run2", methodName : "parse"});
 			return;
 		}
 		var class_exists = new EReg("(class.*({|\n{))","mgu");
@@ -9351,9 +9356,11 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mgu");
 			if(!check_class.match(code)) {
 				response.reply({ content : "You must have a class called `Test` or `Main`"});
+				haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 202, className : "commands.Run2", methodName : "parse"});
 				return;
 			}
 		}
+		haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 206, className : "commands.Run2", methodName : "parse"});
 		this.runCodeOnThread(code,response);
 	}
 	,parseError: function(error,code) {
@@ -9416,6 +9423,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			++_g;
 			format += data;
 		}
+		haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 266, className : "commands.Run2", methodName : "runCodeOnThread"});
 		try {
 			var check_class = new EReg("(^class\\s(Test|Main)(\n|\\s|\\S))","mg");
 			var code_content = get_paths.code;
@@ -9428,15 +9436,18 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			} else {
 				code_content = "class " + class_entry + " {\n\tstatic function main() {\n\t\t" + get_paths.code + "\n\t}\n}";
 			}
+			haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 281, className : "commands.Run2", methodName : "runCodeOnThread"});
 			code_content = format + "\n" + code_content;
 			var http = new haxe_http_HttpNodeJs("http://" + this.site + ":1337");
 			http.onError = function(error) {
-				haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 281, className : "commands.Run2", methodName : "runCodeOnThread"});
+				haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 288, className : "commands.Run2", methodName : "runCodeOnThread"});
 			};
 			http.onData = function(response) {
 				var parse = JSON.parse(response);
+				haxe_Log.trace(response,{ fileName : "src/commands/Run2.hx", lineNumber : 293, className : "commands.Run2", methodName : "runCodeOnThread"});
 				switch(parse.status) {
 				case "OhNo":
+					haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 374, className : "commands.Run2", methodName : "runCodeOnThread"});
 					var compile_output = _gthis.cleanOutput(parse.error,null,class_entry);
 					var errs = "";
 					var _g = 0;
@@ -9448,9 +9459,12 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 						errs += split[split.length - 1] + "\n";
 					}
 					var embed = _gthis.parseError(errs,code_content);
+					haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 383, className : "commands.Run2", methodName : "runCodeOnThread"});
 					if(embed == null) {
+						haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 385, className : "commands.Run2", methodName : "runCodeOnThread"});
 						message.reply({ allowedMentions : { parse : []}, content : mention + ("```\n" + compile_output + "```")});
 					} else {
+						haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 391, className : "commands.Run2", methodName : "runCodeOnThread"});
 						message.reply({ allowedMentions : { parse : []}, embeds : [embed]});
 					}
 					break;
@@ -9505,19 +9519,22 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					var date = new Date(message.createdTimestamp);
 					var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
 					embed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Run2.hx", lineNumber : 354, className : "commands.Run2", methodName : "runCodeOnThread"});
+					haxe_Log.trace(parse,{ fileName : "src/commands/Run2.hx", lineNumber : 355, className : "commands.Run2", methodName : "runCodeOnThread"});
 					if(resp.length > 0) {
 						message.reply({ allowedMentions : { parse : []}, embeds : [embed]}).then(function(succ) {
-							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 347, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 359, className : "commands.Run2", methodName : "runCodeOnThread"});
 							if(message.deletable) {
 								message.delete().then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 350, className : "commands.Run2", methodName : "runCodeOnThread"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 362, className : "commands.Run2", methodName : "runCodeOnThread"});
 									$global.console.dir(err);
 								});
 							}
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 355, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 367, className : "commands.Run2", methodName : "runCodeOnThread"});
 							$global.console.dir(err);
 						});
+						haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 370, className : "commands.Run2", methodName : "runCodeOnThread"});
 						return;
 					}
 					break;
@@ -9534,11 +9551,12 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			var str = JSON.stringify(request);
 			http.setPostData(str);
 			http.request(true);
+			haxe_Log.trace("hey",{ fileName : "src/commands/Run2.hx", lineNumber : 411, className : "commands.Run2", methodName : "runCodeOnThread"});
 			return;
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 563, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 581, className : "commands.Run2", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -23500,11 +23518,105 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			}
 			switch(channel.type) {
 			case 0:
-				this.guildTextChannel(message);
+				var channel1 = message.channel;
+				if(channel1.id == "162664383082790912" && !message.system) {
+					var entity5 = util_EcsTools.get_universe().createEntity();
+					util_EcsTools.get_universe().components.set(entity5,5,"showcase_message");
+					util_EcsTools.get_universe().components.set(entity5,1,message);
+					var ecsEntCompFlags4 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity5)];
+					var ecsTmpFamily20 = util_EcsTools.get_universe().families.get(4);
+					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily20.componentsMask)) {
+						ecsTmpFamily20.add(entity5);
+					}
+					var ecsTmpFamily21 = util_EcsTools.get_universe().families.get(5);
+					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily21.componentsMask)) {
+						ecsTmpFamily21.add(entity5);
+					}
+					var ecsTmpFamily22 = util_EcsTools.get_universe().families.get(6);
+					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily22.componentsMask)) {
+						ecsTmpFamily22.add(entity5);
+					}
+					var ecsTmpFamily23 = util_EcsTools.get_universe().families.get(0);
+					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily23.componentsMask)) {
+						ecsTmpFamily23.add(entity5);
+					}
+					var ecsTmpFamily24 = util_EcsTools.get_universe().families.get(3);
+					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily24.componentsMask)) {
+						ecsTmpFamily24.add(entity5);
+					}
+				}
+				if(StringTools.startsWith(message.content,"!run")) {
+					haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 51, className : "systems.MessageRouter", methodName : "guildTextChannel"});
+					var entity6 = util_EcsTools.get_universe().createEntity();
+					util_EcsTools.get_universe().components.set(entity6,0,"!run");
+					util_EcsTools.get_universe().components.set(entity6,1,message);
+					var ecsEntCompFlags5 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity6)];
+					var ecsTmpFamily25 = util_EcsTools.get_universe().families.get(0);
+					if(bits_Bits.areSet(ecsEntCompFlags5,ecsTmpFamily25.componentsMask)) {
+						ecsTmpFamily25.add(entity6);
+					}
+					var ecsTmpFamily26 = util_EcsTools.get_universe().families.get(3);
+					if(bits_Bits.areSet(ecsEntCompFlags5,ecsTmpFamily26.componentsMask)) {
+						ecsTmpFamily26.add(entity6);
+					}
+					var ecsTmpFamily27 = util_EcsTools.get_universe().families.get(4);
+					if(bits_Bits.areSet(ecsEntCompFlags5,ecsTmpFamily27.componentsMask)) {
+						ecsTmpFamily27.add(entity6);
+					}
+				}
 				this.universe.deleteEntity(entity);
 				break;
 			case 11:
-				this.publicThreadChannel(message);
+				if(StringTools.startsWith(message.content,"[showcase]")) {
+					var entity7 = util_EcsTools.get_universe().createEntity();
+					util_EcsTools.get_universe().components.set(entity7,5,"showcase");
+					util_EcsTools.get_universe().components.set(entity7,1,message);
+					var ecsEntCompFlags6 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity7)];
+					var ecsTmpFamily28 = util_EcsTools.get_universe().families.get(4);
+					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily28.componentsMask)) {
+						ecsTmpFamily28.add(entity7);
+					}
+					var ecsTmpFamily29 = util_EcsTools.get_universe().families.get(5);
+					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily29.componentsMask)) {
+						ecsTmpFamily29.add(entity7);
+					}
+					var ecsTmpFamily30 = util_EcsTools.get_universe().families.get(6);
+					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily30.componentsMask)) {
+						ecsTmpFamily30.add(entity7);
+					}
+					var ecsTmpFamily31 = util_EcsTools.get_universe().families.get(0);
+					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily31.componentsMask)) {
+						ecsTmpFamily31.add(entity7);
+					}
+					var ecsTmpFamily32 = util_EcsTools.get_universe().families.get(3);
+					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily32.componentsMask)) {
+						ecsTmpFamily32.add(entity7);
+					}
+				}
+				var entity8 = util_EcsTools.get_universe().createEntity();
+				util_EcsTools.get_universe().components.set(entity8,5,"thread_count");
+				util_EcsTools.get_universe().components.set(entity8,1,message);
+				var ecsEntCompFlags7 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity8)];
+				var ecsTmpFamily33 = util_EcsTools.get_universe().families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily33.componentsMask)) {
+					ecsTmpFamily33.add(entity8);
+				}
+				var ecsTmpFamily34 = util_EcsTools.get_universe().families.get(5);
+				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily34.componentsMask)) {
+					ecsTmpFamily34.add(entity8);
+				}
+				var ecsTmpFamily35 = util_EcsTools.get_universe().families.get(6);
+				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily35.componentsMask)) {
+					ecsTmpFamily35.add(entity8);
+				}
+				var ecsTmpFamily36 = util_EcsTools.get_universe().families.get(0);
+				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily36.componentsMask)) {
+					ecsTmpFamily36.add(entity8);
+				}
+				var ecsTmpFamily37 = util_EcsTools.get_universe().families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily37.componentsMask)) {
+					ecsTmpFamily37.add(entity8);
+				}
 				break;
 			default:
 			}
@@ -23592,6 +23704,7 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			}
 		}
 		if(StringTools.startsWith(message.content,"!run")) {
+			haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 51, className : "systems.MessageRouter", methodName : "guildTextChannel"});
 			var entity = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity,0,"!run");
 			util_EcsTools.get_universe().components.set(entity,1,message);

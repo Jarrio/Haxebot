@@ -33,14 +33,14 @@ class MessageRouter extends System {
 		});
 	}
 
-	function publicThreadChannel(message:Message) {
+	inline function publicThreadChannel(message:Message) {
 		if (message.content.startsWith("[showcase]")) {
 			EcsTools.set(CommandForward.showcase, message);
 		}
 		EcsTools.set(CommandForward.thread_count, message);
 	}
 
-	function guildTextChannel(message:Message) {
+	inline function guildTextChannel(message:Message) {
 		var channel = message.channel.asType0;
 		var showcase_channel = #if block "1100053767493255182" #else "162664383082790912" #end;
 		if (channel.id == showcase_channel && !message.system) {
@@ -48,6 +48,7 @@ class MessageRouter extends System {
 		}
 
 		if (message.content.startsWith('!run')) {
+			trace('here');
 			EcsTools.set(TextCommand.run, message);
 		}
 	}
