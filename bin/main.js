@@ -11082,7 +11082,6 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						tracker[0].last_message = message.createdTimestamp;
 						tracker[0].member.roles.add(this.silence_role).then((function(tracker,limit) {
 							return function(resp) {
-								haxe_Log.trace("" + Std.string(new Date()) + " user " + limit[0].user_tag + " silenced",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 72, className : "commands.mod.RateLimit", methodName : "update"});
 								limit[0].silenced = tracker[0].last_message;
 								_gthis.updateLimit(limit[0]);
 							};
@@ -11117,7 +11116,6 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						limit[0].silenced = -1;
 						tracker[0].counter = 1;
 						_gthis.updateLimit(limit[0]);
-						haxe_Log.trace("" + Std.string(new Date()) + " user " + limit[0].user_tag + " unsilenced",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 100, className : "commands.mod.RateLimit", methodName : "update"});
 					};
 				})(tracker1,limit1),(function() {
 					return function(err) {
