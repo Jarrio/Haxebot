@@ -115,7 +115,7 @@ class DatabaseSystem extends System {
 		});
 
 		for (i in 0...reverse.length) {
-			var event = reverse.pop();
+			var event:DBEvents = reverse.pop();
 
 			switch (event) {
 				case CreateTable(name, columns):
@@ -136,7 +136,7 @@ class DatabaseSystem extends System {
 					});
 				case Update(table, value, query, callback):
 					if (updating) {
-						this.event_cache.push(event);
+						EcsTools.set(event);
 						continue;
 					}
 					updating = true;
@@ -274,10 +274,6 @@ class DatabaseSystem extends System {
 				default:
 					trace('${event.getName()} not implemented');
 			}
-		}
-
-		for (event in event_cache) {
-			EcsTools.set(event);
 		}
 	}
 

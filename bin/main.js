@@ -22570,261 +22570,250 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 		while(_g < _g1) {
 			++_g;
 			var event = this.reverse.pop();
-			if(event == null) {
-				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 275, className : "systems.DatabaseSystem", methodName : "update"});
-			} else {
-				switch(event._hx_index) {
-				case 0:
-					var callback = [event.callback];
-					var query = "SELECT * FROM `" + event.table + "` WHERE " + event.field + " LIKE '%" + event.value + "%';";
-					thenshim_Promise.then(this.db.raw(query),(function(callback) {
-						return function(result) {
-							if(result != null) {
-								callback[0](database_Callback.Records(result.data));
-							} else {
-								callback[0](database_Callback.Error("No data",result.data));
-							}
-						};
-					})(callback),(function() {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 192, className : "systems.DatabaseSystem", methodName : "update"});
-						};
-					})());
-					break;
-				case 1:
-					var value = [event.value];
-					var callback1 = [event.callback];
-					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(value) {
-						return function(result) {
-							return result.table.add(value[0]);
-						};
-					})(value)),(function(callback) {
-						return function(res) {
-							callback[0](database_Callback.Success("Inserted",res.data));
-						};
-					})(callback1),(function(value) {
-						return function(err) {
-							if(err.message != null && err.message.indexOf("DUPLICATE_DATA") != -1) {
-								return;
-							} else {
-								haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 133, className : "systems.DatabaseSystem", methodName : "update"});
-								haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 134, className : "systems.DatabaseSystem", methodName : "update"});
-							}
-						};
-					})(value));
-					break;
-				case 2:
-					var value1 = [event.value];
-					var query1 = [event.query];
-					var callback2 = [event.callback];
-					if(this.updating) {
-						this.event_cache.push(event);
-						continue;
+			switch(event._hx_index) {
+			case 0:
+				var callback = [event.callback];
+				var query = "SELECT * FROM `" + event.table + "` WHERE " + event.field + " LIKE '%" + event.value + "%';";
+				thenshim_Promise.then(this.db.raw(query),(function(callback) {
+					return function(result) {
+						if(result != null) {
+							callback[0](database_Callback.Records(result.data));
+						} else {
+							callback[0](database_Callback.Error("No data",result.data));
+						}
+					};
+				})(callback),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 192, className : "systems.DatabaseSystem", methodName : "update"});
+					};
+				})());
+				break;
+			case 1:
+				var value = [event.value];
+				var callback1 = [event.callback];
+				thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(value) {
+					return function(result) {
+						return result.table.add(value[0]);
+					};
+				})(value)),(function(callback) {
+					return function(res) {
+						callback[0](database_Callback.Success("Inserted",res.data));
+					};
+				})(callback1),(function(value) {
+					return function(err) {
+						if(err.message != null && err.message.indexOf("DUPLICATE_DATA") != -1) {
+							return;
+						} else {
+							haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 133, className : "systems.DatabaseSystem", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 134, className : "systems.DatabaseSystem", methodName : "update"});
+						}
+					};
+				})(value));
+				break;
+			case 2:
+				var value1 = [event.value];
+				var query1 = [event.query];
+				var callback2 = [event.callback];
+				if(this.updating) {
+					var entity = util_EcsTools.get_universe().createEntity();
+					util_EcsTools.get_universe().components.set(entity,2,event);
+					var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+					var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+					if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+						ecsTmpFamily.add(entity);
 					}
-					this.updating = true;
-					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query,value) {
-						return function(result) {
-							return result.table.update(query[0],value[0]);
-						};
-					})(query1,value1)),(function(callback) {
-						return function(res) {
-							_gthis.updating = false;
-							callback[0](database_Callback.Success("Updated"));
-						};
-					})(callback2),(function(query,value) {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 149, className : "systems.DatabaseSystem", methodName : "update"});
-							haxe_Log.trace(Query.queryExprToSql(query[0]),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 150, className : "systems.DatabaseSystem", methodName : "update"});
-							haxe_Log.trace(value[0].debugString(),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 151, className : "systems.DatabaseSystem", methodName : "update"});
-							_gthis.updating = false;
-						};
-					})(query1,value1));
-					break;
-				case 4:
-					var query2 = [event.query];
-					var value2 = [event.value];
-					var callback3 = [event.callback];
-					var parse_key = this.parseKey(event.key);
-					var column = [parse_key.column];
-					thenshim_Promise.then(thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
-						return function(result) {
-							return result.table.findOne(query[0]);
-						};
-					})(query2)),(function(column,value,query) {
-						return function(result) {
-							_gthis.updating = true;
-							if(result.data == null) {
-								return result.table.add(value[0]);
-							} else {
-								if(column[0] != null) {
-									value[0].field(column[0],result.data.field(column[0]));
-								}
-								if(value[0].hasField("id")) {
-									value[0].removeField("id");
-								}
-								return result.table.update(query[0],value[0]);
-							}
-						};
-					})(column,value2,query2)),(function(callback) {
-						return function(result) {
-							if(result.data.hasField("____status")) {
-								var tmp = haxe_Log.trace;
-								var tmp1 = result.data.field("____status");
-								tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 252, className : "systems.DatabaseSystem", methodName : "update"});
-								return;
-							}
-							_gthis.updating = false;
-							haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 257, className : "systems.DatabaseSystem", methodName : "update"});
-							if(callback[0] != null) {
-								callback[0](database_Callback.Success("Successfully updated record",result.data));
-							}
-						};
-					})(callback3),(function(callback,value) {
-						return function(err) {
-							_gthis.updating = false;
-							haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 263, className : "systems.DatabaseSystem", methodName : "update"});
-							haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 264, className : "systems.DatabaseSystem", methodName : "update"});
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 265, className : "systems.DatabaseSystem", methodName : "update"});
-							haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 266, className : "systems.DatabaseSystem", methodName : "update"});
-							if(callback[0] != null) {
-								callback[0](database_Callback.Error("Failed",err));
-							}
-						};
-					})(callback3,value2));
-					break;
-				case 5:
-					this.db.createTable(event.name,event.columns);
-					break;
-				case 6:
-					var query3 = [event.query];
-					var callback4 = [event.callback];
-					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
-						return function(result) {
-							return result.table.findOne(query[0]);
-						};
-					})(query3)),(function(callback) {
-						return function(result) {
-							if(result != null) {
-								callback[0](database_Callback.Record(result.data));
-							} else {
-								callback[0](database_Callback.Error("No data",result.data));
-							}
-						};
-					})(callback4),(function() {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 163, className : "systems.DatabaseSystem", methodName : "update"});
-						};
-					})());
-					break;
-				case 7:
-					var query4 = [event.query];
-					var callback5 = [event.callback];
-					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
-						return function(result) {
-							return result.table.find(query[0]);
-						};
-					})(query4)),(function(callback) {
-						return function(result) {
-							if(result != null) {
-								callback[0](database_Callback.Records(result.data));
-							} else {
-								callback[0](database_Callback.Error("No data",result.data));
-							}
-						};
-					})(callback5),(function() {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 173, className : "systems.DatabaseSystem", methodName : "update"});
-						};
-					})());
-					break;
-				case 8:
-					var callback6 = [event.callback];
-					thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function() {
-						return function(result) {
-							return result.table.all();
-						};
-					})()),(function(callback) {
-						return function(result) {
-							if(result != null) {
-								callback[0](database_Callback.Records(result.data));
-							} else {
-								callback[0](database_Callback.Error("No data",result.data));
-							}
-						};
-					})(callback6),(function() {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 183, className : "systems.DatabaseSystem", methodName : "update"});
-						};
-					})());
-					break;
-				case 9:
-					var column1 = [event.column];
-					var value3 = [event.value];
-					var callback7 = [event.callback];
-					this.getTable(event.table,(function(callback,value,column) {
-						return function(result) {
-							var record = new db_Record();
-							record.field(column[0],value[0]);
-							thenshim_Promise.then(result.table.delete(record),(function(callback) {
-								return function(succ) {
-									callback[0](database_Callback.Success("Successfully deleted",succ.data));
-								};
-							})(callback),(function(callback) {
-								return function(err) {
-									callback[0](database_Callback.Error("Failed",err));
-									haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 202, className : "systems.DatabaseSystem", methodName : "update"});
-								};
-							})(callback));
-						};
-					})(callback7,value3,column1),(function(callback) {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 205, className : "systems.DatabaseSystem", methodName : "update"});
-							callback[0](database_Callback.Error("Failed",err));
-						};
-					})(callback7));
-					break;
-				case 10:
-					var column2 = [event.column];
-					var value4 = [event.value];
-					var callback8 = [event.callback];
-					this.getTable(event.table,(function(callback,value,column) {
-						return function(result) {
-							var record = new db_Record();
-							record.field(column[0],value[0]);
-							thenshim_Promise.then(result.table.delete(record),(function(callback) {
-								return function(succ) {
-									callback[0](database_Callback.Success("Successfully deleted",succ.data));
-								};
-							})(callback),(function(callback) {
-								return function(err) {
-									callback[0](database_Callback.Error("Failed",err));
-									haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 217, className : "systems.DatabaseSystem", methodName : "update"});
-								};
-							})(callback));
-						};
-					})(callback8,value4,column2),(function(callback) {
-						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 220, className : "systems.DatabaseSystem", methodName : "update"});
-							callback[0](database_Callback.Error("Failed",err));
-						};
-					})(callback8));
-					break;
-				default:
-					haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 275, className : "systems.DatabaseSystem", methodName : "update"});
+					continue;
 				}
-			}
-		}
-		var _g = 0;
-		var _g1 = this.event_cache;
-		while(_g < _g1.length) {
-			var event = _g1[_g];
-			++_g;
-			var entity = util_EcsTools.get_universe().createEntity();
-			util_EcsTools.get_universe().components.set(entity,2,event);
-			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
+				this.updating = true;
+				thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query,value) {
+					return function(result) {
+						return result.table.update(query[0],value[0]);
+					};
+				})(query1,value1)),(function(callback) {
+					return function(res) {
+						_gthis.updating = false;
+						callback[0](database_Callback.Success("Updated"));
+					};
+				})(callback2),(function(query,value) {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 149, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(Query.queryExprToSql(query[0]),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 150, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(value[0].debugString(),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 151, className : "systems.DatabaseSystem", methodName : "update"});
+						_gthis.updating = false;
+					};
+				})(query1,value1));
+				break;
+			case 4:
+				var query2 = [event.query];
+				var value2 = [event.value];
+				var callback3 = [event.callback];
+				var parse_key = this.parseKey(event.key);
+				var column = [parse_key.column];
+				thenshim_Promise.then(thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
+					return function(result) {
+						return result.table.findOne(query[0]);
+					};
+				})(query2)),(function(column,value,query) {
+					return function(result) {
+						_gthis.updating = true;
+						if(result.data == null) {
+							return result.table.add(value[0]);
+						} else {
+							if(column[0] != null) {
+								value[0].field(column[0],result.data.field(column[0]));
+							}
+							if(value[0].hasField("id")) {
+								value[0].removeField("id");
+							}
+							return result.table.update(query[0],value[0]);
+						}
+					};
+				})(column,value2,query2)),(function(callback) {
+					return function(result) {
+						if(result.data.hasField("____status")) {
+							var tmp = haxe_Log.trace;
+							var tmp1 = result.data.field("____status");
+							tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 252, className : "systems.DatabaseSystem", methodName : "update"});
+							return;
+						}
+						_gthis.updating = false;
+						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 257, className : "systems.DatabaseSystem", methodName : "update"});
+						if(callback[0] != null) {
+							callback[0](database_Callback.Success("Successfully updated record",result.data));
+						}
+					};
+				})(callback3),(function(callback,value) {
+					return function(err) {
+						_gthis.updating = false;
+						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 263, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 264, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 265, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 266, className : "systems.DatabaseSystem", methodName : "update"});
+						if(callback[0] != null) {
+							callback[0](database_Callback.Error("Failed",err));
+						}
+					};
+				})(callback3,value2));
+				break;
+			case 5:
+				this.db.createTable(event.name,event.columns);
+				break;
+			case 6:
+				var query3 = [event.query];
+				var callback4 = [event.callback];
+				thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
+					return function(result) {
+						return result.table.findOne(query[0]);
+					};
+				})(query3)),(function(callback) {
+					return function(result) {
+						if(result != null) {
+							callback[0](database_Callback.Record(result.data));
+						} else {
+							callback[0](database_Callback.Error("No data",result.data));
+						}
+					};
+				})(callback4),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 163, className : "systems.DatabaseSystem", methodName : "update"});
+					};
+				})());
+				break;
+			case 7:
+				var query4 = [event.query];
+				var callback5 = [event.callback];
+				thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function(query) {
+					return function(result) {
+						return result.table.find(query[0]);
+					};
+				})(query4)),(function(callback) {
+					return function(result) {
+						if(result != null) {
+							callback[0](database_Callback.Records(result.data));
+						} else {
+							callback[0](database_Callback.Error("No data",result.data));
+						}
+					};
+				})(callback5),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 173, className : "systems.DatabaseSystem", methodName : "update"});
+					};
+				})());
+				break;
+			case 8:
+				var callback6 = [event.callback];
+				thenshim_Promise.then(thenshim_Promise.then(this.db.table(event.table),(function() {
+					return function(result) {
+						return result.table.all();
+					};
+				})()),(function(callback) {
+					return function(result) {
+						if(result != null) {
+							callback[0](database_Callback.Records(result.data));
+						} else {
+							callback[0](database_Callback.Error("No data",result.data));
+						}
+					};
+				})(callback6),(function() {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 183, className : "systems.DatabaseSystem", methodName : "update"});
+					};
+				})());
+				break;
+			case 9:
+				var column1 = [event.column];
+				var value3 = [event.value];
+				var callback7 = [event.callback];
+				this.getTable(event.table,(function(callback,value,column) {
+					return function(result) {
+						var record = new db_Record();
+						record.field(column[0],value[0]);
+						thenshim_Promise.then(result.table.delete(record),(function(callback) {
+							return function(succ) {
+								callback[0](database_Callback.Success("Successfully deleted",succ.data));
+							};
+						})(callback),(function(callback) {
+							return function(err) {
+								callback[0](database_Callback.Error("Failed",err));
+								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 202, className : "systems.DatabaseSystem", methodName : "update"});
+							};
+						})(callback));
+					};
+				})(callback7,value3,column1),(function(callback) {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 205, className : "systems.DatabaseSystem", methodName : "update"});
+						callback[0](database_Callback.Error("Failed",err));
+					};
+				})(callback7));
+				break;
+			case 10:
+				var column2 = [event.column];
+				var value4 = [event.value];
+				var callback8 = [event.callback];
+				this.getTable(event.table,(function(callback,value,column) {
+					return function(result) {
+						var record = new db_Record();
+						record.field(column[0],value[0]);
+						thenshim_Promise.then(result.table.delete(record),(function(callback) {
+							return function(succ) {
+								callback[0](database_Callback.Success("Successfully deleted",succ.data));
+							};
+						})(callback),(function(callback) {
+							return function(err) {
+								callback[0](database_Callback.Error("Failed",err));
+								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 217, className : "systems.DatabaseSystem", methodName : "update"});
+							};
+						})(callback));
+					};
+				})(callback8,value4,column2),(function(callback) {
+					return function(err) {
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 220, className : "systems.DatabaseSystem", methodName : "update"});
+						callback[0](database_Callback.Error("Failed",err));
+					};
+				})(callback8));
+				break;
+			default:
+				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 275, className : "systems.DatabaseSystem", methodName : "update"});
 			}
 		}
 	}
