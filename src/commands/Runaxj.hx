@@ -16,7 +16,7 @@ import js.Browser;
 
 enum abstract RunMessage(String) from String to String {}
 
-class Run extends TextCommandBase {
+class Runaxj extends TextCommandBase {
 	@:fastFamily var code_messages:{message:TextCommand, response:Message};
 	var message_id:String;
 	var haxe_version:String = null;
@@ -552,6 +552,6 @@ class Run extends TextCommandBase {
 	}
 
 	function get_name():String {
-		return '!run';
+		return '!runaeu';
 	}
 }

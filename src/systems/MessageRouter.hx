@@ -11,6 +11,7 @@ class MessageRouter extends System {
 
 	override function update(_) {
 		iterate(messages, (entity) -> {
+			universe.deleteEntity(entity);
 			var channel:TextChannel = message.channel;
 
 			EcsTools.set(CommandForward.rate_limit, message);
@@ -24,12 +25,10 @@ class MessageRouter extends System {
 			switch (channel.type) {
 				case GUILD_TEXT:
 					this.guildTextChannel(message);
-					universe.deleteEntity(entity);
 				case PUBLIC_THREAD:
 					this.publicThreadChannel(message);
 				default:
 			}
-			universe.deleteEntity(entity);
 		});
 	}
 
