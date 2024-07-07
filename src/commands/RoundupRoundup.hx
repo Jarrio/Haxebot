@@ -120,9 +120,7 @@ class RoundupRoundup extends CommandDbBase {
 	}
 
 	function scheduleNewEvent() {
-		trace('here');
 		if (host_contacted || waiting) {
-			trace('here');
 			trace(host_contacted);
 			trace(waiting);
 			return;
@@ -220,7 +218,9 @@ class RoundupRoundup extends CommandDbBase {
 				case roundup_member_update:
 					if (event != null && event.status == Active) {
 						var member = updated.member;
-						if (member.id == host && updated.channel == null) {
+						trace(member);
+						trace(member.id);
+						if (member != null && member.id == host && updated.channel == null) {
 							member.send(
 								'Hi <@$host>, it looks like you left the voice channel. Should I end the event?'
 							)

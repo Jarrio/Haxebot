@@ -137,7 +137,7 @@ class Main {
 						PinMessage,
 						Reminder,
 						Social,
-						Run2,
+						//Run2,
 						AutoRole,
 						Quote,
 						Api,
