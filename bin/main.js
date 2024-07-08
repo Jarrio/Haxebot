@@ -8858,7 +8858,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	}
 	,runCodeOnThread: function(code,message) {
 		var _gthis = this;
-		var mention = "<@" + message.id + ">";
+		var mention = "<@" + message.author.id + ">";
 		var libs = this.extractLibs(code);
 		var lib_regex = new EReg("(/?/?-l\\W.*)","gmiu");
 		if(lib_regex.match(code)) {

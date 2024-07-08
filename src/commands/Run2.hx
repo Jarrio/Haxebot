@@ -248,7 +248,7 @@ class Run2 extends TextCommandBase {
 	}
 
 	function runCodeOnThread(code:String, message:Message) {
-		var mention = '<@${message.id}>';
+		var mention = '<@${message.author.id}>';
 
 		var libs = this.extractLibs(code);
 		var lib_regex = ~/(\/?\/?-l\W.*)/gmiu;
