@@ -2,26 +2,24 @@ package commands;
 
 import database.DBEvents;
 import database.types.DBQuote;
-import firebase.web.firestore.CollectionReference;
 import discord_js.User;
 import js.Browser;
 import discord_builder.APIActionRowComponent;
 import discord_builder.APITextInputComponent;
 import discord_builder.ModalBuilder;
-import firebase.web.firestore.Timestamp;
 import discord_js.MessageEmbed;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import Main.CommandForward;
 import systems.CommandDbBase;
 import commands.types.ActionList;
-import firebase.web.firestore.Query as FQuery;
 import Query;
+import db.Record;
 
 class Quote extends CommandDbBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
-	var cache:Map<String, Int> = [];
-	final max_name_length = 30;
+	var cache:Map<String, DBQuote> = [];
+	final max_name_length = 35;
 
 	override function onEnabled() {
 		this.has_subcommands = true;
@@ -32,18 +30,12 @@ class Quote extends CommandDbBase {
 		iterate(modal, entity -> {
 			switch (forward) {
 				case quote_set:
-					var name = interaction.fields.getTextInputValue('name');
+					var id = interaction.user.id;
+					var name = interaction.user.username;
+					var title = interaction.fields.getTextInputValue('name');
 					var description = interaction.fields.getTextInputValue('description');
 
-					var data:TQuoteData = {
-						id: -1,
-						name: name,
-						tags: this.nameArray(name),
-						description: description,
-						author: interaction.user.id,
-						username: interaction.user.username,
-						timestamp: Date.now()
-					}
+					var quote = new DBQuote(id, name, title, description);
 
 					if (!this.isValidName(name)) {
 						interaction.reply({
@@ -53,60 +45,40 @@ class Quote extends CommandDbBase {
 						return;
 					}
 
-					var doc = doc(db, 'discord/quotes');
+					var e = DBEvents.Insert('quotes', quote.record, function(resp) {
+						switch(resp) {
+							case Success(message, data):
+								trace(message);
+								quote = DBQuote.fromRecord(data);
 
-					Firestore.runTransaction(this.db, function(transaction) {
-						return transaction.get(doc).then(function(doc) {
-							if (!doc.exists()) {
-								return {id: -1};
-							}
-							var data:{id:Int} = (doc.data());
-							data.id = data.id + 1;
-							transaction.update(doc.ref, data);
-							return data;
-						});
-					}).then(function(value) {
-						data.id = value.id;
-						data.tags.insert(0, '${data.id}');
-
-						this.addDoc('discord/quotes/entries', data, function(_) {
-							interaction.reply(
-								'*Quote #${data.id} added!*\nname: $name\n$description\n\nby: <@${data.author}>'
-							);
-						}, function(err) {
-							trace(err);
-							Browser.console.dir(err);
-						});
-					}, function(err) {
-						trace(err);
-						Browser.console.dir(err);
-					});
-				case quote_edit:
-					var col = collection(db, 'discord/quotes/entries');
-					var query:FQuery<TQuoteData> = query(col,
-						where('id', EQUAL_TO, this.cache.get(interaction.user.id)));
-					Firestore.getDocs(query).then(function(resp) {
-						if (resp.docs.length != 1) {
-							interaction.reply('Something went wrong');
-							trace(this.cache.get(interaction.user.id));
-							return;
+								interaction.reply(
+									'*Quote #${quote.id} added!*\nname: $name\n$description\n\nby: <@${quote.author_id}>'
+								);
+							default:
+								interaction.reply('Something went wrong, try again later').then(null, (err) -> trace(err));
+								trace(resp);
+								trace(quote);
 						}
-
-						Firestore.updateDoc(
-							resp.docs[0].ref,
-							{description: interaction.fields.getTextInputValue('description')}
-						)
-							.then(function(_) {
-								interaction.reply('Quote updated!');
-								this.cache.remove(interaction.user.id);
-							}, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
-					}, function(err) {
-						trace(err);
-						Browser.console.dir(err);
 					});
+					EcsTools.set(e);
+				case quote_edit:
+					var quote = this.cache.get(interaction.user.id);
+					quote.description = interaction.fields.getTextInputValue('description');
+
+					var e = DBEvents.Update('quotes', quote.record, Query.query($id == quote.id && $author_id == quote.author_id), function(resp) {
+						switch(resp) {
+							case Success(message, _):
+								trace('$message');
+									interaction.reply('Quote updated!');
+							default:
+									trace(this.cache.get(interaction.user.id));
+									interaction.reply('Something went wrong');
+								trace(resp);
+						}
+							this.cache.remove(interaction.user.id);
+					});
+
+					EcsTools.set(e);
 				default:
 			}
 
@@ -120,32 +92,31 @@ class Quote extends CommandDbBase {
 		switch (command.content) {
 			case QuoteList(user):
 				var sort = Firestore.orderBy('id', ASCENDING);
-				var col:CollectionReference<TQuoteData> = collection(this.db,
-					'discord/quotes/entries');
-				var query = Firestore.query(col, sort);
-				if (user != null) {
-					query = Firestore.query(col, where('author', EQUAL_TO, user.id), sort);
-				}
 
-				Firestore.getDocs(query).then(function(resp) {
-					if (resp.empty) {
-						interaction.reply("No quotes by that user!");
-						return;
-					}
-					var embed = new MessageEmbed();
-					embed.setTitle('List of Quotes');
-					var body = '';
-					for (doc in resp.docs) {
-						var data = doc.data();
-						body += '**#${data.id}** ${data.name} by <@${data.author}> \n';
-					}
-					embed.setDescription(body);
-					embed.setColor(0xEA8220);
-					interaction.reply({embeds: [embed]}).then(null, (err) -> trace(err));
-				}, function(err) {
-					trace(err);
-					Browser.console.dir(err);
-				});
+				var e = DBEvents.GetRecords('quotes', Query.query($author_id == user.id),
+					function response(resp) {
+						switch (resp) {
+							case Records(data):
+								if (data.length == 0) {
+									interaction.reply("No quotes by that user!");
+									return;
+								}
+								var embed = new MessageEmbed();
+								embed.setTitle('List of Quotes');
+								var body = '';
+								for (item in data) {
+									var quote = DBQuote.fromRecord(item);
+									body += '**#${quote.id}** ${quote.title} by <@${quote.author_id}> \n';
+								}
+								embed.setDescription(body);
+								embed.setColor(0xEA8220);
+								interaction.reply({embeds: [embed]})
+									.then(null, (err) -> trace(err));
+							default:
+								trace(resp);
+						}
+					});
+				EcsTools.set(e);
 			case QuoteGet(name) | QuoteCreate(name) | QuoteEdit(name) | QuoteDelete(name):
 				var type = get;
 				var enum_name = command.content.getName().toLowerCase();
@@ -192,30 +163,43 @@ class Quote extends CommandDbBase {
 					where('author', EQUAL_TO, interaction.user.id)
 				);
 
+				var column = 'title';
+				if (isId(name)) {
+					column = 'id';
+				}
+
 				if (interaction.isAutocomplete() && type != get) {
-					Firestore.getDocs(query).then(function(res) {
-						var results = [];
-						for (d in res.docs) {
-							var data = d.data();
-							results.push({
-								name: this.acResponse(data),
-								value: '${data.id}'
-							});
-						}
-						interaction.respond(results).then(null, function(err) {
-							trace(err);
-							Browser.console.dir(err);
-						});
-					}).then(null, function(err) {
-						trace(err);
-						Browser.console.dir(err);
+					var e = DBEvents.SearchBy('quotes', column, name, 'author_id',
+						interaction.user.id, function(resp) {
+							switch (resp) {
+								case Records(data):
+									var res = [];
+									for (r in data) {
+										var quote = DBQuote.fromRecord(r);
+										res.push({
+											name: this.dbacResponse(quote),
+											value: '${quote.id}'
+										});
+									}
+									trace(name);
+									if (!interaction.responded) {
+										interaction.respond(res).then(null, function(err) {
+											trace(err);
+											Browser.console.dir(err);
+										});
+									}
+								default:
+									trace(resp);
+							}
 					});
+					EcsTools.set(e);
 					return;
 				}
 
 				switch (type) {
 					case set:
-						if (!this.isValidName(name)) {
+						var is_id = this.isId(name);
+						if (!is_id && !this.isValidName(name)) {
 							var error_msg = 'name can only be 3-$max_name_length characters long';
 							if (name.length < this.max_name_length) {
 								error_msg = '*Names can only contain `_.-?` and/or spaces.*';
@@ -224,127 +208,109 @@ class Quote extends CommandDbBase {
 							return;
 						}
 
-						Firestore.getDocs(query).then(function(res) {
-							if (res.docs.length >= 1) {
-								interaction.reply(
-									'You already have a quote(#${res.docs[0].data().id}) with the name __${name}__'
-								)
-									.then(null, function(err) {
-										trace(err);
-										Browser.console.dir(err);
-									});
-								return;
+						var column = (is_id) ? 'id' : 'title';
+
+						var e = DBEvents.Search('quotes', column, name, function(resp) {
+							switch (resp) {
+								case Records(data):
+									if (data.length >= 1) {
+										interaction.reply(
+											'You already have a quote with the name __${data[0].field('title')}__'
+										)
+											.then(null, function(err) {
+												trace(err);
+												Browser.console.dir(err);
+											});
+										return;
+									}
+									var modal = new ModalBuilder().setCustomId('quote_set')
+										.setTitle('Creating a quote');
+
+									var title_input = new APITextInputComponent().setCustomId('name')
+										.setLabel('name')
+										.setStyle(Short)
+										.setValue(name.toLowerCase())
+										.setMinLength(3)
+										.setMaxLength(this.max_name_length);
+
+									var desc_input = new APITextInputComponent().setCustomId('description')
+										.setLabel('description')
+										.setStyle(Paragraph)
+										.setMinLength(10)
+										.setMaxLength(2000);
+
+									var action_a = new APIActionRowComponent().addComponents(title_input);
+									var action_b = new APIActionRowComponent().addComponents(desc_input);
+									modal.addComponents(action_a, action_b);
+
+									interaction.showModal(modal);
+								default:
+									trace(resp);
 							}
-
-							var modal = new ModalBuilder().setCustomId('quote_set')
-								.setTitle('Creating a quote');
-
-							var title_input = new APITextInputComponent().setCustomId('name')
-								.setLabel('name')
-								.setStyle(Short)
-								.setValue(name.toLowerCase())
-								.setMinLength(3)
-								.setMaxLength(this.max_name_length);
-
-							var desc_input = new APITextInputComponent().setCustomId('description')
-								.setLabel('description')
-								.setStyle(Paragraph)
-								.setMinLength(10)
-								.setMaxLength(2000);
-
-							var action_a = new APIActionRowComponent().addComponents(title_input);
-							var action_b = new APIActionRowComponent().addComponents(desc_input);
-							modal.addComponents(action_a, action_b);
-
-							interaction.showModal(modal);
-							return;
-						}, function(err) {
-							trace(err);
-							Browser.console.dir(err);
 						});
-
+						EcsTools.set(e);
 					case edit:
-						Firestore.getDocs(query).then(function(res) {
-							if (res.docs.length == 0) {
-								interaction.reply('Could not find quote');
-								return;
+						var e = DBEvents.GetRecord('quotes', Query.query($id == name && $author_id == interaction.user.id), function(resp) {
+							switch (resp) {
+								case Record(data):
+										if (data == null) {
+											interaction.reply('Could not find quote or you were not the author of the quote specified');
+											return;
+										}
+
+										var quote = DBQuote.fromRecord(data);
+										var modal = new ModalBuilder().setCustomId('quote_edit')
+											.setTitle('Editting quote #${quote.id}');
+
+										var desc_input = new APITextInputComponent()
+											.setCustomId('description')
+											.setLabel('${quote.title}:')
+											.setStyle(Paragraph)
+											.setValue(quote.description)
+											.setMinLength(10)
+											.setMaxLength(2000);
+
+										var action_b = new APIActionRowComponent()
+											.addComponents(desc_input);
+										modal.addComponents(action_b);
+
+										this.cache.set(interaction.user.id, quote);
+										interaction.showModal(modal);
+								default:
+									trace(resp);
 							}
-
-							var ref = null;
-							var doc = null;
-
-							for (d in res.docs) {
-								if (interaction.user.id == d.data().author) {
-									ref = d.ref;
-									doc = d.data();
-									break;
-								}
-							}
-
-							if (doc == null) {
-								interaction.reply("That isn't your quote!")
-									.then(null, function(err) {
-										trace(err);
-										Browser.console.dir(err);
-									});
-								return;
-							}
-
-							var modal = new ModalBuilder().setCustomId('quote_edit')
-								.setTitle('Editting quote #${doc.id}');
-
-							var desc_input = new APITextInputComponent().setCustomId('description')
-								.setLabel('${doc.name}:')
-								.setStyle(Paragraph)
-								.setValue(doc.description)
-								.setMinLength(10)
-								.setMaxLength(2000);
-
-							var action_b = new APIActionRowComponent().addComponents(desc_input);
-							modal.addComponents(action_b);
-
-							this.cache.set(interaction.user.id, doc.id);
-							interaction.showModal(modal);
-						}, function(err) {
-							trace(err);
-							Browser.console.dir(err);
 						});
+						EcsTools.set(e);
 					case delete:
-						Firestore.getDocs(query).then(function(res) {
-							if (res.docs.length == 0) {
-								interaction.reply("Cannot delete this quote")
-									.then(null, function(err) {
-										trace(err);
-										Browser.console.dir(err);
-									});
-								return;
-							}
+						var record = new Record();
+						record.field('author_id', interaction.user.id);
+						record.field('id', name);
 
-							if (res.docs.length > 1) {
-								interaction.reply("An odd situation occured. <@151104106973495296>");
-								return;
+						var e = DBEvents.DeleteRecord('quotes', record, function(resp) {
+							switch (resp) {
+								case Success(message, data):
+									interaction.reply("Quote deleted!")
+										.then(null, (err) -> trace(err));
+								case Error(message, data):
+									trace(message);
+									trace(data);
+									interaction.reply("Cannot delete this quote")
+										.then(null, function(err) {
+											trace(err);
+											Browser.console.dir(err);
+										});
+								default:
+									trace(resp);
 							}
-
-							Firestore.deleteDoc(res.docs[0].ref).then(function(_) {
-								interaction.reply("Quote deleted!");
-							}, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
-						}, function(err) {
-							trace(err);
-							Browser.console.dir(err);
 						});
+						EcsTools.set(e);
 					case get | _:
 						if (name != null) {
-							query = Firestore.query(col,
-								where('tags', ARRAY_CONTAINS_ANY, this.nameArray(name)));
 							var qid = Std.parseInt(name);
 							if (interaction.isAutocomplete()) {
 								var results = [];
-								trace('here');
 								var e:DBEvents = null;
-								
+
 								if (name != null && name.length > 0) {
 									if (qid != null && qid > 0) {
 										e = DBEvents.GetRecord('quotes', Query.query($id == qid),
@@ -397,55 +363,53 @@ class Quote extends CommandDbBase {
 									});
 									return;
 								}
+								return;
 							}
-							
-							Firestore.getDocs(query).then(function(res) {
-								if (res.docs.length == 0) {
-									interaction.reply('Could not find any quotes with that identifier');
-									return;
-								}
 
-								var data = res.docs[0].data();
-								var embed = new MessageEmbed();
-								var user = interaction.client.users.cache.get(data.author);
+							var e = DBEvents.GetRecord('quotes', Query.query($id == name),
+								function(resp) {
+									switch (resp) {
+										case Record(data):
+											if (data == null) {
+												interaction.reply('Could not find any quotes with that identifier')
+													.then(null, (err) -> trace(err));
+												return;
+											}
+											var q = DBQuote.fromRecord(data);
+											var embed = new MessageEmbed();
+											var user = interaction.client.users.cache.get(q.author_id);
 
-								var from = cast(data.timestamp, Timestamp);
-								var date = DateTools.format(from.toDate(), '%H:%M %d-%m-%Y');
+											var from = Date.fromTime(q.timestamp);
+											var date = DateTools.format(from, '%H:%M %d-%m-%Y');
 
-								var icon = 'https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless';
-								var content = data.username;
-								if (user != null) {
-									icon = user.avatarURL();
-									content = user.username;
-								}
+											var icon = 'https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless';
+											var content = user.tag;
+											if (user != null) {
+												icon = user.avatarURL();
+												content = user.username;
+											}
 
-								embed.setDescription('***${data.name}***\n${data.description}');
-								embed.setFooter({
-									text: '$content | $date |\t#${data.id}',
-									iconURL: icon
+											embed.setDescription('***${q.title}***\n${q.description}');
+											embed.setFooter({
+												text: '$content | $date |\t#${q.id}',
+												iconURL: icon
+											});
+
+											interaction.reply({embeds: [embed]})
+												.then(null, function(err) {
+													trace(err);
+													Browser.console.dir(err);
+												});
+										default:
+											trace(resp);
+									}
 								});
-
-								interaction.reply({embeds: [embed]}).then(null, function(err) {
-									trace(err);
-									Browser.console.dir(err);
-								});
-							}).then(null, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
+							EcsTools.set(e);
 						}
 				}
 			default:
 				// interaction.reply();
 		}
-	}
-
-	inline function acResponse(data:TQuoteData) {
-		var name = data.name;
-		if (name.length > 25) {
-			name = name.substr(0, 25) + '...';
-		}
-		return '$name - ' + data.description.substr(0, 25) + '... by ${data.username}';
 	}
 
 	inline function dbacResponse(data:DBQuote) {
@@ -477,8 +441,13 @@ class Quote extends CommandDbBase {
 		return check_letters.match(input);
 	}
 
+	function isId(input:String) {
+		var check_letters = ~/^[0-9]*$/;
+		return check_letters.match(input);
+	}
+
 	function isValidName(input:String) {
-		var check_letters = ~/^[A-Za-z0-9 :.?_-]{2,30}$/i;
+		var check_letters = ~/^[A-Za-z0-9 :.?_-]{3,35}$/i;
 		return check_letters.match(input);
 	}
 

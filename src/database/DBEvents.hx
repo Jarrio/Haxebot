@@ -8,6 +8,7 @@ import db.ColumnDefinition;
 
 enum DBEvents {
 	Search(table:String, field:String, value:String, callback:Callback->Void);
+	SearchBy(table:String, field:String, value:String, by_column:String, by_value:Any, callback:Callback->Void);
 	Insert(table:String, value:Record, callback:Callback->Void);
 	Update(table:String, value:Record, query:QueryExpr, callback:Callback->Void);
 	InsertDontDuplicateLastRow(table:String, field:String, query:QueryExpr, data:Record, callback:Callback->Void);
@@ -16,8 +17,8 @@ enum DBEvents {
 	GetRecord(table:String, query:QueryExpr, callback:Callback->Void);
 	GetRecords(table:String, query:QueryExpr, callback:Callback->Void);
 	GetAllRecords(table:String, callback:Callback->Void);
-	DeleteByValue(table:String, column:String, value:Any, callback:Callback -> Void);
-	DeleteRecord(table:String, column:String, value:Record, callback:Callback -> Void);
+	DeleteByValue(table:String, column:String, value:Any, callback:Callback->Void);
+	DeleteRecord(table:String, value:Record, callback:Callback -> Void);
 	Watch(table:String, condition:QueryExpr, callback:Callback->Void, ?rate:Float);
 	Poll(event:DBEvents, ms:Int);
 }

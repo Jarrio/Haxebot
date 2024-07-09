@@ -123,7 +123,7 @@ class DatabaseSystem extends System {
 				case Insert(table, value, callback):
 					db.table(table).then((result) -> {
 						return result.table.add(value);
-					}).then(function(res) {
+					}).then(function(res:DatabaseResult<RRecord>) {
 						callback(Success("Inserted", res.data));
 					}, function(err) {
 						if (err.message != null
@@ -182,7 +182,18 @@ class DatabaseSystem extends System {
 						}
 					}, (err) -> trace(err));
 				case Search(table, field, value, callback):
-					var query = "SELECT * FROM `"+table+"` WHERE "+field+" LIKE '%"+ value + "%';";
+					var query = "SELECT * FROM `"+table+"` WHERE "+field+" LIKE '%"+ value + "%'";
+
+					db.raw(query).then(function(result) {
+						if (result != null) {
+							callback(Records(result.data));
+						} else {
+							callback(Error('No data', result.data));
+						}
+					}, (err) -> trace(err));
+				case SearchBy(table, field, value, by_column, by_value, callback):
+					var query = "SELECT * FROM `"+table+"` WHERE "+by_column+" = '"+by_value+"' AND "+field+" LIKE '%"+ value + "%'";
+
 					db.raw(query).then(function(result) {
 						if (result != null) {
 							callback(Records(result.data));
@@ -205,13 +216,15 @@ class DatabaseSystem extends System {
 						trace(err);
 						callback(Error("Failed", err));
 					});
-				case DeleteRecord(table, column, value, callback):
+				case DeleteRecord(table, value, callback):
 					this.getTable(table, function(result) {
-						var record = new RRecord();
-						record.field(column, value);
-
-						result.table.delete(record).then(function(succ) {
-							callback(Success("Successfully deleted", succ.data));
+						result.table.delete(value).then(function(succ) {
+							if (succ.data == null) {
+								callback(Error("Failed to delete"));
+							} else {
+								callback(Success("Successfully deleted", succ.data));
+							}
+							
 						}, function(err) {
 							callback(Error("Failed", err));
 							trace(err);
