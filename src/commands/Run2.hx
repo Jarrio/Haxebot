@@ -199,7 +199,8 @@ class Run2 extends TextCommandBase {
 			}
 		}
 		trace('hey');
-		code = code.replace('`', '\\`');
+		code = code.replace('```', '\\`\\`\\`');
+		
 		this.runCodeOnThread(code, response);
 	}
 
