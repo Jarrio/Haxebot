@@ -60,7 +60,9 @@ class RateLimit extends CommandBase {
 			switch (command) {
 				case rate_limit:
 					for (limit in limits) {
-						if (message.author.id != limit.user_id || limit.silenced > -1) {
+						if (message.author.id != limit.user_id
+							|| limit.silenced > -1
+							|| message.channel.asType0.id == "663246792426782730") {
 							continue;
 						}
 

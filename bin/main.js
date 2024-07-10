@@ -10791,7 +10791,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 				var limit_current = 0;
 				while(limit_current < limit_length) {
 					var limit = [h[limit_keys[limit_current++]]];
-					if(message.author.id != limit[0].user_id || limit[0].silenced > -1) {
+					if(message.author.id != limit[0].user_id || limit[0].silenced > -1 || message.channel.id == "663246792426782730") {
 						continue;
 					}
 					var tracker = [this.tracking.h[limit[0].user_id]];
@@ -10804,7 +10804,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 							};
 						})(tracker,limit),(function() {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 75, className : "commands.mod.RateLimit", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 77, className : "commands.mod.RateLimit", methodName : "update"});
 							};
 						})());
 					} else {
@@ -10836,7 +10836,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 					};
 				})(tracker1,limit1),(function() {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 101, className : "commands.mod.RateLimit", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 103, className : "commands.mod.RateLimit", methodName : "update"});
 					};
 				})());
 			}
@@ -10845,7 +10845,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 	,updateLimit: function(limit) {
 		var e = database_DBEvents.Update("rate_limit",limit.get_record(),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("user_id")),QueryExpr.QueryValue(limit.user_id)),function(response) {
 			if(response._hx_index != 4) {
-				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 112, className : "commands.mod.RateLimit", methodName : "updateLimit"});
+				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 114, className : "commands.mod.RateLimit", methodName : "updateLimit"});
 			}
 		});
 		var entity = util_EcsTools.get_universe().createEntity();
@@ -10862,10 +10862,10 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 		if(!Object.prototype.hasOwnProperty.call(this.tracking.h,obj.user_id)) {
 			Main.client.guilds.cache.get(Main.guild_id).members.fetch(obj.user_id).then(function(member) {
 				tracker = { member : member, counter : 1, last_message : -1};
-				haxe_Log.trace("Added " + obj.user_tag + " to list",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 129, className : "commands.mod.RateLimit", methodName : "setTracker"});
+				haxe_Log.trace("Added " + obj.user_tag + " to list",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 131, className : "commands.mod.RateLimit", methodName : "setTracker"});
 				_gthis.tracking.h[obj.user_id] = tracker;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 131, className : "commands.mod.RateLimit", methodName : "setTracker"});
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 133, className : "commands.mod.RateLimit", methodName : "setTracker"});
 			});
 		}
 	}
@@ -10886,15 +10886,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 					var key = user.id;
 					var value = database_types_DBRateLimit.fromRecord(response.data);
 					this1.h[key] = value;
-					haxe_Log.trace("Inserted " + user.tag + " rate limit",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 148, className : "commands.mod.RateLimit", methodName : "run"});
+					haxe_Log.trace("Inserted " + user.tag + " rate limit",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 150, className : "commands.mod.RateLimit", methodName : "run"});
 					interaction.reply({ content : "<@" + user.id + "> has been rate limited"}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 151, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 153, className : "commands.mod.RateLimit", methodName : "run"});
 					});
 				} else {
 					interaction.reply({ ephemeral : true, content : "An error occured, check logs"}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 156, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 158, className : "commands.mod.RateLimit", methodName : "run"});
 					});
-					haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 157, className : "commands.mod.RateLimit", methodName : "run"});
+					haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 159, className : "commands.mod.RateLimit", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -10921,15 +10921,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
 							delete(_this.h[key]);
 						}
-						haxe_Log.trace("removed slow mode from " + user1.tag,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 169, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace("removed slow mode from " + user1.tag,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 171, className : "commands.mod.RateLimit", methodName : "run"});
 						interaction.reply({ content : "Slow mode has been removed for <@" + user1.id + ">"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 172, className : "commands.mod.RateLimit", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 174, className : "commands.mod.RateLimit", methodName : "run"});
 						});
 					} else {
 						interaction.reply({ ephemeral : true, content : "An error occured, check logs"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 177, className : "commands.mod.RateLimit", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 179, className : "commands.mod.RateLimit", methodName : "run"});
 						});
-						haxe_Log.trace(resp,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 178, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 180, className : "commands.mod.RateLimit", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
