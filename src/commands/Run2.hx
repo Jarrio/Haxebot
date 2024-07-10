@@ -97,7 +97,6 @@ class Run2 extends TextCommandBase {
 					this.parse(regex.matched(2).htmlUnescape(), response);
 				}
 			}
-			trace('hey');
 			get_code.request();
 			return;
 		}
@@ -105,17 +104,14 @@ class Run2 extends TextCommandBase {
 		check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
 		if (check_code.match(message)) {
 			this.parse(check_code.matched(4), response);
-			trace('hey');
 			return;
 		}
 
 		check_code = ~/!run[\s|\n| \n](.*)/gmis;
 		if (check_code.match(message)) {
 			this.parse(check_code.matched(1), response);
-			trace('hey');
 			return;
 		}
-		trace('hey');
 		this.parse(null, response);
 	}
 
@@ -203,6 +199,7 @@ class Run2 extends TextCommandBase {
 			}
 		}
 		trace('hey');
+		code = code.replace('`', '\\`');
 		this.runCodeOnThread(code, response);
 	}
 
@@ -262,7 +259,6 @@ class Run2 extends TextCommandBase {
 		for (data in get_paths.paths) {
 			format += data;
 		}
-		trace('hey');
 		try {
 			var check_class = ~/(^class\s(Test|Main)(\n|\s|\S))/mg;
 			var code_content = get_paths.code;
@@ -277,7 +273,6 @@ class Run2 extends TextCommandBase {
 			} else {
 				code_content = 'class $class_entry {\n\tstatic function main() {\n\t\t${get_paths.code}\n\t}\n}';
 			}
-			trace('hey');
 
 			code_content = format + '\n' + code_content;
 			var pre_loop = code_content;
@@ -366,11 +361,9 @@ class Run2 extends TextCommandBase {
 									trace(err);
 									Browser.console.dir(err);
 								});
-							trace('hey');
 							return;
 						}
 					case OhNo:
-						trace('hey');
 						var compile_output = this.cleanOutput(parse.error, null, class_entry);
 						var errs = '';
 						for (line in parse.error.split('\n')) {
@@ -379,15 +372,12 @@ class Run2 extends TextCommandBase {
 						}
 
 						var embed = parseError(errs, code_content);
-						trace('hey');
 						if (embed == null) {
-							trace('hey');
 							message.reply({
 								allowedMentions: {parse: []},
 								content: mention + '```\n${compile_output}```'
 							});
 						} else {
-							trace('hey');
 							message.reply({allowedMentions: {parse: []}, embeds: [embed]});
 						}
 				}
@@ -407,7 +397,6 @@ class Run2 extends TextCommandBase {
 			var str = Json.stringify(request);
 			http.setPostData(str);
 			http.request(true);
-			trace('hey');
 			return;
 			var filename = "";
 			Fs.appendFile(

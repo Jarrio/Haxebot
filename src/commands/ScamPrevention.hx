@@ -24,13 +24,50 @@ class ScamPrevention extends CommandBase {
 	var phishing_update_time:Float;
 
 	var timestamp(get, never):Float;
-	final last_message_interval = 30000;
+	final last_message_interval = 5000;
+	
+	final queue_time = 10000; //40 seconds
+	var hold_list:Map<String, Message> = [];
+
+	function singleMessageCheck(message:Message) {
+		if (!message.content.contains('@everyone') && !message.content.contains('@here')) {
+			return false;
+		}
+
+		if (hasLink(message.content)) {
+			return true;
+		}
+		
+		var counter = 0;
+		if (checkContent([message])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	function hasLink(message:String) {
+		var markdown = ~/\[.*?\]\(.*?\)/gmi;
+		if (markdown.match(message)) {
+			return true;
+		}
+		var https = ~/https:\/\/.*?\..*?[\/|\s]/gmi;
+		if (https.match(message)) {
+			return true;
+		}
+
+		return false;
+	}
 
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, entity -> {
 			if (forward != scam_prevention) {
 				continue;
+			}
+
+			if (this.singleMessageCheck(message)) {
+				hold_list.set(message.id, message);
 			}
 
 			if (withinTime(message.createdTimestamp, last_message_interval)) {
@@ -51,6 +88,12 @@ class ScamPrevention extends CommandBase {
 
 			if (messages.length < 3) {
 				continue;
+			}
+
+			for (m in messages) {
+				if (this.hold_list.exists(m.id)) {
+					hold_list.remove(m.id);
+				}
 			}
 
 			var review = false;
@@ -77,6 +120,19 @@ class ScamPrevention extends CommandBase {
 			this.reviewMessage(messages);
 			this.resetChecks(messages[0].author.id);
 		}
+
+		for (key => value in hold_list) {
+			var now = Date.now().getTime() + queue_time;
+			trace(value.createdTimestamp);
+			
+			if (withinTime(value.createdTimestamp, queue_time)) {
+				continue;
+			}
+			this.reviewMessage([value]);
+			this.resetChecks(value.author.id);
+			this.hold_list.remove(key);
+		}
+
 
 		for (id => value in this.time_since) {
 			if (this.timestamp - value > this.last_message_interval) {
@@ -206,10 +262,10 @@ class ScamPrevention extends CommandBase {
 	}
 
 	function checkContent(messages:Array<Message>) {
-		var keywords = ['$', 'crypto', 'market', 'profit', '£'];
+		var keywords = ['$', 'crypto', 'market', 'profit', '£', 'nudes', 'free', 'gift', 'steam', 'telegram', 'giftcard', 'whatsapp', 'girls', 'sexy', 'teen', 'port', 'nsfw', '%', 'nitro', 'airdrop', 'forex', 'pay'];
 		for (m in messages) {
 			for (key in keywords) {
-				if (m.content.contains(key)) {
+				if (m.content.toLowerCase().contains(key)) {
 					return true;
 				}
 			}
@@ -257,7 +313,7 @@ class ScamPrevention extends CommandBase {
 		var tag_count = 0;
 
 		for (message in messages) {
-			if (message.content.startsWith('@everyone') || message.content.startsWith('@here')) {
+			if (message.content.contains('@everyone') || message.content.contains('@here')) {
 				if (tag_count >= 3) {
 					break;
 				}
