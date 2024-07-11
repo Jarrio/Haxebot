@@ -302,7 +302,7 @@ class Run2 extends TextCommandBase {
 						var max_lines = 40;
 						if (parse.output.length > 3500) {
 							truncate = true;
-							if (channel.id == "663246792426782730") {
+							if (message.channel.asType0.id == "663246792426782730") {
 								max_lines = 105;
 							}
 						}

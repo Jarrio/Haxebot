@@ -9113,7 +9113,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					var max_lines = 40;
 					if(parse.output.length > 3500) {
 						truncate = true;
-						if(_gthis.channel.id == "663246792426782730") {
+						if(message.channel.id == "663246792426782730") {
 							max_lines = 105;
 						}
 					}
