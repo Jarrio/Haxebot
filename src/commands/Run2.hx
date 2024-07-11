@@ -295,18 +295,24 @@ class Run2 extends TextCommandBase {
 					case Ok:
 						
 						var resp = '';
+						var extra = '';
+
 						var x = parse.output.split('\n');
-						var truncated = false;
-						if (x.length > 30) {
-							truncated = true;
-							resp = "";
-							for (line in x) {
-								var data = line + "\n";
-								if (resp.length + data.length > 3500) {
-									break;
-								}
-								resp += data;
+						var truncate = false;
+						var max_lines = 40;
+						if (parse.output.length > 3500) {
+							truncate = true;
+							if (channel.id == "663246792426782730") {
+								max_lines = 105;
 							}
+						}
+
+						for (line in x) {
+							var data = line + "\n";
+							if (resp.length + data.length > 3500) {
+								break;
+							}
+							resp += data;
 						}
 
 						var cembed = new MessageEmbed();
@@ -327,8 +333,7 @@ class Run2 extends TextCommandBase {
 						}
 
 						code_output = cleanOutput(code_output, 'Main.hx', 'Main');
-//						trace(code_output);
-						if (truncated) {
+						if (truncate) {
 							code_output += '\n//Output has been trimmed.';
 						}
 
@@ -336,9 +341,22 @@ class Run2 extends TextCommandBase {
 						var odesc = '**Output:**\n ```markdown\n' + code_output + '\n```';
 						trace(cdesc.length);
 						trace(odesc.length);
+						var embeds = [];
+						if (truncate) {
+							oembed.setDescription(odesc);
+						} else {
+							cdesc += '\n$odesc';
+						}
 						
-						cembed.setDescription(cdesc);
-						oembed.setDescription(odesc);
+						embeds.push(cembed);
+						if (truncate) {
+							embeds.push(oembed);
+						}
+
+						trace(cdesc);
+						trace(odesc);
+						// cembed.setDescription(cdesc);
+						// oembed.setDescription(odesc);
 
 						var url = this.codeSource(message.content);
 						var author = {
@@ -365,7 +383,7 @@ class Run2 extends TextCommandBase {
 						// trace(resp);
 						// trace(parse);
 						if (resp.length > 0) {
-							message.reply({allowedMentions: {parse: []}, embeds: [cembed, oembed]})
+							message.reply({allowedMentions: {parse: []}, embeds: embeds})
 								.then((succ) -> {
 									trace('${message.author.tag} at $format_date with file id:');
 									if (message.deletable) {
