@@ -46,7 +46,7 @@ class Quote extends CommandDbBase {
 					}
 
 					var e = DBEvents.Insert('quotes', quote.record, function(resp) {
-						switch(resp) {
+						switch (resp) {
 							case Success(message, data):
 								trace(message);
 								quote = DBQuote.fromRecord(data);
@@ -55,7 +55,8 @@ class Quote extends CommandDbBase {
 									'*Quote #${quote.id} added!*\nname: $name\n$description\n\nby: <@${quote.author_id}>'
 								);
 							default:
-								interaction.reply('Something went wrong, try again later').then(null, (err) -> trace(err));
+								interaction.reply('Something went wrong, try again later')
+									.then(null, (err) -> trace(err));
 								trace(resp);
 								trace(quote);
 						}
@@ -65,18 +66,23 @@ class Quote extends CommandDbBase {
 					var quote = this.cache.get(interaction.user.id);
 					quote.description = interaction.fields.getTextInputValue('description');
 
-					var e = DBEvents.Update('quotes', quote.record, Query.query($id == quote.id && $author_id == quote.author_id), function(resp) {
-						switch(resp) {
-							case Success(message, _):
-								trace('$message');
+					var e = DBEvents.Update(
+						'quotes',
+						quote.record,
+						Query.query($id == quote.id && $author_id == quote.author_id),
+						function(resp) {
+							switch (resp) {
+								case Success(message, _):
+									trace('$message');
 									interaction.reply('Quote updated!');
-							default:
+								default:
 									trace(this.cache.get(interaction.user.id));
 									interaction.reply('Something went wrong');
-								trace(resp);
-						}
+									trace(resp);
+							}
 							this.cache.remove(interaction.user.id);
-					});
+						}
+					);
 
 					EcsTools.set(e);
 				default:
@@ -88,34 +94,37 @@ class Quote extends CommandDbBase {
 		});
 	}
 
+	function parseGroupQuotes(interaction:BaseCommandInteraction, value:Callback) {
+		switch (value) {
+			case Records(data):
+				if (data.length == 0) {
+					interaction.reply("No quotes by that user!");
+					return;
+				}
+				var embed = new MessageEmbed();
+				embed.setTitle('List of Quotes');
+				var body = '';
+				for (item in data) {
+					var quote = DBQuote.fromRecord(item);
+					body += '**#${quote.id}** ${quote.title} by <@${quote.author_id}> \n';
+				}
+				embed.setDescription(body);
+				embed.setColor(0xEA8220);
+				interaction.reply({embeds: [embed]}).then(null, (err) -> trace(err));
+			default:
+				trace(value);
+		}
+	}
+
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case QuoteList(user):
 				var sort = Firestore.orderBy('id', ASCENDING);
-
-				var e = DBEvents.GetRecords('quotes', Query.query($author_id == user.id),
-					function response(resp) {
-						switch (resp) {
-							case Records(data):
-								if (data.length == 0) {
-									interaction.reply("No quotes by that user!");
-									return;
-								}
-								var embed = new MessageEmbed();
-								embed.setTitle('List of Quotes');
-								var body = '';
-								for (item in data) {
-									var quote = DBQuote.fromRecord(item);
-									body += '**#${quote.id}** ${quote.title} by <@${quote.author_id}> \n';
-								}
-								embed.setDescription(body);
-								embed.setColor(0xEA8220);
-								interaction.reply({embeds: [embed]})
-									.then(null, (err) -> trace(err));
-							default:
-								trace(resp);
-						}
-					});
+				var e = DBEvents.GetAllRecords('quotes', parseGroupQuotes.bind(interaction));
+				if (user != null) {
+					e = DBEvents.GetRecords('quotes', Query.query($author_id == user.id),
+						parseGroupQuotes.bind(interaction));
+				}
 				EcsTools.set(e);
 			case QuoteGet(name) | QuoteCreate(name) | QuoteEdit(name) | QuoteDelete(name):
 				var type = get;
@@ -226,21 +235,25 @@ class Quote extends CommandDbBase {
 									var modal = new ModalBuilder().setCustomId('quote_set')
 										.setTitle('Creating a quote');
 
-									var title_input = new APITextInputComponent().setCustomId('name')
+									var title_input = new APITextInputComponent()
+										.setCustomId('name')
 										.setLabel('name')
 										.setStyle(Short)
 										.setValue(name.toLowerCase())
 										.setMinLength(3)
 										.setMaxLength(this.max_name_length);
 
-									var desc_input = new APITextInputComponent().setCustomId('description')
+									var desc_input = new APITextInputComponent()
+										.setCustomId('description')
 										.setLabel('description')
 										.setStyle(Paragraph)
 										.setMinLength(10)
 										.setMaxLength(2000);
 
-									var action_a = new APIActionRowComponent().addComponents(title_input);
-									var action_b = new APIActionRowComponent().addComponents(desc_input);
+									var action_a = new APIActionRowComponent()
+										.addComponents(title_input);
+									var action_b = new APIActionRowComponent()
+										.addComponents(desc_input);
 									modal.addComponents(action_a, action_b);
 
 									interaction.showModal(modal);
@@ -250,11 +263,16 @@ class Quote extends CommandDbBase {
 						});
 						EcsTools.set(e);
 					case edit:
-						var e = DBEvents.GetRecord('quotes', Query.query($id == name && $author_id == interaction.user.id), function(resp) {
-							switch (resp) {
-								case Record(data):
+						var e = DBEvents.GetRecord(
+							'quotes',
+							Query.query($id == name && $author_id == interaction.user.id),
+							function(resp) {
+								switch (resp) {
+									case Record(data):
 										if (data == null) {
-											interaction.reply('Could not find quote or you were not the author of the quote specified');
+											interaction.reply(
+												'Could not find quote or you were not the author of the quote specified'
+											);
 											return;
 										}
 
@@ -276,10 +294,11 @@ class Quote extends CommandDbBase {
 
 										this.cache.set(interaction.user.id, quote);
 										interaction.showModal(modal);
-								default:
-									trace(resp);
+									default:
+										trace(resp);
+								}
 							}
-						});
+						);
 						EcsTools.set(e);
 					case delete:
 						var record = new Record();
