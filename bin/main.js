@@ -22862,8 +22862,8 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 			case 1:
 				var _gby_value = event.by_value;
 				var callback1 = [event.callback];
-				var query1 = "SELECT * FROM `" + event.table + "` WHERE " + event.by_column + " = '" + (_gby_value == null ? "null" : Std.string(_gby_value)) + "' AND " + event.field + " LIKE '%" + event.value + "%'";
-				thenshim_Promise.then(this.db.raw(query1),(function(callback) {
+				var query1 = ["SELECT * FROM `" + event.table + "` WHERE " + event.by_column + " = '" + (_gby_value == null ? "null" : Std.string(_gby_value)) + "' AND " + event.field + " LIKE '%" + event.value + "%'"];
+				thenshim_Promise.then(this.db.raw(query1[0]),(function(callback) {
 					return function(result) {
 						if(result != null) {
 							callback[0](database_Callback.Records(result.data));
@@ -22871,11 +22871,12 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 							callback[0](database_Callback.Error("No data",result.data));
 						}
 					};
-				})(callback1),(function() {
+				})(callback1),(function(query) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 203, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(query[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 204, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 205, className : "systems.DatabaseSystem", methodName : "update"});
 					};
-				})());
+				})(query1));
 				break;
 			case 2:
 				var value = [event.value];
@@ -22962,11 +22963,11 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 						if(result.data.hasField("____status")) {
 							var tmp = haxe_Log.trace;
 							var tmp1 = result.data.field("____status");
-							tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 265, className : "systems.DatabaseSystem", methodName : "update"});
+							tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 268, className : "systems.DatabaseSystem", methodName : "update"});
 							return;
 						}
 						_gthis.updating = false;
-						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 270, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 273, className : "systems.DatabaseSystem", methodName : "update"});
 						if(callback[0] != null) {
 							callback[0](database_Callback.Success("Successfully updated record",result.data));
 						}
@@ -22974,10 +22975,10 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 				})(callback4),(function(callback,value) {
 					return function(err) {
 						_gthis.updating = false;
-						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 276, className : "systems.DatabaseSystem", methodName : "update"});
-						haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 277, className : "systems.DatabaseSystem", methodName : "update"});
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 278, className : "systems.DatabaseSystem", methodName : "update"});
-						haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 279, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 279, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 280, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 281, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 282, className : "systems.DatabaseSystem", methodName : "update"});
 						if(callback[0] != null) {
 							callback[0](database_Callback.Error("Failed",err));
 						}
@@ -23064,13 +23065,13 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 						})(callback),(function(callback) {
 							return function(err) {
 								callback[0](database_Callback.Error("Failed",err));
-								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 213, className : "systems.DatabaseSystem", methodName : "update"});
+								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 216, className : "systems.DatabaseSystem", methodName : "update"});
 							};
 						})(callback));
 					};
 				})(callback8,value3,column1),(function(callback) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 216, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 219, className : "systems.DatabaseSystem", methodName : "update"});
 						callback[0](database_Callback.Error("Failed",err));
 					};
 				})(callback8));
@@ -23091,19 +23092,19 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 						})(callback),(function(callback) {
 							return function(err) {
 								callback[0](database_Callback.Error("Failed",err));
-								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 230, className : "systems.DatabaseSystem", methodName : "update"});
+								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 233, className : "systems.DatabaseSystem", methodName : "update"});
 							};
 						})(callback));
 					};
 				})(callback9,value4),(function(callback) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 233, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 236, className : "systems.DatabaseSystem", methodName : "update"});
 						callback[0](database_Callback.Error("Failed",err));
 					};
 				})(callback9));
 				break;
 			default:
-				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 288, className : "systems.DatabaseSystem", methodName : "update"});
+				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 291, className : "systems.DatabaseSystem", methodName : "update"});
 			}
 		}
 	}

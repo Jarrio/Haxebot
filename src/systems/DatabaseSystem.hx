@@ -200,7 +200,10 @@ class DatabaseSystem extends System {
 						} else {
 							callback(Error('No data', result.data));
 						}
-					}, (err) -> trace(err));
+					}, function(err) {
+						trace(query);
+						trace(err);
+					});
 				case DeleteByValue(table, column, value, callback):
 					this.getTable(table, function(result) {
 						var record = new RRecord();
