@@ -1052,8 +1052,8 @@
 				"description": "Create a quote",
 				"params": [
 					{
-						"name": "identifier",
-						"description": "The string or id of the quote you wish to grab",
+						"name": "title",
+						"description": "The title of your quote. Names are unique, autocomplete will show you names similar to your previous quotes to prevent collisions.",
 						"type": "string",
 						"required": true,
 						"autocomplete": true
