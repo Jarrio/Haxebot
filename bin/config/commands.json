@@ -1053,7 +1053,7 @@
 				"params": [
 					{
 						"name": "title",
-						"description": "The title of your quote. Names are unique, autocomplete will show you names similar to your previous quotes to prevent collisions.",
+						"description": "Title of your quote. Names are unique, autocomplete will show your other quotes",
 						"type": "string",
 						"required": true,
 						"autocomplete": true
