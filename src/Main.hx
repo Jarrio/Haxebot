@@ -115,7 +115,7 @@ class Main {
 					enabled: #if block true #else false #end,
 					systems: [
 						Hi, Boop,
-//						Run2,
+						Run2,
 						Everyone,
 						Roundup,
 						RoundupRoundup,
@@ -665,6 +665,7 @@ typedef TKeys = {
 	var twitch_client_id:String;
 	var twitch_secret:String;
 	var mysql:TMysqlConfig;
+	var haxeip:String;
 }
 
 typedef TMysqlConfig = {

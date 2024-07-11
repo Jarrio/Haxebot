@@ -45,9 +45,13 @@ class Run2 extends TextCommandBase {
 	var checked:Bool = false;
 	var timeout = 5000;
 	var last_cleared:Float;
-	final site = #if block "" #else "localhost" #end;
+	var site = #if block "" #else "localhost" #end;
 
 	override function onEnabled() {
+		#if block
+		site = Main.keys.haxeip;
+		trace(site);
+		#end
 		var http = new Http('http://$site:1337');
 		http.onError = function(error) {
 			trace(error);
@@ -67,6 +71,7 @@ class Run2 extends TextCommandBase {
 					trace(parse.error);
 			}
 		}
+
 
 		http.request(true);
 	}
@@ -292,18 +297,26 @@ class Run2 extends TextCommandBase {
 						var resp = '';
 						var x = parse.output.split('\n');
 						var truncated = false;
-						if (x.length > 24) {
+						if (x.length > 30) {
 							truncated = true;
 							resp = "";
-							for (line in x.slice(x.length - 23)) {
-								resp += line + "\n";
+							for (line in x) {
+								var data = line + "\n";
+								if (resp.length + data.length > 3500) {
+									break;
+								}
+								resp += data;
 							}
 						}
 
-						var embed = new MessageEmbed();
-						embed.type = 'article';
+						var cembed = new MessageEmbed();
+						var oembed = new MessageEmbed();
+						
+						cembed.type = 'article';
+						oembed.type = 'article';
+
 						var code_output = '';
-						resp = parse.output;
+						//resp = parse.output;
 
 						var split = resp.split('\n');
 						for (key => item in split) {
@@ -319,10 +332,13 @@ class Run2 extends TextCommandBase {
 							code_output += '\n//Output has been trimmed.';
 						}
 
-						var desc = '**Code:**\n```hx\n${get_paths.code}``` **Output:**\n ```markdown\n'
-							+ code_output
-							+ '\n```';
-						embed.setDescription(desc);
+						var cdesc = '**Code:**\n```hx\n${get_paths.code}```';
+						var odesc = '**Output:**\n ```markdown\n' + code_output + '\n```';
+						trace(cdesc.length);
+						trace(odesc.length);
+						
+						cembed.setDescription(cdesc);
+						oembed.setDescription(odesc);
 
 						var url = this.codeSource(message.content);
 						var author = {
@@ -331,25 +347,25 @@ class Run2 extends TextCommandBase {
 						}
 
 						if (url == "") {
-							embed.setAuthor(author);
+							cembed.setAuthor(author);
 						} else {
 							var tag = url.split('#')[1];
-							embed.setTitle('TryHaxe #$tag');
-							embed.setURL(url);
-							embed.setAuthor(author);
+							cembed.setTitle('TryHaxe #$tag');
+							cembed.setURL(url);
+							cembed.setAuthor(author);
 						}
 
 						var date = Date.fromTime(message.createdTimestamp);
 						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
 
-						embed.setFooter({
+						oembed.setFooter({
 							text: 'Haxe ${this.haxe_version}',
 							iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
 						});
-						trace(resp);
-						trace(parse);
+						// trace(resp);
+						// trace(parse);
 						if (resp.length > 0) {
-							message.reply({allowedMentions: {parse: []}, embeds: [embed]})
+							message.reply({allowedMentions: {parse: []}, embeds: [cembed, oembed]})
 								.then((succ) -> {
 									trace('${message.author.tag} at $format_date with file id:');
 									if (message.deletable) {
