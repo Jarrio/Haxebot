@@ -314,6 +314,7 @@ class Run2 extends TextCommandBase {
 							}
 							resp += data;
 						}
+						resp = resp.substring(0, resp.lastIndexOf('\n'));
 
 						var cembed = new MessageEmbed();
 						var oembed = new MessageEmbed();
@@ -337,8 +338,8 @@ class Run2 extends TextCommandBase {
 							code_output += '\n//Output has been trimmed.';
 						}
 
-						var cdesc = '**Code:**\n```hx\n${get_paths.code}```';
-						var odesc = '**Output:**\n ```markdown\n' + code_output + '\n```';
+						var cdesc = '**Code:**\n```hx\n${get_paths.code}\n```';
+						var odesc = '**Output:**\n ```markdown\n' + code_output + '```';
 						trace(cdesc.length);
 						trace(odesc.length);
 						var embeds = [];
@@ -347,17 +348,17 @@ class Run2 extends TextCommandBase {
 						} else {
 							cdesc += '\n$odesc';
 						}
-						
+
+						cembed.setDescription(cdesc);
 						embeds.push(cembed);
 						if (truncate) {
 							embeds.push(oembed);
 						}
 
-						trace(cdesc);
-						trace(odesc);
+						// trace(cdesc);
+						// trace(odesc);
 						// cembed.setDescription(cdesc);
 						// oembed.setDescription(odesc);
-
 						var url = this.codeSource(message.content);
 						var author = {
 							name: '@' + message.author.tag,
@@ -375,8 +376,8 @@ class Run2 extends TextCommandBase {
 
 						var date = Date.fromTime(message.createdTimestamp);
 						var format_date = DateTools.format(date, "%d-%m-%Y %H:%M:%S");
-
-						oembed.setFooter({
+						var which = (truncate) ? oembed : cembed;
+						which.setFooter({
 							text: 'Haxe ${this.haxe_version}',
 							iconURL: 'https://cdn.discordapp.com/emojis/567741748172816404.png?v=1'
 						});

@@ -9127,6 +9127,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 						}
 						resp += data;
 					}
+					resp = resp.substring(0,resp.lastIndexOf("\n"));
 					var cembed = new discord_$js_MessageEmbed();
 					var oembed = new discord_$js_MessageEmbed();
 					cembed.type = "article";
@@ -9149,22 +9150,21 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					if(truncate) {
 						code_output += "\n//Output has been trimmed.";
 					}
-					var cdesc = "**Code:**\n```hx\n" + get_paths.code + "```";
-					var odesc = "**Output:**\n ```markdown\n" + code_output + "\n```";
-					haxe_Log.trace(cdesc.length,{ fileName : "src/commands/Run2.hx", lineNumber : 342, className : "commands.Run2", methodName : "runCodeOnThread"});
-					haxe_Log.trace(odesc.length,{ fileName : "src/commands/Run2.hx", lineNumber : 343, className : "commands.Run2", methodName : "runCodeOnThread"});
+					var cdesc = "**Code:**\n```hx\n" + get_paths.code + "\n```";
+					var odesc = "**Output:**\n ```markdown\n" + code_output + "```";
+					haxe_Log.trace(cdesc.length,{ fileName : "src/commands/Run2.hx", lineNumber : 343, className : "commands.Run2", methodName : "runCodeOnThread"});
+					haxe_Log.trace(odesc.length,{ fileName : "src/commands/Run2.hx", lineNumber : 344, className : "commands.Run2", methodName : "runCodeOnThread"});
 					var embeds = [];
 					if(truncate) {
 						oembed.setDescription(odesc);
 					} else {
 						cdesc += "\n" + odesc;
 					}
+					cembed.setDescription(cdesc);
 					embeds.push(cembed);
 					if(truncate) {
 						embeds.push(oembed);
 					}
-					haxe_Log.trace(cdesc,{ fileName : "src/commands/Run2.hx", lineNumber : 356, className : "commands.Run2", methodName : "runCodeOnThread"});
-					haxe_Log.trace(odesc,{ fileName : "src/commands/Run2.hx", lineNumber : 357, className : "commands.Run2", methodName : "runCodeOnThread"});
 					var url = _gthis.codeSource(message.content);
 					var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
 					if(url == "") {
@@ -9177,18 +9177,19 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					}
 					var date = new Date(message.createdTimestamp);
 					var format_date = DateTools.format(date,"%d-%m-%Y %H:%M:%S");
-					oembed.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
+					var which = truncate ? oembed : cembed;
+					which.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 					if(resp.length > 0) {
 						message.reply({ allowedMentions : { parse : []}, embeds : embeds}).then(function(succ) {
-							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 388, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 389, className : "commands.Run2", methodName : "runCodeOnThread"});
 							if(message.deletable) {
 								message.delete().then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 391, className : "commands.Run2", methodName : "runCodeOnThread"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 392, className : "commands.Run2", methodName : "runCodeOnThread"});
 									$global.console.dir(err);
 								});
 							}
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 396, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 397, className : "commands.Run2", methodName : "runCodeOnThread"});
 							$global.console.dir(err);
 						});
 						return;
@@ -9211,7 +9212,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 604, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 605, className : "commands.Run2", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
