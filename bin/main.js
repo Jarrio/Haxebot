@@ -6463,10 +6463,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -6610,10 +6610,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -6855,10 +6855,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -7002,10 +7002,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -7247,10 +7247,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -7394,10 +7394,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -7639,10 +7639,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
@@ -7786,10 +7786,10 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = interaction.user.username;
+							var content = q.author_tag;
 							if(user != null) {
 								icon = user.avatarURL();
-								content = user.username;
+								content = q.author_tag;
 							}
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
