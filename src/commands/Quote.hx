@@ -50,10 +50,10 @@ class Quote extends CommandDbBase {
 							case Success(message, data):
 								trace(message);
 								quote = DBQuote.fromRecord(data);
-
-								interaction.reply(
-									'*Quote #${quote.id} added!*\nname: $name\n$description\n\nby: <@${quote.author_id}>'
-								);
+								var embed = new MessageEmbed();
+								embed.setTitle('Quote #${quote.id} added!');
+								embed.setDescription('**${quote.title}**\n$description');
+								interaction.reply({embeds: [embed]});
 							default:
 								interaction.reply('Something went wrong, try again later')
 									.then(null, (err) -> trace(err));
@@ -61,28 +61,50 @@ class Quote extends CommandDbBase {
 								trace(quote);
 						}
 					});
+
 					EcsTools.set(e);
 				case quote_edit:
 					var quote = this.cache.get(interaction.user.id);
+					var title = interaction.fields.getTextInputValue('title');
 					quote.description = interaction.fields.getTextInputValue('description');
-
-					var e = DBEvents.Update(
-						'quotes',
-						quote.record,
-						Query.query($id == quote.id && $author_id == quote.author_id),
-						function(resp) {
-							switch (resp) {
-								case Success(message, _):
-									trace('$message');
-									interaction.reply('Quote updated!');
-								default:
-									trace(this.cache.get(interaction.user.id));
-									interaction.reply('Something went wrong');
-									trace(resp);
-							}
-							this.cache.remove(interaction.user.id);
+					var e = DBEvents.DBEvents.GetRecord('quotes', Query.query($title == title && $author_id == interaction.user.id), function(resp) {
+						switch (resp) {
+							case Record(data):
+								trace(title);
+								trace(quote.title);
+								if (data != null && title != quote.title) {
+									interaction.reply(
+										'You already have a quote with the title **__${title}__**'
+									)
+										.then(null, function(err) {
+											trace(err);
+											Browser.console.dir(err);
+										});
+									return;
+								}
+								quote.title = title.toLowerCase();
+								var e = DBEvents.Update(
+									'quotes',
+									quote.record,
+									Query.query($id == quote.id && $author_id == quote.author_id),
+									function(resp) {
+										switch (resp) {
+											case Success(message, _):
+												trace('$message');
+												interaction.reply('Quote updated!');
+											default:
+												trace(this.cache.get(interaction.user.id));
+												interaction.reply('Something went wrong');
+												trace(resp);
+										}
+										this.cache.remove(interaction.user.id);
+									}
+								);
+								EcsTools.set(e);
+							default:
+								trace(resp);
 						}
-					);
+					});
 
 					EcsTools.set(e);
 				default:
@@ -224,7 +246,7 @@ class Quote extends CommandDbBase {
 								case Records(data):
 									if (data.length >= 1) {
 										interaction.reply(
-											'You already have a quote with the name __${data[0].field('title')}__'
+											'You already have a quote with the title __${data[0].field('title')}__'
 										)
 											.then(null, function(err) {
 												trace(err);
@@ -237,7 +259,7 @@ class Quote extends CommandDbBase {
 
 									var title_input = new APITextInputComponent()
 										.setCustomId('name')
-										.setLabel('name')
+										.setLabel('title')
 										.setStyle(Short)
 										.setValue(name.toLowerCase())
 										.setMinLength(3)
@@ -279,6 +301,13 @@ class Quote extends CommandDbBase {
 										var quote = DBQuote.fromRecord(data);
 										var modal = new ModalBuilder().setCustomId('quote_edit')
 											.setTitle('Editting quote #${quote.id}');
+										var title_input = new APITextInputComponent()
+											.setCustomId('title')
+											.setLabel('title')
+											.setStyle(Short)
+											.setValue(quote.title.toLowerCase())
+											.setMinLength(3)
+											.setMaxLength(this.max_name_length);
 
 										var desc_input = new APITextInputComponent()
 											.setCustomId('description')
@@ -288,9 +317,12 @@ class Quote extends CommandDbBase {
 											.setMinLength(10)
 											.setMaxLength(2000);
 
+										var action_a = new APIActionRowComponent()
+											.addComponents(title_input);
 										var action_b = new APIActionRowComponent()
 											.addComponents(desc_input);
-										modal.addComponents(action_b);
+
+										modal.addComponents(action_a, action_b);
 
 										this.cache.set(interaction.user.id, quote);
 										interaction.showModal(modal);
