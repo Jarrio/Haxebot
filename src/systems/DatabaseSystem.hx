@@ -222,7 +222,7 @@ class DatabaseSystem extends System {
 				case DeleteRecord(table, value, callback):
 					this.getTable(table, function(result) {
 						result.table.delete(value).then(function(succ) {
-							if (succ.data == null) {
+							if (succ == null) {
 								callback(Error("Failed to delete"));
 							} else {
 								callback(Success("Successfully deleted", succ.data));

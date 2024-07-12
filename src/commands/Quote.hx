@@ -434,7 +434,7 @@ class Quote extends CommandDbBase {
 											var date = DateTools.format(from, '%H:%M %d-%m-%Y');
 
 											var icon = 'https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless';
-											var content = user.tag;
+											var content = interaction.user.username;
 											if (user != null) {
 												icon = user.avatarURL();
 												content = user.username;

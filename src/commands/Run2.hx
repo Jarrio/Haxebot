@@ -361,7 +361,7 @@ class Run2 extends TextCommandBase {
 						// oembed.setDescription(odesc);
 						var url = this.codeSource(message.content);
 						var author = {
-							name: '@' + message.author.tag,
+							name: '@' + message.author.username,
 							iconURL: message.author.displayAvatarURL()
 						}
 

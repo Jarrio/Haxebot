@@ -6463,7 +6463,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -6610,7 +6610,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -6855,7 +6855,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -7002,7 +7002,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -7247,7 +7247,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -7394,7 +7394,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -7639,7 +7639,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -7786,7 +7786,7 @@ commands_Quote.prototype = $extend(systems_CommandDbBase.prototype,{
 							var from = new Date(q.timestamp);
 							var date = DateTools.format(from,"%H:%M %d-%m-%Y");
 							var icon = "https://cdn.discordapp.com/emojis/567741748172816404.webp?size=96&quality=lossless";
-							var content = user.tag;
+							var content = interaction.user.username;
 							if(user != null) {
 								icon = user.avatarURL();
 								content = user.username;
@@ -9213,7 +9213,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 						embeds.push(oembed);
 					}
 					var url = _gthis.codeSource(message.content);
-					var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
+					var author = { name : "@" + message.author.username, iconURL : message.author.displayAvatarURL()};
 					if(url == "") {
 						cembed.setAuthor(author);
 					} else {
@@ -11859,10 +11859,12 @@ db_DatabaseFactory.prototype = {
 	}
 	,__class__: db_DatabaseFactory
 };
-var db_DatabaseResult = function(database,table,data) {
+var db_DatabaseResult = function(database,table,data,itemsAffected) {
+	this.itemsAffected = null;
 	this.database = database;
 	this.table = table;
 	this.data = data;
+	this.itemsAffected = itemsAffected;
 };
 $hxClasses["db.DatabaseResult"] = db_DatabaseResult;
 db_DatabaseResult.__name__ = "db.DatabaseResult";
@@ -11870,6 +11872,7 @@ db_DatabaseResult.prototype = {
 	database: null
 	,table: null
 	,data: null
+	,itemsAffected: null
 	,__class__: db_DatabaseResult
 };
 var db_DatabaseSchema = function(tables) {
@@ -13069,9 +13072,15 @@ db_mysql_MySqlDatabase.prototype = {
 		});
 	}
 	,_schema: null
-	,schema: function() {
+	,schema: function(force) {
+		if(force == null) {
+			force = false;
+		}
 		var _gthis = this;
 		return thenshim_Promise._new(function(resolve,reject) {
+			if(force) {
+				_gthis.clearCachedSchema();
+			}
 			if(_gthis._schema == null) {
 				var _this = db_mysql_MySqlDatabase.log;
 				if(_this._measurements == null) {
@@ -13387,14 +13396,20 @@ db_mysql_MySqlTable.prototype = {
 	,name: null
 	,exists: null
 	,_tableSchema: null
-	,schema: function() {
+	,schema: function(force) {
+		if(force == null) {
+			force = false;
+		}
 		var _gthis = this;
 		return thenshim_Promise._new(function(resolve,reject) {
+			if(force) {
+				_gthis.clearCachedSchema();
+			}
 			if(_gthis._tableSchema != null) {
 				resolve(new db_DatabaseResult(_gthis.db,_gthis,_gthis._tableSchema));
 				return;
 			}
-			thenshim_Promise.then(_gthis.db.schema(),function(result) {
+			thenshim_Promise.then(_gthis.db.schema(force),function(result) {
 				_gthis._tableSchema = result.data.findTable(_gthis.name);
 				resolve(new db_DatabaseResult(_gthis.db,_gthis,_gthis._tableSchema));
 			},function(error) {
@@ -13634,7 +13649,9 @@ db_mysql_MySqlTable.prototype = {
 						delete(_this1.h["add"]);
 					}
 				}
-				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+				var result = new db_DatabaseResult(_gthis.db,_gthis,record);
+				result.itemsAffected = response.affectedRows;
+				resolve(result);
 			},function(error) {
 				var _this = db_mysql_MySqlTable.log;
 				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "add", data : error, ref : _this._ref, instanceId : _this._instanceId});
@@ -13682,7 +13699,16 @@ db_mysql_MySqlTable.prototype = {
 						delete(_this1.h["addAll"]);
 					}
 				}
-				resolve(new db_DatabaseResult(_gthis.db,_gthis,records));
+				var itemsAffected = 0;
+				var _g = 0;
+				while(_g < results.length) {
+					var result = results[_g];
+					++_g;
+					itemsAffected += result.itemsAffected;
+				}
+				var result = new db_DatabaseResult(_gthis.db,_gthis,records);
+				result.itemsAffected = itemsAffected;
+				resolve(result);
 			},function(error) {
 				var _this = db_mysql_MySqlTable.log;
 				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "addAll", data : error, ref : _this._ref, instanceId : _this._instanceId});
@@ -13727,7 +13753,9 @@ db_mysql_MySqlTable.prototype = {
 						delete(_this1.h["delete"]);
 					}
 				}
-				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+				var result = new db_DatabaseResult(_gthis.db,_gthis,record);
+				result.itemsAffected = response.affectedRows;
+				resolve(result);
 			},function(error) {
 				var _this = db_mysql_MySqlTable.log;
 				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "delete", data : error, ref : _this._ref, instanceId : _this._instanceId});
@@ -13765,7 +13793,9 @@ db_mysql_MySqlTable.prototype = {
 						delete(_this1.h["deleteAll"]);
 					}
 				}
-				resolve(new db_DatabaseResult(_gthis.db,_gthis,true));
+				var result = new db_DatabaseResult(_gthis.db,_gthis,true);
+				result.itemsAffected = response.affectedRows;
+				resolve(result);
 			},function(error) {
 				var _this = db_mysql_MySqlTable.log;
 				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "deleteAll", data : error, ref : _this._ref, instanceId : _this._instanceId});
@@ -13810,7 +13840,9 @@ db_mysql_MySqlTable.prototype = {
 						delete(_this1.h["update"]);
 					}
 				}
-				resolve(new db_DatabaseResult(_gthis.db,_gthis,record));
+				var result = new db_DatabaseResult(_gthis.db,_gthis,record);
+				result.itemsAffected = response.affectedRows;
+				resolve(result);
 			},function(error) {
 				var _this = db_mysql_MySqlTable.log;
 				logging_LogManager.get_instance().log({ timestamp : HxOverrides.dateStr(new Date()), level : "Error", message : "update", data : error, ref : _this._ref, instanceId : _this._instanceId});
@@ -21879,6 +21911,8 @@ mysql_MySqlError.prototype = {
 	,__class__: mysql_MySqlError
 };
 var mysql_MySqlResult = function(connection,data) {
+	this.affectedRows = null;
+	this.lastInsertId = null;
 	this.connection = connection;
 	this.data = data;
 };
@@ -21887,6 +21921,8 @@ mysql_MySqlResult.__name__ = "mysql.MySqlResult";
 mysql_MySqlResult.prototype = {
 	connection: null
 	,data: null
+	,lastInsertId: null
+	,affectedRows: null
 	,__class__: mysql_MySqlResult
 };
 var mysql_externs_nodejs_Connection = require("mysql2").Connection;
@@ -22070,7 +22106,18 @@ mysql_impl_nodejs_DatabaseConnection.prototype = $extend(mysql_impl_DatabaseConn
 					}
 					return;
 				}
-				resolve(new mysql_MySqlResult(_gthis,true));
+				var result = null;
+				if(((rows) instanceof Array)) {
+					result = rows[0];
+				} else {
+					result = rows;
+				}
+				var mysqlResult = new mysql_MySqlResult(_gthis,true);
+				if(result != null) {
+					mysqlResult.affectedRows = result.affectedRows;
+					mysqlResult.lastInsertId = result.insertId;
+				}
+				resolve(mysqlResult);
 			});
 		});
 	}
@@ -22093,7 +22140,12 @@ mysql_impl_nodejs_DatabaseConnection.prototype = $extend(mysql_impl_DatabaseConn
 					result = rows;
 				}
 				_gthis.convertBuffersToBytes(rows);
-				resolve(new mysql_MySqlResult(_gthis,result));
+				var mysqlResult = new mysql_MySqlResult(_gthis,result);
+				if(result != null) {
+					mysqlResult.affectedRows = result.affectedRows;
+					mysqlResult.lastInsertId = result.insertId;
+				}
+				resolve(mysqlResult);
 			});
 		});
 	}
@@ -23165,7 +23217,7 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 					return function(result) {
 						thenshim_Promise.then(result.table.delete(value[0]),(function(callback) {
 							return function(succ) {
-								if(succ.data == null) {
+								if(succ == null) {
 									callback[0](database_Callback.Error("Failed to delete"));
 								} else {
 									callback[0](database_Callback.Success("Successfully deleted",succ.data));
