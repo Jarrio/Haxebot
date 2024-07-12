@@ -23097,11 +23097,11 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 						if(result.data.hasField("____status")) {
 							var tmp = haxe_Log.trace;
 							var tmp1 = result.data.field("____status");
-							tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 268, className : "systems.DatabaseSystem", methodName : "update"});
+							tmp("result null " + (tmp1 == null ? "null" : Std.string(tmp1)),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 272, className : "systems.DatabaseSystem", methodName : "update"});
 							return;
 						}
 						_gthis.updating = false;
-						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 273, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 277, className : "systems.DatabaseSystem", methodName : "update"});
 						if(callback[0] != null) {
 							callback[0](database_Callback.Success("Successfully updated record",result.data));
 						}
@@ -23109,10 +23109,10 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 				})(callback4),(function(callback,value) {
 					return function(err) {
 						_gthis.updating = false;
-						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 279, className : "systems.DatabaseSystem", methodName : "update"});
-						haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 280, className : "systems.DatabaseSystem", methodName : "update"});
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 281, className : "systems.DatabaseSystem", methodName : "update"});
-						haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 282, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace("unblock",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 283, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(value[0],{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 284, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 285, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err.message,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 286, className : "systems.DatabaseSystem", methodName : "update"});
 						if(callback[0] != null) {
 							callback[0](database_Callback.Error("Failed",err));
 						}
@@ -23194,18 +23194,22 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 						record.field(column[0],value[0]);
 						thenshim_Promise.then(result.table.delete(record),(function(callback) {
 							return function(succ) {
-								callback[0](database_Callback.Success("Successfully deleted",succ.data));
+								if(succ.itemsAffected == 0) {
+									callback[0](database_Callback.Error("Failed to delete"));
+								} else {
+									callback[0](database_Callback.Success("Successfully deleted",succ.data));
+								}
 							};
 						})(callback),(function(callback) {
 							return function(err) {
 								callback[0](database_Callback.Error("Failed",err));
-								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 216, className : "systems.DatabaseSystem", methodName : "update"});
+								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 220, className : "systems.DatabaseSystem", methodName : "update"});
 							};
 						})(callback));
 					};
 				})(callback8,value3,column1),(function(callback) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 219, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 223, className : "systems.DatabaseSystem", methodName : "update"});
 						callback[0](database_Callback.Error("Failed",err));
 					};
 				})(callback8));
@@ -23217,7 +23221,7 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 					return function(result) {
 						thenshim_Promise.then(result.table.delete(value[0]),(function(callback) {
 							return function(succ) {
-								if(succ == null) {
+								if(succ.itemsAffected == null) {
 									callback[0](database_Callback.Error("Failed to delete"));
 								} else {
 									callback[0](database_Callback.Success("Successfully deleted",succ.data));
@@ -23226,19 +23230,19 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 						})(callback),(function(callback) {
 							return function(err) {
 								callback[0](database_Callback.Error("Failed",err));
-								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 233, className : "systems.DatabaseSystem", methodName : "update"});
+								haxe_Log.trace(err == null ? "null" : Std.string(err),{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 237, className : "systems.DatabaseSystem", methodName : "update"});
 							};
 						})(callback));
 					};
 				})(callback9,value4),(function(callback) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 236, className : "systems.DatabaseSystem", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 240, className : "systems.DatabaseSystem", methodName : "update"});
 						callback[0](database_Callback.Error("Failed",err));
 					};
 				})(callback9));
 				break;
 			default:
-				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 291, className : "systems.DatabaseSystem", methodName : "update"});
+				haxe_Log.trace("" + $hxEnums[event.__enum__].__constructs__[event._hx_index]._hx_name + " not implemented",{ fileName : "src/systems/DatabaseSystem.hx", lineNumber : 295, className : "systems.DatabaseSystem", methodName : "update"});
 			}
 		}
 	}

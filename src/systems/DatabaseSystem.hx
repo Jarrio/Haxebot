@@ -210,7 +210,11 @@ class DatabaseSystem extends System {
 						record.field(column, value);
 
 						result.table.delete(record).then(function(succ) {
-							callback(Success("Successfully deleted", succ.data));
+							if (succ.itemsAffected == 0) {
+								callback(Error("Failed to delete"));
+							} else {
+								callback(Success("Successfully deleted", succ.data));
+							}
 						}, function(err) {
 							callback(Error("Failed", err));
 							trace(err);
@@ -222,7 +226,7 @@ class DatabaseSystem extends System {
 				case DeleteRecord(table, value, callback):
 					this.getTable(table, function(result) {
 						result.table.delete(value).then(function(succ) {
-							if (succ == null) {
+							if (succ.itemsAffected == null) {
 								callback(Error("Failed to delete"));
 							} else {
 								callback(Success("Successfully deleted", succ.data));
