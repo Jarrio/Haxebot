@@ -189,7 +189,7 @@ class Run2 extends TextCommandBase {
 			response.reply(
 				{content: 'Your `!run` command formatting is incorrect. Check the pin in <#663246792426782730>.'}
 			);
-			trace('hey');
+			
 			return;
 		}
 
@@ -199,12 +199,11 @@ class Run2 extends TextCommandBase {
 			var check_class = ~/(^class\s(Test|Main)(\n|\s|\S))/mgu;
 			if (!check_class.match(code)) {
 				response.reply({content: 'You must have a class called `Test` or `Main`'});
-				trace('hey');
+				
 				return;
 			}
 		}
-		trace('hey');
-		code = code.replace('```', '\\`\\`\\`');
+		
 		
 		this.runCodeOnThread(code, response);
 	}
