@@ -106,7 +106,7 @@ class Run2 extends TextCommandBase {
 			return;
 		}
 
-		check_code = ~/^(!run(\s|\n| \n|)```(haxe|hx|)(.*)```)/gmisu;
+		check_code = ~/^(!run(\s|\n| \n|).```(haxe|hx|)(.*)```)/gmisu;
 		if (check_code.match(message)) {
 			this.parse(check_code.matched(4), response);
 			return;

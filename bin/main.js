@@ -8965,7 +8965,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			get_code.request();
 			return;
 		}
-		check_code = new EReg("^(!run(\\s|\n| \n|)```(haxe|hx|)(.*)```)","gmisu");
+		check_code = new EReg("^(!run(\\s|\n| \n|).```(haxe|hx|)(.*)```)","gmisu");
 		if(check_code.match(message)) {
 			this.parse(check_code.matched(4),response);
 			return;
