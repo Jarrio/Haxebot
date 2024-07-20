@@ -127,6 +127,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						Haxelib,
 						Emoji,
 						Everyone,
 						Tracker,

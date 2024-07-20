@@ -34,6 +34,7 @@ class MessageRouter extends System {
 
 	inline function publicThreadChannel(message:Message) {
 		if (message.content.startsWith("[showcase]")) {
+			trace('here');
 			EcsTools.set(CommandForward.showcase, message);
 		}
 		EcsTools.set(CommandForward.thread_count, message);
