@@ -48,6 +48,12 @@ enum CommandOptions {
 	QuoteDelete(name:String);
 	QuoteEdit(name:String);
 	QuoteCreate(name:String);
+
+	EmojiGet(name:String);
+	EmojiRemove(name:String);
+	EmojiEdit(name:String);
+	EmojiCreate(name:String, url:String, description:String);
+
 	Everyone(content:String);
 	//Mention(user:User, role:Role);
 	Showcase;

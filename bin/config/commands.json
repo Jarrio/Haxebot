@@ -1091,6 +1091,81 @@
 		]
 	},
 	{
+		"name": "emoji",
+		"is_public": true,
+		"description": "Store and retrieve custom emojis here for use around the server",
+		"params": [
+			{
+				"name": "get",
+				"type": "subcommand",
+				"description": "Get an emoji",
+				"params": [
+					{
+						"name": "identifier",
+						"description": "The string or id of the emoji you wish to get",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					}
+				]
+			},
+			{
+				"name": "create",
+				"type": "subcommand",
+				"description": "Add an emoji",
+				"params": [
+					{
+						"name": "name",
+						"description": "Name of the graphic",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					},
+					{
+						"name": "url",
+						"description": "Url of the graphic",
+						"type": "string",
+						"required": true
+					},
+					{
+						"name": "description",
+						"description": "description of the graphic",
+						"type": "string",
+						"required": false
+					}
+				]
+			},
+			{
+				"name": "edit",
+				"type": "subcommand",
+				"description": "Edit an emoji",
+				"params": [
+					{
+						"name": "identifier",
+						"description": "The string or id of the emoji you wish to edit",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					}
+				]
+			},
+			{
+				"name": "remove",
+				"type": "subcommand",
+				"description": "Delete an emoji",
+				"params": [
+					{
+						"name": "identifier",
+						"description": "The string or id of the emoji you wish to delete",
+						"type": "string",
+						"required": true,
+						"autocomplete": true
+					}
+				]
+			}
+		]
+	},
+	{
 		"name": "mention",
 		"is_public": true,
 		"permissions": "supermod",

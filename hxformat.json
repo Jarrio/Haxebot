@@ -55,14 +55,14 @@
 					"conditions": [
 						{
 							"cond": "anyItemLength >= n",
-							"value": 60
+							"value": 150
 						}
 					],
 					"type": "onePerLine"
 				}
 			]
 		},
-		"maxLineLength": 100,
+		"maxLineLength": 150,
 		"arrayMatrixWrap": "matrixWrapNoAlign"
 	}
 }

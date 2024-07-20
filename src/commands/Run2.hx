@@ -294,7 +294,6 @@ class Run2 extends TextCommandBase {
 
 			http.onData = function(response) {
 				var parse:Response = Json.parse(response);
-				trace(response);
 				switch (parse.status) {
 					case Ok:
 						
@@ -344,8 +343,7 @@ class Run2 extends TextCommandBase {
 
 						var cdesc = '**Code:**\n```hx\n${get_paths.code}\n```';
 						var odesc = '**Output:**\n ```markdown\n' + code_output + '```';
-						trace(cdesc.length);
-						trace(odesc.length);
+
 						var embeds = [];
 						if (truncate) {
 							oembed.setDescription(odesc);

@@ -114,6 +114,8 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
+						Emoji,
+						Haxelib,
 						Hi, Boop,
 						Run2,
 						Everyone,
@@ -125,6 +127,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						Emoji,
 						Everyone,
 						Tracker,
 						PinMessageInfo,
@@ -287,7 +290,7 @@ class Main {
 			}
 
 			if (interaction.isModalSubmit()) {
-				trace(interaction.customId);
+				
 				switch ((interaction.customId:CommandForward)) {
 					case quote_edit:
 						universe.setComponents(universe.createEntity(), CommandForward.quote_edit,
@@ -298,7 +301,11 @@ class Main {
 					case code_paste:
 						universe.setComponents(universe.createEntity(), CommandForward.code_paste,
 							interaction);
+					case emoji_edit:
+						universe.setComponents(universe.createEntity(), CommandForward.emoji_edit,
+							interaction);
 					default:
+						trace(interaction.customId);
 				}
 				return;
 			}
@@ -666,6 +673,7 @@ typedef TKeys = {
 	var twitch_secret:String;
 	var mysql:TMysqlConfig;
 	var haxeip:String;
+	var haxelib:String;
 }
 
 typedef TMysqlConfig = {
@@ -761,4 +769,5 @@ enum abstract CommandForward(String) from String {
 	var auto_thread;
 	var thread_count;
 	var rate_limit;
+	var emoji_edit;
 }
