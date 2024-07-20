@@ -7,6 +7,30 @@ import sys.FileSystem;
 import components.Command;
 import js.node.ChildProcess.spawn;
 import systems.CommandBase;
+import haxe.Http;
+
+private typedef Request = {
+	action:Action,
+	?input:String,
+	?hxml:String,
+};
+
+private enum abstract Action(String) {
+	var Run = "run";
+	var HaxeVersion = "haxe_version";
+	var HaxelibRun = "haxelib_run";
+}
+
+private enum abstract Status(String) {
+	var Ok;
+	var OhNo;
+}
+
+private typedef Response = {
+	status:Status,
+	?output:Null<String>,
+	?error:Null<String>,
+}
 
 typedef CommandHistory = {
 	var timestamp:Float;
@@ -15,8 +39,16 @@ typedef CommandHistory = {
 
 class Haxelib extends CommandBase {
 	var last_interaction:BaseCommandInteraction;
-	final super_mod_id:String = '198916468312637440';
+	final super_mod_id:String = #if block '1114582456381747232' #else '198916468312637440' #end;
 	var message_history:Map<String, MessageEmbed> = [];
+	var http:Http;
+	var site = #if block "" #else "localhost" #end;
+
+	override function onEnabled() {
+		#if block
+		site = Main.keys.haxeip;
+		#end
+	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		for (key => data in message_history) {
@@ -30,6 +62,10 @@ class Haxelib extends CommandBase {
 		switch (command.content) {
 			case Haxelib(command):
 				var route = command;
+				var http = new Http('http://$site:1337');
+				http.onError = function(error) {
+					trace(error);
+				}
 
 				if (route.contains(" ")) {
 					route = route.split(" ")[0];
@@ -44,51 +80,60 @@ class Haxelib extends CommandBase {
 						return;
 					}
 				}
-				var channel = (interaction.channel);
-				var commands = [];
-				for (c in command.split(' ')) {
-					commands.push(c);
-				}
 
-				var process = './haxe/haxelib';
-				if (!FileSystem.exists(process)) {
-					process = 'haxelib';
-				}
+				interaction.deferReply({}).then(function(_) {
+					http.setHeader('Authorization', "Basic " + Main.keys.haxelib);
+					trace(Main.keys.haxelib);
+					http.onData = function(response) {
+						var parse:Response = Json.parse(response);
+						switch (parse.status) {
+							case Ok:
+								trace('parse');
+								var output = '';
+								for (line in parse.output.split('\n')) {
+									if (line.contains('KB') || line.contains('%')) {
+										continue;
+									}
+									output += line + '\n';
+								}
+								trace(output);
+								var embed = new MessageEmbed().setTitle('Haxelib');
+								if (output.length > 4000) {
+									output = output.substr(0, 4000) + '...';
+								}
 
-				var ls = spawn(process, commands);
-				var output = '';
-				ls.stdout.on('data', function(data:String) {
-					// Filter out download progress from output message
-					if (data.contains('KB') || data.contains('%')) {
-						return;
+								if (output.length == 0 || output == '') {
+									output = "No libraries installed.";
+								}
+
+								embed.setDescription(output);
+								interaction.editReply({embeds: [embed]}).then(null, function(err) {
+									trace(err);
+									Browser.console.dir(err);
+								});
+							default:
+								var embed = new MessageEmbed();
+								embed.type = 'article';
+								var error = parse.error;
+								embed.setDescription('Error \n + ${error}');
+
+								interaction.editReply({embeds: [embed]})
+									.then(null, (err) -> trace(err));
+								trace(parse);
+						}
 					}
-					output += data;
-				});
 
-				ls.stdout.once('close', (data) -> {
-					var embed = new MessageEmbed().setTitle('Haxelib');
-					if (output.length > 4000) {
-						output = output.substr(0, 4000) + '...';
+					var request:Request = {
+						action: HaxelibRun,
+						input: command
 					}
 
-					if (output.length == 0 || output == '') {
-						output = "No libraries installed.";
-					}
-					
-					embed.setDescription(output);
-					interaction.reply({embeds: [embed]}).then(null, function(err) {
-						trace(err);
-						Browser.console.dir(err);
-					});
-				});
+					trace(request);
 
-				ls.stderr.on('data', (data) -> {
-					var embed = new MessageEmbed();
-					embed.type = 'article';
-					embed.setDescription('Error \n + $error');
-
-					channel.send(embed);
-				});
+					var str = Json.stringify(request);
+					http.setPostData(str);
+					http.request(true);
+				}, (err) -> trace(err));
 			default:
 		}
 	}

@@ -50,9 +50,10 @@ class Run2 extends TextCommandBase {
 	override function onEnabled() {
 		#if block
 		site = Main.keys.haxeip;
-		trace(site);
 		#end
+
 		var http = new Http('http://$site:1337');
+		http.setHeader('Authorization', "Basic " + Main.keys.haxelib);
 		http.onError = function(error) {
 			trace(error);
 		}
@@ -127,11 +128,14 @@ class Run2 extends TextCommandBase {
 		}
 
 		var libs = [];
+		var i = 0;
 		while (check_code.match(code)) {
 			var split = check_code.matched(1).split(" ");
-			libs.push('-L');
+			(i > 0) ? libs.push(' -L ') : libs.push('-L ');
+			
 			libs.push(split[1]);
 			code = check_code.matchedRight();
+			i++;
 		}
 
 		return libs;
@@ -283,6 +287,7 @@ class Run2 extends TextCommandBase {
 			var pre_loop = code_content;
 
 			var http = new Http('http://$site:1337');
+			http.setHeader('Authorization', "Basic " + Main.keys.haxelib);
 			http.onError = function(error) {
 				trace(error);
 			}
@@ -420,7 +425,7 @@ class Run2 extends TextCommandBase {
 
 			var libstr = "";
 			for (lib in libs) {
-				libstr += '$lib\n';
+				libstr += '$lib';
 			}
 
 			var request:Request = {
@@ -428,6 +433,8 @@ class Run2 extends TextCommandBase {
 				input: code_content,
 				hxml: libstr
 			}
+			
+			trace(request);
 
 			var str = Json.stringify(request);
 			http.setPostData(str);
