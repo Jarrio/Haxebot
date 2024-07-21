@@ -366,6 +366,7 @@ class Quote extends CommandDbBase {
 									if (qid != null && qid > 0) {
 										e = DBEvents.GetRecord('quotes', Query.query($id == qid),
 											function(response) {
+											trace(name);
 												switch (response) {
 													case Record(data):
 														var quote = DBQuote.fromRecord(data);
