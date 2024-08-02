@@ -246,6 +246,10 @@ class Run2 extends TextCommandBase {
 			if (new_code.length > 3900) {
 				new_code = new_code.substr(0, 3900);
 			}
+
+			if (error.length > 3900) {
+				error = error.substr(0, 3900);
+			}
 			embed.setDescription('```hx\n' + new_code + '``` **Error** \n $error');
 			return embed;
 		}

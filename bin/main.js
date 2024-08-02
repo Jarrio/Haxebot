@@ -5378,21 +5378,21 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 					var data = resp.data;
 					if(data != null) {
 						var emoji = database_types_DBEmoji.fromRecord(data);
-						interaction.reply({ content : emoji.url}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 172, className : "commands.Emoji", methodName : "run"});
+						interaction.reply({ files : [{ url : emoji.url, width : 48, height : 48}]}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 177, className : "commands.Emoji", methodName : "run"});
 						});
 						return;
 					}
-					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 175, className : "commands.Emoji", methodName : "run"});
-					haxe_Log.trace(data,{ fileName : "src/commands/Emoji.hx", lineNumber : 176, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 180, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(data,{ fileName : "src/commands/Emoji.hx", lineNumber : 181, className : "commands.Emoji", methodName : "run"});
 					interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 177, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 182, className : "commands.Emoji", methodName : "run"});
 					});
 				} else {
 					interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 179, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 184, className : "commands.Emoji", methodName : "run"});
 					});
-					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 180, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 185, className : "commands.Emoji", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -5513,7 +5513,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 			if(interaction.isAutocomplete()) {
 				this.search(name1,function(arr) {
 					interaction.respond(arr).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 187, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 192, className : "commands.Emoji", methodName : "run"});
 					});
 				});
 				return;
@@ -5524,14 +5524,14 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 					if(data != null) {
 						var emoji = database_types_DBEmoji.fromRecord(data);
 						interaction.reply({ ephemeral : true, content : "Emoji already exists with name __" + emoji.name + "__"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 197, className : "commands.Emoji", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 202, className : "commands.Emoji", methodName : "run"});
 						});
 						return;
 					}
 					var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
 					if(!regex.match(url)) {
 						interaction.reply({ ephemeral : true, content : "URL does not appear to be valid"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 202, className : "commands.Emoji", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 207, className : "commands.Emoji", methodName : "run"});
 						});
 						return;
 					}
@@ -5540,7 +5540,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data.get_length() > 0) {
 								interaction.reply({ ephemeral : true, content : "An emoji exists with this name already"}).then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 210, className : "commands.Emoji", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 215, className : "commands.Emoji", methodName : "run"});
 								});
 								return;
 							}
@@ -5550,13 +5550,13 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							var e = database_DBEvents.Insert("emojis",emoji.get_record(),function(resp) {
 								if(resp._hx_index == 4) {
 									interaction.reply({ content : "Emoji " + name1 + " has been created"}).then(null,function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 220, className : "commands.Emoji", methodName : "run"});
+										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 225, className : "commands.Emoji", methodName : "run"});
 									});
 								} else {
 									interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 223, className : "commands.Emoji", methodName : "run"});
+										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 228, className : "commands.Emoji", methodName : "run"});
 									});
-									haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 224, className : "commands.Emoji", methodName : "run"});
+									haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 229, className : "commands.Emoji", methodName : "run"});
 								}
 							});
 							var entity = util_EcsTools.get_universe().createEntity();
@@ -5569,9 +5569,9 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							}
 						} else {
 							interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 229, className : "commands.Emoji", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 234, className : "commands.Emoji", methodName : "run"});
 							});
-							haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 230, className : "commands.Emoji", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 235, className : "commands.Emoji", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -5584,9 +5584,9 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 					}
 				} else {
 					interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 235, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 240, className : "commands.Emoji", methodName : "run"});
 					});
-					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 236, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 241, className : "commands.Emoji", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -5613,7 +5613,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				callback(arr);
 			} else {
-				haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 258, className : "commands.Emoji", methodName : "search"});
+				haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 263, className : "commands.Emoji", methodName : "search"});
 				callback([]);
 			}
 		});
@@ -9656,6 +9656,9 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			if(new_code.length > 3900) {
 				new_code = HxOverrides.substr(new_code,0,3900);
 			}
+			if(error.length > 3900) {
+				error = HxOverrides.substr(error,0,3900);
+			}
 			embed.setDescription("```hx\n" + new_code + ("``` **Error** \n " + error));
 			return embed;
 		}
@@ -9694,7 +9697,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			var http = new haxe_http_HttpNodeJs("http://" + this.site + ":1337");
 			http.setHeader("Authorization","Basic " + Main.keys.haxelib);
 			http.onError = function(error) {
-				haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 292, className : "commands.Run2", methodName : "runCodeOnThread"});
+				haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 296, className : "commands.Run2", methodName : "runCodeOnThread"});
 			};
 			http.onData = function(response) {
 				var parse = JSON.parse(response);
@@ -9790,15 +9793,15 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					which.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 					if(resp.length > 0) {
 						message.reply({ allowedMentions : { parse : []}, embeds : embeds}).then(function(succ) {
-							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 391, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 395, className : "commands.Run2", methodName : "runCodeOnThread"});
 							if(message.deletable) {
 								message.delete().then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 394, className : "commands.Run2", methodName : "runCodeOnThread"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 398, className : "commands.Run2", methodName : "runCodeOnThread"});
 									$global.console.dir(err);
 								});
 							}
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 399, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 403, className : "commands.Run2", methodName : "runCodeOnThread"});
 							$global.console.dir(err);
 						});
 						return;
@@ -9814,7 +9817,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 				libstr += "" + lib;
 			}
 			var request = { action : "run", input : code_content, hxml : libstr};
-			haxe_Log.trace(request,{ fileName : "src/commands/Run2.hx", lineNumber : 435, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(request,{ fileName : "src/commands/Run2.hx", lineNumber : 439, className : "commands.Run2", methodName : "runCodeOnThread"});
 			var str = JSON.stringify(request);
 			http.setPostData(str);
 			http.request(true);
@@ -9822,7 +9825,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 609, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 613, className : "commands.Run2", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
@@ -11705,11 +11708,12 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				if(!Object.prototype.hasOwnProperty.call(_gthis.dm.h,data1[0].by)) {
 					Main.client.users.fetch(data1[0].by).then((function(data) {
 						return function(user) {
+							haxe_Log.trace("added user " + user.tag,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 50, className : "commands.mod.Tracker", methodName : "onEnabled"});
 							_gthis.dm.h[data[0].by] = user;
 						};
 					})(data1),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 51, className : "commands.mod.Tracker", methodName : "onEnabled"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 52, className : "commands.mod.Tracker", methodName : "onEnabled"});
 						};
 					})());
 				}
@@ -11799,7 +11803,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 							var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};
 							embed.setAuthor(author);
 							this.dm.h[tracker.by].send({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 142, className : "commands.mod.Tracker", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 145, className : "commands.mod.Tracker", methodName : "update"});
 							});
 							continue;
 						}
@@ -11828,7 +11832,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				var _g_key = _g_current++;
 				var key = _g_key;
 				var value = _g_value;
-				keywords1[key] = value.toLowerCase();
+				keywords1[key] = StringTools.trim(value.toLowerCase());
 			}
 			var str_exclude = [];
 			if(string_exclude != null) {
@@ -11873,7 +11877,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 278, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 281, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				usr_exclude[key] = StringTools.trim(string);
 			}
 			var _g_current = 0;
@@ -11889,7 +11893,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 278, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 281, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				chl_exclude[key] = StringTools.trim(string);
 			}
 			this.parseTracker(interaction,name,description,keywords1,str_exclude,chl_exclude,usr_exclude);
@@ -11915,11 +11919,11 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 							results.push({ name : name, value : d.id});
 						}
 						interaction.respond(results).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 217, className : "commands.mod.Tracker", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 220, className : "commands.mod.Tracker", methodName : "run"});
 							$global.console.dir(err);
 						});
 					}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 221, className : "commands.mod.Tracker", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 224, className : "commands.mod.Tracker", methodName : "run"});
 						$global.console.dir(err);
 					});
 					return;
@@ -11930,10 +11934,10 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 						delete(_this.h[name]);
 					}
 					interaction.reply({ content : "Tracker deleted!", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 229, className : "commands.mod.Tracker", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 232, className : "commands.mod.Tracker", methodName : "run"});
 					});
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 231, className : "commands.mod.Tracker", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 234, className : "commands.mod.Tracker", methodName : "run"});
 					$global.console.dir(err);
 				});
 			}
@@ -11957,10 +11961,10 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/admin/trackers"),obj).then(function(_) {
 			interaction.reply({ content : "Your tracker is now active!", ephemeral : true}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 268, className : "commands.mod.Tracker", methodName : "parseTracker"});
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 271, className : "commands.mod.Tracker", methodName : "parseTracker"});
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 269, className : "commands.mod.Tracker", methodName : "parseTracker"});
+			haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 272, className : "commands.mod.Tracker", methodName : "parseTracker"});
 		});
 	}
 	,cleanDiscordThings: function(string) {
@@ -11969,7 +11973,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandDbBase.prototype,{
 		string = StringTools.replace(string,"#","");
 		string = StringTools.replace(string,"@","");
 		string = StringTools.replace(string,"&","");
-		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 278, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 281, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 		return string;
 	}
 	,get_name: function() {

@@ -47,6 +47,7 @@ class Tracker extends CommandDbBase {
 				
 				if (!dm.exists(data.by)) {
 					Main.client.users.fetch(data.by).then(function(user) {
+						trace('added user ${user.tag}');
 						this.dm.set(data.by, user);
 					}, (err) -> trace(err));
 				}
@@ -99,7 +100,9 @@ class Tracker extends CommandDbBase {
 					for (tracker in trackers) {
 
 						if (message.author.id == tracker.by) {
+							#if !block
 							continue;
+							#end
 						}
 
 						var content = message.content;
@@ -122,7 +125,7 @@ class Tracker extends CommandDbBase {
 
 						// will improve another time
 						if (findKeywords(message, tracker)) {
-							if (this.dm.exists(tracker.by)) {
+							if (this.dm.exists(tracker.by) #if block && tracker.by == "151104106973495296" #end) {
 								var embed = new MessageEmbed();
 								embed.setTitle('${tracker.name}');
 								var description = message.content;
@@ -156,7 +159,7 @@ class Tracker extends CommandDbBase {
 				user_exclude):
 				var keywords = keywords.split(',');
 				for (key => value in keywords) {
-					keywords[key] = value.toLowerCase();
+					keywords[key] = value.toLowerCase().trim();
 				}
 
 				var str_exclude = [];
