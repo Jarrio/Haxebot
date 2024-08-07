@@ -157,19 +157,22 @@ class Emoji extends CommandBase {
 					}
 				});
 				EcsTools.set(e);
-			case EmojiGet(name):
+			case EmojiGet(name, size):
 				if (interaction.isAutocomplete()) {
 					search(name, function(arr) {
 						interaction.respond(arr).then(null, (err) -> trace(err));
 					});
 					return;
 				}
+
+
 				var e = DBEvents.GetRecord('emojis', Query.query($name == name || $id == name), function(resp) {
 					switch (resp) {
 						case Record(data):
 							if (data != null) {
 								var emoji = DBEmoji.fromRecord(data);
-								interaction.reply({content: emoji.url}).then(null, (err) -> trace(err));
+								var url = formatLink(emoji.url, size);
+								interaction.reply({content: url}).then(null, (err) -> trace(err));
 								return;
 							}
 							trace(resp);
@@ -239,6 +242,27 @@ class Emoji extends CommandBase {
 				EcsTools.set(e);
 			default:
 		}
+	}
+
+	function formatLink(url:String, size:String) {
+		if (url.contains('cdn.discordapp.com')) {
+			var split = url.split('?');
+			if (split.length > 1) {
+				if (size == null) {
+					size = 'small';
+				}
+
+				var dimensions = switch(size) {
+					case 'medium': 64;
+					case 'large': 128;
+					default: 48;
+				}
+				
+				url = split[0] += '?quality=lossless&size=$dimensions';
+				return url;
+			}
+		}
+		return url;
 	}
 
 	function search(name:String, callback:Array<{name:String, value:String}>->Void) {

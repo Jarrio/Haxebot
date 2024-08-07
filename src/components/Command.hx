@@ -49,7 +49,7 @@ enum CommandOptions {
 	QuoteEdit(name:String);
 	QuoteCreate(name:String);
 
-	EmojiGet(name:String);
+	EmojiGet(name:String, size:Null<String>);
 	EmojiRemove(name:String);
 	EmojiEdit(name:String);
 	EmojiCreate(name:String, url:String, description:String);

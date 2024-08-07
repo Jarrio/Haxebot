@@ -656,7 +656,7 @@ Main.start = function() {
 	vec[0] = new ecs_Phase(true,"systems",new Array(2),new Array(2));
 	vec[1] = new ecs_Phase(true,"messages",new Array(5),new Array(5));
 	vec[2] = new ecs_Phase(false,"testing",new Array(19),new Array(19));
-	vec[3] = new ecs_Phase(true,"main",new Array(28),new Array(28));
+	vec[3] = new ecs_Phase(true,"main",new Array(27),new Array(27));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
 	var vec = new Array(13);
@@ -1225,73 +1225,69 @@ Main.start = function() {
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
 	s.onEnabled();
-	var s = new commands_Run2(u);
+	var s = new commands_AutoRole(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
 	s.onEnabled();
-	var s = new commands_AutoRole(u);
+	var s = new commands_Quote(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
 	s.onEnabled();
-	var s = new commands_Quote(u);
+	var s = new commands_Api(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
 	s.onEnabled();
-	var s = new commands_Api(u);
+	var s = new commands_React(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
 	s.onEnabled();
-	var s = new commands_React(u);
+	var s = new commands_Notify(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
 	s.onEnabled();
-	var s = new commands_Notify(u);
+	var s = new commands_Rtfm(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
 	s.onEnabled();
-	var s = new commands_Rtfm(u);
+	var s = new commands_Poll(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
 	s.onEnabled();
-	var s = new commands_Poll(u);
+	var s = new commands_Boop(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
 	s.onEnabled();
-	var s = new commands_Boop(u);
+	var s = new commands_Archive(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
 	s.onEnabled();
-	var s = new commands_Archive(u);
+	var s = new commands_Help(u);
 	phase.systems[20] = s;
 	phase.enabledSystems[20] = true;
 	s.onEnabled();
-	var s = new commands_Help(u);
+	var s = new commands_Translate(u);
 	phase.systems[21] = s;
 	phase.enabledSystems[21] = true;
 	s.onEnabled();
-	var s = new commands_Translate(u);
+	var s = new commands_Hi(u);
 	phase.systems[22] = s;
 	phase.enabledSystems[22] = true;
 	s.onEnabled();
-	var s = new commands_Hi(u);
+	var s = new commands_Roundup(u);
 	phase.systems[23] = s;
 	phase.enabledSystems[23] = true;
 	s.onEnabled();
-	var s = new commands_Roundup(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[24] = s;
 	phase.enabledSystems[24] = true;
 	s.onEnabled();
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_Say(u);
 	phase.systems[25] = s;
 	phase.enabledSystems[25] = true;
 	s.onEnabled();
-	var s = new commands_Say(u);
+	var s = new commands_Color(u);
 	phase.systems[26] = s;
 	phase.enabledSystems[26] = true;
-	s.onEnabled();
-	var s = new commands_Color(u);
-	phase.systems[27] = s;
-	phase.enabledSystems[27] = true;
 	s.onEnabled();
 	var _g = 0;
 	var _g1 = u.families.number;
@@ -5365,6 +5361,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 		switch(_g._hx_index) {
 		case 37:
 			var name = _g.name;
+			var size = _g.size;
 			if(interaction.isAutocomplete()) {
 				this.search(name,function(arr) {
 					interaction.respond(arr).then(null,function(err) {
@@ -5378,21 +5375,22 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 					var data = resp.data;
 					if(data != null) {
 						var emoji = database_types_DBEmoji.fromRecord(data);
-						interaction.reply({ content : emoji.url}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 172, className : "commands.Emoji", methodName : "run"});
+						var url = _gthis.formatLink(emoji.url,size);
+						interaction.reply({ content : url}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 175, className : "commands.Emoji", methodName : "run"});
 						});
 						return;
 					}
-					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 175, className : "commands.Emoji", methodName : "run"});
-					haxe_Log.trace(data,{ fileName : "src/commands/Emoji.hx", lineNumber : 176, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 178, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(data,{ fileName : "src/commands/Emoji.hx", lineNumber : 179, className : "commands.Emoji", methodName : "run"});
 					interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 177, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 180, className : "commands.Emoji", methodName : "run"});
 					});
 				} else {
 					interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 179, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 182, className : "commands.Emoji", methodName : "run"});
 					});
-					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 180, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 183, className : "commands.Emoji", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -5513,7 +5511,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 			if(interaction.isAutocomplete()) {
 				this.search(name1,function(arr) {
 					interaction.respond(arr).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 187, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 190, className : "commands.Emoji", methodName : "run"});
 					});
 				});
 				return;
@@ -5524,14 +5522,14 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 					if(data != null) {
 						var emoji = database_types_DBEmoji.fromRecord(data);
 						interaction.reply({ ephemeral : true, content : "Emoji already exists with name __" + emoji.name + "__"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 197, className : "commands.Emoji", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 200, className : "commands.Emoji", methodName : "run"});
 						});
 						return;
 					}
 					var regex = new EReg("((((https?:)(?://)?)(?:[-;:&=\\+\\$,\\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+\\$,\\w]+@)[A-Za-z0-9.-]+)((?:/[\\+~%/.\\w_]*)?\\??(?:[-\\+=&;%@.\\w_]*)#?(?:[\\w]*))?)","gm");
 					if(!regex.match(url)) {
 						interaction.reply({ ephemeral : true, content : "URL does not appear to be valid"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 202, className : "commands.Emoji", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 205, className : "commands.Emoji", methodName : "run"});
 						});
 						return;
 					}
@@ -5540,7 +5538,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data.get_length() > 0) {
 								interaction.reply({ ephemeral : true, content : "An emoji exists with this name already"}).then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 210, className : "commands.Emoji", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 213, className : "commands.Emoji", methodName : "run"});
 								});
 								return;
 							}
@@ -5550,13 +5548,13 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							var e = database_DBEvents.Insert("emojis",emoji.get_record(),function(resp) {
 								if(resp._hx_index == 4) {
 									interaction.reply({ content : "Emoji " + name1 + " has been created"}).then(null,function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 220, className : "commands.Emoji", methodName : "run"});
+										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 223, className : "commands.Emoji", methodName : "run"});
 									});
 								} else {
 									interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 223, className : "commands.Emoji", methodName : "run"});
+										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 226, className : "commands.Emoji", methodName : "run"});
 									});
-									haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 224, className : "commands.Emoji", methodName : "run"});
+									haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 227, className : "commands.Emoji", methodName : "run"});
 								}
 							});
 							var entity = util_EcsTools.get_universe().createEntity();
@@ -5569,9 +5567,9 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							}
 						} else {
 							interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 229, className : "commands.Emoji", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 232, className : "commands.Emoji", methodName : "run"});
 							});
-							haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 230, className : "commands.Emoji", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 233, className : "commands.Emoji", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -5584,9 +5582,9 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 					}
 				} else {
 					interaction.reply({ content : "Something went wrong", ephemeral : true}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 235, className : "commands.Emoji", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 238, className : "commands.Emoji", methodName : "run"});
 					});
-					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 236, className : "commands.Emoji", methodName : "run"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 239, className : "commands.Emoji", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -5601,6 +5599,31 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 		default:
 		}
 	}
+	,formatLink: function(url,size) {
+		if(url.indexOf("cdn.discordapp.com") != -1) {
+			var split = url.split("?");
+			if(split.length > 1) {
+				if(size == null) {
+					size = "small";
+				}
+				var dimensions;
+				switch(size) {
+				case "large":
+					dimensions = 128;
+					break;
+				case "medium":
+					dimensions = 64;
+					break;
+				default:
+					dimensions = 48;
+				}
+				split[0] += "?quality=lossless&size=" + dimensions;
+				url = split[0];
+				return url;
+			}
+		}
+		return url;
+	}
 	,search: function(name,callback) {
 		var e = database_DBEvents.Search("emojis","name",name,function(resp) {
 			if(resp._hx_index == 2) {
@@ -5613,7 +5636,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				callback(arr);
 			} else {
-				haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 258, className : "commands.Emoji", methodName : "search"});
+				haxe_Log.trace(resp,{ fileName : "src/commands/Emoji.hx", lineNumber : 282, className : "commands.Emoji", methodName : "search"});
 				callback([]);
 			}
 		});
@@ -12068,7 +12091,7 @@ var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __enam
 	,QuoteDelete: ($_=function(name) { return {_hx_index:34,name:name,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name];}}; },$_._hx_name="QuoteDelete",$_)
 	,QuoteEdit: ($_=function(name) { return {_hx_index:35,name:name,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name];}}; },$_._hx_name="QuoteEdit",$_)
 	,QuoteCreate: ($_=function(name) { return {_hx_index:36,name:name,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name];}}; },$_._hx_name="QuoteCreate",$_)
-	,EmojiGet: ($_=function(name) { return {_hx_index:37,name:name,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name];}}; },$_._hx_name="EmojiGet",$_)
+	,EmojiGet: ($_=function(name,size) { return {_hx_index:37,name:name,size:size,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name,this.size];}}; },$_._hx_name="EmojiGet",$_)
 	,EmojiRemove: ($_=function(name) { return {_hx_index:38,name:name,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name];}}; },$_._hx_name="EmojiRemove",$_)
 	,EmojiEdit: ($_=function(name) { return {_hx_index:39,name:name,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name];}}; },$_._hx_name="EmojiEdit",$_)
 	,EmojiCreate: ($_=function(name,url,description) { return {_hx_index:40,name:name,url:url,description:description,__enum__:"components.CommandOptions",toString:$estr,__params__:function(){ return [this.name,this.url,this.description];}}; },$_._hx_name="EmojiCreate",$_)

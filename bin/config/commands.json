@@ -1106,6 +1106,26 @@
 						"type": "string",
 						"required": true,
 						"autocomplete": true
+					},
+					{
+						"name": "size",
+						"description": "Select size of emoji (only works for discord emoji's)",
+						"type":"string",
+						"required": false,
+						"choices": [
+							{
+								"name": "Small",
+								"value": "small"
+							},
+							{
+								"name": "Medium",
+								"value": "medium"
+							},
+							{
+								"name": "Large",
+								"value": "large"
+							}
+						]
 					}
 				]
 			},
