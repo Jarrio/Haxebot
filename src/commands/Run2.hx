@@ -316,7 +316,7 @@ class Run2 extends TextCommandBase {
 
 						for (line in x) {
 							var data = line + "\n";
-							if (resp.length + data.length > 3500) {
+							if (resp.length + data.length > 3000) {
 								break;
 							}
 							resp += data;
@@ -347,7 +347,7 @@ class Run2 extends TextCommandBase {
 
 						var cdesc = '**Code:**\n```hx\n${get_paths.code}\n```';
 						var odesc = '**Output:**\n ```markdown\n' + code_output + '```';
-
+						
 						var embeds = [];
 						if (truncate) {
 							oembed.setDescription(odesc);
