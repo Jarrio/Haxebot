@@ -43,6 +43,9 @@ class PinMessageInfo extends System {
 							saveHistory(thread.ownerId);
 							this.messages.push(message);
 						}, function(err) {
+							if ((err?.message:String).indexOf('Unknown Channel') != -1) {
+								return; //assume thread was deleted
+							}
 							trace(err);
 							Browser.console.dir(err);
 						});

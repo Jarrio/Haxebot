@@ -114,6 +114,7 @@ class Main {
 					name: 'testing',
 					enabled: #if block true #else false #end,
 					systems: [
+						DeleteProject,
 						Emoji,
 						Haxelib,
 						Hi, Boop,
@@ -127,6 +128,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						DeleteProject,
 						Haxelib,
 						Emoji,
 						Everyone,
@@ -198,8 +200,8 @@ class Main {
 			intents: [
 				IntentFlags.GUILDS,
 				IntentFlags.MESSAGE_CONTENT,
-				IntentFlags.GUILD_SCHEDULED_EVENTS,
 				IntentFlags.GUILD_MESSAGES,
+				IntentFlags.GUILD_SCHEDULED_EVENTS,
 				IntentFlags.DIRECT_MESSAGES,
 				IntentFlags.GUILD_MEMBERS,
 				IntentFlags.GUILD_MESSAGE_REACTIONS,
@@ -317,6 +319,8 @@ class Main {
 						PinMessage;
 					case 'Line Numbers': 
 						CodeLineNumbers;
+					case 'Delete Project': 
+						DeleteProject;
 					default: 
 						none;
 				}
@@ -324,8 +328,10 @@ class Main {
 				if (type != none) {
 					universe.setComponents(universe.createEntity(), type, interaction);
 				}
+				return;
 			}
 
+			trace(interaction.isAutocomplete());
 			if (!interaction.isCommand() && !interaction.isAutocomplete()
 				&& !interaction.isChatInputCommand()) {
 				return;

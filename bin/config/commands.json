@@ -757,6 +757,14 @@
 		"id": "PinMessage"
 	},
 	{
+		"name": "Delete Project",
+		"is_public": true,
+		"permissions": "everyone",
+		"type": "menu",
+		"menu_type": 3,
+		"id": "DeleteProject"
+	},
+	{
 		"name": "Line Numbers",
 		"is_public": true,
 		"permissions": "everyone",
