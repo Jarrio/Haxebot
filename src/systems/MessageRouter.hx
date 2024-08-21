@@ -7,10 +7,13 @@ import Main.CommandForward;
 import components.TextCommand;
 
 class MessageRouter extends System {
-	@:fastFamily var messages:{message:Message};
+	@:fastFamily var messages:{command:CommandForward, message:Message};
 
 	override function update(_) {
 		iterate(messages, (entity) -> {
+			if (command != CommandForward.new_message) {
+				continue;
+			}
 			universe.deleteEntity(entity);
 			var channel:TextChannel = message.channel;
 
@@ -32,15 +35,15 @@ class MessageRouter extends System {
 		});
 	}
 
-	inline function publicThreadChannel(message:Message) {
+	function publicThreadChannel(message:Message) {
 		if (message.content.startsWith("[showcase]")) {
-			trace('here');
+			trace('Author: ${message.author.username}');
 			EcsTools.set(CommandForward.showcase, message);
 		}
 		EcsTools.set(CommandForward.thread_count, message);
 	}
 
-	inline function guildTextChannel(message:Message) {
+	function guildTextChannel(message:Message) {
 		var channel = message.channel.asType0;
 		var showcase_channel = #if block "1100053767493255182" #else "162664383082790912" #end;
 		if (channel.id == showcase_channel && !message.system) {

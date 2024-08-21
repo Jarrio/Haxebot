@@ -22,6 +22,9 @@ class ThreadCount extends CommandBase {
 
 	override function update(_:Float) {
 		super.update(_);
+		#if block
+		return;
+		#end
 		iterate(messages, (entity) -> {
 			switch (command) {
 				case thread_count:

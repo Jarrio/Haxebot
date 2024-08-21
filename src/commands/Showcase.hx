@@ -29,7 +29,11 @@ class Showcase extends CommandBase {
 
 	public function new(_) {
 		super(_);
-		this.webhook = new WebhookClient({url: Main.keys.showcase_hook});
+		var hook = Main.keys.showcase_hook;
+		#if block
+		hook = Main.keys.showcase_hook_debug;
+		#end
+		this.webhook = new WebhookClient({url: hook});
 	}
 
 	override function update(_:Float) {
@@ -46,7 +50,7 @@ class Showcase extends CommandBase {
 				Browser.console.dir(err);
 			});
 		}
-		
+
 		if (channel == null) {
 			return;
 		}
@@ -60,80 +64,78 @@ class Showcase extends CommandBase {
 		});
 
 		iterate(messages, entity -> {
-			if (command == CommandForward.showcase_message) {
-				var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
+			switch(command) {
+				case showcase_message:
+					var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
 
-				if (!regex.match(message.content) && message.attachments.size == 0) {
-					var content = '```\n${message.content}\n```';
-					content += '\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n';
-					content += '**Showcase Channel guidelines:**\n\n';
-					content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
+					if (!regex.match(message.content) && message.attachments.size == 0) {
+						var content = '```\n${message.content}\n```';
+						content += '\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n';
+						content += '**Showcase Channel guidelines:**\n\n';
+						content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
 
-					message.author.send({content: content}).then(function(succ) {
-						message.delete().then(null, (err) -> trace(err));
-					}, function(err) {
-						trace(err);
-						Browser.console.dir(err);
-					});
-				}
+						message.author.send({content: content}).then(function(succ) {
+							message.delete().then(null, (err) -> trace(err));
+						}, function(err) {
+							trace(err);
+							Browser.console.dir(err);
+						});
+					}
 
-				this.universe.deleteEntity(entity);
-				return;
-			}
+					this.universe.deleteEntity(entity);
+				case showcase:
+					var thread = cast(message.channel.asType0, ThreadChannel);
+					if (!message.channel.asType0.isThread()) {
+						continue;
+					}
+					#if !block
+					if (thread.id != "1024905470621798410") { // TODO: (LD thread id) better solution
+						if (thread.ownerId != message.author.id) {
+							return;
+						}
+					}
+					#end
+					var arr = [];
 
-			if (command != CommandForward.showcase && !channel.isThread()) {
-				return;
-			}
+					var content = message.content.substring(10).trim();
+					for (a in message.attachments) {
+						arr.push(a);
+						trace(a);
+					}
+					var name = message.author.username;
+					if (message.member.nickname != null && message.member.nickname.length > 0) {
+						name = message.member.nickname;
+					}
 
-			#if !block
-			var thread = cast(message.channel.asType0, ThreadChannel);
-			if (thread.id != "1024905470621798410") { // TODO: (LD thread id) better solution
-				if (thread.ownerId != message.author.id) {
-					return;
-				}
-			}
-			#else
-			var thread = cast(message.channel.asType0, TextChannel);
-			#end
-
-			var arr = [];
-
-			var content = message.content.substring(10).trim();
-			for (a in message.attachments) {
-				arr.push(a);
-				trace(a);
-			}
-			var name = message.author.username;
-			if (message.member.nickname != null && message.member.nickname.length > 0) {
-				name = message.member.nickname;
-			}
-			var cont = () -> this.webhook.send({
-				content: '***Continue the conversation at - <#${thread.id}>***',
-				username: name,
-				avatarURL: message.author.avatarURL()
-			});
-
-			// trace(message.attachments);
-			this.webhook.send({
-				content: content,
-				username: name,
-				avatarURL: message.author.avatarURL(),
-				files: arr
-			}).then(function(_) {
-				cont();
-			}, function(err:{message:String}) {
-				if (err != null && err.message.contains("Request entity too large")) {
-					this.webhook.send({
-						content: content + '\n' + arr[0].url,
+					var cont = () -> this.webhook.send({
+						content: '***Continue the conversation at - <#${thread.id}>***',
 						username: name,
 						avatarURL: message.author.avatarURL()
+					});
+
+					// trace(message.attachments);
+					this.webhook.send({
+						content: content,
+						username: name,
+						avatarURL: message.author.avatarURL(),
+						files: arr
 					}).then(function(_) {
 						cont();
+					}, function(err:{message:String}) {
+						if (err != null && err.message.contains("Request entity too large")) {
+							this.webhook.send({
+								content: content + '\n' + arr[0].url,
+								username: name,
+								avatarURL: message.author.avatarURL()
+							}).then(function(_) {
+								cont();
+							});
+						}
 					});
-				}
-			});
 
-			this.universe.deleteEntity(entity);
+					this.universe.deleteEntity(entity);
+				default:
+			}
 		});
 
 		iterate(interactions, entity -> {

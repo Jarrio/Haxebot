@@ -256,7 +256,7 @@ class Main {
 			if (message.author.bot || message.system) {
 				return;
 			}
-			universe.setComponents(universe.createEntity(), message);
+			universe.setComponents(universe.createEntity(), CommandForward.new_message, message);
 		});
 
 		client.on('ChatInputAutoCompleteEvent', (incoming) -> {
@@ -675,6 +675,7 @@ typedef TKeys = {
 	var discord_test:TDiscordConfig;
 	var twitter_token:String;
 	var showcase_hook:String;
+	var showcase_hook_debug:String;
 	var suggestionbox_hook:String;
 	var twitch_client_id:String;
 	var twitch_secret:String;
@@ -753,6 +754,7 @@ enum abstract CommandType(String) {
 }
 
 enum abstract CommandForward(String) from String {
+	var new_message;
 	var suggestion_box;
 	var create_event;
 	var scheduled_event_update;

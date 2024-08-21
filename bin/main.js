@@ -688,7 +688,7 @@ Main.start = function() {
 		}
 	}
 	var resources = new ecs_core_ResourceManager(this1,new Array(0));
-	var vec = new Array(13);
+	var vec = new Array(12);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -795,6 +795,7 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
+	bits_Bits.set(cmpBits,5);
 	bits_Bits.set(cmpBits,1);
 	var capacity = 0;
 	if(capacity == null) {
@@ -825,37 +826,6 @@ Main.start = function() {
 		}
 	}
 	var cmpBits = this1;
-	bits_Bits.set(cmpBits,5);
-	bits_Bits.set(cmpBits,1);
-	var capacity = 0;
-	if(capacity == null) {
-		capacity = 0;
-	}
-	var this1 = [0];
-	if(capacity > 0) {
-		var _g = this1.length;
-		var _g1 = Math.ceil(capacity / 32);
-		while(_g < _g1) {
-			var i = _g++;
-			this1[i] = 0;
-		}
-	}
-	var resBits = this1;
-	vec[4] = new ecs_Family(4,cmpBits,resBits,1000);
-	var capacity = 13;
-	if(capacity == null) {
-		capacity = 0;
-	}
-	var this1 = [0];
-	if(capacity > 0) {
-		var _g = this1.length;
-		var _g1 = Math.ceil(capacity / 32);
-		while(_g < _g1) {
-			var i = _g++;
-			this1[i] = 0;
-		}
-	}
-	var cmpBits = this1;
 	bits_Bits.set(cmpBits,6);
 	bits_Bits.set(cmpBits,5);
 	var capacity = 0;
@@ -872,7 +842,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[5] = new ecs_Family(5,cmpBits,resBits,1000);
+	vec[4] = new ecs_Family(4,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -903,7 +873,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[6] = new ecs_Family(6,cmpBits,resBits,1000);
+	vec[5] = new ecs_Family(5,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -934,7 +904,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[7] = new ecs_Family(7,cmpBits,resBits,1000);
+	vec[6] = new ecs_Family(6,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -965,7 +935,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[8] = new ecs_Family(8,cmpBits,resBits,1000);
+	vec[7] = new ecs_Family(7,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -996,7 +966,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[9] = new ecs_Family(9,cmpBits,resBits,1000);
+	vec[8] = new ecs_Family(8,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -1026,7 +996,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[10] = new ecs_Family(10,cmpBits,resBits,1000);
+	vec[9] = new ecs_Family(9,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -1058,7 +1028,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[11] = new ecs_Family(11,cmpBits,resBits,1000);
+	vec[10] = new ecs_Family(10,cmpBits,resBits,1000);
 	var capacity = 13;
 	if(capacity == null) {
 		capacity = 0;
@@ -1089,7 +1059,7 @@ Main.start = function() {
 		}
 	}
 	var resBits = this1;
-	vec[12] = new ecs_Family(12,cmpBits,resBits,1000);
+	vec[11] = new ecs_Family(11,cmpBits,resBits,1000);
 	var families = new ecs_core_FamilyManager(components,resources,vec);
 	var u = new ecs_Universe(entities,components,resources,families,phases);
 	var phase = phases[0];
@@ -1371,6 +1341,10 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,5,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,7,member);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1379,19 +1353,15 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(6);
+		var ecsTmpFamily = Main.universe.families.get(7);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(8);
+		var ecsTmpFamily = Main.universe.families.get(10);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(11);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(12);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1401,6 +1371,10 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,5,"create_event");
 		Main.universe.components.set(_ecsTmpEntity,12,event);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1409,19 +1383,15 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(6);
+		var ecsTmpFamily = Main.universe.families.get(7);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(8);
+		var ecsTmpFamily = Main.universe.families.get(10);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(11);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(12);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1431,6 +1401,10 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,5,"scheduled_event_update");
 		Main.universe.components.set(_ecsTmpEntity,12,event);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1439,19 +1413,15 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(6);
+		var ecsTmpFamily = Main.universe.families.get(7);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(8);
+		var ecsTmpFamily = Main.universe.families.get(10);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(11);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(12);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1462,6 +1432,10 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,11,old);
 		Main.universe.components.set(_ecsTmpEntity,11,updated);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1470,19 +1444,15 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(6);
+		var ecsTmpFamily = Main.universe.families.get(7);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(8);
+		var ecsTmpFamily = Main.universe.families.get(10);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(11);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(12);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1492,17 +1462,34 @@ Main.start = function() {
 			return;
 		}
 		var _ecsTmpEntity = Main.universe.createEntity();
+		Main.universe.components.set(_ecsTmpEntity,5,"new_message");
 		Main.universe.components.set(_ecsTmpEntity,1,message);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-		var ecsTmpFamily = Main.universe.families.get(0);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
 		var ecsTmpFamily = Main.universe.families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(4);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(5);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(7);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(10);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(11);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
+		var ecsTmpFamily = Main.universe.families.get(0);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1516,6 +1503,10 @@ Main.start = function() {
 		Main.universe.components.set(_ecsTmpEntity,5,"thread_pin_message");
 		Main.universe.components.set(_ecsTmpEntity,6,thread);
 		var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = Main.universe.families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
@@ -1524,19 +1515,15 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(6);
+		var ecsTmpFamily = Main.universe.families.get(7);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
-		var ecsTmpFamily = Main.universe.families.get(8);
+		var ecsTmpFamily = Main.universe.families.get(10);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(11);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(12);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -1548,6 +1535,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"showcase_agree");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1556,11 +1547,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1568,19 +1559,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1590,6 +1577,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"showcase_disagree");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1598,11 +1589,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1610,19 +1601,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1632,6 +1619,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"snippet_left");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1640,11 +1631,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1652,19 +1643,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1674,6 +1661,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"snippet_right");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1682,11 +1673,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1694,19 +1685,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1720,6 +1707,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"code_paste");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1728,11 +1719,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1740,19 +1731,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1762,6 +1749,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"emoji_edit");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1770,11 +1761,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1782,19 +1773,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1804,6 +1791,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"quote_edit");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1812,11 +1803,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1824,19 +1815,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1846,6 +1833,10 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,5,"quote_set");
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = Main.universe.families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				var ecsTmpFamily = Main.universe.families.get(4);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
@@ -1854,11 +1845,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(6);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(10);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1866,19 +1857,15 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(12);
-				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-					ecsTmpFamily.add(_ecsTmpEntity);
-				}
 				var ecsTmpFamily = Main.universe.families.get(2);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1908,7 +1895,7 @@ Main.start = function() {
 				Main.universe.components.set(_ecsTmpEntity,9,type);
 				Main.universe.components.set(_ecsTmpEntity,4,interaction);
 				var ecsEntCompFlags = Main.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = Main.universe.families.get(9);
+				var ecsTmpFamily = Main.universe.families.get(8);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1916,11 +1903,11 @@ Main.start = function() {
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(7);
+				var ecsTmpFamily = Main.universe.families.get(6);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
-				var ecsTmpFamily = Main.universe.families.get(8);
+				var ecsTmpFamily = Main.universe.families.get(7);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -1940,15 +1927,15 @@ Main.start = function() {
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
+		var ecsTmpFamily = Main.universe.families.get(6);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 		var ecsTmpFamily = Main.universe.families.get(7);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
 		var ecsTmpFamily = Main.universe.families.get(8);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(_ecsTmpEntity);
-		}
-		var ecsTmpFamily = Main.universe.families.get(9);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(_ecsTmpEntity);
 		}
@@ -4741,7 +4728,7 @@ var commands_AutoRole = function(_universe) {
 	this.event_role_id = "1054432874473996408";
 	this.news_role_id = "761714325227700225";
 	systems_CommandBase.call(this,_universe);
-	this.users = this.universe.families.get(6);
+	this.users = this.universe.families.get(5);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(7);
 };
@@ -4792,7 +4779,7 @@ var commands_AutoThread = function(_universe) {
 	this.event_role_id = "1054432874473996408";
 	this.news_role_id = "761714325227700225";
 	systems_CommandBase.call(this,_universe);
-	this.users = this.universe.families.get(6);
+	this.users = this.universe.families.get(5);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tablec254489e95ef23a8f91062a1947780b9 = this.universe.components.getTable(7);
 };
@@ -4879,7 +4866,7 @@ commands_Boop.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Code = function(_universe) {
 	systems_CommandBase.call(this,_universe);
-	this.something_else = this.universe.families.get(8);
+	this.something_else = this.universe.families.get(7);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 };
 $hxClasses["commands.Code"] = commands_Code;
@@ -4981,7 +4968,7 @@ commands_Code.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_CodeLineNumbers = function(_universe) {
 	systems_CommandBase.call(this,_universe);
-	this.options = this.universe.families.get(9);
+	this.options = this.universe.families.get(8);
 	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(9);
 };
 $hxClasses["commands.CodeLineNumbers"] = commands_CodeLineNumbers;
@@ -5322,7 +5309,7 @@ systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
 });
 var commands_DeleteProject = function(_universe) {
 	systems_CommandDbBase.call(this,_universe);
-	this.options = this.universe.families.get(9);
+	this.options = this.universe.families.get(8);
 	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(9);
 };
 $hxClasses["commands.DeleteProject"] = commands_DeleteProject;
@@ -5412,7 +5399,7 @@ var commands_Emoji = function(_universe) {
 	this.max_name_length = 35;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.modal = this.universe.families.get(8);
+	this.modal = this.universe.families.get(7);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 };
 $hxClasses["commands.Emoji"] = commands_Emoji;
@@ -6107,7 +6094,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 var commands_JamSuggestionBox = function(_) {
 	this.channel_id = "1234817988377706557";
 	systems_CommandBase.call(this,_);
-	this.messages = this.universe.families.get(4);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 	this.webhook = new discord_$js_WebhookClient({ url : Main.keys.suggestionbox_hook});
@@ -6232,6 +6219,10 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 							_gthis.universe.components.set(_ecsTmpEntity,5,"auto_thread");
 							_gthis.universe.components.set(_ecsTmpEntity,7,member);
 							var ecsEntCompFlags = _gthis.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+							var ecsTmpFamily = _gthis.universe.families.get(3);
+							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+								ecsTmpFamily.add(_ecsTmpEntity);
+							}
 							var ecsTmpFamily = _gthis.universe.families.get(4);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
@@ -6240,19 +6231,15 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
-							var ecsTmpFamily = _gthis.universe.families.get(6);
+							var ecsTmpFamily = _gthis.universe.families.get(7);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
-							var ecsTmpFamily = _gthis.universe.families.get(8);
+							var ecsTmpFamily = _gthis.universe.families.get(10);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
 							var ecsTmpFamily = _gthis.universe.families.get(11);
-							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-								ecsTmpFamily.add(_ecsTmpEntity);
-							}
-							var ecsTmpFamily = _gthis.universe.families.get(12);
 							if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
@@ -6276,7 +6263,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_PinMessage = function(_universe) {
 	systems_CommandDbBase.call(this,_universe);
-	this.options = this.universe.families.get(9);
+	this.options = this.universe.families.get(8);
 	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(9);
 };
 $hxClasses["commands.PinMessage"] = commands_PinMessage;
@@ -6360,7 +6347,7 @@ commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
 var commands_Poll = function(_universe) {
 	this.checked = false;
 	systems_CommandDbBase.call(this,_universe);
-	this.dm_messages = this.universe.families.get(4);
+	this.dm_messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -6740,7 +6727,7 @@ var commands_Quote = function(_universe) {
 	this.max_name_length = 35;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
-	this.modal = this.universe.families.get(8);
+	this.modal = this.universe.families.get(7);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 };
 $hxClasses["commands.Quote"] = commands_Quote;
@@ -9039,9 +9026,9 @@ var commands_RoundupRoundup = function(_universe) {
 	this.host_active = false;
 	this.waiting = false;
 	systems_CommandDbBase.call(this,_universe);
-	this.end_event = this.universe.families.get(10);
-	this.voice_update_events = this.universe.families.get(11);
-	this.scheduled_event_updates = this.universe.families.get(12);
+	this.end_event = this.universe.families.get(9);
+	this.voice_update_events = this.universe.families.get(10);
+	this.scheduled_event_updates = this.universe.families.get(11);
 	this.table0f9294ec4df5372e078c34fabf7427cd = this.universe.components.getTable(10);
 	this.table83434594cd483e85f1d6ab14e011303c = this.universe.components.getTable(11);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
@@ -9456,7 +9443,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 				var _ecsTmpEntity = _gthis.universe.createEntity();
 				_gthis.universe.components.set(_ecsTmpEntity,10,obj);
 				var ecsEntCompFlags = _gthis.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-				var ecsTmpFamily = _gthis.universe.families.get(10);
+				var ecsTmpFamily = _gthis.universe.families.get(9);
 				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 					ecsTmpFamily.add(_ecsTmpEntity);
 				}
@@ -10030,7 +10017,7 @@ var commands_ScamPrevention = function(_universe) {
 	this.sequential_tags = new haxe_ds_StringMap();
 	this.time_since = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(4);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -10536,13 +10523,14 @@ var commands_Showcase = function(_) {
 	this.checking = false;
 	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
-	this.modal = this.universe.families.get(7);
-	this.messages = this.universe.families.get(4);
-	this.interactions = this.universe.families.get(8);
+	this.modal = this.universe.families.get(6);
+	this.messages = this.universe.families.get(3);
+	this.interactions = this.universe.families.get(7);
 	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(8);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
-	this.webhook = new discord_$js_WebhookClient({ url : Main.keys.showcase_hook});
+	var hook = Main.keys.showcase_hook;
+	this.webhook = new discord_$js_WebhookClient({ url : hook});
 };
 $hxClasses["commands.Showcase"] = commands_Showcase;
 commands_Showcase.__name__ = "commands.Showcase";
@@ -10560,9 +10548,9 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			Main.client.channels.fetch(this.channel_id).then(function(channel) {
 				_gthis.channel = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("loaded showcase channel",{ fileName : "src/commands/Showcase.hx", lineNumber : 43, className : "commands.Showcase", methodName : "update"});
+				haxe_Log.trace("loaded showcase channel",{ fileName : "src/commands/Showcase.hx", lineNumber : 47, className : "commands.Showcase", methodName : "update"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 45, className : "commands.Showcase", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 49, className : "commands.Showcase", methodName : "update"});
 				$global.console.dir(err);
 			});
 		}
@@ -10594,77 +10582,81 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 			var entity = _g_set.getDense(_g_idx--);
 			var command1 = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
-			if(command1 == "showcase_message") {
+			switch(command1) {
+			case "showcase":
+				var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
+				if(!message[0].channel.isThread()) {
+					continue;
+				}
+				if(thread[0].id != "1024905470621798410") {
+					if(thread[0].ownerId != message[0].author.id) {
+						return;
+					}
+				}
+				var arr = [[]];
+				var content = [StringTools.trim(message[0].content.substring(10))];
+				var jsIterator = message[0].attachments.values();
+				var _g_jsIterator = jsIterator;
+				var _g_lastStep = jsIterator.next();
+				while(!_g_lastStep.done) {
+					var v = _g_lastStep.value;
+					_g_lastStep = _g_jsIterator.next();
+					var a = v;
+					arr[0].push(a);
+					haxe_Log.trace(a,{ fileName : "src/commands/Showcase.hx", lineNumber : 103, className : "commands.Showcase", methodName : "update"});
+				}
+				var name = [message[0].author.username];
+				if(message[0].member.nickname != null && message[0].member.nickname.length > 0) {
+					name[0] = message[0].member.nickname;
+				}
+				var cont = [(function(name,thread,message) {
+					return function() {
+						return _gthis.webhook.send({ content : "***Continue the conversation at - <#" + thread[0].id + ">***", username : name[0], avatarURL : message[0].author.avatarURL()});
+					};
+				})(name,thread,message)];
+				this.webhook.send({ content : content[0], username : name[0], avatarURL : message[0].author.avatarURL(), files : arr[0]}).then((function(cont) {
+					return function(_) {
+						cont[0]();
+					};
+				})(cont),(function(cont,name,content,arr,message) {
+					return function(err) {
+						if(err != null && err.message.indexOf("Request entity too large") != -1) {
+							_gthis.webhook.send({ content : content[0] + "\n" + arr[0][0].url, username : name[0], avatarURL : message[0].author.avatarURL()}).then((function(cont) {
+								return function(_) {
+									cont[0]();
+								};
+							})(cont));
+						}
+					};
+				})(cont,name,content,arr,message));
+				this.universe.deleteEntity(entity);
+				break;
+			case "showcase_message":
 				var regex = new EReg("https?://(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&/=]*)","ig");
 				if(!regex.match(message[0].content) && message[0].attachments.size == 0) {
-					var content = "```\n" + message[0].content + "\n```";
-					content += "\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n";
-					content += "**Showcase Channel guidelines:**\n\n";
-					content += "1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here";
-					message[0].author.send({ content : content}).then((function(message) {
+					var content1 = "```\n" + message[0].content + "\n```";
+					content1 += "\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n";
+					content1 += "**Showcase Channel guidelines:**\n\n";
+					content1 += "1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here";
+					message[0].author.send({ content : content1}).then((function(message) {
 						return function(succ) {
 							message[0].delete().then(null,(function() {
 								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 73, className : "commands.Showcase", methodName : "update"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 78, className : "commands.Showcase", methodName : "update"});
 								};
 							})());
 						};
 					})(message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 75, className : "commands.Showcase", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 80, className : "commands.Showcase", methodName : "update"});
 							$global.console.dir(err);
 						};
 					})());
 				}
 				this.universe.deleteEntity(entity);
-				return;
+				break;
+			default:
 			}
-			if(command1 != "showcase" && !this.channel.isThread()) {
-				return;
-			}
-			var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
-			if(thread[0].id != "1024905470621798410") {
-				if(thread[0].ownerId != message[0].author.id) {
-					return;
-				}
-			}
-			var arr = [[]];
-			var content1 = [StringTools.trim(message[0].content.substring(10))];
-			var jsIterator = message[0].attachments.values();
-			var _g_jsIterator = jsIterator;
-			var _g_lastStep = jsIterator.next();
-			while(!_g_lastStep.done) {
-				var v = _g_lastStep.value;
-				_g_lastStep = _g_jsIterator.next();
-				var a = v;
-				arr[0].push(a);
-				haxe_Log.trace(a,{ fileName : "src/commands/Showcase.hx", lineNumber : 104, className : "commands.Showcase", methodName : "update"});
-			}
-			var name = [message[0].author.username];
-			if(message[0].member.nickname != null && message[0].member.nickname.length > 0) {
-				name[0] = message[0].member.nickname;
-			}
-			var cont = [(function(name,thread,message) {
-				return function() {
-					return _gthis.webhook.send({ content : "***Continue the conversation at - <#" + thread[0].id + ">***", username : name[0], avatarURL : message[0].author.avatarURL()});
-				};
-			})(name,thread,message)];
-			this.webhook.send({ content : content1[0], username : name[0], avatarURL : message[0].author.avatarURL(), files : arr[0]}).then((function(cont) {
-				return function(_) {
-					cont[0]();
-				};
-			})(cont),(function(cont,name,content,arr,message) {
-				return function(err) {
-					if(err != null && err.message.indexOf("Request entity too large") != -1) {
-						_gthis.webhook.send({ content : content[0] + "\n" + arr[0][0].url, username : name[0], avatarURL : message[0].author.avatarURL()}).then((function(cont) {
-							return function(_) {
-								cont[0]();
-							};
-						})(cont));
-					}
-				};
-			})(cont,name,content1,arr,message));
-			this.universe.deleteEntity(entity);
 		}
 		var _this = this.interactions;
 		var _set = _this.entities;
@@ -10682,7 +10674,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 					};
 				})(interaction),(function() {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 147, className : "commands.Showcase", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Showcase.hx", lineNumber : 149, className : "commands.Showcase", methodName : "update"});
 						$global.console.dir(err);
 					};
 				})());
@@ -10722,7 +10714,7 @@ var commands_Snippet = function(_universe) {
 	this.tags = [];
 	this.sent = [];
 	systems_CommandDbBase.call(this,_universe);
-	this.button_events = this.universe.families.get(8);
+	this.button_events = this.universe.families.get(7);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 };
 $hxClasses["commands.Snippet"] = commands_Snippet;
@@ -11244,7 +11236,7 @@ var commands_ThreadCount = function(_universe) {
 	this.path = "./config/threadcount.json";
 	this.count = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(4);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -11287,7 +11279,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 		if(Object.prototype.hasOwnProperty.call(this.count.h,interaction.channelId)) {
 			var count = this.count.h[interaction.channelId];
 			interaction.reply({ content : "This thread has " + count + " messages"}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 48, className : "commands.ThreadCount", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 51, className : "commands.ThreadCount", methodName : "run"});
 				$global.console.dir(err);
 			});
 		} else {
@@ -11300,7 +11292,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				content = "This is not a thread :angry:";
 			}
 			interaction.reply({ content : content}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 60, className : "commands.ThreadCount", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 63, className : "commands.ThreadCount", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
@@ -11421,7 +11413,7 @@ var commands_events_PinMessageInfo = function(_universe) {
 	this.notified = new haxe_ds_StringMap();
 	this.messages = [];
 	ecs_System.call(this,_universe);
-	this.threads = this.universe.families.get(5);
+	this.threads = this.universe.families.get(4);
 	this.table77d573418a21d66427b12280fbf7836b = this.universe.components.getTable(6);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 };
@@ -11509,7 +11501,7 @@ var commands_mod_RateLimit = function(_universe) {
 	this.limits = new haxe_ds_StringMap();
 	this.tracking = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
-	this.messages = this.universe.families.get(4);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -11777,7 +11769,7 @@ var commands_mod_Tracker = function(_universe) {
 	this.dm = new haxe_ds_StringMap();
 	this.trackers = new haxe_ds_StringMap();
 	systems_CommandDbBase.call(this,_universe);
-	this.messages = this.universe.families.get(4);
+	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
@@ -24036,6 +24028,7 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 var systems_MessageRouter = function(_universe) {
 	ecs_System.call(this,_universe);
 	this.messages = this.universe.families.get(3);
+	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
 };
 $hxClasses["systems.MessageRouter"] = systems_MessageRouter;
@@ -24049,22 +24042,26 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 		var _g_idx = _set.size() - 1;
 		while(_active && _g_idx >= 0) {
 			var entity = _set.getDense(_g_idx--);
+			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
+			if(command != "new_message") {
+				continue;
+			}
 			this.universe.deleteEntity(entity);
 			var channel = message.channel;
 			var entity1 = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity1,5,"rate_limit");
 			util_EcsTools.get_universe().components.set(entity1,1,message);
 			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity1)];
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(4);
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity1);
 			}
-			var ecsTmpFamily1 = util_EcsTools.get_universe().families.get(5);
+			var ecsTmpFamily1 = util_EcsTools.get_universe().families.get(4);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily1.componentsMask)) {
 				ecsTmpFamily1.add(entity1);
 			}
-			var ecsTmpFamily2 = util_EcsTools.get_universe().families.get(6);
+			var ecsTmpFamily2 = util_EcsTools.get_universe().families.get(5);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily2.componentsMask)) {
 				ecsTmpFamily2.add(entity1);
 			}
@@ -24072,14 +24069,14 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily3.componentsMask)) {
 				ecsTmpFamily3.add(entity1);
 			}
-			var ecsTmpFamily4 = util_EcsTools.get_universe().families.get(3);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily4.componentsMask)) {
-				ecsTmpFamily4.add(entity1);
-			}
 			var entity2 = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity2,5,"scam_prevention");
 			util_EcsTools.get_universe().components.set(entity2,1,message);
 			var ecsEntCompFlags1 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity2)];
+			var ecsTmpFamily4 = util_EcsTools.get_universe().families.get(3);
+			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily4.componentsMask)) {
+				ecsTmpFamily4.add(entity2);
+			}
 			var ecsTmpFamily5 = util_EcsTools.get_universe().families.get(4);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily5.componentsMask)) {
 				ecsTmpFamily5.add(entity2);
@@ -24088,169 +24085,58 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily6.componentsMask)) {
 				ecsTmpFamily6.add(entity2);
 			}
-			var ecsTmpFamily7 = util_EcsTools.get_universe().families.get(6);
+			var ecsTmpFamily7 = util_EcsTools.get_universe().families.get(0);
 			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily7.componentsMask)) {
 				ecsTmpFamily7.add(entity2);
-			}
-			var ecsTmpFamily8 = util_EcsTools.get_universe().families.get(0);
-			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily8.componentsMask)) {
-				ecsTmpFamily8.add(entity2);
-			}
-			var ecsTmpFamily9 = util_EcsTools.get_universe().families.get(3);
-			if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily9.componentsMask)) {
-				ecsTmpFamily9.add(entity2);
 			}
 			var entity3 = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity3,5,"keyword_tracker");
 			util_EcsTools.get_universe().components.set(entity3,1,message);
 			var ecsEntCompFlags2 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity3)];
-			var ecsTmpFamily10 = util_EcsTools.get_universe().families.get(4);
+			var ecsTmpFamily8 = util_EcsTools.get_universe().families.get(3);
+			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily8.componentsMask)) {
+				ecsTmpFamily8.add(entity3);
+			}
+			var ecsTmpFamily9 = util_EcsTools.get_universe().families.get(4);
+			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily9.componentsMask)) {
+				ecsTmpFamily9.add(entity3);
+			}
+			var ecsTmpFamily10 = util_EcsTools.get_universe().families.get(5);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily10.componentsMask)) {
 				ecsTmpFamily10.add(entity3);
 			}
-			var ecsTmpFamily11 = util_EcsTools.get_universe().families.get(5);
+			var ecsTmpFamily11 = util_EcsTools.get_universe().families.get(0);
 			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily11.componentsMask)) {
 				ecsTmpFamily11.add(entity3);
-			}
-			var ecsTmpFamily12 = util_EcsTools.get_universe().families.get(6);
-			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily12.componentsMask)) {
-				ecsTmpFamily12.add(entity3);
-			}
-			var ecsTmpFamily13 = util_EcsTools.get_universe().families.get(0);
-			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily13.componentsMask)) {
-				ecsTmpFamily13.add(entity3);
-			}
-			var ecsTmpFamily14 = util_EcsTools.get_universe().families.get(3);
-			if(bits_Bits.areSet(ecsEntCompFlags2,ecsTmpFamily14.componentsMask)) {
-				ecsTmpFamily14.add(entity3);
 			}
 			if(channel.id == "1234544675264925788") {
 				var entity4 = util_EcsTools.get_universe().createEntity();
 				util_EcsTools.get_universe().components.set(entity4,5,"suggestion_box");
 				util_EcsTools.get_universe().components.set(entity4,1,message);
 				var ecsEntCompFlags3 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity4)];
-				var ecsTmpFamily15 = util_EcsTools.get_universe().families.get(4);
+				var ecsTmpFamily12 = util_EcsTools.get_universe().families.get(3);
+				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily12.componentsMask)) {
+					ecsTmpFamily12.add(entity4);
+				}
+				var ecsTmpFamily13 = util_EcsTools.get_universe().families.get(4);
+				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily13.componentsMask)) {
+					ecsTmpFamily13.add(entity4);
+				}
+				var ecsTmpFamily14 = util_EcsTools.get_universe().families.get(5);
+				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily14.componentsMask)) {
+					ecsTmpFamily14.add(entity4);
+				}
+				var ecsTmpFamily15 = util_EcsTools.get_universe().families.get(0);
 				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily15.componentsMask)) {
 					ecsTmpFamily15.add(entity4);
-				}
-				var ecsTmpFamily16 = util_EcsTools.get_universe().families.get(5);
-				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily16.componentsMask)) {
-					ecsTmpFamily16.add(entity4);
-				}
-				var ecsTmpFamily17 = util_EcsTools.get_universe().families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily17.componentsMask)) {
-					ecsTmpFamily17.add(entity4);
-				}
-				var ecsTmpFamily18 = util_EcsTools.get_universe().families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily18.componentsMask)) {
-					ecsTmpFamily18.add(entity4);
-				}
-				var ecsTmpFamily19 = util_EcsTools.get_universe().families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags3,ecsTmpFamily19.componentsMask)) {
-					ecsTmpFamily19.add(entity4);
 				}
 			}
 			switch(channel.type) {
 			case 0:
-				var channel1 = message.channel;
-				if(channel1.id == "162664383082790912" && !message.system) {
-					var entity5 = util_EcsTools.get_universe().createEntity();
-					util_EcsTools.get_universe().components.set(entity5,5,"showcase_message");
-					util_EcsTools.get_universe().components.set(entity5,1,message);
-					var ecsEntCompFlags4 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity5)];
-					var ecsTmpFamily20 = util_EcsTools.get_universe().families.get(4);
-					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily20.componentsMask)) {
-						ecsTmpFamily20.add(entity5);
-					}
-					var ecsTmpFamily21 = util_EcsTools.get_universe().families.get(5);
-					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily21.componentsMask)) {
-						ecsTmpFamily21.add(entity5);
-					}
-					var ecsTmpFamily22 = util_EcsTools.get_universe().families.get(6);
-					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily22.componentsMask)) {
-						ecsTmpFamily22.add(entity5);
-					}
-					var ecsTmpFamily23 = util_EcsTools.get_universe().families.get(0);
-					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily23.componentsMask)) {
-						ecsTmpFamily23.add(entity5);
-					}
-					var ecsTmpFamily24 = util_EcsTools.get_universe().families.get(3);
-					if(bits_Bits.areSet(ecsEntCompFlags4,ecsTmpFamily24.componentsMask)) {
-						ecsTmpFamily24.add(entity5);
-					}
-				}
-				if(StringTools.startsWith(message.content,"!run")) {
-					haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 51, className : "systems.MessageRouter", methodName : "guildTextChannel"});
-					var _ecsTmpEntity = this.universe.createEntity();
-					this.universe.components.set(_ecsTmpEntity,0,"!run");
-					this.universe.components.set(_ecsTmpEntity,1,message);
-					var ecsEntCompFlags5 = this.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
-					var ecsTmpFamily25 = this.universe.families.get(0);
-					if(bits_Bits.areSet(ecsEntCompFlags5,ecsTmpFamily25.componentsMask)) {
-						ecsTmpFamily25.add(_ecsTmpEntity);
-					}
-					var ecsTmpFamily26 = this.universe.families.get(3);
-					if(bits_Bits.areSet(ecsEntCompFlags5,ecsTmpFamily26.componentsMask)) {
-						ecsTmpFamily26.add(_ecsTmpEntity);
-					}
-					var ecsTmpFamily27 = this.universe.families.get(4);
-					if(bits_Bits.areSet(ecsEntCompFlags5,ecsTmpFamily27.componentsMask)) {
-						ecsTmpFamily27.add(_ecsTmpEntity);
-					}
-				}
+				this.guildTextChannel(message);
 				break;
 			case 11:
-				if(StringTools.startsWith(message.content,"[showcase]")) {
-					haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 37, className : "systems.MessageRouter", methodName : "publicThreadChannel"});
-					var entity6 = util_EcsTools.get_universe().createEntity();
-					util_EcsTools.get_universe().components.set(entity6,5,"showcase");
-					util_EcsTools.get_universe().components.set(entity6,1,message);
-					var ecsEntCompFlags6 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity6)];
-					var ecsTmpFamily28 = util_EcsTools.get_universe().families.get(4);
-					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily28.componentsMask)) {
-						ecsTmpFamily28.add(entity6);
-					}
-					var ecsTmpFamily29 = util_EcsTools.get_universe().families.get(5);
-					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily29.componentsMask)) {
-						ecsTmpFamily29.add(entity6);
-					}
-					var ecsTmpFamily30 = util_EcsTools.get_universe().families.get(6);
-					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily30.componentsMask)) {
-						ecsTmpFamily30.add(entity6);
-					}
-					var ecsTmpFamily31 = util_EcsTools.get_universe().families.get(0);
-					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily31.componentsMask)) {
-						ecsTmpFamily31.add(entity6);
-					}
-					var ecsTmpFamily32 = util_EcsTools.get_universe().families.get(3);
-					if(bits_Bits.areSet(ecsEntCompFlags6,ecsTmpFamily32.componentsMask)) {
-						ecsTmpFamily32.add(entity6);
-					}
-				}
-				var entity7 = util_EcsTools.get_universe().createEntity();
-				util_EcsTools.get_universe().components.set(entity7,5,"thread_count");
-				util_EcsTools.get_universe().components.set(entity7,1,message);
-				var ecsEntCompFlags7 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity7)];
-				var ecsTmpFamily33 = util_EcsTools.get_universe().families.get(4);
-				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily33.componentsMask)) {
-					ecsTmpFamily33.add(entity7);
-				}
-				var ecsTmpFamily34 = util_EcsTools.get_universe().families.get(5);
-				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily34.componentsMask)) {
-					ecsTmpFamily34.add(entity7);
-				}
-				var ecsTmpFamily35 = util_EcsTools.get_universe().families.get(6);
-				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily35.componentsMask)) {
-					ecsTmpFamily35.add(entity7);
-				}
-				var ecsTmpFamily36 = util_EcsTools.get_universe().families.get(0);
-				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily36.componentsMask)) {
-					ecsTmpFamily36.add(entity7);
-				}
-				var ecsTmpFamily37 = util_EcsTools.get_universe().families.get(3);
-				if(bits_Bits.areSet(ecsEntCompFlags7,ecsTmpFamily37.componentsMask)) {
-					ecsTmpFamily37.add(entity7);
-				}
+				this.publicThreadChannel(message);
 				break;
 			default:
 			}
@@ -24258,11 +24144,15 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 	}
 	,publicThreadChannel: function(message) {
 		if(StringTools.startsWith(message.content,"[showcase]")) {
-			haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 37, className : "systems.MessageRouter", methodName : "publicThreadChannel"});
+			haxe_Log.trace("Author: " + message.author.username,{ fileName : "src/systems/MessageRouter.hx", lineNumber : 40, className : "systems.MessageRouter", methodName : "publicThreadChannel"});
 			var entity = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity,5,"showcase");
 			util_EcsTools.get_universe().components.set(entity,1,message);
 			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
 			var ecsTmpFamily = util_EcsTools.get_universe().families.get(4);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
@@ -24271,15 +24161,7 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(6);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
-			}
 			var ecsTmpFamily = util_EcsTools.get_universe().families.get(0);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
-			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
@@ -24288,6 +24170,10 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 		util_EcsTools.get_universe().components.set(entity,5,"thread_count");
 		util_EcsTools.get_universe().components.set(entity,1,message);
 		var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+		var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(entity);
+		}
 		var ecsTmpFamily = util_EcsTools.get_universe().families.get(4);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
@@ -24296,15 +24182,7 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
 		}
-		var ecsTmpFamily = util_EcsTools.get_universe().families.get(6);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(entity);
-		}
 		var ecsTmpFamily = util_EcsTools.get_universe().families.get(0);
-		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-			ecsTmpFamily.add(entity);
-		}
-		var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 			ecsTmpFamily.add(entity);
 		}
@@ -24316,6 +24194,10 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			util_EcsTools.get_universe().components.set(entity,5,"showcase_message");
 			util_EcsTools.get_universe().components.set(entity,1,message);
 			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
 			var ecsTmpFamily = util_EcsTools.get_universe().families.get(4);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
@@ -24324,21 +24206,13 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(6);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
-			}
 			var ecsTmpFamily = util_EcsTools.get_universe().families.get(0);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(entity);
-			}
-			var ecsTmpFamily = util_EcsTools.get_universe().families.get(3);
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(entity);
 			}
 		}
 		if(StringTools.startsWith(message.content,"!run")) {
-			haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 51, className : "systems.MessageRouter", methodName : "guildTextChannel"});
+			haxe_Log.trace("here",{ fileName : "src/systems/MessageRouter.hx", lineNumber : 54, className : "systems.MessageRouter", methodName : "guildTextChannel"});
 			var _ecsTmpEntity = this.universe.createEntity();
 			this.universe.components.set(_ecsTmpEntity,0,"!run");
 			this.universe.components.set(_ecsTmpEntity,1,message);
@@ -24351,13 +24225,10 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
 				ecsTmpFamily.add(_ecsTmpEntity);
 			}
-			var ecsTmpFamily = this.universe.families.get(4);
-			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-				ecsTmpFamily.add(_ecsTmpEntity);
-			}
 		}
 	}
 	,messages: null
+	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
 	,__class__: systems_MessageRouter
 });
