@@ -11,7 +11,7 @@
 			"preLaunchTask": "${defaultBuildTask}",
 			"cwd": "${workspaceFolder}/bin",
 			"program": "${workspaceFolder}/bin/main.js",
-			"sourceMaps": true,
+			"sourceMaps": false,
 			"skipFiles": [
 				"<node_internals>/**"
 			],

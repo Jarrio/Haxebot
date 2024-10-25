@@ -369,6 +369,10 @@ class Quote extends CommandDbBase {
 											trace(name);
 												switch (response) {
 													case Record(data):
+														if (data == null) {
+															interaction.respond([]);
+															return;
+														}
 														var quote = DBQuote.fromRecord(data);
 														results.push({
 															name: this.dbacResponse(quote),
