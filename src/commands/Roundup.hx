@@ -11,6 +11,8 @@ import discord_js.User;
 import haxe.Json;
 
 class Roundup extends CommandBase {
+	//post once a week
+	var posted:Float = -1;
 	var last_checked:Float = -1;
 	var thursday_check:Float = -1;
 	var active:Bool = true;
@@ -130,8 +132,8 @@ class Roundup extends CommandBase {
 
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
-
-		if (today.getUTCDay() == 4 || _check_now) {
+		var day = today.getUTCDay() == 4 || today.getUTCDay() == 6;
+		if (day || _check_now) {
 			if (!this.shouldCheck()) {
 				return;
 			}
