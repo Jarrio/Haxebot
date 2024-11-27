@@ -1,5 +1,7 @@
 package commands;
 
+import js.node.Http;
+import js.node.http.Server;
 import commands.types.Duration;
 import discord_builder.BaseCommandInteraction;
 import discord_js.MessageEmbed;
@@ -27,6 +29,14 @@ class Roundup extends CommandBase {
 	final announcement_channel:String = #if block '597067735771381771' #else '286485321925918721' #end;
 
 	var sent = false;
+	// var server:Server;
+	// override function onEnabled() {
+	// 	trace('running');
+	// 	Http.createServer((request, response) -> {
+	// 		trace(request);
+	// 		trace(response);
+	// 	});
+	// }
 
 	function dmUser(title:String, content:String) {
 		#if block

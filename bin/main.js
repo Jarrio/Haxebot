@@ -655,7 +655,7 @@ Main.start = function() {
 	var vec = new Array(4);
 	vec[0] = new ecs_Phase(true,"systems",new Array(2),new Array(2));
 	vec[1] = new ecs_Phase(true,"messages",new Array(5),new Array(5));
-	vec[2] = new ecs_Phase(false,"testing",new Array(20),new Array(20));
+	vec[2] = new ecs_Phase(false,"testing",new Array(19),new Array(19));
 	vec[3] = new ecs_Phase(true,"main",new Array(29),new Array(29));
 	var phases = vec;
 	var entities = new ecs_core_EntityManager(1000);
@@ -1108,51 +1108,48 @@ Main.start = function() {
 	var s = new commands_Boop(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
-	var s = new commands_Run2(u);
+	var s = new commands_Everyone(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
-	var s = new commands_Everyone(u);
+	var s = new commands_Roundup(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
-	var s = new commands_Roundup(u);
+	var s = new commands_RoundupRoundup(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
-	var s = new commands_RoundupRoundup(u);
+	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
-	var s = new commands_events_PinMessageInfo(u);
+	var s = new commands_mod_Tracker(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
-	var s = new commands_mod_Tracker(u);
+	var s = new commands_Quote(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
-	var s = new commands_Quote(u);
+	var s = new commands_Snippet(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
-	var s = new commands_Snippet(u);
+	var s = new commands_Api(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
-	var s = new commands_Api(u);
+	var s = new commands_Notify(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
-	var s = new commands_Notify(u);
+	var s = new commands_Code(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
-	var s = new commands_Code(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_React(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
-	var s = new commands_React(u);
+	var s = new commands_Say(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
-	var s = new commands_Say(u);
+	var s = new commands_Poll(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
-	var s = new commands_Poll(u);
-	phase.systems[19] = s;
-	phase.enabledSystems[19] = true;
 	var phase = phases[3];
 	var s = new commands_DeleteProject(u);
 	phase.systems[0] = s;
@@ -1914,7 +1911,9 @@ Main.start = function() {
 			}
 			return;
 		}
-		haxe_Log.trace(interaction.isAutocomplete(),{ fileName : "src/Main.hx", lineNumber : 334, className : "Main", methodName : "start"});
+		if(interaction.isAutocomplete()) {
+			haxe_Log.trace(JSON.stringify(interaction),{ fileName : "src/Main.hx", lineNumber : 335, className : "Main", methodName : "start"});
+		}
 		if(!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 			return;
 		}
@@ -2074,7 +2073,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 473, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 475, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -2082,21 +2081,21 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 481, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 483, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 491, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 493, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
 			CommandPermission.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 501, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 503, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
@@ -2108,9 +2107,9 @@ Main.updateState = function(field,value) {
 	record.field("value",value);
 	var e = database_DBEvents.Update("state",record,QueryExpr.QueryBinop(QBinop.QOpAssign,QueryExpr.QueryConstant(QConstant.QIdent("key")),QueryExpr.QueryValue(field)),function(response) {
 		if(response._hx_index == 4) {
-			haxe_Log.trace("updated state",{ fileName : "src/Main.hx", lineNumber : 517, className : "Main", methodName : "updateState"});
+			haxe_Log.trace("updated state",{ fileName : "src/Main.hx", lineNumber : 519, className : "Main", methodName : "updateState"});
 		} else {
-			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 519, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 521, className : "Main", methodName : "updateState"});
 		}
 	});
 	var _ecsTmpEntity = Main.universe.createEntity();
@@ -8852,7 +8851,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			var _g_value = h[key];
 			var user = [_g_value];
 			if(user[0] == null) {
-				haxe_Log.trace("skipping " + key,{ fileName : "src/commands/Roundup.hx", lineNumber : 39, className : "commands.Roundup", methodName : "dmUser"});
+				haxe_Log.trace("skipping " + key,{ fileName : "src/commands/Roundup.hx", lineNumber : 49, className : "commands.Roundup", methodName : "dmUser"});
 				continue;
 			}
 			user[0].send("## " + title);
@@ -8874,13 +8873,13 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				return function(_) {
 					return user[0].send(b[0]).then(null,(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 55, className : "commands.Roundup", methodName : "dmUser"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 65, className : "commands.Roundup", methodName : "dmUser"});
 						};
 					})());
 				};
 			})(b,user),(function() {
 				return function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 56, className : "commands.Roundup", methodName : "dmUser"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 66, className : "commands.Roundup", methodName : "dmUser"});
 				};
 			})());
 		}
@@ -8890,7 +8889,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + Main.state.next_roundup + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/commands/Roundup.hx", lineNumber : 66, className : "commands.Roundup", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/commands/Roundup.hx", lineNumber : 76, className : "commands.Roundup", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
@@ -8939,7 +8938,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.channel = channel;
 				_gthis.checking = false;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 115, className : "commands.Roundup", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 125, className : "commands.Roundup", methodName : "update"});
 				$global.console.dir(err);
 			});
 			var h = this.dmlist.h;
@@ -8957,11 +8956,11 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 					Main.client.users.fetch(key1[0]).then((function(key) {
 						return function(user) {
 							_gthis.dmlist.h[key[0]] = user;
-							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/Roundup.hx", lineNumber : 123, className : "commands.Roundup", methodName : "update"});
+							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/Roundup.hx", lineNumber : 133, className : "commands.Roundup", methodName : "update"});
 						};
 					})(key1),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 124, className : "commands.Roundup", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 134, className : "commands.Roundup", methodName : "update"});
 						};
 					})());
 				}
@@ -9033,7 +9032,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 205, className : "commands.Roundup", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 215, className : "commands.Roundup", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
@@ -11595,7 +11594,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 				var limit_current = 0;
 				while(limit_current < limit_length) {
 					var limit = [h[limit_keys[limit_current++]]];
-					if(message.author.id != limit[0].user_id || limit[0].silenced > -1 || message.channel.id == "663246792426782730") {
+					var tmp;
+					if(!(message.author.id != limit[0].user_id || limit[0].silenced > -1 || message.channel.id == "663246792426782730")) {
+						var tmp1 = message.channel;
+						var tmp2 = tmp1 != null ? tmp1 : null;
+						tmp = (tmp2 != null ? tmp2.id : null) == "1311129828069740604";
+					} else {
+						tmp = true;
+					}
+					if(tmp) {
 						continue;
 					}
 					var tracker = [this.tracking.h[limit[0].user_id]];
@@ -11608,7 +11615,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 							};
 						})(tracker,limit),(function() {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 77, className : "commands.mod.RateLimit", methodName : "update"});
+								haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 78, className : "commands.mod.RateLimit", methodName : "update"});
 							};
 						})());
 					} else {
@@ -11640,7 +11647,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 					};
 				})(tracker1,limit1),(function() {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 103, className : "commands.mod.RateLimit", methodName : "update"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 104, className : "commands.mod.RateLimit", methodName : "update"});
 					};
 				})());
 			}
@@ -11649,7 +11656,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 	,updateLimit: function(limit) {
 		var e = database_DBEvents.Update("rate_limit",limit.get_record(),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("user_id")),QueryExpr.QueryValue(limit.user_id)),function(response) {
 			if(response._hx_index != 4) {
-				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 114, className : "commands.mod.RateLimit", methodName : "updateLimit"});
+				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 115, className : "commands.mod.RateLimit", methodName : "updateLimit"});
 			}
 		});
 		var entity = util_EcsTools.get_universe().createEntity();
@@ -11666,10 +11673,10 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 		if(!Object.prototype.hasOwnProperty.call(this.tracking.h,obj.user_id)) {
 			Main.client.guilds.cache.get(Main.guild_id).members.fetch(obj.user_id).then(function(member) {
 				tracker = { member : member, counter : 1, last_message : -1};
-				haxe_Log.trace("Added " + obj.user_tag + " to list",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 131, className : "commands.mod.RateLimit", methodName : "setTracker"});
+				haxe_Log.trace("Added " + obj.user_tag + " to list",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 132, className : "commands.mod.RateLimit", methodName : "setTracker"});
 				_gthis.tracking.h[obj.user_id] = tracker;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 133, className : "commands.mod.RateLimit", methodName : "setTracker"});
+				haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 134, className : "commands.mod.RateLimit", methodName : "setTracker"});
 			});
 		}
 	}
@@ -11690,15 +11697,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 					var key = user.id;
 					var value = database_types_DBRateLimit.fromRecord(response.data);
 					this1.h[key] = value;
-					haxe_Log.trace("Inserted " + user.tag + " rate limit",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 150, className : "commands.mod.RateLimit", methodName : "run"});
+					haxe_Log.trace("Inserted " + user.tag + " rate limit",{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 151, className : "commands.mod.RateLimit", methodName : "run"});
 					interaction.reply({ content : "<@" + user.id + "> has been rate limited"}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 153, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 154, className : "commands.mod.RateLimit", methodName : "run"});
 					});
 				} else {
 					interaction.reply({ ephemeral : true, content : "An error occured, check logs"}).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 158, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 159, className : "commands.mod.RateLimit", methodName : "run"});
 					});
-					haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 159, className : "commands.mod.RateLimit", methodName : "run"});
+					haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 160, className : "commands.mod.RateLimit", methodName : "run"});
 				}
 			});
 			var entity = util_EcsTools.get_universe().createEntity();
@@ -11725,15 +11732,15 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 						if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
 							delete(_this.h[key]);
 						}
-						haxe_Log.trace("removed slow mode from " + user1.tag,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 171, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace("removed slow mode from " + user1.tag,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 172, className : "commands.mod.RateLimit", methodName : "run"});
 						interaction.reply({ content : "Slow mode has been removed for <@" + user1.id + ">"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 174, className : "commands.mod.RateLimit", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 175, className : "commands.mod.RateLimit", methodName : "run"});
 						});
 					} else {
 						interaction.reply({ ephemeral : true, content : "An error occured, check logs"}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 179, className : "commands.mod.RateLimit", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 180, className : "commands.mod.RateLimit", methodName : "run"});
 						});
-						haxe_Log.trace(resp,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 180, className : "commands.mod.RateLimit", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 181, className : "commands.mod.RateLimit", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();

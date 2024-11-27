@@ -62,7 +62,8 @@ class RateLimit extends CommandBase {
 					for (limit in limits) {
 						if (message.author.id != limit.user_id
 							|| limit.silenced > -1
-							|| message.channel.asType0.id == "663246792426782730") {
+							|| message.channel.asType0.id == "663246792426782730"
+							|| message.channel?.asType3?.id == "1311129828069740604") {
 							continue;
 						}
 

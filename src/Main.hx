@@ -118,7 +118,7 @@ class Main {
 						Emoji,
 						Haxelib,
 						Hi, Boop,
-						Run2,
+						//Run2,
 						Everyone,
 						Roundup,
 						RoundupRoundup,
@@ -331,7 +331,9 @@ class Main {
 				return;
 			}
 
-			trace(interaction.isAutocomplete());
+			if(interaction.isAutocomplete()) {
+				trace(Json.stringify(interaction));
+			}
 			if (!interaction.isCommand() && !interaction.isAutocomplete()
 				&& !interaction.isChatInputCommand()) {
 				return;
