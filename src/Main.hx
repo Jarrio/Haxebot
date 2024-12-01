@@ -332,7 +332,7 @@ class Main {
 			}
 
 			if(interaction.isAutocomplete()) {
-				trace(Json.stringify(interaction));
+				trace(interaction);
 			}
 			if (!interaction.isCommand() && !interaction.isAutocomplete()
 				&& !interaction.isChatInputCommand()) {

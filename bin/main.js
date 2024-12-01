@@ -1912,7 +1912,7 @@ Main.start = function() {
 			return;
 		}
 		if(interaction.isAutocomplete()) {
-			haxe_Log.trace(JSON.stringify(interaction),{ fileName : "src/Main.hx", lineNumber : 335, className : "Main", methodName : "start"});
+			haxe_Log.trace(interaction,{ fileName : "src/Main.hx", lineNumber : 335, className : "Main", methodName : "start"});
 		}
 		if(!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 			return;
