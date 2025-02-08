@@ -112,7 +112,7 @@ class Main {
 				},
 				{
 					name: 'testing',
-					enabled: #if block true #else false #end,
+					enabled: #if block false #else false #end,
 					systems: [
 						DeleteProject,
 						Emoji,
@@ -121,9 +121,7 @@ class Main {
 						VoiceChatBridge,
 						//Run2,
 						Everyone,
-						Roundup,
-						RoundupRoundup,
-						PinMessageInfo, Tracker, Quote, Snippet, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						PinMessageInfo, Quote, Snippet, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
 				{
 					name: 'main',
@@ -215,6 +213,10 @@ class Main {
 		client.once('ready', (clients) -> {
 			trace('Ready!');
 			Main.client = cast clients[0];
+			
+			#if block
+			universe.getPhase('testing').enable();
+			#end
 			connected = true;
 
 			var rest = new REST({version: '9'}).setToken(discord.token);
@@ -511,6 +513,9 @@ class Main {
 	}
 
 	static public function updateState(field:String, value:Dynamic) {
+		#if block
+		File.saveContent('./config/state.json', Json.stringify(state));
+		#else
 		var record = new Record();
 		record.field('key', field);
 		record.field('value', value);
@@ -524,15 +529,6 @@ class Main {
 			}
 		});
 		universe.setComponents(universe.createEntity(), e);
-		return;
-		#if !block
-		var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
-		Firestore.updateDoc(doc, field, value).then(null, function(err) {
-			trace(err);
-			Browser.console.dir(err);
-		});
-		#else
-			File.saveContent('./config/state.json', Json.stringify(state));
 		#end
 	}
 

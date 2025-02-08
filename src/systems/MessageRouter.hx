@@ -49,7 +49,6 @@ class MessageRouter extends System {
 
 	function publicThreadChannel(message:Message) {
 		if (message.content.startsWith("[showcase]")) {
-			trace('Author: ${message.author.username}');
 			EcsTools.set(CommandForward.showcase, message);
 		}
 		EcsTools.set(CommandForward.thread_count, message);
