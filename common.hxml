@@ -1,7 +1,6 @@
 -cp src
 -D analyzer-optimize
 --library safety
---library vm2
 --library node-html-parser
 --library aidan-ecs
 --library hxnodejs
@@ -13,6 +12,9 @@
 --library db-mysql
 --library hx4compat
 --debug
+-D js-source-map
+-D source-map
+-D fail-fast
 #-D keep-inline-positions
 -D ecs.no_debug_output
 -D ecs.static_loading

@@ -9,6 +9,9 @@ import components.TextCommand;
 class MessageRouter extends System {
 	@:fastFamily var messages:{command:CommandForward, message:Message};
 
+	final voicechat = #if block "714201892959289500" #else "220626116627529728" #end;
+	final voice = #if block "416069724657418244" #else "198219256687493120" #end;
+
 	override function update(_) {
 		iterate(messages, (entity) -> {
 			if (command != CommandForward.new_message) {
@@ -20,6 +23,15 @@ class MessageRouter extends System {
 			EcsTools.set(CommandForward.rate_limit, message);
 			EcsTools.set(CommandForward.scam_prevention, message);
 			EcsTools.set(CommandForward.keyword_tracker, message);
+
+			if (channel.id == voicechat){
+				EcsTools.set(CommandForward.voice_chat_bridge, message);
+			}
+
+
+			if (channel.id == voice){
+				EcsTools.set(CommandForward.voice_channel_bridge, message);
+			}
 
 			if (channel.id == "1234544675264925788") {
 				EcsTools.set(CommandForward.suggestion_box, message);

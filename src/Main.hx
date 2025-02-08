@@ -118,6 +118,7 @@ class Main {
 						Emoji,
 						Haxelib,
 						Hi, Boop,
+						VoiceChatBridge,
 						//Run2,
 						Everyone,
 						Roundup,
@@ -128,6 +129,7 @@ class Main {
 					name: 'main',
 					enabled: #if block false #else true #end,
 					systems: [
+						VoiceChatBridge,
 						DeleteProject,
 						Haxelib,
 						Emoji,
@@ -684,6 +686,14 @@ typedef TKeys = {
 	var mysql:TMysqlConfig;
 	var haxeip:String;
 	var haxelib:String;
+	var hooks:TWebhooks;
+	var debug_hooks:TWebhooks;
+}
+
+typedef TWebhooks = {
+	var showcase:String;
+	var voice_channel:String;
+	var voice_text_channel:String;
 }
 
 typedef TMysqlConfig = {
@@ -773,6 +783,8 @@ enum abstract CommandForward(String) from String {
 	var showcase_agree;
 	var showcase_disagree;
 	var showcase_message;
+	var voice_chat_bridge;
+	var voice_channel_bridge;
 	var quote_set;
 	var quote_edit;
 	var code_paste;

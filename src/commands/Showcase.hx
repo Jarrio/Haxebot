@@ -32,6 +32,7 @@ class Showcase extends CommandBase {
 		var hook = Main.keys.showcase_hook;
 		#if block
 		hook = Main.keys.showcase_hook_debug;
+		return;
 		#end
 		this.webhook = new WebhookClient({url: hook});
 	}
@@ -102,10 +103,7 @@ class Showcase extends CommandBase {
 						arr.push(a);
 						trace(a);
 					}
-					var name = message.author.username;
-					if (message.member.nickname != null && message.member.nickname.length > 0) {
-						name = message.member.nickname;
-					}
+					var name = message.author.displayName;
 
 					var cont = () -> this.webhook.send({
 						content: '***Continue the conversation at - <#${thread.id}>***',
