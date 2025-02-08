@@ -112,7 +112,7 @@ class Main {
 				},
 				{
 					name: 'testing',
-					enabled: #if block false #else false #end,
+					enabled: false,
 					systems: [
 						DeleteProject,
 						Emoji,
@@ -125,7 +125,7 @@ class Main {
 				},
 				{
 					name: 'main',
-					enabled: #if block false #else true #end,
+					enabled: false,
 					systems: [
 						VoiceChatBridge,
 						DeleteProject,
@@ -216,6 +216,10 @@ class Main {
 			
 			#if block
 			universe.getPhase('testing').enable();
+			#end
+
+			#if !block
+			universe.getPhase('main').enable();
 			#end
 			connected = true;
 
