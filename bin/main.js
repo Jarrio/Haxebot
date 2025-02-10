@@ -11462,8 +11462,16 @@ commands_VoiceChatBridge.prototype = $extend(systems_CommandBase.prototype,{
 			var entity = _set.getDense(_g_idx--);
 			var cmd = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
 			var message = [this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity)];
+			var files = [];
+			var jsIterator = message[0].attachments.values();
+			var _g_lastStep = jsIterator.next();
+			while(!_g_lastStep.done) {
+				var v = _g_lastStep.value;
+				_g_lastStep = jsIterator.next();
+				files.push(v);
+			}
 			var name = message[0].author.displayName;
-			var msg = [{ content : message[0].content, username : name, avatarURL : message[0].author.avatarURL(), attachments : message[0].attachments, allowedMentions : { users : []}}];
+			var msg = [{ content : message[0].content, username : name, avatarURL : message[0].author.avatarURL(), files : files, allowedMentions : { users : []}}];
 			msg[0].allowedMentions.users.length = 0;
 			switch(cmd) {
 			case "voice_channel_bridge":
@@ -11487,32 +11495,32 @@ commands_VoiceChatBridge.prototype = $extend(systems_CommandBase.prototype,{
 										msg[0].allowedMentions.users.push(og_msg.author.id);
 										return _gthis.voice_text_chat.send(msg[0]).then(null,(function() {
 											return function(err) {
-												haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 106, className : "commands.VoiceChatBridge", methodName : "update"});
+												haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 111, className : "commands.VoiceChatBridge", methodName : "update"});
 											};
 										})());
 									};
 								})(msg),(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 107, className : "commands.VoiceChatBridge", methodName : "update"});
+										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 112, className : "commands.VoiceChatBridge", methodName : "update"});
 									};
 								})());
 							} else {
 								return _gthis.voice_text_chat.send(msg[0]).then(null,(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 109, className : "commands.VoiceChatBridge", methodName : "update"});
+										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 114, className : "commands.VoiceChatBridge", methodName : "update"});
 									};
 								})());
 							}
 						};
 					})(msg,message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 111, className : "commands.VoiceChatBridge", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 116, className : "commands.VoiceChatBridge", methodName : "update"});
 						};
 					})());
 				} else {
 					this.voice_text_chat.send(msg[0]).then(null,(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 113, className : "commands.VoiceChatBridge", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 118, className : "commands.VoiceChatBridge", methodName : "update"});
 						};
 					})());
 				}
@@ -11539,32 +11547,32 @@ commands_VoiceChatBridge.prototype = $extend(systems_CommandBase.prototype,{
 										msg[0].allowedMentions.users.push(og_msg.author.id);
 										return _gthis.voice_channel_chat.send(msg[0]).then(null,(function() {
 											return function(err) {
-												haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 80, className : "commands.VoiceChatBridge", methodName : "update"});
+												haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 85, className : "commands.VoiceChatBridge", methodName : "update"});
 											};
 										})());
 									};
 								})(msg),(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 81, className : "commands.VoiceChatBridge", methodName : "update"});
+										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 86, className : "commands.VoiceChatBridge", methodName : "update"});
 									};
 								})());
 							} else {
 								return _gthis.voice_channel_chat.send(msg[0]).then(null,(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 83, className : "commands.VoiceChatBridge", methodName : "update"});
+										haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 88, className : "commands.VoiceChatBridge", methodName : "update"});
 									};
 								})());
 							}
 						};
 					})(msg,message),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 85, className : "commands.VoiceChatBridge", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 90, className : "commands.VoiceChatBridge", methodName : "update"});
 						};
 					})());
 				} else {
 					this.voice_channel_chat.send(msg[0]).then(null,(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 87, className : "commands.VoiceChatBridge", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/VoiceChatBridge.hx", lineNumber : 92, className : "commands.VoiceChatBridge", methodName : "update"});
 						};
 					})());
 				}

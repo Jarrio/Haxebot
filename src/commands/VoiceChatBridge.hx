@@ -44,17 +44,22 @@ class VoiceChatBridge extends CommandBase {
 			voice_channel = channel;
 		}, (err) -> trace(err));
 	}
-
+	
 	override function update(_:Float) {
 		super.update(_);
+		
 
 		iterate(messages, (entity) -> {
+			var files = [];
+			for (a in message.attachments) {
+				files.push(a);
+			}
 			var name = message.author.displayName;
 			var msg:MessageOptions = {
 				content: message.content,
 				username: name,
 				avatarURL: message.author.avatarURL(),
-				attachments: message.attachments,
+				files: files,
 				allowedMentions: {
 					users: []
 				}
