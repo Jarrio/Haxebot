@@ -48,7 +48,7 @@ enum CommandOptions {
 	QuoteDelete(name:String);
 	QuoteEdit(name:String);
 	QuoteCreate(name:String);
-
+	Rrannouncer(name:User);
 	EmojiGet(name:String, size:Null<String>);
 	EmojiRemove(name:String);
 	EmojiEdit(name:String);

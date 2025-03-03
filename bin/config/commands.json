@@ -488,6 +488,19 @@
 		]
 	},
 	{
+		"name": "rrannouncer",
+		"permissions": "supermod",
+		"description": "[Mod] Sets a user to be the one who does the @everyone ping for roundup rounudps",
+		"params": [
+			{
+				"name": "user",
+				"type": "user",
+				"description": "user to announce",
+				"required": true
+			}
+		]
+	},
+	{
 		"name": "social",
 		"permissions": "supermod",
 		"description": "[Mod] Add sources to social media scanner",

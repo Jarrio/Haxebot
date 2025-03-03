@@ -4,6 +4,7 @@ import haxe.PosInfos;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import ecs.System;
+import Main.TState;
 
 abstract class CommandBase extends System {
 	final has_subcommands:Bool = false;
@@ -30,7 +31,11 @@ abstract class CommandBase extends System {
 
 	abstract function run(command:Command, interaction:BaseCommandInteraction):Void;
 
+	public var state(get, never):TState;
+	function get_state() {
+		return Main.state;
+	}
+	
 	public var name(get, never):String;
-
 	abstract function get_name():String;
 }

@@ -114,12 +114,14 @@ class Main {
 					name: 'testing',
 					enabled: false,
 					systems: [
+						RoundupAnnouncer,
+						RoundupRoundup,
 						DeleteProject,
 						Emoji,
 						Haxelib,
 						Hi, Boop,
 						VoiceChatBridge,
-						//Run2,
+						Run2,
 						Everyone,
 						PinMessageInfo, Quote, Snippet, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
 				},
@@ -127,6 +129,7 @@ class Main {
 					name: 'main',
 					enabled: false,
 					systems: [
+						RoundupAnnouncer,
 						VoiceChatBridge,
 						DeleteProject,
 						Haxelib,
@@ -186,8 +189,10 @@ class Main {
 								state.roundup_roundup = value;
 							case 'snippet_tags':
 								state.snippet_tags = value;
+							case 'announcer':
+								state.announcer = value;
 							default:
-								trace(d.field('key'));
+								trace('WARNING: FIELD NOT MAPPED ' + d.field('key'));
 						}
 					}
 				default:
@@ -527,7 +532,7 @@ class Main {
 		var e = DBEvents.Update('state', record, Query.query($key = field), (response) -> {
 			switch(response) {
 				case Success(message, data):
-					trace('updated state');
+					trace('updated state field($field)');
 				default:
 					trace(response);
 			}
@@ -713,6 +718,10 @@ typedef TDiscordConfig = {
 typedef TState = {
 	@:optional var macros:Bool;
 	@:optional var twitter_since_id:String;
+	@:optional var announcer:{
+		var user:String;
+		var id:String;
+	};
 	var snippet_tags:Array<String>;
 	var next_roundup:Int;
 	var roundup_roundup:TRoundup;

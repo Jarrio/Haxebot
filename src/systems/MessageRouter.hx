@@ -28,10 +28,11 @@ class MessageRouter extends System {
 				EcsTools.set(CommandForward.voice_chat_bridge, message);
 			}
 
-
+			
 			if (channel.id == voice){
 				EcsTools.set(CommandForward.voice_channel_bridge, message);
 			}
+			
 
 			if (channel.id == "1234544675264925788") {
 				EcsTools.set(CommandForward.suggestion_box, message);

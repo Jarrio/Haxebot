@@ -20,6 +20,7 @@ import components.Command;
 import systems.CommandDbBase;
 import Main.CommandForward;
 import discord_js.GuildScheduledEvent;
+import database.DBEvents;
 
 typedef RoundupEndEvent = {
 	var member:GuildMember;
@@ -42,10 +43,14 @@ class RoundupRoundup extends CommandDbBase {
 	var new_event_collector:ReactionCollector;
 	var end_event_collector:ReactionCollector;
 
+	var announcer:GuildMember;
+
 	final voice_channel_id = #if block "416069724657418244" #else "198219256687493120" #end;
 	final announcement_id = #if block "597067735771381771" #else "286485321925918721" #end;
 	final voice_text_id = #if block "597067735771381771" #else "220626116627529728" #end;
 	final event_role = #if block "<@&1114582456381747232>" #else "<@&1054432874473996408>" #end;
+
+	final announcer_role = #if block "1346192541141434511" #else "1346193522797187092" #end;
 
 	@:fastFamily var end_event:{data:RoundupEndEvent};
 	@:fastFamily var voice_update_events:{forward:CommandForward, old:VoiceState, updated:VoiceState};
@@ -101,7 +106,7 @@ class RoundupRoundup extends CommandDbBase {
 			this.guild.members.fetch({user: this.state.host, force: true}).then(function(member) {
 				this.host_m = member;
 				this.waiting = false;
-				trace('Roundup host obtained');
+				trace('Roundup host(${member?.user?.tag}) obtained');
 			}, (err) -> trace(err));
 		}
 
@@ -114,9 +119,54 @@ class RoundupRoundup extends CommandDbBase {
 			return;
 		}
 
+		this.checkAnnouncer();
 		this.handleEventUpdates();
 		this.handleVoiceEvents();
 		this.handleScheduledEvent();
+	}
+
+	var get_announcer = false;
+	var added_role = false;
+	var reminded:Bool = false;
+
+	function checkAnnouncer() {
+		var now = Date.now().getTime();
+		var event = event.scheduledStartTimestamp;
+
+		var diff = event - now;
+
+		if (Main.state.announcer == null) {
+			return;
+		}
+
+		if (!get_announcer && this.announcer == null) {
+			get_announcer = true;
+			Main.client.guilds.fetch(Main.discord.server_id).then((guild) -> {
+				guild.members.fetch(Main.state.announcer.id).then((member) -> {
+					this.announcer = member;
+					trace('Got announcer ${member.user.tag}');
+				}, (err) -> trace(err));
+			}, (err) -> trace(err));
+		}
+
+		if (this.announcer == null) {
+			return;
+		}
+
+		if (diff <= Duration.fromString('1hr') && !added_role) {
+			added_role = true;
+			announcer.roles.add(announcer_role).then(null, (err) -> trace(err));
+			trace('added role');
+		}
+
+		if (diff > Duration.fromString('15m')) {
+			return;
+		}
+
+		if (!reminded) {
+			reminded = true;
+			announcer.user.send('Haxe roundup is scheduled to start in 15minutes!').then(null, (err) -> trace(err));
+		}
 	}
 
 	function scheduleNewEvent() {
@@ -127,6 +177,16 @@ class RoundupRoundup extends CommandDbBase {
 		}
 		trace(this.host_m.user.tag);
 		waiting = true;
+		if (announcer != null) {
+			Main.updateState('announcer', null);
+			announcer.roles.remove(announcer_role).then(function(_) {
+				this.get_announcer = false;
+				this.added_role = false;
+				this.reminded = false;
+				this.announcer = null;
+			}, (err) -> trace(err));
+		}
+
 		var message = "Time to schedule a new roundup roundup! How many weeks until the next roundup roundup?\n";
 		var reactions = ['2️⃣', '3️⃣', '4️⃣', '5️⃣'];
 		host_contacted = true;
@@ -164,13 +224,12 @@ class RoundupRoundup extends CommandDbBase {
 						continue;
 					}
 					event.client.guilds.fetch({guild: Main.guild_id}).then(function(guild) {
-						guild.scheduledEvents.fetch(event.id)
-							.then(function(event:GuildScheduledEvent) {
-								this.event = (event);
-								handleEventStatus(event);
-								trace('Updated event: ${event.status}');
-								trace('New time: ${Date.fromTime(event.scheduledStartTimestamp)}');
-							}, (err) -> trace(err));
+						guild.scheduledEvents.fetch(event.id).then(function(event:GuildScheduledEvent) {
+							this.event = (event);
+							handleEventStatus(event);
+							trace('Updated event: ${event.status}');
+							trace('New time: ${Date.fromTime(event.scheduledStartTimestamp)}');
+						}, (err) -> trace(err));
 					}, (err) -> trace(err));
 
 				default:
@@ -185,17 +244,11 @@ class RoundupRoundup extends CommandDbBase {
 				this.scheduleNewEvent();
 			case Active:
 				if (state.announced || waiting) {
-					trace('here', state.announced, waiting);
 					return;
 				}
-				var mention = (state.event_ping >= 3) ? event_role : '@everyone';
+				var mention = (Main.state.announcer != null) ? '' : '@everyone';
 				var message = '$mention come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!';
-				if (state.event_ping >= 3) {
-					state.event_ping = 0;
-					message += '\n\nIf you received this event and want to opt out please go to <#663246792426782730> and type `/notify events`';
-				} else {
-					state.event_ping = state.event_ping + 1;
-				}
+
 				this.voice_text.send({
 					content: message,
 					allowedMentions: {
@@ -219,14 +272,10 @@ class RoundupRoundup extends CommandDbBase {
 					if (event != null && event.status == Active) {
 						var member = updated.member;
 						if (member != null && member.id == host && updated.channel == null) {
-							member.send(
-								'Hi <@$host>, it looks like you left the voice channel. Should I end the event?'
-							)
-								.then(function(message) {
-									var reactions = ["✅", "❎"];
-									end_event_collector = this.addCollection('1w', reactions,
-										message, endEventCollector);
-								}, (err) -> trace(err));
+							member.send('Hi <@$host>, it looks like you left the voice channel. Should I end the event?').then(function(message) {
+								var reactions = ["✅", "❎"];
+								end_event_collector = this.addCollection('1w', reactions, message, endEventCollector);
+							}, (err) -> trace(err));
 						}
 					}
 					universe.deleteEntity(entity);
@@ -307,20 +356,12 @@ class RoundupRoundup extends CommandDbBase {
 			this.state.event_id = event.id;
 			var time = 604800;
 			event.createInviteURL({maxAge: time, channel: voice_text_id}).then(function(url) {
-				this.voice_text.send(
-					{content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}
-				)
-					.then(null, (err) -> trace(err));
-				this.announcement.send(
-					{content: 'Get ready for the next roundup roundup :grin: \n$url'}
-				)
-					.then(null, (err) -> trace(err));
+				this.voice_text.send({content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}).then(null, (err) -> trace(err));
+				this.announcement.send({content: 'Get ready for the next roundup roundup :grin: \n$url'}).then(null, (err) -> trace(err));
 			}, (err) -> trace(err));
 			this.setState(state);
 			trace('Event setup!');
-			this.host_m.send(
-				'New roundup event scheduled for <t:${Math.round(event.scheduledStartTimestamp / 1000)}:R>'
-			)
+			this.host_m.send('New roundup event scheduled for <t:${Math.round(event.scheduledStartTimestamp / 1000)}:R>')
 				.then(null, (err) -> trace(err));
 		}, (err) -> trace(err));
 	}
@@ -354,8 +395,7 @@ class RoundupRoundup extends CommandDbBase {
 		});
 	}
 
-	function addCollection(time:String, emojis:Array<String>, message:Message,
-			on_collect:MessageReaction->User->Void,
+	function addCollection(time:String, emojis:Array<String>, message:Message, on_collect:MessageReaction->User->Void,
 			?on_end:Collection<String, MessageReaction>->String->Void) {
 		for (e in emojis) {
 			message.react(e).then(null, (err) -> trace(err));
@@ -368,6 +408,10 @@ class RoundupRoundup extends CommandDbBase {
 		}
 
 		return collector;
+	}
+
+	function confirmAnnouncer() {
+		var e = DBEvents.GetAllRecords('roundup_announcers', (response) -> {});
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {}
@@ -391,10 +435,7 @@ class RoundupRoundup extends CommandDbBase {
 			collector.stop('User responded');
 		});
 
-		collector.on(
-			'end',
-			(collected:Collection<String, MessageReaction>, reason:String) -> {}
-		);
+		collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {});
 	}
 
 	function get_name():String {
