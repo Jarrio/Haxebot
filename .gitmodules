@@ -31,3 +31,6 @@
 [submodule "haxe_modules/hx4compat"]
 	path = haxe_modules/hx4compat
 	url = https://github.com/haxefoundation/hx4compat
+[submodule "haxe_modules/libmysqlclient"]
+	path = haxe_modules/libmysqlclient
+	url = https://github.com/core-haxe/libmysqlclient
