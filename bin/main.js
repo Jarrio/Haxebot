@@ -10726,24 +10726,31 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				var db = null;
 				if(Object.prototype.hasOwnProperty.call(this.count.h,channel.id)) {
 					db = this.count.h[channel.id];
-					db.count += 1;
-					var e = database_DBEvents.Update("threadcount",db,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("threadid")),QueryExpr.QueryValue(channel.id)),function(resp) {
-						if(resp._hx_index != 4) {
-							haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 68, className : "commands.ThreadCount", methodName : "update"});
+					try {
+						db.count += 1;
+						var e = database_DBEvents.Update("threadcount",db,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("threadid")),QueryExpr.QueryValue(channel.id)),function(resp) {
+							if(resp._hx_index != 4) {
+								haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 69, className : "commands.ThreadCount", methodName : "update"});
+							}
+						});
+						var entity1 = util_EcsTools.get_universe().createEntity();
+						util_EcsTools.get_universe().components.set(entity1,2,e);
+						var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity1)];
+						var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+						if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+							ecsTmpFamily.add(entity1);
 						}
-					});
-					var entity1 = util_EcsTools.get_universe().createEntity();
-					util_EcsTools.get_universe().components.set(entity1,2,e);
-					var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity1)];
-					var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
-					if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
-						ecsTmpFamily.add(entity1);
+					} catch( _g ) {
+						var _g1 = haxe_Exception.caught(_g);
+						haxe_Log.trace(_g1,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 74, className : "commands.ThreadCount", methodName : "update"});
+						haxe_Log.trace(db,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 75, className : "commands.ThreadCount", methodName : "update"});
+						haxe_Log.trace(db.count,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 76, className : "commands.ThreadCount", methodName : "update"});
 					}
 				} else {
 					db = new database_types_DBThreadCount(channel.name,channel.id,1);
 					var e1 = database_DBEvents.Insert("threadcount",db,function(resp) {
 						if(resp._hx_index != 4) {
-							haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 77, className : "commands.ThreadCount", methodName : "update"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 83, className : "commands.ThreadCount", methodName : "update"});
 						}
 					});
 					var entity2 = util_EcsTools.get_universe().createEntity();
@@ -10775,10 +10782,10 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 			var _g_value = h[key];
 			this.arr.push({ thread : key, count : _g_value});
 		}
-		haxe_Log.trace(this.arr.length,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 102, className : "commands.ThreadCount", methodName : "loadToDB"});
+		haxe_Log.trace(this.arr.length,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 108, className : "commands.ThreadCount", methodName : "loadToDB"});
 		var timer = new haxe_Timer(200);
 		timer.run = function() {
-			haxe_Log.trace(_gthis.i,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 105, className : "commands.ThreadCount", methodName : "loadToDB"});
+			haxe_Log.trace(_gthis.i,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 111, className : "commands.ThreadCount", methodName : "loadToDB"});
 			if(_gthis.i > _gthis.arr.length) {
 				timer.stop();
 				return;
@@ -10794,7 +10801,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var r = new database_types_DBThreadCount(channel.name,data.thread,data.count);
 				var e = database_DBEvents.Insert("threadcount",r,function(resp) {
-					haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 121, className : "commands.ThreadCount", methodName : "loadToDB"});
+					haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 127, className : "commands.ThreadCount", methodName : "loadToDB"});
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
 				util_EcsTools.get_universe().components.set(entity,2,e);
@@ -10805,7 +10812,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				_gthis.i++;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 125, className : "commands.ThreadCount", methodName : "loadToDB"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 131, className : "commands.ThreadCount", methodName : "loadToDB"});
 			});
 			_gthis.i++;
 		};
@@ -10814,7 +10821,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 		if(Object.prototype.hasOwnProperty.call(this.count.h,interaction.channelId)) {
 			var count = this.count.h[interaction.channelId];
 			interaction.reply({ content : "This thread has " + Std.string(count) + " messages"}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 134, className : "commands.ThreadCount", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 140, className : "commands.ThreadCount", methodName : "run"});
 				$global.console.dir(err);
 			});
 		} else {
@@ -10827,7 +10834,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				content = "This is not a thread :angry:";
 			}
 			interaction.reply({ content : content}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 146, className : "commands.ThreadCount", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 152, className : "commands.ThreadCount", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}

@@ -21,7 +21,7 @@ class ThreadCount extends CommandBase {
 	final path = "./config/threadcount.json";
 
 	override function onEnabled() {
-		//loadToDB();
+		// loadToDB();
 		if (FileSystem.exists(path)) {
 			count = Json.parse(File.getContent(path));
 		}
@@ -61,14 +61,20 @@ class ThreadCount extends CommandBase {
 					var db = null;
 					if (this.count.exists(channel.id)) {
 						db = this.count.get(channel.id);
-						db.count += 1;
-						var e = DBEvents.Update('threadcount', db, query($threadid == channel.id), (resp) -> {
-							switch (resp) {
-								case Success(_, _):
-								default: trace(resp);
-							}
-						});
-						EcsTools.set(e);
+						try {
+							db.count += 1;
+							var e = DBEvents.Update('threadcount', db, query($threadid == channel.id), (resp) -> {
+								switch (resp) {
+									case Success(_, _):
+									default: trace(resp);
+								}
+							});
+							EcsTools.set(e);
+						} catch (e ) {
+							trace(e);
+							trace(db);
+							trace(db.count);
+						}
 					} else {
 						db = new DBThreadCount(channel.name, channel.id, 1);
 						var e = DBEvents.Insert('threadcount', db, (resp) -> {
