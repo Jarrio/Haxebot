@@ -16,9 +16,9 @@ class RoundupAnnouncer extends CommandBase {
 						user: user.tag
 					}
 
-					//Main.state.announcer = obj;
-					Main.updateState('announcer', obj);
-					
+					Main.state.announcer = obj;
+					Main.updateState('announcer');
+
 					user.send({
 						content: "
 					You will be our roundup roundup announcer for this next event :) \n 

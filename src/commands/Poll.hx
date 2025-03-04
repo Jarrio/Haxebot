@@ -1,4 +1,5 @@
 package commands;
+
 import commands.types.Duration;
 import discord_js.TextChannel;
 import js.Browser;
@@ -21,18 +22,16 @@ class Poll extends CommandDbBase {
 	override function update(_:Float) {
 		super.update(_);
 
-		if (!checked && Main.connected) {
+		if (!checked && Main.discord_connected) {
 			checked = true;
 
-			var query:FQuery<PollData> = Firestore.query(collection(this.db,
-				'discord/polls/entries'));
+			var query:FQuery<PollData> = Firestore.query(collection(this.db, 'discord/polls/entries'));
 			Firestore.getDocs(query).then(function(res) {
 				var now = Date.now().getTime();
 				for (doc in res.docs) {
 					var data = doc.data();
 					if (!data.active) {
-						var four_weeks = data.timestamp.toMillis()
-							+ (PollTime.two_weeks : Float) * 2;
+						var four_weeks = data.timestamp.toMillis() + (PollTime.two_weeks : Float) * 2;
 						if (now - four_weeks < 0) {
 							continue;
 						}
@@ -115,9 +114,7 @@ class Poll extends CommandDbBase {
 
 				var embed = new MessageEmbed();
 
-				embed.setDescription(
-					'**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${votes}** $vtxt per user.'
-				);
+				embed.setDescription('**Question**\n$question\n\n**Options**\n$body\n**Settings**\n**${votes}** $vtxt per user.');
 				embed.setFooter({text: 'Poll will run for ${length}.'});
 
 				var settings = new Map();
@@ -144,26 +141,23 @@ class Poll extends CommandDbBase {
 						}
 
 						Firestore.runTransaction(this.db, function(transaction) {
-							return transaction.get(doc(this.db, 'discord/polls'))
-								.then(function(doc) {
-									if (!doc.exists()) {
-										return {id: -1};
-									}
-									var data:{id:Int} = (doc.data());
-									data.id = data.id + 1;
-									transaction.update(doc.ref, data);
-									return data;
-								});
+							return transaction.get(doc(this.db, 'discord/polls')).then(function(doc) {
+								if (!doc.exists()) {
+									return {id: -1};
+								}
+								var data:{id:Int} = (doc.data());
+								data.id = data.id + 1;
+								transaction.update(doc.ref, data);
+								return data;
+							});
 						}).then(function(value) {
 							data.id = value.id;
-							Firestore.addDoc(Firestore.collection(this.db,
-								'discord/polls/entries'), data)
-								.then(function(_) {
-									this.addCollector(message, data);
-								}, function(err) {
-									trace(err);
-									Browser.console.dir(err);
-								});
+							Firestore.addDoc(Firestore.collection(this.db, 'discord/polls/entries'), data).then(function(_) {
+								this.addCollector(message, data);
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
 						}, function(err) {
 							trace(err);
 							Browser.console.dir(err);
@@ -195,47 +189,43 @@ class Poll extends CommandDbBase {
 
 		collector.on('collect', (reaction:MessageReaction, user:User) -> {});
 
-		collector.on(
-			'end',
-			(collected:Collection<String, MessageReaction>, reason:String) -> {
-				var embed = new MessageEmbed();
-				var body = '**Question**\n${data.question}\n**Results**\n';
+		collector.on('end', (collected:Collection<String, MessageReaction>, reason:String) -> {
+			var embed = new MessageEmbed();
+			var body = '**Question**\n${data.question}\n**Results**\n';
 
-				var options = data.answers;
+			var options = data.answers;
 
-				var sort = message.reactions.cache.sort(function(a, b, _, _) {
-					return b.count - a.count;
-				});
+			var sort = message.reactions.cache.sort(function(a, b, _, _) {
+				return b.count - a.count;
+			});
 
-				for (k => v in sort) {
-					var col = sort.get(k);
-					var ans = options.get(k);
-					var count = 0;
+			for (k => v in sort) {
+				var col = sort.get(k);
+				var ans = options.get(k);
+				var count = 0;
 
-					if (col != null) {
-						count = v.count;
-					}
-					
-					body += '$k / $ans /  **${count - 1}** \n';
+				if (col != null) {
+					count = v.count;
 				}
 
-				body += '\n*Poll ran for ${data.duration}*';
-
-				body += '\n*Posted: <t:${Math.round(message.createdTimestamp / 1000)}:R>*';
-				embed.setDescription(body);
-
-				message.reply({content: '<@${data.author}>', embeds: [embed]}).then(function(_) {
-					var query = Firestore.query(collection(this.db, 'discord/polls/entries'),
-						where('id', EQUAL_TO, data.id));
-					Firestore.getDocs(query).then(function(res) {
-						if (res.docs.length == 0) {
-							return;
-						}
-						Firestore.updateDoc(res.docs[0].ref, 'active', false);
-					});
-				});
+				body += '$k / $ans /  **${count - 1}** \n';
 			}
-		);
+
+			body += '\n*Poll ran for ${data.duration}*';
+
+			body += '\n*Posted: <t:${Math.round(message.createdTimestamp / 1000)}:R>*';
+			embed.setDescription(body);
+
+			message.reply({content: '<@${data.author}>', embeds: [embed]}).then(function(_) {
+				var query = Firestore.query(collection(this.db, 'discord/polls/entries'), where('id', EQUAL_TO, data.id));
+				Firestore.getDocs(query).then(function(res) {
+					if (res.docs.length == 0) {
+						return;
+					}
+					Firestore.updateDoc(res.docs[0].ref, 'active', false);
+				});
+			});
+		});
 	}
 
 	function get_name():String {

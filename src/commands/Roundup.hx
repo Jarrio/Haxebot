@@ -225,7 +225,8 @@ class Roundup extends CommandBase {
 
 	inline function set_roundup(value:Int) {
 		Main.state.next_roundup = value;
-		Main.updateState('next_roundup', Json.stringify(value));	
+		
+		Main.updateState('next_roundup');
 
 		return value;
 	}

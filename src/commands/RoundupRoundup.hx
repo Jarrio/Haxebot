@@ -455,8 +455,9 @@ class RoundupRoundup extends CommandDbBase {
 	}
 
 	function setState(value:TRoundup) {
-		//Main.state.roundup_roundup = value;
-		Main.updateState('roundup_roundup', value);
+		Main.state.roundup_roundup = value;
+		Main.updateState('roundup_roundup');
+		trace('here');
 	}
 
 	function get_started() {
