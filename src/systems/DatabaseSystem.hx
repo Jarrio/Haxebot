@@ -177,7 +177,7 @@ class DatabaseSystem extends System {
 						if (result != null) {
 							callback(Record(result.data));
 						} else {
-							callback(Error('No data', result.data));
+							callback(Empty);
 						}
 					}, (err) -> trace(err));
 				case GetLastRecord(table, where, value, column, callback):

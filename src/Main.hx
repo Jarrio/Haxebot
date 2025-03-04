@@ -121,6 +121,8 @@ abstract NewState(Map<String, DBState>) {
 }
 
 class Main {
+	public static var app:FirebaseApp;
+	public static var auth:firebase.web.auth.User;
 	public static var logged_in:Bool = false;
 	public static var client:Client;
 	public static var registered_commands:Map<String, ApplicationCommand> = [];
@@ -592,6 +594,22 @@ class Main {
 		if (keys == null || discord.token == null) {
 			throw('Enter your discord auth token.');
 		}
+
+		Main.app = FirebaseApp.initializeApp(keys.firebase);
+		Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password).then(function(res) {
+			trace('logged in');
+			var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
+			Firestore.onSnapshot(doc, function(resp) {
+				#if !block
+				admin = resp.data();
+				#end
+				Main.auth = res.user;
+				Main.logged_in = true;
+			}, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
+		});
 
 		start();
 	}

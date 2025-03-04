@@ -673,6 +673,8 @@ var Main = function() { };
 $hxClasses["Main"] = Main;
 Main.__name__ = "Main";
 Main.__properties__ = {get_discord:"get_discord"};
+Main.app = null;
+Main.auth = null;
 Main.client = null;
 Main.keys = null;
 Main.command_file = null;
@@ -1047,10 +1049,10 @@ Main.startup = function() {
 		return;
 	}
 	if(!Main.got_state && !Main.startup_request) {
-		haxe_Log.trace("Requested state",{ fileName : "src/Main.hx", lineNumber : 271, className : "Main", methodName : "startup"});
+		haxe_Log.trace("Requested state",{ fileName : "src/Main.hx", lineNumber : 273, className : "Main", methodName : "startup"});
 		Main.startup_request = true;
 		var e = database_DBEvents.GetAllRecords("state",function(response) {
-			if(response._hx_index == 1) {
+			if(response._hx_index == 2) {
 				var d = response.data.iterator();
 				while(d.hasNext()) {
 					var d1 = d.next();
@@ -1058,14 +1060,14 @@ Main.startup = function() {
 					NewState.set(Main.state,d1.field("key"),database_types_DBState.fromRecord(d1));
 					var e = haxe_Log.trace;
 					var tmp = d1.field("key");
-					e("got " + (tmp == null ? "null" : Std.string(tmp)),{ fileName : "src/Main.hx", lineNumber : 283, className : "Main", methodName : "startup"});
+					e("got " + (tmp == null ? "null" : Std.string(tmp)),{ fileName : "src/Main.hx", lineNumber : 285, className : "Main", methodName : "startup"});
 				}
-				haxe_Log.trace("State set",{ fileName : "src/Main.hx", lineNumber : 285, className : "Main", methodName : "startup"});
+				haxe_Log.trace("State set",{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "startup"});
 				Main.got_state = true;
 				Main.startup_request = false;
 				Main.discordClient();
 			} else {
-				haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 290, className : "Main", methodName : "startup"});
+				haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "startup"});
 			}
 		});
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1082,11 +1084,11 @@ Main.startup = function() {
 	var messages = Main.universe.getPhase("messages");
 	if(!messages.enabled) {
 		messages.enable();
-		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 303, className : "Main", methodName : "startup"});
+		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 305, className : "Main", methodName : "startup"});
 	}
 	if(Main.commands_active) {
 		Main.universe.getPhase("main").enable();
-		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 315, className : "Main", methodName : "startup"});
+		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 317, className : "Main", methodName : "startup"});
 	}
 	if(Main.universe.getPhase("testing").enabled || Main.universe.getPhase("main").enabled) {
 		Main.startup_timer.stop();
@@ -1098,7 +1100,7 @@ Main.discordClient = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 339, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 341, className : "Main", methodName : "discordClient"});
 		Main.client = clients[0];
 		Main.discord_connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1109,15 +1111,15 @@ Main.discordClient = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 348, className : "Main", methodName : "discordClient"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 350, className : "Main", methodName : "discordClient"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 354, className : "Main", methodName : "discordClient"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 356, className : "Main", methodName : "discordClient"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 360, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 362, className : "Main", methodName : "discordClient"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,5,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,7,member);
@@ -1276,8 +1278,8 @@ Main.discordClient = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 388, className : "Main", methodName : "discordClient"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 389, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 390, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 391, className : "Main", methodName : "discordClient"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1652,7 +1654,7 @@ Main.discordClient = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 426, className : "Main", methodName : "discordClient"});
+				haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 428, className : "Main", methodName : "discordClient"});
 			}
 			return;
 		}
@@ -1849,19 +1851,32 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 581, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 583, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
 		Main.keys = JSON.parse(js_node_Fs.readFileSync("./config/keys.json",{ encoding : "utf8"}));
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
-		var _g1 = haxe_Exception.caught(_g);
-		haxe_Log.trace(_g1.get_message(),{ fileName : "src/Main.hx", lineNumber : 589, className : "Main", methodName : "main"});
+		var e = haxe_Exception.caught(_g);
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 591, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
+	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
+	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 600, className : "Main", methodName : "main"});
+		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
+		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
+			CommandPermission.admin = resp.data();
+			Main.auth = res.user;
+			Main.logged_in = true;
+		},function(err) {
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 609, className : "Main", methodName : "main"});
+			$global.console.dir(err);
+		});
+	});
 	Main.start();
 };
 Main.updateState = function(field,value) {
@@ -1869,11 +1884,11 @@ Main.updateState = function(field,value) {
 		NewState.set(Main.state,field,value);
 	}
 	var e = database_DBEvents.Update("state",NewState.get(Main.state,field),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("key")),QueryExpr.QueryValue(field)),function(response) {
-		if(response._hx_index == 3) {
-			haxe_Log.trace("updated state field(" + field + ")",{ fileName : "src/Main.hx", lineNumber : 608, className : "Main", methodName : "updateState"});
+		if(response._hx_index == 4) {
+			haxe_Log.trace("updated state field(" + field + ")",{ fileName : "src/Main.hx", lineNumber : 626, className : "Main", methodName : "updateState"});
 		} else {
-			haxe_Log.trace(NewState.get(Main.state,field),{ fileName : "src/Main.hx", lineNumber : 610, className : "Main", methodName : "updateState"});
-			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 611, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(NewState.get(Main.state,field),{ fileName : "src/Main.hx", lineNumber : 628, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 629, className : "Main", methodName : "updateState"});
 		}
 	});
 	var _ecsTmpEntity = Main.universe.createEntity();
@@ -4704,7 +4719,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 				emoji[0].description = interaction[0].fields.getTextInputValue("description");
 				var e = database_DBEvents.GetRecord("emojis",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("url")),QueryExpr.QueryValue(url)),(function(emoji,interaction) {
 					return function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data != null && data.field("name") != emoji[0].name) {
 								var interaction1 = interaction[0];
@@ -4720,7 +4735,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							emoji[0].name = _gthis.get_name().toLowerCase();
 							var e = database_DBEvents.Update("emojis",emoji[0],QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(emoji[0].id)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(emoji[0].author_id))),(function(interaction) {
 								return function(resp) {
-									if(resp._hx_index == 3) {
+									if(resp._hx_index == 4) {
 										var message = resp.message;
 										haxe_Log.trace("" + message,{ fileName : "src/commands/Emoji.hx", lineNumber : 46, className : "commands.Emoji", methodName : "update"});
 										interaction[0].reply("Emoji updated!").then(null,(function() {
@@ -4787,7 +4802,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			var e = database_DBEvents.GetRecord("emojis",QueryExpr.QueryBinop(QBinop.QOpBoolOr,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("name")),QueryExpr.QueryValue(name)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name))),function(resp) {
-				if(resp._hx_index == 0) {
+				if(resp._hx_index == 1) {
 					var data = resp.data;
 					if(data != null) {
 						var emoji = database_types_DBEmoji.fromRecord(data);
@@ -4836,12 +4851,12 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 			record.field("id",name);
 			var e = database_DBEvents.DeleteRecord("emojis",record,function(resp) {
 				switch(resp._hx_index) {
-				case 3:
+				case 4:
 					interaction.reply("Emoji " + name + " deleted!").then(null,function(err) {
 						haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 148, className : "commands.Emoji", methodName : "run"});
 					});
 					break;
-				case 4:
+				case 5:
 					var message = resp.message;
 					haxe_Log.trace(message,{ fileName : "src/commands/Emoji.hx", lineNumber : 150, className : "commands.Emoji", methodName : "run"});
 					interaction.reply({ ephemeral : true, content : "Cannot delete this emoji"}).then(null,function(err) {
@@ -4866,7 +4881,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 			var name1 = _g.name;
 			if(interaction.isAutocomplete()) {
 				var e = database_DBEvents.SearchBy("emojis","name",name1,"author_id",interaction.user.id,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						var arr = [];
 						var r = data.iterator();
@@ -4892,7 +4907,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			var e = database_DBEvents.GetRecord("emojis",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name1)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(interaction.user.id))),function(resp) {
-				if(resp._hx_index == 0) {
+				if(resp._hx_index == 1) {
 					var data = resp.data;
 					if(data == null) {
 						interaction.reply("Could not find emoji or you were not the author of the emoji specified");
@@ -4933,7 +4948,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 				return;
 			}
 			var e = database_DBEvents.GetRecord("emojis",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("url")),QueryExpr.QueryValue(url)),function(resp) {
-				if(resp._hx_index == 0) {
+				if(resp._hx_index == 1) {
 					var data = resp.data;
 					if(data != null) {
 						var emoji = database_types_DBEmoji.fromRecord(data);
@@ -4950,7 +4965,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 						return;
 					}
 					var e = database_DBEvents.GetRecords("emojis",QueryExpr.QueryBinop(QBinop.QOpBoolOr,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("name")),QueryExpr.QueryValue(name1)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name1))),function(resp) {
-						if(resp._hx_index == 1) {
+						if(resp._hx_index == 2) {
 							var data = resp.data;
 							if(data.get_length() > 0) {
 								interaction.reply({ ephemeral : true, content : "An emoji exists with this name already"}).then(null,function(err) {
@@ -4962,7 +4977,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 							var aid = interaction.user.id;
 							var emoji = new database_types_DBEmoji(aid,aname,name1,url,description);
 							var e = database_DBEvents.Insert("emojis",emoji,function(resp) {
-								if(resp._hx_index == 3) {
+								if(resp._hx_index == 4) {
 									interaction.reply({ content : "Emoji " + name1 + " has been created"}).then(null,function(err) {
 										haxe_Log.trace(err,{ fileName : "src/commands/Emoji.hx", lineNumber : 223, className : "commands.Emoji", methodName : "run"});
 									});
@@ -5042,7 +5057,7 @@ commands_Emoji.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,search: function(name,callback) {
 		var e = database_DBEvents.Search("emojis","name",name,function(resp) {
-			if(resp._hx_index == 1) {
+			if(resp._hx_index == 2) {
 				var arr = [];
 				var r = resp.data.iterator();
 				while(r.hasNext()) {
@@ -6033,7 +6048,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				quote[0].description = interaction[0].fields.getTextInputValue("description");
 				var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("title")),QueryExpr.QueryValue(title[0])),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(interaction[0].user.id))),(function(title,quote,interaction) {
 					return function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							haxe_Log.trace(title[0],{ fileName : "src/commands/Quote.hx", lineNumber : 74, className : "commands.Quote", methodName : "update"});
 							haxe_Log.trace(quote[0].title,{ fileName : "src/commands/Quote.hx", lineNumber : 75, className : "commands.Quote", methodName : "update"});
@@ -6049,7 +6064,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							quote[0].title = title[0].toLowerCase();
 							var e = database_DBEvents.Update("quotes",quote[0],QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(quote[0].id)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(quote[0].author_id))),(function(interaction) {
 								return function(resp) {
-									if(resp._hx_index == 3) {
+									if(resp._hx_index == 4) {
 										var message = resp.message;
 										haxe_Log.trace("" + message,{ fileName : "src/commands/Quote.hx", lineNumber : 94, className : "commands.Quote", methodName : "update"});
 										interaction[0].reply("Quote updated!");
@@ -6099,7 +6114,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var e1 = database_DBEvents.Insert("quotes",quote1[0],(function(quote,description,interaction) {
 					return function(resp) {
-						if(resp._hx_index == 3) {
+						if(resp._hx_index == 4) {
 							var message = resp.message;
 							var data = resp.data;
 							haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 52, className : "commands.Quote", methodName : "update"});
@@ -6136,7 +6151,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 		}
 	}
 	,parseGroupQuotes: function(interaction,value) {
-		if(value._hx_index == 1) {
+		if(value._hx_index == 2) {
 			var _gdata = value.data;
 			if(_gdata.get_length() == 0) {
 				interaction.reply("No quotes by that user!");
@@ -6227,7 +6242,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			if(interaction.isAutocomplete() && type != "get") {
 				var e = database_DBEvents.SearchBy("quotes",column,name,"author_id",interaction.user.id,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						var res = [];
 						var r = data.iterator();
@@ -6268,12 +6283,12 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				record.field("id",name);
 				var e = database_DBEvents.DeleteRecord("quotes",record,function(resp) {
 					switch(resp._hx_index) {
-					case 3:
+					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
 							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
 						});
 						break;
-					case 4:
+					case 5:
 						var message = resp.message;
 						var data = resp.data;
 						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
@@ -6298,7 +6313,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				break;
 			case "edit":
 				var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(interaction.user.id))),function(resp) {
-					if(resp._hx_index == 0) {
+					if(resp._hx_index == 1) {
 						var data = resp.data;
 						if(data == null) {
 							interaction.reply("Could not find quote or you were not the author of the quote specified");
@@ -6336,7 +6351,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -6358,7 +6373,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -6396,7 +6411,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -6447,7 +6462,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var column = is_id ? "id" : "title";
 				var e = database_DBEvents.Search("quotes",column,name,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						if(data.get_length() >= 1) {
 							var interaction1 = interaction;
@@ -6488,7 +6503,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -6510,7 +6525,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -6548,7 +6563,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -6627,7 +6642,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			if(interaction.isAutocomplete() && type != "get") {
 				var e = database_DBEvents.SearchBy("quotes",column,name1,"author_id",interaction.user.id,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						var res = [];
 						var r = data.iterator();
@@ -6668,12 +6683,12 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				record.field("id",name1);
 				var e = database_DBEvents.DeleteRecord("quotes",record,function(resp) {
 					switch(resp._hx_index) {
-					case 3:
+					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
 							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
 						});
 						break;
-					case 4:
+					case 5:
 						var message = resp.message;
 						var data = resp.data;
 						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
@@ -6698,7 +6713,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				break;
 			case "edit":
 				var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name1)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(interaction.user.id))),function(resp) {
-					if(resp._hx_index == 0) {
+					if(resp._hx_index == 1) {
 						var data = resp.data;
 						if(data == null) {
 							interaction.reply("Could not find quote or you were not the author of the quote specified");
@@ -6736,7 +6751,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -6758,7 +6773,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name1,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -6796,7 +6811,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name1)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -6847,7 +6862,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var column = is_id ? "id" : "title";
 				var e = database_DBEvents.Search("quotes",column,name1,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						if(data.get_length() >= 1) {
 							var interaction1 = interaction;
@@ -6888,7 +6903,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -6910,7 +6925,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name1,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -6948,7 +6963,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name1)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -7027,7 +7042,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			if(interaction.isAutocomplete() && type != "get") {
 				var e = database_DBEvents.SearchBy("quotes",column,name2,"author_id",interaction.user.id,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						var res = [];
 						var r = data.iterator();
@@ -7068,12 +7083,12 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				record.field("id",name2);
 				var e = database_DBEvents.DeleteRecord("quotes",record,function(resp) {
 					switch(resp._hx_index) {
-					case 3:
+					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
 							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
 						});
 						break;
-					case 4:
+					case 5:
 						var message = resp.message;
 						var data = resp.data;
 						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
@@ -7098,7 +7113,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				break;
 			case "edit":
 				var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name2)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(interaction.user.id))),function(resp) {
-					if(resp._hx_index == 0) {
+					if(resp._hx_index == 1) {
 						var data = resp.data;
 						if(data == null) {
 							interaction.reply("Could not find quote or you were not the author of the quote specified");
@@ -7136,7 +7151,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -7158,7 +7173,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name2,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -7196,7 +7211,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name2)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -7247,7 +7262,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var column = is_id ? "id" : "title";
 				var e = database_DBEvents.Search("quotes",column,name2,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						if(data.get_length() >= 1) {
 							var interaction1 = interaction;
@@ -7288,7 +7303,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -7310,7 +7325,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name2,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -7348,7 +7363,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name2)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -7427,7 +7442,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 			}
 			if(interaction.isAutocomplete() && type != "get") {
 				var e = database_DBEvents.SearchBy("quotes",column,name3,"author_id",interaction.user.id,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						var res = [];
 						var r = data.iterator();
@@ -7468,12 +7483,12 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				record.field("id",name3);
 				var e = database_DBEvents.DeleteRecord("quotes",record,function(resp) {
 					switch(resp._hx_index) {
-					case 3:
+					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
 							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
 						});
 						break;
-					case 4:
+					case 5:
 						var message = resp.message;
 						var data = resp.data;
 						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
@@ -7498,7 +7513,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				break;
 			case "edit":
 				var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name3)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(interaction.user.id))),function(resp) {
-					if(resp._hx_index == 0) {
+					if(resp._hx_index == 1) {
 						var data = resp.data;
 						if(data == null) {
 							interaction.reply("Could not find quote or you were not the author of the quote specified");
@@ -7536,7 +7551,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -7558,7 +7573,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name3,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -7596,7 +7611,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name3)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -7647,7 +7662,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var column = is_id ? "id" : "title";
 				var e = database_DBEvents.Search("quotes",column,name3,function(resp) {
-					if(resp._hx_index == 1) {
+					if(resp._hx_index == 2) {
 						var data = resp.data;
 						if(data.get_length() >= 1) {
 							var interaction1 = interaction;
@@ -7688,7 +7703,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
 									haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
-									if(response._hx_index == 0) {
+									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
 											interaction.respond([]);
@@ -7710,7 +7725,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								});
 							} else {
 								e = database_DBEvents.Search("quotes","title",name3,function(response) {
-									if(response._hx_index == 1) {
+									if(response._hx_index == 2) {
 										var data = response.data;
 										var item = data.iterator();
 										while(item.hasNext()) {
@@ -7748,7 +7763,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					}
 					var e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name3)),function(resp) {
-						if(resp._hx_index == 0) {
+						if(resp._hx_index == 1) {
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
@@ -10669,7 +10684,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 	,loadCounts: function() {
 		var _gthis = this;
 		var e = database_DBEvents.GetAllRecords("threadcount",function(resp) {
-			if(resp._hx_index == 1) {
+			if(resp._hx_index == 2) {
 				var item = resp.data.iterator();
 				while(item.hasNext()) {
 					var item1 = item.next();
@@ -10710,7 +10725,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 					db = this.count.h[channel.id];
 					db.count += 1;
 					var e = database_DBEvents.Update("threadcount",db,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("threadid")),QueryExpr.QueryValue(channel.id)),function(resp) {
-						if(resp._hx_index != 3) {
+						if(resp._hx_index != 4) {
 							haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 68, className : "commands.ThreadCount", methodName : "update"});
 						}
 					});
@@ -10724,7 +10739,7 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 				} else {
 					db = new database_types_DBThreadCount(channel.name,channel.id,1);
 					var e1 = database_DBEvents.Insert("threadcount",db,function(resp) {
-						if(resp._hx_index != 3) {
+						if(resp._hx_index != 4) {
 							haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 77, className : "commands.ThreadCount", methodName : "update"});
 						}
 					});
@@ -11216,7 +11231,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 	,onEnabled: function() {
 		var _gthis = this;
 		var e = database_DBEvents.GetAllRecords("rate_limit",function(response) {
-			if(response._hx_index == 1) {
+			if(response._hx_index == 2) {
 				var r = response.data.iterator();
 				while(r.hasNext()) {
 					var r1 = r.next();
@@ -11321,7 +11336,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,updateLimit: function(limit) {
 		var e = database_DBEvents.Update("rate_limit",limit,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("user_id")),QueryExpr.QueryValue(limit.user_id)),function(response) {
-			if(response._hx_index != 3) {
+			if(response._hx_index != 4) {
 				haxe_Log.trace(response,{ fileName : "src/commands/mod/RateLimit.hx", lineNumber : 115, className : "commands.mod.RateLimit", methodName : "updateLimit"});
 			}
 		});
@@ -11358,7 +11373,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 			obj.reason = _g.reason;
 			this.setTracker(obj);
 			var e = database_DBEvents.SearchAndUpdate("rate_limit","user_id",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("user_id")),QueryExpr.QueryValue(obj.user_id)),obj,function(response) {
-				if(response._hx_index == 3) {
+				if(response._hx_index == 4) {
 					var this1 = _gthis.limits;
 					var key = user.id;
 					var value = database_types_DBRateLimit.fromRecord(response.data);
@@ -11387,7 +11402,7 @@ commands_mod_RateLimit.prototype = $extend(systems_CommandBase.prototype,{
 			var obj = this.limits.h[user1.id];
 			if(Object.prototype.hasOwnProperty.call(this.limits.h,user1.id)) {
 				var e = database_DBEvents.DeleteByValue("rate_limit","user_id",obj.user_id,function(resp) {
-					if(resp._hx_index == 3) {
+					if(resp._hx_index == 4) {
 						var key = user1.id;
 						var _this = _gthis.tracking;
 						if(Object.prototype.hasOwnProperty.call(_this.h,key)) {
@@ -11491,7 +11506,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 	,onEnabled: function() {
 		var _gthis = this;
 		var e = database_DBEvents.GetAllRecords("trackers",function(resp) {
-			if(resp._hx_index == 1) {
+			if(resp._hx_index == 2) {
 				var record = resp.data.iterator();
 				while(record.hasNext()) {
 					var record1 = record.next();
@@ -11703,7 +11718,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 			if(name != null) {
 				if(interaction.isAutocomplete()) {
 					var e = database_DBEvents.SearchBy("trackers","name",name,"by",interaction.user.id,function(resp) {
-						if(resp._hx_index == 1) {
+						if(resp._hx_index == 2) {
 							var data = resp.data;
 							var results = [];
 							var record = data.iterator();
@@ -11736,7 +11751,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				var id = Std.parseInt(name);
 				var e = database_DBEvents.DeleteByValue("trackers","id",id,function(resp) {
-					if(resp._hx_index == 3) {
+					if(resp._hx_index == 4) {
 						_gthis.trackers.remove(id);
 						interaction.reply({ content : "Tracker deleted!", ephemeral : true}).then(null,function(err) {
 							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 210, className : "commands.mod.Tracker", methodName : "run"});
@@ -11778,7 +11793,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 			obj.channel_exclude = channel_exclude;
 		}
 		var e = database_DBEvents.Insert("trackers",obj,function(resp) {
-			if(resp._hx_index == 3) {
+			if(resp._hx_index == 4) {
 				var d = database_types_DBTracker.fromRecord(resp.data);
 				_gthis.trackers.h[d.id] = d;
 				interaction.reply({ content : "Your tracker is now active!", ephemeral : true}).then(null,function(err) {
@@ -11947,14 +11962,15 @@ var database_DBEvents = $hxEnums["database.DBEvents"] = { __ename__:"database.DB
 database_DBEvents.__constructs__ = [database_DBEvents.Search,database_DBEvents.SearchBy,database_DBEvents.Insert,database_DBEvents.Update,database_DBEvents.InsertDontDuplicateLastRow,database_DBEvents.SearchAndUpdate,database_DBEvents.CreateTable,database_DBEvents.Page,database_DBEvents.GetRecord,database_DBEvents.GetRecords,database_DBEvents.GetAllRecords,database_DBEvents.DeleteByValue,database_DBEvents.DeleteRecord,database_DBEvents.Watch,database_DBEvents.Poll,database_DBEvents.GetLastRecord,database_DBEvents.GetRecentRecords];
 database_DBEvents.__empty_constructs__ = [];
 var database_Callback = $hxEnums["database.Callback"] = { __ename__:"database.Callback",__constructs__:null
-	,Record: ($_=function(data) { return {_hx_index:0,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Record",$_)
-	,Records: ($_=function(data) { return {_hx_index:1,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Records",$_)
-	,WatchResult: ($_=function(result) { return {_hx_index:2,result:result,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.result];}}; },$_._hx_name="WatchResult",$_)
-	,Success: ($_=function(message,data) { return {_hx_index:3,message:message,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.message,this.data];}}; },$_._hx_name="Success",$_)
-	,Error: ($_=function(message,data) { return {_hx_index:4,message:message,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.message,this.data];}}; },$_._hx_name="Error",$_)
+	,Empty: {_hx_name:"Empty",_hx_index:0,__enum__:"database.Callback",toString:$estr}
+	,Record: ($_=function(data) { return {_hx_index:1,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Record",$_)
+	,Records: ($_=function(data) { return {_hx_index:2,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.data];}}; },$_._hx_name="Records",$_)
+	,WatchResult: ($_=function(result) { return {_hx_index:3,result:result,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.result];}}; },$_._hx_name="WatchResult",$_)
+	,Success: ($_=function(message,data) { return {_hx_index:4,message:message,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.message,this.data];}}; },$_._hx_name="Success",$_)
+	,Error: ($_=function(message,data) { return {_hx_index:5,message:message,data:data,__enum__:"database.Callback",toString:$estr,__params__:function(){ return [this.message,this.data];}}; },$_._hx_name="Error",$_)
 };
-database_Callback.__constructs__ = [database_Callback.Record,database_Callback.Records,database_Callback.WatchResult,database_Callback.Success,database_Callback.Error];
-database_Callback.__empty_constructs__ = [];
+database_Callback.__constructs__ = [database_Callback.Empty,database_Callback.Record,database_Callback.Records,database_Callback.WatchResult,database_Callback.Success,database_Callback.Error];
+database_Callback.__empty_constructs__ = [database_Callback.Empty];
 var database_MyRecord = function() {
 	this._record = new db_Record();
 };
@@ -23820,7 +23836,7 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 							if(result != null) {
 								callback[0](database_Callback.Record(result.data));
 							} else {
-								callback[0](database_Callback.Error("No data",result.data));
+								callback[0](database_Callback.Empty);
 							}
 						};
 					})(callback6),(function() {

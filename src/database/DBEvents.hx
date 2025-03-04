@@ -30,6 +30,7 @@ enum DBEvents {
 }
 
 enum Callback {
+	Empty;
 	Record(data:Record);
 	Records(data:RecordSet);
 	WatchResult(result:Array<Record>);
