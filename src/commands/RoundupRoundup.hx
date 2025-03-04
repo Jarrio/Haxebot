@@ -135,7 +135,7 @@ class RoundupRoundup extends CommandDbBase {
 
 		var diff = event - now;
 
-		if (Main.state.announcer == null) {
+		if (Main.state.announcer?.id == null) {
 			return;
 		}
 
@@ -177,9 +177,11 @@ class RoundupRoundup extends CommandDbBase {
 		}
 		trace(this.host_m.user.tag);
 		waiting = true;
-		if (announcer != null) {
-			Main.state.announcer = null;
-			Main.updateState('announcer', null);
+		if (announcer?.id != null) {
+			Main.state.announcer.id = null;
+			Main.state.announcer.user = null;
+
+			Main.updateState('announcer');
 			announcer.roles.remove(announcer_role).then(function(_) {
 				this.get_announcer = false;
 				this.added_role = false;
@@ -247,7 +249,7 @@ class RoundupRoundup extends CommandDbBase {
 				if (state.announced || waiting) {
 					return;
 				}
-				var mention = (Main.state.announcer != null) ? '' : '@everyone';
+				var mention = (this.announcer == null) ? '@everyone' : '';
 				var message = '$mention come and join the haxe roundup where we go over what has been happening in haxe for the last few weeks!';
 
 				this.voice_text.send({
