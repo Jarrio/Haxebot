@@ -1,11 +1,5 @@
 package systems;
 
-import sys.io.File;
-import sys.FileSystem;
-import db.DebugUtils;
-import promises.PromiseUtils;
-import promises.Promise;
-import util.Duration;
 import db.ITable;
 import db.DatabaseResult;
 import db.Record as RRecord;
@@ -14,11 +8,13 @@ import Query.*;
 import db.IDatabase;
 import ecs.System;
 import db.DatabaseFactory;
-import db.mysql.Utils;
-import database.types.DBQuote;
-import database.types.DBSnippet;
-import database.types.DBReminder;
+import util.Duration;
 
+using StringTools;
+
+import db.Record;
+
+// import events.ExchangeDBEvent;
 class DatabaseSystem extends System {
 	public var connected:Bool = false;
 
@@ -30,11 +26,15 @@ class DatabaseSystem extends System {
 	var db:IDatabase;
 	var watches:Array<DBEvents> = [];
 	@:fastFamily var dbevents:{event:DBEvents};
-
+	// @:fastFamily var exchange_events:{event:ExchangeDBEvent};
 	var connected_time:Float;
 
 	var event_cache:Array<DBEvents> = [];
 	var reverse:Array<DBEvents> = [];
+	var host:String;
+	var user:String;
+	var pass:String;
+	var database:String;
 
 	override function onEnabled() {
 		var keys = Main.keys.mysql;
@@ -51,8 +51,7 @@ class DatabaseSystem extends System {
 
 		connected_time = Date.now().getTime() - (Duration.fromString('8hrs') : Float);
 	}
-
-
+	
 	inline function insert(table:String, value:RRecord, callback) {
 		this.db.table(table).then((result) -> {
 			return result.table.add(value);
@@ -68,7 +67,6 @@ class DatabaseSystem extends System {
 			if (state.data) {
 				this.connected = true;
 				this.connected_time = Date.now().getTime();
-
 				trace('Database connected');
 			} else {
 				this.connected = false;
@@ -115,41 +113,62 @@ class DatabaseSystem extends System {
 		});
 
 		for (i in 0...reverse.length) {
-			var event:DBEvents = reverse.pop();
-
+			var event = reverse.pop();
 			switch (event) {
 				case CreateTable(name, columns):
 					this.db.createTable(name, columns);
 				case Insert(table, value, callback):
 					db.table(table).then((result) -> {
-						return result.table.add(value);
-					}).then(function(res:DatabaseResult<RRecord>) {
+						var record = value.record;
+						if (record.hasField('_insertedId')) {
+							record.removeField('_insertedId');
+						}
+						return result.table.add(record);
+					}).then(function(res) {
 						callback(Success("Inserted", res.data));
 					}, function(err) {
-						if (err.message != null
-							&& (err.message : String).contains('DUPLICATE_DATA')) {
+						if (err.message != null && (err.message : String).contains('DUPLICATE_DATA')) {
 							return;
 						} else {
 							trace(value);
 							trace(err);
 						}
 					});
+				case Page(table, page, results, query, callback):
+					db.table(table).then((result) -> {
+						return result.table.page(page, results, query);
+					}).then(function(result) {
+						if (result != null) {
+							callback(Records(result.data));
+						} else {
+							callback(Error('No data', result.data));
+						}
+					}, function(err) {
+						if (err.message != null && (err.message : String).contains('DUPLICATE_DATA')) {
+							return;
+						} else {
+							trace(event);
+							trace(err);
+						}
+					});
 				case Update(table, value, query, callback):
+					var record = value.record;
+					if (record.hasField('_insertedId')) {
+						record.removeField('_insertedId');
+					}
 					if (updating) {
-						EcsTools.set(event);
+						this.event_cache.push(event);
 						continue;
 					}
 					updating = true;
 					db.table(table).then((result) -> {
-						return result.table.update(query, value);
+						return result.table.update(query, record);
 					}).then(function(res) {
 						updating = false;
 						callback(Success("Updated"));
 					}, function(err) {
-						trace(err);
-						trace(queryExprToSql(query));
-						trace(value.debugString());
 						updating = false;
+						callback(Error("Error", err));
 					});
 				case GetRecord(table, query, callback):
 					db.table(table).then((result) -> {
@@ -157,6 +176,26 @@ class DatabaseSystem extends System {
 					}).then(function(result) {
 						if (result != null) {
 							callback(Record(result.data));
+						} else {
+							callback(Error('No data', result.data));
+						}
+					}, (err) -> trace(err));
+				case GetLastRecord(table, where, value, column, callback):
+					db.table(table).then((result) -> {
+						return result.table.raw('SELECT * FROM `$table` WHERE `$where` = \'$value\' ORDER BY `$column` DESC LIMIT 1');
+					}).then((result) -> {
+						if (result != null) {
+							callback(Record(result.data[0]));
+						} else {
+							callback(Error('No data', result.data));
+						}
+					}, (err) -> trace(err));
+				case GetRecentRecords(table, where, value, column, amount, callback):
+					db.table(table).then((result) -> {
+						return result.table.raw('SELECT * FROM `$table` WHERE `$where` = \'$value\' ORDER BY `$column` DESC LIMIT $amount');
+					}).then((result) -> {
+						if (result != null) {
+							callback(Records(result.data));
 						} else {
 							callback(Error('No data', result.data));
 						}
@@ -182,7 +221,7 @@ class DatabaseSystem extends System {
 						}
 					}, (err) -> trace(err));
 				case Search(table, field, value, callback):
-					var query = "SELECT * FROM `"+table+"` WHERE "+field+" LIKE '%"+ value + "%'";
+					var query = "SELECT * FROM `"+table+"` WHERE `"+field+"` LIKE '%"+ value + "%'";
 
 					db.raw(query).then(function(result) {
 						if (result != null) {
@@ -192,7 +231,7 @@ class DatabaseSystem extends System {
 						}
 					}, (err) -> trace(err));
 				case SearchBy(table, field, value, by_column, by_value, callback):
-					var query = "SELECT * FROM `"+table+"` WHERE "+by_column+" = '"+by_value+"' AND "+field+" LIKE '%"+ value + "%'";
+					var query = "SELECT * FROM `"+table+"` WHERE `"+by_column+"` = '"+by_value+"' AND "+field+" LIKE '%"+ value + "%'";
 
 					db.raw(query).then(function(result) {
 						if (result != null) {
@@ -210,11 +249,7 @@ class DatabaseSystem extends System {
 						record.field(column, value);
 
 						result.table.delete(record).then(function(succ) {
-							if (succ.itemsAffected == 0) {
-								callback(Error("Failed to delete"));
-							} else {
-								callback(Success("Successfully deleted", succ.data));
-							}
+							callback(Success("Successfully deleted", succ));
 						}, function(err) {
 							callback(Error("Failed", err));
 							trace(err);
@@ -245,55 +280,138 @@ class DatabaseSystem extends System {
 					var key = parse_key.key;
 					var column = parse_key.column;
 
-					db.table(table).then((result) -> {
-						return result.table.findOne(query);
-					}).then((result) -> {
-						// if (this.updating) {
-						// 	this.event_cache.push(event);
-						// 	var record = new RRecord();
-						// 	record.field('____status', 'blocked');
-						// 	var result = new DatabaseResult(result.database, result.table, record);
-						// 	return PromiseUtils.promisify(result);
-						// }
-						this.updating = true;
-						if (result.data == null) {
-							return result.table.add(value);
-						} else {
-							if (column != null) {
-								value.field(column, result.data.field(column));
-							}
-							if (value.hasField('id')) {
-								value.removeField('id');
-							}
-							return result.table.update(query, value);
-						}
-					}).then(function(result) {
-						if (result.data.hasField('____status')) {
-							trace('result null ${result.data.field('____status')}');
-							return;
-						}
+					var record = value.record;
+					this.updating = true;
 
-						this.updating = false;
-						trace('unblock');
-						if (callback != null) {
-							callback(Success('Successfully updated record', result.data));
-						}
-					}, function(err:Dynamic) {
-						this.updating = false;
-						trace('unblock');
-						trace(value);
+					db.table(table).then(function(result) {
+						result.table.findOne(query).then(function(result) {
+							if (result.data == null) {
+								result.table.add(record).then((result) -> {
+									updating = false;
+									if (result.itemsAffected != null && result.itemsAffected >= 1) {
+										callback(Success("Inserted"));
+									} else {
+										trace("something went wrong");
+										trace(result);
+									}
+								}, (err) -> {
+									updating = false;
+									if (callback != null) {
+										callback(Error("Failed", err));
+									}
+									trace(err);
+								});
+							} else {
+								if (column != null) {
+									record.field(column, result.data.field(column));
+								}
+								if (record.hasField('id')) {
+									record.removeField('id');
+								}
+
+								result.table.update(query, record).then((result) -> {
+									updating = false;
+									if (result.itemsAffected != null && result.itemsAffected >= 1) {
+										callback(Success("Updated"));
+									} else {
+										trace("something went wrong");
+										trace(result);
+									}
+								}, (err) -> {
+									updating = false;
+									if (callback != null) {
+										callback(Error("Failed", err));
+									}
+									trace(err);
+								});
+							}
+						}, (err) -> {
+							updating = false;
+							trace(err);
+						});
+					}, (err) -> {
+						updating = false;
 						trace(err);
-						trace(err.message);
-						// if (err.message.contains('Duplicate entry')) {
-						// 	EcsTools.addComponents(event); //recycle for an update instead
-						// }
-						if (callback != null) {
-							callback(Error("Failed", err));
-						}
 					});
+
+				// db.table(table).then((result) -> {
+				// 	return result.table.findOne(query);
+				// }).then((result) -> {
+				// 	this.updating = true;
+				// 	if (result.data == null) {
+				// 		return result.table.add(record);
+				// 	} else {
+				// 		if (column != null) {
+				// 			record.field(column, result.data.field(column));
+				// 		}
+				// 		if (record.hasField('id')) {
+				// 			record.removeField('id');
+				// 		}
+				// 		return result.table.update(query, record);
+				// 	}
+				// }).then(function(result) {
+				// 	if (result.data.hasField('____status')) {
+				// 		trace('result null ${result.data.field('____status')}');
+				// 		return;
+				// 	}
+
+				// 	this.updating = false;
+				// 	trace('unblock');
+				// 	if (callback != null) {
+				// 		callback(Success('Successfully updated record', result.data));
+				// 	}
+				// }, function(err:Dynamic) {
+				// 	this.updating = false;
+				// 	trace('unblock');
+				// 	trace(value);
+				// 	trace(err);
+				// 	trace(err.message);
+				// 	// if (err.message.contains('Duplicate entry')) {
+				// 	// 	EcsTools.addComponents(event); //recycle for an update instead
+				// 	// }
+				// 	if (callback != null) {
+				// 		callback(Error("Failed", err));
+				// 	}
+				// });
 				default:
-					trace('${event.getName()} not implemented');
+					trace('$event not implemented');
 			}
+		}
+
+		// iterate(exchange_events, (entity) -> {
+		// 	switch (event) {
+		// 		case GetAllOrders(query, callback):
+		// 			db.table('orders').then((result) -> {
+		// 				return result.table.find(query);
+		// 			}).then((result) -> {
+		// 				var orders = new Array<Order>();
+		// 				for (data in result.data) {
+		// 					var order_id = data.field('order_id');
+		// 					var symbol = data.field('symbol');
+		// 					var exchange = data.field('exchange');
+		// 					var timestamp = data.field('timestamp');
+		// 					var price = data.field('price');
+		// 					var quantity = data.field('quantity');
+		// 					var status = data.field('status');
+		// 					var side = data.field('side');
+		// 					var type = data.field('type');
+		// 					var filled = data.field('filled');
+		// 					var updated = data.field('updated');
+		// 					var order = new Order(order_id, exchange, symbol, price, quantity, status, side, type, timestamp);
+		// 					order.updated = updated;
+		// 					order.filled = filled;
+		// 					orders.push(order);
+		// 				}
+		// 				callback(orders);
+		// 			}, function(error) {});
+		// 			universe.deleteEntity(entity);
+		// 		default:
+		// 	}
+		// });
+
+		for (i in 0...event_cache.length) {
+			var e = event_cache.pop();
+			EcsTools.set((e : DBEvents));
 		}
 	}
 

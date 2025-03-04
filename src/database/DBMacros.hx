@@ -51,8 +51,14 @@ class DBMacros {
 		
 		gblock.push(macro return _record);
 		cfields.push(getter);
-
-		init_class = init_class.substr(0, init_class.length - 1) + ')';
+		
+		var sub = init_class.substr(0, init_class.length - 1);
+		init_class =  sub + ')';
+		
+		if (init_class.indexOf('(') == -1) {
+			init_class = sub + '()';
+		}
+		
 		var exp = Context.parseInlineString(init_class, Context.currentPos());
 		sblock.push(macro $exp);
 
