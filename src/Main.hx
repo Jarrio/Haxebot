@@ -75,7 +75,6 @@ abstract NewState(Map<String, DBState>) {
 	}
 
 	function set_announcer(value:TAnnouncer) {
-		trace(value);
 		return this['announcer'].value = value;
 	}
 

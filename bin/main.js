@@ -585,7 +585,6 @@ NewState.get_announcer = function(this1) {
 	return this1.h["announcer"].value;
 };
 NewState.set_announcer = function(this1,value) {
-	haxe_Log.trace(value,{ fileName : "src/Main.hx", lineNumber : 78, className : "_Main.NewState_Impl_", methodName : "set_announcer"});
 	return this1.h["announcer"].value = value;
 };
 NewState.get_snippet_tags = function(this1) {
@@ -1049,7 +1048,7 @@ Main.startup = function() {
 		return;
 	}
 	if(!Main.got_state && !Main.startup_request) {
-		haxe_Log.trace("Requested state",{ fileName : "src/Main.hx", lineNumber : 273, className : "Main", methodName : "startup"});
+		haxe_Log.trace("Requested state",{ fileName : "src/Main.hx", lineNumber : 272, className : "Main", methodName : "startup"});
 		Main.startup_request = true;
 		var e = database_DBEvents.GetAllRecords("state",function(response) {
 			if(response._hx_index == 2) {
@@ -1060,14 +1059,14 @@ Main.startup = function() {
 					NewState.set(Main.state,d1.field("key"),database_types_DBState.fromRecord(d1));
 					var e = haxe_Log.trace;
 					var tmp = d1.field("key");
-					e("got " + (tmp == null ? "null" : Std.string(tmp)),{ fileName : "src/Main.hx", lineNumber : 285, className : "Main", methodName : "startup"});
+					e("got " + (tmp == null ? "null" : Std.string(tmp)),{ fileName : "src/Main.hx", lineNumber : 284, className : "Main", methodName : "startup"});
 				}
-				haxe_Log.trace("State set",{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "startup"});
+				haxe_Log.trace("State set",{ fileName : "src/Main.hx", lineNumber : 286, className : "Main", methodName : "startup"});
 				Main.got_state = true;
 				Main.startup_request = false;
 				Main.discordClient();
 			} else {
-				haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "startup"});
+				haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 291, className : "Main", methodName : "startup"});
 			}
 		});
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1084,11 +1083,11 @@ Main.startup = function() {
 	var messages = Main.universe.getPhase("messages");
 	if(!messages.enabled) {
 		messages.enable();
-		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 305, className : "Main", methodName : "startup"});
+		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 304, className : "Main", methodName : "startup"});
 	}
 	if(Main.commands_active) {
 		Main.universe.getPhase("main").enable();
-		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 317, className : "Main", methodName : "startup"});
+		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 316, className : "Main", methodName : "startup"});
 	}
 	if(Main.universe.getPhase("testing").enabled || Main.universe.getPhase("main").enabled) {
 		Main.startup_timer.stop();
@@ -1100,7 +1099,7 @@ Main.discordClient = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 341, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 340, className : "Main", methodName : "discordClient"});
 		Main.client = clients[0];
 		Main.discord_connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1111,15 +1110,15 @@ Main.discordClient = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 350, className : "Main", methodName : "discordClient"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 349, className : "Main", methodName : "discordClient"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 356, className : "Main", methodName : "discordClient"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 355, className : "Main", methodName : "discordClient"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 362, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 361, className : "Main", methodName : "discordClient"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,5,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,7,member);
@@ -1278,8 +1277,8 @@ Main.discordClient = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 390, className : "Main", methodName : "discordClient"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 391, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 389, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 390, className : "Main", methodName : "discordClient"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1654,7 +1653,7 @@ Main.discordClient = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 428, className : "Main", methodName : "discordClient"});
+				haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 427, className : "Main", methodName : "discordClient"});
 			}
 			return;
 		}
@@ -1851,7 +1850,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 583, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 582, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1859,21 +1858,21 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 591, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 590, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 600, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 599, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
 			CommandPermission.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 609, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 608, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
@@ -1885,10 +1884,10 @@ Main.updateState = function(field,value) {
 	}
 	var e = database_DBEvents.Update("state",NewState.get(Main.state,field),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("key")),QueryExpr.QueryValue(field)),function(response) {
 		if(response._hx_index == 4) {
-			haxe_Log.trace("updated state field(" + field + ")",{ fileName : "src/Main.hx", lineNumber : 626, className : "Main", methodName : "updateState"});
+			haxe_Log.trace("updated state field(" + field + ")",{ fileName : "src/Main.hx", lineNumber : 625, className : "Main", methodName : "updateState"});
 		} else {
-			haxe_Log.trace(NewState.get(Main.state,field),{ fileName : "src/Main.hx", lineNumber : 628, className : "Main", methodName : "updateState"});
-			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 629, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(NewState.get(Main.state,field),{ fileName : "src/Main.hx", lineNumber : 627, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 628, className : "Main", methodName : "updateState"});
 		}
 	});
 	var _ecsTmpEntity = Main.universe.createEntity();
