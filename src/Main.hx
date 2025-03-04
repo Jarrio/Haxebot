@@ -185,6 +185,7 @@ class Main {
 					enabled: false,
 					systems: [
 						Tracker,
+						Poll,
 						RoundupAnnouncer,
 						RoundupRoundup,
 						DeleteProject,

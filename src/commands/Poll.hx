@@ -1,10 +1,10 @@
 package commands;
 
+import database.DBEvents;
 import commands.types.Duration;
 import discord_js.TextChannel;
 import js.Browser;
 import haxe.Json;
-import firebase.web.firestore.Timestamp;
 import discord_js.Collection;
 import discord_js.User;
 import discord_js.MessageReaction;
@@ -13,63 +13,66 @@ import Main.CommandForward;
 import discord_js.Message;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
-import systems.CommandDbBase;
+import systems.CommandBase;
+import database.types.DBPoll;
+import Query.query;
 
-class Poll extends CommandDbBase {
+class Poll extends CommandBase {
 	@:fastFamily var dm_messages:{type:CommandForward, message:Message};
 	var checked = false;
+	var polls:Map<Int, DBPoll> = [];
 
-	override function update(_:Float) {
-		super.update(_);
-
-		if (!checked && Main.discord_connected) {
-			checked = true;
-
-			var query:FQuery<PollData> = Firestore.query(collection(this.db, 'discord/polls/entries'));
-			Firestore.getDocs(query).then(function(res) {
-				var now = Date.now().getTime();
-				for (doc in res.docs) {
-					var data = doc.data();
-					if (!data.active) {
-						var four_weeks = data.timestamp.toMillis() + (PollTime.two_weeks : Float) * 2;
-						if (now - four_weeks < 0) {
+	override function onEnabled() {
+		var e = DBEvents.GetAllRecords('polls', (resp) -> {
+			switch (resp) {
+				case Records(data):
+					var now = Date.now().getTime();
+					for (record in data) {
+						var poll = DBPoll.fromRecord(record);
+						if (!poll.is_active) {
+							var four_weeks = poll.timestamp + (PollTime.two_weeks : Float) * 2;
+							if (now - four_weeks < 0) {
+								continue;
+							}
+							var e = DBEvents.DeleteRecord('polls', poll.record, (resp) -> {
+								switch (resp) {
+									case Success(_, _):
+									default:
+										trace(resp);
+								}
+							});
+							universe.setComponents(universe.createEntity(), e);
 							continue;
 						}
+						var start = poll.timestamp;
+						var finish = start + poll.duration;
+						var time_left = 0.;
 
-						Firestore.deleteDoc(doc.ref).then(null, function(err) {
-							trace(err);
-							Browser.console.dir(err);
-						});
-						continue;
-					}
-					var start = data.timestamp.toMillis();
-					var finish = start + data.duration;
-					var time_left = 0.;
+						if (finish < now) {
+							time_left = 30000;
+						} else {
+							time_left = finish - now;
+						}
 
-					if (finish < now) {
-						time_left = 30000;
-					} else {
-						time_left = finish - now;
-					}
-
-					Main.client.channels.fetch(data.channel).then(function(succ:TextChannel) {
-						succ.messages.fetch(data.message_id).then(function(message) {
-							trace('Resyncing ${data.id}');
-							this.addCollector(message, data, time_left);
+						Main.client.channels.fetch(poll.channel).then(function(succ:TextChannel) {
+							succ.messages.fetch(poll.message_id).then(function(message) {
+								trace('Resyncing ${poll.id}');
+								this.addCollector(message, poll, time_left);
+							}, function(err) {
+								trace(err);
+								Browser.console.dir(err);
+							});
 						}, function(err) {
 							trace(err);
 							Browser.console.dir(err);
 						});
-					}, function(err) {
-						trace(err);
-						Browser.console.dir(err);
-					});
-				}
-			}, function(err) {
-				trace(err);
-				Browser.console.dir(err);
-			});
-		}
+						polls.set(poll.id, poll);
+					}
+				default:
+					trace(resp);
+			}
+		});
+		universe.setComponents(universe.createEntity(), e);
 	}
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
@@ -125,43 +128,22 @@ class Poll extends CommandDbBase {
 						for (k => _ in answers) {
 							message.react(k);
 						}
+						var user = interaction.user.id;
+						var channel = interaction.channel.id;
+						var poll = new DBPoll(user, channel, message.id, question, time);
+						poll.results = results;
+						poll.answers = answers;
 
-						var data:TPollData = {
-							id: -1,
-							active: true,
-							results: Json.stringify(results),
-							answers: answers.stringify(),
-							question: question,
-							duration: time,
-							settings: settings.stringify(),
-							timestamp: Timestamp.now(),
-							author: interaction.user.id,
-							message_id: message.id,
-							channel: message.channel.asType0.id
-						}
-
-						Firestore.runTransaction(this.db, function(transaction) {
-							return transaction.get(doc(this.db, 'discord/polls')).then(function(doc) {
-								if (!doc.exists()) {
-									return {id: -1};
-								}
-								var data:{id:Int} = (doc.data());
-								data.id = data.id + 1;
-								transaction.update(doc.ref, data);
-								return data;
-							});
-						}).then(function(value) {
-							data.id = value.id;
-							Firestore.addDoc(Firestore.collection(this.db, 'discord/polls/entries'), data).then(function(_) {
-								this.addCollector(message, data);
-							}, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
-						}, function(err) {
-							trace(err);
-							Browser.console.dir(err);
+						var e = DBEvents.Insert('polls', poll, (resp) -> {
+							switch (resp) {
+								case Success(_, _):
+									this.addCollector(message, poll);
+								default:
+									trace(resp);
+							}
 						});
+
+						EcsTools.set(e);
 					}).then(null, function(err) {
 						trace(err);
 						Browser.console.dir(err);
@@ -174,7 +156,7 @@ class Poll extends CommandDbBase {
 		}
 	}
 
-	function addCollector(message:Message, data:PollData, ?time_left:Float) {
+	function addCollector(message:Message, data:DBPoll, ?time_left:Float) {
 		var filter = this.filter(message, data);
 		var time:Float = data.duration;
 		#if block
@@ -217,13 +199,15 @@ class Poll extends CommandDbBase {
 			embed.setDescription(body);
 
 			message.reply({content: '<@${data.author}>', embeds: [embed]}).then(function(_) {
-				var query = Firestore.query(collection(this.db, 'discord/polls/entries'), where('id', EQUAL_TO, data.id));
-				Firestore.getDocs(query).then(function(res) {
-					if (res.docs.length == 0) {
-						return;
+				data.active = 0;
+				var e = DBEvents.Update('polls', data, query($id == data.id), (resp) -> {
+					switch(resp) {
+						case Success(_, _):
+						default:
+							trace(resp);
 					}
-					Firestore.updateDoc(res.docs[0].ref, 'active', false);
 				});
+				EcsTools.set(e);
 			});
 		});
 	}
@@ -232,14 +216,14 @@ class Poll extends CommandDbBase {
 		return 'poll';
 	}
 
-	function filter(message:Message, data:PollData) {
+	function filter(message:Message, data:DBPoll) {
 		var reactions = data.answers;
 		var rcount = 0;
 		for (_ in reactions) {
 			rcount++;
 		}
 
-		var vvotes = data.settings.get(PollSetting.votes);
+		var vvotes = data.votes;
 		var filter = (reaction:MessageReaction, user:User) -> {
 			var votes = 0;
 			for (reac in message.reactions.cache) {
@@ -315,41 +299,6 @@ enum abstract PollTypes(String) {
 	var bool;
 	var bool_maybe;
 	var multiple_choice;
-}
-
-typedef TPollData = {
-	var id:Int;
-	var active:Bool;
-	var channel:String;
-	var message_id:String;
-	var author:String;
-	var question:String;
-	var duration:PollTime;
-	var timestamp:Timestamp;
-	var settings:String;
-	var answers:String;
-	var results:String;
-}
-
-@:forward
-abstract PollData(TPollData) from TPollData {
-	public var answers(get, never):Map<String, String>;
-
-	function get_answers() {
-		return Json.parse(this.answers);
-	}
-
-	public var results(get, never):Map<String, Int>;
-
-	function get_results() {
-		return Json.parse(this.results);
-	}
-
-	public var settings(get, never):Map<PollSetting, Int>;
-
-	function get_settings() {
-		return Json.parse(this.settings);
-	}
 }
 
 enum abstract PollSetting(Int) to Int {
