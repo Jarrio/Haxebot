@@ -12,7 +12,6 @@
 --library db-mysql
 --library hx4compat
 --debug
--D js-source-map
 -D source-map
 -D fail-fast
 #-D keep-inline-positions
