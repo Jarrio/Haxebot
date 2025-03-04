@@ -185,7 +185,6 @@ class Main {
 					enabled: false,
 					systems: [
 						Tracker,
-						Roundup,
 						RoundupAnnouncer,
 						RoundupRoundup,
 						DeleteProject,
@@ -273,8 +272,8 @@ class Main {
 			request = true;
 			var e = DBEvents.GetAllRecords('state', (response) -> {
 				#if block
-				state = Json.parse(File.getContent('./config/state.json'));
-				return;
+				//state = Json.parse(File.getContent('./config/state.json'));
+				//return;
 				#end
 				switch (response) {
 					case Records(data):

@@ -24,6 +24,12 @@ class Tracker extends CommandBase {
 				case Records(data):
 					for (record in data) {
 						var tracker = DBTracker.fromRecord(record);
+						#if block
+						if (tracker.by != '151104106973495296') {
+							//only load me if in debug mode
+							continue;
+						}
+						#end
 						trackers.set(tracker.id, tracker);
 						if (!dm.exists(tracker.by)) {
 							Main.client.users.fetch(tracker.by).then(function(user) {
@@ -66,8 +72,16 @@ class Tracker extends CommandBase {
 	function findKeywords(message:Message, tracker:DBTracker) {
 		var content = message.content;
 		for (word in tracker.keywords) {
+			var before = content.indexOf(word) - 1;
+			
 			if (content.toLowerCase().contains(word)) {
-				return true;
+				var a = content.charAt(before);
+				var b = content.charAt(before + word.length + 1);
+
+				if ((a == "" || a == " " || a == "\n") && (b == "" || b == " " || b == "\n")) {
+					return true;
+				}
+				return false;
 			}
 		}
 		return false;
