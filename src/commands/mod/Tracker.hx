@@ -1,58 +1,43 @@
 package commands.mod;
 
+import database.DBEvents;
 import discord_js.MessageEmbed;
 import discord_js.User;
-import externs.FuzzySort;
 import js.Browser;
 import components.Command;
 import discord_builder.BaseCommandInteraction;
-import systems.CommandDbBase;
+import systems.CommandBase;
 import Main.CommandForward;
 import discord_js.Message;
 import discord_js.TextChannel;
-import firebase.web.firestore.DocumentSnapshot;
+import database.types.DBTracker;
 
-class Tracker extends CommandDbBase {
-	var trackers:Map<String, TTracker> = [];
+class NewTracker extends CommandBase {
+	var trackers:Map<Int, DBTracker> = [];
 	var dm:Map<String, User> = [];
 	@:fastFamily var messages:{command:CommandForward, message:Message};
 	var init_trackers:Bool = false;
 
 	override function onEnabled() {
-		Firestore.onSnapshot(collection(this.db, 'discord/admin/trackers'), function(resp) {
-			if (init_trackers) {
-				for (item in resp.docChanges()) {
-					switch (item.type) {
-						case "added" | "modified":
-							var data = item.doc.data();
-							trackers.set(item.doc.id, data);
-							if (!dm.exists(data.by)) {
-								Main.client.users.fetch(data.by).then(function(user) {
-									this.dm.set(data.by, user);
-								}, (err) -> trace(err));
-							}
-						case "removed":
-							trackers.remove(item.doc.id);
-						default:
-							trace('item type not mapped? ${item.type}');
+		var e = DBEvents.GetAllRecords('trackers', (resp) -> {
+			switch (resp) {
+				case Records(data):
+					for (record in data) {
+						var tracker = DBTracker.fromRecord(record);
+						trackers.set(tracker.id, tracker);
+						if (!dm.exists(tracker.by)) {
+							Main.client.users.fetch(tracker.by).then(function(user) {
+								trace('added user ${user.tag}');
+								this.dm.set(tracker.by, user);
+							}, (err) -> trace(err));
+						}
 					}
-				}
-				return;
-			}
-
-			init_trackers = true;
-			for (item in resp.docs) {
-				var data = item.data();
-				trackers.set(item.id, cast data);
-				
-				if (!dm.exists(data.by)) {
-					Main.client.users.fetch(data.by).then(function(user) {
-						trace('added user ${user.tag}');
-						this.dm.set(data.by, user);
-					}, (err) -> trace(err));
-				}
+					init_trackers = true;
+				default:
+					trace(resp);
 			}
 		});
+		universe.setComponents(universe.createEntity(), e);
 	}
 
 	function string_compare(value:String, array:Array<String>) {
@@ -64,7 +49,7 @@ class Tracker extends CommandDbBase {
 		return false;
 	}
 
-	function excludeKeywords(message:Message, tracker:TTracker) {
+	function excludeKeywords(message:Message, tracker:DBTracker) {
 		var content = message.content;
 		if (tracker.string_exclude == null) {
 			return false;
@@ -78,7 +63,7 @@ class Tracker extends CommandDbBase {
 		return false;
 	}
 
-	function findKeywords(message:Message, tracker:TTracker) {
+	function findKeywords(message:Message, tracker:DBTracker) {
 		var content = message.content;
 		for (word in tracker.keywords) {
 			if (content.toLowerCase().contains(word)) {
@@ -88,9 +73,7 @@ class Tracker extends CommandDbBase {
 		return false;
 	}
 
-	function keywordParser(content:String, matcher:Array<String>) {
-		
-	}
+	function keywordParser(content:String, matcher:Array<String>) {}
 
 	override function update(_:Float) {
 		super.update(_);
@@ -98,7 +81,6 @@ class Tracker extends CommandDbBase {
 			switch (command) {
 				case keyword_tracker:
 					for (tracker in trackers) {
-
 						if (message.author.id == tracker.by) {
 							#if !block
 							continue;
@@ -107,14 +89,12 @@ class Tracker extends CommandDbBase {
 
 						var content = message.content;
 
-						if (tracker.user_exclude != null
-							&& string_compare(message.author.id, tracker.user_exclude)) {
+						if (tracker.user_exclude != null && string_compare(message.author.id, tracker.user_exclude)) {
 							continue;
 						}
 
 						if (tracker.channel_exclude != null
-							&& string_compare((message.channel : TextChannel).id,
-								tracker.channel_exclude)) {
+							&& string_compare((message.channel : TextChannel).id, tracker.channel_exclude)) {
 							continue;
 						}
 
@@ -141,8 +121,7 @@ class Tracker extends CommandDbBase {
 									iconURL: message.author.displayAvatarURL()
 								}
 								embed.setAuthor(author);
-								this.dm[tracker.by].send({embeds: [embed]})
-								.then(null, (err) -> trace(err));
+								this.dm[tracker.by].send({embeds: [embed]}).then(null, (err) -> trace(err));
 								continue;
 							}
 						}
@@ -155,8 +134,7 @@ class Tracker extends CommandDbBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case TrackerCreate(name, keywords, description, string_exclude, channel_exclude,
-				user_exclude):
+			case TrackerCreate(name, keywords, description, string_exclude, channel_exclude, user_exclude):
 				var keywords = keywords.split(',');
 				for (key => value in keywords) {
 					keywords[key] = value.toLowerCase().trim();
@@ -192,63 +170,62 @@ class Tracker extends CommandDbBase {
 					chl_exclude[key] = cleanDiscordThings(channel).trim();
 				}
 
-				this.parseTracker(interaction, name, description, keywords, str_exclude,
-					chl_exclude, usr_exclude);
+				this.parseTracker(interaction, name, description, keywords, str_exclude, chl_exclude, usr_exclude);
 			case TrackerDelete(name):
-				var col = collection(db, 'discord/admin/trackers');
 				if (name != null) {
-					var query = Firestore.query(col, where('name', GREATER_EQUALS, name),
-						where('name', LESS_EQUALS, name + '~'),
-						where('by', EQUAL_TO, interaction.user.id));
-
 					if (interaction.isAutocomplete()) {
-						Firestore.getDocs(query).then(function(res) {
-							var results = [];
-							for (d in res.docs) {
-								var data = d.data();
-								var name = data.name;
-								if (data.description != null) {
-									name += ' - ' + data.description;
-								}
-								results.push({
-									name: name,
-									value: d.id
-								});
-							}
+						var e = DBEvents.SearchBy('trackers', 'name', name, 'by', interaction.user.id, (resp) -> {
+							switch(resp) {
+								case Records(data):
+									var results = [];
+									for (record in data) {
+										var tracker = DBTracker.fromRecord(record);
+										var name = tracker.name;
+										if (tracker.description != null) {
+											name += ' - ' + tracker.description;
+										}
+										results.push({
+											name: name,
+											value: tracker.id.string()
+										});
+									}
 
-							interaction.respond(results).then(null, function(err) {
-								trace(err);
-								Browser.console.dir(err);
-							});
-						}).then(null, function(err) {
-							trace(err);
-							Browser.console.dir(err);
+									interaction.respond(results).then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
+								default:
+									trace(resp);
+							}
 						});
+
+						EcsTools.set(e);
 						return;
 					}
-
-					Firestore.deleteDoc(doc(db, 'discord/admin/trackers/$name')).then(function(_) {
-						trackers.remove(name);
-						interaction.reply({content: 'Tracker deleted!', ephemeral: true}).then(null, (err) -> trace(err));
-					}, function(err) {
-						trace(err);
-						Browser.console.dir(err);
+					var id = Std.parseInt(name);
+					var e = DBEvents.DeleteByValue('trackers', 'id', id, (resp) -> {
+						switch(resp) {
+							case Success(message, data):
+								trackers.remove(id);
+								interaction.reply({content: 'Tracker deleted!', ephemeral: true}).then(null, (err) -> trace(err));
+							default:
+								trace(resp);
+						}
 					});
+					EcsTools.set(e);
 				}
 			default:
 		}
 	}
 
-	function parseTracker(interaction:BaseCommandInteraction, name:String, description:String,
-			keywords:Array<String>, string_exclude:Array<String>, channel_exclude:Array<String>,
-			user_exclude:Array<String>) {
-		var obj:TTracker = {
-			name: name,
-			by: interaction.user.id,
-			discord_name: interaction.user.username,
-			keywords: keywords,
-			timestamp: Date.now().getTime()
-		}
+	function parseTracker(interaction:BaseCommandInteraction, name:String, description:String, keywords:Array<String>, string_exclude:Array<String>,
+			channel_exclude:Array<String>, user_exclude:Array<String>) {
+
+		var obj = new DBTracker();
+		obj.name = name;
+		obj.by = interaction.user.id;
+		obj.username = interaction.user.username;
+		obj.keywords = keywords;
 
 		if (description != null) {
 			obj.description = description;
@@ -266,10 +243,17 @@ class Tracker extends CommandDbBase {
 			obj.channel_exclude = channel_exclude;
 		}
 
-		Firestore.addDoc(collection(this.db, 'discord/admin/trackers'), obj).then(function(_) {
-			interaction.reply({content: 'Your tracker is now active!', ephemeral: true})
-				.then(null, (err) -> trace(err));
-		}, (err) -> trace(err));
+		var e = DBEvents.Insert('trackers', obj, (resp) -> {
+			switch(resp) {
+				case Success(_, data):
+					var d = DBTracker.fromRecord(data);
+					trackers.set(d.id, d);
+					interaction.reply({content: 'Your tracker is now active!', ephemeral: true}).then(null, (err) -> trace(err));
+				default:
+					trace(resp);
+			}
+		});
+		EcsTools.set(e);
 	}
 
 	inline function cleanDiscordThings(string:String) {
@@ -285,16 +269,4 @@ class Tracker extends CommandDbBase {
 	function get_name():String {
 		return 'tracker';
 	}
-}
-
-typedef TTracker = {
-	var by:String;
-	var name:String;
-	var discord_name:String;
-	var timestamp:Float;
-	var keywords:Array<String>;
-	@:optional var description:String;
-	@:optional var string_exclude:Array<String>;
-	@:optional var channel_exclude:Array<String>;
-	@:optional var user_exclude:Array<String>;
 }
