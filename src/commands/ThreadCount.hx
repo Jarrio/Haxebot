@@ -73,6 +73,7 @@ class ThreadCount extends CommandBase {
 						} catch (e ) {
 							trace(e);
 							trace(db);
+							trace(db.threadid);
 							trace(db.count);
 						}
 					} else {
