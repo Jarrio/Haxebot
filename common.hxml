@@ -13,6 +13,7 @@
 --library hx4compat
 --debug
 -D source-map
+# -D source-map-content
 -D fail-fast
 #-D keep-inline-positions
 -D ecs.no_debug_output

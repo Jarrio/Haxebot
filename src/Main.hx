@@ -1,3 +1,4 @@
+import database.types.DBSnippet;
 import db.Record;
 import database.DBEvents;
 import discord_js.VoiceState;
@@ -54,17 +55,79 @@ import commands.Everyone;
 import systems.DatabaseSystem;
 import Query;
 import commands.Run2;
+import database.types.DBState;
+
+typedef TAnnouncer = {
+	var user:String;
+	var id:String;
+}
+
+@:forward
+abstract NewState(Map<String, DBState>) {
+	public function new() {
+		this = [];
+	}
+
+	public var announcer(get, set):TAnnouncer;
+
+	function get_announcer() {
+		return this['announcer'].value;
+	}
+
+	function set_announcer(value:TAnnouncer) {
+		trace(value);
+		return this['announcer'].value = value;
+	}
+
+	public var snippet_tags(get, set):Array<String>;
+
+	function get_snippet_tags() {
+		return this['snippet_tags'].value;
+	}
+
+	function set_snippet_tags(value:Array<String>) {
+		return this['snippet_tags'].value = value;
+	}
+
+	public var roundup_roundup(get, set):TRoundup;
+
+	function get_roundup_roundup() {
+		return this['roundup_roundup'].value;
+	}
+
+	function set_roundup_roundup(value:TRoundup) {
+		return this['roundup_roundup'].value = value;
+	}
+
+	public var next_roundup(get, set):Null<Int>;
+
+	function get_next_roundup() {
+		return this['next_roundup'].int;
+	}
+
+	function set_next_roundup(value:Null<Int>) {
+		return this['next_roundup'].int = value;
+	}
+
+	@:arrayAccess
+	public function get(value:String) {
+		return this[value];
+	}
+
+	@:arrayAccess
+	public function set(key:String, value:DBState) {
+		return this[key] = value;
+	}
+}
 
 class Main {
-	public static var app:FirebaseApp;
 	public static var logged_in:Bool = false;
-	public static var auth:firebase.web.auth.User;
 	public static var client:Client;
 	public static var registered_commands:Map<String, ApplicationCommand> = [];
 	public static var commands_active:Bool = false;
-	public static var connected:Bool = false;
+	public static var discord_connected:Bool = false;
 	public static var keys:TKeys;
-	public static var state:TState;
+	public static var state:NewState = new NewState();
 	public static var command_file:Array<TCommands>;
 	public static var universe:Universe;
 	public static var dm_help_tracking:Map<String, Float> = [];
@@ -89,46 +152,64 @@ class Main {
 
 	public static function token(rest:REST):Promise<Dynamic> {
 		var commands = parseCommands();
-		var get = rest.put(
-			Routes.applicationGuildCommands(discord.client_id, Main.guild_id),
-			{body: commands}
-		);
+		var get = rest.put(Routes.applicationGuildCommands(discord.client_id, Main.guild_id), {body: commands});
 		return get;
 	}
+
+	static var got_state:Bool = false;
 
 	public static function start() {
 		universe = Universe.create({
 			entities: 1000,
 			phases: [
 				{
-					name: 'systems',
+					name: 'startup',
 					enabled: true,
-					systems: [MessageRouter, DatabaseSystem]
+					systems: [DatabaseSystem]
 				},
 				{
 					name: 'messages',
-					enabled: #if block true #else true #end,
-					systems: [ThreadCount, ScamPrevention, JamSuggestionBox, Showcase, RateLimit]
+					enabled: #if block false #else false #end,
+					systems: [
+						MessageRouter,
+						ThreadCount,
+						ScamPrevention,
+						JamSuggestionBox,
+						Showcase,
+						RateLimit
+					]
 				},
 				{
 					name: 'testing',
 					enabled: false,
 					systems: [
+						Tracker,
+						Roundup,
 						RoundupAnnouncer,
 						RoundupRoundup,
 						DeleteProject,
 						Emoji,
 						Haxelib,
-						Hi, Boop,
+						Hi,
+						Boop,
 						VoiceChatBridge,
 						Run2,
 						Everyone,
-						PinMessageInfo, Quote, Snippet, Api, Notify, Code, CodeLineNumbers, React, Say, Poll],
+						PinMessageInfo,
+						Quote,
+						Api,
+						Notify,
+						Code,
+						CodeLineNumbers,
+						React,
+						Say
+					],
 				},
 				{
 					name: 'main',
 					enabled: false,
 					systems: [
+						ThreadCount,
 						RoundupAnnouncer,
 						VoiceChatBridge,
 						DeleteProject,
@@ -168,39 +249,78 @@ class Main {
 			]
 		});
 
-		var e = DBEvents.GetAllRecords('state', (response) -> {
-			#if block
-			state = Json.parse(File.getContent('./config/state.json'));
-			return;
-			#end
-			switch (response) {
-				case Records(data):
-					state = {
-						next_roundup: 0,
-						roundup_roundup: null,
-						snippet_tags: null
-					}
-					for (d in data) {
-						var value:Dynamic = d.field('value');
-						switch (d.field('key')) {
-							case 'next_roundup':
-								state.next_roundup = value;
-							case 'roundup_roundup':
-								state.roundup_roundup = value;
-							case 'snippet_tags':
-								state.snippet_tags = value;
-							case 'announcer':
-								state.announcer = value;
-							default:
-								trace('WARNING: FIELD NOT MAPPED ' + d.field('key'));
-						}
-					}
-				default:
-					trace(response);
-			}
-		});
-		universe.setComponents(universe.createEntity(), e);
+		new Timer(500).run = update;
+		startup_timer = new Timer(100);
+		startup_timer.run = startup;
+	}
 
+	static var startup_timer:Timer;
+
+	static function update() {
+		universe.update(500);
+	}
+
+	static function startup() {
+		var dbs = universe.getPhase('startup').getSystem(DatabaseSystem);
+		if (!dbs.connected) {
+			return;
+		}
+
+		static var request = false;
+		if (!got_state && !request) {
+			trace('Requested state');
+			request = true;
+			var e = DBEvents.GetAllRecords('state', (response) -> {
+				#if block
+				state = Json.parse(File.getContent('./config/state.json'));
+				return;
+				#end
+				switch (response) {
+					case Records(data):
+						for (d in data) {
+							var value:Dynamic = d.field('value');
+							state[d.field('key')] = DBState.fromRecord(d);
+							trace('got ' + d.field('key'));
+						}
+						trace("State set");
+						got_state = true;
+						request = false;
+						discordClient();
+					default:
+						trace(response);
+				}
+			});
+			universe.setComponents(universe.createEntity(), e);
+		}
+
+		if (request || !discord_connected) {
+			return;
+		}
+
+		var messages = universe.getPhase('messages');
+		if (!messages.enabled) {
+			messages.enable();
+			trace('enabled phase "messages"');
+		}
+
+		if (commands_active) {
+			#if block
+			universe.getPhase('testing').enable();
+			#end
+
+			#if !block
+			universe.getPhase('main').enable();
+			#end
+
+			trace('enabled phase "commands"');
+		}
+
+		if (universe.getPhase('testing').enabled || universe.getPhase('main').enabled) {
+			startup_timer.stop();
+		}
+	}
+
+	static function discordClient() {
 		client = new Client({
 			intents: [
 				IntentFlags.GUILDS,
@@ -218,15 +338,7 @@ class Main {
 		client.once('ready', (clients) -> {
 			trace('Ready!');
 			Main.client = cast clients[0];
-			
-			#if block
-			universe.getPhase('testing').enable();
-			#end
-
-			#if !block
-			universe.getPhase('main').enable();
-			#end
-			connected = true;
+			discord_connected = true;
 
 			var rest = new REST({version: '9'}).setToken(discord.token);
 			var res = token(rest);
@@ -261,7 +373,7 @@ class Main {
 
 		client.on('voiceStateUpdate', (old:VoiceState, updated:VoiceState) -> {
 			universe.setComponents(universe.createEntity(), CommandForward.roundup_member_update, old, updated);
-			//universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
+			// universe.setComponents(universe.createEntity(), CommandForward.add_event_role, member);
 			// universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 		});
 
@@ -278,48 +390,38 @@ class Main {
 		});
 
 		client.on('threadCreate', (thread:ThreadChannel) -> {
-			universe.setComponents(universe.createEntity(), CommandForward.thread_pin_message,
-				thread);
+			universe.setComponents(universe.createEntity(), CommandForward.thread_pin_message, thread);
 		});
 
 		client.on('interactionCreate', function(interaction:BaseCommandInteraction) {
 			if (interaction.isButton()) {
 				if (interaction.customId == 'showcase_agree') {
-					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree,
-						interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_agree, interaction);
 				}
 				if (interaction.customId == 'showcase_disagree') {
-					universe.setComponents(universe.createEntity(),
-						CommandForward.showcase_disagree, interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.showcase_disagree, interaction);
 				}
 
 				if (interaction.customId == 'snippet_left') {
-					universe.setComponents(universe.createEntity(), CommandForward.snippet_left,
-						interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.snippet_left, interaction);
 				}
 
 				if (interaction.customId == 'snippet_right') {
-					universe.setComponents(universe.createEntity(), CommandForward.snippet_right,
-						interaction);
+					universe.setComponents(universe.createEntity(), CommandForward.snippet_right, interaction);
 				}
 				return;
 			}
 
 			if (interaction.isModalSubmit()) {
-				
-				switch ((interaction.customId:CommandForward)) {
+				switch ((interaction.customId : CommandForward)) {
 					case quote_edit:
-						universe.setComponents(universe.createEntity(), CommandForward.quote_edit,
-							interaction);
+						universe.setComponents(universe.createEntity(), CommandForward.quote_edit, interaction);
 					case quote_set:
-						universe.setComponents(universe.createEntity(), CommandForward.quote_set,
-							interaction);
+						universe.setComponents(universe.createEntity(), CommandForward.quote_set, interaction);
 					case code_paste:
-						universe.setComponents(universe.createEntity(), CommandForward.code_paste,
-							interaction);
+						universe.setComponents(universe.createEntity(), CommandForward.code_paste, interaction);
 					case emoji_edit:
-						universe.setComponents(universe.createEntity(), CommandForward.emoji_edit,
-							interaction);
+						universe.setComponents(universe.createEntity(), CommandForward.emoji_edit, interaction);
 					default:
 						trace(interaction.customId);
 				}
@@ -327,14 +429,14 @@ class Main {
 			}
 
 			if (interaction.isMessageContextMenuCommand()) {
-				var type:ContextMenuTypes = switch(interaction.commandName) {
+				var type:ContextMenuTypes = switch (interaction.commandName) {
 					case 'Pin Message':
 						PinMessage;
-					case 'Line Numbers': 
+					case 'Line Numbers':
 						CodeLineNumbers;
-					case 'Delete Project': 
+					case 'Delete Project':
 						DeleteProject;
-					default: 
+					default:
 						none;
 				}
 
@@ -344,11 +446,10 @@ class Main {
 				return;
 			}
 
-			if(interaction.isAutocomplete()) {
-				trace(interaction);
+			if (interaction.isAutocomplete()) {
+				// trace(interaction);
 			}
-			if (!interaction.isCommand() && !interaction.isAutocomplete()
-				&& !interaction.isChatInputCommand()) {
+			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
 
@@ -357,17 +458,10 @@ class Main {
 		});
 
 		client.login(discord.token);
-		new Timer(500).run = function() {
-			if (!connected || !commands_active) {
-				return;
-			}
-			universe.update(1);
-		}
 	}
 
 	public static function supressEmbeds(message:Message) {
 		var content = message.content;
-		
 	}
 
 	public static function createCommand(interaction:BaseCommandInteraction) {
@@ -449,8 +543,7 @@ class Main {
 		return null;
 	}
 
-	static function parseIncomingCommand(args:Array<Dynamic>, param:TCommands,
-			interaction:BaseCommandInteraction) {
+	static function parseIncomingCommand(args:Array<Dynamic>, param:TCommands, interaction:BaseCommandInteraction) {
 		switch (param.type) {
 			case user:
 				args.push(interaction.options.getUser(param.name));
@@ -500,45 +593,26 @@ class Main {
 			throw('Enter your discord auth token.');
 		}
 
-		Main.app = FirebaseApp.initializeApp(keys.firebase);
-		Auth.signInWithEmailAndPassword(Auth.getAuth(), keys.username, keys.password)
-			.then(function(res) {
-				trace('logged in');
-				var doc = Firestore.doc(Firestore.getFirestore(app), 'discord/admin');
-				Firestore.onSnapshot(doc, function(resp) {
-					
-					#if !block
-					admin = resp.data();
-					#end
-					Main.auth = res.user;
-					Main.logged_in = true;
-				}, function(err) {
-					trace(err);
-					Browser.console.dir(err);
-				});
-			});
-
 		start();
 	}
 
-	static public function updateState(field:String, value:Dynamic) {
-		#if block
-		File.saveContent('./config/state.json', Json.stringify(state));
-		#else
-		var record = new Record();
-		record.field('key', field);
-		record.field('value', value);
+	static public function updateState(field:String, ?value:DBState) {
+
+		if (value != null) {
+			state[field] = value;
+		}
 		
-		var e = DBEvents.Update('state', record, Query.query($key = field), (response) -> {
-			switch(response) {
+		var e = DBEvents.Update('state', state[field], Query.query($key == field), (response) -> {
+			switch (response) {
 				case Success(message, data):
 					trace('updated state field($field)');
 				default:
+					trace(state[field]);
 					trace(response);
 			}
 		});
 		universe.setComponents(universe.createEntity(), e);
-		#end
+		
 	}
 
 	static function parseCommands() {
@@ -559,10 +633,9 @@ class Main {
 			}
 
 			if (command.type == menu) {
-				commands.push(
-					new ContextMenuCommandBuilder().setName(command.name)
-						.setType(command.menu_type)
-						.setDefaultMemberPermissions(permission));
+				commands.push(new ContextMenuCommandBuilder().setName(command.name)
+					.setType(command.menu_type)
+					.setDefaultMemberPermissions(permission));
 				continue;
 			}
 
@@ -576,8 +649,7 @@ class Main {
 
 					switch (param.type) {
 						case subcommand:
-							var subcommand = new SlashCommandSubcommandBuilder().setName(param.name)
-								.setDescription(param.description);
+							var subcommand = new SlashCommandSubcommandBuilder().setName(param.name).setDescription(param.description);
 							for (subparam in param.params) {
 								var autocomplete = false;
 								if (subparam.autocomplete != null) {
@@ -600,18 +672,12 @@ class Main {
 		return commands;
 	}
 
-	static function parseCommandType(param:TCommands, autocomplete:Bool,
-			builder:SharedSlashCommandOptions) {
+	static function parseCommandType(param:TCommands, autocomplete:Bool, builder:SharedSlashCommandOptions) {
 		switch (param.type) {
 			case user:
-				builder.addUserOption(
-					new SlashCommandUserOption().setName(param.name)
-						.setDescription(param.description)
-						.setRequired(param.required));
+				builder.addUserOption(new SlashCommandUserOption().setName(param.name).setDescription(param.description).setRequired(param.required));
 			case string:
-				var cmd = new SlashCommandStringOption().setName(param.name)
-					.setRequired(param.required)
-					.setAutocomplete(autocomplete);
+				var cmd = new SlashCommandStringOption().setName(param.name).setRequired(param.required).setAutocomplete(autocomplete);
 				if (param.description != null) {
 					cmd = cmd.setDescription(param.description);
 				}
@@ -625,30 +691,23 @@ class Main {
 
 				builder.addStringOption(cmd);
 			case bool:
-				builder.addBooleanOption(
-					new SlashCommandBooleanOption().setName(param.name)
-						.setDescription(param.description)
-						.setRequired(param.required));
+				builder.addBooleanOption(new SlashCommandBooleanOption().setName(param.name)
+					.setDescription(param.description)
+					.setRequired(param.required));
 			case channel:
-				builder.addChannelOption(
-					new SlashCommandChannelOption().setName(param.name)
-						.setDescription(param.description)
-						.setRequired(param.required));
+				builder.addChannelOption(new SlashCommandChannelOption().setName(param.name)
+					.setDescription(param.description)
+					.setRequired(param.required));
 			case role:
-				builder.addRoleOption(
-					new SlashCommandRoleOption().setName(param.name)
-						.setDescription(param.description)
-						.setRequired(param.required));
+				builder.addRoleOption(new SlashCommandRoleOption().setName(param.name).setDescription(param.description).setRequired(param.required));
 			case mention:
-				builder.addMentionableOption(
-					new SlashCommandMentionableOption().setName(param.name)
-						.setDescription(param.description)
-						.setRequired(param.required));
+				builder.addMentionableOption(new SlashCommandMentionableOption().setName(param.name)
+					.setDescription(param.description)
+					.setRequired(param.required));
 			case number:
-				builder.addNumberOption(
-					new SlashCommandNumberOption().setName(param.name)
-						.setDescription(param.description)
-						.setRequired(param.required));
+				builder.addNumberOption(new SlashCommandNumberOption().setName(param.name)
+					.setDescription(param.description)
+					.setRequired(param.required));
 			default:
 		}
 	}

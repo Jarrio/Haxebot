@@ -1,8 +1,5 @@
 common.hxml
 --dce no
--D source-map
--D source-map-content
--D source-header
 #--macro haxe.macro.CompilationServer.setModuleCheckPolicy([''], [Retype], false)
 -D ecs.no_debug_output
 -D keep-inline-positions
