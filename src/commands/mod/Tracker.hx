@@ -12,7 +12,7 @@ import discord_js.Message;
 import discord_js.TextChannel;
 import database.types.DBTracker;
 
-class NewTracker extends CommandBase {
+class Tracker extends CommandBase {
 	var trackers:Map<Int, DBTracker> = [];
 	var dm:Map<String, User> = [];
 	@:fastFamily var messages:{command:CommandForward, message:Message};
