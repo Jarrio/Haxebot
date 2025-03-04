@@ -39,7 +39,7 @@ class Emoji extends CommandBase {
 									return;
 								}
 								emoji.name = name.toLowerCase();
-								var e = DBEvents.Update('emojis', emoji.record, Query.query($id == emoji.id && $author_id == emoji.author_id),
+								var e = DBEvents.Update('emojis', emoji, Query.query($id == emoji.id && $author_id == emoji.author_id),
 									function(resp) {
 										switch (resp) {
 											case Success(message, _):
@@ -217,7 +217,7 @@ class Emoji extends CommandBase {
 										var aid = interaction.user.id;
 
 										var emoji = new DBEmoji(aid, aname, name, url, description);
-										var e = DBEvents.Insert('emojis', emoji.record, function(resp) {
+										var e = DBEvents.Insert('emojis', emoji, function(resp) {
 											switch (resp) {
 												case Success(message, data):
 													interaction.reply({content: 'Emoji $name has been created'}).then(null, (err) -> trace(err));

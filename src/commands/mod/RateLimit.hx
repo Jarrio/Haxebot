@@ -107,7 +107,7 @@ class RateLimit extends CommandBase {
 	}
 
 	function updateLimit(limit:DBRateLimit) {
-		var e = DBEvents.Update('rate_limit', limit.record, query($user_id == limit.user_id),
+		var e = DBEvents.Update('rate_limit', limit, query($user_id == limit.user_id),
 			function(response) {
 				switch (response) {
 					case Success(message, data):
@@ -144,7 +144,7 @@ class RateLimit extends CommandBase {
 				obj.reason = reason;
 				setTracker(obj);
 				
-				var e = DBEvents.SearchAndUpdate('rate_limit', 'user_id', query($user_id == obj.user_id), obj.record, function(response) {
+				var e = DBEvents.SearchAndUpdate('rate_limit', 'user_id', query($user_id == obj.user_id), obj, function(response) {
 					switch (response) {
 						case Success(message, data):
 							this.limits.set(user.id, DBRateLimit.fromRecord(data));

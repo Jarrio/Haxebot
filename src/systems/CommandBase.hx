@@ -1,5 +1,7 @@
 package systems;
 
+import Main.NewState;
+import database.types.DBState;
 import haxe.PosInfos;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
@@ -7,11 +9,11 @@ import ecs.System;
 import Main.TState;
 
 abstract class CommandBase extends System {
-	final has_subcommands:Bool = false;
+	var has_subcommands:Bool = false;
 	@:fastFamily var commands:{command:Command, interaction:BaseCommandInteraction};
 
 	override function update(_) {
-		if (!Main.connected || !Main.commands_active) {
+		if (!Main.discord_connected || !Main.commands_active) {
 			return;
 		}
 		iterate(commands, entity -> {
@@ -31,11 +33,13 @@ abstract class CommandBase extends System {
 
 	abstract function run(command:Command, interaction:BaseCommandInteraction):Void;
 
-	public var state(get, never):TState;
+	public var state(get, never):NewState;
+
 	function get_state() {
 		return Main.state;
 	}
-	
+
 	public var name(get, never):String;
+
 	abstract function get_name():String;
 }

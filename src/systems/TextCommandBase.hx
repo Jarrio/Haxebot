@@ -8,7 +8,7 @@ abstract class TextCommandBase extends System {
 	@:fastFamily var commands:{command:TextCommand, message:Message};
 
 	override function update(_) {
-		if (!Main.connected || !Main.commands_active) {
+		if (!Main.discord_connected || !Main.commands_active) {
 			return;
 		}
 		iterate(commands, entity -> {

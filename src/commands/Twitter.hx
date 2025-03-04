@@ -13,6 +13,7 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandDbBase;
 import js.Browser;
+
 typedef TTweet = {
 	var edit_history_tweet_ids:Array<String>;
 	var id:String;
@@ -28,8 +29,7 @@ typedef TTweetUser = {
 }
 
 @:forward
-private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes:{users:Array<TTweetUser>}})
-	from Dynamic {
+private abstract Response({meta:{result_count:Int}, data:Array<TTweet>, includes:{users:Array<TTweetUser>}}) from Dynamic {
 	public function getUser(tweet:TTweet):TTweetUser {
 		if (users != null) {
 			for (user in users) {
@@ -105,7 +105,7 @@ class Twitter extends CommandDbBase {
 		trace('Started twitter scanning');
 		var checker = new Timer((this.ping_rate : Float).int());
 		checker.run = () -> {
-			if (Main.connected && !this.checking && this.channel != null) {
+			if (Main.discord_connected && !this.checking && this.channel != null) {
 				this.checking = true;
 				for (k => query in this.tags) {
 					var url = 'https://api.twitter.com/2/tweets/search/recent?tweet.fields=created_at&user.fields=name&expansions=author_id&max_results=25';
@@ -173,7 +173,7 @@ class Twitter extends CommandDbBase {
 
 	override function update(_:Float) {
 		super.update(_);
-		if (!Main.connected) {
+		if (!Main.discord_connected) {
 			return;
 		}
 

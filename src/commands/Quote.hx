@@ -11,17 +11,18 @@ import discord_js.MessageEmbed;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
 import Main.CommandForward;
-import systems.CommandDbBase;
+import systems.CommandBase;
 import commands.types.ActionList;
 import Query;
 import db.Record;
 
-class Quote extends CommandDbBase {
+class Quote extends CommandBase {
 	@:fastFamily var modal:{forward:CommandForward, interaction:BaseCommandInteraction};
 	var cache:Map<String, DBQuote> = [];
 	final max_name_length = 35;
 
-	override function onEnabled() {
+	public function new(universe) {
+		super(universe);
 		this.has_subcommands = true;
 	}
 
@@ -45,7 +46,7 @@ class Quote extends CommandDbBase {
 						return;
 					}
 
-					var e = DBEvents.Insert('quotes', quote.record, function(resp) {
+					var e = DBEvents.Insert('quotes', quote, function(resp) {
 						switch (resp) {
 							case Success(message, data):
 								trace(message);
@@ -85,7 +86,7 @@ class Quote extends CommandDbBase {
 								quote.title = title.toLowerCase();
 								var e = DBEvents.Update(
 									'quotes',
-									quote.record,
+									quote,
 									Query.query($id == quote.id && $author_id == quote.author_id),
 									function(resp) {
 										switch (resp) {
@@ -141,7 +142,7 @@ class Quote extends CommandDbBase {
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
 			case QuoteList(user):
-				var sort = Firestore.orderBy('id', ASCENDING);
+				
 				var e = DBEvents.GetAllRecords('quotes', parseGroupQuotes.bind(interaction));
 				if (user != null) {
 					e = DBEvents.GetRecords('quotes', Query.query($author_id == user.id),
@@ -185,14 +186,6 @@ class Quote extends CommandDbBase {
 						name = name.toLowerCase();
 					}
 				}
-
-				var col = collection(db, 'discord/quotes/entries');
-
-				var query:FQuery<TQuoteData> = Firestore.query(
-					col,
-					where(column, EQUAL_TO, isName(name) ? name : name.parseInt()),
-					where('author', EQUAL_TO, interaction.user.id)
-				);
 
 				var column = 'title';
 				if (isId(name)) {

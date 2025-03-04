@@ -16,7 +16,7 @@ abstract class CommandDbBase extends System {
 	@:fastFamily var commands:{command:Command, interaction:BaseCommandInteraction};
 
 	override function update(_) {
-		if (!Main.connected || !Main.commands_active) {
+		if (!Main.discord_connected || !Main.commands_active) {
 			return;
 		}
 		iterate(commands, entity -> {
