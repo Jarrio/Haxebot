@@ -178,6 +178,7 @@ class RoundupRoundup extends CommandDbBase {
 		trace(this.host_m.user.tag);
 		waiting = true;
 		if (announcer != null) {
+			Main.state.announcer = null;
 			Main.updateState('announcer', null);
 			announcer.roles.remove(announcer_role).then(function(_) {
 				this.get_announcer = false;
@@ -453,9 +454,9 @@ class RoundupRoundup extends CommandDbBase {
 		return Main.state.roundup_roundup;
 	}
 
-	function setState(value) {
-		Main.state.roundup_roundup = value;
-		Main.updateState('roundup_roundup', Json.stringify(Main.state.roundup_roundup));
+	function setState(value:TRoundup) {
+		//Main.state.roundup_roundup = value;
+		Main.updateState('roundup_roundup', value);
 	}
 
 	function get_started() {
