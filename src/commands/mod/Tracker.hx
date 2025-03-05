@@ -26,7 +26,7 @@ class Tracker extends CommandBase {
 						var tracker = DBTracker.fromRecord(record);
 						#if block
 						if (tracker.by != '151104106973495296') {
-							//only load me if in debug mode
+							// only load me if in debug mode
 							continue;
 						}
 						#end
@@ -73,7 +73,7 @@ class Tracker extends CommandBase {
 		var content = message.content;
 		for (word in tracker.keywords) {
 			var before = content.indexOf(word) - 1;
-			
+
 			if (content.toLowerCase().contains(word)) {
 				var a = content.charAt(before);
 				var b = content.charAt(before + word.length + 1);
@@ -189,7 +189,7 @@ class Tracker extends CommandBase {
 				if (name != null) {
 					if (interaction.isAutocomplete()) {
 						var e = DBEvents.SearchBy('trackers', 'name', name, 'by', interaction.user.id, (resp) -> {
-							switch(resp) {
+							switch (resp) {
 								case Records(data):
 									var results = [];
 									for (record in data) {
@@ -218,7 +218,7 @@ class Tracker extends CommandBase {
 					}
 					var id = Std.parseInt(name);
 					var e = DBEvents.DeleteByValue('trackers', 'id', id, (resp) -> {
-						switch(resp) {
+						switch (resp) {
 							case Success(message, data):
 								trackers.remove(id);
 								interaction.reply({content: 'Tracker deleted!', ephemeral: true}).then(null, (err) -> trace(err));
@@ -234,7 +234,6 @@ class Tracker extends CommandBase {
 
 	function parseTracker(interaction:BaseCommandInteraction, name:String, description:String, keywords:Array<String>, string_exclude:Array<String>,
 			channel_exclude:Array<String>, user_exclude:Array<String>) {
-
 		var obj = new DBTracker();
 		obj.name = name;
 		obj.by = interaction.user.id;
@@ -258,10 +257,13 @@ class Tracker extends CommandBase {
 		}
 
 		var e = DBEvents.Insert('trackers', obj, (resp) -> {
-			switch(resp) {
+			switch (resp) {
 				case Success(_, data):
 					var d = DBTracker.fromRecord(data);
 					trackers.set(d.id, d);
+					if (!dm.exists(interaction.user.id)) {
+						dm.set(interaction.user.id, interaction.user);
+					}
 					interaction.reply({content: 'Your tracker is now active!', ephemeral: true}).then(null, (err) -> trace(err));
 				default:
 					trace(resp);
