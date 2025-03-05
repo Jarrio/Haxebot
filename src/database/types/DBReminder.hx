@@ -11,6 +11,7 @@ class DBReminder extends MyRecord {
 	@crecord public var channel_id:String;
 	@crecord public var is_thread:Int = 0;
 	
+	@record public var username:String;
 	@record public var sent:Int = 0;
 	@record public var personal:Int = 0;
 	@record public var thread_reply:Int = 0;

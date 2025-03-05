@@ -66,29 +66,20 @@ class Reminder extends CommandBase {
 					channel_id = interaction.channelId;
 				}
 
-				var obj:TReminder = {
-					channel_id: channel_id,
-					sent: false,
-					thread_reply: thread_reply,
-					thread_id: thread_id,
-					id: "",
-					duration: Duration.fromString(when),
-					timestamp: Date.now().getTime(),
-					author: interaction.user.id,
-					content: content,
-					personal: personal
-				}
 				var is_thread = (interaction.channel.isThread()) ? 1 : 0;
 				var reminder = new DBReminder(interaction.user.id, content, Duration.fromString(when), channel_id, is_thread);
+				reminder.username = interaction.user.username;
+				
 				if (is_thread == 1 && thread_reply) {
 					reminder.thread_reply = 1;
+					reminder.channel_id = thread_id;
 				}
 				reminder.personal = (personal) ? 1 : 0;
 
 				var min = #if block "0min" #else "4mins" #end;
 				var duration = Duration.fromString(min);
 
-				if (obj.duration == 0.) {
+				if (reminder.duration == 0.) {
 					interaction.reply({
 						content: 'Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)',
 						ephemeral: personal
@@ -96,12 +87,12 @@ class Reminder extends CommandBase {
 					return;
 				}
 
-				if (obj.duration <= duration) {
+				if (reminder.duration <= duration) {
 					interaction.reply({content: 'Please set a reminder that is at least 5mins', ephemeral: personal});
 					return;
 				}
 
-				if (obj.duration >= Duration.fromString('366days')) {
+				if (reminder.duration >= Duration.fromString('366days')) {
 					interaction.reply({content: 'A reminder can\'t be set for longer than 366 days', ephemeral: personal});
 					return;
 				}
@@ -111,7 +102,7 @@ class Reminder extends CommandBase {
 						case Success(_, data):
 							var record:Record = data;
 							reminder.id = record.field('id');
-							var post_time = Math.round((obj.timestamp + obj.duration) / 1000);
+							var post_time = Math.round((reminder.timestamp + reminder.duration) / 1000);
 							this.reminders.push(reminder);
 							interaction.reply({
 								ephemeral: personal,
