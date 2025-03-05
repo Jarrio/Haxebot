@@ -692,7 +692,7 @@ Main.start = function() {
 	var vec = new Array(4);
 	vec[0] = new ecs_Phase(true,"startup",new Array(1),new Array(1));
 	vec[1] = new ecs_Phase(false,"messages",new Array(6),new Array(6));
-	vec[2] = new ecs_Phase(false,"testing",new Array(20),new Array(20));
+	vec[2] = new ecs_Phase(false,"testing",new Array(21),new Array(21));
 	vec[3] = new ecs_Phase(false,"main",new Array(32),new Array(32));
 	var entities = new ecs_core_EntityManager(1000);
 	var vec1 = new Array(13);
@@ -876,60 +876,63 @@ Main.start = function() {
 	var s = new commands_Poll(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
-	var s = new commands_RoundupAnnouncer(u);
+	var s = new commands_Reminder(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
-	var s = new commands_RoundupRoundup(u);
+	var s = new commands_RoundupAnnouncer(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
-	var s = new commands_DeleteProject(u);
+	var s = new commands_RoundupRoundup(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
-	var s = new commands_Emoji(u);
+	var s = new commands_DeleteProject(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
-	var s = new commands_Haxelib(u);
+	var s = new commands_Emoji(u);
 	phase.systems[6] = s;
 	phase.enabledSystems[6] = true;
-	var s = new commands_Hi(u);
+	var s = new commands_Haxelib(u);
 	phase.systems[7] = s;
 	phase.enabledSystems[7] = true;
-	var s = new commands_Boop(u);
+	var s = new commands_Hi(u);
 	phase.systems[8] = s;
 	phase.enabledSystems[8] = true;
-	var s = new commands_VoiceChatBridge(u);
+	var s = new commands_Boop(u);
 	phase.systems[9] = s;
 	phase.enabledSystems[9] = true;
-	var s = new commands_Run2(u);
+	var s = new commands_VoiceChatBridge(u);
 	phase.systems[10] = s;
 	phase.enabledSystems[10] = true;
-	var s = new commands_Everyone(u);
+	var s = new commands_Run2(u);
 	phase.systems[11] = s;
 	phase.enabledSystems[11] = true;
-	var s = new commands_events_PinMessageInfo(u);
+	var s = new commands_Everyone(u);
 	phase.systems[12] = s;
 	phase.enabledSystems[12] = true;
-	var s = new commands_Quote(u);
+	var s = new commands_events_PinMessageInfo(u);
 	phase.systems[13] = s;
 	phase.enabledSystems[13] = true;
-	var s = new commands_Api(u);
+	var s = new commands_Quote(u);
 	phase.systems[14] = s;
 	phase.enabledSystems[14] = true;
-	var s = new commands_Notify(u);
+	var s = new commands_Api(u);
 	phase.systems[15] = s;
 	phase.enabledSystems[15] = true;
-	var s = new commands_Code(u);
+	var s = new commands_Notify(u);
 	phase.systems[16] = s;
 	phase.enabledSystems[16] = true;
-	var s = new commands_CodeLineNumbers(u);
+	var s = new commands_Code(u);
 	phase.systems[17] = s;
 	phase.enabledSystems[17] = true;
-	var s = new commands_React(u);
+	var s = new commands_CodeLineNumbers(u);
 	phase.systems[18] = s;
 	phase.enabledSystems[18] = true;
-	var s = new commands_Say(u);
+	var s = new commands_React(u);
 	phase.systems[19] = s;
 	phase.enabledSystems[19] = true;
+	var s = new commands_Say(u);
+	phase.systems[20] = s;
+	phase.enabledSystems[20] = true;
 	var phase = vec[3];
 	var s = new commands_ThreadCount(u);
 	phase.systems[0] = s;
@@ -1048,7 +1051,7 @@ Main.startup = function() {
 		return;
 	}
 	if(!Main.got_state && !Main.startup_request) {
-		haxe_Log.trace("Requested state",{ fileName : "src/Main.hx", lineNumber : 272, className : "Main", methodName : "startup"});
+		haxe_Log.trace("Requested state",{ fileName : "src/Main.hx", lineNumber : 273, className : "Main", methodName : "startup"});
 		Main.startup_request = true;
 		var e = database_DBEvents.GetAllRecords("state",function(response) {
 			if(response._hx_index == 2) {
@@ -1059,14 +1062,14 @@ Main.startup = function() {
 					NewState.set(Main.state,d1.field("key"),database_types_DBState.fromRecord(d1));
 					var e = haxe_Log.trace;
 					var tmp = d1.field("key");
-					e("got " + (tmp == null ? "null" : Std.string(tmp)),{ fileName : "src/Main.hx", lineNumber : 284, className : "Main", methodName : "startup"});
+					e("got " + (tmp == null ? "null" : Std.string(tmp)),{ fileName : "src/Main.hx", lineNumber : 285, className : "Main", methodName : "startup"});
 				}
-				haxe_Log.trace("State set",{ fileName : "src/Main.hx", lineNumber : 286, className : "Main", methodName : "startup"});
+				haxe_Log.trace("State set",{ fileName : "src/Main.hx", lineNumber : 287, className : "Main", methodName : "startup"});
 				Main.got_state = true;
 				Main.startup_request = false;
 				Main.discordClient();
 			} else {
-				haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 291, className : "Main", methodName : "startup"});
+				haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 292, className : "Main", methodName : "startup"});
 			}
 		});
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1083,11 +1086,11 @@ Main.startup = function() {
 	var messages = Main.universe.getPhase("messages");
 	if(!messages.enabled) {
 		messages.enable();
-		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 304, className : "Main", methodName : "startup"});
+		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 305, className : "Main", methodName : "startup"});
 	}
 	if(Main.commands_active) {
 		Main.universe.getPhase("main").enable();
-		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 316, className : "Main", methodName : "startup"});
+		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 317, className : "Main", methodName : "startup"});
 	}
 	if(Main.universe.getPhase("testing").enabled || Main.universe.getPhase("main").enabled) {
 		Main.startup_timer.stop();
@@ -1099,7 +1102,7 @@ Main.discordClient = function() {
 		var $l=arguments.length;
 		var clients = new Array($l>0?$l-0:0);
 		for(var $i=0;$i<$l;++$i){clients[$i-0]=arguments[$i];}
-		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 340, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("Ready!",{ fileName : "src/Main.hx", lineNumber : 341, className : "Main", methodName : "discordClient"});
 		Main.client = clients[0];
 		Main.discord_connected = true;
 		var rest = new discord_$js_rest_REST({ version : "9"}).setToken(Main.get_discord().token);
@@ -1110,15 +1113,15 @@ Main.discordClient = function() {
 			while(_g < foo.length) {
 				var item = foo[_g];
 				++_g;
-				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 349, className : "Main", methodName : "discordClient"});
+				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 350, className : "Main", methodName : "discordClient"});
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 355, className : "Main", methodName : "discordClient"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 356, className : "Main", methodName : "discordClient"});
 			$global.console.dir(err);
 		});
 	});
 	Main.client.on("guildMemberAdd",function(member) {
-		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 361, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("member " + member.user.tag,{ fileName : "src/Main.hx", lineNumber : 362, className : "Main", methodName : "discordClient"});
 		var _ecsTmpEntity = Main.universe.createEntity();
 		Main.universe.components.set(_ecsTmpEntity,5,"add_event_role");
 		Main.universe.components.set(_ecsTmpEntity,7,member);
@@ -1277,8 +1280,8 @@ Main.discordClient = function() {
 		}
 	});
 	Main.client.on("ChatInputAutoCompleteEvent",function(incoming) {
-		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 389, className : "Main", methodName : "discordClient"});
-		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 390, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace("disconnected",{ fileName : "src/Main.hx", lineNumber : 390, className : "Main", methodName : "discordClient"});
+		haxe_Log.trace(incoming,{ fileName : "src/Main.hx", lineNumber : 391, className : "Main", methodName : "discordClient"});
 	});
 	Main.client.on("threadCreate",function(thread) {
 		var _ecsTmpEntity = Main.universe.createEntity();
@@ -1653,7 +1656,7 @@ Main.discordClient = function() {
 				}
 				break;
 			default:
-				haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 427, className : "Main", methodName : "discordClient"});
+				haxe_Log.trace(interaction.customId,{ fileName : "src/Main.hx", lineNumber : 428, className : "Main", methodName : "discordClient"});
 			}
 			return;
 		}
@@ -1850,7 +1853,7 @@ Main.getCommand = function(name) {
 };
 Main.saveCommand = function(command) {
 	Main.registered_commands.h[command.name] = command;
-	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 582, className : "Main", methodName : "saveCommand"});
+	haxe_Log.trace("registered " + command.name,{ fileName : "src/Main.hx", lineNumber : 583, className : "Main", methodName : "saveCommand"});
 };
 Main.main = function() {
 	try {
@@ -1858,21 +1861,21 @@ Main.main = function() {
 		Main.command_file = JSON.parse(js_node_Fs.readFileSync("./config/commands.json",{ encoding : "utf8"}));
 	} catch( _g ) {
 		var e = haxe_Exception.caught(_g);
-		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 590, className : "Main", methodName : "main"});
+		haxe_Log.trace(e.get_message(),{ fileName : "src/Main.hx", lineNumber : 591, className : "Main", methodName : "main"});
 	}
 	if(Main.keys == null || Main.get_discord().token == null) {
 		throw haxe_Exception.thrown("Enter your discord auth token.");
 	}
 	Main.app = firebase_web_app_FirebaseApp.initializeApp(Main.keys.firebase);
 	firebase_web_auth_Auth.signInWithEmailAndPassword(firebase_web_auth_Auth.getAuth(),Main.keys.username,Main.keys.password).then(function(res) {
-		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 599, className : "Main", methodName : "main"});
+		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 600, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
 			CommandPermission.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 608, className : "Main", methodName : "main"});
+			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 609, className : "Main", methodName : "main"});
 			$global.console.dir(err);
 		});
 	});
@@ -1884,10 +1887,10 @@ Main.updateState = function(field,value) {
 	}
 	var e = database_DBEvents.Update("state",NewState.get(Main.state,field),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("key")),QueryExpr.QueryValue(field)),function(response) {
 		if(response._hx_index == 4) {
-			haxe_Log.trace("updated state field(" + field + ")",{ fileName : "src/Main.hx", lineNumber : 625, className : "Main", methodName : "updateState"});
+			haxe_Log.trace("updated state field(" + field + ")",{ fileName : "src/Main.hx", lineNumber : 626, className : "Main", methodName : "updateState"});
 		} else {
-			haxe_Log.trace(NewState.get(Main.state,field),{ fileName : "src/Main.hx", lineNumber : 627, className : "Main", methodName : "updateState"});
-			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 628, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(NewState.get(Main.state,field),{ fileName : "src/Main.hx", lineNumber : 628, className : "Main", methodName : "updateState"});
+			haxe_Log.trace(response,{ fileName : "src/Main.hx", lineNumber : 629, className : "Main", methodName : "updateState"});
 		}
 	});
 	var _ecsTmpEntity = Main.universe.createEntity();
@@ -7837,68 +7840,19 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,__class__: commands_React
 });
-var systems_CommandDbBase = function(_universe) {
-	this.has_subcommands = false;
-	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(2);
-	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(4);
-	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(3);
-};
-$hxClasses["systems.CommandDbBase"] = systems_CommandDbBase;
-systems_CommandDbBase.__name__ = "systems.CommandDbBase";
-systems_CommandDbBase.__super__ = ecs_System;
-systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
-	has_subcommands: null
-	,update: function(_) {
-		if(!Main.discord_connected || !Main.commands_active) {
-			return;
-		}
-		var _this = this.commands;
-		var _set = _this.entities;
-		var _active = _this.isActive();
-		var _g_idx = _set.size() - 1;
-		while(_active && _g_idx >= 0) {
-			var entity = _set.getDense(_g_idx--);
-			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
-			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
-			if(this.has_subcommands) {
-				if(command.name.indexOf(this.get_name(),0) != -1) {
-					this.run(command,interaction);
-					this.universe.deleteEntity(entity);
-				}
-			} else if(command.name == this.get_name()) {
-				this.run(command,interaction);
-				this.universe.deleteEntity(entity);
-			}
-		}
-	}
-	,addDoc: function(path,data,success,failure) {
-		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),data).then(success,failure);
-	}
-	,get_db: function() {
-		return firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp());
-	}
-	,run: null
-	,get_name: null
-	,commands: null
-	,table5d38588a6ddd880f90fc8234bccb893f: null
-	,tablefa61f37a15ee60bbc1601eb42174bd3d: null
-	,__class__: systems_CommandDbBase
-	,__properties__: {get_name:"get_name",get_db:"get_db"}
-});
 var commands_Reminder = function(_universe) {
 	this.casual_chat = "";
 	this.bot_channel = "663246792426782730";
-	this.sent = [];
+	this.sent = new haxe_ds_IntMap();
 	this.reminders = [];
 	this.checking = false;
 	this.channels = new haxe_ds_StringMap();
-	systems_CommandDbBase.call(this,_universe);
+	systems_CommandBase.call(this,_universe);
 };
 $hxClasses["commands.Reminder"] = commands_Reminder;
 commands_Reminder.__name__ = "commands.Reminder";
-commands_Reminder.__super__ = systems_CommandDbBase;
-commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
+commands_Reminder.__super__ = systems_CommandBase;
+commands_Reminder.prototype = $extend(systems_CommandBase.prototype,{
 	channels: null
 	,checking: null
 	,reminders: null
@@ -7907,34 +7861,40 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 	,casual_chat: null
 	,onEnabled: function() {
 		var _gthis = this;
-		firebase_web_firestore_Firestore.onSnapshot(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries"),function(resp) {
-			var arr = [];
-			var _g = 0;
-			var _g1 = resp.docs;
-			while(_g < _g1.length) {
-				var item = _g1[_g];
-				++_g;
-				arr.push(item.data());
+		var e = database_DBEvents.GetAllRecords("reminders",function(resp) {
+			if(resp._hx_index == 2) {
+				var item = resp.data.iterator();
+				while(item.hasNext()) {
+					var item1 = item.next();
+					var r = database_types_DBReminder.fromRecord(item1);
+					_gthis.reminders.push(r);
+				}
+				haxe_Log.trace("Loaded reminders",{ fileName : "src/commands/Reminder.hx", lineNumber : 36, className : "commands.Reminder", methodName : "onEnabled"});
+			} else {
+				haxe_Log.trace(resp,{ fileName : "src/commands/Reminder.hx", lineNumber : 38, className : "commands.Reminder", methodName : "onEnabled"});
 			}
-			_gthis.reminders = arr;
 		});
+		var _ecsTmpEntity = this.universe.createEntity();
+		this.universe.components.set(_ecsTmpEntity,2,e);
+		var ecsEntCompFlags = this.universe.components.flags[ecs_Entity.id(_ecsTmpEntity)];
+		var ecsTmpFamily = this.universe.families.get(1);
+		if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+			ecsTmpFamily.add(_ecsTmpEntity);
+		}
 	}
 	,run: function(command,interaction) {
+		var _gthis = this;
 		var _g = command.content;
 		if(_g._hx_index == 14) {
-			var content = _g.content;
-			var when = _g.when;
+			var _gwhen = _g.when;
+			var _gthread_reply = _g.thread_reply;
 			var personal = _g.personal;
-			var thread_reply = _g.thread_reply;
 			if(personal == null) {
 				personal = false;
 			}
-			var thread_id = "";
-			if(thread_reply) {
-				if(interaction.channel.isThread()) {
-					thread_id = interaction.channel.id;
-				} else {
-					interaction.reply("You marked `thread_reply` to true. Please trigger this command from a thread.");
+			if(_gthread_reply) {
+				if(!interaction.channel.isThread()) {
+					interaction.reply({ content : "You marked `thread_reply` to true. Please trigger this command from a thread.", ephemeral : personal});
 					return;
 				}
 			}
@@ -7943,42 +7903,55 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(category.toLowerCase() == "offtopic") {
 				channel_id = interaction.channelId;
 			}
-			var obj = { channel_id : channel_id, sent : false, thread_reply : thread_reply, thread_id : thread_id, id : "", duration : commands_types_Duration.fromString(when), timestamp : new Date().getTime(), author : interaction.user.id, content : content, personal : personal};
-			var min = "4mins";
-			var duration = commands_types_Duration.fromString(min);
-			if(obj.duration == 0.) {
-				interaction.reply("Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)");
+			var obj_timestamp;
+			var obj_duration = commands_types_Duration.fromString(_gwhen);
+			obj_timestamp = new Date().getTime();
+			var is_thread = interaction.channel.isThread() ? 1 : 0;
+			var reminder = new database_types_DBReminder(interaction.user.id,_g.content,commands_types_Duration.fromString(_gwhen),channel_id,is_thread);
+			if(is_thread == 1 && _gthread_reply) {
+				reminder.thread_reply = 1;
+			}
+			reminder.personal = personal ? 1 : 0;
+			var duration = commands_types_Duration.fromString("4mins");
+			if(obj_duration == 0.) {
+				interaction.reply({ content : "Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)", ephemeral : personal});
 				return;
 			}
-			if(obj.duration <= duration) {
-				interaction.reply("Please set a reminder that is at least 5mins");
+			if(obj_duration <= duration) {
+				interaction.reply({ content : "Please set a reminder that is at least 5mins", ephemeral : personal});
 				return;
 			}
-			if(obj.duration >= commands_types_Duration.fromString("366days")) {
-				interaction.reply("A reminder can't be set for longer than 366 days");
+			if(obj_duration >= commands_types_Duration.fromString("366days")) {
+				interaction.reply({ content : "A reminder can't be set for longer than 366 days", ephemeral : personal});
 				return;
 			}
-			var col = firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries");
-			firebase_web_firestore_Firestore.addDoc(col,obj).then(function(doc) {
-				var post_time = Math.round((obj.timestamp + obj.duration) / 1000);
-				interaction.reply({ ephemeral : personal, content : "Your reminder has been set for <t:" + post_time + ">"}).then(function(msg) {
-					obj.id = doc.id;
-					firebase_web_firestore_Firestore.updateDoc(doc,obj).then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 95, className : "commands.Reminder", methodName : "run"});
+			var e = database_DBEvents.Insert("reminders",reminder,function(resp) {
+				if(resp._hx_index == 4) {
+					var record = resp.data;
+					var this1 = record.field("id");
+					reminder.id = this1;
+					var post_time = Math.round((obj_timestamp + obj_duration) / 1000);
+					_gthis.reminders.push(reminder);
+					interaction.reply({ ephemeral : personal, content : "Your reminder has been set for <t:" + post_time + ">"}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 119, className : "commands.Reminder", methodName : "run"});
 					});
-				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 98, className : "commands.Reminder", methodName : "run"});
-					$global.console.dir(err);
-				});
-			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 102, className : "commands.Reminder", methodName : "run"});
-				$global.console.dir(err);
+				} else {
+					haxe_Log.trace(resp,{ fileName : "src/commands/Reminder.hx", lineNumber : 121, className : "commands.Reminder", methodName : "run"});
+					interaction.reply({ content : "Something went wrong", ephemeral : personal});
+				}
 			});
+			var entity = util_EcsTools.get_universe().createEntity();
+			util_EcsTools.get_universe().components.set(entity,2,e);
+			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
 		}
 	}
 	,update: function(_) {
 		var _gthis = this;
-		systems_CommandDbBase.prototype.update.call(this,_);
+		systems_CommandBase.prototype.update.call(this,_);
 		this.getChannel(this.bot_channel);
 		if(this.channels.h[this.bot_channel] == null) {
 			return;
@@ -7988,7 +7961,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 		while(_g < _g1.length) {
 			var reminder = [_g1[_g]];
 			++_g;
-			if(reminder[0].sent) {
+			if(reminder[0].sent == 1) {
 				continue;
 			}
 			if(reminder[0].channel_id != null && !Object.prototype.hasOwnProperty.call(this.channels.h,reminder[0].channel_id)) {
@@ -7998,44 +7971,59 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			if(new Date().getTime() < post_time) {
 				continue;
 			}
-			reminder[0].sent = true;
+			reminder[0].sent = 1;
+			var e = database_DBEvents.Update("reminders",reminder[0],QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(reminder[0].id)),(function() {
+				return function(resp) {
+					if(resp._hx_index != 4) {
+						haxe_Log.trace(resp,{ fileName : "src/commands/Reminder.hx", lineNumber : 159, className : "commands.Reminder", methodName : "update"});
+					}
+				};
+			})());
+			var entity = util_EcsTools.get_universe().createEntity();
+			util_EcsTools.get_universe().components.set(entity,2,e);
+			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
 			var parse = [{ parse : ["users"]}];
 			var embed = new discord_$js_MessageEmbed();
+			var author = [reminder[0].author_id];
 			embed.setTitle("Reminder");
 			embed.setDescription(reminder[0].content);
 			embed.setFooter({ text : "<t:" + Math.round(reminder[0].timestamp / 1000) + ">"});
-			var message = "> <@" + reminder[0].author + "> Your reminder was sent <t:" + Math.round(reminder[0].timestamp / 1000) + ":R>";
+			var message = "> <@" + author[0] + "> Your reminder was sent <t:" + Math.round(reminder[0].timestamp / 1000) + ":R>";
 			var content = ["" + message + "\n" + reminder[0].content];
-			if(reminder[0].thread_reply) {
-				Main.client.channels.fetch(reminder[0].thread_id).then((function(content,parse,reminder) {
+			if(reminder[0].thread_reply == 1) {
+				Main.client.channels.fetch(reminder[0].channel_id).then((function(content,author,parse,reminder) {
 					return function(channel) {
-						channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(parse,reminder) {
+						channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(author,parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 145, className : "commands.Reminder", methodName : "update"});
-								reminder[0].sent = false;
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 178, className : "commands.Reminder", methodName : "update"});
+								reminder[0].sent = 0;
 								reminder[0].duration += commands_types_Duration.fromString("3hrs");
-								var tmp = "<@" + reminder[0].author + "> I failed to post a reminder to your thread. Might be an issue.";
+								var tmp = "<@" + author[0] + "> I failed to post a reminder to your thread. Might be an issue.";
 								var parse1 = parse[0];
 								_gthis.get_channel().send({ content : tmp, allowedMentions : parse1});
 							};
-						})(parse,reminder));
+						})(author,parse,reminder));
 					};
-				})(content,parse,reminder));
-			} else if(reminder[0].personal) {
-				Main.client.users.fetch(reminder[0].author).then((function(content,parse,reminder) {
+				})(content,author,parse,reminder));
+			} else if(reminder[0].personal == 1) {
+				Main.client.users.fetch(author[0]).then((function(content,author,parse,reminder) {
 					return function(user) {
-						user.send(content[0]).then(null,(function(parse,reminder) {
+						user.send(content[0]).then(null,(function(author,parse,reminder) {
 							return function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 157, className : "commands.Reminder", methodName : "update"});
-								reminder[0].sent = false;
+								haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 190, className : "commands.Reminder", methodName : "update"});
+								reminder[0].sent = 0;
 								reminder[0].duration += 86400000;
-								var tmp = "<@" + reminder[0].author + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?";
+								var tmp = "<@" + author[0] + "> I tried to DM you a reminder, but it failed. Do you accept messages from this server?";
 								var parse1 = parse[0];
 								_gthis.get_channel().send({ content : tmp, allowedMentions : parse1});
 							};
-						})(parse,reminder));
+						})(author,parse,reminder));
 					};
-				})(content,parse,reminder));
+				})(content,author,parse,reminder));
 			} else {
 				var channel = this.get_channel();
 				if(reminder[0].channel_id != null && Object.prototype.hasOwnProperty.call(this.channels.h,reminder[0].channel_id)) {
@@ -8043,8 +8031,8 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 				}
 				channel.send({ content : content[0], allowedMentions : parse[0]}).then(null,(function(reminder) {
 					return function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 173, className : "commands.Reminder", methodName : "update"});
-						reminder[0].sent = false;
+						haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 206, className : "commands.Reminder", methodName : "update"});
+						reminder[0].sent = 0;
 						reminder[0].duration += 3600000;
 					};
 				})(reminder));
@@ -8053,17 +8041,31 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 		var _g = 0;
 		var _g1 = this.reminders;
 		while(_g < _g1.length) {
-			var msg = _g1[_g];
+			var msg = [_g1[_g]];
 			++_g;
-			if(!msg.sent) {
+			if(msg[0].sent == 0 || this.sent.h.hasOwnProperty(msg[0].id)) {
 				continue;
 			}
-			var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),"discord/reminders/entries/" + msg.id);
-			firebase_web_firestore_Firestore.deleteDoc(doc).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 186, className : "commands.Reminder", methodName : "update"});
-				$global.console.dir(err);
-			});
-			HxOverrides.remove(this.sent,msg);
+			this.sent.h[msg[0].id] = msg[0];
+			var e = database_DBEvents.DeleteByValue("reminders","id",msg[0].id,(function(msg) {
+				return function(resp) {
+					if(resp._hx_index == 4) {
+						haxe_Log.trace("Deleted",{ fileName : "src/commands/Reminder.hx", lineNumber : 221, className : "commands.Reminder", methodName : "update"});
+						HxOverrides.remove(_gthis.reminders,msg[0]);
+						_gthis.sent.remove(msg[0].id);
+					} else {
+						_gthis.sent.remove(msg[0].id);
+						haxe_Log.trace(resp,{ fileName : "src/commands/Reminder.hx", lineNumber : 227, className : "commands.Reminder", methodName : "update"});
+					}
+				};
+			})(msg));
+			var entity = util_EcsTools.get_universe().createEntity();
+			util_EcsTools.get_universe().components.set(entity,2,e);
+			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(entity);
+			}
 		}
 	}
 	,getChannel: function(channel_id) {
@@ -8073,9 +8075,9 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 			Main.client.channels.fetch(channel_id).then(function(channel) {
 				_gthis.channels.h[channel.id] = channel;
 				_gthis.checking = false;
-				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 199, className : "commands.Reminder", methodName : "getChannel"});
+				haxe_Log.trace("Found " + channel.name + " channel",{ fileName : "src/commands/Reminder.hx", lineNumber : 240, className : "commands.Reminder", methodName : "getChannel"});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 201, className : "commands.Reminder", methodName : "getChannel"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Reminder.hx", lineNumber : 242, className : "commands.Reminder", methodName : "getChannel"});
 				$global.console.dir(err);
 			});
 		}
@@ -8087,7 +8089,7 @@ commands_Reminder.prototype = $extend(systems_CommandDbBase.prototype,{
 		return "reminder";
 	}
 	,__class__: commands_Reminder
-	,__properties__: $extend(systems_CommandDbBase.prototype.__properties__,{get_channel:"get_channel"})
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_channel:"get_channel"})
 });
 var commands_Roundup = function(_universe) {
 	this.set_permissions = false;
@@ -10136,6 +10138,55 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tabled1cd3067ebd0108e92f1425a40ea7b45: null
 	,__class__: commands_Showcase
+});
+var systems_CommandDbBase = function(_universe) {
+	this.has_subcommands = false;
+	ecs_System.call(this,_universe);
+	this.commands = this.universe.families.get(2);
+	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(4);
+	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(3);
+};
+$hxClasses["systems.CommandDbBase"] = systems_CommandDbBase;
+systems_CommandDbBase.__name__ = "systems.CommandDbBase";
+systems_CommandDbBase.__super__ = ecs_System;
+systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
+	has_subcommands: null
+	,update: function(_) {
+		if(!Main.discord_connected || !Main.commands_active) {
+			return;
+		}
+		var _this = this.commands;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
+			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
+			if(this.has_subcommands) {
+				if(command.name.indexOf(this.get_name(),0) != -1) {
+					this.run(command,interaction);
+					this.universe.deleteEntity(entity);
+				}
+			} else if(command.name == this.get_name()) {
+				this.run(command,interaction);
+				this.universe.deleteEntity(entity);
+			}
+		}
+	}
+	,addDoc: function(path,data,success,failure) {
+		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),data).then(success,failure);
+	}
+	,get_db: function() {
+		return firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp());
+	}
+	,run: null
+	,get_name: null
+	,commands: null
+	,table5d38588a6ddd880f90fc8234bccb893f: null
+	,tablefa61f37a15ee60bbc1601eb42174bd3d: null
+	,__class__: systems_CommandDbBase
+	,__properties__: {get_name:"get_name",get_db:"get_db"}
 });
 var commands_Snippet = function(_universe) {
 	this.cache = new haxe_ds_StringMap();
@@ -12210,6 +12261,67 @@ database_types_DBRateLimit.prototype = $extend(database_MyRecord.prototype,{
 		return this._record;
 	}
 	,__class__: database_types_DBRateLimit
+});
+var database_types_DBReminder = function(author_id,content,duration,channel_id,is_thread) {
+	this.thread_reply = 0;
+	this.personal = 0;
+	this.sent = 0;
+	this.is_thread = 0;
+	database_MyRecord.call(this);
+	this.author_id = author_id;
+	this.content = content;
+	this.duration = duration;
+	this.channel_id = channel_id;
+	this.is_thread = is_thread;
+	this.timestamp = new Date().getTime();
+};
+$hxClasses["database.types.DBReminder"] = database_types_DBReminder;
+database_types_DBReminder.__name__ = "database.types.DBReminder";
+database_types_DBReminder.fromRecord = function(record) {
+	var id = record.field("id");
+	var author_id = record.field("author_id");
+	var content = record.field("content");
+	var duration = record.field("duration");
+	var channel_id = record.field("channel_id");
+	var is_thread = record.field("is_thread");
+	var sent = record.field("sent");
+	var personal = record.field("personal");
+	var thread_reply = record.field("thread_reply");
+	var timestamp = record.field("timestamp");
+	var p = new database_types_DBReminder(author_id,content,duration,channel_id,is_thread);
+	p.id = id;
+	p.sent = sent;
+	p.personal = personal;
+	p.thread_reply = thread_reply;
+	p.timestamp = timestamp;
+	return p;
+};
+database_types_DBReminder.__super__ = database_MyRecord;
+database_types_DBReminder.prototype = $extend(database_MyRecord.prototype,{
+	id: null
+	,author_id: null
+	,content: null
+	,duration: null
+	,channel_id: null
+	,is_thread: null
+	,sent: null
+	,personal: null
+	,thread_reply: null
+	,timestamp: null
+	,get_record: function() {
+		this._record.field("id",this.id);
+		this._record.field("author_id",this.author_id);
+		this._record.field("content",this.content);
+		this._record.field("duration",this.duration);
+		this._record.field("channel_id",this.channel_id);
+		this._record.field("is_thread",this.is_thread);
+		this._record.field("sent",this.sent);
+		this._record.field("personal",this.personal);
+		this._record.field("thread_reply",this.thread_reply);
+		this._record.field("timestamp",this.timestamp);
+		return this._record;
+	}
+	,__class__: database_types_DBReminder
 });
 var database_types_DBSnippet = function(author_id,title,description,url) {
 	database_MyRecord.call(this);
@@ -24684,6 +24796,7 @@ database_types_DBEmoji.__meta__ = { fields : { author_id : { crecord : null}, au
 database_types_DBPoll.__meta__ = { fields : { id : { record : null}, active : { record : null}, author : { crecord : null}, channel : { crecord : null}, message_id : { crecord : null}, question : { crecord : null}, duration : { crecord : null}, timestamp : { record : null}, votes : { record : null}, results : { record : null}, answers : { record : null}}};
 database_types_DBQuote.__meta__ = { fields : { author_id : { crecord : null}, author_tag : { crecord : null}, title : { crecord : null}, description : { crecord : null}, timestamp : { record : null}, id : { record : null}}};
 database_types_DBRateLimit.__meta__ = { fields : { user_id : { crecord : null}, user_tag : { crecord : null}, mod_id : { crecord : null}, mod_tag : { crecord : null}, count : { crecord : null}, time : { crecord : null}, reason : { record : null}, silenced : { record : null}, created : { record : null}, id : { record : null}}};
+database_types_DBReminder.__meta__ = { fields : { id : { record : null}, author_id : { crecord : null}, content : { crecord : null}, duration : { crecord : null}, channel_id : { crecord : null}, is_thread : { crecord : null}, sent : { record : null}, personal : { record : null}, thread_reply : { record : null}, timestamp : { record : null}}};
 database_types_DBSnippet.__meta__ = { fields : { author_id : { crecord : null}, title : { crecord : null}, url : { crecord : null}, description : { crecord : null}, timestamp : { record : null}, snippet_id : { record : null}}};
 database_types_DBState.__meta__ = { fields : { id : { record : null}, key : { record : null}, value : { record : null}, int : { record : null}}};
 database_types_DBThreadCount.__meta__ = { fields : { id : { record : null}, name : { crecord : null}, threadid : { crecord : null}, count : { crecord : null}}};

@@ -186,6 +186,7 @@ class Main {
 					systems: [
 						Tracker,
 						Poll,
+						Reminder,
 						RoundupAnnouncer,
 						RoundupRoundup,
 						DeleteProject,
