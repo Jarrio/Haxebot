@@ -22,9 +22,9 @@ class ThreadCount extends CommandBase {
 
 	override function onEnabled() {
 		// loadToDB();
-		if (FileSystem.exists(path)) {
-			count = Json.parse(File.getContent(path));
-		}
+		// if (FileSystem.exists(path)) {
+		// 	count = Json.parse(File.getContent(path));
+		// }
 		loadCounts();
 	}
 

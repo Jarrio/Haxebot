@@ -17,7 +17,7 @@ import discord_js.GuildScheduleEventManager;
 import discord_js.Guild;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
-import systems.CommandDbBase;
+import systems.CommandBase;
 import Main.CommandForward;
 import discord_js.GuildScheduledEvent;
 import database.DBEvents;
@@ -26,9 +26,9 @@ typedef RoundupEndEvent = {
 	var member:GuildMember;
 }
 
-class RoundupRoundup extends CommandDbBase {
+class RoundupRoundup extends CommandBase {
 	var guild(get, never):Guild;
-	var state(get, never):TRoundup;
+	var roundup(get, never):TRoundup;
 
 	var voice_text:TextChannel;
 	var announcement:TextChannel;
@@ -60,7 +60,7 @@ class RoundupRoundup extends CommandDbBase {
 		super.update(_);
 		// this.handleEndEvent();
 
-		if (this.state == null) {
+		if (this.roundup == null) {
 			return;
 		}
 
@@ -102,8 +102,8 @@ class RoundupRoundup extends CommandDbBase {
 
 		if (host_m == null && !waiting) {
 			waiting = true;
-			trace(this.state.host);
-			this.guild.members.fetch({user: this.state.host, force: true}).then(function(member) {
+			trace(this.roundup.host);
+			this.guild.members.fetch({user: this.roundup.host, force: true}).then(function(member) {
 				this.host_m = member;
 				this.waiting = false;
 				trace('Roundup host(${member?.user?.tag}) obtained');
@@ -246,7 +246,7 @@ class RoundupRoundup extends CommandDbBase {
 			case Completed:
 				this.scheduleNewEvent();
 			case Active:
-				if (state.announced || waiting) {
+				if (roundup.announced || waiting) {
 					return;
 				}
 				var mention = (this.announcer == null) ? '@everyone' : '';
@@ -258,8 +258,8 @@ class RoundupRoundup extends CommandDbBase {
 						parse: [everyone, roles]
 					}
 				}).then(null, (err) -> trace(err));
-				state.announced = true;
-				this.setState(state);
+				roundup.announced = true;
+				this.setState(roundup);
 				trace('Event Started');
 				waiting = false;
 				this.event = event;
@@ -355,14 +355,14 @@ class RoundupRoundup extends CommandDbBase {
 		}).then(function(event) {
 			host_contacted = false;
 			this.event = event;
-			state.announced = false;
-			this.state.event_id = event.id;
+			roundup.announced = false;
+			this.roundup.event_id = event.id;
 			var time = 604800;
 			event.createInviteURL({maxAge: time, channel: voice_text_id}).then(function(url) {
 				this.voice_text.send({content: 'Thanks for hanging out :grin: \nGet ready for the next one! $url'}).then(null, (err) -> trace(err));
 				this.announcement.send({content: 'Get ready for the next roundup roundup :grin: \n$url'}).then(null, (err) -> trace(err));
 			}, (err) -> trace(err));
-			this.setState(state);
+			this.setState(roundup);
 			trace('Event setup!');
 			this.host_m.send('New roundup event scheduled for <t:${Math.round(event.scheduledStartTimestamp / 1000)}:R>')
 				.then(null, (err) -> trace(err));
@@ -375,7 +375,7 @@ class RoundupRoundup extends CommandDbBase {
 		}
 
 		waiting = true;
-		schedule.fetch(this.state.event_id).then(function(event) {
+		schedule.fetch(this.roundup.event_id).then(function(event) {
 			waiting = false;
 			trace('Roundup event retrieved');
 			this.event = event;
@@ -449,7 +449,7 @@ class RoundupRoundup extends CommandDbBase {
 		return Main.client.guilds.cache.get(Main.guild_id);
 	}
 
-	function get_state() {
+	function get_roundup() {
 		if (Main.state == null) {
 			return null;
 		}
@@ -476,7 +476,7 @@ class RoundupRoundup extends CommandDbBase {
 		#if block
 		return "151104106973495296";
 		#end
-		return this.state.host;
+		return this.roundup.host;
 	}
 }
 

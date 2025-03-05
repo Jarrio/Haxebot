@@ -4,10 +4,10 @@ import commands.types.ContextMenuTypes;
 import discord_js.ThreadChannel;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
-import systems.CommandDbBase;
+import systems.CommandBase;
 import Main.CommandForward;
 
-class PinMessage extends CommandDbBase {
+class PinMessage extends CommandBase {
 	@:fastFamily var options:{route:ContextMenuTypes, interaction:BaseCommandInteraction};
 
 	override function update(_) {

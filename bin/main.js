@@ -4549,64 +4549,15 @@ commands_Color.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,__class__: commands_Color
 });
-var systems_CommandDbBase = function(_universe) {
-	this.has_subcommands = false;
-	ecs_System.call(this,_universe);
-	this.commands = this.universe.families.get(2);
-	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(4);
-	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(3);
-};
-$hxClasses["systems.CommandDbBase"] = systems_CommandDbBase;
-systems_CommandDbBase.__name__ = "systems.CommandDbBase";
-systems_CommandDbBase.__super__ = ecs_System;
-systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
-	has_subcommands: null
-	,update: function(_) {
-		if(!Main.discord_connected || !Main.commands_active) {
-			return;
-		}
-		var _this = this.commands;
-		var _set = _this.entities;
-		var _active = _this.isActive();
-		var _g_idx = _set.size() - 1;
-		while(_active && _g_idx >= 0) {
-			var entity = _set.getDense(_g_idx--);
-			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
-			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
-			if(this.has_subcommands) {
-				if(command.name.indexOf(this.get_name(),0) != -1) {
-					this.run(command,interaction);
-					this.universe.deleteEntity(entity);
-				}
-			} else if(command.name == this.get_name()) {
-				this.run(command,interaction);
-				this.universe.deleteEntity(entity);
-			}
-		}
-	}
-	,addDoc: function(path,data,success,failure) {
-		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),data).then(success,failure);
-	}
-	,get_db: function() {
-		return firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp());
-	}
-	,run: null
-	,get_name: null
-	,commands: null
-	,table5d38588a6ddd880f90fc8234bccb893f: null
-	,tablefa61f37a15ee60bbc1601eb42174bd3d: null
-	,__class__: systems_CommandDbBase
-	,__properties__: {get_name:"get_name",get_db:"get_db"}
-});
 var commands_DeleteProject = function(_universe) {
-	systems_CommandDbBase.call(this,_universe);
+	systems_CommandBase.call(this,_universe);
 	this.options = this.universe.families.get(11);
 	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(12);
 };
 $hxClasses["commands.DeleteProject"] = commands_DeleteProject;
 commands_DeleteProject.__name__ = "commands.DeleteProject";
-commands_DeleteProject.__super__ = systems_CommandDbBase;
-commands_DeleteProject.prototype = $extend(systems_CommandDbBase.prototype,{
+commands_DeleteProject.__super__ = systems_CommandBase;
+commands_DeleteProject.prototype = $extend(systems_CommandBase.prototype,{
 	update: function(_) {
 		var _this = this.options;
 		var _set = _this.entities;
@@ -5553,14 +5504,14 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Notify
 });
 var commands_PinMessage = function(_universe) {
-	systems_CommandDbBase.call(this,_universe);
+	systems_CommandBase.call(this,_universe);
 	this.options = this.universe.families.get(11);
 	this.tablef1c30c373f6abc39648a24020b4b82b2 = this.universe.components.getTable(12);
 };
 $hxClasses["commands.PinMessage"] = commands_PinMessage;
 commands_PinMessage.__name__ = "commands.PinMessage";
-commands_PinMessage.__super__ = systems_CommandDbBase;
-commands_PinMessage.prototype = $extend(systems_CommandDbBase.prototype,{
+commands_PinMessage.__super__ = systems_CommandBase;
+commands_PinMessage.prototype = $extend(systems_CommandBase.prototype,{
 	update: function(_) {
 		var _this = this.options;
 		var _set = _this.entities;
@@ -7886,6 +7837,55 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,__class__: commands_React
 });
+var systems_CommandDbBase = function(_universe) {
+	this.has_subcommands = false;
+	ecs_System.call(this,_universe);
+	this.commands = this.universe.families.get(2);
+	this.table5d38588a6ddd880f90fc8234bccb893f = this.universe.components.getTable(4);
+	this.tablefa61f37a15ee60bbc1601eb42174bd3d = this.universe.components.getTable(3);
+};
+$hxClasses["systems.CommandDbBase"] = systems_CommandDbBase;
+systems_CommandDbBase.__name__ = "systems.CommandDbBase";
+systems_CommandDbBase.__super__ = ecs_System;
+systems_CommandDbBase.prototype = $extend(ecs_System.prototype,{
+	has_subcommands: null
+	,update: function(_) {
+		if(!Main.discord_connected || !Main.commands_active) {
+			return;
+		}
+		var _this = this.commands;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var interaction = this.table5d38588a6ddd880f90fc8234bccb893f.get(entity);
+			var command = this.tablefa61f37a15ee60bbc1601eb42174bd3d.get(entity);
+			if(this.has_subcommands) {
+				if(command.name.indexOf(this.get_name(),0) != -1) {
+					this.run(command,interaction);
+					this.universe.deleteEntity(entity);
+				}
+			} else if(command.name == this.get_name()) {
+				this.run(command,interaction);
+				this.universe.deleteEntity(entity);
+			}
+		}
+	}
+	,addDoc: function(path,data,success,failure) {
+		firebase_web_firestore_Firestore.addDoc(firebase_web_firestore_Firestore.collection(firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp()),path),data).then(success,failure);
+	}
+	,get_db: function() {
+		return firebase_web_firestore_Firestore.getFirestore(firebase_web_app_FirebaseApp.getApp());
+	}
+	,run: null
+	,get_name: null
+	,commands: null
+	,table5d38588a6ddd880f90fc8234bccb893f: null
+	,tablefa61f37a15ee60bbc1601eb42174bd3d: null
+	,__class__: systems_CommandDbBase
+	,__properties__: {get_name:"get_name",get_db:"get_db"}
+});
 var commands_Reminder = function(_universe) {
 	this.casual_chat = "";
 	this.bot_channel = "663246792426782730";
@@ -8399,7 +8399,7 @@ var commands_RoundupRoundup = function(_universe) {
 	this.host_contacted = false;
 	this.host_active = false;
 	this.waiting = false;
-	systems_CommandDbBase.call(this,_universe);
+	systems_CommandBase.call(this,_universe);
 	this.end_event = this.universe.families.get(8);
 	this.voice_update_events = this.universe.families.get(9);
 	this.scheduled_event_updates = this.universe.families.get(10);
@@ -8410,8 +8410,8 @@ var commands_RoundupRoundup = function(_universe) {
 };
 $hxClasses["commands.RoundupRoundup"] = commands_RoundupRoundup;
 commands_RoundupRoundup.__name__ = "commands.RoundupRoundup";
-commands_RoundupRoundup.__super__ = systems_CommandDbBase;
-commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
+commands_RoundupRoundup.__super__ = systems_CommandBase;
+commands_RoundupRoundup.prototype = $extend(systems_CommandBase.prototype,{
 	voice_text: null
 	,announcement: null
 	,voice_channel: null
@@ -8431,8 +8431,8 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 	,announcer_role: null
 	,update: function(_) {
 		var _gthis = this;
-		systems_CommandDbBase.prototype.update.call(this,_);
-		if(this.get_state() == null) {
+		systems_CommandBase.prototype.update.call(this,_);
+		if(this.get_roundup() == null) {
 			return;
 		}
 		if(this.voice_channel == null && !this.waiting) {
@@ -8473,8 +8473,8 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		}
 		if(this.host_m == null && !this.waiting) {
 			this.waiting = true;
-			haxe_Log.trace(this.get_state().host,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 105, className : "commands.RoundupRoundup", methodName : "update"});
-			this.get_guild().members.fetch({ user : this.get_state().host, force : true}).then(function(member) {
+			haxe_Log.trace(this.get_roundup().host,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 105, className : "commands.RoundupRoundup", methodName : "update"});
+			this.get_guild().members.fetch({ user : this.get_roundup().host, force : true}).then(function(member) {
 				_gthis.host_m = member;
 				_gthis.waiting = false;
 				var tmp = member != null ? member.user : null;
@@ -8665,7 +8665,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 	,handleEventStatus: function(event) {
 		switch(event.status) {
 		case 2:
-			if(this.get_state().announced || this.waiting) {
+			if(this.get_roundup().announced || this.waiting) {
 				return;
 			}
 			var mention = this.announcer == null ? "@everyone" : "";
@@ -8673,8 +8673,8 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			this.voice_text.send({ content : message, allowedMentions : { parse : ["everyone","roles"]}}).then(null,function(err) {
 				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 260, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
 			});
-			this.get_state().announced = true;
-			this.setState(this.get_state());
+			this.get_roundup().announced = true;
+			this.setState(this.get_roundup());
 			haxe_Log.trace("Event Started",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 263, className : "commands.RoundupRoundup", methodName : "handleEventStatus"});
 			this.waiting = false;
 			this.event = event;
@@ -8775,8 +8775,8 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		this.get_guild().scheduledEvents.create({ name : "Haxe Roundup Roundup", channel : this.voice_channel_id, entityType : 2, privacyLevel : 2, scheduledStartTime : date, description : "A community hosted discussion event where we go over the latest things that has gone on in the haxe over the last few weeks. We also have a period where people can show off what they're working on - its open floor come and join if you want :D"}).then(function(event) {
 			_gthis.host_contacted = false;
 			_gthis.event = event;
-			_gthis.get_state().announced = false;
-			_gthis.get_state().event_id = event.id;
+			_gthis.get_roundup().announced = false;
+			_gthis.get_roundup().event_id = event.id;
 			event.createInviteURL({ maxAge : 604800, channel : _gthis.voice_text_id}).then(function(url) {
 				_gthis.voice_text.send({ content : "Thanks for hanging out :grin: \nGet ready for the next one! " + url}).then(null,function(err) {
 					haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 362, className : "commands.RoundupRoundup", methodName : "createEvent"});
@@ -8787,7 +8787,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			},function(err) {
 				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 364, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			});
-			_gthis.setState(_gthis.get_state());
+			_gthis.setState(_gthis.get_roundup());
 			haxe_Log.trace("Event setup!",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 366, className : "commands.RoundupRoundup", methodName : "createEvent"});
 			_gthis.host_m.send("New roundup event scheduled for <t:" + Math.round(event.scheduledStartTimestamp / 1000) + ":R>").then(null,function(err) {
 				haxe_Log.trace(err,{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 368, className : "commands.RoundupRoundup", methodName : "createEvent"});
@@ -8802,7 +8802,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 			return;
 		}
 		this.waiting = true;
-		this.get_schedule().fetch(this.get_state().event_id).then(function(event) {
+		this.get_schedule().fetch(this.get_roundup().event_id).then(function(event) {
 			_gthis.waiting = false;
 			haxe_Log.trace("Roundup event retrieved",{ fileName : "src/commands/RoundupRoundup.hx", lineNumber : 380, className : "commands.RoundupRoundup", methodName : "getEvent"});
 			_gthis.event = event;
@@ -8891,7 +8891,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 	,get_guild: function() {
 		return Main.client.guilds.cache.get(Main.guild_id);
 	}
-	,get_state: function() {
+	,get_roundup: function() {
 		if(Main.state == null) {
 			return null;
 		}
@@ -8909,7 +8909,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 		return this.get_guild().scheduledEvents;
 	}
 	,get_host: function() {
-		return this.get_state().host;
+		return this.get_roundup().host;
 	}
 	,end_event: null
 	,voice_update_events: null
@@ -8919,7 +8919,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandDbBase.prototype,{
 	,table87a8f92f715c03d0822a55d9b93a210d: null
 	,tablec9adfcb69cacf935dab274fb9ef32870: null
 	,__class__: commands_RoundupRoundup
-	,__properties__: $extend(systems_CommandDbBase.prototype.__properties__,{get_host:"get_host",get_schedule:"get_schedule",get_state:"get_state",get_guild:"get_guild"})
+	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{get_host:"get_host",get_schedule:"get_schedule",get_roundup:"get_roundup",get_guild:"get_guild"})
 });
 var commands_Rtfm = function(_universe) {
 	systems_CommandBase.call(this,_universe);
@@ -10679,9 +10679,6 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 	count: null
 	,path: null
 	,onEnabled: function() {
-		if(sys_FileSystem.exists(this.path)) {
-			this.count = JSON.parse(js_node_Fs.readFileSync(this.path,{ encoding : "utf8"}));
-		}
 		this.loadCounts();
 	}
 	,loadCounts: function() {

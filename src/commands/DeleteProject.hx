@@ -5,12 +5,12 @@ import commands.types.ContextMenuTypes;
 import discord_js.ThreadChannel;
 import discord_builder.BaseCommandInteraction;
 import components.Command;
-import systems.CommandDbBase;
+import systems.CommandBase;
 import Main.CommandForward;
 import discord_builder.ButtonBuilder;
 import discord_builder.APIActionRowComponent;
 
-class DeleteProject extends CommandDbBase {
+class DeleteProject extends CommandBase {
 	@:fastFamily var options:{route:ContextMenuTypes, interaction:BaseCommandInteraction};
 
 	override function update(_) {
