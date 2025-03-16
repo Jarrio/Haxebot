@@ -289,7 +289,7 @@ class DatabaseSystem extends System {
 								result.table.add(record).then((result) -> {
 									updating = false;
 									if (result.itemsAffected != null && result.itemsAffected >= 1) {
-										callback(Success("Inserted"));
+										callback(Success("Inserted", result.data));
 									} else {
 										trace("something went wrong");
 										trace(result);
