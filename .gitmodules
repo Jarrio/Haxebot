@@ -34,3 +34,6 @@
 [submodule "haxe_modules/libmysqlclient"]
 	path = haxe_modules/libmysqlclient
 	url = https://github.com/core-haxe/libmysqlclient
+[submodule "haxe_modules/logging"]
+	path = haxe_modules/logging
+	url = https://github.com/core-haxe/logging
