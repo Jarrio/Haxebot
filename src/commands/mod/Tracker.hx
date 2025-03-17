@@ -73,16 +73,9 @@ class Tracker extends CommandBase {
 		var content = message.content;
 		for (word in tracker.keywords) {
 			var before = content.indexOf(word) - 1;
+			var regex = new EReg('\\b$word\\b', 'gmi');
 
-			if (content.toLowerCase().contains(word)) {
-				var a = content.charAt(before);
-				var b = content.charAt(before + word.length + 1);
-
-				if ((a == "" || a == " " || a == "\n") && (b == "" || b == " " || b == "\n")) {
-					return true;
-				}
-				return false;
-			}
+			return regex.match(content);
 		}
 		return false;
 	}
