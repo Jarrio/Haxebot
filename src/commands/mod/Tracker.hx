@@ -181,6 +181,55 @@ class Tracker extends CommandBase {
 				this.parseTracker(interaction, name, description, keywords, str_exclude, chl_exclude, usr_exclude);
 			case TrackerList(name):
 				if (name != null) {
+					if (interaction.isAutocomplete()) {
+						var e = DBEvents.SearchBy('trackers', 'name', name, 'by', interaction.user.id, (resp) -> {
+							switch (resp) {
+								case Records(data):
+									var results = [];
+									for (record in data) {
+										var tracker = DBTracker.fromRecord(record);
+										var name = tracker.name;
+										if (tracker.description != null) {
+											name += ' - ' + tracker.description;
+										}
+										results.push({
+											name: name,
+											value: tracker.id.string()
+										});
+									}
+
+									interaction.respond(results).then(null, function(err) {
+										trace(err);
+										Browser.console.dir(err);
+									});
+								default:
+									trace(resp);
+							}
+						});
+
+						EcsTools.set(e);
+						return;
+					}
+					var e = DBEvents.GetRecord('trackers', query($by == interaction.user.id && $id == name), (resp) -> {
+						switch(resp) {
+							case Record(data):
+								var tracker = DBTracker.fromRecord(data);
+								var embed = new MessageEmbed();
+								embed.setTitle(tracker.name);
+								embed.setDescription(tracker.description ?? "No description");
+								embed.addFields(
+									new Field('keywords', tracker.keywords.toString()),
+									new Field('string exclusions', tracker.string_exclude?.toString() ?? "[]"),
+									new Field('user exclusions', tracker.user_exclude?.toString() ?? '[]'),
+									new Field('channel exclusions', tracker.channel_exclude?.toString() ?? '[]')
+								);
+								embed.setTimestamp(tracker.timestamp);
+								interaction.reply({embeds: [embed], ephemeral: true}).then(null, (err) -> trace(err));
+							default:
+								trace(resp);
+						}
+					});
+					EcsTools.set(e);
 					return;
 				}
 				var e = DBEvents.GetRecords('trackers', query($by == interaction.user.id), (resp) -> {
@@ -192,20 +241,16 @@ class Tracker extends CommandBase {
 							}
 							var embed = new MessageEmbed();
 							embed.setTitle('Trackers');
-							
 							for (record in data) {
 								var t = DBTracker.fromRecord(record);
-								embed.fields.push({
-									name: t.name,
-									value: t.keywords.toString()
-								});
+								embed.addFields(new Field(t.name, t.keywords.toString(), false));
 							}
-
 							interaction.reply({embeds: [embed], ephemeral: true}).then(null, (err) -> trace(err));
 						default:
 							trace(resp);
 					}
 				});
+				EcsTools.set(e);
 			case TrackerDelete(name):
 				if (name != null) {
 					if (interaction.isAutocomplete()) {

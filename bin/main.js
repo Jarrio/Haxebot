@@ -680,7 +680,7 @@ Main.command_file = null;
 Main.universe = null;
 Main.get_discord = function() {
 	var config = null;
-	config = Main.keys.discord_test;
+	config = Main.keys.discord_live;
 	return config;
 };
 Main.token = function(rest) {
@@ -1089,7 +1089,7 @@ Main.startup = function() {
 		haxe_Log.trace("enabled phase \"messages\"",{ fileName : "src/Main.hx", lineNumber : 305, className : "Main", methodName : "startup"});
 	}
 	if(Main.commands_active) {
-		Main.universe.getPhase("testing").enable();
+		Main.universe.getPhase("main").enable();
 		haxe_Log.trace("enabled phase \"commands\"",{ fileName : "src/Main.hx", lineNumber : 317, className : "Main", methodName : "startup"});
 	}
 	if(Main.universe.getPhase("testing").enabled || Main.universe.getPhase("main").enabled) {
@@ -1115,7 +1115,6 @@ Main.discordClient = function() {
 				++_g;
 				haxe_Log.trace("DEBUG - " + item.name + " is REGISTERED",{ fileName : "src/Main.hx", lineNumber : 350, className : "Main", methodName : "discordClient"});
 			}
-			haxe_Log.trace("DEBUG - TESTING ON DEVELOPER TOKEN NOT FOR LIVE",{ fileName : "src/Main.hx", lineNumber : 353, className : "Main", methodName : "discordClient"});
 		},function(err) {
 			haxe_Log.trace(err,{ fileName : "src/Main.hx", lineNumber : 356, className : "Main", methodName : "discordClient"});
 			$global.console.dir(err);
@@ -1872,6 +1871,7 @@ Main.main = function() {
 		haxe_Log.trace("logged in",{ fileName : "src/Main.hx", lineNumber : 600, className : "Main", methodName : "main"});
 		var doc = firebase_web_firestore_Firestore.doc(firebase_web_firestore_Firestore.getFirestore(Main.app),"discord/admin");
 		firebase_web_firestore_Firestore.onSnapshot(doc,function(resp) {
+			CommandPermission.admin = resp.data();
 			Main.auth = res.user;
 			Main.logged_in = true;
 		},function(err) {
@@ -1911,6 +1911,9 @@ Main.parseCommands = function() {
 	while(_g < _g1.length) {
 		var command = _g1[_g];
 		++_g;
+		if(command.is_public != null && !command.is_public) {
+			continue;
+		}
 		var permission = CommandPermission.fromString(command.permissions);
 		if(permission == null) {
 			permission = 1024 | 2048;
@@ -4066,7 +4069,7 @@ commands_AutoRole.prototype = $extend(systems_CommandBase.prototype,{
 var commands_AutoThread = function(_universe) {
 	this.news_feed = "1030188275341729882";
 	this.checking = false;
-	this.announcement_channel = "597067735771381771";
+	this.announcement_channel = "286485321925918721";
 	this.event_role_id = "1054432874473996408";
 	this.news_role_id = "761714325227700225";
 	systems_CommandBase.call(this,_universe);
@@ -4637,7 +4640,7 @@ commands_DeleteProject.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_DeleteProject
 });
 var commands_Emoji = function(_universe) {
-	this.super_mod_id = "1114582456381747232";
+	this.super_mod_id = "198916468312637440";
 	this.max_name_length = 35;
 	this.cache = new haxe_ds_StringMap();
 	systems_CommandBase.call(this,_universe);
@@ -5076,9 +5079,9 @@ commands_Everyone.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Everyone
 });
 var commands_Haxelib = function(_universe) {
-	this.site = "";
+	this.site = "localhost";
 	this.message_history = new haxe_ds_StringMap();
-	this.super_mod_id = "1114582456381747232";
+	this.super_mod_id = "198916468312637440";
 	systems_CommandBase.call(this,_universe);
 };
 $hxClasses["commands.Haxelib"] = commands_Haxelib;
@@ -5091,7 +5094,6 @@ commands_Haxelib.prototype = $extend(systems_CommandBase.prototype,{
 	,http: null
 	,site: null
 	,onEnabled: function() {
-		this.site = Main.keys.haxeip;
 	}
 	,run: function(command,interaction) {
 		var h = this.message_history.h;
@@ -5335,7 +5337,7 @@ commands_Hi.prototype = $extend(systems_CommandBase.prototype,{
 	,__class__: commands_Hi
 });
 var commands_JamSuggestionBox = function(_) {
-	this.channel_id = "1100053767493255182";
+	this.channel_id = "1234817988377706557";
 	systems_CommandBase.call(this,_);
 	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
@@ -5402,7 +5404,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "dvorak":
 			return "903006951896666153";
 		case "events":
-			return "738508312382799874";
+			return "1054432874473996408";
 		case "flixel":
 			return "761714697468248125";
 		case "godot":
@@ -5773,8 +5775,6 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 	,addCollector: function(message,data,time_left) {
 		var filter = this.filter(message,data);
 		var time = data.duration;
-		haxe_Log.trace("Poll duration changed due to debug block on",{ fileName : "src/commands/Poll.hx", lineNumber : 163, className : "commands.Poll", methodName : "addCollector"});
-		time = commands_types_Duration.fromString("1m");
 		if(time_left != null) {
 			time = time_left;
 		}
@@ -7842,7 +7842,7 @@ commands_React.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Reminder = function(_universe) {
 	this.casual_chat = "";
-	this.bot_channel = "597067735771381771";
+	this.bot_channel = "663246792426782730";
 	this.sent = new haxe_ds_IntMap();
 	this.reminders = [];
 	this.checking = false;
@@ -7867,9 +7867,6 @@ commands_Reminder.prototype = $extend(systems_CommandBase.prototype,{
 				while(item.hasNext()) {
 					var item1 = item.next();
 					var r = database_types_DBReminder.fromRecord(item1);
-					if(r.author_id != "151104106973495296") {
-						continue;
-					}
 					_gthis.reminders.push(r);
 				}
 				haxe_Log.trace("Loaded reminders",{ fileName : "src/commands/Reminder.hx", lineNumber : 36, className : "commands.Reminder", methodName : "onEnabled"});
@@ -7916,7 +7913,7 @@ commands_Reminder.prototype = $extend(systems_CommandBase.prototype,{
 				reminder.channel_id = thread_id;
 			}
 			reminder.personal = personal ? 1 : 0;
-			var duration = commands_types_Duration.fromString("0min");
+			var duration = commands_types_Duration.fromString("4mins");
 			if(reminder.duration == 0.) {
 				interaction.reply({ content : "Your time formatting was likely incorrect. Use units like __m__in(s), __h__ou__r__(s), __d__ay(s), __w__ee__k__(s) and __mo__nth(s)", ephemeral : personal});
 				return;
@@ -8098,7 +8095,7 @@ commands_Reminder.prototype = $extend(systems_CommandBase.prototype,{
 var commands_Roundup = function(_universe) {
 	this.set_permissions = false;
 	this.sent = false;
-	this.announcement_channel = "597067735771381771";
+	this.announcement_channel = "286485321925918721";
 	this.news_role = "761714325227700225";
 	this.super_mod_id = "198916468312637440";
 	var _g = new haxe_ds_StringMap();
@@ -8131,7 +8128,49 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,announcement_channel: null
 	,sent: null
 	,dmUser: function(title,content) {
-		return;
+		var regex_r = new RegExp("\\((.*?)\\)","gmis".split("u").join(""));
+		content = content.replace(regex_r,"(<$1>)");
+		var h = this.dmlist.h;
+		var _g_keys = Object.keys(h);
+		var _g_length = _g_keys.length;
+		var _g_current = 0;
+		while(_g_current < _g_length) {
+			var key = _g_keys[_g_current++];
+			var _g_value = h[key];
+			var user = [_g_value];
+			if(user[0] == null) {
+				haxe_Log.trace("skipping " + key,{ fileName : "src/commands/Roundup.hx", lineNumber : 49, className : "commands.Roundup", methodName : "dmUser"});
+				continue;
+			}
+			user[0].send("## " + title);
+			var arr = content.split("\n");
+			var half = Math.floor(arr.length / 2);
+			var a = "";
+			var b = [""];
+			var _g_current1 = 0;
+			while(_g_current1 < arr.length) {
+				var _g_value1 = arr[_g_current1];
+				var _g_key = _g_current1++;
+				if(_g_key <= half) {
+					a += _g_value1 + "\n";
+				} else {
+					b[0] += _g_value1 + "\n";
+				}
+			}
+			user[0].send(a).then((function(b,user) {
+				return function(_) {
+					return user[0].send(b[0]).then(null,(function() {
+						return function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 65, className : "commands.Roundup", methodName : "dmUser"});
+						};
+					})());
+				};
+			})(b,user),(function() {
+				return function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/Roundup.hx", lineNumber : 66, className : "commands.Roundup", methodName : "dmUser"});
+				};
+			})());
+		}
 	}
 	,getHaxeIoPage: function() {
 		var _gthis = this;
@@ -8300,7 +8339,7 @@ commands_Roundup.prototype = $extend(systems_CommandBase.prototype,{
 	,__properties__: $extend(systems_CommandBase.prototype.__properties__,{set_roundup:"set_roundup",get_roundup:"get_roundup"})
 });
 var commands_RoundupAnnouncer = function(_universe) {
-	this.channel_id = "597067735771381771";
+	this.channel_id = "663246792426782730";
 	systems_CommandBase.call(this,_universe);
 };
 $hxClasses["commands.RoundupAnnouncer"] = commands_RoundupAnnouncer;
@@ -8355,11 +8394,11 @@ var commands_RoundupRoundup = function(_universe) {
 	this.reminded = false;
 	this.added_role = false;
 	this.get_announcer = false;
-	this.announcer_role = "1346192541141434511";
-	this.event_role = "<@&1114582456381747232>";
-	this.voice_text_id = "597067735771381771";
-	this.announcement_id = "597067735771381771";
-	this.voice_channel_id = "416069724657418244";
+	this.announcer_role = "1346193522797187092";
+	this.event_role = "<@&1054432874473996408>";
+	this.voice_text_id = "220626116627529728";
+	this.announcement_id = "286485321925918721";
+	this.voice_channel_id = "198219256687493120";
 	this.host_contacted = false;
 	this.host_active = false;
 	this.waiting = false;
@@ -8873,7 +8912,7 @@ commands_RoundupRoundup.prototype = $extend(systems_CommandBase.prototype,{
 		return this.get_guild().scheduledEvents;
 	}
 	,get_host: function() {
-		return "151104106973495296";
+		return this.get_roundup().host;
 	}
 	,end_event: null
 	,voice_update_events: null
@@ -8969,7 +9008,7 @@ systems_TextCommandBase.prototype = $extend(ecs_System.prototype,{
 	,__properties__: {get_name:"get_name"}
 });
 var commands_Run2 = function(_universe) {
-	this.site = "";
+	this.site = "localhost";
 	this.timeout = 5000;
 	this.checked = false;
 	this.code_requests = new haxe_ds_StringMap();
@@ -8990,7 +9029,6 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 	,site: null
 	,onEnabled: function() {
 		var _gthis = this;
-		this.site = Main.keys.haxeip;
 		var http = new haxe_http_HttpNodeJs("http://" + this.site + ":1337");
 		http.setHeader("Authorization","Basic " + Main.keys.haxelib);
 		http.onError = function(error) {
@@ -9924,7 +9962,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_Showcase = function(_) {
 	this.checking = false;
-	this.channel_id = "1100053767493255182";
+	this.channel_id = "162664383082790912";
 	systems_CommandBase.call(this,_);
 	this.modal = this.universe.families.get(6);
 	this.messages = this.universe.families.get(3);
@@ -9932,6 +9970,8 @@ var commands_Showcase = function(_) {
 	this.table57fe33dae47d23e66b521963cf6643b9 = this.universe.components.getTable(8);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
 	this.tabled1cd3067ebd0108e92f1425a40ea7b45 = this.universe.components.getTable(1);
+	var hook = Main.keys.showcase_hook;
+	this.webhook = new discord_$js_WebhookClient({ url : hook});
 };
 $hxClasses["commands.Showcase"] = commands_Showcase;
 commands_Showcase.__name__ = "commands.Showcase";
@@ -9988,6 +10028,11 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 				var thread = [js_Boot.__cast(message[0].channel , discord_$js_ThreadChannel)];
 				if(!message[0].channel.isThread()) {
 					continue;
+				}
+				if(thread[0].id != "1024905470621798410") {
+					if(thread[0].ownerId != message[0].author.id) {
+						return;
+					}
 				}
 				var arr = [[]];
 				var content = [StringTools.trim(message[0].content.substring(10))];
@@ -10722,6 +10767,60 @@ commands_ThreadCount.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,update: function(_) {
 		systems_CommandBase.prototype.update.call(this,_);
+		var _this = this.messages;
+		var _set = _this.entities;
+		var _active = _this.isActive();
+		var _g_idx = _set.size() - 1;
+		while(_active && _g_idx >= 0) {
+			var entity = _set.getDense(_g_idx--);
+			var command = this.table87a8f92f715c03d0822a55d9b93a210d.get(entity);
+			var message = this.tabled1cd3067ebd0108e92f1425a40ea7b45.get(entity);
+			if(command == "thread_count") {
+				var channel = message.channel;
+				var db = null;
+				if(Object.prototype.hasOwnProperty.call(this.count.h,channel.id)) {
+					db = this.count.h[channel.id];
+					try {
+						db.count += 1;
+						var e = database_DBEvents.Update("threadcount",db,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("threadid")),QueryExpr.QueryValue(channel.id)),function(resp) {
+							if(resp._hx_index != 4) {
+								haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 69, className : "commands.ThreadCount", methodName : "update"});
+							}
+						});
+						var entity1 = util_EcsTools.get_universe().createEntity();
+						util_EcsTools.get_universe().components.set(entity1,2,e);
+						var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity1)];
+						var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+						if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+							ecsTmpFamily.add(entity1);
+						}
+					} catch( _g ) {
+						var _g1 = haxe_Exception.caught(_g);
+						haxe_Log.trace(_g1,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 74, className : "commands.ThreadCount", methodName : "update"});
+						haxe_Log.trace(db,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 75, className : "commands.ThreadCount", methodName : "update"});
+						haxe_Log.trace(db.threadid,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 76, className : "commands.ThreadCount", methodName : "update"});
+						haxe_Log.trace(db.count,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 77, className : "commands.ThreadCount", methodName : "update"});
+					}
+				} else {
+					db = new database_types_DBThreadCount(channel.name,channel.id,1);
+					var e1 = database_DBEvents.Insert("threadcount",db,function(resp) {
+						if(resp._hx_index != 4) {
+							haxe_Log.trace(resp,{ fileName : "src/commands/ThreadCount.hx", lineNumber : 84, className : "commands.ThreadCount", methodName : "update"});
+						}
+					});
+					var entity2 = util_EcsTools.get_universe().createEntity();
+					util_EcsTools.get_universe().components.set(entity2,2,e1);
+					var ecsEntCompFlags1 = util_EcsTools.get_universe().components.flags[ecs_Entity.id(entity2)];
+					var ecsTmpFamily1 = util_EcsTools.get_universe().families.get(1);
+					if(bits_Bits.areSet(ecsEntCompFlags1,ecsTmpFamily1.componentsMask)) {
+						ecsTmpFamily1.add(entity2);
+					}
+				}
+				this.count.h[channel.id] = db;
+				js_node_Fs.writeFileSync(this.path,JSON.stringify(this.count));
+				this.universe.deleteEntity(entity);
+			}
+		}
 	}
 	,arr: null
 	,i: null
@@ -10908,8 +11007,8 @@ commands_Translate.prototype = $extend(systems_CommandBase.prototype,{
 });
 var commands_VoiceChatBridge = function(_universe) {
 	this.map_cache = new haxe_ds_StringMap();
-	this.voice = "416069724657418244";
-	this.voicetext = "714201892959289500";
+	this.voice = "198219256687493120";
+	this.voicetext = "220626116627529728";
 	this.mentions = { parse : []};
 	systems_CommandBase.call(this,_universe);
 	this.messages = this.universe.families.get(3);
@@ -10930,7 +11029,7 @@ commands_VoiceChatBridge.prototype = $extend(systems_CommandBase.prototype,{
 	,map_cache: null
 	,onEnabled: function() {
 		var _gthis = this;
-		var obj = Main.keys.debug_hooks;
+		var obj = Main.keys.hooks;
 		var vc = obj.voice_channel;
 		var vt_channel = obj.voice_text_channel;
 		this.voice_channel_chat = new discord_$js_WebhookClient({ url : vc});
@@ -11177,7 +11276,7 @@ commands_events_PinMessageInfo.prototype = $extend(ecs_System.prototype,{
 	,__class__: commands_events_PinMessageInfo
 });
 var commands_mod_RateLimit = function(_universe) {
-	this.silence_role = "1257723900813639801";
+	this.silence_role = "503359600712482827";
 	this.records = false;
 	this.limits = new haxe_ds_StringMap();
 	this.tracking = new haxe_ds_StringMap();
@@ -11477,9 +11576,6 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 				while(record.hasNext()) {
 					var record1 = record.next();
 					var tracker = [database_types_DBTracker.fromRecord(record1)];
-					if(tracker[0].by != "151104106973495296") {
-						continue;
-					}
 					_gthis.trackers.h[tracker[0].id] = tracker[0];
 					if(!Object.prototype.hasOwnProperty.call(_gthis.dm.h,tracker[0].by)) {
 						Main.client.users.fetch(tracker[0].by).then((function(tracker) {
@@ -11560,6 +11656,9 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 				var tracker = this.trackers.iterator();
 				while(tracker.hasNext()) {
 					var tracker1 = tracker.next();
+					if(message.author.id == tracker1.by) {
+						continue;
+					}
 					if(tracker1.user_exclude != null && this.string_compare(message.author.id,tracker1.user_exclude)) {
 						continue;
 					}
@@ -11570,7 +11669,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 						continue;
 					}
 					if(this.findKeywords(message,tracker1)) {
-						if(Object.prototype.hasOwnProperty.call(this.dm.h,tracker1.by) && tracker1.by == "151104106973495296") {
+						if(Object.prototype.hasOwnProperty.call(this.dm.h,tracker1.by)) {
 							var embed = new discord_$js_MessageEmbed();
 							embed.setTitle("" + tracker1.name);
 							var description = message.content;
@@ -11655,7 +11754,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 302, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 347, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				usr_exclude[key] = StringTools.trim(string);
 			}
 			var _g_current = 0;
@@ -11671,7 +11770,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 				string = StringTools.replace(string,"#","");
 				string = StringTools.replace(string,"@","");
 				string = StringTools.replace(string,"&","");
-				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 302, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+				haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 347, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 				chl_exclude[key] = StringTools.trim(string);
 			}
 			this.parseTracker(interaction,name,description,keywords1,str_exclude,chl_exclude,usr_exclude);
@@ -11679,7 +11778,106 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 		case 7:
 			var name = _g.name;
 			if(name != null) {
+				if(interaction.isAutocomplete()) {
+					var e = database_DBEvents.SearchBy("trackers","name",name,"by",interaction.user.id,function(resp) {
+						if(resp._hx_index == 2) {
+							var data = resp.data;
+							var results = [];
+							var record = data.iterator();
+							while(record.hasNext()) {
+								var record1 = record.next();
+								var tracker = database_types_DBTracker.fromRecord(record1);
+								var name = tracker.name;
+								if(tracker.description != null) {
+									name += " - " + tracker.description;
+								}
+								results.push({ name : name, value : tracker.id == null ? "null" : "" + tracker.id});
+							}
+							interaction.respond(results).then(null,function(err) {
+								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 202, className : "commands.mod.Tracker", methodName : "run"});
+								$global.console.dir(err);
+							});
+						} else {
+							haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 206, className : "commands.mod.Tracker", methodName : "run"});
+						}
+					});
+					var entity = util_EcsTools.get_universe().createEntity();
+					var _ecsTmpEntity = entity;
+					util_EcsTools.get_universe().components.set(_ecsTmpEntity,2,e);
+					var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(_ecsTmpEntity)];
+					var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+					if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+						ecsTmpFamily.add(_ecsTmpEntity);
+					}
+					return;
+				}
+				var e = database_DBEvents.GetRecord("trackers",QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("by")),QueryExpr.QueryValue(interaction.user.id)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(name))),function(resp) {
+					if(resp._hx_index == 1) {
+						var data = resp.data;
+						var tracker = database_types_DBTracker.fromRecord(data);
+						var embed = new discord_$js_MessageEmbed();
+						embed.setTitle(tracker.name);
+						var description = tracker.description;
+						embed.setDescription(description != null ? description : "No description");
+						var e = new discord_$js_Field("keywords",tracker.keywords.toString());
+						var tmp = tracker.string_exclude;
+						var value = tmp != null ? tmp.toString() : null;
+						var e1 = new discord_$js_Field("string exclusions",value != null ? value : "[]");
+						var tmp = tracker.user_exclude;
+						var value = tmp != null ? tmp.toString() : null;
+						var e2 = new discord_$js_Field("user exclusions",value != null ? value : "[]");
+						var tmp = tracker.channel_exclude;
+						var value = tmp != null ? tmp.toString() : null;
+						embed.addFields(e,e1,e2,new discord_$js_Field("channel exclusions",value != null ? value : "[]"));
+						embed.setTimestamp(tracker.timestamp);
+						interaction.reply({ embeds : [embed], ephemeral : true}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 227, className : "commands.mod.Tracker", methodName : "run"});
+						});
+					} else {
+						haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 229, className : "commands.mod.Tracker", methodName : "run"});
+					}
+				});
+				var entity = util_EcsTools.get_universe().createEntity();
+				var _ecsTmpEntity = entity;
+				util_EcsTools.get_universe().components.set(_ecsTmpEntity,2,e);
+				var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(_ecsTmpEntity)];
+				var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+				if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+					ecsTmpFamily.add(_ecsTmpEntity);
+				}
 				return;
+			}
+			var e = database_DBEvents.GetRecords("trackers",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("by")),QueryExpr.QueryValue(interaction.user.id)),function(resp) {
+				if(resp._hx_index == 2) {
+					var data = resp.data;
+					if(data.get_length() == 0) {
+						interaction.reply({ content : "No trackers found", ephemeral : true}).then(null,function(err) {
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 239, className : "commands.mod.Tracker", methodName : "run"});
+						});
+						return;
+					}
+					var embed = new discord_$js_MessageEmbed();
+					embed.setTitle("Trackers");
+					var record = data.iterator();
+					while(record.hasNext()) {
+						var record1 = record.next();
+						var t = database_types_DBTracker.fromRecord(record1);
+						embed.addFields(new discord_$js_Field(t.name,t.keywords.toString(),false));
+					}
+					interaction.reply({ embeds : [embed], ephemeral : true}).then(null,function(err) {
+						haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 248, className : "commands.mod.Tracker", methodName : "run"});
+					});
+				} else {
+					haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 250, className : "commands.mod.Tracker", methodName : "run"});
+				}
+			});
+			var entity = util_EcsTools.get_universe().createEntity();
+			var _ecsTmpEntity = entity;
+			util_EcsTools.get_universe().components.set(_ecsTmpEntity,2,e);
+			var ecsEntCompFlags = util_EcsTools.get_universe().components.flags[ecs_Entity.id(_ecsTmpEntity)];
+			var ecsTmpFamily = util_EcsTools.get_universe().families.get(1);
+			if(bits_Bits.areSet(ecsEntCompFlags,ecsTmpFamily.componentsMask)) {
+				ecsTmpFamily.add(_ecsTmpEntity);
 			}
 			break;
 		case 8:
@@ -11701,11 +11899,11 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 								results.push({ name : name, value : tracker.id == null ? "null" : "" + tracker.id});
 							}
 							interaction.respond(results).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 229, className : "commands.mod.Tracker", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 274, className : "commands.mod.Tracker", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 233, className : "commands.mod.Tracker", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 278, className : "commands.mod.Tracker", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -11723,10 +11921,10 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 					if(resp._hx_index == 4) {
 						_gthis.trackers.remove(id);
 						interaction.reply({ content : "Tracker deleted!", ephemeral : true}).then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 245, className : "commands.mod.Tracker", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 290, className : "commands.mod.Tracker", methodName : "run"});
 						});
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 247, className : "commands.mod.Tracker", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 292, className : "commands.mod.Tracker", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -11769,10 +11967,10 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 					_gthis.dm.h[interaction.user.id] = interaction.user;
 				}
 				interaction.reply({ content : "Your tracker is now active!", ephemeral : true}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 288, className : "commands.mod.Tracker", methodName : "parseTracker"});
+					haxe_Log.trace(err,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 333, className : "commands.mod.Tracker", methodName : "parseTracker"});
 				});
 			} else {
-				haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 290, className : "commands.mod.Tracker", methodName : "parseTracker"});
+				haxe_Log.trace(resp,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 335, className : "commands.mod.Tracker", methodName : "parseTracker"});
 			}
 		});
 		var entity = util_EcsTools.get_universe().createEntity();
@@ -11789,7 +11987,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 		string = StringTools.replace(string,"#","");
 		string = StringTools.replace(string,"@","");
 		string = StringTools.replace(string,"&","");
-		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 302, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
+		haxe_Log.trace(string,{ fileName : "src/commands/mod/Tracker.hx", lineNumber : 347, className : "commands.mod.Tracker", methodName : "cleanDiscordThings"});
 		return string;
 	}
 	,get_name: function() {
@@ -24332,8 +24530,8 @@ systems_DatabaseSystem.prototype = $extend(ecs_System.prototype,{
 	,__class__: systems_DatabaseSystem
 });
 var systems_MessageRouter = function(_universe) {
-	this.voice = "416069724657418244";
-	this.voicechat = "714201892959289500";
+	this.voice = "198219256687493120";
+	this.voicechat = "220626116627529728";
 	ecs_System.call(this,_universe);
 	this.messages = this.universe.families.get(3);
 	this.table87a8f92f715c03d0822a55d9b93a210d = this.universe.components.getTable(5);
@@ -24542,7 +24740,7 @@ systems_MessageRouter.prototype = $extend(ecs_System.prototype,{
 	}
 	,guildTextChannel: function(message) {
 		var channel = message.channel;
-		if(channel.id == "1100053767493255182" && !message.system) {
+		if(channel.id == "162664383082790912" && !message.system) {
 			var entity = util_EcsTools.get_universe().createEntity();
 			util_EcsTools.get_universe().components.set(entity,5,"showcase_message");
 			util_EcsTools.get_universe().components.set(entity,1,message);
@@ -24869,7 +25067,7 @@ Main.discord_connected = false;
 Main.state = NewState._hx_new();
 Main.dm_help_tracking = new haxe_ds_StringMap();
 Main.active_systems = new haxe_ds_StringMap();
-Main.guild_id = "416069724158427137";
+Main.guild_id = "162395145352904705";
 Main.got_state = false;
 CommandPermission.admin = 8;
 CommandPermission.supermod = 4;
