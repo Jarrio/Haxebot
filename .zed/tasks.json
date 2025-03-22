@@ -1,0 +1,7 @@
+[
+  {
+    "label": "Haxe Debug Block",
+    "command": "haxe debug_block.hxml; node bin/main.js",
+    "allow_concurrent_runs": false
+  }
+]

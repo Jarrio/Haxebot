@@ -1,0 +1,9 @@
+{
+  "lsp": {
+    "haxe-language-server": {
+      "initialization_options": {
+        "displayArguments": ["debug_block.hxml"]
+      }
+    }
+  }
+}

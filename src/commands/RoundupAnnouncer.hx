@@ -6,10 +6,15 @@ import discord_builder.BaseCommandInteraction;
 import components.Command;
 import systems.CommandBase;
 import database.DBEvents;
+import database.types.DBState;
+import Query.query;
+
 using StringTools;
+
 class RoundupAnnouncer extends CommandBase {
 	var channel:TextChannel;
 	final channel_id = #if block "597067735771381771" #else "663246792426782730" #end;
+
 	override function onEnabled() {
 		Main.client.channels.fetch(channel_id).then(function(ch) {
 			if (ch != null) {
@@ -18,6 +23,7 @@ class RoundupAnnouncer extends CommandBase {
 			}
 		});
 	}
+
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		interaction.reply("Announcer has been set").then(function(_) {
 			switch (command.content) {

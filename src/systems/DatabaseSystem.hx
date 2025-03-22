@@ -153,7 +153,7 @@ class DatabaseSystem extends System {
 					});
 				case Update(table, value, query, callback):
 					var record = value.record;
-					if (record.hasField('_insertedId')) {
+					if (record != null && record.hasField('_insertedId')) {
 						record.removeField('_insertedId');
 					}
 					if (updating) {

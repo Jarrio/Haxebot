@@ -30,6 +30,10 @@ class ScamPrevention extends CommandBase {
 	var hold_list:Map<String, Message> = [];
 
 	function singleMessageCheck(message:Message) {
+		if (message.member.roles.cache.some((role, _, _) -> role.name == 'Announcer')) {
+			return false;
+		}
+		
 		if (!message.content.contains('@everyone') && !message.content.contains('@here')) {
 			return false;
 		}

@@ -11,6 +11,7 @@ import Main.CommandForward;
 import discord_js.Message;
 import discord_js.TextChannel;
 import database.types.DBTracker;
+import Query.query;
 
 class Tracker extends CommandBase {
 	var trackers:Map<Int, DBTracker> = [];
@@ -178,6 +179,33 @@ class Tracker extends CommandBase {
 				}
 
 				this.parseTracker(interaction, name, description, keywords, str_exclude, chl_exclude, usr_exclude);
+			case TrackerList(name):
+				if (name != null) {
+					return;
+				}
+				var e = DBEvents.GetRecords('trackers', query($by == interaction.user.id), (resp) -> {
+					switch (resp) {
+						case Records(data):
+							if (data.length == 0) {
+								interaction.reply({content: "No trackers found", ephemeral: true}).then(null, (err) -> trace(err));
+								return;
+							}
+							var embed = new MessageEmbed();
+							embed.setTitle('Trackers');
+							
+							for (record in data) {
+								var t = DBTracker.fromRecord(record);
+								embed.fields.push({
+									name: t.name,
+									value: t.keywords.toString()
+								});
+							}
+
+							interaction.reply({embeds: [embed], ephemeral: true}).then(null, (err) -> trace(err));
+						default:
+							trace(resp);
+					}
+				});
 			case TrackerDelete(name):
 				if (name != null) {
 					if (interaction.isAutocomplete()) {

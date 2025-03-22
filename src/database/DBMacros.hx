@@ -28,7 +28,13 @@ class DBMacros {
 			for (meta in field.meta) {
 				if (StringTools.contains(meta.name, 'record')) {
 					// getter
-					gblock.push(macro _record.field($v{id}, $i{id}));
+					gblock.push(macro {
+						if (_record == null) {
+							_record = new db.Record();
+						}
+
+						_record.field($v{id}, $i{id});
+					});
 					// static fromRecord function
 					sblock.push(macro var $id = record.field($v{field.name}));
 					if (meta.name == 'crecord') {

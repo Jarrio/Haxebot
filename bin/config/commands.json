@@ -1020,6 +1020,20 @@
 				]
 			}, 
 			{
+				"name": "list",
+				"type": "subcommand",
+				"description": "Show all trackers",
+				"params":[
+					{
+						"name": "name",
+						"type": "string",
+						"description": "Show a specific tracker",
+						"required": false,
+						"autocomplete": true
+					}
+				]
+			},
+			{
 				"name": "delete",
 				"type": "subcommand",
 				"description": "Delete an existing subcommand",
