@@ -25,15 +25,15 @@ class ScamPrevention extends CommandBase {
 
 	var timestamp(get, never):Float;
 	final last_message_interval = 5000;
-	
-	final queue_time = 10000; //40 seconds
+
+	final queue_time = 10000; // 40 seconds
 	var hold_list:Map<String, Message> = [];
 
 	function singleMessageCheck(message:Message) {
-		if (message.member.roles.cache.some((role, _, _) -> role.name == 'Announcer')) {
+		if (message.author.id == state?.announcer?.id) {
 			return false;
 		}
-		
+
 		if (!message.content.contains('@everyone') && !message.content.contains('@here')) {
 			return false;
 		}
@@ -41,7 +41,7 @@ class ScamPrevention extends CommandBase {
 		if (hasLink(message.content)) {
 			return true;
 		}
-		
+
 		var counter = 0;
 		if (checkContent([message])) {
 			return true;
@@ -128,7 +128,7 @@ class ScamPrevention extends CommandBase {
 		for (key => value in hold_list) {
 			var now = Date.now().getTime() + queue_time;
 			trace(value.createdTimestamp);
-			
+
 			if (withinTime(value.createdTimestamp, queue_time)) {
 				continue;
 			}
@@ -136,7 +136,6 @@ class ScamPrevention extends CommandBase {
 			this.resetChecks(value.author.id);
 			this.hold_list.remove(key);
 		}
-
 
 		for (id => value in this.time_since) {
 			if (this.timestamp - value > this.last_message_interval) {
@@ -178,9 +177,7 @@ class ScamPrevention extends CommandBase {
 			return;
 		}
 		phishing_update_time = this.timestamp;
-		var links = new Http(
-			'https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json'
-		);
+		var links = new Http('https://raw.githubusercontent.com/Discord-AntiScam/scam-links/main/urls.json');
 		links.onData = function(data) {
 			try {
 				phishing_urls = Json.parse(data);
@@ -195,16 +192,11 @@ class ScamPrevention extends CommandBase {
 
 	function timeoutUser(message:Message, ?callback:(_:Dynamic) -> Void) {
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
-			this.logMessage(message.author.id,
-				this.reformatMessage('Original Message', message, false), TIMEOUT);
-			guild_member.timeout(
-				1000 * 60 * 60 * 12,
-				'Stop spamming, a mod will review this at their convenience.'
-			)
-				.then(callback, function(err) {
-					trace(err);
-					Browser.console.dir(err);
-				});
+			this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), TIMEOUT);
+			guild_member.timeout(1000 * 60 * 60 * 12, 'Stop spamming, a mod will review this at their convenience.').then(callback, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 			this.resetChecks(message.author.id);
 		}, function(err) {
 			trace(err);
@@ -230,8 +222,7 @@ class ScamPrevention extends CommandBase {
 		var message = messages[0];
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			for (message in messages) {
-				this.logMessage(message.author.id,
-					this.reformatMessage('Original Message', message, false), BAN);
+				this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), BAN);
 			}
 			guild_member.ban({
 				days: 1,
@@ -241,13 +232,10 @@ class ScamPrevention extends CommandBase {
 				Browser.console.dir(err);
 			});
 			this.resetChecks(message.author.id);
-			message.channel.asType0.send(
-				'User <@${message.author.id}> has been auto banned for sending scam links.'
-			)
-				.then(callback, function(err) {
-					trace(err);
-					Browser.console.dir(err);
-				});
+			message.channel.asType0.send('User <@${message.author.id}> has been auto banned for sending scam links.').then(callback, function(err) {
+				trace(err);
+				Browser.console.dir(err);
+			});
 		}, function(err) {
 			trace(err);
 			Browser.console.dir(err);
@@ -266,7 +254,30 @@ class ScamPrevention extends CommandBase {
 	}
 
 	function checkContent(messages:Array<Message>) {
-		var keywords = ['$', 'crypto', 'market', 'profit', '£', 'nudes', 'free', 'gift', 'steam', 'telegram', 'giftcard', 'whatsapp', 'girls', 'sexy', 'teen', 'port', 'nsfw', '%', 'nitro', 'airdrop', 'forex', 'pay'];
+		var keywords = [
+			'$',
+			'crypto',
+			'market',
+			'profit',
+			'£',
+			'nudes',
+			'free',
+			'gift',
+			'steam',
+			'telegram',
+			'giftcard',
+			'whatsapp',
+			'girls',
+			'sexy',
+			'teen',
+			'port',
+			'nsfw',
+			'%',
+			'nitro',
+			'airdrop',
+			'forex',
+			'pay'
+		];
 		for (m in messages) {
 			for (key in keywords) {
 				if (m.content.toLowerCase().contains(key)) {
@@ -346,7 +357,7 @@ class ScamPrevention extends CommandBase {
 				if (compare.channel.asType0.id != message.channel.asType0.id) {
 					channel_count++;
 				}
-			} catch (e) {
+			} catch (e ) {
 				trace(e);
 				trace(Json.stringify(messages));
 			}
