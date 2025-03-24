@@ -50,7 +50,7 @@ import commands.ThreadCount;
 import discord_js.GuildScheduledEvent;
 import commands.JamSuggestionBox;
 import systems.MessageRouter;
-import commands.Roundup;
+import commands.RoundupPoster;
 import commands.Everyone;
 import systems.DatabaseSystem;
 import Query;
@@ -187,7 +187,7 @@ class Main {
 						Tracker,
 						Poll,
 						Reminder,
-						RoundupAnnouncer,
+						Roundup,
 						RoundupRoundup,
 						DeleteProject,
 						Emoji,
@@ -212,7 +212,7 @@ class Main {
 					enabled: false,
 					systems: [
 						ThreadCount,
-						RoundupAnnouncer,
+						Roundup,
 						VoiceChatBridge,
 						DeleteProject,
 						Haxelib,
@@ -242,7 +242,7 @@ class Main {
 						Help,
 						Translate,
 						Hi,
-						Roundup,
+						RoundupPoster,
 						CodeLineNumbers,
 						Say,
 						Color
@@ -529,6 +529,7 @@ class Main {
 				}
 				if (subcommand != null) {
 					enum_id += subcommand.charAt(0).toUpperCase() + subcommand.substring(1);
+					trace(enum_id);
 				}
 
 				command.content = Type.createEnum(CommandOptions, enum_id, params);

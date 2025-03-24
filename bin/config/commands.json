@@ -729,6 +729,40 @@
 		"permissions": "admin",
 		"params": [
 			{
+				"name": "announcer",
+				"type": "subcommand",
+				"description": "The designated person will get to announce the haxe roundup with the @everyone tag",
+				"params": [
+					{
+						"name": "user",
+						"description": "They will get @everyone permission during the roundup window",
+						"type": "user",
+						"required": true
+					}
+				]
+			},
+			{
+				"name": "host",
+				"type": "subcommand",
+				"description": "This person will be the one to host haxe roundup roundup",
+				"params": [
+					{
+						"name": "host",
+						"description": "The roundup host",
+						"type": "user",
+						"required": true
+					}
+				]
+			}
+		]
+	},
+	{
+		"name": "roundupposter",
+		"description": "[Mod] Configure auto-roundup posting",
+		"is_public": true,
+		"permissions": "admin",
+		"params": [
+			{
 				"name": "issue",
 				"type": "number",
 				"description": "Topic to get info for",

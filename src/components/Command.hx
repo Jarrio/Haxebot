@@ -36,7 +36,9 @@ enum CommandOptions {
 	Boop(user:User);
 	Poll(question:String, length:String, a:Null<String>, b:Null<String>, c:Null<String>, d:Null<String>, e:Null<String>, f:Null<String>, g:Null<String>,
 		votes:Null<Int>);
-	Roundup(number:Float);
+	RoundupHost(user:User);
+	RoundupAnnouncer(user:User);
+	RoundupPoster(number:Float);
 	Rtfm(channel:String);
 	Translate(to:String, message:String, from:String);
 	Helpdescription(description:String);
