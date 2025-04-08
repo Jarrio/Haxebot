@@ -11707,8 +11707,7 @@ commands_mod_Tracker.prototype = $extend(systems_CommandBase.prototype,{
 							var embed = new discord_$js_MessageEmbed();
 							embed.setTitle("" + tracker1.name);
 							var description = message.content;
-							var channel = message.channel.name;
-							description += "\n ----- \n [Location: " + channel + "](" + message.url + ")";
+							description += "\n ----- \n Location: " + message.url;
 							embed.setDescription(description);
 							embed.setFooter({ text : "Keyword Tracker", iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 							var author = { name : "@" + message.author.tag, iconURL : message.author.displayAvatarURL()};

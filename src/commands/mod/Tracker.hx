@@ -118,7 +118,7 @@ class Tracker extends CommandBase {
 								embed.setTitle('${tracker.name}');
 								var description = message.content;
 								var channel = (message.channel : TextChannel).name;
-								description += '\n ----- \n [Location: $channel](${message.url})';
+								description += '\n ----- \n Location: ${message.url}';
 								embed.setDescription(description);
 								embed.setFooter({
 									text: 'Keyword Tracker',
