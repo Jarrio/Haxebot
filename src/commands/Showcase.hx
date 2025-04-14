@@ -13,6 +13,7 @@ import Main.CommandForward;
 import discord_js.Message;
 import systems.CommandBase;
 import js.Browser;
+
 class Showcase extends CommandBase {
 	var channel:TextChannel;
 	#if block
@@ -65,13 +66,14 @@ class Showcase extends CommandBase {
 		});
 
 		iterate(messages, entity -> {
-			switch(command) {
+			switch (command) {
 				case showcase_message:
 					var regex = ~/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/ig;
+					var tags = ~/```(haxe|hx|)(.*?)```/gism;
 
-					if (!regex.match(message.content) && message.attachments.size == 0) {
+					if (!tags.match(message.content) && !regex.match(message.content) && message.attachments.size == 0) {
 						var content = '```\n${message.content}\n```';
-						content += '\nYour message was removed due to not having any attachments or links. Please chat within threads only.\n';
+						content += '\nYour message was removed due to not having any attachments, code tags or links. Please chat within threads only.\n';
 						content += '**Showcase Channel guidelines:**\n\n';
 						content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
 
@@ -153,7 +155,7 @@ class Showcase extends CommandBase {
 				interaction.reply({content: "Keep on lurking :)", ephemeral: true});
 			}
 
-			switch(command) {
+			switch (command) {
 				case showcase_agree | showcase_disagree:
 					this.universe.deleteEntity(entity);
 				default:
@@ -163,12 +165,8 @@ class Showcase extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		var text = 'If your post does not contain either an __**attachment**__ or a __**link**__, the post will be removed. Any comments on any of the works posted in the <#162664383082790912> channel should be made within threads. \n\n**Guidelines**\n1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
-		var agree_btn = new ButtonBuilder().setCustomId('showcase_agree')
-			.setLabel('Agree')
-			.setStyle(Primary);
-		var disagree_btn = new ButtonBuilder().setCustomId('showcase_disagree')
-			.setLabel('Disagree')
-			.setStyle(Secondary);
+		var agree_btn = new ButtonBuilder().setCustomId('showcase_agree').setLabel('Agree').setStyle(Primary);
+		var disagree_btn = new ButtonBuilder().setCustomId('showcase_disagree').setLabel('Disagree').setStyle(Secondary);
 		var row = new APIActionRowComponent().addComponents(agree_btn, disagree_btn);
 
 		interaction.reply({content: text, components: [row], ephemeral: true});
