@@ -75,7 +75,7 @@ class Showcase extends CommandBase {
 						var content = '```\n${message.content}\n```';
 						content += '\nYour message was removed due to not having any attachments, code tags or links. Please chat within threads only.\n';
 						content += '**Showcase Channel guidelines:**\n\n';
-						content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here';
+						content += '1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n';
 
 						message.author.send({content: content}).then(function(succ) {
 							message.delete().then(null, (err) -> trace(err));

@@ -10112,7 +10112,7 @@ commands_Showcase.prototype = $extend(systems_CommandBase.prototype,{
 					var content1 = "```\n" + message[0].content + "\n```";
 					content1 += "\nYour message was removed due to not having any attachments, code tags or links. Please chat within threads only.\n";
 					content1 += "**Showcase Channel guidelines:**\n\n";
-					content1 += "1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n3. Art and Music showcases are allowed here";
+					content1 += "1. Programming projects must be haxe related\n2. Comments on posts should be made within threads\n";
 					message[0].author.send({ content : content1}).then((function(message) {
 						return function(succ) {
 							message[0].delete().then(null,(function() {
