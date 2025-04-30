@@ -136,8 +136,8 @@ class ThreadCount extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		if (this.count.exists(interaction.channelId)) {
-			var count = this.count.get(interaction.channelId);
-			interaction.reply({content: 'This thread has ${count} messages'}).then(null, function(err) {
+			var data = this.count.get(interaction.channelId);
+			interaction.reply({content: 'This thread has ${data.count} messages'}).then(null, function(err) {
 				trace(err);
 				Browser.console.dir(err);
 			});

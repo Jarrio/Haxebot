@@ -14,7 +14,36 @@ import systems.CommandBase;
 import js.Browser;
 
 class ScamPrevention extends CommandBase {
+
+	final keywords:Array<String> = [
+		'ticket',
+		'support',
+		'$',
+		'crypto',
+		'market',
+		'profit',
+		'£',
+		'nudes',
+		'free',
+		'gift',
+		'steam',
+		'telegram',
+		'giftcard',
+		'whatsapp',
+		'girls',
+		'sexy',
+		'teen',
+		'port',
+		'nsfw',
+		'%',
+		'nitro',
+		'airdrop',
+		'forex',
+		'pay'
+	];
+
 	@:fastFamily var messages:{forward:CommandForward, message:Message};
+
 	var time_since:Map<String, Float> = new Map();
 	var sequential_tags:Map<String, Int> = new Map();
 	var user_list:Map<String, User> = new Map();
@@ -36,6 +65,10 @@ class ScamPrevention extends CommandBase {
 
 		if (!message.content.contains('@everyone') && !message.content.contains('@here')) {
 			return false;
+		}
+
+		if (hasKeyword(message.content)) {
+			return true;
 		}
 
 		if (hasLink(message.content)) {
@@ -63,12 +96,21 @@ class ScamPrevention extends CommandBase {
 		return false;
 	}
 
+	function oneChanceChecks(message:Message) {
+		if (message.content.contains('discord.gg') && hasKeyword(message.content)) {
+			return true;
+		}
+		return false;
+	}
+
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, entity -> {
 			if (forward != scam_prevention) {
 				continue;
 			}
+
+			oneChanceChecks(message);
 
 			if (this.singleMessageCheck(message)) {
 				hold_list.set(message.id, message);
@@ -254,35 +296,20 @@ class ScamPrevention extends CommandBase {
 	}
 
 	function checkContent(messages:Array<Message>) {
-		var keywords = [
-			'$',
-			'crypto',
-			'market',
-			'profit',
-			'£',
-			'nudes',
-			'free',
-			'gift',
-			'steam',
-			'telegram',
-			'giftcard',
-			'whatsapp',
-			'girls',
-			'sexy',
-			'teen',
-			'port',
-			'nsfw',
-			'%',
-			'nitro',
-			'airdrop',
-			'forex',
-			'pay'
-		];
 		for (m in messages) {
 			for (key in keywords) {
 				if (m.content.toLowerCase().contains(key)) {
 					return true;
 				}
+			}
+		}
+		return false;
+	}
+
+	function hasKeyword(message:String) {
+		for (keyword in keywords) {
+			if (message.contains(keyword)) {
+				return true;
 			}
 		}
 		return false;
