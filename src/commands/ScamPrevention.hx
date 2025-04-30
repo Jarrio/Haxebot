@@ -110,7 +110,9 @@ class ScamPrevention extends CommandBase {
 				continue;
 			}
 
-			oneChanceChecks(message);
+			if (oneChanceChecks(message)) {
+				reviewMessage([message]);
+			}
 
 			if (this.singleMessageCheck(message)) {
 				hold_list.set(message.id, message);
