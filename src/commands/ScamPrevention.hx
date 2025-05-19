@@ -64,6 +64,7 @@ class ScamPrevention extends CommandBase {
 		}
 
 		if (!message.content.contains('@everyone') && !message.content.contains('@here')) {
+			trace('here');
 			return false;
 		}
 
@@ -114,9 +115,9 @@ class ScamPrevention extends CommandBase {
 				reviewMessage([message]);
 			}
 
-			if (this.singleMessageCheck(message)) {
-				hold_list.set(message.id, message);
-			}
+			// if (this.singleMessageCheck(message)) {
+			// 	hold_list.set(message.id, message);
+			// }
 
 			if (withinTime(message.createdTimestamp, last_message_interval)) {
 				this.updateTime(message.author.id);
@@ -134,15 +135,15 @@ class ScamPrevention extends CommandBase {
 				continue;
 			}
 
-			if (messages.length < 3) {
+			if (messages.length < 2) {
 				continue;
 			}
 
-			for (m in messages) {
-				if (this.hold_list.exists(m.id)) {
-					hold_list.remove(m.id);
-				}
-			}
+			// for (m in messages) {
+			// 	if (this.hold_list.exists(m.id)) {
+			// 		hold_list.remove(m.id);
+			// 	}
+			// }
 
 			var review = false;
 			if (this.checkTags(messages)) {
@@ -169,17 +170,17 @@ class ScamPrevention extends CommandBase {
 			this.resetChecks(messages[0].author.id);
 		}
 
-		for (key => value in hold_list) {
-			var now = Date.now().getTime() + queue_time;
-			trace(value.createdTimestamp);
+		// for (key => value in hold_list) {
+		// 	var now = Date.now().getTime() + queue_time;
+		// 	trace(value.createdTimestamp);
 
-			if (withinTime(value.createdTimestamp, queue_time)) {
-				continue;
-			}
-			this.reviewMessage([value]);
-			this.resetChecks(value.author.id);
-			this.hold_list.remove(key);
-		}
+		// 	if (withinTime(value.createdTimestamp, queue_time)) {
+		// 		continue;
+		// 	}
+		// 	this.reviewMessage([value]);
+		// 	this.resetChecks(value.author.id);
+		// 	this.hold_list.remove(key);
+		// }
 
 		for (id => value in this.time_since) {
 			if (this.timestamp - value > this.last_message_interval) {
@@ -249,7 +250,7 @@ class ScamPrevention extends CommandBase {
 	}
 
 	inline function checkChannels(messages:Array<Message>) {
-		var channel_count = 0;
+		var channel_count = 1;
 		for (k => m in messages) {
 			if (k == 0) {
 				continue;
@@ -259,7 +260,7 @@ class ScamPrevention extends CommandBase {
 				channel_count++;
 			}
 		}
-		return channel_count > 2;
+		return channel_count > 1;
 	}
 
 	function banUser(messages:Array<Message>, ?callback:(_:Dynamic) -> Void) {
@@ -359,13 +360,14 @@ class ScamPrevention extends CommandBase {
 		for (message in messages) {
 			if (message.content.contains('@everyone') || message.content.contains('@here')) {
 				if (tag_count >= 3) {
+					trace('here');
 					break;
 				}
 				tag_count++;
 			}
 		}
 
-		if (tag_count >= 3) {
+		if (tag_count >= 2) {
 			return true;
 		}
 
