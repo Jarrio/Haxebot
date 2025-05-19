@@ -2,6 +2,7 @@ package commands;
 
 import database.DBEvents;
 import commands.types.Duration;
+import commands.types.Timeframe;
 import discord_js.TextChannel;
 import js.Browser;
 import haxe.Json;
@@ -193,8 +194,8 @@ class Poll extends CommandBase {
 
 				body += '$k / $ans /  **${count - 1}** \n';
 			}
-
-			body += '\n*Poll ran for ${data.duration}*';
+			
+			body += '\n*Poll ran for ${new Timeframe(data.duration).toString()}*';
 
 			body += '\n*Posted: <t:${Math.round(message.createdTimestamp / 1000)}:R>*';
 			embed.setDescription(body);

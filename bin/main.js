@@ -5624,7 +5624,7 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 						var e = database_DBEvents.DeleteRecord("polls",poll[0].get_record(),(function() {
 							return function(resp) {
 								if(resp._hx_index != 4) {
-									haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 41, className : "commands.Poll", methodName : "onEnabled"});
+									haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 42, className : "commands.Poll", methodName : "onEnabled"});
 								}
 							};
 						})());
@@ -5649,26 +5649,26 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 						return function(succ) {
 							succ.messages.fetch(poll[0].message_id).then((function(time_left,poll) {
 								return function(message) {
-									haxe_Log.trace("Resyncing " + poll[0].id,{ fileName : "src/commands/Poll.hx", lineNumber : 59, className : "commands.Poll", methodName : "onEnabled"});
+									haxe_Log.trace("Resyncing " + poll[0].id,{ fileName : "src/commands/Poll.hx", lineNumber : 60, className : "commands.Poll", methodName : "onEnabled"});
 									_gthis.addCollector(message,poll[0],time_left[0]);
 								};
 							})(time_left,poll),(function() {
 								return function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 62, className : "commands.Poll", methodName : "onEnabled"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 63, className : "commands.Poll", methodName : "onEnabled"});
 									$global.console.dir(err);
 								};
 							})());
 						};
 					})(time_left,poll),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 66, className : "commands.Poll", methodName : "onEnabled"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 67, className : "commands.Poll", methodName : "onEnabled"});
 							$global.console.dir(err);
 						};
 					})());
 					_gthis.polls.h[poll[0].id] = poll[0];
 				}
 			} else {
-				haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 72, className : "commands.Poll", methodName : "onEnabled"});
+				haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 73, className : "commands.Poll", methodName : "onEnabled"});
 			}
 		});
 		var _ecsTmpEntity = this.universe.createEntity();
@@ -5759,7 +5759,7 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 						if(resp._hx_index == 4) {
 							_gthis.addCollector(message,poll);
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 143, className : "commands.Poll", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 144, className : "commands.Poll", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -5771,11 +5771,11 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 						ecsTmpFamily.add(_ecsTmpEntity);
 					}
 				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 149, className : "commands.Poll", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 150, className : "commands.Poll", methodName : "run"});
 					$global.console.dir(err);
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 153, className : "commands.Poll", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 154, className : "commands.Poll", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
@@ -5811,14 +5811,14 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 				}
 				body += "" + _g_key + " / " + ans + " /  **" + (count - 1) + "** \n";
 			}
-			body += "\n*Poll ran for " + data.duration + "*";
+			body += "\n*Poll ran for " + commands_types_Timeframe.toString(commands_types_Timeframe._hx_new(data.duration)) + "*";
 			body += "\n*Posted: <t:" + Math.round(message.createdTimestamp / 1000) + ":R>*";
 			embed.setDescription(body);
 			message.reply({ content : "<@" + data.author + ">", embeds : [embed]}).then(function(_) {
 				data.active = 0;
 				var e = database_DBEvents.Update("polls",data,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(data.id)),function(resp) {
 					if(resp._hx_index != 4) {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 208, className : "commands.Poll", methodName : "addCollector"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 209, className : "commands.Poll", methodName : "addCollector"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -5901,7 +5901,7 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 			if(reaction.emoji.name == "🇰" && rcount >= 11) {
 				return true;
 			}
-			haxe_Log.trace("removed " + reaction.message.author.tag + " reaction on message " + Std.string(reaction.message),{ fileName : "src/commands/Poll.hx", lineNumber : 283, className : "commands.Poll", methodName : "filter"});
+			haxe_Log.trace("removed " + reaction.message.author.tag + " reaction on message " + Std.string(reaction.message),{ fileName : "src/commands/Poll.hx", lineNumber : 284, className : "commands.Poll", methodName : "filter"});
 			reaction.remove();
 			return false;
 		};
@@ -12130,6 +12130,66 @@ commands_types_Duration.fromString = function(input) {
 		time = num * 2419200000;
 	}
 	return commands_types_Duration._hx_new(time);
+};
+var commands_types_Timeframe = {};
+commands_types_Timeframe._hx_new = function(value) {
+	return value;
+};
+commands_types_Timeframe.lt = null;
+commands_types_Timeframe.ltg = null;
+commands_types_Timeframe.toString = function(this1) {
+	if(this1 <= 60000) {
+		return "" + this1 / 1000 + " seconds";
+	} else if(this1 <= 3600000) {
+		return "" + this1 / 60000 + " minutes";
+	} else if(this1 <= 86400000) {
+		return "" + this1 / 3600000 + " hours";
+	} else if(this1 <= 604800000) {
+		return "" + this1 / 86400000 + " days";
+	} else if(this1 <= 2419200000) {
+		return "" + this1 / 2419200000 + " weeks";
+	} else {
+		return "" + this1 / 1000;
+	}
+};
+commands_types_Timeframe.toShort = function(this1) {
+	if(this1 < 60000) {
+		return "" + this1 / 1000 + " seconds";
+	} else if(this1 < 3600000) {
+		return "" + (this1 / 60000 | 0) + "m";
+	} else if(this1 < 86400000) {
+		return "" + (this1 / 3600000 | 0) + "hr";
+	} else if(this1 < 604800000) {
+		return "" + (this1 / 86400000 | 0) + "d";
+	} else if(this1 <= 2419200000) {
+		return "" + this1 + "w";
+	} else {
+		return "" + this1;
+	}
+};
+commands_types_Timeframe.fromString = function(data) {
+	switch(data) {
+	case "15m":
+		return 900000;
+	case "1d":
+		return 86400000;
+	case "1hr":
+		return 3600000;
+	case "1m":
+		return 60000;
+	case "1w":
+		return 604800000;
+	case "30m":
+		return 1800000;
+	case "3m":
+		return 180000;
+	case "4hr":
+		return 14400000;
+	case "5m":
+		return 300000;
+	default:
+		return commands_types_Timeframe._hx_new(Std.parseInt(data));
+	}
 };
 var components_CommandOptions = $hxEnums["components.CommandOptions"] = { __ename__:"components.CommandOptions",__constructs__:null
 	,Hi: {_hx_name:"Hi",_hx_index:0,__enum__:"components.CommandOptions",toString:$estr}
@@ -25289,6 +25349,22 @@ commands_types_Duration.hour = 3600000;
 commands_types_Duration.day = 86400000;
 commands_types_Duration.week = 604800000;
 commands_types_Duration.month = 2419200000;
+commands_types_Timeframe.none = -1;
+commands_types_Timeframe.one_min = 60000;
+commands_types_Timeframe.three_mins = 180000;
+commands_types_Timeframe.five_mins = 300000;
+commands_types_Timeframe.fifteen_mins = 900000;
+commands_types_Timeframe.thirty_mins = 1800000;
+commands_types_Timeframe.one_hour = 3600000;
+commands_types_Timeframe.two_hours = 7200000;
+commands_types_Timeframe.four_hours = 14400000;
+commands_types_Timeframe.six_hours = 21600000;
+commands_types_Timeframe.eight_hours = 28800000;
+commands_types_Timeframe.twelve_hours = 43200000;
+commands_types_Timeframe.one_day = 86400000;
+commands_types_Timeframe.three_days = 259200000;
+commands_types_Timeframe.one_week = 604800000;
+commands_types_Timeframe.one_month = 2419200000;
 components_TextCommand.mention = "!mention";
 components_TextCommand.run = "!run";
 database_types_DBEmoji.__meta__ = { fields : { author_id : { crecord : null}, author_tag : { crecord : null}, name : { crecord : null}, url : { crecord : null}, description : { crecord : null}, timestamp : { record : null}, id : { record : null}}};
