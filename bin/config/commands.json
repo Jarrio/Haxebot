@@ -104,10 +104,34 @@
 				"required": false
 			},
 			{
+				"name": "h",
+				"type": "string",
+				"description": "answer h",
+				"required": false
+			},
+			{
+				"name": "i",
+				"type": "string",
+				"description": "answer i",
+				"required": false
+			},
+			{
+				"name": "j",
+				"type": "string",
+				"description": "answer j",
+				"required": false
+			},
+			{
+				"name": "k",
+				"type": "string",
+				"description": "answer k",
+				"required": false
+			},
+			{
 				"name": "votes",
 				"type": "number",
 				"required": false,
-				"description": "The number of times a person can vote. Default is 1. Max is 7."
+				"description": "The number of times a person can vote. Default is 1. Max is 11."
 			}
 		]
 	},

@@ -34,8 +34,8 @@ enum CommandOptions {
 	Run(code:String);
 	Trace(code:String);
 	Boop(user:User);
-	Poll(question:String, length:String, a:Null<String>, b:Null<String>, c:Null<String>, d:Null<String>, e:Null<String>, f:Null<String>, g:Null<String>,
-		votes:Null<Int>);
+	Poll(question:String, length:String, a:Null<String>, b:Null<String>, c:Null<String>, d:Null<String>, e:Null<String>, f:Null<String>,
+		g:Null<String>, h:Null<String>, i:Null<String>, j:Null<String>, k:Null<String>, votes:Null<Int>);
 	RoundupHost(user:User);
 	RoundupAnnouncer(user:User);
 	RoundupPoster(number:Float);

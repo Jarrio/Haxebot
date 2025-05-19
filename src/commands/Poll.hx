@@ -77,7 +77,7 @@ class Poll extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Poll(question, length, a, b, c, d, e, f, g, v):
+			case Poll(question, length, a, b, c, d, e, f, g, h, i, j, k, v):
 				var time = PollTime.fromString(length);
 
 				if (a == null && b == null) {
@@ -86,7 +86,7 @@ class Poll extends CommandBase {
 				}
 
 				var body = '';
-				var collection = [a, b, c, d, e, f, g];
+				var collection = [a, b, c, d, e, f, g, h, i, j, k];
 				var answers = new Map();
 				var results = new Map();
 				var votes = 1;
@@ -97,8 +97,8 @@ class Poll extends CommandBase {
 
 				if (v != null) {
 					votes = v;
-					if (votes > 7) {
-						votes = 7;
+					if (votes > 11) {
+						votes = 11;
 					}
 				}
 
@@ -201,7 +201,7 @@ class Poll extends CommandBase {
 			message.reply({content: '<@${data.author}>', embeds: [embed]}).then(function(_) {
 				data.active = 0;
 				var e = DBEvents.Update('polls', data, query($id == data.id), (resp) -> {
-					switch(resp) {
+					switch (resp) {
 						case Success(_, _):
 						default:
 							trace(resp);
@@ -267,6 +267,18 @@ class Poll extends CommandBase {
 			if (reaction.emoji.name == "🇬" && rcount >= 7) {
 				return true;
 			}
+			if (reaction.emoji.name == "🇭" && rcount >= 8) {
+				return true;
+			}
+			if (reaction.emoji.name == "🇮" && rcount >= 9) {
+				return true;
+			}
+			if (reaction.emoji.name == "🇯" && rcount >= 10) {
+				return true;
+			}
+			if (reaction.emoji.name == "🇰" && rcount >= 11) {
+				return true;
+			}
 			trace('removed ${reaction.message.author.tag} reaction on message ${reaction.message}');
 			reaction.remove();
 			return false;
@@ -284,6 +296,10 @@ class Poll extends CommandBase {
 			case 4: '🇪';
 			case 5: '🇫';
 			case 6: '🇬';
+			case 7: '🇭';
+			case 8: '🇮';
+			case 9: '🇯';
+			case 10: '🇰';
 			default: '';
 		}
 	}
