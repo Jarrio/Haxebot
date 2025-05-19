@@ -5754,11 +5754,12 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 					var poll = new database_types_DBPoll(user,channel,message.id,question,time);
 					poll.results = results;
 					poll.answers = answers;
+					poll.votes = votes;
 					var e = database_DBEvents.Insert("polls",poll,function(resp) {
 						if(resp._hx_index == 4) {
 							_gthis.addCollector(message,poll);
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 142, className : "commands.Poll", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 143, className : "commands.Poll", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -5770,11 +5771,11 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 						ecsTmpFamily.add(_ecsTmpEntity);
 					}
 				}).then(null,function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 148, className : "commands.Poll", methodName : "run"});
+					haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 149, className : "commands.Poll", methodName : "run"});
 					$global.console.dir(err);
 				});
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 152, className : "commands.Poll", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Poll.hx", lineNumber : 153, className : "commands.Poll", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
@@ -5817,7 +5818,7 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 				data.active = 0;
 				var e = database_DBEvents.Update("polls",data,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(data.id)),function(resp) {
 					if(resp._hx_index != 4) {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 207, className : "commands.Poll", methodName : "addCollector"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Poll.hx", lineNumber : 208, className : "commands.Poll", methodName : "addCollector"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -5900,7 +5901,7 @@ commands_Poll.prototype = $extend(systems_CommandBase.prototype,{
 			if(reaction.emoji.name == "🇰" && rcount >= 11) {
 				return true;
 			}
-			haxe_Log.trace("removed " + reaction.message.author.tag + " reaction on message " + Std.string(reaction.message),{ fileName : "src/commands/Poll.hx", lineNumber : 282, className : "commands.Poll", methodName : "filter"});
+			haxe_Log.trace("removed " + reaction.message.author.tag + " reaction on message " + Std.string(reaction.message),{ fileName : "src/commands/Poll.hx", lineNumber : 283, className : "commands.Poll", methodName : "filter"});
 			reaction.remove();
 			return false;
 		};

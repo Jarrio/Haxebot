@@ -133,6 +133,7 @@ class Poll extends CommandBase {
 						var poll = new DBPoll(user, channel, message.id, question, time);
 						poll.results = results;
 						poll.answers = answers;
+						poll.votes = votes;
 
 						var e = DBEvents.Insert('polls', poll, (resp) -> {
 							switch (resp) {
