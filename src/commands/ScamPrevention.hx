@@ -313,7 +313,7 @@ class ScamPrevention extends CommandBase {
 
 	function hasKeyword(message:String) {
 		for (keyword in keywords) {
-			if (message.contains(keyword)) {
+			if (message.toLowerCase().contains(keyword)) {
 				return true;
 			}
 		}

@@ -9858,7 +9858,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		while(_g < _g1.length) {
 			var keyword = _g1[_g];
 			++_g;
-			if(message.indexOf(keyword) != -1) {
+			if(message.toLowerCase().indexOf(keyword) != -1) {
 				return true;
 			}
 		}
