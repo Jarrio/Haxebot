@@ -21,6 +21,8 @@ class ScamPrevention extends CommandBase {
 		'$',
 		'crypto',
 		'market',
+		'help',
+		'chat',
 		'profit',
 		'£',
 		'nudes',
