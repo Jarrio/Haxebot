@@ -126,91 +126,130 @@ class ScamPrevention extends CommandBase {
 	public function extractURLs(content:String):Array<String> {
 		var urls = [];
 
-		// Don't decode the entire content here - extract first, then decode individual URLs
+		// Handle URLs wrapped in < > (including multi-line)
+		var wrappedPattern = ~/<([^>]*?)>/gs;
+		wrappedPattern.map(content, function(r) {
+			var innerContent = r.matched(1);
 
-		var cleanMessage = ~/\s+/g.replace(content, "");
+			var cleanedUrl = ~/[\s\n\r\t]+/g.replace(innerContent, "");
 
+			if (~/^https?:/i.match(cleanedUrl)) {
+				if (isURLEncoded(cleanedUrl)) {
+					cleanedUrl = urlDecode(cleanedUrl);
+				}
+
+				if (~/^https?:\/[^\/]/.match(cleanedUrl)) {
+					cleanedUrl = ~/^(https?:)\//i.replace(cleanedUrl, "$1//");
+				}
+
+				if (!urls.contains(cleanedUrl)) {
+					urls.push(cleanedUrl);
+				}
+			}
+			return r.matched(0);
+		});
+
+		// Find any text that starts with http/https
+		var spacedHttpPattern = ~/h\s*t\s*t\s*p\s*s?\s*:\s*\/\s*\/\s*[^\s]*(?:\s+[^\s<>]*)*(?=\s|$|<|>|\.)/gi;
+		spacedHttpPattern.map(content, function(r) {
+			var cleanedUrl = ~/\s+/g.replace(r.matched(0), "");
+
+			cleanedUrl = ~/[<>].*$/g.replace(cleanedUrl, "");
+
+			if (isURLEncoded(cleanedUrl)) {
+				cleanedUrl = urlDecode(cleanedUrl);
+			}
+
+			cleanedUrl = ~/^(https?:)\/([^\/])/i.replace(cleanedUrl, "$1//$2");
+
+			if (!urls.contains(cleanedUrl)) {
+				urls.push(cleanedUrl);
+			}
+			return r.matched(0);
+		});
+
+		// Standard URLs (clean text)
+		var cleanMessage = ~/\s+/g.replace(content, " ");
 		var standardPattern = ~/https?:\/\/[^\s<>"']+/gi;
 		standardPattern.map(cleanMessage, function(r) {
 			var url = r.matched(0);
-			// Decode individual URL if it's encoded
 			if (isURLEncoded(url)) {
 				url = urlDecode(url);
 			}
+
+			url = ~/^(https?:)\/([^\/])/i.replace(url, "$1//$2");
+
 			if (!urls.contains(url)) {
 				urls.push(url);
 			}
 			return r.matched(0);
 		});
 
-		// Spaced/obfuscated patterns in original message
-		var spacedPattern = ~/h\s*t\s*t\s*p\s*s?\s*:\s*\/\s*\/\s*[^\s]*(?:\s+[^\s]*)*(?=\s|$|<|>)/gi;
-		spacedPattern.map(content, function(r) {
-			var cleanedUrl = ~/\s+/g.replace(r.matched(0), "");
-			// Decode after cleaning spaces
-			if (isURLEncoded(cleanedUrl)) {
-				cleanedUrl = urlDecode(cleanedUrl);
-			}
-			if (!urls.contains(cleanedUrl)) {
-				urls.push(cleanedUrl);
-			}
-			return r.matched(0);
-		});
-
-		// URLs wrapped in < >
-		var wrappedPattern = ~/<\s*(h\s*t\s*t\s*p\s*s?\s*:.*?)\s*>/gi;
-		wrappedPattern.map(content, function(r) {
-			var cleanedUrl = ~/\s+/g.replace(r.matched(1), "");
-			cleanedUrl = ~/[:：]/g.replace(cleanedUrl, ":");
-			cleanedUrl = ~/[\\\/]+/g.replace(cleanedUrl, "/");
-			// Decode after cleaning
-			if (isURLEncoded(cleanedUrl)) {
-				cleanedUrl = urlDecode(cleanedUrl);
-			}
-			if (!urls.contains(cleanedUrl)) {
-				urls.push(cleanedUrl);
-			}
-			return r.matched(0);
-		});
-
-		// Multi-line URL extraction
+		// Multi-line reconstruction
 		var lines = content.split('\n');
-		var currentURL = "";
-		var inURL = false;
+		var potentialUrl = "";
+		var foundHttpStart = false;
 
 		for (line in lines) {
-			var cleanLine = ~/\s+/g.replace(line, "");
-			var originalLine = line.trim(); // Keep original for bracket checking
+			var trimmedLine = StringTools.trim(line);
 
-			if (~/^h\s*t\s*t\s*p/i.match(line) || ~/^https?/i.match(cleanLine)) {
-				inURL = true;
-				currentURL = cleanLine;
-			} else if (inURL && cleanLine.length > 0 && !~/[<>]/.match(originalLine)) {
-				// Continue building URL only if no brackets in original line
-				currentURL += cleanLine;
-			} else if (inURL && (cleanLine.length == 0 || ~/[<>]/.match(originalLine))) {
-				// End URL on empty line or line with brackets
-				if (currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
-					var finalUrl = currentURL;
-					if (isURLEncoded(finalUrl)) {
-						finalUrl = urlDecode(finalUrl);
+			//
+			if (~/^<?h\s*t\s*t\s*p/i.match(trimmedLine)) {
+				foundHttpStart = true;
+				potentialUrl = ~/\s+/g.replace(trimmedLine, "");
+				potentialUrl = ~/^<|>$/g.replace(potentialUrl, "");
+			} else if (foundHttpStart && trimmedLine.length > 0) {
+				var cleanLine = ~/\s+/g.replace(trimmedLine, "");
+				cleanLine = ~/^<|>$/g.replace(cleanLine, "");
+
+				if (trimmedLine.charAt(trimmedLine.length - 1) == '>') {
+					cleanLine = cleanLine.substr(0, cleanLine.length - 1);
+					potentialUrl += cleanLine;
+
+					if (~/^https?:/i.match(potentialUrl)) {
+						if (isURLEncoded(potentialUrl)) {
+							potentialUrl = urlDecode(potentialUrl);
+						}
+
+						potentialUrl = ~/^(https?:)\/([^\/])/i.replace(potentialUrl, "$1//$2");
+
+						if (!urls.contains(potentialUrl)) {
+							urls.push(potentialUrl);
+						}
 					}
-					if (!urls.contains(finalUrl)) {
-						urls.push(finalUrl);
+
+					potentialUrl = "";
+					foundHttpStart = false;
+				} else {
+					potentialUrl += cleanLine;
+				}
+			} else if (foundHttpStart) {
+				if (~/^https?:/i.match(potentialUrl)) {
+					if (isURLEncoded(potentialUrl)) {
+						potentialUrl = urlDecode(potentialUrl);
+					}
+
+					potentialUrl = ~/^(https?:)\/([^\/])/i.replace(potentialUrl, "$1//$2");
+
+					if (!urls.contains(potentialUrl)) {
+						urls.push(potentialUrl);
 					}
 				}
-				currentURL = "";
-				inURL = false;
+				potentialUrl = "";
+				foundHttpStart = false;
 			}
 		}
 
-		if (inURL && currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
-			var finalUrl = currentURL;
-			if (isURLEncoded(finalUrl)) {
-				finalUrl = urlDecode(finalUrl);
+		// Handle case where URL continues to end of content
+		if (foundHttpStart && ~/^https?:/i.match(potentialUrl)) {
+			if (isURLEncoded(potentialUrl)) {
+				potentialUrl = urlDecode(potentialUrl);
 			}
-			if (!urls.contains(finalUrl)) {
-				urls.push(finalUrl);
+
+			potentialUrl = ~/^(https?:)\/([^\/])/i.replace(potentialUrl, "$1//$2");
+
+			if (!urls.contains(potentialUrl)) {
+				urls.push(potentialUrl);
 			}
 		}
 

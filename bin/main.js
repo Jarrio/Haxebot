@@ -9585,83 +9585,116 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 	,extractURLs: function(content) {
 		var _gthis = this;
 		var urls = [];
+		var wrappedPattern = new EReg("<([^>]*?)>","gs");
+		wrappedPattern.map(content,function(r) {
+			var innerContent = r.matched(1);
+			var _this_r = new RegExp("[\\s\n\r\t]+","g".split("u").join(""));
+			var cleanedUrl = innerContent.replace(_this_r,"");
+			if(new EReg("^https?:","i").match(cleanedUrl)) {
+				if(_gthis.isURLEncoded(cleanedUrl)) {
+					cleanedUrl = _gthis.urlDecode(cleanedUrl);
+				}
+				if(new EReg("^https?:/[^/]","").match(cleanedUrl)) {
+					var _this_r = new RegExp("^(https?:)/","i".split("u").join(""));
+					cleanedUrl = cleanedUrl.replace(_this_r,"$1//");
+				}
+				if(urls.indexOf(cleanedUrl) == -1) {
+					urls.push(cleanedUrl);
+				}
+			}
+			return r.matched(0);
+		});
+		var spacedHttpPattern = new EReg("h\\s*t\\s*t\\s*p\\s*s?\\s*:\\s*/\\s*/\\s*[^\\s]*(?:\\s+[^\\s<>]*)*(?=\\s|$|<|>|\\.)","gi");
+		spacedHttpPattern.map(content,function(r) {
+			var _this_r = new RegExp("\\s+","g".split("u").join(""));
+			var cleanedUrl = r.matched(0).replace(_this_r,"");
+			var _this_r = new RegExp("[<>].*$","g".split("u").join(""));
+			cleanedUrl = cleanedUrl.replace(_this_r,"");
+			if(_gthis.isURLEncoded(cleanedUrl)) {
+				cleanedUrl = _gthis.urlDecode(cleanedUrl);
+			}
+			var _this_r = new RegExp("^(https?:)/([^/])","i".split("u").join(""));
+			cleanedUrl = cleanedUrl.replace(_this_r,"$1//$2");
+			if(urls.indexOf(cleanedUrl) == -1) {
+				urls.push(cleanedUrl);
+			}
+			return r.matched(0);
+		});
 		var _this_r = new RegExp("\\s+","g".split("u").join(""));
-		var cleanMessage = content.replace(_this_r,"");
+		var cleanMessage = content.replace(_this_r," ");
 		var standardPattern = new EReg("https?://[^\\s<>\"']+","gi");
 		standardPattern.map(cleanMessage,function(r) {
 			var url = r.matched(0);
 			if(_gthis.isURLEncoded(url)) {
 				url = _gthis.urlDecode(url);
 			}
+			var _this_r = new RegExp("^(https?:)/([^/])","i".split("u").join(""));
+			url = url.replace(_this_r,"$1//$2");
 			if(urls.indexOf(url) == -1) {
 				urls.push(url);
 			}
 			return r.matched(0);
 		});
-		var spacedPattern = new EReg("h\\s*t\\s*t\\s*p\\s*s?\\s*:\\s*/\\s*/\\s*[^\\s]*(?:\\s+[^\\s]*)*(?=\\s|$|<|>)","gi");
-		spacedPattern.map(content,function(r) {
-			var _this_r = new RegExp("\\s+","g".split("u").join(""));
-			var cleanedUrl = r.matched(0).replace(_this_r,"");
-			if(_gthis.isURLEncoded(cleanedUrl)) {
-				cleanedUrl = _gthis.urlDecode(cleanedUrl);
-			}
-			if(urls.indexOf(cleanedUrl) == -1) {
-				urls.push(cleanedUrl);
-			}
-			return r.matched(0);
-		});
-		var wrappedPattern = new EReg("<\\s*(h\\s*t\\s*t\\s*p\\s*s?\\s*:.*?)\\s*>","gi");
-		wrappedPattern.map(content,function(r) {
-			var _this_r = new RegExp("\\s+","g".split("u").join(""));
-			var cleanedUrl = r.matched(1).replace(_this_r,"");
-			var _this_r = new RegExp("[:：]","g".split("u").join(""));
-			cleanedUrl = cleanedUrl.replace(_this_r,":");
-			var _this_r = new RegExp("[\\\\/]+","g".split("u").join(""));
-			cleanedUrl = cleanedUrl.replace(_this_r,"/");
-			if(_gthis.isURLEncoded(cleanedUrl)) {
-				cleanedUrl = _gthis.urlDecode(cleanedUrl);
-			}
-			if(urls.indexOf(cleanedUrl) == -1) {
-				urls.push(cleanedUrl);
-			}
-			return r.matched(0);
-		});
 		var lines = content.split("\n");
-		var currentURL = "";
-		var inURL = false;
+		var potentialUrl = "";
+		var foundHttpStart = false;
 		var _g = 0;
 		while(_g < lines.length) {
 			var line = lines[_g];
 			++_g;
-			var _this_r = new RegExp("\\s+","g".split("u").join(""));
-			var cleanLine = line.replace(_this_r,"");
-			var originalLine = StringTools.trim(line);
-			if(new EReg("^h\\s*t\\s*t\\s*p","i").match(line) || new EReg("^https?","i").match(cleanLine)) {
-				inURL = true;
-				currentURL = cleanLine;
-			} else if(inURL && cleanLine.length > 0 && !new EReg("[<>]","").match(originalLine)) {
-				currentURL += cleanLine;
-			} else if(inURL && (cleanLine.length == 0 || new EReg("[<>]","").match(originalLine))) {
-				if(currentURL.length > 0 && new EReg("^https?:","i").match(currentURL)) {
-					var finalUrl = currentURL;
-					if(this.isURLEncoded(finalUrl)) {
-						finalUrl = this.urlDecode(finalUrl);
+			var trimmedLine = StringTools.trim(line);
+			if(new EReg("^<?h\\s*t\\s*t\\s*p","i").match(trimmedLine)) {
+				foundHttpStart = true;
+				var _this_r = new RegExp("\\s+","g".split("u").join(""));
+				potentialUrl = trimmedLine.replace(_this_r,"");
+				var _this_r1 = new RegExp("^<|>$","g".split("u").join(""));
+				potentialUrl = potentialUrl.replace(_this_r1,"");
+			} else if(foundHttpStart && trimmedLine.length > 0) {
+				var _this_r2 = new RegExp("\\s+","g".split("u").join(""));
+				var cleanLine = trimmedLine.replace(_this_r2,"");
+				var _this_r3 = new RegExp("^<|>$","g".split("u").join(""));
+				cleanLine = cleanLine.replace(_this_r3,"");
+				if(trimmedLine.charAt(trimmedLine.length - 1) == ">") {
+					cleanLine = HxOverrides.substr(cleanLine,0,cleanLine.length - 1);
+					potentialUrl += cleanLine;
+					if(new EReg("^https?:","i").match(potentialUrl)) {
+						if(this.isURLEncoded(potentialUrl)) {
+							potentialUrl = this.urlDecode(potentialUrl);
+						}
+						var _this_r4 = new RegExp("^(https?:)/([^/])","i".split("u").join(""));
+						potentialUrl = potentialUrl.replace(_this_r4,"$1//$2");
+						if(urls.indexOf(potentialUrl) == -1) {
+							urls.push(potentialUrl);
+						}
 					}
-					if(urls.indexOf(finalUrl) == -1) {
-						urls.push(finalUrl);
+					potentialUrl = "";
+					foundHttpStart = false;
+				} else {
+					potentialUrl += cleanLine;
+				}
+			} else if(foundHttpStart) {
+				if(new EReg("^https?:","i").match(potentialUrl)) {
+					if(this.isURLEncoded(potentialUrl)) {
+						potentialUrl = this.urlDecode(potentialUrl);
+					}
+					var _this_r5 = new RegExp("^(https?:)/([^/])","i".split("u").join(""));
+					potentialUrl = potentialUrl.replace(_this_r5,"$1//$2");
+					if(urls.indexOf(potentialUrl) == -1) {
+						urls.push(potentialUrl);
 					}
 				}
-				currentURL = "";
-				inURL = false;
+				potentialUrl = "";
+				foundHttpStart = false;
 			}
 		}
-		if(inURL && currentURL.length > 0 && new EReg("^https?:","i").match(currentURL)) {
-			var finalUrl = currentURL;
-			if(this.isURLEncoded(finalUrl)) {
-				finalUrl = this.urlDecode(finalUrl);
+		if(foundHttpStart && new EReg("^https?:","i").match(potentialUrl)) {
+			if(this.isURLEncoded(potentialUrl)) {
+				potentialUrl = this.urlDecode(potentialUrl);
 			}
-			if(urls.indexOf(finalUrl) == -1) {
-				urls.push(finalUrl);
+			var _this_r = new RegExp("^(https?:)/([^/])","i".split("u").join(""));
+			potentialUrl = potentialUrl.replace(_this_r,"$1//$2");
+			if(urls.indexOf(potentialUrl) == -1) {
+				urls.push(potentialUrl);
 			}
 		}
 		return urls;
@@ -9681,8 +9714,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 	,oneChanceChecks: function(message) {
 		var urls = this.extractURLs(message.content);
 		if(urls.length > 0 && this.hasKeyword(message.content)) {
-			haxe_Log.trace(urls,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 234, className : "commands.ScamPrevention", methodName : "oneChanceChecks"});
-			haxe_Log.trace(message.content,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 235, className : "commands.ScamPrevention", methodName : "oneChanceChecks"});
+			haxe_Log.trace(urls,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 273, className : "commands.ScamPrevention", methodName : "oneChanceChecks"});
+			haxe_Log.trace(message.content,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 274, className : "commands.ScamPrevention", methodName : "oneChanceChecks"});
 			return true;
 		}
 		return false;
@@ -9721,8 +9754,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 365, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 366, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 404, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 405, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -9819,12 +9852,12 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					var message = messages[_g];
 					++_g;
 					message.delete().then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 338, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 377, className : "commands.ScamPrevention", methodName : "reviewMessage"});
 						$global.console.dir(err);
 					});
 				}
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 343, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 382, className : "commands.ScamPrevention", methodName : "reviewMessage"});
 				$global.console.dir(err);
 			});
 		});
@@ -9855,8 +9888,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 365, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 366, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 404, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 405, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -9868,7 +9901,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
 			_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
 			guild_member.timeout(43200000,"Stop spamming, a mod will review this at their convenience.").then(callback,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 377, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 416, className : "commands.ScamPrevention", methodName : "timeoutUser"});
 				$global.console.dir(err);
 			});
 			var id = message.author.id;
@@ -9885,7 +9918,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				delete(_this.h[id]);
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 382, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 421, className : "commands.ScamPrevention", methodName : "timeoutUser"});
 			$global.console.dir(err);
 		});
 	}
@@ -9916,7 +9949,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
 			}
 			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 411, className : "commands.ScamPrevention", methodName : "banUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 450, className : "commands.ScamPrevention", methodName : "banUser"});
 				$global.console.dir(err);
 			});
 			var id = message.author.id;
@@ -9933,11 +9966,11 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				delete(_this.h[id]);
 			}
 			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 416, className : "commands.ScamPrevention", methodName : "banUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 455, className : "commands.ScamPrevention", methodName : "banUser"});
 				$global.console.dir(err);
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 420, className : "commands.ScamPrevention", methodName : "banUser"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 459, className : "commands.ScamPrevention", methodName : "banUser"});
 			$global.console.dir(err);
 		});
 	}
@@ -9947,7 +9980,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		Main.client.channels.fetch("952952631079362650").then(function(channel) {
 			channel.send({ content : "<@" + id + ">", embeds : [embed]});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 431, className : "commands.ScamPrevention", methodName : "logMessage"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 470, className : "commands.ScamPrevention", methodName : "logMessage"});
 			$global.console.dir(err);
 		});
 	}
@@ -10008,7 +10041,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 476, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 515, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 						if(link != url.hostname) {
@@ -10029,7 +10062,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			++_g;
 			if(message.content.indexOf("@everyone") != -1 || message.content.indexOf("@here") != -1) {
 				if(tag_count >= 3) {
-					haxe_Log.trace("here",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 498, className : "commands.ScamPrevention", methodName : "checkTags"});
+					haxe_Log.trace("here",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 537, className : "commands.ScamPrevention", methodName : "checkTags"});
 					break;
 				}
 				++tag_count;
@@ -10058,8 +10091,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				}
 			} catch( _g1 ) {
 				var _g2 = haxe_Exception.caught(_g1);
-				haxe_Log.trace(_g2,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 527, className : "commands.ScamPrevention", methodName : "checkEquality"});
-				haxe_Log.trace(JSON.stringify(messages),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 528, className : "commands.ScamPrevention", methodName : "checkEquality"});
+				haxe_Log.trace(_g2,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 566, className : "commands.ScamPrevention", methodName : "checkEquality"});
+				haxe_Log.trace(JSON.stringify(messages),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 567, className : "commands.ScamPrevention", methodName : "checkEquality"});
 			}
 		}
 		if(equality_count == messages.length && equality_count >= 3 && channel_count >= 4) {
