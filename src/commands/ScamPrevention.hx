@@ -14,9 +14,11 @@ import systems.CommandBase;
 import js.Browser;
 
 class ScamPrevention extends CommandBase {
-
 	final keywords:Array<String> = [
 		'ticket',
+		'contact',
+		'mod',
+		'admin',
 		'support',
 		'$',
 		'crypto',
@@ -99,10 +101,126 @@ class ScamPrevention extends CommandBase {
 		return false;
 	}
 
+	public function isURLEncoded(message:Message):Bool {
+		var encodingRegex = ~/(%[0-9A-Fa-f]{2})/;
+		return encodingRegex.match(message.content);
+	}
+
+	public function urlDecode(encodedUrl:String):String {
+		if (encodedUrl == null)
+			return "";
+
+		var decoded = encodedUrl;
+
+		// Replace URL encoded characters
+		var regex = ~/(%[0-9A-Fa-f]{2})/g;
+		decoded = regex.map(decoded, function(r) {
+			var hex = r.matched(1).substr(1); // Remove the %
+			var charCode = Std.parseInt("0x" + hex);
+			return String.fromCharCode(charCode);
+		});
+
+		return decoded;
+	}
+
+	public function extractURLs(message:Message):Array<String> {
+		var content = message.content;
+		var urls = [];
+
+		if (isURLEncoded(message)) {
+			content = urlDecode(content);
+		}
+
+		var cleanMessage = ~/\s+/g.replace(content, "");
+
+		var standardPattern = ~/https?:\/\/[^\s<>"']+/gi;
+		standardPattern.map(cleanMessage, function(r) {
+			if (!urls.contains(r.matched(0))) {
+				urls.push(r.matched(0));
+			}
+			return r.matched(0);
+		});
+
+		// Spaced/obfuscated patterns in original message
+		var spacedPattern = ~/h\s*t\s*t\s*p\s*s?\s*:\s*\/\s*\/\s*[^\s]*(?:\s+[^\s]*)*(?=\s|$|<|>)/gi;
+		spacedPattern.map(content, function(r) {
+			var cleanedUrl = ~/\s+/g.replace(r.matched(0), "");
+			if (!urls.contains(cleanedUrl)) {
+				urls.push(cleanedUrl);
+			}
+			return r.matched(0);
+		});
+
+		// URLs wrapped in < >
+		var wrappedPattern = ~/<\s*(h\s*t\s*t\s*p\s*s?\s*:.*?)\s*>/gi;
+		wrappedPattern.map(content, function(r) {
+			var cleanedUrl = ~/\s+/g.replace(r.matched(1), "");
+			cleanedUrl = ~/[:：]/g.replace(cleanedUrl, ":");
+			cleanedUrl = ~/[\\\/]+/g.replace(cleanedUrl, "/");
+			if (!urls.contains(cleanedUrl)) {
+				urls.push(cleanedUrl);
+			}
+			return r.matched(0);
+		});
+
+		// Multi-line URL extraction
+		var lines = content.split('\n');
+		var currentURL = "";
+		var inURL = false;
+
+		for (line in lines) {
+			var cleanLine = ~/\s+/g.replace(line, "");
+
+			if (~/^h\s*t\s*t\s*p/i.match(line) || ~/^https?/i.match(cleanLine)) {
+				inURL = true;
+				currentURL = cleanLine;
+			} else if (inURL && cleanLine.length > 0) {
+				currentURL += cleanLine;
+			} else if (inURL && (cleanLine.length == 0 || ~/^[<>]/.match(cleanLine))) {
+				if (currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
+					if (!urls.contains(currentURL)) {
+						urls.push(currentURL);
+					}
+				}
+				currentURL = "";
+				inURL = false;
+			}
+		}
+
+		if (inURL && currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
+			if (!urls.contains(currentURL)) {
+				urls.push(currentURL);
+			}
+		}
+
+		return urls;
+	}
+
+	function hasInviteLink(message:String) {
+		var links = ['discord.gg', 'discordapp.com'];
+		for (link in links) {
+			if (message.toLowerCase().contains(link)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function oneChanceChecks(message:Message) {
-		if (message.content.contains('discord.gg') && hasKeyword(message.content)) {
+		var urls = extractURLs(message);
+		var hasLink = false;
+		for (url in urls) {
+			if (hasInviteLink(url)) {
+				hasLink = true;
+				break;
+			}
+		}
+
+		if (hasLink && hasKeyword(message.content)) {
+			trace(urls);
 			return true;
 		}
+
 		return false;
 	}
 
