@@ -208,16 +208,10 @@ class ScamPrevention extends CommandBase {
 
 	function oneChanceChecks(message:Message) {
 		var urls = extractURLs(message);
-		var hasLink = false;
-		for (url in urls) {
-			if (hasInviteLink(url)) {
-				hasLink = true;
-				break;
-			}
-		}
 
-		if (hasLink && hasKeyword(message.content)) {
+		if (urls.length > 0 && hasKeyword(message.content)) {
 			trace(urls);
+			trace(message.content);
 			return true;
 		}
 
