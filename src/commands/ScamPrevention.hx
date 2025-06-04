@@ -180,15 +180,17 @@ class ScamPrevention extends CommandBase {
 
 		for (line in lines) {
 			var cleanLine = ~/\s+/g.replace(line, "");
+			var originalLine = line.trim(); // Keep original for bracket checking
 
 			if (~/^h\s*t\s*t\s*p/i.match(line) || ~/^https?/i.match(cleanLine)) {
 				inURL = true;
 				currentURL = cleanLine;
-			} else if (inURL && cleanLine.length > 0) {
+			} else if (inURL && cleanLine.length > 0 && !~/[<>]/.match(originalLine)) {
+				// Continue building URL only if no brackets in original line
 				currentURL += cleanLine;
-			} else if (inURL && (cleanLine.length == 0 || ~/^[<>]/.match(cleanLine))) {
+			} else if (inURL && (cleanLine.length == 0 || ~/[<>]/.match(originalLine))) {
+				// End URL on empty line or line with brackets
 				if (currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
-					// Decode the final URL
 					var finalUrl = currentURL;
 					if (isURLEncoded(finalUrl)) {
 						finalUrl = urlDecode(finalUrl);
