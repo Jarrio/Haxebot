@@ -101,9 +101,9 @@ class ScamPrevention extends CommandBase {
 		return false;
 	}
 
-	public function isURLEncoded(message:Message):Bool {
+	public function isURLEncoded(url:String):Bool {
 		var encodingRegex = ~/(%[0-9A-Fa-f]{2})/;
-		return encodingRegex.match(message.content);
+		return encodingRegex.match(url);
 	}
 
 	public function urlDecode(encodedUrl:String):String {
@@ -123,20 +123,22 @@ class ScamPrevention extends CommandBase {
 		return decoded;
 	}
 
-	public function extractURLs(message:Message):Array<String> {
-		var content = message.content;
+	public function extractURLs(content:String):Array<String> {
 		var urls = [];
 
-		if (isURLEncoded(message)) {
-			content = urlDecode(content);
-		}
+		// Don't decode the entire content here - extract first, then decode individual URLs
 
 		var cleanMessage = ~/\s+/g.replace(content, "");
 
 		var standardPattern = ~/https?:\/\/[^\s<>"']+/gi;
 		standardPattern.map(cleanMessage, function(r) {
-			if (!urls.contains(r.matched(0))) {
-				urls.push(r.matched(0));
+			var url = r.matched(0);
+			// Decode individual URL if it's encoded
+			if (isURLEncoded(url)) {
+				url = urlDecode(url);
+			}
+			if (!urls.contains(url)) {
+				urls.push(url);
 			}
 			return r.matched(0);
 		});
@@ -145,6 +147,10 @@ class ScamPrevention extends CommandBase {
 		var spacedPattern = ~/h\s*t\s*t\s*p\s*s?\s*:\s*\/\s*\/\s*[^\s]*(?:\s+[^\s]*)*(?=\s|$|<|>)/gi;
 		spacedPattern.map(content, function(r) {
 			var cleanedUrl = ~/\s+/g.replace(r.matched(0), "");
+			// Decode after cleaning spaces
+			if (isURLEncoded(cleanedUrl)) {
+				cleanedUrl = urlDecode(cleanedUrl);
+			}
 			if (!urls.contains(cleanedUrl)) {
 				urls.push(cleanedUrl);
 			}
@@ -157,6 +163,10 @@ class ScamPrevention extends CommandBase {
 			var cleanedUrl = ~/\s+/g.replace(r.matched(1), "");
 			cleanedUrl = ~/[:：]/g.replace(cleanedUrl, ":");
 			cleanedUrl = ~/[\\\/]+/g.replace(cleanedUrl, "/");
+			// Decode after cleaning
+			if (isURLEncoded(cleanedUrl)) {
+				cleanedUrl = urlDecode(cleanedUrl);
+			}
 			if (!urls.contains(cleanedUrl)) {
 				urls.push(cleanedUrl);
 			}
@@ -178,8 +188,13 @@ class ScamPrevention extends CommandBase {
 				currentURL += cleanLine;
 			} else if (inURL && (cleanLine.length == 0 || ~/^[<>]/.match(cleanLine))) {
 				if (currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
-					if (!urls.contains(currentURL)) {
-						urls.push(currentURL);
+					// Decode the final URL
+					var finalUrl = currentURL;
+					if (isURLEncoded(finalUrl)) {
+						finalUrl = urlDecode(finalUrl);
+					}
+					if (!urls.contains(finalUrl)) {
+						urls.push(finalUrl);
 					}
 				}
 				currentURL = "";
@@ -188,8 +203,12 @@ class ScamPrevention extends CommandBase {
 		}
 
 		if (inURL && currentURL.length > 0 && ~/^https?:/i.match(currentURL)) {
-			if (!urls.contains(currentURL)) {
-				urls.push(currentURL);
+			var finalUrl = currentURL;
+			if (isURLEncoded(finalUrl)) {
+				finalUrl = urlDecode(finalUrl);
+			}
+			if (!urls.contains(finalUrl)) {
+				urls.push(finalUrl);
 			}
 		}
 
@@ -207,7 +226,7 @@ class ScamPrevention extends CommandBase {
 	}
 
 	function oneChanceChecks(message:Message) {
-		var urls = extractURLs(message);
+		var urls = extractURLs(message.content);
 
 		if (urls.length > 0 && hasKeyword(message.content)) {
 			trace(urls);
