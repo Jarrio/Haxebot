@@ -9733,9 +9733,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			if(forward != "scam_prevention") {
 				continue;
 			}
-			if(this.oneChanceChecks(message)) {
-				this.reviewMessage([message]);
-			}
+			this.oneChanceChecks(message);
 			if(Util_withinTime(message.createdTimestamp,this.last_message_interval)) {
 				var user = message.author.id;
 				var this1 = this.time_since;

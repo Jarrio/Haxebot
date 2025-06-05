@@ -283,7 +283,7 @@ class ScamPrevention extends CommandBase {
 			}
 
 			if (oneChanceChecks(message)) {
-				reviewMessage([message]);
+				//reviewMessage([message]);
 			}
 
 			// if (this.singleMessageCheck(message)) {
