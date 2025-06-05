@@ -4,6 +4,13 @@
 /.haxelib/asynctools
 /.haxelib/buddy
 /.haxelib/promhx
+/.haxelib/db-core
+/.haxelib/db-mysql
+/.haxelib/hx4compat
+/.haxelib/libmysqlclient
+/.haxelib/logging
+/.haxelib/mysql
+/.haxelib/promises
 /bin/haxebot
 .ecs_invalidation
 /bin/config/keys.json
