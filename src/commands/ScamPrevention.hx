@@ -17,7 +17,6 @@ class ScamPrevention extends CommandBase {
 	final keywords:Array<String> = [
 		'ticket',
 		'contact',
-		'mod',
 		'admin',
 		'support',
 		'$',
@@ -486,6 +485,7 @@ class ScamPrevention extends CommandBase {
 	function hasKeyword(message:String) {
 		for (keyword in keywords) {
 			if (message.toLowerCase().contains(keyword)) {
+				trace(keyword);
 				return true;
 			}
 		}
