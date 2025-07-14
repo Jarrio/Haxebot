@@ -1,4 +1,5 @@
 package commands;
+
 import Main.CommandForward;
 import js.Browser;
 import discord_builder.BaseCommandInteraction;
@@ -26,7 +27,7 @@ class Notify extends CommandBase {
 			case 'reflaxe': '1200065966445449286';
 			// #devserver notes test
 			case 'dvorak': '903006951896666153';
-			case 'go2hx': '1337566555189411860';
+			case 'go2hx': '1394239056543486062';
 			case 'jam': '1058843687687295066';
 			case 'cortex': '1256579748575051867';
 			case 'godot': '1059447670344794142';
@@ -64,10 +65,7 @@ class Notify extends CommandBase {
 					} else {
 						interaction.member.roles.add(role).then(function(success) {
 							if (channel == 'announcements') {
-								universe.setComponents(
-									universe.createEntity(),
-									CommandForward.auto_thread, member
-								);
+								universe.setComponents(universe.createEntity(), CommandForward.auto_thread, member);
 							}
 							interaction.reply('Subscribed to $channel updates');
 						}, function(err) {

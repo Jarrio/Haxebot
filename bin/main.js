@@ -5380,7 +5380,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 		case "flixel":
 			return "761714697468248125";
 		case "go2hx":
-			return "1337566555189411860";
+			return "1394239056543486062";
 		case "godot":
 			return "1059447670344794142";
 		case "haxeui":
@@ -5404,8 +5404,8 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 			var channel = _g.channel;
 			var role = this.getRole(channel);
 			if(role == "err") {
-				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 42, className : "commands.Notify", methodName : "run"});
-				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 43, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(channel,{ fileName : "src/commands/Notify.hx", lineNumber : 43, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(interaction.command,{ fileName : "src/commands/Notify.hx", lineNumber : 44, className : "commands.Notify", methodName : "run"});
 				interaction.reply("Invalid channel");
 				return;
 			}
@@ -5428,7 +5428,7 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 					interaction.member.roles.remove(role).then(function(success) {
 						interaction.reply("Unsubscribed to " + channel + " updates");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 61, className : "commands.Notify", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 62, className : "commands.Notify", methodName : "run"});
 						$global.console.dir(err);
 					});
 				} else {
@@ -5465,12 +5465,12 @@ commands_Notify.prototype = $extend(systems_CommandBase.prototype,{
 						}
 						interaction.reply("Subscribed to " + channel + " updates");
 					},function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 74, className : "commands.Notify", methodName : "run"});
+						haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 72, className : "commands.Notify", methodName : "run"});
 						$global.console.dir(err);
 					});
 				}
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 79, className : "commands.Notify", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Notify.hx", lineNumber : 77, className : "commands.Notify", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
