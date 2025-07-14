@@ -26,6 +26,7 @@ class Notify extends CommandBase {
 			case 'reflaxe': '1200065966445449286';
 			// #devserver notes test
 			case 'dvorak': '903006951896666153';
+			case 'go2hx': '1337566555189411860';
 			case 'jam': '1058843687687295066';
 			case 'cortex': '1256579748575051867';
 			case 'godot': '1059447670344794142';

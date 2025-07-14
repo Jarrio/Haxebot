@@ -665,6 +665,10 @@
 						"value": "reflaxe"
 					},
 					{
+						"name": "go2hx",
+						"value": "go2hx"
+					},
+					{
 						"name": "flixel",
 						"value": "flixel"
 					},
