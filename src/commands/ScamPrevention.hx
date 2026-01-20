@@ -359,7 +359,6 @@ class ScamPrevention extends CommandBase {
 			messageCount.remove(id);
 			messageLastSent.remove(id);
 			messagesTracked.remove(id);
-			trace("Cleaned up history");
 		}
 
 		for (messages in this.trigger_messages) {
