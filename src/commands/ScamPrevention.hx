@@ -58,7 +58,7 @@ class ScamPrevention extends CommandBase {
 
 	final queue_time = 10000; // 40 seconds
 	var hold_list:Map<String, Message> = [];
-
+	final logChannelId = #if block "1060192351030628372" #else "952952631079362650" #end;
 	var messageCount:Map<String, Int> = [];
 	var messageLastSent:Map<String, Float> = [];
 	var messagesTracked:Map<String, Array<Message>> = [];
@@ -303,7 +303,6 @@ class ScamPrevention extends CommandBase {
 
 		embed.addFields(new Field('AvgTimePerMsg', '$avgTimePerMsg'), new Field('totalMsgs', '$totalMsgs'), new Field('timeDiff', '$timeDiff'),
 			new Field('channels', '${channels.length}'));
-		logMessages(messagesTracked[uid], TIMEOUT);
 		logStats(uid, embed);
 		return true;
 	}
@@ -352,7 +351,6 @@ class ScamPrevention extends CommandBase {
 
 			if (multipleMessageCheck(id)) {
 				this.reviewMessage(messagesTracked[id], false);
-				logMessages(messagesTracked[id], TIMEOUT);
 				this.resetChecks(id);
 			}
 
@@ -425,7 +423,7 @@ class ScamPrevention extends CommandBase {
 		var message = messages[0];
 		var embed = this.reformatMessage('SPAM ALERT - Timed out', message);
 
-		this.timeoutUser(message, function(_) {
+		this.timeoutUser(message, logMessage, function(_) {
 			message.reply({
 				content: '<@&198916468312637440> Please review this message by: <@${message.author.id}>',
 				embeds: [embed]
@@ -531,7 +529,7 @@ class ScamPrevention extends CommandBase {
 			embed.description = '${key + 1}) ${msg.content}\n**$str**';
 		}
 
-		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
+		Main.client.channels.fetch(logChannelId).then(function(channel:TextChannel) {
 			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
@@ -539,8 +537,20 @@ class ScamPrevention extends CommandBase {
 		});
 	}
 
+
+
 	function logStats(uid:String, embed:MessageEmbed) {
-		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
+		var messages = messagesTracked[uid];
+		var fields = [];
+		embed.title = "Bot Intervention";
+		for (key => msg in messages) {
+			var sent = Date.fromTime(msg.createdTimestamp);
+			var str = DateTools.format(sent, "%d/%m/%Y %T");
+			fields.push(new Field('Message ${key + 1}', msg.content + '\n**$str**\n'));
+		}
+		embed.addFields(...fields);
+
+		Main.client.channels.fetch(logChannelId).then(function(channel:TextChannel) {
 			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
@@ -551,7 +561,7 @@ class ScamPrevention extends CommandBase {
 	function logMessage(uid:String, embed:MessageEmbed, action:UserActions) {
 		embed.description += '\n\n Action: **__${action}__**';
 
-		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
+		Main.client.channels.fetch(logChannelId).then(function(channel:TextChannel) {
 			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
