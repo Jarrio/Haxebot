@@ -59,6 +59,10 @@ class ScamPrevention extends CommandBase {
 	final queue_time = 10000; // 40 seconds
 	var hold_list:Map<String, Message> = [];
 
+	var messageCount:Map<String, Int> = [];
+	var messageLastSent:Map<String, Float> = [];
+	var messagesTracked:Map<String, Array<Message>> = [];
+
 	function singleMessageCheck(message:Message) {
 		if (message.author.id == state?.announcer?.id) {
 			return false;
@@ -275,12 +279,37 @@ class ScamPrevention extends CommandBase {
 		return false;
 	}
 
+	function multipleMessageCheck(uid:String) {
+		var firstMsgTime = messagesTracked[uid][0].createdTimestamp;
+		var lastMsgTime = messageLastSent[uid];
+		var totalMsgs = messagesTracked[uid].length;
+		var timeDiff = lastMsgTime - firstMsgTime;
+		var avgTimePerMsg = timeDiff / (totalMsgs - 1);
+
+		var channels = [];
+		for (msg in messagesTracked[uid]) {
+			if (channels.contains(msg.channel.asType0.id)) {
+				continue;
+			}
+			channels.push(msg.channel.asType0.id); 
+		}
+
+		if (channels.length <= 2) {
+			return false;
+		}
+
+		trace('AvgTimePerMsg=$avgTimePerMsg totalMsgs=$totalMsgs timeDiff=$timeDiff channels=${channels.length}');
+
+		return true;
+	}
+
 	override function update(_:Float) {
 		super.update(_);
 		iterate(messages, entity -> {
 			if (forward != scam_prevention) {
 				continue;
 			}
+			var id = message.author.id;
 
 			if (oneChanceChecks(message)) {
 				//reviewMessage([message]);
@@ -291,14 +320,42 @@ class ScamPrevention extends CommandBase {
 			// }
 
 			if (withinTime(message.createdTimestamp, last_message_interval)) {
-				this.updateTime(message.author.id);
-				this.addMessage(message.author.id, message);
+				this.updateTime(id);
+				this.addMessage(id, message);
 			}
+
+			if (!messageCount.exists(id)) {
+				messageCount[id] = 0;
+				messageLastSent[id] = 0;
+				messagesTracked[id] = [];
+			}
+
+			messageCount[id] = messageCount[id]++;
+			messageLastSent[id] = message.createdTimestamp;
+			messagesTracked[id].push(message);
 
 			this.universe.deleteEntity(entity);
 		});
 
 		this.getPhishingLinks();
+
+		for (id => time in messageLastSent) {
+			var now = Date.now().getTime();
+			if (now - time <= 30000) {
+				continue;
+			}
+
+			if (multipleMessageCheck(id)) {
+				this.reviewMessage(messagesTracked[id]);
+				logMessages(messagesTracked[id], TIMEOUT);
+				this.resetChecks(id);
+			}
+
+			messageCount.remove(id);
+			messageLastSent.remove(id);
+			messagesTracked.remove(id);
+			trace("Cleaned up history");
+		}
 
 		for (messages in this.trigger_messages) {
 			if (this.checkPhishingLinks(messages)) {
@@ -458,11 +515,31 @@ class ScamPrevention extends CommandBase {
 		});
 	}
 
-	function logMessage(id:String, embed:MessageEmbed, action:UserActions) {
+	function logMessages(messages:Array<Message>, action:UserActions) {
+		var embeds = [];
+		var uid = messages[0].author.id;
+		for (msg in messages) {
+			var embed = new MessageEmbed();
+			embed.description = msg.content;
+			var sent = Date.fromTime(msg.createdTimestamp);
+
+			embed.setFooter({text: '$sent(${msg.createdTimestamp})'});
+			embeds.push(embed);
+		}
+
+		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
+			channel.send({content: '<@$uid>', embeds: embeds});
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
+	}
+
+	function logMessage(uid:String, embed:MessageEmbed, action:UserActions) {
 		embed.description += '\n\n Action: **__${action}__**';
 
 		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
-			channel.send({content: '<@$id>', embeds: [embed]});
+			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
 			Browser.console.dir(err);

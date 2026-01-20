@@ -170,14 +170,16 @@ class Main {
 				},
 				{
 					name: 'messages',
-					enabled: #if block false #else false #end,
+					enabled: #if block true #else false #end,
 					systems: [
 						MessageRouter,
 						ThreadCount,
 						ScamPrevention,
 						JamSuggestionBox,
+						#if !block
 						Showcase,
 						RateLimit
+						#end
 					]
 				},
 				{
