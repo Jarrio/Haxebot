@@ -298,8 +298,11 @@ class ScamPrevention extends CommandBase {
 			return false;
 		}
 
-		trace('AvgTimePerMsg=$avgTimePerMsg totalMsgs=$totalMsgs timeDiff=$timeDiff channels=${channels.length}');
-
+		var data = 'AvgTimePerMsg=$avgTimePerMsg totalMsgs=$totalMsgs timeDiff=$timeDiff channels=${channels.length}';
+		var embed = new MessageEmbed();
+		
+		embed.addFields(new Field('AvgTimePerMsg', '$avgTimePerMsg'), new Field('totalMsgs', '$totalMsgs'), new Field('timeDiff', '$timeDiff'), new Field('channels', '${channels.length}'));
+		logStats(uid, embed);
 		return true;
 	}
 
@@ -529,6 +532,16 @@ class ScamPrevention extends CommandBase {
 
 		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
 			channel.send({content: '<@$uid>', embeds: embeds});
+		}, function(err) {
+			trace(err);
+			Browser.console.dir(err);
+		});
+	}
+
+	function logStats(uid:String, embed:MessageEmbed) {
+
+		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
+			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
 			Browser.console.dir(err);
