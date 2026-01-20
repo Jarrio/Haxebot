@@ -291,7 +291,7 @@ class ScamPrevention extends CommandBase {
 			if (channels.contains(msg.channel.asType0.id)) {
 				continue;
 			}
-			channels.push(msg.channel.asType0.id); 
+			channels.push(msg.channel.asType0.id);
 		}
 
 		if (channels.length <= 2) {
@@ -300,8 +300,10 @@ class ScamPrevention extends CommandBase {
 
 		var data = 'AvgTimePerMsg=$avgTimePerMsg totalMsgs=$totalMsgs timeDiff=$timeDiff channels=${channels.length}';
 		var embed = new MessageEmbed();
-		
-		embed.addFields(new Field('AvgTimePerMsg', '$avgTimePerMsg'), new Field('totalMsgs', '$totalMsgs'), new Field('timeDiff', '$timeDiff'), new Field('channels', '${channels.length}'));
+
+		embed.addFields(new Field('AvgTimePerMsg', '$avgTimePerMsg'), new Field('totalMsgs', '$totalMsgs'), new Field('timeDiff', '$timeDiff'),
+			new Field('channels', '${channels.length}'));
+		logMessages(messagesTracked[uid], TIMEOUT);
 		logStats(uid, embed);
 		return true;
 	}
@@ -315,7 +317,7 @@ class ScamPrevention extends CommandBase {
 			var id = message.author.id;
 
 			if (oneChanceChecks(message)) {
-				//reviewMessage([message]);
+				// reviewMessage([message]);
 			}
 
 			// if (this.singleMessageCheck(message)) {
@@ -349,7 +351,7 @@ class ScamPrevention extends CommandBase {
 			}
 
 			if (multipleMessageCheck(id)) {
-				this.reviewMessage(messagesTracked[id]);
+				this.reviewMessage(messagesTracked[id], false);
 				logMessages(messagesTracked[id], TIMEOUT);
 				this.resetChecks(id);
 			}
@@ -420,7 +422,7 @@ class ScamPrevention extends CommandBase {
 		}
 	}
 
-	function reviewMessage(messages:Array<Message>) {
+	function reviewMessage(messages:Array<Message>, logMessage = true) {
 		var message = messages[0];
 		var embed = this.reformatMessage('SPAM ALERT - Timed out', message);
 
@@ -466,9 +468,11 @@ class ScamPrevention extends CommandBase {
 		links.request();
 	}
 
-	function timeoutUser(message:Message, ?callback:(_:Dynamic) -> Void) {
+	function timeoutUser(message:Message, logMessage = true, ?callback:(_:Dynamic) -> Void) {
 		message.guild.members.fetch(message.author.id).then(function(guild_member) {
-			this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), TIMEOUT);
+			if (logMessage) {
+				this.logMessage(message.author.id, this.reformatMessage('Original Message', message, false), TIMEOUT);
+			}
 			guild_member.timeout(1000 * 60 * 60 * 12, 'Stop spamming, a mod will review this at their convenience.').then(callback, function(err) {
 				trace(err);
 				Browser.console.dir(err);
@@ -520,18 +524,16 @@ class ScamPrevention extends CommandBase {
 
 	function logMessages(messages:Array<Message>, action:UserActions) {
 		var embeds = [];
+		var embed = new MessageEmbed();
 		var uid = messages[0].author.id;
-		for (msg in messages) {
-			var embed = new MessageEmbed();
-			embed.description = msg.content;
+		for (key => msg in messages) {
 			var sent = Date.fromTime(msg.createdTimestamp);
-
-			embed.setFooter({text: '$sent(${msg.createdTimestamp})'});
-			embeds.push(embed);
+			var str = DateTools.format(sent, "%d/%m/%Y %T");
+			embed.description = '${key + 1}) ${msg.content}\n**$str**';
 		}
 
 		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
-			channel.send({content: '<@$uid>', embeds: embeds});
+			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
 			trace(err);
 			Browser.console.dir(err);
@@ -539,7 +541,6 @@ class ScamPrevention extends CommandBase {
 	}
 
 	function logStats(uid:String, embed:MessageEmbed) {
-
 		Main.client.channels.fetch('952952631079362650').then(function(channel:TextChannel) {
 			channel.send({content: '<@$uid>', embeds: [embed]});
 		}, function(err) {
