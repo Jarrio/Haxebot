@@ -472,6 +472,8 @@ class ScamPrevention extends CommandBase {
 			}
 			guild_member.timeout(1000 * 60 * 60 * 12, 'Stop spamming, a mod will review this at their convenience.').then(callback, function(err) {
 				trace(err);
+				trace('AuthorId=${message.author.id} User=${message.author.displayName}');
+				trace(message.content);
 				Browser.console.dir(err);
 			});
 			this.resetChecks(message.author.id);
