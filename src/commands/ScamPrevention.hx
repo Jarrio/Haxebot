@@ -267,17 +267,17 @@ class ScamPrevention extends CommandBase {
 		return false;
 	}
 
-	function oneChanceChecks(message:Message) {
-		var urls = extractURLs(message.content);
+	// function oneChanceChecks(message:Message) {
+	// 	var urls = extractURLs(message.content);
 
-		if (urls.length > 0 && hasKeyword(message.content)) {
-			trace(urls);
-			trace(message.content);
-			return true;
-		}
+	// 	if (urls.length > 0 && hasKeyword(message.content)) {
+	// 		trace(urls);
+	// 		trace(message.content);
+	// 		return true;
+	// 	}
 
-		return false;
-	}
+	// 	return false;
+	// }
 
 	function multipleMessageCheck(uid:String) {
 		var firstMsgTime = messagesTracked[uid][0].createdTimestamp;
@@ -315,9 +315,9 @@ class ScamPrevention extends CommandBase {
 			}
 			var id = message.author.id;
 
-			if (oneChanceChecks(message)) {
+			// if (oneChanceChecks(message)) {
 				// reviewMessage([message]);
-			}
+			// }
 
 			// if (this.singleMessageCheck(message)) {
 			// 	hold_list.set(message.id, message);
@@ -709,6 +709,9 @@ class ScamPrevention extends CommandBase {
 		}
 
 		embed.setAuthor({name: '${message.author.tag}', iconURL: avatar});
+		if (content == null || content.length == 0) {
+			content = "Message likely just contained images";
+		}
 		embed.setDescription(content);
 
 		return embed;
