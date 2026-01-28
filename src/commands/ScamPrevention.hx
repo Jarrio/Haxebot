@@ -287,14 +287,20 @@ class ScamPrevention extends CommandBase {
 		var avgTimePerMsg = timeDiff / (totalMsgs - 1);
 
 		var channels = [];
+		var inThreads = 0;
 		for (msg in messagesTracked[uid]) {
-			if (channels.contains(msg.channel.asType0.id)) {
+			var channel = msg.channel.asType0;
+			if (channels.contains(channel.id)) {
 				continue;
 			}
-			channels.push(msg.channel.asType0.id);
+			if (channel.isThread()) {
+				inThreads++;
+			}
+			channels.push(channel.id);
 		}
 
-		if (channels.length <= 2) {
+		if (channels.length <= 2 || inThreads == channels.length) {
+			trace('ignored messages');
 			return false;
 		}
 
@@ -313,6 +319,7 @@ class ScamPrevention extends CommandBase {
 			if (forward != scam_prevention) {
 				continue;
 			}
+
 			var id = message.author.id;
 
 			// if (oneChanceChecks(message)) {

@@ -170,7 +170,7 @@ class Main {
 				},
 				{
 					name: 'messages',
-					enabled: #if block true #else false #end,
+					enabled: #if block true #else true #end,
 					systems: [
 						MessageRouter,
 						ThreadCount,
