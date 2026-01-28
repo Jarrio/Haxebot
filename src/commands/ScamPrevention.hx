@@ -300,7 +300,6 @@ class ScamPrevention extends CommandBase {
 		}
 
 		if (channels.length <= 2 || inThreads == channels.length) {
-			trace('ignored messages');
 			return false;
 		}
 
