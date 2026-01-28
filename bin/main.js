@@ -708,7 +708,7 @@ Main.token = function(rest) {
 Main.start = function() {
 	var vec = new Array(4);
 	vec[0] = new ecs_Phase(true,"startup",new Array(1),new Array(1));
-	vec[1] = new ecs_Phase(true,"messages",new Array(6),new Array(6));
+	vec[1] = new ecs_Phase(false,"messages",new Array(6),new Array(6));
 	vec[2] = new ecs_Phase(false,"testing",new Array(21),new Array(21));
 	vec[3] = new ecs_Phase(false,"main",new Array(32),new Array(32));
 	var entities = new ecs_core_EntityManager(1000);
@@ -871,27 +871,21 @@ Main.start = function() {
 	var s = new systems_MessageRouter(u);
 	phase.systems[0] = s;
 	phase.enabledSystems[0] = true;
-	s.onEnabled();
 	var s = new commands_ThreadCount(u);
 	phase.systems[1] = s;
 	phase.enabledSystems[1] = true;
-	s.onEnabled();
 	var s = new commands_ScamPrevention(u);
 	phase.systems[2] = s;
 	phase.enabledSystems[2] = true;
-	s.onEnabled();
 	var s = new commands_JamSuggestionBox(u);
 	phase.systems[3] = s;
 	phase.enabledSystems[3] = true;
-	s.onEnabled();
 	var s = new commands_Showcase(u);
 	phase.systems[4] = s;
 	phase.enabledSystems[4] = true;
-	s.onEnabled();
 	var s = new commands_mod_RateLimit(u);
 	phase.systems[5] = s;
 	phase.enabledSystems[5] = true;
-	s.onEnabled();
 	var phase = vec[2];
 	var s = new commands_mod_Tracker(u);
 	phase.systems[0] = s;
