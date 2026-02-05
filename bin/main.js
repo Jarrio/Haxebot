@@ -6023,28 +6023,28 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 					return function(resp) {
 						if(resp._hx_index == 1) {
 							var data = resp.data;
-							haxe_Log.trace(title[0],{ fileName : "src/commands/Quote.hx", lineNumber : 74, className : "commands.Quote", methodName : "update"});
-							haxe_Log.trace(quote[0].title,{ fileName : "src/commands/Quote.hx", lineNumber : 75, className : "commands.Quote", methodName : "update"});
+							quote[0].title = title[0].toLowerCase();
+							haxe_Log.trace(title[0],{ fileName : "src/commands/Quote.hx", lineNumber : 75, className : "commands.Quote", methodName : "update"});
+							haxe_Log.trace(quote[0].title,{ fileName : "src/commands/Quote.hx", lineNumber : 76, className : "commands.Quote", methodName : "update"});
 							if(data != null && title[0] != quote[0].title) {
 								interaction[0].reply("You already have a quote with the title **__" + title[0] + "__**").then(null,(function() {
 									return function(err) {
-										haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 81, className : "commands.Quote", methodName : "update"});
+										haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 82, className : "commands.Quote", methodName : "update"});
 										$global.console.dir(err);
 									};
 								})());
 								return;
 							}
-							quote[0].title = title[0].toLowerCase();
 							var e = database_DBEvents.Update("quotes",quote[0],QueryExpr.QueryBinop(QBinop.QOpBoolAnd,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(quote[0].id)),QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("author_id")),QueryExpr.QueryValue(quote[0].author_id))),(function(interaction) {
 								return function(resp) {
 									if(resp._hx_index == 4) {
 										var message = resp.message;
-										haxe_Log.trace("" + message,{ fileName : "src/commands/Quote.hx", lineNumber : 94, className : "commands.Quote", methodName : "update"});
+										haxe_Log.trace("" + message,{ fileName : "src/commands/Quote.hx", lineNumber : 95, className : "commands.Quote", methodName : "update"});
 										interaction[0].reply("Quote updated!");
 									} else {
-										haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 97, className : "commands.Quote", methodName : "update"});
+										haxe_Log.trace(_gthis.cache.h[interaction[0].user.id],{ fileName : "src/commands/Quote.hx", lineNumber : 98, className : "commands.Quote", methodName : "update"});
 										interaction[0].reply("Something went wrong");
-										haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 99, className : "commands.Quote", methodName : "update"});
+										haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 100, className : "commands.Quote", methodName : "update"});
 									}
 									var key = interaction[0].user.id;
 									var _this = _gthis.cache;
@@ -6062,7 +6062,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 								ecsTmpFamily.add(_ecsTmpEntity);
 							}
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 106, className : "commands.Quote", methodName : "update"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 107, className : "commands.Quote", methodName : "update"});
 						}
 					};
 				})(title,quote,interaction));
@@ -6142,10 +6142,10 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 			embed.setDescription(body);
 			embed.setColor(15368736);
 			interaction.reply({ embeds : [embed]}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 136, className : "commands.Quote", methodName : "parseGroupQuotes"});
+				haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 137, className : "commands.Quote", methodName : "parseGroupQuotes"});
 			});
 		} else {
-			haxe_Log.trace(value,{ fileName : "src/commands/Quote.hx", lineNumber : 138, className : "commands.Quote", methodName : "parseGroupQuotes"});
+			haxe_Log.trace(value,{ fileName : "src/commands/Quote.hx", lineNumber : 139, className : "commands.Quote", methodName : "parseGroupQuotes"});
 		}
 	}
 	,run: function(command,interaction) {
@@ -6228,15 +6228,15 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							}
 							res.push({ name : "" + name1 + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 						}
-						haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 208, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 209, className : "commands.Quote", methodName : "run"});
 						if(!interaction.responded) {
 							interaction.respond(res).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 211, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 212, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						}
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 216, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 217, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6258,21 +6258,21 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 					switch(resp._hx_index) {
 					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
 						});
 						break;
 					case 5:
 						var message = resp.message;
 						var data = resp.data;
-						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
-						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 341, className : "commands.Quote", methodName : "run"});
 						interaction.reply("Cannot delete this quote").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 343, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 344, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 						break;
 					default:
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 347, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 348, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6302,7 +6302,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						_gthis.cache.h[interaction.user.id] = quote;
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 323, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 324, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6323,7 +6323,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name != null && name.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -6337,11 +6337,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results.push({ name : "" + name1 + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -6359,11 +6359,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -6377,7 +6377,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -6388,7 +6388,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -6406,11 +6406,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -6441,7 +6441,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var interaction1 = interaction;
 							var tmp = data.records[0].field("title");
 							interaction1.reply("You already have a quote with the title __" + (tmp == null ? "null" : Std.string(tmp)) + "__").then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 245, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 246, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -6454,7 +6454,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						modal.addComponents(action_a,action_b);
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 276, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 277, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6475,7 +6475,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name != null && name.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -6489,11 +6489,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results1.push({ name : "" + name1 + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results1).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -6511,11 +6511,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results1.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results1).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -6529,7 +6529,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -6540,7 +6540,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -6558,11 +6558,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -6628,15 +6628,15 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							}
 							res.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 						}
-						haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 208, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 209, className : "commands.Quote", methodName : "run"});
 						if(!interaction.responded) {
 							interaction.respond(res).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 211, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 212, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						}
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 216, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 217, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6658,21 +6658,21 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 					switch(resp._hx_index) {
 					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
 						});
 						break;
 					case 5:
 						var message = resp.message;
 						var data = resp.data;
-						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
-						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 341, className : "commands.Quote", methodName : "run"});
 						interaction.reply("Cannot delete this quote").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 343, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 344, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 						break;
 					default:
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 347, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 348, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6702,7 +6702,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						_gthis.cache.h[interaction.user.id] = quote;
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 323, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 324, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6723,7 +6723,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name1 != null && name1.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -6737,11 +6737,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results2.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results2).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -6759,11 +6759,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results2.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results2).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -6777,7 +6777,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -6788,7 +6788,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -6806,11 +6806,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -6841,7 +6841,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var interaction1 = interaction;
 							var tmp = data.records[0].field("title");
 							interaction1.reply("You already have a quote with the title __" + (tmp == null ? "null" : Std.string(tmp)) + "__").then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 245, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 246, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -6854,7 +6854,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						modal.addComponents(action_a,action_b);
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 276, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 277, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -6875,7 +6875,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name1 != null && name1.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name1,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -6889,11 +6889,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results3.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results3).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -6911,11 +6911,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results3.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results3).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -6929,7 +6929,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -6940,7 +6940,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -6958,11 +6958,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -7028,15 +7028,15 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							}
 							res.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 						}
-						haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 208, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 209, className : "commands.Quote", methodName : "run"});
 						if(!interaction.responded) {
 							interaction.respond(res).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 211, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 212, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						}
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 216, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 217, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7058,21 +7058,21 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 					switch(resp._hx_index) {
 					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
 						});
 						break;
 					case 5:
 						var message = resp.message;
 						var data = resp.data;
-						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
-						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 341, className : "commands.Quote", methodName : "run"});
 						interaction.reply("Cannot delete this quote").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 343, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 344, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 						break;
 					default:
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 347, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 348, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7102,7 +7102,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						_gthis.cache.h[interaction.user.id] = quote;
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 323, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 324, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7123,7 +7123,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name2 != null && name2.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -7137,11 +7137,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results4.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results4).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -7159,11 +7159,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results4.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results4).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -7177,7 +7177,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -7188,7 +7188,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -7206,11 +7206,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -7241,7 +7241,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var interaction1 = interaction;
 							var tmp = data.records[0].field("title");
 							interaction1.reply("You already have a quote with the title __" + (tmp == null ? "null" : Std.string(tmp)) + "__").then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 245, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 246, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -7254,7 +7254,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						modal.addComponents(action_a,action_b);
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 276, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 277, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7275,7 +7275,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name2 != null && name2.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name2,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -7289,11 +7289,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results5.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results5).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -7311,11 +7311,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results5.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results5).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -7329,7 +7329,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -7340,7 +7340,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -7358,11 +7358,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -7428,15 +7428,15 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							}
 							res.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 						}
-						haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 208, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 209, className : "commands.Quote", methodName : "run"});
 						if(!interaction.responded) {
 							interaction.respond(res).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 211, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 212, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						}
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 216, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 217, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7458,21 +7458,21 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 					switch(resp._hx_index) {
 					case 4:
 						interaction.reply("Quote deleted!").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 337, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 338, className : "commands.Quote", methodName : "run"});
 						});
 						break;
 					case 5:
 						var message = resp.message;
 						var data = resp.data;
-						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 339, className : "commands.Quote", methodName : "run"});
-						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(message,{ fileName : "src/commands/Quote.hx", lineNumber : 340, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(data == null ? "null" : Std.string(data),{ fileName : "src/commands/Quote.hx", lineNumber : 341, className : "commands.Quote", methodName : "run"});
 						interaction.reply("Cannot delete this quote").then(null,function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 343, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 344, className : "commands.Quote", methodName : "run"});
 							$global.console.dir(err);
 						});
 						break;
 					default:
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 347, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 348, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7502,7 +7502,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						_gthis.cache.h[interaction.user.id] = quote;
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 323, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 324, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7523,7 +7523,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name3 != null && name3.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -7537,11 +7537,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results6.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results6).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -7559,11 +7559,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results6.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results6).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -7577,7 +7577,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -7588,7 +7588,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -7606,11 +7606,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();
@@ -7641,7 +7641,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var interaction1 = interaction;
 							var tmp = data.records[0].field("title");
 							interaction1.reply("You already have a quote with the title __" + (tmp == null ? "null" : Std.string(tmp)) + "__").then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 245, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 246, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -7654,7 +7654,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						modal.addComponents(action_a,action_b);
 						interaction.showModal(modal);
 					} else {
-						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 276, className : "commands.Quote", methodName : "run"});
+						haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 277, className : "commands.Quote", methodName : "run"});
 					}
 				});
 				var entity = util_EcsTools.get_universe().createEntity();
@@ -7675,7 +7675,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 						if(name3 != null && name3.length > 0) {
 							if(qid != null && qid > 0) {
 								e = database_DBEvents.GetRecord("quotes",QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("id")),QueryExpr.QueryValue(qid)),function(response) {
-									haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 362, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(name3,{ fileName : "src/commands/Quote.hx", lineNumber : 363, className : "commands.Quote", methodName : "run"});
 									if(response._hx_index == 1) {
 										var data = response.data;
 										if(data == null) {
@@ -7689,11 +7689,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 										}
 										results7.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										interaction.respond(results7).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 376, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 377, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 380, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 381, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							} else {
@@ -7711,11 +7711,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 											results7.push({ name : "" + name + " - " + HxOverrides.substr(quote.description,0,25) + ("... by " + quote.author_tag), value : "" + quote.id});
 										}
 										interaction.respond(results7).then(null,function(err) {
-											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 398, className : "commands.Quote", methodName : "run"});
+											haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 399, className : "commands.Quote", methodName : "run"});
 											$global.console.dir(err);
 										});
 									} else {
-										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 402, className : "commands.Quote", methodName : "run"});
+										haxe_Log.trace(response,{ fileName : "src/commands/Quote.hx", lineNumber : 403, className : "commands.Quote", methodName : "run"});
 									}
 								});
 							}
@@ -7729,7 +7729,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							return;
 						} else {
 							interaction.respond([]).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 410, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 411, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 							return;
@@ -7740,7 +7740,7 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							var data = resp.data;
 							if(data == null) {
 								interaction.reply("Could not find any quotes with that identifier").then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 424, className : "commands.Quote", methodName : "run"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 425, className : "commands.Quote", methodName : "run"});
 								});
 								return;
 							}
@@ -7758,11 +7758,11 @@ commands_Quote.prototype = $extend(systems_CommandBase.prototype,{
 							embed.setDescription("***" + q.title + "***\n" + q.description);
 							embed.setFooter({ text : "" + content + " | " + date + " |\t#" + q.id, iconURL : icon});
 							interaction.reply({ embeds : [embed]}).then(null,function(err) {
-								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 449, className : "commands.Quote", methodName : "run"});
+								haxe_Log.trace(err,{ fileName : "src/commands/Quote.hx", lineNumber : 450, className : "commands.Quote", methodName : "run"});
 								$global.console.dir(err);
 							});
 						} else {
-							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 453, className : "commands.Quote", methodName : "run"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/Quote.hx", lineNumber : 454, className : "commands.Quote", methodName : "run"});
 						}
 					});
 					var entity = util_EcsTools.get_universe().createEntity();

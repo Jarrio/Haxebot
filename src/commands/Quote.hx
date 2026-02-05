@@ -71,6 +71,7 @@ class Quote extends CommandBase {
 					var e = DBEvents.DBEvents.GetRecord('quotes', Query.query($title == title && $author_id == interaction.user.id), function(resp) {
 						switch (resp) {
 							case Record(data):
+								quote.title = title.toLowerCase();
 								trace(title);
 								trace(quote.title);
 								if (data != null && title != quote.title) {
@@ -83,7 +84,7 @@ class Quote extends CommandBase {
 										});
 									return;
 								}
-								quote.title = title.toLowerCase();
+								
 								var e = DBEvents.Update(
 									'quotes',
 									quote,
