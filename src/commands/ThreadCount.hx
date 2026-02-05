@@ -21,10 +21,6 @@ class ThreadCount extends CommandBase {
 	final path = "./config/threadcount.json";
 
 	override function onEnabled() {
-		// loadToDB();
-		// if (FileSystem.exists(path)) {
-		// 	count = Json.parse(File.getContent(path));
-		// }
 		loadCounts();
 	}
 

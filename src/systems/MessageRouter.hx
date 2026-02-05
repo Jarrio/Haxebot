@@ -21,6 +21,7 @@ class MessageRouter extends System {
 			var channel:TextChannel = message.channel;
 
 			EcsTools.set(CommandForward.rate_limit, message);
+			EcsTools.set(CommandForward.message_counter, message);
 			EcsTools.set(CommandForward.scam_prevention, message);
 			EcsTools.set(CommandForward.keyword_tracker, message);
 

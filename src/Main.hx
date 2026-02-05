@@ -56,6 +56,7 @@ import systems.DatabaseSystem;
 import Query;
 import commands.Run2;
 import database.types.DBState;
+import commands.MessageCounter;
 
 typedef TAnnouncer = {
 	var user:String;
@@ -174,6 +175,7 @@ class Main {
 					systems: [
 						MessageRouter,
 						ThreadCount,
+						MessageCounter,
 						ScamPrevention,
 						JamSuggestionBox,
 						#if !block
@@ -880,6 +882,7 @@ enum abstract CommandForward(String) from String {
 	var add_event_role;
 	var auto_thread;
 	var thread_count;
+	var message_counter;
 	var rate_limit;
 	var emoji_edit;
 }
