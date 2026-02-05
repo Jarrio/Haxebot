@@ -5444,10 +5444,11 @@ commands_MessageCounter.prototype = $extend(systems_CommandBase.prototype,{
 				if(Object.prototype.hasOwnProperty.call(this.count.h,userId)) {
 					db = this.count.h[userId];
 					try {
+						db.updatedTime = new Date().getTime();
 						db.count += 1;
 						var e = database_DBEvents.Update("message_counter",db,QueryExpr.QueryBinop(QBinop.QOpEq,QueryExpr.QueryConstant(QConstant.QIdent("userId")),QueryExpr.QueryValue(userId)),function(resp) {
 							if(resp._hx_index != 4) {
-								haxe_Log.trace(resp,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 69, className : "commands.MessageCounter", methodName : "update"});
+								haxe_Log.trace(resp,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 70, className : "commands.MessageCounter", methodName : "update"});
 							}
 						});
 						var entity1 = util_EcsTools.get_universe().createEntity();
@@ -5459,18 +5460,19 @@ commands_MessageCounter.prototype = $extend(systems_CommandBase.prototype,{
 						}
 					} catch( _g ) {
 						var _g1 = haxe_Exception.caught(_g);
-						haxe_Log.trace(_g1,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 74, className : "commands.MessageCounter", methodName : "update"});
-						haxe_Log.trace(db,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 75, className : "commands.MessageCounter", methodName : "update"});
-						haxe_Log.trace(db.userId,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 76, className : "commands.MessageCounter", methodName : "update"});
-						haxe_Log.trace(db.count,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 77, className : "commands.MessageCounter", methodName : "update"});
+						haxe_Log.trace(_g1,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 75, className : "commands.MessageCounter", methodName : "update"});
+						haxe_Log.trace(db,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 76, className : "commands.MessageCounter", methodName : "update"});
+						haxe_Log.trace(db.userId,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 77, className : "commands.MessageCounter", methodName : "update"});
+						haxe_Log.trace(db.count,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 78, className : "commands.MessageCounter", methodName : "update"});
 					}
 				} else {
 					db = new database_types_DBMessageCounter();
 					db.userId = userId;
+					db.updatedTime = db.startedTime = new Date().getTime();
 					db.count = 1;
 					var e1 = database_DBEvents.Insert("message_counter",db,function(resp) {
 						if(resp._hx_index != 4) {
-							haxe_Log.trace(resp,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 87, className : "commands.MessageCounter", methodName : "update"});
+							haxe_Log.trace(resp,{ fileName : "src/commands/MessageCounter.hx", lineNumber : 89, className : "commands.MessageCounter", methodName : "update"});
 						}
 					});
 					var entity2 = util_EcsTools.get_universe().createEntity();
@@ -12731,15 +12733,21 @@ database_types_DBMessageCounter.__name__ = "database.types.DBMessageCounter";
 database_types_DBMessageCounter.fromRecord = function(record) {
 	var userId = record.field("userId");
 	var count = record.field("count");
+	var updatedTime = record.field("updatedTime");
+	var startedTime = record.field("startedTime");
 	var p = new database_types_DBMessageCounter();
 	p.userId = userId;
 	p.count = count;
+	p.updatedTime = updatedTime;
+	p.startedTime = startedTime;
 	return p;
 };
 database_types_DBMessageCounter.__super__ = database_MyRecord;
 database_types_DBMessageCounter.prototype = $extend(database_MyRecord.prototype,{
 	userId: null
 	,count: null
+	,updatedTime: null
+	,startedTime: null
 	,get_record: function() {
 		if(this._record == null) {
 			this._record = new db_Record();
@@ -12749,6 +12757,14 @@ database_types_DBMessageCounter.prototype = $extend(database_MyRecord.prototype,
 			this._record = new db_Record();
 		}
 		this._record.field("count",this.count);
+		if(this._record == null) {
+			this._record = new db_Record();
+		}
+		this._record.field("updatedTime",this.updatedTime);
+		if(this._record == null) {
+			this._record = new db_Record();
+		}
+		this._record.field("startedTime",this.startedTime);
 		return this._record;
 	}
 	,__class__: database_types_DBMessageCounter
@@ -25814,7 +25830,7 @@ commands_types_Timeframe.one_month = 2419200000;
 components_TextCommand.mention = "!mention";
 components_TextCommand.run = "!run";
 database_types_DBEmoji.__meta__ = { fields : { author_id : { crecord : null}, author_tag : { crecord : null}, name : { crecord : null}, url : { crecord : null}, description : { crecord : null}, timestamp : { record : null}, id : { record : null}}};
-database_types_DBMessageCounter.__meta__ = { fields : { userId : { record : null}, count : { record : null}}};
+database_types_DBMessageCounter.__meta__ = { fields : { userId : { record : null}, count : { record : null}, updatedTime : { record : null}, startedTime : { record : null}}};
 database_types_DBPoll.__meta__ = { fields : { id : { record : null}, active : { record : null}, author : { crecord : null}, channel : { crecord : null}, message_id : { crecord : null}, question : { crecord : null}, duration : { crecord : null}, timestamp : { record : null}, votes : { record : null}, results : { record : null}, answers : { record : null}}};
 database_types_DBQuote.__meta__ = { fields : { author_id : { crecord : null}, author_tag : { crecord : null}, title : { crecord : null}, description : { crecord : null}, timestamp : { record : null}, id : { record : null}}};
 database_types_DBRateLimit.__meta__ = { fields : { user_id : { crecord : null}, user_tag : { crecord : null}, mod_id : { crecord : null}, mod_tag : { crecord : null}, count : { crecord : null}, time : { crecord : null}, reason : { record : null}, silenced : { record : null}, created : { record : null}, id : { record : null}}};

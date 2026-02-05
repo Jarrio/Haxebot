@@ -62,6 +62,7 @@ class MessageCounter extends CommandBase {
 					if (this.count.exists(userId)) {
 						db = this.count.get(userId);
 						try {
+							db.updatedTime = Date.now().getTime();
 							db.count += 1;
 							var e = DBEvents.Update('message_counter', db, query($userId == userId), (resp) -> {
 								switch (resp) {
@@ -79,6 +80,7 @@ class MessageCounter extends CommandBase {
 					} else {
 						db = new DBMessageCounter();
 						db.userId = userId;
+						db.updatedTime = db.startedTime = Date.now().getTime();
 						db.count = 1;
 
 						var e = DBEvents.Insert('message_counter', db, (resp) -> {
