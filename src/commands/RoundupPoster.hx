@@ -137,16 +137,18 @@ class RoundupPoster extends CommandBase {
 			}
 		}
 
+		trace(roundup, channel == null);
 		if (this.roundup == -1 || this.channel == null) {
 			return;
 		}
 
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
+		trace(diff, diff <= Duration.day);
 		if (diff <= Duration.fromString('1d')) {
 			return;
 		}
-		
+
 		this.last_checked = Date.now().getTime();
 		getHaxeIoPage();
 	}
