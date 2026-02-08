@@ -8478,16 +8478,17 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 				}
 			}
 		}
+		haxe_Log.trace(NewState.get_next_roundup(Main.state),{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 140, className : "commands.RoundupPoster", methodName : "update", customParams : [this.channel == null]});
 		if(NewState.get_next_roundup(Main.state) == -1 || this.channel == null) {
 			return;
 		}
 		var today = new Date();
 		var diff = today.getTime() - this.last_checked;
-		if(diff >= commands_types_Duration.fromString("1d")) {
-			return;
+		haxe_Log.trace(diff,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 147, className : "commands.RoundupPoster", methodName : "update", customParams : [diff >= 86400000]});
+		if(diff >= 86400000) {
+			this.last_checked = new Date().getTime();
+			this.getHaxeIoPage();
 		}
-		this.last_checked = new Date().getTime();
-		this.getHaxeIoPage();
 	}
 	,shouldCheck: function() {
 		var today = new Date();
@@ -8537,7 +8538,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 209, className : "commands.RoundupPoster", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 208, className : "commands.RoundupPoster", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
