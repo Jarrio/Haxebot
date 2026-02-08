@@ -70,7 +70,6 @@ class RoundupPoster extends CommandBase {
 	}
 
 	function getHaxeIoPage() {
-		trace(roundup);
 		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/$roundup.md');
 		var embed = new MessageEmbed();
 		data.onError = (error) -> {
@@ -78,7 +77,7 @@ class RoundupPoster extends CommandBase {
 		}
 
 		data.onData = (body) -> {
-			var regex = ~/### News and Articles(.*?)##### _In case you missed it_/gmis;
+			var regex = ~/### News and Articles(.*?)##### Via [Haxe Discord] server/gmis;
 			if (regex.match(body)) {
 				embed.setTitle('Haxe Roundup #$roundup');
 				embed.setURL('https://haxe.io/roundups/$roundup/');

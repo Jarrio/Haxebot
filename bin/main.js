@@ -8398,14 +8398,13 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,getHaxeIoPage: function() {
 		var _gthis = this;
-		haxe_Log.trace(NewState.get_next_roundup(Main.state),{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 73, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + NewState.get_next_roundup(Main.state) + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 77, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 76, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
-			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
+			var regex = new EReg("### News and Articles(.*?)##### Via [Haxe Discord] server","gmis");
 			if(regex.match(body)) {
 				embed.setTitle("Haxe Roundup #" + NewState.get_next_roundup(Main.state));
 				embed.setURL("https://haxe.io/roundups/" + NewState.get_next_roundup(Main.state) + "/");
@@ -8431,7 +8430,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 					NewState.set_next_roundup(Main.state,value);
 					Main.updateState("next_roundup");
 				},function(err) {
-					haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 107, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 106, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 				});
 			}
 		};
@@ -8451,7 +8450,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.channel = channel;
 				_gthis.checking = false;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 129, className : "commands.RoundupPoster", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 128, className : "commands.RoundupPoster", methodName : "update"});
 				$global.console.dir(err);
 			});
 			var h = this.dmlist.h;
@@ -8469,11 +8468,11 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 					Main.client.users.fetch(key1[0]).then((function(key) {
 						return function(user) {
 							_gthis.dmlist.h[key[0]] = user;
-							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 137, className : "commands.RoundupPoster", methodName : "update"});
+							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 136, className : "commands.RoundupPoster", methodName : "update"});
 						};
 					})(key1),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 138, className : "commands.RoundupPoster", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 137, className : "commands.RoundupPoster", methodName : "update"});
 						};
 					})());
 				}
@@ -8485,7 +8484,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 		var today = new Date();
 		var diff = today.getTime() - this.last_checked;
 		if(diff >= 86400000) {
-			haxe_Log.trace("Attempt to post roundup!",{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 150, className : "commands.RoundupPoster", methodName : "update"});
+			haxe_Log.trace("Attempt to post roundup!",{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 149, className : "commands.RoundupPoster", methodName : "update"});
 			this.last_checked = new Date().getTime();
 			this.getHaxeIoPage();
 		}
@@ -8538,7 +8537,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 210, className : "commands.RoundupPoster", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 209, className : "commands.RoundupPoster", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}
