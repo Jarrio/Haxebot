@@ -8404,7 +8404,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 			haxe_Log.trace(error,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 76, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
-			var regex = new EReg("### News and Articles(.*?)##### Via [Haxe Discord] server","gmis");
+			var regex = new EReg("### News and Articles(.*?)##### Via \\[Haxe Discord\\] server","gmis");
 			if(regex.match(body)) {
 				embed.setTitle("Haxe Roundup #" + NewState.get_next_roundup(Main.state));
 				embed.setURL("https://haxe.io/roundups/" + NewState.get_next_roundup(Main.state) + "/");
@@ -8414,7 +8414,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 				while(_g < desc_split.length) {
 					var item = desc_split[_g];
 					++_g;
-					if(desc.length + StringTools.trim(item).length + 3 + 22 >= 2048) {
+					if(item.length == 0 || desc.length + StringTools.trim(item).length + 3 + 24 >= 2048) {
 						continue;
 					}
 					if(item.indexOf("#### ") != -1) {
@@ -8422,9 +8422,8 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 					}
 					desc += "\n" + StringTools.trim(item);
 				}
-				desc += "\n...";
+				desc += "\n\n...";
 				embed.setDescription(desc);
-				_gthis.dmUser("Haxe Roundup #" + NewState.get_next_roundup(Main.state),desc);
 				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
 					var value = NewState.get_next_roundup(Main.state) + 1;
 					NewState.set_next_roundup(Main.state,value);

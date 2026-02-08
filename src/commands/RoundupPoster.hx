@@ -77,7 +77,7 @@ class RoundupPoster extends CommandBase {
 		}
 
 		data.onData = (body) -> {
-			var regex = ~/### News and Articles(.*?)##### Via [Haxe Discord] server/gmis;
+			var regex = ~/### News and Articles(.*?)##### Via \[Haxe Discord\] server/gmis;
 			if (regex.match(body)) {
 				embed.setTitle('Haxe Roundup #$roundup');
 				embed.setURL('https://haxe.io/roundups/$roundup/');
@@ -85,7 +85,7 @@ class RoundupPoster extends CommandBase {
 				var desc_split = regex.matched(1).trim().split('\n');
 				var desc = '\n**News And Articles**';
 				for (item in desc_split) {
-					if (desc.length + item.trim().length + 3 + 22 >= 2048) {
+					if (item.length == 0 || desc.length + item.trim().length + 3 + 24 >= 2048) {
 						continue;
 					}
 					if (item.contains("#### ")) {
@@ -93,9 +93,9 @@ class RoundupPoster extends CommandBase {
 					}
 					desc += '\n' + item.trim();
 				}
-				desc += '\n...';
+				desc += '\n\n...';
 				embed.setDescription(desc);
-				dmUser('Haxe Roundup #$roundup', desc);
+				// dmUser('Haxe Roundup #$roundup', desc);
 				this.channel.send({
 					content: '<@&$news_role>',
 					allowedMentions: {roles: [news_role]},
