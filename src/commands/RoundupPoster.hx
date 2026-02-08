@@ -1,5 +1,6 @@
 package commands;
 
+import util.Duration;
 import js.node.Http;
 import js.node.http.Server;
 import commands.types.Duration;
@@ -13,7 +14,7 @@ import discord_js.User;
 import haxe.Json;
 
 class RoundupPoster extends CommandBase {
-	//post once a week
+	// post once a week
 	var posted:Float = -1;
 	var last_checked:Float = -1;
 	var thursday_check:Float = -1;
@@ -29,6 +30,7 @@ class RoundupPoster extends CommandBase {
 	final announcement_channel:String = #if block '597067735771381771' #else '286485321925918721' #end;
 
 	var sent = false;
+
 	// var server:Server;
 	// override function onEnabled() {
 	// 	trace('running');
@@ -68,9 +70,7 @@ class RoundupPoster extends CommandBase {
 	}
 
 	function getHaxeIoPage() {
-		var data = new haxe.Http(
-			'https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/$roundup.md'
-		);
+		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/$roundup.md');
 		var embed = new MessageEmbed();
 		data.onError = (error) -> {
 			trace(error);
@@ -109,6 +109,7 @@ class RoundupPoster extends CommandBase {
 	}
 
 	var set_permissions = false;
+	var lastDayChecked:Int = 0;
 
 	override function update(_) {
 		super.update(_);
@@ -142,18 +143,11 @@ class RoundupPoster extends CommandBase {
 
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
-		var day = today.getUTCDay() == 4 || today.getUTCDay() == 6;
-		if (day || _check_now) {
-			if (!this.shouldCheck()) {
-				return;
-			}
-		} else {
-			if (diff >= Duration.fromString('1d')) {
-				return;
-			}
-			this.last_checked = Date.now().getTime();
+		if (diff <= Duration.fromString('1d')) {
+			return;
 		}
-
+		
+		this.last_checked = Date.now().getTime();
 		getHaxeIoPage();
 	}
 
@@ -208,13 +202,12 @@ class RoundupPoster extends CommandBase {
 				this.roundup = number.int();
 
 				interaction.reply('Will start watching haxe roundups from **#$number**.');
-				interaction.client.channels.fetch(this.announcement_channel)
-					.then(function(channel) {
-						this.channel = cast channel;
-					}, function(err) {
-						trace(err);
-						Browser.console.dir(err);
-					});
+				interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
+					this.channel = cast channel;
+				}, function(err) {
+					trace(err);
+					Browser.console.dir(err);
+				});
 			default:
 		}
 	}
@@ -225,7 +218,7 @@ class RoundupPoster extends CommandBase {
 
 	inline function set_roundup(value:Int) {
 		Main.state.next_roundup = value;
-		
+
 		Main.updateState('next_roundup');
 
 		return value;
