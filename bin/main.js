@@ -8398,10 +8398,11 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 	}
 	,getHaxeIoPage: function() {
 		var _gthis = this;
+		haxe_Log.trace(NewState.get_next_roundup(Main.state),{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 73, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 		var data = new haxe_http_HttpNodeJs("https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/" + NewState.get_next_roundup(Main.state) + ".md");
 		var embed = new discord_$js_MessageEmbed();
 		data.onError = function(error) {
-			haxe_Log.trace(error,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 76, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
+			haxe_Log.trace(error,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 77, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 		};
 		data.onData = function(body) {
 			var regex = new EReg("### News and Articles(.*?)##### _In case you missed it_","gmis");
@@ -8426,11 +8427,11 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 				embed.setDescription(desc);
 				_gthis.dmUser("Haxe Roundup #" + NewState.get_next_roundup(Main.state),desc);
 				_gthis.channel.send({ content : "<@&" + _gthis.news_role + ">", allowedMentions : { roles : [_gthis.news_role]}, embeds : [embed]}).then(function(_) {
-					var lhs = NewState.get_next_roundup(Main.state);
-					var value = lhs + 1;
+					var value = NewState.get_next_roundup(Main.state) + 1;
 					NewState.set_next_roundup(Main.state,value);
 					Main.updateState("next_roundup");
-					return lhs;
+				},function(err) {
+					haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 107, className : "commands.RoundupPoster", methodName : "getHaxeIoPage"});
 				});
 			}
 		};
@@ -8450,7 +8451,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.channel = channel;
 				_gthis.checking = false;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 126, className : "commands.RoundupPoster", methodName : "update"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 129, className : "commands.RoundupPoster", methodName : "update"});
 				$global.console.dir(err);
 			});
 			var h = this.dmlist.h;
@@ -8468,24 +8469,23 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 					Main.client.users.fetch(key1[0]).then((function(key) {
 						return function(user) {
 							_gthis.dmlist.h[key[0]] = user;
-							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 134, className : "commands.RoundupPoster", methodName : "update"});
+							haxe_Log.trace("Got " + user.tag,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 137, className : "commands.RoundupPoster", methodName : "update"});
 						};
 					})(key1),(function() {
 						return function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 135, className : "commands.RoundupPoster", methodName : "update"});
+							haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 138, className : "commands.RoundupPoster", methodName : "update"});
 						};
 					})());
 				}
 			}
 		}
-		haxe_Log.trace(NewState.get_next_roundup(Main.state),{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 140, className : "commands.RoundupPoster", methodName : "update", customParams : [this.channel == null]});
 		if(NewState.get_next_roundup(Main.state) == -1 || this.channel == null) {
 			return;
 		}
 		var today = new Date();
 		var diff = today.getTime() - this.last_checked;
-		haxe_Log.trace(diff,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 147, className : "commands.RoundupPoster", methodName : "update", customParams : [diff >= 86400000]});
 		if(diff >= 86400000) {
+			haxe_Log.trace("Attempt to post roundup!",{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 150, className : "commands.RoundupPoster", methodName : "update"});
 			this.last_checked = new Date().getTime();
 			this.getHaxeIoPage();
 		}
@@ -8538,7 +8538,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 			interaction.client.channels.fetch(this.announcement_channel).then(function(channel) {
 				_gthis.channel = channel;
 			},function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 208, className : "commands.RoundupPoster", methodName : "run"});
+				haxe_Log.trace(err,{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 210, className : "commands.RoundupPoster", methodName : "run"});
 				$global.console.dir(err);
 			});
 		}

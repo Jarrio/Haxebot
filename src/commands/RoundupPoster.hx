@@ -70,6 +70,7 @@ class RoundupPoster extends CommandBase {
 	}
 
 	function getHaxeIoPage() {
+		trace(roundup);
 		var data = new haxe.Http('https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/$roundup.md');
 		var embed = new MessageEmbed();
 		data.onError = (error) -> {
@@ -100,8 +101,10 @@ class RoundupPoster extends CommandBase {
 					content: '<@&$news_role>',
 					allowedMentions: {roles: [news_role]},
 					embeds: [embed]
-				}).then((_) -> {
+				}).then(function(_) {
 					this.roundup++;
+				}, function(err:Dynamic) {
+					trace(err);
 				});
 			}
 		}
@@ -137,15 +140,14 @@ class RoundupPoster extends CommandBase {
 			}
 		}
 
-		trace(roundup, channel == null);
 		if (this.roundup == -1 || this.channel == null) {
 			return;
 		}
 
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
-		trace(diff, diff >= Duration.day);
 		if (diff >= Duration.day) {
+			trace('Attempt to post roundup!');
 			this.last_checked = Date.now().getTime();
 			getHaxeIoPage();
 		}
