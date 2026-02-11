@@ -314,20 +314,13 @@ class ScamPrevention extends CommandBase {
 
 	override function update(_:Float) {
 		super.update(_);
+		var caught = false;
 		iterate(messages, entity -> {
 			if (forward != scam_prevention) {
 				continue;
 			}
 
 			var id = message.author.id;
-
-			// if (oneChanceChecks(message)) {
-				// reviewMessage([message]);
-			// }
-
-			// if (this.singleMessageCheck(message)) {
-			// 	hold_list.set(message.id, message);
-			// }
 
 			if (withinTime(message.createdTimestamp, last_message_interval)) {
 				this.updateTime(id);
@@ -348,7 +341,7 @@ class ScamPrevention extends CommandBase {
 		});
 
 		this.getPhishingLinks();
-
+		
 		for (id => time in messageLastSent) {
 			var now = Date.now().getTime();
 			if (now - time <= 30000) {
@@ -356,6 +349,7 @@ class ScamPrevention extends CommandBase {
 			}
 
 			if (multipleMessageCheck(id)) {
+				caught = true;
 				this.reviewMessage(messagesTracked[id], false);
 				this.resetChecks(id);
 			}
@@ -365,6 +359,10 @@ class ScamPrevention extends CommandBase {
 			messagesTracked.remove(id);
 		}
 
+		if (caught) {
+			return;
+		}
+		
 		for (messages in this.trigger_messages) {
 			if (this.checkPhishingLinks(messages)) {
 				this.banUser(messages);
@@ -441,6 +439,7 @@ class ScamPrevention extends CommandBase {
 					});
 				}
 			}, function(err) {
+				trace(message.content);
 				trace(err);
 				Browser.console.dir(err);
 			});
