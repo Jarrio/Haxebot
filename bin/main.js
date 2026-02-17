@@ -9896,8 +9896,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					_gthis.phishing_urls = JSON.parse(data);
 				} catch( _g ) {
 					var _g1 = haxe_Exception.caught(_g);
-					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 465, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 466, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 471, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+					haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 472, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 					var tmp = new Date().getTime();
 					_gthis.phishing_update_time = tmp - 18000000;
 				}
@@ -10033,6 +10033,16 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		}
 		var message = messages[0];
 		var embed = this.reformatMessage("SPAM ALERT - Timed out",message);
+		var _g = 0;
+		while(_g < messages.length) {
+			var msg = messages[_g];
+			++_g;
+			if(msg.channel.name == "showcase") {
+				continue;
+			}
+			message = msg;
+			break;
+		}
 		this.timeoutUser(message,logMessage,function(_) {
 			message.reply({ content : "<@&198916468312637440> Please review this message by: <@" + message.author.id + ">", embeds : [embed]}).then(function(_) {
 				var _g = 0;
@@ -10040,13 +10050,13 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 					var message = messages[_g];
 					++_g;
 					message.delete().then(null,function(err) {
-						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 437, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+						haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 443, className : "commands.ScamPrevention", methodName : "reviewMessage"});
 						$global.console.dir(err);
 					});
 				}
 			},function(err) {
-				haxe_Log.trace(message.content,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 442, className : "commands.ScamPrevention", methodName : "reviewMessage"});
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 443, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+				haxe_Log.trace(message.content,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 448, className : "commands.ScamPrevention", methodName : "reviewMessage"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 449, className : "commands.ScamPrevention", methodName : "reviewMessage"});
 				$global.console.dir(err);
 			});
 		});
@@ -10077,8 +10087,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.phishing_urls = JSON.parse(data);
 			} catch( _g ) {
 				var _g1 = haxe_Exception.caught(_g);
-				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 465, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
-				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 466, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace(_g1,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 471, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
+				haxe_Log.trace("error parsing phishing links",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 472, className : "commands.ScamPrevention", methodName : "getPhishingLinks"});
 				var tmp = new Date().getTime();
 				_gthis.phishing_update_time = tmp - 18000000;
 			}
@@ -10095,9 +10105,9 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.logMessage(message.author.id,_gthis.reformatMessage("Original Message",message,false),"TIMEOUT");
 			}
 			guild_member.timeout(43200000,"Stop spamming, a mod will review this at their convenience.").then(callback,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 479, className : "commands.ScamPrevention", methodName : "timeoutUser"});
-				haxe_Log.trace("AuthorId=" + message.author.id + " User=" + message.author.displayName,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 480, className : "commands.ScamPrevention", methodName : "timeoutUser"});
-				haxe_Log.trace(message.content,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 481, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 485, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+				haxe_Log.trace("AuthorId=" + message.author.id + " User=" + message.author.displayName,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 486, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+				haxe_Log.trace(message.content,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 487, className : "commands.ScamPrevention", methodName : "timeoutUser"});
 				$global.console.dir(err);
 			});
 			var id = message.author.id;
@@ -10114,7 +10124,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				delete(_this.h[id]);
 			}
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 486, className : "commands.ScamPrevention", methodName : "timeoutUser"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 492, className : "commands.ScamPrevention", methodName : "timeoutUser"});
 			$global.console.dir(err);
 		});
 	}
@@ -10145,7 +10155,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				_gthis.logMessage(message1.author.id,_gthis.reformatMessage("Original Message",message1,false),"BAN");
 			}
 			guild_member.ban({ days : 1, reason : "found phishing links, auto banned."}).then(null,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 515, className : "commands.ScamPrevention", methodName : "banUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 521, className : "commands.ScamPrevention", methodName : "banUser"});
 				$global.console.dir(err);
 			});
 			var id = message.author.id;
@@ -10162,11 +10172,11 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				delete(_this.h[id]);
 			}
 			message.channel.send("User <@" + message.author.id + "> has been auto banned for sending scam links.").then(callback,function(err) {
-				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 520, className : "commands.ScamPrevention", methodName : "banUser"});
+				haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 526, className : "commands.ScamPrevention", methodName : "banUser"});
 				$global.console.dir(err);
 			});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 524, className : "commands.ScamPrevention", methodName : "banUser"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 530, className : "commands.ScamPrevention", methodName : "banUser"});
 			$global.console.dir(err);
 		});
 	}
@@ -10188,7 +10198,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		Main.client.channels.fetch(this.logChannelId).then(function(channel) {
 			channel.send({ content : "<@" + uid + ">", embeds : [embed]});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 542, className : "commands.ScamPrevention", methodName : "logMessages"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 548, className : "commands.ScamPrevention", methodName : "logMessages"});
 			$global.console.dir(err);
 		});
 	}
@@ -10211,7 +10221,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		Main.client.channels.fetch(this.logChannelId).then(function(channel) {
 			channel.send({ content : "<@" + uid + ">", embeds : [embed]});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 563, className : "commands.ScamPrevention", methodName : "logStats"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 569, className : "commands.ScamPrevention", methodName : "logStats"});
 			$global.console.dir(err);
 		});
 	}
@@ -10221,7 +10231,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 		Main.client.channels.fetch(this.logChannelId).then(function(channel) {
 			channel.send({ content : "<@" + uid + ">", embeds : [embed]});
 		},function(err) {
-			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 574, className : "commands.ScamPrevention", methodName : "logMessage"});
+			haxe_Log.trace(err,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 580, className : "commands.ScamPrevention", methodName : "logMessage"});
 			$global.console.dir(err);
 		});
 	}
@@ -10249,7 +10259,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			var keyword = _g1[_g];
 			++_g;
 			if(message.toLowerCase().indexOf(keyword) != -1) {
-				haxe_Log.trace(keyword,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 593, className : "commands.ScamPrevention", methodName : "hasKeyword"});
+				haxe_Log.trace(keyword,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 599, className : "commands.ScamPrevention", methodName : "hasKeyword"});
 				return true;
 			}
 		}
@@ -10283,7 +10293,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 							return false;
 						}
 						if(url.hostname.length == 0 || url.hostname == null) {
-							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 620, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
+							haxe_Log.trace(regex.matched(1),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 626, className : "commands.ScamPrevention", methodName : "checkPhishingLinks"});
 							return false;
 						}
 						if(link != url.hostname) {
@@ -10304,7 +10314,7 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 			++_g;
 			if(message.content.indexOf("@everyone") != -1 || message.content.indexOf("@here") != -1) {
 				if(tag_count >= 3) {
-					haxe_Log.trace("here",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 642, className : "commands.ScamPrevention", methodName : "checkTags"});
+					haxe_Log.trace("here",{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 648, className : "commands.ScamPrevention", methodName : "checkTags"});
 					break;
 				}
 				++tag_count;
@@ -10333,8 +10343,8 @@ commands_ScamPrevention.prototype = $extend(systems_CommandBase.prototype,{
 				}
 			} catch( _g1 ) {
 				var _g2 = haxe_Exception.caught(_g1);
-				haxe_Log.trace(_g2,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 671, className : "commands.ScamPrevention", methodName : "checkEquality"});
-				haxe_Log.trace(JSON.stringify(messages),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 672, className : "commands.ScamPrevention", methodName : "checkEquality"});
+				haxe_Log.trace(_g2,{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 677, className : "commands.ScamPrevention", methodName : "checkEquality"});
+				haxe_Log.trace(JSON.stringify(messages),{ fileName : "src/commands/ScamPrevention.hx", lineNumber : 678, className : "commands.ScamPrevention", methodName : "checkEquality"});
 			}
 		}
 		if(equality_count == messages.length && equality_count >= 3 && channel_count >= 4) {
