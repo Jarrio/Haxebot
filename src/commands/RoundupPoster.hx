@@ -77,7 +77,7 @@ class RoundupPoster extends CommandBase {
 		}
 
 		data.onData = (body) -> {
-			var regex = ~/### News and Articles(.*?)##### Via \[Haxe Discord\] server/gmis;
+			var regex = ~/### News and Articles(.*?)### People & Projects to support/gmis;
 			if (regex.match(body)) {
 				embed.setTitle('Haxe Roundup #$roundup');
 				embed.setURL('https://haxe.io/roundups/$roundup/');
@@ -105,6 +105,8 @@ class RoundupPoster extends CommandBase {
 				}, function(err:Dynamic) {
 					trace(err);
 				});
+			} else {
+				trace("[Error] No content found");
 			}
 		}
 		data.request();
