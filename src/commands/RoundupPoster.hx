@@ -146,7 +146,7 @@ class RoundupPoster extends CommandBase {
 		var today = Date.now();
 		var diff = today.getTime() - last_checked;
 		if (diff >= Duration.day) {
-			trace('Attempt to post roundup!');
+			trace('Attempt to post roundup! ${roundup}');
 			this.last_checked = Date.now().getTime();
 			getHaxeIoPage();
 		}

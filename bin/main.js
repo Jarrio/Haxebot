@@ -8483,7 +8483,7 @@ commands_RoundupPoster.prototype = $extend(systems_CommandBase.prototype,{
 		var today = new Date();
 		var diff = today.getTime() - this.last_checked;
 		if(diff >= 86400000) {
-			haxe_Log.trace("Attempt to post roundup!",{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 149, className : "commands.RoundupPoster", methodName : "update"});
+			haxe_Log.trace("Attempt to post roundup! " + NewState.get_next_roundup(Main.state),{ fileName : "src/commands/RoundupPoster.hx", lineNumber : 149, className : "commands.RoundupPoster", methodName : "update"});
 			this.last_checked = new Date().getTime();
 			this.getHaxeIoPage();
 		}
