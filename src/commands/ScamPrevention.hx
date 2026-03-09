@@ -293,13 +293,14 @@ class ScamPrevention extends CommandBase {
 			if (channels.contains(channel.id)) {
 				continue;
 			}
+			trace(channel.isThread(), channel.name);
 			if (channel.isThread()) {
 				inThreads++;
 			}
 			channels.push(channel.id);
 		}
 
-		if (channels.length <= 2 || inThreads == channels.length) {
+		if (channels.length >= 1) {
 			return false;
 		}
 
@@ -344,7 +345,7 @@ class ScamPrevention extends CommandBase {
 		
 		for (id => time in messageLastSent) {
 			var now = Date.now().getTime();
-			if (now - time <= 30000) {
+			if (now - time <= 10000) {
 				continue;
 			}
 

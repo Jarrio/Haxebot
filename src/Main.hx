@@ -455,6 +455,7 @@ class Main {
 			if (interaction.isAutocomplete()) {
 				// trace(interaction);
 			}
+			
 			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
