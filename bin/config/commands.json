@@ -635,7 +635,7 @@
 		"description": "Add framework icons/Get pinged for framework updates",
 		"params": [
 			{
-				"name": "Role",
+				"name": "role",
 				"type": "string",
 				"description": "Channel/topic to receive targetted notifications for",
 				"required": true,
