@@ -631,11 +631,11 @@
 		]
 	},
 	{
-		"name": "notify",
-		"description": "Subscribe to topic specific updates",
+		"name": "role",
+		"description": "Add framework icons/Get pinged for framework updates",
 		"params": [
 			{
-				"name": "channel",
+				"name": "Role",
 				"type": "string",
 				"description": "Channel/topic to receive targetted notifications for",
 				"required": true,
@@ -647,6 +647,14 @@
 					{
 						"name": "events",
 						"value": "events"
+					},
+					{
+						"name": "haxe",
+						"value": "haxe"
+					},
+					{
+						"name": "haxepog",
+						"value": "haxepog"
 					},
 					{
 						"name": "haxeui",
@@ -1017,12 +1025,12 @@
 						"required": true
 					}
 				]
-			}, 
+			},
 			{
 				"name": "delete",
 				"type": "subcommand",
 				"description": "Remove slow mode from a user",
-				"params":[
+				"params": [
 					{
 						"name": "name",
 						"type": "user",
@@ -1080,12 +1088,12 @@
 						"required": false
 					}
 				]
-			}, 
+			},
 			{
 				"name": "list",
 				"type": "subcommand",
 				"description": "Show all trackers",
-				"params":[
+				"params": [
 					{
 						"name": "name",
 						"type": "string",
@@ -1099,7 +1107,7 @@
 				"name": "delete",
 				"type": "subcommand",
 				"description": "Delete an existing subcommand",
-				"params":[
+				"params": [
 					{
 						"name": "name",
 						"type": "string",
@@ -1207,7 +1215,7 @@
 					{
 						"name": "size",
 						"description": "Select size of emoji (only works for discord emoji's)",
-						"type":"string",
+						"type": "string",
 						"required": false,
 						"choices": [
 							{

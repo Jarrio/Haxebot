@@ -7,7 +7,7 @@ import components.Command;
 import systems.CommandBase;
 import discord_js.TextChannel;
 
-class Notify extends CommandBase {
+class Role extends CommandBase {
 	function getRole(channel:String) {
 		return switch (channel) {
 			// #events
@@ -39,7 +39,7 @@ class Notify extends CommandBase {
 
 	function run(command:Command, interaction:BaseCommandInteraction) {
 		switch (command.content) {
-			case Notify(channel):
+			case Role(channel):
 				var role = this.getRole(channel);
 				if (role == 'err') {
 					trace(channel);
@@ -85,6 +85,6 @@ class Notify extends CommandBase {
 	}
 
 	function get_name():String {
-		return 'notify';
+		return 'role';
 	}
 }

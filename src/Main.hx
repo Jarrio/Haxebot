@@ -179,8 +179,7 @@ class Main {
 						ScamPrevention,
 						JamSuggestionBox,
 						#if !block
-						Showcase,
-						RateLimit
+						Showcase, RateLimit
 						#end
 					]
 				},
@@ -204,7 +203,7 @@ class Main {
 						PinMessageInfo,
 						Quote,
 						Api,
-						Notify,
+						Role,
 						Code,
 						CodeLineNumbers,
 						React,
@@ -238,7 +237,7 @@ class Main {
 						Quote,
 						Api,
 						React,
-						Notify,
+						Role,
 						Rtfm,
 						Poll,
 						Boop,
@@ -278,8 +277,8 @@ class Main {
 			request = true;
 			var e = DBEvents.GetAllRecords('state', (response) -> {
 				#if block
-				//state = Json.parse(File.getContent('./config/state.json'));
-				//return;
+				// state = Json.parse(File.getContent('./config/state.json'));
+				// return;
 				#end
 				switch (response) {
 					case Records(data):
@@ -455,7 +454,7 @@ class Main {
 			if (interaction.isAutocomplete()) {
 				// trace(interaction);
 			}
-			
+
 			if (!interaction.isCommand() && !interaction.isAutocomplete() && !interaction.isChatInputCommand()) {
 				return;
 			}
@@ -621,11 +620,10 @@ class Main {
 	}
 
 	static public function updateState(field:String, ?value:DBState) {
-
 		if (value != null) {
 			state[field] = value;
 		}
-		
+
 		var e = DBEvents.Update('state', state[field], Query.query($key == field), (response) -> {
 			switch (response) {
 				case Success(message, data):
@@ -636,7 +634,6 @@ class Main {
 			}
 		});
 		universe.setComponents(universe.createEntity(), e);
-		
 	}
 
 	static function parseCommands() {

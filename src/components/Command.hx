@@ -43,7 +43,7 @@ enum CommandOptions {
 	Translate(to:String, message:String, from:String);
 	Helpdescription(description:String);
 	Api(content:String, field:String);
-	Notify(channel:String);
+	Role(channel:String);
 	Help(category:String);
 	Haxelib(command:String);
 	QuoteList(user:User);
