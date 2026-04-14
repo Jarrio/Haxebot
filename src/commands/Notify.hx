@@ -25,6 +25,7 @@ class Notify extends CommandBase {
 			// #ceramic
 			case 'ceramic': '914171888748609546';
 			case 'haxe': '1493533802432036986';
+			case 'haxepog': '1493536795131121805';
 			case 'reflaxe': '1200065966445449286';
 			// #devserver notes test
 			case 'dvorak': '903006951896666153';
