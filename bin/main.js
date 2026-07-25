@@ -9375,7 +9375,11 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			if(error.length > 3900) {
 				error = HxOverrides.substr(error,0,3900);
 			}
-			embed.setDescription("```hx\n" + new_code + ("``` **Error** \n " + error));
+			var errStr = "```hx\n" + new_code + ("``` **Error** \n " + error);
+			if(errStr.length >= 4096) {
+				errStr = HxOverrides.substr(errStr,0,4090) + "...";
+			}
+			embed.setDescription(errStr);
 			return embed;
 		}
 		return null;
@@ -9413,7 +9417,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 			var http = new haxe_http_HttpNodeJs("http://" + this.site + ":1337");
 			http.setHeader("Authorization","Basic " + Main.keys.haxelib);
 			http.onError = function(error) {
-				haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 295, className : "commands.Run2", methodName : "runCodeOnThread"});
+				haxe_Log.trace(error,{ fileName : "src/commands/Run2.hx", lineNumber : 299, className : "commands.Run2", methodName : "runCodeOnThread"});
 			};
 			http.onData = function(response) {
 				var parse = JSON.parse(response);
@@ -9509,15 +9513,15 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 					which.setFooter({ text : "Haxe " + _gthis.haxe_version, iconURL : "https://cdn.discordapp.com/emojis/567741748172816404.png?v=1"});
 					if(resp.length > 0) {
 						message.reply({ allowedMentions : { parse : []}, embeds : embeds}).then(function(succ) {
-							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 394, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace("" + message.author.tag + " at " + format_date + " with file id:",{ fileName : "src/commands/Run2.hx", lineNumber : 398, className : "commands.Run2", methodName : "runCodeOnThread"});
 							if(message.deletable) {
 								message.delete().then(null,function(err) {
-									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 397, className : "commands.Run2", methodName : "runCodeOnThread"});
+									haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 401, className : "commands.Run2", methodName : "runCodeOnThread"});
 									$global.console.dir(err);
 								});
 							}
 						},function(err) {
-							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 402, className : "commands.Run2", methodName : "runCodeOnThread"});
+							haxe_Log.trace(err,{ fileName : "src/commands/Run2.hx", lineNumber : 406, className : "commands.Run2", methodName : "runCodeOnThread"});
 							$global.console.dir(err);
 						});
 						return;
@@ -9533,7 +9537,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 				libstr += "" + lib;
 			}
 			var request = { action : "run", input : code_content, hxml : libstr};
-			haxe_Log.trace(request,{ fileName : "src/commands/Run2.hx", lineNumber : 438, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(request,{ fileName : "src/commands/Run2.hx", lineNumber : 442, className : "commands.Run2", methodName : "runCodeOnThread"});
 			var str = JSON.stringify(request);
 			http.setPostData(str);
 			http.request(true);
@@ -9541,7 +9545,7 @@ commands_Run2.prototype = $extend(systems_TextCommandBase.prototype,{
 		} catch( _g ) {
 			haxe_NativeStackTrace.lastError = _g;
 			var e = haxe_Exception.caught(_g).unwrap();
-			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 445, className : "commands.Run2", methodName : "runCodeOnThread"});
+			haxe_Log.trace(e,{ fileName : "src/commands/Run2.hx", lineNumber : 449, className : "commands.Run2", methodName : "runCodeOnThread"});
 			this.channel.send({ content : mention + "Code failed to execute."});
 		}
 	}
